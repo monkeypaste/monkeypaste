@@ -491,7 +491,8 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                hivm.PluginFormat = (MpPluginFormat)await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
+                //hivm.PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
+                hivm.PluginFormat = await MpPluginLoader.ReloadPluginAsync(hivm.PluginFormat.guid);
                 // loop through another validation pass
                 return await ValidateHandlerFormatsAsync(hivm);
             }

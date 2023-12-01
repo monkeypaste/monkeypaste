@@ -9,12 +9,16 @@ namespace MonkeyPaste.Common.Plugin {
         MpJsonObject,
         MpIFilterMatch,
         MpIFilterMatchCount {
+        #region Statics
+
+        #endregion
+
         #region Interfaces
         #region MpIFilterMatch Implementation
         private string[] _filterFields => new string[] {
             title,
             description,
-            credits,
+            author,
             tags,
             projectUrl
         };
@@ -45,10 +49,11 @@ namespace MonkeyPaste.Common.Plugin {
         #region Properties
         public string title { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
-        public string language { get; set; } = string.Empty;
+        public string languageCode { get; set; } = string.Empty;
         public string version { get; set; } = string.Empty;
-        public string credits { get; set; } = string.Empty;
+        public string author { get; set; } = string.Empty;
         public string licenseUrl { get; set; } = string.Empty;
+        public bool requireLicenseAcceptance { get; set; } = false;
         public string donateUrl { get; set; } = string.Empty;
         public string readmeUrl { get; set; } = string.Empty;
 

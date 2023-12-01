@@ -159,7 +159,8 @@ function deleteFocusTemplate() {
     }
 
     getMessageBoxResultAsync_get(
-        UiStrings['EditorConfirmNtfTitle'], UiStrings['EditorDeleteAllTemplatesNtfText'].Format(ft.templateName),
+        UiStrings['EditorConfirmNtfTitle'],
+        strFormat(UiStrings['EditorDeleteAllTemplatesNtfText'],ft.templateName),
         'okcancel',
         'WarningImage')
         .then(result => {

@@ -2,7 +2,7 @@
   "title": "Google Contacts Fetcher",
   "description": "Once authorized, will gatcher your contacts for template automation.",
   "version": "1.0",
-  "credits": "Thomas Kefauver",
+  "author": "Thomas Kefauver",
   "guid": "0eae9826-b6fe-4b88-80b6-85a4ea35911f",
   "iconUri": "contact_icon.png",
   "packageType": "Dll",

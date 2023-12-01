@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,2032 +118,1977 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GestureProfileGlobal" xml:space="preserve">
-    <value>All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime (not currently supported on Linux)</value>
+    <value>默认情况下启用所有互操作快捷方式（MonkeyPaste 之外有用的快捷方式）。</value>
   </data>
   <data name="GestureProfileInternal" xml:space="preserve">
-    <value>No global shortcuts are enabled by default. </value>
+    <value>默认情况下不启用全局快捷方式。</value>
   </data>
   <data name="ProductDescription" xml:space="preserve">
-    <value>The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential.</value>
+    <value>剪贴板是一片丛林。</value>
   </data>
   <data name="WelcomeAccountCaption" xml:space="preserve">
-    <value>No features are limited by subscription, only storage capacity and can be changed at anytime.</value>
+    <value>没有任何功能受到订阅的限制，只有存储容量的限制，并且可以随时更改。</value>
   </data>
   <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
-    <value>Restore your existing account...</value>
+    <value>恢复您现有的帐户...</value>
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
-    <value>Content and trash are limited to {0} and {1} clips respectively.</value>
-    <comment>Description formats all use same format from content cap, trash cap, standard cap</comment>
+    <value>内容和垃圾分别仅限于 {0} 和 {1} 个剪辑。</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
-    <value>Allows up to {2} clips of content and unlimited trash storage. </value>
+    <value>允许最多 {2} 个内容剪辑和无限的垃圾存储空间。</value>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
-    <value>Unrestricted and unlimited content and trash storage.</value>
+    <value>不受限制和无限的内容和垃圾存储。</value>
   </data>
   <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
-    <value>Restore</value>
+    <value>恢复</value>
   </data>
   <data name="WelcomeAccountFreeLabel" xml:space="preserve">
-    <value>Free</value>
+    <value>自由的</value>
   </data>
   <data name="WelcomeAccountStandardLabel" xml:space="preserve">
-    <value>Standard</value>
+    <value>标准</value>
   </data>
   <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
-    <value>Unlimited</value>
+    <value>无限</value>
   </data>
   <data name="WelcomeAccountTitle" xml:space="preserve">
-    <value>Subscription</value>
+    <value>订阅</value>
   </data>
   <data name="WelcomeDbPasswordCaption" xml:space="preserve">
-    <value>Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.</value>
+    <value>您的隐私很重要，剪贴板数据可能非常个人化。</value>
   </data>
   <data name="WelcomeDbPasswordTitle" xml:space="preserve">
-    <value>Password</value>
+    <value>密码</value>
   </data>
   <data name="WelcomeDragToOpenCaption" xml:space="preserve">
-    <value>When enabled, dragging from any application to the top of the screen will reveal MonkeyPaste to easily drop content into MonkeyPaste.</value>
+    <value>启用后，从任何应用程序拖动到屏幕顶部都会显示 MonkeyPaste，以便轻松地将内容放入 MonkeyPaste 中。</value>
   </data>
   <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
-    <value>Enabling the 'lock' in the top left of the main window will still allow dropping into MonkeyPaste.</value>
+    <value>启用主窗口左上角的“锁定”仍然允许进入 MonkeyPaste。</value>
   </data>
   <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
+    <value>更多窗口首选项可从“设置 -&gt; 首选项 -&gt; 窗口”菜单中获得。</value>
   </data>
   <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
-    <value>Drag Bananas Up Here!</value>
+    <value>把香蕉拖到这里！</value>
   </data>
   <data name="WelcomeDragToOpenTitle" xml:space="preserve">
-    <value>Drag - to - Open</value>
+    <value>拖至-打开</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
-    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings -&gt; Shortcuts' menu.</value>
+    <value>可以随时从“设置 -&gt; 快捷方式”菜单中查看或更改键盘快捷方式。</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
-    <value>All global shortcuts will be marked as local so you can configure them yourself later.</value>
+    <value>所有全局快捷方式都将标记为本地快捷方式，以便您稍后可以自行配置。</value>
   </data>
   <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
-    <value>MonkeyPaste's clipboard shortcuts will be available in all applications.</value>
+    <value>MonkeyPaste 的剪贴板快捷方式将在所有应用程序中可用。</value>
   </data>
   <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
-    <value>Internal</value>
+    <value>内部的</value>
   </data>
   <data name="CommonDefaultLabel" xml:space="preserve">
-    <value>Default</value>
+    <value>默认</value>
   </data>
   <data name="WelcomeGestureProfileTitle" xml:space="preserve">
-    <value>Gesture Profile</value>
+    <value>手势配置文件</value>
   </data>
   <data name="WelcomeGreetingCaption" xml:space="preserve">
-    <value>Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
+    <value>嘿 ！</value>
   </data>
   <data name="WelcomeGreetingTitle" xml:space="preserve">
-    <value>Welcome</value>
+    <value>欢迎</value>
   </data>
   <data name="WelcomeLoginLoadCaption" xml:space="preserve">
-    <value>To get the most use out of MonkeyPaste, loading automatically when you log in is a good idea. But, that's entirely up to you.</value>
+    <value>为了充分利用 MonkeyPaste，登录时自动加载是一个好主意。</value>
   </data>
   <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
-    <value>Keep it casual.</value>
+    <value>保持随意。</value>
   </data>
   <data name="CommonEnableLabel" xml:space="preserve">
-    <value>Enable</value>
+    <value>使能够</value>
   </data>
   <data name="WelcomeLoginLoadTitle" xml:space="preserve">
-    <value>Load On Login?</value>
+    <value>登录时加载？</value>
   </data>
   <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
-    <value>When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.</value>
+    <value>启用后，屏幕顶部的滚动手势将显示 MonkeyPaste。</value>
   </data>
   <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
-    <value>Left-clicking the taskbar icon will still open MonkeyPaste.</value>
+    <value>左键单击任务栏图标仍会打开 MonkeyPaste。</value>
   </data>
   <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
+    <value>更多窗口首选项可从“设置 -&gt; 首选项 -&gt; 窗口”菜单中获得。</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
-    <value>Easy Right?</value>
+    <value>容易吧？</value>
   </data>
   <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
-    <value>Scroll Up Here!</value>
+    <value>向上滚动到这里！</value>
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
-    <value>Scroll - to - Open</value>
+    <value>滚动至 - 打开</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
+    <value>&lt;palign="center"&gt;MonkeyPaste&lt;span color="red&gt;完全集成&lt;/span&gt;，可以在应用程序之间拖放。&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
-    <value>Drop it here!</value>
+    <value>把它扔在这里！</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+    <value>&lt;palign="center"&gt;这样，就可以访问 MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;无需点击&lt;/span&gt;甚至&lt;span color="red"&gt;眨眼&lt;/span&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
-    <value>Drag Me!</value>
+    <value>拉我一把！</value>
   </data>
   <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
-    <value>Try it out!</value>
+    <value>试试看！</value>
   </data>
   <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
-    <value>Try it out!</value>
+    <value>试试看！</value>
   </data>
   <data name="CommonEmptyListText" xml:space="preserve">
-    <value>No results available.</value>
+    <value>无可用结果。</value>
   </data>
   <data name="CommonConfirmLabel" xml:space="preserve">
-    <value>Confirm</value>
+    <value>确认</value>
   </data>
   <data name="CommonRefreshTooltip" xml:space="preserve">
-    <value>Refresh</value>
+    <value>刷新</value>
   </data>
   <data name="CommonSearchWatermark" xml:space="preserve">
-    <value>Search...</value>
+    <value>搜索...</value>
   </data>
   <data name="CommonSettingsTitle" xml:space="preserve">
-    <value>Settings</value>
+    <value>设置</value>
   </data>
   <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
-    <value>Dependencies:</value>
+    <value>依赖项：</value>
   </data>
   <data name="PluginBrowserInstallLabel" xml:space="preserve">
-    <value>Install</value>
+    <value>安装</value>
   </data>
   <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
-    <value>Are you sure you want to remove '{0}' and all its presets and shortcuts?</value>
+    <value>您确定要删除“{0}”及其所有预设和快捷方式吗？</value>
   </data>
   <data name="PluginBrowserUninstallLabel" xml:space="preserve">
-    <value>Uninstall</value>
+    <value>卸载</value>
   </data>
   <data name="QueryTrayEmptyText" xml:space="preserve">
-    <value> has no results.</value>
+    <value>没有结果。</value>
   </data>
   <data name="QueryTrayNoSelection" xml:space="preserve">
-    <value>No selection.</value>
+    <value>没有选择。</value>
   </data>
   <data name="CommonNoneLabel" xml:space="preserve">
-    <value>None</value>
+    <value>没有任何</value>
   </data>
   <data name="PluginBrowserCreditsLabel" xml:space="preserve">
-    <value>Credits:</value>
+    <value>学分：</value>
   </data>
   <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
-    <value>Description:</value>
+    <value>描述：</value>
   </data>
   <data name="PluginBrowserDonateLabel" xml:space="preserve">
-    <value>Donate:</value>
+    <value>捐：</value>
   </data>
   <data name="PluginBrowserLicenseLabel" xml:space="preserve">
-    <value>License:</value>
+    <value>执照：</value>
   </data>
   <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
-    <value>Project URL:</value>
+    <value>项目网址：</value>
   </data>
   <data name="PluginBrowserPublishedLabel" xml:space="preserve">
-    <value>Published:</value>
+    <value>发表：</value>
   </data>
   <data name="PluginBrowserReadMeLabel" xml:space="preserve">
-    <value>Read Me:</value>
+    <value>读我：</value>
   </data>
   <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
-    <value>Report Abuse:</value>
+    <value>报告滥用：</value>
   </data>
   <data name="PluginBrowserTagsLabel" xml:space="preserve">
-    <value>Tags:</value>
+    <value>标签：</value>
   </data>
   <data name="PluginBrowserUpdateLabel" xml:space="preserve">
-    <value>Update:</value>
+    <value>更新：</value>
   </data>
   <data name="PluginBrowserVersionLabel" xml:space="preserve">
-    <value>Version:</value>
+    <value>版本：</value>
   </data>
   <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
-    <value>Open in Window</value>
+    <value>在窗口中打开</value>
   </data>
   <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>解雇</value>
   </data>
   <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
-    <value>Refresh</value>
+    <value>刷新</value>
   </data>
   <data name="CommonSaveLabel" xml:space="preserve">
-    <value>Save</value>
+    <value>节省</value>
   </data>
   <data name="AccountNextRemoveToolTipText" xml:space="preserve">
-    <value>Next to delete! Upgrade to avoid.</value>
+    <value>接下来要删除！</value>
   </data>
   <data name="AccountNextTrashToolTipText" xml:space="preserve">
-    <value>Next to trash! Upgrade to avoid.</value>
+    <value>旁边就是垃圾箱！</value>
   </data>
   <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
-    <value>Files</value>
+    <value>文件</value>
   </data>
   <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
-    <value>Image</value>
+    <value>图像</value>
   </data>
   <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
-    <value>Text</value>
+    <value>文本</value>
   </data>
   <data name="ClipTileDetailCreated" xml:space="preserve">
-    <value>Copied {0}</value>
+    <value>已复制 {0}</value>
   </data>
   <data name="ClipTileDetailDimFiles" xml:space="preserve">
-    <value>{0} files | {1} MBs</value>
+    <value>{0} 个文件 |</value>
   </data>
   <data name="ClipTileDetailDimImage" xml:space="preserve">
-    <value>{0} x {1} px</value>
+    <value>{0} x {1} 像素</value>
   </data>
   <data name="ClipTileDetailDimText" xml:space="preserve">
-    <value>{0} chars | {1} lines</value>
+    <value>{0} 个字符 |</value>
   </data>
   <data name="ClipTileDetailUsage" xml:space="preserve">
-    <value>{0} copies | {1} pastes</value>
+    <value>{0} 份 |</value>
   </data>
   <data name="ActionMoveLabel" xml:space="preserve">
-    <value>Move</value>
+    <value>移动</value>
   </data>
   <data name="CommonAddLabel" xml:space="preserve">
-    <value>Add</value>
+    <value>添加</value>
   </data>
   <data name="CommonCopyOpLabel" xml:space="preserve">
-    <value>Copy</value>
+    <value>复制</value>
   </data>
   <data name="CommonCutOpLabel" xml:space="preserve">
-    <value>Cut</value>
+    <value>切</value>
   </data>
   <data name="CommonPasteOpLabel" xml:space="preserve">
-    <value>Paste</value>
+    <value>粘贴</value>
   </data>
   <data name="CommonTitledCopyTitleText" xml:space="preserve">
-    <value>{0} Copy</value>
+    <value>{0}复制</value>
   </data>
   <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
-    <value>Unnamed Filter</value>
+    <value>未命名过滤器</value>
   </data>
   <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
-    <value>- Please Select -</value>
+    <value>- 请选择 -</value>
   </data>
   <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
-    <value>Formats</value>
+    <value>格式</value>
   </data>
   <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
-    <value>Readers</value>
+    <value>读者</value>
   </data>
   <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
-    <value>Writers</value>
+    <value>作家</value>
   </data>
   <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
-    <value>Handlers</value>
+    <value>处理程序</value>
   </data>
   <data name="CommonDeleteLabel" xml:space="preserve">
-    <value>Delete</value>
+    <value>删除</value>
   </data>
   <data name="CommonDuplicateLabel" xml:space="preserve">
-    <value>Duplicate</value>
+    <value>复制</value>
   </data>
   <data name="CommonEditLabel" xml:space="preserve">
-    <value>Edit Name</value>
+    <value>编辑姓名</value>
   </data>
   <data name="CommonResetLabel" xml:space="preserve">
-    <value>Reset</value>
+    <value>重置</value>
   </data>
   <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
-    <value>Tags</value>
+    <value>标签</value>
   </data>
   <data name="ShortcutDataGridActionHeader" xml:space="preserve">
-    <value>Action</value>
+    <value>行动</value>
   </data>
   <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
-    <value>Global Routing</value>
+    <value>全球路由</value>
   </data>
   <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
-    <value>Shortcut</value>
+    <value>捷径</value>
   </data>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
-    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, Meta / Win depending on platform).</value>
+    <value>手势必须是唯一的，并且只能包含一个输入键（而不是 Control、Shift、Alt、Meta / Win 等修饰键，具体取决于平台）。</value>
   </data>
   <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-	&lt;li&gt;
-		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
-	&lt;li&gt;
-		&lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
-	&lt;/li&gt;
-&lt;/ul&gt;</value>
+    <value>&lt;ul&gt;</value>
   </data>
   <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt;hide&lt;/i&gt;that key press from application-level input.&lt;/p&gt;&lt;p&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Exclusive Override&lt;/b&gt;This is a special type of override mode designed for the Caps Lock key. It only allows&lt;b&gt;one&lt;/b&gt;key (non-modifier) for its assignment.&lt;/p&gt;&lt;p&gt;In normal override mode Caps Lock can become&lt;i&gt;stuck on&lt;/i&gt;when pressed in combination with other keys.&lt;/p&gt;&lt;p&gt;So no matter what other keys are down, if a&lt;b&gt;Hotkey&lt;/b&gt;shortcut is pressed it will be overriden and prevent it from becoming&lt;i&gt;stuck on&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</value>
+    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;全局快捷方式模式&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;被动&lt;/b&gt;快捷方式 MonkeyPaste 将在任何应用程序中侦听。</value>
   </data>
   <data name="CommonDisableLabel" xml:space="preserve">
-    <value>Disable</value>
+    <value>禁用</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
-    <value>Load up when this user account is logged in, not for other users.</value>
+    <value>当该用户帐户登录时加载，而不是为其他用户加载。</value>
   </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
+    <value>&lt;p&gt;使用可用的联系人（需要提取器插件），此字段将用于本文档中此模板的所有实例或稍后将引用的任何实例。&lt;/p&gt;&lt;p&gt; 例如，如果选择电子邮件地址</value>
   </data>
   <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>&lt;p&gt;yy = short year&lt;/p&gt;&lt;p&gt;yyyy = long year&lt;/p&gt;&lt;p&gt;M = month (1-12)&lt;/p&gt;&lt;p&gt;MM = month (01-12)&lt;/p&gt;&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;&lt;p&gt;d = day (1 - 31)&lt;/p&gt;&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;&lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;&lt;p&gt;H = hour in day (0-23)&lt;/p&gt;&lt;p&gt;HH = hour in day (00-23)&lt;/p&gt;&lt;p&gt;mm = minute&lt;/p&gt;&lt;p&gt;ss = second&lt;/p&gt;&lt;p&gt;SSS = milliseconds&lt;/p&gt;&lt;p&gt;a = AM/PM marker&lt;/p&gt;&lt;p&gt;p = a.m./p.m. marker&lt;/p&gt;</value>
+    <value>&lt;p&gt;yy = 短年份&lt;/p&gt;&lt;p&gt;yyyy = 长年份&lt;/p&gt;&lt;p&gt;M = 月份（1-12）&lt;/p&gt;&lt;p&gt;MM = 月份（01-12）&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system - wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;从评估那一刻起，当前日期和/或时间将替换为 DateTime 模板。</value>
   </data>
   <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;</value>
+    <value>&lt;p&gt;此模板的所有出现都将设置为您在此处提供的值&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;从评估那一刻起，当前日期和/或时间将替换为 DateTime 模板。</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
-    <value>Finish appending</value>
+    <value>完成追加</value>
   </data>
   <data name="EditorAppendInlineModelLabel" xml:space="preserve">
-    <value>Enable Paragraph</value>
+    <value>启用段落</value>
   </data>
   <data name="EditorAppendLineModeLabel" xml:space="preserve">
-    <value>Enable Inline</value>
+    <value>启用内联</value>
   </data>
   <data name="EditorAppendManualModeLabel" xml:space="preserve">
-    <value>Toggle manual</value>
+    <value>切换手动</value>
   </data>
   <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
-    <value>Toggle manual</value>
+    <value>切换手动</value>
   </data>
   <data name="EditorAppendPauseLabel" xml:space="preserve">
-    <value>Pause appending to clipboard</value>
+    <value>暂停附加到剪贴板</value>
   </data>
   <data name="EditorAppendPostLabel" xml:space="preserve">
-    <value>Toggle Before</value>
+    <value>切换之前</value>
   </data>
   <data name="EditorAppendPreLabel" xml:space="preserve">
-    <value>Toggle Before</value>
+    <value>切换之前</value>
   </data>
   <data name="EditorAppendResumeLabel" xml:space="preserve">
-    <value>Resume appending to clipboard</value>
+    <value>继续附加到剪贴板</value>
   </data>
   <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
-    <value>Append...</value>
+    <value>附加...</value>
   </data>
   <data name="EditorPasteButtonLabel" xml:space="preserve">
-    <value>Paste</value>
+    <value>粘贴</value>
   </data>
   <data name="CommonPinItemLabel" xml:space="preserve">
-    <value>Pin</value>
+    <value>别针</value>
   </data>
   <data name="CommonUnpinItemLabel" xml:space="preserve">
-    <value>Unpin</value>
+    <value>取消固定</value>
   </data>
   <data name="NotificationOptionHideAllLabel" xml:space="preserve">
-    <value>Hide all '{0}' notifications</value>
+    <value>隐藏所有“{0}”通知</value>
   </data>
   <data name="NotificationOptionHideLabel" xml:space="preserve">
-    <value>Hide</value>
+    <value>隐藏</value>
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
-    <value>Last active app unknown. Switch to intended app to monkey paste.</value>
+    <value>上次活动的应用程序未知。</value>
   </data>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+    <value>粘贴到：&lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
-    <value>Minimize</value>
+    <value>最小化</value>
   </data>
   <data name="CommonBusyLabel" xml:space="preserve">
-    <value>Please wait...</value>
+    <value>请稍等...</value>
   </data>
   <data name="MainWindowTitleLockLabel" xml:space="preserve">
-    <value>Lock</value>
+    <value>锁</value>
   </data>
   <data name="SettingsAccountTabLabel" xml:space="preserve">
-    <value>Account</value>
+    <value>帐户</value>
   </data>
   <data name="SettingsHelpTabLabel" xml:space="preserve">
-    <value>Help</value>
+    <value>帮助</value>
   </data>
   <data name="SettingsInteropTabLabel" xml:space="preserve">
-    <value>Copy &amp; Paste</value>
+    <value>复制粘贴</value>
   </data>
   <data name="SettingsPrefTabLabel" xml:space="preserve">
-    <value>Preferences</value>
+    <value>优先</value>
   </data>
   <data name="SettingsResetAllButtonLabel" xml:space="preserve">
-    <value>Reset All</value>
+    <value>重置全部</value>
   </data>
   <data name="SettingsSearchWatermark" xml:space="preserve">
-    <value>Filter...</value>
+    <value>筛选...</value>
   </data>
   <data name="SettingsShortcutTabLabel" xml:space="preserve">
-    <value>Shortcuts</value>
+    <value>快捷方式</value>
   </data>
   <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
-    <value>Add App</value>
+    <value>添加应用程序</value>
   </data>
   <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
-    <value>Add Website</value>
+    <value>添加网站</value>
   </data>
   <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
-    <value>Block?</value>
+    <value>堵塞？</value>
   </data>
   <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
-    <value>Name</value>
+    <value>姓名</value>
   </data>
   <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
-    <value>Apps</value>
+    <value>应用</value>
   </data>
   <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
-    <value>Block Domain?</value>
+    <value>阻止域名？</value>
   </data>
   <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
-    <value>Block Url?</value>
+    <value>阻止网址？</value>
   </data>
   <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
-    <value>Domain</value>
+    <value>领域</value>
   </data>
   <data name="SettingsInteropUrlHintText" xml:space="preserve">
-    <value>Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(</value>
+    <value>源 URL 识别取决于主机应用程序剪贴板支持，因此不能保证拒绝:(</value>
   </data>
   <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
-    <value>Url</value>
+    <value>网址</value>
   </data>
   <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
-    <value>Websites</value>
+    <value>网站</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
-    <value>Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.</value>
+    <value>某些 Monkey Paste 功能使用键盘自动化来触发应用程序（例如控制台或 shell）中的复制事件。</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
-    <value>Copy Shortcut</value>
+    <value>复制快捷键</value>
   </data>
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
-    <value>None</value>
+    <value>没有任何</value>
   </data>
   <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</value>
+    <value>只有选定的预设才会用于指定的应用程序。</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
-    <value>&lt;p&gt;Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.&lt;/p&gt;&lt;p&gt;Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)&lt;/p&gt;</value>
+    <value>&lt;p&gt;Monkey Paste 使用键盘自动化来执行外部粘贴，某些应用程序（例如控制台或 shell）可能具有非默认粘贴快捷方式。</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
-    <value>Paste Shortcut</value>
+    <value>粘贴快捷方式</value>
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
-    <value>Readers</value>
+    <value>读者</value>
   </data>
   <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;.</value>
+    <value>来自被拒绝的应用程序的所有剪贴板监控都将被&lt;b&gt;忽略&lt;/b&gt;。</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
-    <value>Writers</value>
+    <value>作家</value>
   </data>
   <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
-    <value>Edit...</value>
+    <value>编辑...</value>
   </data>
   <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
-    <value>Formats</value>
+    <value>格式</value>
   </data>
   <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
-    <value>Rejected</value>
+    <value>拒绝</value>
   </data>
   <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
-    <value>Shortcuts</value>
+    <value>快捷方式</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>Would you also like to remove all {0} clips from '{1}'</value>
+    <value>您是否还要从“{1}”中删除所有 {0} 个剪辑</value>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
-    <value>Remove Clips?</value>
+    <value>删除剪辑？</value>
   </data>
   <data name="CommonApplicationLabel" xml:space="preserve">
-    <value>Application</value>
+    <value>应用</value>
   </data>
   <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
-    <value>Browse to app...</value>
+    <value>浏览到应用程序...</value>
   </data>
   <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
-    <value>Select application path</value>
+    <value>选择应用路径</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>Are you sure you want to remove custom shortcuts for {1}</value>
+    <value>您确定要删除 {1} 的自定义快捷方式吗</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
-    <value>Are you sure you want to remove custom formats for {0}?</value>
+    <value>您确定要删除 {0} 的自定义格式吗？</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag - and - drop into MonkeyPaste</value>
+    <value>此应用程序没有指定的剪贴板格式。</value>
   </data>
   <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. Automated paste or drag - and - drop from MonkeyPaste will have no affect (its empty data).</value>
+    <value>此应用程序没有指定的剪贴板格式。</value>
   </data>
   <data name="ShortcutsResetNtfMsg" xml:space="preserve">
-    <value>Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.</value>
+    <value>您确定要重置所有快捷方式吗？</value>
   </data>
   <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
-    <value>Are you sure you want to change your shortcut routing profile to '{0}'</value>
+    <value>您确定要将快捷路由配置文件更改为“{0}”</value>
   </data>
   <data name="TagDefaultAllLabel" xml:space="preserve">
-    <value>All</value>
+    <value>全部</value>
   </data>
   <data name="TagDefaultFavoritesLabel" xml:space="preserve">
-    <value>Favorites</value>
+    <value>收藏夹</value>
   </data>
   <data name="TagDefaultFiltersLabel" xml:space="preserve">
-    <value>Filters</value>
+    <value>过滤器</value>
   </data>
   <data name="TagDefaultFormatsLabel" xml:space="preserve">
-    <value>Formats</value>
+    <value>格式</value>
   </data>
   <data name="TagDefaultTagsLabel" xml:space="preserve">
-    <value>Tags</value>
+    <value>标签</value>
   </data>
   <data name="TagDefaultTodayLabel" xml:space="preserve">
-    <value>Today</value>
+    <value>今天</value>
   </data>
   <data name="TagDefaultTrashLabel" xml:space="preserve">
-    <value>Trash</value>
+    <value>垃圾</value>
   </data>
   <data name="AboutWindowTitlePrefix" xml:space="preserve">
-    <value>About</value>
+    <value>关于</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
-    <value>Easy Right?</value>
+    <value>容易吧？</value>
   </data>
   <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
-    <value>Double Click to unpin </value>
+    <value>双击取消固定</value>
   </data>
   <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
-    <value>Custom</value>
+    <value>风俗</value>
   </data>
   <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
-    <value>Global</value>
+    <value>全球的</value>
   </data>
   <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
-    <value>This combination conflicts with '{0}' which will be cleared if saved.</value>
+    <value>此组合与“{0}”冲突，保存后将被清除。</value>
   </data>
   <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
-    <value>A shortcut must be provided.</value>
+    <value>必须提供快捷方式。</value>
   </data>
   <data name="ShortcutAssignGlobalHint" xml:space="preserve">
-    <value>This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications.</value>
+    <value>这是全球捷径！</value>
   </data>
   <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
-    <value>Global</value>
+    <value>全球的</value>
   </data>
   <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
-    <value>Shortcut must contain ONE and only ONE input key.Any key that is not:</value>
+    <value>快捷方式必须包含一个且仅一个输入键。任何不包含以下键的键：</value>
   </data>
   <data name="ShortcutAssignRecordLabel" xml:space="preserve">
-    <value>Press any key to record...</value>
+    <value>按任意键即可录制...</value>
   </data>
   <data name="CommonAssignShortcutLabel" xml:space="preserve">
-    <value>Assign Shortcut</value>
+    <value>指定快捷方式</value>
   </data>
   <data name="AccountLearnMoreButtonText" xml:space="preserve">
-    <value>Learn More...</value>
+    <value>了解更多...</value>
   </data>
   <data name="AccountUpgradeButtonText" xml:space="preserve">
-    <value>Upgrade</value>
+    <value>升级</value>
   </data>
   <data name="CommonCancelLabel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="UserActionFixButtonText" xml:space="preserve">
-    <value>Fix</value>
+    <value>使固定</value>
   </data>
   <data name="UserActionIgnoreButtonText" xml:space="preserve">
-    <value>Ignore</value>
+    <value>忽略</value>
   </data>
   <data name="CommonNoButtonText" xml:space="preserve">
-    <value>No</value>
+    <value>不</value>
   </data>
   <data name="CommonOkLabel" xml:space="preserve">
-    <value>Ok</value>
+    <value>好的</value>
   </data>
   <data name="UserActionRetryButtonText" xml:space="preserve">
-    <value>Retry</value>
+    <value>重试</value>
   </data>
   <data name="UserActionShutdownButtonText" xml:space="preserve">
-    <value>Shutdown</value>
+    <value>关闭</value>
   </data>
   <data name="UserActionSubmitButtonText" xml:space="preserve">
-    <value>Submit</value>
+    <value>提交</value>
   </data>
   <data name="CommonYesButtonText" xml:space="preserve">
-    <value>Yes</value>
+    <value>是的</value>
   </data>
   <data name="AccountYearlyLabel" xml:space="preserve">
-    <value>Yearly</value>
+    <value>每年</value>
   </data>
   <data name="AccountMonthlyLabel" xml:space="preserve">
-    <value>Monthly</value>
+    <value>每月</value>
   </data>
   <data name="AccountTrialButtonText" xml:space="preserve">
-    <value>Try for free!</value>
+    <value>免费试用！</value>
   </data>
   <data name="AccountBillingCycleLabel" xml:space="preserve">
-    <value>Billing Cycle</value>
+    <value>结算周期</value>
   </data>
   <data name="AccountEmailLabel" xml:space="preserve">
-    <value>Email</value>
+    <value>电子邮件</value>
   </data>
   <data name="AccountLoginButtonText" xml:space="preserve">
-    <value>Login</value>
+    <value>登录</value>
   </data>
   <data name="AccountLoginFailedText" xml:space="preserve">
-    <value>Check your connection and try again.</value>
+    <value>检查您的连接并重试。</value>
   </data>
   <data name="AccountLogoutButtonText" xml:space="preserve">
-    <value>Log out</value>
+    <value>登出</value>
   </data>
   <data name="AccountNextPaymentDateLabel" xml:space="preserve">
-    <value>Next Payment</value>
+    <value>下次付款</value>
   </data>
   <data name="AccountPasswordLabel" xml:space="preserve">
-    <value>Password</value>
+    <value>密码</value>
   </data>
   <data name="AccountRegisterButtonText" xml:space="preserve">
-    <value>Register</value>
+    <value>登记</value>
   </data>
   <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
-    <value>Email is not valid</value>
+    <value>电子邮件无效</value>
   </data>
   <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
-    <value>Passwords do not match.</value>
+    <value>密码不匹配。</value>
   </data>
   <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
-    <value>Password must be a minimum of {0} characters.</value>
+    <value>密码必须至少包含 {0} 个字符。</value>
   </data>
   <data name="CommonRememberLabel" xml:space="preserve">
-    <value>Remember?</value>
+    <value>记住？</value>
   </data>
   <data name="AccountRegistrationSuccessText" xml:space="preserve">
-    <value>Check your email to confirm your account</value>
+    <value>检查您的电子邮件以确认您的帐户</value>
   </data>
   <data name="AccountResetPasswordLabel" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>重设密码</value>
   </data>
   <data name="CommonDateFormat" xml:space="preserve">
-    <value>MMM d, yyyy</value>
+    <value>嗯，年，日</value>
   </data>
   <data name="CommonDateTimeFormat" xml:space="preserve">
     <value>MMM d, h:mm tt</value>
   </data>
   <data name="CommonTimestampFormat" xml:space="preserve">
-    <value>MM/dd/yyyy hh:mm tt</value>
+    <value>月/日/年 时:分 tt</value>
   </data>
   <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
-    <value>Never</value>
+    <value>绝不</value>
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
-    <value>Free {0} - Day Trial</value>
+    <value>免费 {0} - 天试用</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
-    <value>There was a problem performing your purchase. Checking your connection and settings may help. Would you like to try again?</value>
+    <value>执行您的购买时出现问题。</value>
   </data>
   <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
-    <value>Your account has been upgraded to {0}/{1}.</value>
-    <comment>Subscription Type, Billing Cycle</comment>
+    <value>您的帐户已升级至 {0}/{1}。</value>
   </data>
   <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
-    <value>Purchase Successful!</value>
+    <value>购买成功！</value>
   </data>
   <data name="CommonErrorLabel" xml:space="preserve">
-    <value>Error</value>
+    <value>错误</value>
   </data>
   <data name="CommonConnectionFailedCaption" xml:space="preserve">
-    <value>Connection failed.</value>
+    <value>连接失败。</value>
   </data>
   <data name="CommonRetryLabel" xml:space="preserve">
-    <value>Retry</value>
+    <value>重试</value>
   </data>
   <data name="NtfCapAccountChangedTitle" xml:space="preserve">
-    <value>Account Changed</value>
+    <value>帐户已更改</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Your subscription is now {0}/{1} with {2} content and {3} trash storage. \n But fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
-    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+    <value>您的订阅现在为 {0}/{1}，包含 {2} 内容和 {3} 垃圾存储空间。</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>Congratulations! Your subscription is now {0}/{1} with {2} content and {3} trash storage.</value>
-    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+    <value>恭喜！</value>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
-    <value>Trash or unlink something from '{0}' to add more.</value>
+    <value>将某些内容删除或取消与“{0}”的链接以添加更多内容。</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
-    <value>Max '{0}' storage is {1}.</value>
-    <comment>Account Type, Storage Count</comment>
+    <value>“{0}”的最大存储空间为 {1}。</value>
   </data>
   <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
-    <value>Restore</value>
+    <value>恢复</value>
   </data>
   <data name="NtfCapBlockSuffix" xml:space="preserve">
-    <value>{0} Blocked</value>
-    <comment>Add/Restore</comment>
+    <value>{0}已被阻止</value>
   </data>
   <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
-    <value>Content &amp; Trash Capacity Reached!</value>
+    <value>内容和垃圾容量已达到！</value>
   </data>
   <data name="NtfCapContentMaxStorageText" xml:space="preserve">
-    <value>Max '{0}' storage is {1}.</value>
+    <value>“{0}”的最大存储空间为 {1}。</value>
   </data>
   <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
-    <value>Content Capacity Reached!</value>
+    <value>内容容量已达！</value>
   </data>
   <data name="NtfCapHideHint" xml:space="preserve">
-    <value>* You can hide these warnings by clicking 'hide all' from the options menu above.</value>
+    <value>* 您可以通过单击上面选项菜单中的“隐藏全部”来隐藏这些警告。</value>
   </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
-    <value>Max Trash storage is {0}.</value>
+    <value>最大垃圾箱存储空间为 {0}。</value>
   </data>
   <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
-    <value>Trash Capacity Reached!</value>
+    <value>垃圾容量已达！</value>
   </data>
   <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
-    <value>{0} is invalid</value>
-    <comment>Label</comment>
+    <value>{0}无效</value>
   </data>
   <data name="ParameterInvalidLengthCaption" xml:space="preserve">
-    <value>{0} must be at least {1} characters</value>
-    <comment>Label, number</comment>
+    <value>{0} 必须至少为 {1} 个字符</value>
   </data>
   <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
-    <value>{0} can only be {1} character</value>
-    <comment>Label, number</comment>
+    <value>{0} 只能是 {1} 个字符</value>
   </data>
   <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
-    <value>Paste to: '{0}'</value>
-    <comment>Application Name</comment>
+    <value>粘贴到：“{0}”</value>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please update your payment information.</value>
-    <comment>Subscription Type, Date</comment>
+    <value>您的 {0} 订阅付款已到期 {1}，但尚未收到。</value>
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please connect to the internet on the device with your subscription and restart in order to continue using your {0} plan</value>
-    <comment>Subscription Type, Date</comment>
+    <value>您的 {0} 订阅付款已到期 {1}，但尚未收到。</value>
   </data>
   <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please open MonkeyPaste on the device with your subscription and restart to continue using your {0} plan.</value>
-    <comment>Subscription Type, Date</comment>
+    <value>您的 {0} 订阅付款已到期 {1}，但尚未收到。</value>
   </data>
   <data name="AccountExpiredNtfTitle" xml:space="preserve">
-    <value>Account Expired</value>
+    <value>帐户已过期</value>
   </data>
   <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
-    <value>Note</value>
+    <value>笔记</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>Microsoft Store doesn't allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?</value>
-    <comment>Old Subscription Type, Old Billing Cycle</comment>
+    <value>Microsoft Store 不允许对订阅附加组件进行级别更改。</value>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
-    <value>Your password has been reset. Please check your email and follow the link to change your password.</value>
+    <value>您的密码已重置。</value>
   </data>
   <data name="AccountLoginWindowTitle" xml:space="preserve">
-    <value>Login</value>
+    <value>登录</value>
   </data>
   <data name="TermsAuthorsInlineText" xml:space="preserve">
-    <value>Author(s)</value>
+    <value>作者</value>
   </data>
   <data name="TermsIntroAppText" xml:space="preserve">
-    <value>It is required that you accept the following license terms before continuing.</value>
+    <value>在继续之前，您需要接受以下许可条款。</value>
   </data>
   <data name="TermsIntroPluginText" xml:space="preserve">
-    <value>The following package(s) require that you accept their license terms before installing.</value>
+    <value>以下软件包要求您在安装之前接受其许可条款。</value>
   </data>
   <data name="TermsNoButtonText" xml:space="preserve">
-    <value>I Decline</value>
+    <value>我拒绝</value>
   </data>
   <data name="TermsOutroAppText" xml:space="preserve">
-    <value>By clicking "I Accept", you agree to the license terms for this application. If you do not agree to the terms, click "I Decline".</value>
+    <value>单击“我接受”即表示您同意此应用程序的许可条款。</value>
   </data>
   <data name="TermsOutroPluginText" xml:space="preserve">
-    <value>By clicking "I Accept", you agree to the license terms for the package(s) listed above. If you do not agree to the terms, click "I Decline".</value>
+    <value>单击“我接受”即表示您同意上面列出的软件包的许可条款。</value>
   </data>
   <data name="TermsViewLicenseButtonText" xml:space="preserve">
-    <value>View License</value>
+    <value>查看许可证</value>
   </data>
   <data name="TermsWindowTitle" xml:space="preserve">
-    <value>License Acceptance</value>
+    <value>许可接受</value>
   </data>
   <data name="TermsYesButtonText" xml:space="preserve">
-    <value>I Accept</value>
+    <value>我接受</value>
   </data>
   <data name="AccountActiveLabel" xml:space="preserve">
-    <value>ACTIVE</value>
+    <value>积极的</value>
   </data>
   <data name="AccountOfflineLabel" xml:space="preserve">
-    <value>Offline</value>
+    <value>离线</value>
   </data>
   <data name="AccountUnregisteredLabel" xml:space="preserve">
-    <value>Unregistered</value>
+    <value>未注册</value>
   </data>
   <data name="DbPasswordDoneLabel" xml:space="preserve">
-    <value>Done</value>
+    <value>完毕</value>
   </data>
   <data name="DbPasswordMismatch" xml:space="preserve">
-    <value>⚠️ Passwords do not match</value>
+    <value>⚠️密码不匹配</value>
   </data>
   <data name="DbPasswordWatermark" xml:space="preserve">
-    <value>Password</value>
+    <value>密码</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>Your subscription is now set to {0}/{1}.</value>
-    <comment>Subscription Type, Billing Cycle</comment>
+    <value>您的订阅现已设置为 {0}/{1}。</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
-    <value>Account Found</value>
+    <value>找到帐户</value>
   </data>
   <data name="AccountLoginFailedTitle" xml:space="preserve">
-    <value>Login Failed</value>
+    <value>登录失败</value>
   </data>
   <data name="AccountRegistrationFailedTitle" xml:space="preserve">
-    <value>Registration Failed</value>
+    <value>注册失败</value>
   </data>
   <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
-    <value>Registration successful!</value>
+    <value>注册成功！</value>
   </data>
   <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
-    <value>Reset Error</value>
+    <value>重置错误</value>
   </data>
   <data name="AccountSubscriptionTabName" xml:space="preserve">
-    <value>Subscription</value>
+    <value>订阅</value>
   </data>
   <data name="AccountWhatsNewTabName" xml:space="preserve">
-    <value>What's New</value>
+    <value>什么是新的</value>
   </data>
   <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
-    <value>Never</value>
+    <value>绝不</value>
   </data>
   <data name="AccountUnlimitedDisplayText" xml:space="preserve">
-    <value>Unlimited</value>
+    <value>无限</value>
   </data>
   <data name="AccountInfoCapacityText" xml:space="preserve">
-    <value>capacity</value>
+    <value>容量</value>
   </data>
   <data name="AccountInfoRemainingText" xml:space="preserve">
-    <value>remaining</value>
+    <value>其余的</value>
   </data>
   <data name="AccountInfoTotalText" xml:space="preserve">
-    <value>total</value>
+    <value>全部的</value>
   </data>
   <data name="AccountExpiredStatusTooltip" xml:space="preserve">
-    <value>Your payment is past due. </value>
+    <value>您的付款已逾期。</value>
   </data>
   <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
-    <value>Exclusive override shortcuts may only contain ONE key and that key can not be a modifier key.</value>
+    <value>独占覆盖快捷键只能包含一个键，并且该键不能是修饰键。</value>
   </data>
   <data name="AccountExpiredLabel" xml:space="preserve">
-    <value>Expired</value>
+    <value>已到期</value>
   </data>
   <data name="NtfLoaderTitle" xml:space="preserve">
-    <value>LOADING</value>
+    <value>加载中</value>
   </data>
   <data name="CommonDisabledLabel" xml:space="preserve">
-    <value>Disabled</value>
+    <value>残疾人</value>
   </data>
   <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
-    <value>Note! This password is optional and only for EXTRA security. If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
+    <value>笔记！</value>
   </data>
   <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
-    <value>Remember Drop Settings For:</value>
+    <value>记住放置设置：</value>
   </data>
   <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
-    <value>Browse Plugins</value>
+    <value>浏览插件</value>
   </data>
   <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
-    <value>Analyze</value>
+    <value>分析</value>
   </data>
   <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
-    <value>Quick Action</value>
+    <value>快速行动</value>
   </data>
   <data name="ClipTileToggleEditLabel" xml:space="preserve">
-    <value>Toggle Edit</value>
+    <value>切换编辑</value>
   </data>
   <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
-    <value>Toggle Pinned</value>
+    <value>切换固定</value>
   </data>
   <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
-    <value>Annotations</value>
+    <value>注释</value>
   </data>
   <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
-    <value>Plain Text</value>
+    <value>纯文本</value>
   </data>
   <data name="CommonFloatWindowLabel" xml:space="preserve">
-    <value>Float</value>
+    <value>漂浮</value>
   </data>
   <data name="LinkNavigateToolTipText" xml:space="preserve">
-    <value>Control + Click to follow...</value>
+    <value>Control + 单击关注...</value>
   </data>
   <data name="LinkNavigateToolTipText2" xml:space="preserve">
-    <value>Alt + Click to follow...</value>
+    <value>Alt + 单击关注...</value>
   </data>
   <data name="PinTrayEmptyLabel" xml:space="preserve">
-    <value>Pin or Drop any media here!</value>
+    <value>将任何媒体固定或拖放到此处！</value>
   </data>
   <data name="PinTrayUnpinAllLabel" xml:space="preserve">
-    <value>Clear</value>
+    <value>清除</value>
   </data>
   <data name="SearchColorDistanceToolTipText" xml:space="preserve">
-    <value>Thresholds above 0 will provide fuzzy color matching using Euclidean distance in the RGBA colorspace. For example, if red (#FF0000) is the search term and black (#000000) is a pixel in an image then the color distance will be 255. Black to white distance is the maximum possible at 510, including an alpha channel</value>
+    <value>高于 0 的阈值将使用 RGBA 色彩空间中的欧几里德距离提供模糊色彩匹配。</value>
   </data>
   <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
-    <value>all of the following are true</value>
+    <value>以下所有内容均属实</value>
   </data>
   <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
-    <value>Clipboard</value>
+    <value>剪贴板</value>
   </data>
   <data name="SidebarCollectionsToolTip" xml:space="preserve">
-    <value>Collections</value>
+    <value>收藏</value>
   </data>
   <data name="SidebarMouseModesToolTip" xml:space="preserve">
-    <value>Mouse Modes</value>
+    <value>鼠标模式</value>
   </data>
   <data name="SidebarTriggersToolTip" xml:space="preserve">
-    <value>Triggers</value>
+    <value>触发器</value>
   </data>
   <data name="TriggerPauseButtonLabel" xml:space="preserve">
-    <value>Pause</value>
+    <value>暂停</value>
   </data>
   <data name="TriggerResumeButtonLabel" xml:space="preserve">
-    <value>Resume</value>
+    <value>恢复</value>
   </data>
   <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
-    <value>New Trigger</value>
+    <value>新触发器</value>
   </data>
   <data name="CommonAddPresetButtonLabel" xml:space="preserve">
-    <value>Add Preset</value>
+    <value>添加预设</value>
   </data>
   <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
-    <value>Monkey Drop Wizard</value>
+    <value>猴子掉落向导</value>
   </data>
   <data name="AnalyzerPresetGridTitle" xml:space="preserve">
-    <value>Presets</value>
+    <value>预设</value>
   </data>
   <data name="AnalyzerSelectorLabel" xml:space="preserve">
-    <value>Analyzer</value>
+    <value>分析仪</value>
   </data>
   <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
-    <value>Cutom</value>
+    <value>定制</value>
   </data>
   <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
-    <value>Cycle Orientation</value>
+    <value>循环方向</value>
   </data>
   <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
-    <value>Toggle Grid Layout</value>
+    <value>切换网格布局</value>
   </data>
   <data name="SearchCaseSensitiveLabel" xml:space="preserve">
-    <value>Case Sensitive</value>
+    <value>区分大小写</value>
   </data>
   <data name="SearchThresholdLabel" xml:space="preserve">
-    <value>Threshold</value>
+    <value>临界点</value>
   </data>
   <data name="SearchWholeWordLabel" xml:space="preserve">
-    <value>Whole Word</value>
+    <value>整个词</value>
   </data>
   <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
-    <value>None Set</value>
+    <value>无设置</value>
   </data>
   <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
-    <value>Routing</value>
+    <value>路由</value>
   </data>
   <data name="TriggerActionLabel" xml:space="preserve">
-    <value>Action</value>
+    <value>行动</value>
   </data>
   <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
-    <value>Grid</value>
+    <value>网格</value>
   </data>
   <data name="WelcomeDoneButtonLabel" xml:space="preserve">
-    <value>Done</value>
+    <value>完毕</value>
   </data>
   <data name="WelcomeNextButtonLabel" xml:space="preserve">
-    <value>Next</value>
+    <value>下一个</value>
   </data>
   <data name="WelcomePreviousButtonLabel" xml:space="preserve">
-    <value>Previous</value>
+    <value>以前的</value>
   </data>
   <data name="WelcomeSkipButtonLabel" xml:space="preserve">
-    <value>Skip</value>
+    <value>跳过</value>
   </data>
   <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
-    <value>Existing Account?</value>
+    <value>现有帐户？</value>
   </data>
   <data name="AccountNextPaymentLabel" xml:space="preserve">
-    <value>Next Payment</value>
+    <value>下次付款</value>
   </data>
   <data name="PrefRegistrationFrameHint" xml:space="preserve">
-    <value>Registration lets you carry your paid subscription across all your devices (upon availability). We won't spam your email we promise 😇.</value>
+    <value>注册后，您可以在所有设备上进行付费订阅（视情况而定）。</value>
   </data>
   <data name="AccountSubscriptionLabel" xml:space="preserve">
-    <value>Subscription</value>
+    <value>订阅</value>
   </data>
   <data name="AccountUserNameLabel" xml:space="preserve">
-    <value>User Name</value>
+    <value>用户名</value>
   </data>
   <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
-    <value>Need to Register?</value>
+    <value>需要注册吗？</value>
   </data>
   <data name="ClipTileSourcesHeader" xml:space="preserve">
-    <value>Sources</value>
+    <value>来源</value>
   </data>
   <data name="ClipTileTransactionErrorText" xml:space="preserve">
-    <value>Odd, nothing available. Something must be wrong 😕</value>
+    <value>奇怪，没有可用的东西。</value>
   </data>
   <data name="CommonRemoveLabel" xml:space="preserve">
-    <value>Remove</value>
+    <value>消除</value>
   </data>
   <data name="CommonRequiresRestartHint" xml:space="preserve">
-    <value>Requires restart</value>
+    <value>需要重新启动</value>
   </data>
   <data name="ContentQueryAdvancedHeader" xml:space="preserve">
-    <value>Advanced</value>
+    <value>先进的</value>
   </data>
   <data name="PluginErrExtractText" xml:space="preserve">
-    <value>Error extracting plugin from '{0}'</value>
-    <comment>Folder Path</comment>
+    <value>从“{0}”提取插件时出错</value>
   </data>
   <data name="PluginErrInstallNtfText" xml:space="preserve">
-    <value>Error installing plugin: '{0}'</value>
-    <comment>Error Details</comment>
+    <value>安装插件时出错：“{0}”</value>
   </data>
   <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
-    <value>Error installing plugin '{0}' corrupt or improper directory structure. Manifest should exist at '{1}' but was not found.</value>
-    <comment>Plugin Name, File Path</comment>
+    <value>安装插件“{0}”时出错，目录结构损坏或不正确。</value>
   </data>
   <data name="PluginErrManifestText" xml:space="preserve">
-    <value>Error parsing plugin manifest '{0}': {1}</value>
-    <comment>File Path, Error Details</comment>
+    <value>解析插件清单“{0}”时出错：{1}</value>
   </data>
-  <data name="PluginErrMissingManifest" xml:space="preserve">
-    <value>No plugin loaded with guid: '{0}'</value>
-    <comment>Serial Number</comment>
+  <data name="PluginErrGuidNotFound" xml:space="preserve">
+    <value>未从清单路径加载插件：“{0}”</value>
   </data>
   <data name="PluginErrNtfTitle" xml:space="preserve">
-    <value>{0} Error</value>
-    <comment>Plugin Name</comment>
+    <value>{0}错误</value>
   </data>
   <data name="PluginErrStagingText" xml:space="preserve">
-    <value>Error staging plugin to temp dir '{0}'</value>
-    <comment>Folder Path</comment>
+    <value>将插件暂存到临时目录“{0}”时出错</value>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
-    <value>Error backing up '{0}' to '{1}'. Details: '{2}'</value>
-    <comment>Folder Path, Folder Path, Error Details</comment>
+    <value>将“{0}”备份到“{1}”时出错。</value>
   </data>
   <data name="PrefAutoSearchHint" xml:space="preserve">
-    <value>Text typed will be automatically applied to a search when no text control is focused.</value>
+    <value>当没有文本控件获得焦点时，键入的文本将自动应用于搜索。</value>
   </data>
   <data name="PrefAutoSearchLabel" xml:space="preserve">
-    <value>Auto Search Input</value>
+    <value>自动搜索输入</value>
   </data>
   <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
-    <value>Password change failed</value>
+    <value>密码修改失败</value>
   </data>
   <data name="PrefChangePasswordButtonText" xml:space="preserve">
-    <value>Change</value>
+    <value>改变</value>
   </data>
   <data name="PrefChangePasswordLabel" xml:space="preserve">
-    <value>Change Password</value>
+    <value>更改密码</value>
   </data>
   <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
-    <value>Clear</value>
+    <value>清除</value>
   </data>
   <data name="PrefClearPasswordLabel" xml:space="preserve">
-    <value>Clear Password</value>
+    <value>清除密码</value>
   </data>
   <data name="PrefContentFontLabel" xml:space="preserve">
-    <value>Content</value>
+    <value>内容</value>
   </data>
   <data name="PrefContentFontSizeLabel" xml:space="preserve">
-    <value>Size</value>
+    <value>尺寸</value>
   </data>
   <data name="PrefDestFormatHint" xml:space="preserve">
-    <value>When true, external content inserted into a clip will use the clips rich formatting and not the source content.</value>
+    <value>如果为 true，插入到剪辑中的外部内容将使用剪辑的丰富格式，而不是源内容。</value>
   </data>
   <data name="PrefDestFormatLabel" xml:space="preserve">
-    <value>Paste, drop or append with destination formatting</value>
+    <value>使用目标格式粘贴、删除或附加</value>
   </data>
   <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
-    <value>Are you sure you want to forget the password?</value>
+    <value>您确定要忘记密码吗？</value>
   </data>
   <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
-    <value>Forget</value>
+    <value>忘记</value>
   </data>
   <data name="PrefForgetPasswordLabel" xml:space="preserve">
-    <value>Forget Password</value>
+    <value>忘记密码</value>
   </data>
   <data name="PrefGestureProfileLabel" xml:space="preserve">
-    <value>Profile</value>
+    <value>轮廓</value>
   </data>
   <data name="PrefHideWatermarksLabel" xml:space="preserve">
-    <value>Hide Capacity Watermarks</value>
+    <value>隐藏容量水印</value>
   </data>
   <data name="PrefIgnoreAppendsHint" xml:space="preserve">
-    <value>When new clipboard content is appended it will not be tracked</value>
+    <value>当添加新的剪贴板内容时，它将不会被跟踪</value>
   </data>
   <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
-    <value>Ignore Appends</value>
+    <value>忽略附加</value>
   </data>
   <data name="PrefIgnoreDupHint" xml:space="preserve">
-    <value>When duplicate is detected on clipboard, it will be staged from original source and not added redundantly.</value>
+    <value>当在剪贴板上检测到重复项时，它将从原始源暂存，而不是冗余添加。</value>
   </data>
   <data name="PrefIgnoreDupLabel" xml:space="preserve">
-    <value>Ignore New Duplicates</value>
+    <value>忽略新的重复项</value>
   </data>
   <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
-    <value>Clipboard changes from within the app will not be tracked</value>
+    <value>应用程序内的剪贴板更改将不会被跟踪</value>
   </data>
   <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
-    <value>Ignore Internal Clipboard Tracking</value>
+    <value>忽略内部剪贴板跟踪</value>
   </data>
   <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
-    <value>Spaces, tabs and new lines will be ignored from tracking</value>
+    <value>跟踪时将忽略空格、制表符和换行符</value>
   </data>
   <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
-    <value>Ignore Only White Space</value>
+    <value>仅忽略空白</value>
   </data>
   <data name="PrefLoginLoadLabel" xml:space="preserve">
-    <value>Load on Login</value>
+    <value>登录时加载</value>
   </data>
   <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
-    <value>Animate Window</value>
+    <value>动画窗口</value>
   </data>
   <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
-    <value>Opacity</value>
+    <value>不透明度</value>
   </data>
   <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
-    <value>Show Behavior</value>
+    <value>显示行为</value>
   </data>
   <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
-    <value>Monkey Paste will be revealed by performing a scroll gesture on the top edge of your monitor</value>
+    <value>在显示器的顶部边缘执行滚动手势即可显示 Monkey Paste</value>
   </data>
   <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
-    <value>Show on top screen scroll</value>
+    <value>在顶部屏幕上显示滚动条</value>
   </data>
   <data name="PrefNtfVolumeLabel" xml:space="preserve">
-    <value>Notification Volume</value>
+    <value>通知音量</value>
   </data>
   <data name="PrefPasteHistoryHint" xml:space="preserve">
-    <value>This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing application specific keyboard paste command.</value>
+    <value>此设置将跟踪系统范围的键盘粘贴计数以进行使用统计。</value>
   </data>
   <data name="PrefPasteHistoryLabel" xml:space="preserve">
-    <value>Paste History</value>
+    <value>粘贴历史记录</value>
   </data>
   <data name="PrefPinTrayCapacityHint" xml:space="preserve">
-    <value>Large or many staged items can consume significant memory. removal follows a first-in-first-out policy</value>
+    <value>大型或许多暂存项目可能会消耗大量内存。</value>
   </data>
   <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
-    <value>Pin Capacity</value>
+    <value>引脚容量</value>
   </data>
   <data name="PrefRecentTextLimitHint" xml:space="preserve">
-    <value>This applies to all auto-completable inputs, lower values will improve performance</value>
+    <value>这适用于所有自动完成输入，较低的值将提高性能</value>
   </data>
   <data name="PrefRecentTextLimitLabel" xml:space="preserve">
-    <value>Recent Text Limit</value>
+    <value>最近的文本限制</value>
   </data>
   <data name="PrefResetAllNtfMsgText" xml:space="preserve">
-    <value>Are you sure you want to reset all preferences? This action cannot be undone. *Some Settings will not update until restart</value>
+    <value>您确定要重置所有首选项吗？</value>
   </data>
   <data name="PrefResetAllNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset all notifications?</value>
+    <value>您确定要重置所有通知吗？</value>
   </data>
   <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).</value>
+    <value>Monkey Paste 使用系统剪贴板进行互操作，并在粘贴到外部程序时更改当前剪贴板。</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
-    <value>Reset Clipboard after Monkey Pasting</value>
+    <value>猴子粘贴后重置剪贴板</value>
   </data>
   <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
-    <value>Could not delete plugin cache from path: '{0}'</value>
-    <comment>Folder Path</comment>
+    <value>无法从路径“{0}”删除插件缓存</value>
   </data>
   <data name="PrefResetPluginCacheHint" xml:space="preserve">
-    <value>All plugins will be reset to initial default state</value>
+    <value>所有插件将重置为初始默认状态</value>
   </data>
   <data name="PrefResetPluginCacheLabel" xml:space="preserve">
-    <value>Plugin Cache</value>
+    <value>插件缓存</value>
   </data>
   <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset all plugins to defaults?</value>
+    <value>您确定要将所有插件重置为默认值吗？</value>
   </data>
   <data name="PrefResetPwdNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset your password?</value>
+    <value>您确定要重置密码吗？</value>
   </data>
   <data name="PrefResetShortcutsHint" xml:space="preserve">
-    <value>All application shortcuts will be reset to their default key gestures.</value>
+    <value>所有应用程序快捷方式都将重置为其默认按键手势。</value>
   </data>
   <data name="PrefResetShortcutsLabel" xml:space="preserve">
-    <value>Reset Shortcuts</value>
+    <value>重置快捷方式</value>
   </data>
   <data name="PrefRestoreNtfHint" xml:space="preserve">
-    <value>All ignored notifications previously set.</value>
+    <value>之前设置的所有忽略的通知。</value>
   </data>
   <data name="PrefRestorNtfLabel" xml:space="preserve">
-    <value>Restore Notifications</value>
+    <value>恢复通知</value>
   </data>
   <data name="PrefRichContentHint" xml:space="preserve">
-    <value>(Enabling can be quite slow) Disabling formatted will reduce memory consumption but will disable some advanced features, such as: templates, annotations and find/replace</value>
+    <value>（启用可能会很慢）禁用格式化会减少内存消耗，但会禁用一些高级功能，例如：模板、注释和查找/替换</value>
   </data>
   <data name="PrefRichContentLabel" xml:space="preserve">
-    <value>Rich Content</value>
+    <value>内容丰富</value>
   </data>
   <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
-    <value>Set Password</value>
+    <value>设置密码</value>
   </data>
   <data name="PrefShowHintsLabel" xml:space="preserve">
-    <value>Show Hints</value>
+    <value>显示提示</value>
   </data>
   <data name="PrefShowInTaskbarLabel" xml:space="preserve">
-    <value>Show In Taskbar</value>
+    <value>在任务栏中显示</value>
   </data>
   <data name="PrefShowInTaskSwitcher" xml:space="preserve">
-    <value>Show In Task Switcher</value>
+    <value>在任务切换器中显示</value>
   </data>
   <data name="PrefShowTitlesLabel" xml:space="preserve">
-    <value>Show Titles</value>
+    <value>显示标题</value>
   </data>
   <data name="PrefShowWindowOnDragHint" xml:space="preserve">
-    <value>This helps fluidly allow dropping data into Monkey paste from another application without extra fumbling with window placement by dragging data to the top of the screen which will activate Monkey Paste and allow drop.</value>
+    <value>这有助于流畅地将数据从另一个应用程序拖放到 Monkey Paste 中，而无需额外摸索窗口放置，只需将数据拖到屏幕顶部即可激活 Monkey Paste 并允许拖放。</value>
   </data>
   <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
-    <value>Show on drag to top of screen</value>
+    <value>拖动到屏幕顶部时显示</value>
   </data>
   <data name="PrefSoundThemeLabel" xml:space="preserve">
-    <value>Sound Theme</value>
+    <value>声音主题</value>
   </data>
   <data name="PrefSpellCheckLabel" xml:space="preserve">
-    <value>Spell Check</value>
+    <value>拼写检查</value>
   </data>
   <data name="PrefStartupClipboardHint" xml:space="preserve">
-    <value>On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.</value>
+    <value>启动时，剪贴板的来源将未知，并且根据您的安全设置，内容可能来自排除的网站或应用程序。</value>
   </data>
   <data name="PrefStartupClipboardLabel" xml:space="preserve">
-    <value>Add Startup Clipboard</value>
+    <value>添加启动剪贴板</value>
   </data>
   <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
-    <value>Listen to clipboard on startup</value>
+    <value>启动时监听剪贴板</value>
   </data>
   <data name="CommonSelectLabel" xml:space="preserve">
-    <value>Select</value>
+    <value>选择</value>
   </data>
   <data name="PrefThemeColorHint" xml:space="preserve">
-    <value>Caution! Palette colors are decided by math not eyes! So please be careful as some color and style combinations may not have proper contrast for readability.</value>
+    <value>警告！</value>
   </data>
   <data name="PrefThemeColorLabel" xml:space="preserve">
-    <value>Theme Color</value>
+    <value>主题颜色</value>
   </data>
   <data name="PrefThemeStyleLabel" xml:space="preserve">
-    <value>Theme Style</value>
+    <value>主题风格</value>
   </data>
   <data name="PrefTrashCycleHint" xml:space="preserve">
-    <value>Automatic trash cleanup will occur on startup at the set interval. It is not required but definitely don't let it get too large! Overall performance and CPU usage will have an impact if it becomes large ie. over 100 items lets say...</value>
+    <value>启动时将按照设定的时间间隔进行自动垃圾清理。</value>
   </data>
   <data name="PrefTrashCycleLabel" xml:space="preserve">
-    <value>Trash Cleanup</value>
+    <value>垃圾清理</value>
   </data>
   <data name="PrefUiFontLabel" xml:space="preserve">
-    <value>Interface</value>
+    <value>界面</value>
   </data>
   <data name="PrefUndoLimitHint" xml:space="preserve">
-    <value>High undo limits may affect performance</value>
+    <value>高撤消限制可能会影响性能</value>
   </data>
   <data name="PrefUndoLimitLabel" xml:space="preserve">
-    <value>Undo Limit</value>
+    <value>撤销限制</value>
   </data>
   <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
-    <value>No Limit</value>
+    <value>没有限制</value>
   </data>
   <data name="PrefUserFileExtHint" xml:space="preserve">
-    <value>Used in advanced file search for non preset file kinds</value>
+    <value>用于非预设文件类型的高级文件搜索</value>
   </data>
   <data name="PrefUserFileExtLabel" xml:space="preserve">
-    <value>User - Defined Search Extensions</value>
+    <value>用户定义的搜索扩展</value>
   </data>
   <data name="ClipTileFindReplaceHeader" xml:space="preserve">
-    <value>Find and Replace...</value>
+    <value>查找和替换...</value>
   </data>
   <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
-    <value>Paste Here</value>
+    <value>粘贴在这里</value>
   </data>
   <data name="ClipTileShareHeader" xml:space="preserve">
-    <value>Share...</value>
+    <value>分享...</value>
   </data>
   <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
-    <value>View</value>
+    <value>看法</value>
   </data>
   <data name="CommonManageHeader" xml:space="preserve">
-    <value>Manage...</value>
+    <value>管理...</value>
   </data>
   <data name="CommonRenameLabel" xml:space="preserve">
-    <value>Rename</value>
+    <value>改名</value>
   </data>
   <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
-    <value>Score: {0}</value>
-    <comment>Number</comment>
+    <value>得分：{0}</value>
   </data>
   <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
-    <value>Type: {0}</value>
-    <comment>Annotation Type Name</comment>
+    <value>类型：{0}</value>
   </data>
   <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
-    <value>Permanently Delete</value>
+    <value>永久删除</value>
   </data>
   <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
-    <value>Browse to '{0}'</value>
-    <comment>App Name</comment>
+    <value>浏览到“{0}”</value>
   </data>
   <data name="ClipTileTransformHeader" xml:space="preserve">
-    <value>Transform</value>
+    <value>转换</value>
   </data>
   <data name="ClipTileTransInputTabHeader" xml:space="preserve">
-    <value>Input</value>
+    <value>输入</value>
   </data>
   <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
-    <value>Output</value>
+    <value>输出</value>
   </data>
   <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
-    <value>Sources</value>
+    <value>来源</value>
   </data>
   <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
-    <value>Restore</value>
+    <value>恢复</value>
   </data>
   <data name="CommonChooseImageHeader" xml:space="preserve">
-    <value>Choose Image...</value>
+    <value>选择图像...</value>
   </data>
   <data name="CommonColorHeader" xml:space="preserve">
-    <value>Color</value>
+    <value>颜色</value>
   </data>
   <data name="CommonManageLabel2" xml:space="preserve">
-    <value>Manage '{0}'...</value>
-    <comment>Plugin name</comment>
+    <value>管理“{0}”...</value>
   </data>
   <data name="CommonOpenLabel" xml:space="preserve">
-    <value>Open</value>
+    <value>打开</value>
   </data>
   <data name="CommonWaitLabel" xml:space="preserve">
-    <value>Please wait...</value>
+    <value>请稍等...</value>
   </data>
   <data name="EditorBgColorLabel" xml:space="preserve">
-    <value>Background Color</value>
+    <value>背景颜色</value>
   </data>
   <data name="EditorClearAllLabel" xml:space="preserve">
-    <value>Clear All</value>
+    <value>全部清除</value>
   </data>
   <data name="EditorClipboardFormatsLabel" xml:space="preserve">
-    <value>Clipboard Formats</value>
+    <value>剪贴板格式</value>
   </data>
   <data name="EditorDeleteAllButtonText" xml:space="preserve">
-    <value>Delete All</value>
+    <value>删除所有</value>
   </data>
   <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
-    <value>Edit Details</value>
+    <value>编辑详细信息</value>
   </data>
   <data name="EditorEditTemplateNameLabel" xml:space="preserve">
-    <value>Name</value>
+    <value>姓名</value>
   </data>
   <data name="EditorFindLabel" xml:space="preserve">
-    <value>Find</value>
+    <value>寻找</value>
   </data>
   <data name="EditorFontColorLabel" xml:space="preserve">
-    <value>Font Color</value>
+    <value>字体颜色</value>
   </data>
   <data name="EditorFormatPaintLabel" xml:space="preserve">
-    <value>Format Paint</value>
+    <value>格式绘制</value>
   </data>
   <data name="EditorInSelectionLabel" xml:space="preserve">
-    <value> In Selection</value>
+    <value>选拔中</value>
   </data>
   <data name="EditorInsertImageLabel" xml:space="preserve">
-    <value>Insert Image</value>
+    <value>插入图片</value>
   </data>
   <data name="EditorInsertLinkLabel" xml:space="preserve">
-    <value>Insert Link</value>
+    <value>插入链接</value>
   </data>
   <data name="EditorInsertVideoLabel" xml:space="preserve">
-    <value>Insert Video</value>
+    <value>插入视频</value>
   </data>
   <data name="EditorMatchCaseLabel" xml:space="preserve">
-    <value> Match Case</value>
+    <value>相符</value>
   </data>
   <data name="EditorNewTemplateLabel" xml:space="preserve">
-    <value>New Template</value>
+    <value>新模板</value>
   </data>
   <data name="EditorNextTemplateLabel" xml:space="preserve">
-    <value>Next Template</value>
+    <value>下一个模板</value>
   </data>
   <data name="EditorPasteTemplateWatermark" xml:space="preserve">
-    <value>Enter paste text...</value>
+    <value>输入粘贴文本...</value>
   </data>
   <data name="EditorPrevTemplateLabel" xml:space="preserve">
-    <value>Previous Template</value>
+    <value>上一个模板</value>
   </data>
   <data name="EditorRegExLabel" xml:space="preserve">
-    <value> Regular Expression</value>
+    <value>正则表达式</value>
   </data>
   <data name="EditorReplaceAllLabel" xml:space="preserve">
-    <value>Replace All</value>
+    <value>全部替换</value>
   </data>
   <data name="EditorReplaceLabel" xml:space="preserve">
-    <value>Replace</value>
+    <value>代替</value>
   </data>
   <data name="EditorWholeWordLabel" xml:space="preserve">
-    <value> Whole Word</value>
+    <value>整个词</value>
   </data>
   <data name="EditorWrapLabel" xml:space="preserve">
-    <value> Wrap Around</value>
+    <value>环绕式</value>
   </data>
   <data name="SourceBlockLabel" xml:space="preserve">
-    <value>Block</value>
+    <value>堵塞</value>
   </data>
   <data name="SourceDomainLabel" xml:space="preserve">
-    <value>Domain</value>
+    <value>领域</value>
   </data>
   <data name="SourceShowFolderLabel" xml:space="preserve">
-    <value>Show Folder</value>
+    <value>显示文件夹</value>
   </data>
   <data name="SourceUnblockLabel" xml:space="preserve">
-    <value>Unblock</value>
+    <value>解锁</value>
   </data>
   <data name="SysTrayAboutHeader" xml:space="preserve">
-    <value>About</value>
+    <value>关于</value>
   </data>
   <data name="SysTrayAppendLineHeader" xml:space="preserve">
-    <value>Append Line</value>
+    <value>追加行</value>
   </data>
   <data name="SysTrayAppenInlineHeader" xml:space="preserve">
-    <value>Append Inline</value>
+    <value>内联追加</value>
   </data>
   <data name="SysTrayAutoCopyHeader" xml:space="preserve">
-    <value>Auto - Copy</value>
+    <value>自动 - 复制</value>
   </data>
   <data name="SysTrayModeHeader" xml:space="preserve">
-    <value>Mode</value>
+    <value>模式</value>
   </data>
   <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
-    <value>Please wait MonkeyPaste is loading...</value>
+    <value>请稍候 MonkeyPaste 正在加载...</value>
   </data>
   <data name="SysTrayQuitHeader" xml:space="preserve">
-    <value>Quit</value>
+    <value>辞职</value>
   </data>
   <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
-    <value>Righ-Click Paste</value>
+    <value>右键单击粘贴</value>
   </data>
   <data name="TagGroupTypeName" xml:space="preserve">
-    <value>Group</value>
+    <value>团体</value>
   </data>
   <data name="TagQueryTypeName" xml:space="preserve">
-    <value>Filter</value>
+    <value>筛选</value>
   </data>
   <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
-    <value>Permanently Delete All</value>
+    <value>永久删除全部</value>
   </data>
   <data name="TagTileRestoreAllHeader" xml:space="preserve">
-    <value>Restore All</value>
+    <value>恢复所有</value>
   </data>
   <data name="ActionLabel" xml:space="preserve">
-    <value>Action</value>
+    <value>行动</value>
   </data>
   <data name="AddUrlNtfDupText" xml:space="preserve">
-    <value>Url already exists: '{0}'</value>
-    <comment>Url</comment>
+    <value>网址已存在：“{0}”</value>
   </data>
   <data name="AddUrlNtfErrorText" xml:space="preserve">
-    <value>Url must be in valid format.</value>
+    <value>网址必须采用有效格式。</value>
   </data>
   <data name="AddUrlNtfText" xml:space="preserve">
-    <value>Enter full url:</value>
+    <value>输入完整网址：</value>
   </data>
   <data name="AddUrlNtfTitle" xml:space="preserve">
-    <value>Add Url</value>
+    <value>添加网址</value>
   </data>
   <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
-    <value>Enter Values</value>
+    <value>输入值</value>
   </data>
   <data name="AppendActivateText" xml:space="preserve">
-    <value>Copy text or files to apply.</value>
+    <value>复制要应用的文本或文件。</value>
   </data>
   <data name="AppendActivateTitle" xml:space="preserve">
-    <value>Append {0} {1} Mode Activated</value>
-    <comment>Append Type, Manual or empty</comment>
+    <value>附加 {0} {1} 模式已激活</value>
   </data>
   <data name="AppendAfterNtfText" xml:space="preserve">
-    <value>Clipboard changes will now be appended</value>
+    <value>现在将附加剪贴板更改</value>
   </data>
   <data name="AppendAfterNtfTitle" xml:space="preserve">
-    <value>After Append Mode Activated</value>
+    <value>激活追加模式后</value>
   </data>
   <data name="AppendBeforeNtfText" xml:space="preserve">
-    <value>Clipboard changes will now be prepended</value>
+    <value>现在将预先考虑剪贴板更改</value>
   </data>
   <data name="AppendBeforeNtfTitle" xml:space="preserve">
-    <value>Before Append Mode Activated</value>
+    <value>激活附加模式之前</value>
   </data>
   <data name="AppendBlockLabel" xml:space="preserve">
-    <value>Block</value>
+    <value>堵塞</value>
   </data>
   <data name="AppendDeactivatedText" xml:space="preserve">
-    <value>Normal clipboard behavior has been restored</value>
+    <value>正常的剪贴板行为已恢复</value>
   </data>
   <data name="AppendDeactivatedTitle" xml:space="preserve">
-    <value>Append Deactivated</value>
+    <value>附加已停用</value>
   </data>
   <data name="AppendExtentNtfText" xml:space="preserve">
-    <value>Appends added to top or botom of the clip</value>
+    <value>添加到剪辑的顶部或底部</value>
   </data>
   <data name="AppendExtentNtfTitle" xml:space="preserve">
-    <value>Extent Append Mode Activated</value>
+    <value>范围附加模式已激活</value>
   </data>
   <data name="AppendInlineLabel" xml:space="preserve">
-    <value>Inline</value>
+    <value>排队</value>
   </data>
   <data name="AppendManualLabel" xml:space="preserve">
-    <value>Manual</value>
+    <value>手动的</value>
   </data>
   <data name="AppendManualNtfText" xml:space="preserve">
-    <value>Appends added where you select</value>
+    <value>追加添加到您选择的位置</value>
   </data>
   <data name="AppendManualNtfTitle" xml:space="preserve">
-    <value>Manual Append Mode Activated</value>
+    <value>手动追加模式已激活</value>
   </data>
   <data name="AppendPausedNtfText" xml:space="preserve">
-    <value>Clipboard accumulation halted</value>
+    <value>剪贴板累积已停止</value>
   </data>
   <data name="AppendPausedNtfTitle" xml:space="preserve">
-    <value>Append Paused</value>
+    <value>追加已暂停</value>
   </data>
   <data name="AppendResumedNtfText" xml:space="preserve">
-    <value>Clipboard accumulation resumed</value>
+    <value>剪贴板累积已恢复</value>
   </data>
   <data name="AppendResumedNtfTitle" xml:space="preserve">
-    <value>Append Resumed</value>
+    <value>已恢复追加</value>
   </data>
   <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
-    <value>Are you sure you want to finish appending?</value>
+    <value>您确定要完成附加吗？</value>
   </data>
   <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
-    <value>Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?</value>
+    <value>在兼容模式下编辑将删除所有丰富的格式。</value>
   </data>
   <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
-    <value>Data Degradation Warning</value>
+    <value>数据降级警告</value>
   </data>
   <data name="CommonActiveLabel" xml:space="preserve">
-    <value>Active</value>
+    <value>积极的</value>
   </data>
   <data name="CommonEnabledLabel" xml:space="preserve">
-    <value>Enabled</value>
+    <value>启用</value>
   </data>
   <data name="CommonOffLabel" xml:space="preserve">
-    <value>Off</value>
+    <value>离开</value>
   </data>
   <data name="CommonOnLabel" xml:space="preserve">
-    <value>On</value>
+    <value>在</value>
   </data>
   <data name="CommonPausedLabel" xml:space="preserve">
-    <value>Paused</value>
+    <value>已暂停</value>
   </data>
   <data name="CommonResultLabel" xml:space="preserve">
-    <value>Result</value>
+    <value>结果</value>
   </data>
   <data name="CommonStatusLabel" xml:space="preserve">
-    <value>Status</value>
+    <value>地位</value>
   </data>
   <data name="CommonUnknownErrorText" xml:space="preserve">
-    <value>Unknown error occured.</value>
+    <value>发生未知错误。</value>
   </data>
   <data name="DbPasswordNtfText" xml:space="preserve">
-    <value>attempts remaining</value>
-    <comment>Number</comment>
+    <value>其余的尝试</value>
   </data>
   <data name="DbPasswordNtfTitle" xml:space="preserve">
-    <value>Enter Password</value>
+    <value>输入密码</value>
   </data>
   <data name="EditorConfirmNtfTitle" xml:space="preserve">
-    <value>Confirm</value>
+    <value>确认</value>
   </data>
   <data name="EditorTemplateContactName" xml:space="preserve">
-    <value>Contact</value>
+    <value>接触</value>
   </data>
   <data name="EditorTemplateDateTimeName" xml:space="preserve">
-    <value>Date Time</value>
+    <value>约会时间</value>
   </data>
   <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
-    <value>Are you sure you want to delete ALL usages of '{0}'? This cannot be undone.</value>
-    <comment>Template Name</comment>
+    <value>您确定要删除“{0}”的所有使用情况吗？</value>
   </data>
   <data name="EditorTemplateDynamicName" xml:space="preserve">
-    <value>Dynamic</value>
+    <value>动态的</value>
   </data>
   <data name="EditorTemplateStaticName" xml:space="preserve">
-    <value>Static</value>
+    <value>静止的</value>
   </data>
   <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
-    <value>{0} is empty...</value>
-    <comment>Template Name</comment>
+    <value>{0} 为空...</value>
   </data>
   <data name="EditorTemplateTeaserText" xml:space="preserve">
-    <value>More coming soon!</value>
+    <value>更多即将推出！</value>
   </data>
   <data name="LoginLoadDisableFailed" xml:space="preserve">
-    <value>Login load disable failed</value>
+    <value>登录加载禁用失败</value>
   </data>
   <data name="LoginLoadDisableSuccess" xml:space="preserve">
-    <value>Login load disable success</value>
+    <value>登录加载禁用成功</value>
   </data>
   <data name="LoginLoadEnableFailed" xml:space="preserve">
-    <value>Login load enable failed</value>
+    <value>登录加载启用失败</value>
   </data>
   <data name="LoginLoadEnableSuccess" xml:space="preserve">
-    <value>Login load enable success</value>
+    <value>登录加载启用成功</value>
   </data>
   <data name="MainWindowHideLabel" xml:space="preserve">
-    <value>Hide</value>
+    <value>隐藏</value>
   </data>
   <data name="MainWindowLoadedNtfText" xml:space="preserve">
-    <value>Monkey Paste is now loaded. \nClipboard listening is: {0}</value>
-    <comment>Paused or active</comment>
+    <value>猴酱现已加载。</value>
   </data>
   <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
-    <value>Loaded</value>
+    <value>已加载</value>
   </data>
   <data name="MainWindowShowLabel" xml:space="preserve">
-    <value>Show</value>
+    <value>展示</value>
   </data>
   <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
-    <value>Auto Copy Selection Mode: {0}</value>
-    <comment>On or off</comment>
+    <value>自动复制选择模式：{0}</value>
   </data>
   <data name="MouseModeChangeNtfTitle" xml:space="preserve">
-    <value>Mode Changed</value>
+    <value>模式已改变</value>
   </data>
   <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
-    <value>Right Click Paste Mode: {0}</value>
-    <comment>On or off</comment>
+    <value>右键单击粘贴模式：{0}</value>
   </data>
   <data name="PluginUpdatedNtfTitle" xml:space="preserve">
-    <value>Plugin Updated</value>
+    <value>插件更新</value>
   </data>
   <data name="ShortcutPasteTitle" xml:space="preserve">
-    <value>Paste '{0}'</value>
-    <comment>Content Title</comment>
+    <value>粘贴“{0}”</value>
   </data>
   <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
-    <value>Run '{0}' Analyzer</value>
-    <comment>Plugin Name</comment>
+    <value>运行“{0}”分析器</value>
   </data>
   <data name="ShortcutRunTriggerTitle" xml:space="preserve">
-    <value>Run '{0}' Trigger</value>
-    <comment>Trigger Name</comment>
+    <value>运行“{0}”触发器</value>
   </data>
   <data name="ShortcutSelectTagTitle" xml:space="preserve">
-    <value>Select '{0}' Collection</value>
-    <comment>Collection Name</comment>
+    <value>选择“{0}”集合</value>
   </data>
   <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
-    <value>Are you sure you want to delete '{0}' and all associated actions?</value>
-    <comment>Trigger Name</comment>
+    <value>您确定要删除“{0}”和所有关联的操作吗？</value>
   </data>
   <data name="TriggerLabel" xml:space="preserve">
-    <value>Trigger</value>
+    <value>扳机</value>
   </data>
   <data name="TriggerRemoveActionText" xml:space="preserve">
-    <value>Would you like to remove all the sub-actions for '{0}'? (Otherwise they will be re-parented to '{1}')</value>
-    <comment>Action Name, Action Name</comment>
+    <value>您想删除“{0}”的所有子操作吗？</value>
   </data>
   <data name="TriggerRemoveActionTitle" xml:space="preserve">
-    <value>Remove Options</value>
+    <value>删除选项</value>
   </data>
   <data name="UrlNavConfirmText" xml:space="preserve">
-    <value>Do you really want to goto '{0}'?</value>
-    <comment>Url</comment>
+    <value>您确实要转到“{0}”吗？</value>
   </data>
   <data name="LoaderAccountLabel" xml:space="preserve">
-    <value>Account</value>
+    <value>帐户</value>
   </data>
   <data name="LoaderAnalyzersLabel" xml:space="preserve">
-    <value>Analyzers</value>
+    <value>分析仪</value>
   </data>
   <data name="LoaderAppLabel" xml:space="preserve">
-    <value>Application Operations</value>
+    <value>应用操作</value>
   </data>
   <data name="LoaderClipboardLabel" xml:space="preserve">
-    <value>Clipboard</value>
+    <value>剪贴板</value>
   </data>
   <data name="LoaderContentLabel" xml:space="preserve">
-    <value>Content</value>
+    <value>内容</value>
   </data>
   <data name="LoaderConvertersLabel" xml:space="preserve">
-    <value>Converters</value>
+    <value>转换器</value>
   </data>
   <data name="LoaderCultureLabel" xml:space="preserve">
-    <value>Culture</value>
+    <value>文化</value>
   </data>
   <data name="LoaderDataLabel" xml:space="preserve">
-    <value>Data</value>
+    <value>数据</value>
   </data>
   <data name="LoaderDirLabel" xml:space="preserve">
-    <value>Direction</value>
+    <value>方向</value>
   </data>
   <data name="LoaderDndLabel" xml:space="preserve">
-    <value>Drag and Drop</value>
+    <value>拖放</value>
   </data>
   <data name="LoaderDropWidgetLabel" xml:space="preserve">
-    <value>Drop Wizard</value>
+    <value>掉落向导</value>
   </data>
   <data name="LoaderIconsLabel" xml:space="preserve">
-    <value>Icons</value>
+    <value>图标</value>
   </data>
   <data name="LoaderLoggerLabel" xml:space="preserve">
-    <value>Logger</value>
+    <value>记录器</value>
   </data>
   <data name="LoaderMainWindowLabel" xml:space="preserve">
-    <value>Interface</value>
+    <value>界面</value>
   </data>
   <data name="LoaderPasteLabel" xml:space="preserve">
-    <value>Paste Operations</value>
+    <value>粘贴操作</value>
   </data>
   <data name="LoaderPrefLabel" xml:space="preserve">
-    <value>Preferences</value>
+    <value>优先</value>
   </data>
   <data name="LoaderSearchLabel" xml:space="preserve">
-    <value>Search</value>
+    <value>搜索</value>
   </data>
   <data name="LoaderShortcutsLabel" xml:space="preserve">
-    <value>Shortcuts</value>
+    <value>快捷方式</value>
   </data>
   <data name="LoaderSortLabel" xml:space="preserve">
-    <value>Sort</value>
+    <value>种类</value>
   </data>
   <data name="LoaderSoundLabel" xml:space="preserve">
-    <value>Sounds</value>
+    <value>声音</value>
   </data>
   <data name="LoaderSysTrayLabel" xml:space="preserve">
-    <value>System Tray</value>
+    <value>系统托盘</value>
   </data>
   <data name="LoaderTagsLabel" xml:space="preserve">
-    <value>Collections</value>
+    <value>收藏</value>
   </data>
   <data name="LoaderThemeLabel" xml:space="preserve">
-    <value>Theme</value>
+    <value>主题</value>
   </data>
   <data name="LoaderTriggersLabel" xml:space="preserve">
-    <value>Triggers</value>
+    <value>触发器</value>
   </data>
   <data name="LoaderUrlLabel" xml:space="preserve">
-    <value>Website Operations</value>
+    <value>网站运营</value>
   </data>
   <data name="PrefLanguageLabel" xml:space="preserve">
-    <value>Language</value>
+    <value>语言</value>
   </data>
   <data name="ActionAddFromClipboardHint" xml:space="preserve">
-    <value>Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content.</value>
+    <value>从剪贴板创建 - 在执行时从当前剪贴板创建新的内容项。</value>
   </data>
   <data name="ActionAlertAlertSound" xml:space="preserve">
-    <value>Alert</value>
+    <value>警报</value>
   </data>
   <data name="ActionAlertBlipSound" xml:space="preserve">
-    <value>Blip</value>
+    <value>光点</value>
   </data>
   <data name="ActionAlertChimeSound" xml:space="preserve">
-    <value>Chime</value>
+    <value>编钟</value>
   </data>
   <data name="ActionAlertHint" xml:space="preserve">
-    <value>Alert - Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring 'Conditional' actions. Alerts have no affect on their input.</value>
+    <value>警报 - 用于自定义警报，帮助您了解长时间运行的操作链。</value>
   </data>
   <data name="ActionAlertMessageLabel" xml:space="preserve">
-    <value>Message</value>
+    <value>信息</value>
   </data>
   <data name="ActionAlertMonkeySound" xml:space="preserve">
-    <value>Monkey</value>
+    <value>猴</value>
   </data>
   <data name="ActionAlertPreviewLabel" xml:space="preserve">
-    <value>Preview</value>
+    <value>预览</value>
   </data>
   <data name="ActionAlertShowLabel" xml:space="preserve">
-    <value>Show?</value>
+    <value>展示？</value>
   </data>
   <data name="ActionAlertShowTimeHint" xml:space="preserve">
-    <value>Time toast message is shown in seconds. When value is 0 message must be closed manually.</value>
+    <value>时间 toast 消息以秒为单位显示。</value>
   </data>
   <data name="ActionAlertShowTimeLabel" xml:space="preserve">
-    <value>Show Time (s)</value>
+    <value>演出时间</value>
   </data>
   <data name="ActionAlertSonarSound" xml:space="preserve">
-    <value>Sonar</value>
+    <value>声纳</value>
   </data>
   <data name="ActionAlertSoundLabel" xml:space="preserve">
-    <value>Sound?</value>
+    <value>声音？</value>
   </data>
   <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
-    <value>Sound Type</value>
+    <value>声音类型</value>
   </data>
   <data name="ActionAlertTingSound" xml:space="preserve">
-    <value>Ting</value>
+    <value>婷</value>
   </data>
   <data name="ActionAlertVolumeLabel" xml:space="preserve">
-    <value>Volume</value>
+    <value>体积</value>
   </data>
   <data name="ActionAnalyzeLabel" xml:space="preserve">
-    <value>Analyzer</value>
+    <value>分析仪</value>
   </data>
   <data name="ActionAnalyzerHint" xml:space="preserve">
-    <value>Analyzer - Processes triggered content or previous action output using a selected plugin.</value>
+    <value>分析器 - 使用选定的插件处理触发的内容或先前的操作输出。</value>
   </data>
   <data name="ActionClassifyActionHint" xml:space="preserve">
-    <value>Input content is linked to the selected collection</value>
+    <value>输入内容链​​接到所选集合</value>
   </data>
   <data name="ActionClassifyHint" xml:space="preserve">
-    <value>Classifier - Automatically adds triggered content to the selected collection.</value>
+    <value>分类器 - 自动将触发的内容添加到选定的集合中。</value>
   </data>
   <data name="ActionClassifyLabel" xml:space="preserve">
-    <value>Collection</value>
+    <value>收藏</value>
   </data>
   <data name="ActionCondCaseLabel" xml:space="preserve">
-    <value>Case Sensitive?</value>
+    <value>区分大小写？</value>
   </data>
   <data name="ActionCondDataHint" xml:space="preserve">
-    <value>This can be static text to compare with the input and/or include selected properties (via the filter button) will be substituted when the condition is evaluated.</value>
+    <value>这可以是与输入进行比较的静态文本和/或包括选定的属性（通过过滤器按钮）将在评估条件时被替换。</value>
   </data>
   <data name="ActionCondDataLabel" xml:space="preserve">
-    <value>Condition Data</value>
+    <value>条件数据</value>
   </data>
   <data name="ActionCondInFilterHint" xml:space="preserve">
-    <value>An optional JSONPath query that will be applied to the selected 'Input Property' before the condition is evaluated.</value>
+    <value>一个可选的 JSONPath 查询，将在评估条件之前应用于所选的“输入属性”。</value>
   </data>
   <data name="ActionCondInFilterLabel" xml:space="preserve">
-    <value>Input Filter</value>
+    <value>输入滤波器</value>
   </data>
   <data name="ActionCondInPropHint" xml:space="preserve">
-    <value>What's evaluated for this condition in the action chain. All values come from the initial input to the trigger, except for 'Last Output'. 'Last Output' will scrape the previous action's output with this condition. So for example if the previous action was an image object detector on a picture of a cat, the output to be compared here in that case would be the word 'cat'. In practice however the output will be JSON or XML annotation markup where these other properties can be used to isolate the comparision data for this condition.</value>
+    <value>在操作链中针对此条件评估什么。</value>
   </data>
   <data name="ActionCondInPropLabel" xml:space="preserve">
-    <value>Input Property</value>
+    <value>输入属性</value>
   </data>
   <data name="ActionConditionalHint" xml:space="preserve">
-    <value>Conditional - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.</value>
+    <value>有条件 - 解析内容或先前操作输出的文本。</value>
   </data>
   <data name="ActionCondOpHint" xml:space="preserve">
-    <value>All true or false operations where child actions will only execute if the result is true.</value>
+    <value>所有 true 或 false 操作，其中子操作仅在结果为 true 时才会执行。</value>
   </data>
   <data name="ActionCondOpLabel" xml:space="preserve">
-    <value>Operation</value>
+    <value>手术</value>
   </data>
   <data name="ActionContentAddAllLabel" xml:space="preserve">
-    <value>All</value>
+    <value>全部</value>
   </data>
   <data name="ActionContentAddHint" xml:space="preserve">
-    <value>Content Added - Triggered when content of the selected type is added</value>
+    <value>已添加内容 - 添加所选类型的内容时触发</value>
   </data>
   <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
-    <value>Only execute this trigger if clipboard is new and not been already copied and processed. This is independant of any preferene setting of whether new content is ignored or not.</value>
+    <value>仅当剪贴板是新的且尚未复制和处理时才执行此触发器。</value>
   </data>
   <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
-    <value>Ignore Duplicate</value>
+    <value>忽略重复</value>
   </data>
   <data name="ActionContentAddTriggerHint" xml:space="preserve">
-    <value>Content (not meeting rejection criteria) of this type will trigger this action.</value>
+    <value>这种类型的内容（不符合拒绝标准）将触发此操作。</value>
   </data>
   <data name="ActionContentTaggedHint" xml:space="preserve">
-    <value>Content Classified - Triggered when content is added to the selected collection</value>
+    <value>内容分类 - 将内容添加到所选集合时触发</value>
   </data>
   <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
-    <value>Triggered when content is added to the selected collection</value>
+    <value>当内容添加到所选集合时触发</value>
   </data>
   <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
-    <value>Collection</value>
+    <value>收藏</value>
   </data>
   <data name="ActionDelayActionHint" xml:space="preserve">
-    <value>The amount of time in milliseconds waited before children execute</value>
+    <value>子进程执行之前等待的时间（以毫秒为单位）</value>
   </data>
   <data name="ActionDelayActionLabel" xml:space="preserve">
-    <value>Delay</value>
+    <value>延迟</value>
   </data>
   <data name="ActionDelayHint" xml:space="preserve">
-    <value>Delay - Priarily used in conjunction with the 'Repeat' Action for polling remote sources or aid with long running operations.</value>
+    <value>延迟 - 主要与“重复”操作结合使用，用于轮询远程源或帮助长时间运行的操作。</value>
   </data>
   <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
-    <value>When left blank, the content will use its title as the file name.</value>
+    <value>当留空时，内容将使用其标题作为文件名。</value>
   </data>
   <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
-    <value>Custom Name</value>
+    <value>自定义名称</value>
   </data>
   <data name="ActionFileWriteDirHint" xml:space="preserve">
-    <value>The directory where input content will be written.</value>
+    <value>将写入输入内容的目录。</value>
   </data>
   <data name="ActionFileWriteDirLabel" xml:space="preserve">
-    <value>Directory</value>
+    <value>目录</value>
   </data>
   <data name="ActionFileWriterHint" xml:space="preserve">
-    <value>File Writer - Saves input to the selected folder.</value>
+    <value>文件写入器 - 将输入保存到选定的文件夹。</value>
   </data>
   <data name="ActionFolderWatcherHint" xml:space="preserve">
-    <value>Folder Changed - Triggered when a folders content changes. The output will be a new content item of the file or folder that has changed along with the type of change.</value>
+    <value>文件夹已更改 - 当文件夹内容更改时触发。</value>
   </data>
   <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
-    <value>Events</value>
+    <value>活动</value>
   </data>
   <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
-    <value>Folder</value>
+    <value>文件夹</value>
   </data>
   <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
-    <value>Ignore Duplicate</value>
+    <value>忽略重复</value>
   </data>
   <data name="ActionKeySimActionHint" xml:space="preserve">
-    <value>Recorded key combinations will be simulated in the foreground application.</value>
+    <value>记录的组合键将在前台应用程序中模拟。</value>
   </data>
   <data name="ActionKeySimActionLabel" xml:space="preserve">
-    <value>Keys to simulate</value>
+    <value>模拟按键</value>
   </data>
   <data name="ActionKeySimHint" xml:space="preserve">
-    <value>"Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether.</value>
+    <value>“手势模拟器 - 将记录的按键组合模拟到当前活动的应用程序中。仅支持 1 个手势，因此如果您需要更多手势，则需要将其多个实例链接在一起。</value>
   </data>
   <data name="ActionRepeatCountHint" xml:space="preserve">
-    <value>A value of 0 will repeat parent action indefinitely</value>
+    <value>值为 0 将无限期地重复父操作</value>
   </data>
   <data name="ActionRepeatCountLabel" xml:space="preserve">
-    <value>Repeat Count</value>
+    <value>重复计数</value>
   </data>
   <data name="ActionRepeatDelayHint" xml:space="preserve">
-    <value>The amount of time in milliseconds waited once parent action completes</value>
+    <value>父操作完成后等待的时间（以毫秒为单位）</value>
   </data>
   <data name="ActionRepeatDelayLabel" xml:space="preserve">
-    <value>Repeat Delay</value>
+    <value>重复延迟</value>
   </data>
   <data name="ActionRepeaterHint" xml:space="preserve">
-    <value>Repeater - Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation.</value>
+    <value>中继器 - 用于创建动作循环或重复任务。</value>
   </data>
   <data name="ActionShortcutTriggerHint" xml:space="preserve">
-    <value>Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard</value>
+    <value>快捷方式触发 - 当使用当前剪贴板随时按下记录的快捷方式时</value>
   </data>
   <data name="ActionShortcutTriggerLabel" xml:space="preserve">
-    <value>Shortcut Trigger</value>
+    <value>快捷触发</value>
   </data>
   <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
-    <value>Triggered when the recorded shortcut is pressed at anytime with the current clipboard</value>
+    <value>当使用当前剪贴板随时按下录制的快捷方式时触发</value>
   </data>
   <data name="PrefRestartConfirmNtfText" xml:space="preserve">
-    <value>This action requires the app to restart. Would you like to do that now?</value>
+    <value>此操作需要重新启动应用程序。</value>
   </data>
   <data name="RestarterErrorNtfText" xml:space="preserve">
-    <value>There was a problem. You need to manually restart the application.</value>
+    <value>有问题。</value>
   </data>
   <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
-    <value>Analyze with Annotator</value>
+    <value>使用注释器进行分析</value>
   </data>
   <data name="TriggerAnnTriggerLabel" xml:space="preserve">
-    <value>Annotate New Text Trigger</value>
+    <value>注释新文本触发器</value>
   </data>
   <data name="SearchDisabeledCriteriaTooltip" xml:space="preserve">
-    <value>Pre-Loaded Filters are read-only. Duplicate to alter.</value>
+    <value>预加载过滤器是只读的。</value>
   </data>
   <data name="PluginAnonymousAuthor" xml:space="preserve">
-    <value>Anonymous</value>
+    <value>匿名的</value>
   </data>
   <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
-    <value>Custom</value>
+    <value>风俗</value>
   </data>
   <data name="TimeSpanDayLast" xml:space="preserve">
-    <value>Yesterday</value>
+    <value>昨天</value>
   </data>
   <data name="TimeSpanDays" xml:space="preserve">
-    <value>{0} days ago</value>
-    <comment>Number</comment>
+    <value>{0} 天前</value>
   </data>
   <data name="TimeSpanHourLast" xml:space="preserve">
-    <value>1 hour ago</value>
+    <value>1小时前</value>
   </data>
   <data name="TimeSpanHours" xml:space="preserve">
-    <value>{0} hours ago</value>
-    <comment>Number</comment>
+    <value>{0} 小时前</value>
   </data>
   <data name="TimeSpanJustNow" xml:space="preserve">
-    <value>Just Now</value>
+    <value>现在</value>
   </data>
   <data name="TimeSpanMinute" xml:space="preserve">
-    <value>A minute ago</value>
+    <value>一分钟前</value>
   </data>
   <data name="TimeSpanMinutes" xml:space="preserve">
-    <value>{0} minutes ago</value>
-    <comment>Number</comment>
+    <value>{0} 分钟前</value>
   </data>
   <data name="TimeSpanMonthLast" xml:space="preserve">
-    <value>Last month</value>
+    <value>上个月</value>
   </data>
   <data name="TimeSpanMonths" xml:space="preserve">
-    <value>{0} months ago</value>
-    <comment>Number</comment>
+    <value>{0} 个月前</value>
   </data>
   <data name="TimeSpanWeekLast" xml:space="preserve">
-    <value>Last week</value>
+    <value>上星期</value>
   </data>
   <data name="TimeSpanWeeks" xml:space="preserve">
-    <value>{0} weeks ago</value>
-    <comment>Number</comment>
+    <value>{0} 周前</value>
   </data>
   <data name="TimeSpanYears" xml:space="preserve">
-    <value>{0} years ago</value>
-    <comment>Number</comment>
+    <value>{0} 年前</value>
   </data>
 </root>

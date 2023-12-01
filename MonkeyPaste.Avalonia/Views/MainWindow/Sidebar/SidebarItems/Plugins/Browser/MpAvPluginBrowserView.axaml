@@ -408,7 +408,7 @@
                     <SelectableTextBlock Grid.Row="6"
                                Grid.Column="1"
                                Classes="detailInfo"
-                               Text="{Binding PluginCredits}" />
+                               Text="{Binding PluginAuthor}" />
 
                     <!--  LICENSE URL  -->
                     <SelectableTextBlock Grid.Row="7"

@@ -2,7 +2,7 @@
   "title": "Azure Language Translator",
   "description": "Translation of written text from specified or auto-detected language",
   "version": "1.0",
-  "credits": "Thomas Kefauver",
+  "author": "Thomas Kefauver",
   "guid": "c80163e4-66b6-4845-ba11-de182b9f8a62",
   "iconUri": "logo.png",
   "tags": "Language Translator,Accessibility,Text,Microsoft,Azure",

@@ -1785,15 +1785,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Remove="Resources\Legal\Attributions.resx" />
     <EmbeddedResource Remove="Resources\Localization\UiStrings\ListingStrings.ja-JP.resx" />
     <EmbeddedResource Remove="Resources\Localization\UiStrings\ListingStrings.resx" />
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="Resources\Legal\Attributions.resx">
-      <Generator></Generator>
-    </None>
     <None Include="Resources\Localization\Listings\ListingStrings.resx">
       <Generator></Generator>
     </None>
@@ -1834,6 +1830,9 @@
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.zh-CN.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.ja-JP.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -1843,6 +1842,10 @@
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.zh-CN.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

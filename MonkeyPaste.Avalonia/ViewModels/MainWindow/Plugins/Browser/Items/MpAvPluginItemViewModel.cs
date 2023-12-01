@@ -15,12 +15,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        public const string DEFAULT_LICENSE_URL =
-#if LOCAL_SERVER
-            @"https://localhost/license";
-#else
-            @"https://www.monkeypaste.com/license";
-#endif
 
         public const string ABUSE_BASE_URL =
 #if LOCAL_SERVER
@@ -28,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 #else
             @"https://www.monkeypaste.com/plugins/abuse?id=";
 #endif
+
         #endregion
 
         #region Statics
@@ -152,15 +147,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string PluginLanguage {
-            get {
-                if (PluginFormat == null) {
-                    return string.Empty;
-                }
-                return PluginFormat.language;
-            }
-        }
-
         public string PackageUrl {
             get {
                 if (PluginFormat == null) {
@@ -179,12 +165,12 @@ namespace MonkeyPaste.Avalonia {
                 return PluginFormat.version;
             }
         }
-        public string PluginCredits {
+        public string PluginAuthor {
             get {
                 if (PluginFormat == null) {
                     return string.Empty;
                 }
-                return PluginFormat.credits;
+                return PluginFormat.author;
             }
         }
 
@@ -192,9 +178,9 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (PluginFormat == null ||
                     !Uri.IsWellFormedUriString(PluginFormat.licenseUrl, UriKind.Absolute)) {
-                    return DEFAULT_LICENSE_URL;
+                    return null;
                 }
-                return PluginFormat.credits;
+                return PluginFormat.licenseUrl;
             }
         }
 

@@ -381,7 +381,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.WhenAll(aivm.Items.Select(x => x.Preset.DeleteFromDatabaseAsync()));
 
                 // remove from plugin dir
-                MpPluginLoader.DeletePlugin(aivm.PluginGuid);
+                MpPluginLoader.DeletePluginByGuid(aivm.PluginGuid);
 
 
                 // remove from collection
@@ -409,7 +409,7 @@ namespace MonkeyPaste.Avalonia {
 
                 bool success = true;
                 // remove from plugin dir (retain cache)
-                if (!MpPluginLoader.DeletePlugin(plugin_guid, false)) {
+                if (!MpPluginLoader.DeletePluginByGuid(plugin_guid, false)) {
                     success = false;
                 }
 

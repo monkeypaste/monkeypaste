@@ -79,6 +79,54 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region Strings
+
+        public static string ToReadableTimeSpan(this DateTime dt) {
+            TimeSpan ts = DateTime.Now - dt;
+            int totalYears = (int)(ts.TotalDays / 365);
+            int totalMonths = DateTime.Now.MonthDifference(dt);
+            int totalWeeks = DateTime.Now.WeekDifference(dt);
+            int totalDays = (int)ts.TotalDays;
+            int totalHours = (int)ts.TotalHours;
+            int totalMinutes = (int)ts.TotalMinutes;
+
+            if (totalYears > 1) {
+                return string.Format(UiStrings.TimeSpanYears, totalYears);
+            }
+            if (totalMonths >= 1 && totalWeeks >= 4) {
+                if (totalMonths == 1) {
+                    return UiStrings.TimeSpanMonthLast;
+                }
+                return string.Format(UiStrings.TimeSpanMonths, totalMonths);
+            }
+            if (totalWeeks >= 1) {
+                if (totalWeeks == 1) {
+                    return UiStrings.TimeSpanWeekLast;
+                }
+                return string.Format(UiStrings.TimeSpanWeeks, totalWeeks);
+            }
+            if (totalDays >= 1) {
+                if (totalDays == 1) {
+                    return UiStrings.TimeSpanDayLast;
+                }
+                return string.Format(UiStrings.TimeSpanDays, totalDays);
+            }
+            if (totalHours >= 1) {
+                if (totalHours == 1) {
+                    return UiStrings.TimeSpanHourLast;
+                }
+                return string.Format(UiStrings.TimeSpanHours, totalHours);
+            }
+            if (totalMinutes >= 1) {
+                if (totalMinutes == 1) {
+                    return UiStrings.TimeSpanMinute;
+                }
+                return string.Format(UiStrings.TimeSpanMinutes, totalMinutes);
+            }
+            return UiStrings.TimeSpanJustNow;
+        }
+        #endregion
+
         #region Resources
 
         public static string ToPathFromAvResourceString(this string res_str) {

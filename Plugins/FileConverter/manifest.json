@@ -2,7 +2,7 @@
   "title": "File Converter",
   "description": "Allows files to be translated into images or text content types",
   "version": "1.0",
-  "credits": "Thomas Kefauver",
+  "author": "Thomas Kefauver",
   "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
   "projectUrl": "https://www.monkeypaste.com",
   "donateUrl": "https://www.monkeypaste.com",

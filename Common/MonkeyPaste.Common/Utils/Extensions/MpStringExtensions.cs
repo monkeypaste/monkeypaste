@@ -384,49 +384,20 @@ namespace MonkeyPaste.Common {
         public static string ToProperCase(this string titleCaseStr, string noneText = "", string spaceStr = " ") {
             // TODO when automating UI language need to parameterize low vs up case logic
             //Converts 'ThisIsALabel" to 'This Is A Label'
-            string outStr = string.Empty;
+            var sb = new StringBuilder();
             for (int i = 0; i < titleCaseStr.Length; i++) {
                 if (i > 0 &&
                     (IsLowerCaseChar(titleCaseStr[i - 1]) && IsCapitalCaseChar(titleCaseStr[i]) ||
                     IsCapitalCaseChar(titleCaseStr[i - 1]) && IsCapitalCaseChar(titleCaseStr[i]))) {
-                    outStr += spaceStr;
+                    sb.Append(spaceStr);
                 }
-                outStr += titleCaseStr[i];
+                sb.Append(titleCaseStr[i]);
             }
-            if (outStr.ToLower() == "none") {
+            string result = sb.ToString();
+            if (result.ToLower() == "none") {
                 return noneText;
             }
-            return outStr;
-        }
-
-        public static string ToReadableTimeSpan(this DateTime dt) {
-            TimeSpan ts = DateTime.Now - dt;
-            int totalYears = (int)(ts.TotalDays / 365);
-            int totalMonths = DateTime.Now.MonthDifference(dt);
-            int totalWeeks = DateTime.Now.WeekDifference(dt);
-            int totalDays = (int)ts.TotalDays;
-            int totalHours = (int)ts.TotalHours;
-            int totalMinutes = (int)ts.TotalMinutes;
-
-            if (totalYears > 1) {
-                return string.Format($"{totalYears} years ago");
-            }
-            if (totalMonths >= 1 && totalWeeks >= 4) {
-                return string.Format($"{(totalMonths == 1 ? "Last" : totalMonths)} month{(totalMonths == 1 ? string.Empty : "s ago")}");
-            }
-            if (totalWeeks >= 1) {
-                return string.Format($"{(totalWeeks == 1 ? "Last" : totalWeeks)} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
-            }
-            if (totalDays >= 1) {
-                return string.Format($"{(totalDays == 1 ? "Yesterday" : totalDays)} {(totalDays == 1 ? string.Empty : "days ago")}");
-            }
-            if (totalHours >= 1) {
-                return string.Format($"{totalHours} hour{(totalHours == 1 ? string.Empty : "s")} ago");
-            }
-            if (totalMinutes >= 1) {
-                return string.Format($"{totalMinutes} minute{(totalMinutes == 1 ? string.Empty : "s")} ago");
-            }
-            return "Just Now";
+            return result;
         }
 
 

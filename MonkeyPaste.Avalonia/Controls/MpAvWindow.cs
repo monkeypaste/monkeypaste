@@ -86,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public DateTime LastActiveDateTime { get; set; }
 
         #endregion
 

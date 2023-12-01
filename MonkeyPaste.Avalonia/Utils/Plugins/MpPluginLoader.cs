@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+        const string MANIFEST_FILE_NAME_PREFIX = "manifest";
+        const string MANIFEST_FILE_EXT = "json";
+
+        #endregion
         #region Statics
+        static string MANIFEST_INVARIANT_FILE_NAME =>
+            $"{MANIFEST_FILE_NAME_PREFIX}.{MANIFEST_FILE_EXT}";
 
         public static string PLUG_FOLDER_NAME => "Plugins";
         public static string MANIFEST_BACKUP_FOLDER_NAME => ".cache";
@@ -57,19 +65,16 @@ namespace MonkeyPaste.Avalonia {
             await ValidateLoadedPluginsAsync();
             IsLoaded = true;
         }
-
-
-
-        public static async Task<MpPluginFormat> ReloadPluginAsync(string manifestPath) {
-            if (!Plugins.ContainsKey(manifestPath)) {
-                throw new Exception(string.Format(UiStrings.PluginErrMissingManifest, manifestPath));
+        public static async Task<MpPluginFormat> ReloadPluginAsync(string plugin_guid) {
+            var kvp = Plugins.FirstOrDefault(x => x.Value.guid == plugin_guid);
+            if (kvp.IsDefault()) {
+                throw new Exception(string.Format(UiStrings.PluginErrGuidNotFound, plugin_guid));
             }
+            string manifestPath = kvp.Key;
             var reloaded_pf = await LoadPluginAsync(manifestPath);
             Plugins[manifestPath] = reloaded_pf;
             return reloaded_pf;
         }
-
-
         public static bool ValidatePluginDependencies(MpPluginFormat plugin) {
             if (plugin == null) {
                 return false;
@@ -94,7 +99,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return true;
         }
-
         public static string CreatePluginBackup(string guid, out string original_dir) {
             original_dir = null;
             if (Plugins.All(x => x.Value.guid != guid)) {
@@ -122,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return backup_path;
         }
-        public static bool DeletePlugin(string guid, bool delete_cache = true) {
+        public static bool DeletePluginByGuid(string guid, bool delete_cache = true) {
             if (Plugins.All(x => x.Value.guid != guid)) {
                 // not found
                 return false;
@@ -130,31 +134,8 @@ namespace MonkeyPaste.Avalonia {
             var plugin_kvp = Plugins.FirstOrDefault(x => x.Value.guid == guid);
             string manifest_path = plugin_kvp.Key;
 
-            bool success = true;
-            if (manifest_path.IsFile()) {
-                // delete plugin folder
-                string dir_to_remove = Path.GetDirectoryName(manifest_path);
-                if (!MpFileIo.DeleteDirectory(dir_to_remove)) {
-                    success = false;
-                    MpConsole.WriteLine($"Error deleting plugin folder '{dir_to_remove}'");
-                }
-            }
-            if (delete_cache) {
-                string cache_path = Path.Combine(PluginManifestBackupFolderPath, GetCachedPluginFileName(plugin_kvp.Value));
-                if (cache_path.IsFile()) {
-                    if (!MpFileIo.DeleteFile(cache_path)) {
-                        success = false;
-                        MpConsole.WriteLine($"Error deleting plugin cache file '{cache_path}'");
-                    }
-                }
-            }
-            // remove from loader
-            if (!Plugins.Remove(manifest_path)) {
-                MpConsole.WriteLine($"Loaded plugin '{manifest_path}' not found");
-            }
-            return success;
+            return DeletePlugin(plugin_kvp.Key, plugin_kvp.Value, delete_cache);
         }
-
         public static async Task<MpPluginFormat> InstallPluginAsync(string packageUrl, bool silentInstall = false) {
             try {
                 // download package (should always be a zip file of the plugins root folder or contents of root folder)
@@ -212,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
-                var result = await LoadPluginAsync(manifest_path);
+                var result = await LoadPluginAsync(manifest_path, true);
                 if (result != null) {
                     Plugins.AddOrReplace(manifest_path, result);
                 }
@@ -228,7 +209,6 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
         }
-
         public static MpNotificationFormat CreateInvalidPluginNotification(string msg, MpPluginFormat pf) {
             return new MpNotificationFormat() {
                 Title = string.Format(UiStrings.PluginErrNtfTitle, msg),
@@ -252,13 +232,15 @@ namespace MonkeyPaste.Avalonia {
                 // if plugin folder doesn't exist then no plugins so nothing to do but it should                
                 return;
             }
-            var manifestPaths = FindManifestPaths(PluginRootFolderPath);
-            foreach (var manifestPath in manifestPaths) {
-                var plugin = await LoadPluginAsync(manifestPath);
+            var inv_manifest_paths = FindInvariantManifestPaths(PluginRootFolderPath);
+            foreach (var inv_manifest_path in inv_manifest_paths) {
+                // attempt to localized manifest
+                string localized_manifest_path = ResolveManifestPath(inv_manifest_path);
+                var plugin = await LoadPluginAsync(localized_manifest_path);
                 if (plugin == null) {
                     continue;
                 }
-                Plugins.Add(manifestPath, plugin);
+                Plugins.Add(localized_manifest_path, plugin);
                 MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
             }
 
@@ -308,12 +290,12 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        private static IEnumerable<string> FindManifestPaths(string root) {
+        private static IEnumerable<string> FindInvariantManifestPaths(string root) {
             if (!root.IsDirectory()) {
                 return new List<string>();
             }
             try {
-                return Directory.EnumerateFiles(root, "manifest.json", SearchOption.AllDirectories);
+                return Directory.EnumerateFiles(root, MANIFEST_INVARIANT_FILE_NAME, SearchOption.AllDirectories);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine(@"Error scanning plug-in directory: " + root, ex);
@@ -321,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static async Task<MpPluginFormat> LoadPluginAsync(string manifestPath) {
+        private static async Task<MpPluginFormat> LoadPluginAsync(string manifestPath, bool isLoadFromInstall = false) {
             bool needsFixing = false;
             Func<object, object> retryFunc = (args) => {
                 needsFixing = false;
@@ -385,9 +367,61 @@ namespace MonkeyPaste.Avalonia {
                 return await LoadPluginAsync(manifestPath);
             }
 
+            // valid after here
+
+            if (isLoadFromInstall &&
+                Uri.IsWellFormedUriString(plugin.licenseUrl, UriKind.Absolute) &&
+                plugin.requireLicenseAcceptance) {
+                // show terms
+                bool agreed = await MpAvTermsView.ShowTermsAgreementWindowAsync(
+                    new MpAvTermsAgreementCollectionViewModel() {
+                        IntroText = UiStrings.TermsIntroAppText,
+                        OutroText = UiStrings.TermsOutroAppText,
+                        Items = new[] {
+                            new MpAvTermsAgreementViewModel() {
+                                Author = string.IsNullOrEmpty(plugin.author) ? UiStrings.PluginAnonymousAuthor : plugin.author,
+                                PackageName =plugin.title,
+                                LicenseUri = plugin.licenseUrl
+                            }
+                        }.ToList()
+                    });
+
+                if (!agreed) {
+                    // uninstall here
+                    bool success = DeletePlugin(manifestPath, plugin, true);
+                    MpDebug.Assert(success, $"Error deleting unaccepted plugin '{plugin}'");
+                    return null;
+                }
+            }
+
             // only once manifest is validated get manifest backup
             UpdatePluginCache(plugin);
             return plugin;
+        }
+        private static bool DeletePlugin(string manifest_path, MpPluginFormat plugin, bool delete_cache) {
+            bool success = true;
+            if (manifest_path.IsFile()) {
+                // delete plugin folder
+                string dir_to_remove = Path.GetDirectoryName(manifest_path);
+                if (!MpFileIo.DeleteDirectory(dir_to_remove)) {
+                    success = false;
+                    MpConsole.WriteLine($"Error deleting plugin folder '{dir_to_remove}'");
+                }
+            }
+            if (delete_cache) {
+                string cache_path = Path.Combine(PluginManifestBackupFolderPath, GetCachedPluginFileName(plugin));
+                if (cache_path.IsFile()) {
+                    if (!MpFileIo.DeleteFile(cache_path)) {
+                        success = false;
+                        MpConsole.WriteLine($"Error deleting plugin cache file '{cache_path}'");
+                    }
+                }
+            }
+            // remove from loader
+            if (!Plugins.Remove(manifest_path)) {
+                MpConsole.WriteLine($"Loaded plugin '{manifest_path}' not found");
+            }
+            return success;
         }
 
         #region Compnent
@@ -506,8 +540,12 @@ namespace MonkeyPaste.Avalonia {
         }
         private static object[] GetDllComponents(string dllPath, string pluginName, out Assembly component_assembly) {
             try {
+#if !ANDROID
+                component_assembly = Assembly.Load(File.ReadAllBytes(dllPath));
+#else
                 component_assembly = Assembly.LoadFrom(dllPath);
-                //component_assembly = Assembly.Load(File.ReadAllBytes(dllPath));
+#endif
+
             }
             catch (Exception rtle) {
                 throw new MpUserNotifiedException($"Plugin Compilation error '{pluginName}':" + Environment.NewLine + rtle);
@@ -591,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
 
             //bool is_icon_valid = await MpFileIo.IsAccessibleUriAsync(plugin.iconUri, plugin.RootDirectory);
             //if (!is_icon_valid) {
-            //    throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with iconUri '{plugin.iconUri}' must have an 'iconUri' property which is a relative file path or valid url to an image");
+            //    throw new MpUserNotifiedException($"Plugin icon error, at path '{inv_manifest_path}' with iconUri '{plugin.iconUri}' must have an 'iconUri' property which is a relative file path or valid url to an image");
             //}
             bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
             return are_all_components_valid;
@@ -645,8 +683,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-
 
         private static IEnumerable<object> GetInterfaceObjsFromAssembly(Assembly pluginAssembly, string interfaceName, string pluginName) {
             if (pluginAssembly == null) {
@@ -751,6 +787,34 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        #region Localization
+
+        private static string ResolveManifestPath(string inv_manifest_path) {
+            // find closest manifest culture matching users culture
+            string manifest_dir = Path.GetDirectoryName(inv_manifest_path);
+            string man_culture_code = MpAvLocalizationHelpers.ResolveMissingCulture(
+                culture_code: MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
+                dir: manifest_dir,
+                file_name_prefix: MANIFEST_FILE_NAME_PREFIX);
+
+            string localized_manifest_file_name =
+                $"{MANIFEST_FILE_NAME_PREFIX}.{man_culture_code}.{MANIFEST_FILE_EXT}";
+
+            string localized_manifest_path =
+                Path.Combine(
+                    manifest_dir,
+                    localized_manifest_file_name);
+
+            if (localized_manifest_path.IsFile()) {
+                return localized_manifest_path;
+            }
+            // fallback to invariant
+            return inv_manifest_path;
+        }
         #endregion
+
+        #endregion
+
     }
 }

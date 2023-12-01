@@ -2716,6 +2716,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string EditorTemplateDateTimeCustomLabel {
+            get {
+                return ResourceManager.GetString("EditorTemplateDateTimeCustomLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system - wide.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateDateTimeHint {
@@ -3310,15 +3319,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}.
-        /// </summary>
-        public static string NtfCapTitle {
-            get {
-                return ResourceManager.GetString("NtfCapTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Max Trash storage is {0}..
         /// </summary>
         public static string NtfCapTrashMaxStorageText {
@@ -3405,6 +3405,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PinTrayUnpinAllLabel {
             get {
                 return ResourceManager.GetString("PinTrayUnpinAllLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anonymous.
+        /// </summary>
+        public static string PluginAnonymousAuthor {
+            get {
+                return ResourceManager.GetString("PluginAnonymousAuthor", resourceCulture);
             }
         }
         
@@ -3544,15 +3553,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string PluginErrBundleTypeText {
-            get {
-                return ResourceManager.GetString("PluginErrBundleTypeText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error extracting plugin from &apos;{0}&apos;.
         /// </summary>
         public static string PluginErrExtractText {
@@ -3591,9 +3591,9 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to No plugin loaded from manifest path: &apos;{0}&apos;.
         /// </summary>
-        public static string PluginErrMissingManifest {
+        public static string PluginErrGuidNotFound {
             get {
-                return ResourceManager.GetString("PluginErrMissingManifest", resourceCulture);
+                return ResourceManager.GetString("PluginErrGuidNotFound", resourceCulture);
             }
         }
         
@@ -4444,7 +4444,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ReadOnlyTooltipText&quot;&gt;Pre-Loaded Filters are read-only. Duplicate to alter..
+        ///   Looks up a localized string similar to Pre-Loaded Filters are read-only. Duplicate to alter..
         /// </summary>
         public static string SearchDisabeledCriteriaTooltip {
             get {
@@ -5341,6 +5341,114 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yesterday.
+        /// </summary>
+        public static string TimeSpanDayLast {
+            get {
+                return ResourceManager.GetString("TimeSpanDayLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} days ago.
+        /// </summary>
+        public static string TimeSpanDays {
+            get {
+                return ResourceManager.GetString("TimeSpanDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 hour ago.
+        /// </summary>
+        public static string TimeSpanHourLast {
+            get {
+                return ResourceManager.GetString("TimeSpanHourLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours ago.
+        /// </summary>
+        public static string TimeSpanHours {
+            get {
+                return ResourceManager.GetString("TimeSpanHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Just Now.
+        /// </summary>
+        public static string TimeSpanJustNow {
+            get {
+                return ResourceManager.GetString("TimeSpanJustNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A minute ago.
+        /// </summary>
+        public static string TimeSpanMinute {
+            get {
+                return ResourceManager.GetString("TimeSpanMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} minutes ago.
+        /// </summary>
+        public static string TimeSpanMinutes {
+            get {
+                return ResourceManager.GetString("TimeSpanMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last month.
+        /// </summary>
+        public static string TimeSpanMonthLast {
+            get {
+                return ResourceManager.GetString("TimeSpanMonthLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} months ago.
+        /// </summary>
+        public static string TimeSpanMonths {
+            get {
+                return ResourceManager.GetString("TimeSpanMonths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last week.
+        /// </summary>
+        public static string TimeSpanWeekLast {
+            get {
+                return ResourceManager.GetString("TimeSpanWeekLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} weeks ago.
+        /// </summary>
+        public static string TimeSpanWeeks {
+            get {
+                return ResourceManager.GetString("TimeSpanWeeks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} years ago.
+        /// </summary>
+        public static string TimeSpanYears {
+            get {
+                return ResourceManager.GetString("TimeSpanYears", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string TriggerActionLabel {
@@ -5719,7 +5827,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hey ! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
+        ///   Looks up a localized string similar to Hey! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
         /// </summary>
         public static string WelcomeGreetingCaption {
             get {

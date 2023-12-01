@@ -37,9 +37,14 @@
     color: var(--editableeditorbgcolor_opaque);
     font-weight: bolder;
     height: 30px;
+    padding-left: 5px;
 }
 
     #editTemplateDeleteButton:hover {
         background-color: red;
+    }
+
+    #editTemplateDeleteButton span {
+        margin-left: 5px;
     }
 

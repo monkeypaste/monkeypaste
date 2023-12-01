@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
             return uiStr.UiStringToEnum(enumType);
         }
     }
-
     public static class MpAvEnumToUiStringResourceConverter {
         #region Private Variables
         #endregion
@@ -105,8 +104,9 @@ namespace MonkeyPaste.Avalonia {
 #if !DEBUG || !WINDOWS
             return false;
 #endif
-            if (!MpAvCurrentCultureViewModel.IsDefaultCulture(EnumUiStrings.Culture)) {
-                MpConsole.WriteLine($"Enum UI Strings ignoring culture '{EnumUiStrings.Culture}' its not default '{MpAvCurrentCultureViewModel.DEFAULT_CULTURE_NAME}'");
+            if (!string.IsNullOrWhiteSpace(EnumUiStrings.Culture.Name)) {
+                // non-invariant don't update
+                MpConsole.WriteLine($"Enum UI Strings ignoring culture '{EnumUiStrings.Culture}' its non-invariant '{EnumUiStrings.Culture.Name}'");
                 return false;
             }
             var diffs = GetCodeAndResxEnumDiffs(ActualEnumUiResxResourcePath);
@@ -167,8 +167,8 @@ namespace MonkeyPaste.Avalonia {
             if (!resx_path.IsFile()) {
                 return elu;
             }
-            //using var ms = new FileStream(resx_path, FileMode.Open);
-            //using var rrr = new ResXResourceReader(ms);
+            // NOTE using reflection not .ResourceManager returns invariant value only but this 
+            // should only run with default culture
             foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
                 if (pi.GetValue(null) is string val) {
                     elu.Add(pi.Name, val);

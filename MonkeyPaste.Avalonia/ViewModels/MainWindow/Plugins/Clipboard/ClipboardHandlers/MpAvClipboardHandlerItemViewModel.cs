@@ -323,7 +323,8 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                PluginFormat = (await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpPluginFormat;
+                //PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpPluginFormat;
+                PluginFormat = await MpPluginLoader.ReloadPluginAsync(PluginFormat.guid);
                 // loop through another validation pass
                 return await ValidateClipboardHandlerAsync();
             }

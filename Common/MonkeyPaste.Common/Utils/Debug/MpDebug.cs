@@ -25,12 +25,13 @@ namespace MonkeyPaste.Common {
         }
         public static void BreakAll(bool pre = true, bool post = false) {
 #if DEBUG
+            bool can_handle = MpCommonTools.Services != null && MpCommonTools.Services.DebugBreakHelper != null;
             if (Debugger.IsAttached) {
-                if (pre) {
+                if (pre && can_handle) {
                     MpCommonTools.Services.DebugBreakHelper.HandlePreBreak();
                 }
                 Debugger.Break();
-                if (post) {
+                if (post && can_handle) {
                     MpCommonTools.Services.DebugBreakHelper.HandlePostBreak();
                 }
             }

@@ -60,8 +60,18 @@ namespace MonkeyPaste.Avalonia {
 
         private static IEnumerable<string> FindEnumKeys(string uiStr) {
             foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
-                if (pi.GetValue(null) is string val && val == uiStr) {
-                    yield return pi.Name;
+                string key = null;
+                try {
+                    if (EnumUiStrings.ResourceManager.GetString(pi.Name, MpAvCurrentCultureViewModel.Instance.CurrentCulture) is string val
+                        && val == uiStr) {
+                        key = pi.Name;
+                    }
+                }
+                catch {
+                    continue;
+                }
+                if (!string.IsNullOrEmpty(key)) {
+                    yield return key;
                 }
             }
         }

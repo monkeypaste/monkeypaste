@@ -77,10 +77,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _isShuttingDown = true;
             MpConsole.WriteLine($"App shutdown called ({(int)code}). Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
-#if CEFNET_WV
 
-            MpAvCefNetApplication.ShutdownCefNet();
-#endif
             MpConsole.ShutdownLog();
             if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 lifetime.Shutdown();

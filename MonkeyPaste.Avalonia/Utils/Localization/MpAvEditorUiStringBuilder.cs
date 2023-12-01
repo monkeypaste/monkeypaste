@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Resources.NetStandard;
@@ -28,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
         static bool UseRuntimePaths { get; set; } = false;
         static string EditorUiStringJsContentTemplate => string.Format(
 @"var UiStrings = {{
@@ -36,8 +38,9 @@ namespace MonkeyPaste.Avalonia {
 
         static string CommonUiStrPath {
             get {
-                string cul_suff = MpAvCurrentCultureViewModel.IsDefaultCulture(UiStrings.Culture) ?
-                    string.Empty : "." + UiStrings.Culture.Name;
+                //string cul_suff = MpAvCurrentCultureViewModel.IsDefaultCulture(UiStrings.Culture) ?
+                //    string.Empty : "." + UiStrings.Culture.Name;
+                string cul_suff = UiStrings.Culture.Name;
 
                 string com_ui_str_path = Path.Combine(
                     GetRootDir(),
@@ -53,8 +56,7 @@ namespace MonkeyPaste.Avalonia {
             get {
 
                 // append culture suffix for non-defaults
-                string cul_suff = MpAvCurrentCultureViewModel.IsDefaultCulture(UiStrings.Culture) ?
-                    string.Empty : "." + UiStrings.Culture.Name;
+                string cul_suff = UiStrings.Culture.Name;
                 return Path.Combine(
                     GetRootDir(),
                     "Resources",
@@ -91,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
             // target project dir
             UseRuntimePaths = false;
             bool needs_restart_debug = CheckJsUiStrings_internal();
-            MpDebug.Assert(needs_restart == needs_restart_debug, $"Editor UiString runtime result mismatch");
+            MpDebug.Assert(needs_restart == needs_restart_debug, $"Editor UiString runtime result mismatch", true);
 #endif
             // no resx gen needed so don't restart
             return false;
@@ -101,6 +103,10 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private static bool CheckJsUiStrings_internal() {
+            if (!CommonUiStrPath.IsFile()) {
+                // probably runtime path during localize only run
+                return false;
+            }
             // returns true if needs restart
             using ResXResourceReader resx_reader = new ResXResourceReader(CommonUiStrPath);
             // find all Editor* keys in uistring.resx 
@@ -114,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
             resx_reader.Close();
 
             // create js key-values str for Editor* items
-            string inner_content = string.Join(string.Empty, editor_res_lookup.Select(x => GetEntryJs(x)));
+            string inner_content = string.Join(string.Empty, editor_res_lookup.OrderBy(x => x.Key).Select(x => GetEntryJs(x)));
 
             // swap placeholder w/ key-values
             string runtime_content = EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
@@ -172,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(index_html_parts.Length == 2, $"Editor uistring error. Index.html missing marker '{INDEX_LOCALIZER_CULTURE_MARKER}' at path '{EditorIndexHtmlPath}'");
 
             // create str of everything before script tag and add splitted including marker text
-            string pre = index_html_parts[0] + Environment.NewLine + INDEX_LOCALIZER_CULTURE_MARKER;
+            string pre = index_html_parts[0] + INDEX_LOCALIZER_CULTURE_MARKER;
 
             var post_parts = index_html_parts[1].SplitNoEmpty(Environment.NewLine).ToList();
             MpDebug.Assert(post_parts[0].Trim().StartsWith(INDEX_LOCALIZER_REPLACE_LINE_PREFIX_CHECK), $"Editor uistring error. Insert line supposed to start with '{INDEX_LOCALIZER_REPLACE_LINE_PREFIX_CHECK}' but line is '{post_parts[0]}'");

@@ -843,9 +843,6 @@
   <data name="NtfCapHideHint" xml:space="preserve">
     <value>* 上のオプション メニューから [すべて非表示] をクリックすると、これらの警告を非表示にできます。</value>
   </data>
-  <data name="NtfCapTitle" xml:space="preserve">
-    <value>'{0}</value>
-  </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
     <value>最大ゴミ箱ストレージは {0} です。</value>
   </data>
@@ -1155,7 +1152,7 @@
   <data name="PluginErrManifestText" xml:space="preserve">
     <value>プラグイン マニフェスト '{0}' の解析エラー: {1}</value>
   </data>
-  <data name="PluginErrMissingManifest" xml:space="preserve">
+  <data name="PluginErrGuidNotFound" xml:space="preserve">
     <value>マニフェスト パスからロードされたプラグインがありません: '{0}'</value>
   </data>
   <data name="PluginErrNtfTitle" xml:space="preserve">
@@ -2048,5 +2045,50 @@
   </data>
   <data name="ActionRepeatDelayLabel" xml:space="preserve">
     <value>リピートディレイ</value>
+  </data>
+  <data name="SearchDisabeledCriteriaTooltip" xml:space="preserve">
+    <value>プリロードされたフィルターは読み取り専用です。</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>匿名</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>昨日</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0}日前</value>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1時間前</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} 時間前</value>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>ちょうど今</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>1分前</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0}分前</value>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>先月</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} か月前</value>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>先週</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0}週間前</value>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0}年前</value>
   </data>
 </root>

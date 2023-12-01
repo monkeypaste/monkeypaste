@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
             MpParameterControlType controlType,
             MpParameterValue aipv,
             MpAvViewModelBase parent) {
-            MpAvParameterViewModelBase naipvm = null;
+            MpAvParameterViewModelBase naipvm;
 
 
             switch (controlType) {

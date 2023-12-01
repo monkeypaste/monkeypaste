@@ -928,10 +928,12 @@ var globals = {
 	TemplateTypesMenuOptions: [
 		{
 			label: '#EditorTemplateDynamicName#',
+			templateType: 'dynamic',
 			icon: 'text'
 		},
 		{
 			label: '#EditorTemplateStaticName#',
+			templateType: 'static',
 			icon: 'snowflake'
 		},
 		/* {
@@ -948,10 +950,12 @@ var globals = {
 		 },
 		{
 			label: '#EditorTemplateContactName#',
+			templateType: 'contact',
 			icon: 'contact'
 		},*/
 		{
 			label: '#EditorTemplateDateTimeName#',
+			templateType: 'datetime',
 			icon: 'datetime'
 		},
 		{
@@ -1005,7 +1009,7 @@ var globals = {
 	// #endregion
 
 	// #region TEMPLATE DATETIME
-	CUSTOM_TEMPLATE_LABEL_VAL: 'Custom',
+	CUSTOM_TEMPLATE_LABEL_VAL: '#EditorTemplateDateTimeCustomLabel#',
 
 
 	// #endregion

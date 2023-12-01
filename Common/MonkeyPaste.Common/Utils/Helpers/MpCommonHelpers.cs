@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste.Common {
+﻿using System;
+
+namespace MonkeyPaste.Common {
     public static class MpCommonHelpers {
         //        public static string GetExecutingDir() {
         //            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -29,7 +31,8 @@
         //#endif
         //        }
         public static string GetSolutionDir() {
-            string solution_path = MpCommonTools.Services.PlatformInfo.ExecutingDir.FindParentDirectory("MonkeyPaste");
+            string solution_path = AppDomain.CurrentDomain.BaseDirectory.FindParentDirectory("MonkeyPaste");
+            //string solution_path = MpCommonTools.Services.PlatformInfo.ExecutingDir.FindParentDirectory("MonkeyPaste");
             return solution_path;
         }
 

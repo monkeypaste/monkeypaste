@@ -11,6 +11,7 @@ using CefNet;
 
 namespace MonkeyPaste.Avalonia {
     internal class Program {
+        static bool LOCALIZE_ONLY = false;
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
@@ -25,12 +26,13 @@ namespace MonkeyPaste.Avalonia {
                         break;
                 }
             }
+            if (LOCALIZE_ONLY) {
+                MpAvCurrentCultureViewModel.SetAllCultures(new System.Globalization.CultureInfo("zh-CN"));
+                return;
+            }
+
             Exception top_level_ex = null;
             try {
-                //if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
-                //    return;
-                //}
-                //MpConsole.CheckEnumUiStrings();
 
 #if CEFNET_WV
                 MpAvCefNetApplication.Init();

@@ -2,7 +2,7 @@
   "title": "Text to speech",
   "description": "Converts text to audio",
   "version": "1.0.0",
-  "credits": "Thomas Kefauver",
+  "author": "Thomas Kefauver",
   "guid": "26436e84-392e-4038-a99c-0abe92b843bd",
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",

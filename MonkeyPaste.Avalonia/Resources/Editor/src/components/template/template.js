@@ -319,7 +319,8 @@ function getTemplateEmbedStr(t, sToken = globals.ENCODED_TEMPLATE_OPEN_TOKEN, eT
 }
 
 function getLowestAnonTemplateName(newTemplateType, allDefs) {
-    let anonPrefix = `${toTitleCase(newTemplateType)} #`;
+    let tname = getTemplateDefaultNameByType(newTemplateType);
+    let anonPrefix = `${tname} #`;
     let maxNum = 0;
     for (var i = 0; i < allDefs.length; i++) {
         let t = allDefs[i];
@@ -331,9 +332,31 @@ function getLowestAnonTemplateName(newTemplateType, allDefs) {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
+function getTemplateDefaultNameByType(ttype) {
+    let ui_key = null;
+    switch (ttype) {
+        case 'dynamic':
+            ui_key = 'EditorTemplateDynamicName';
+            break;
+        case 'static':
+            ui_key = 'EditorTemplateStaticName';
+            break;
+        case 'datetime':
+            ui_key = 'EditorTemplateDateTimeName';
+            break;
+        case 'contact':
+            ui_key = 'EditorTemplateContactName';
+            break;
+        default:
+            onException_ntf('unknown template: ' + ttype);
+            break;
+    }
+    return UiStrings[ui_key];
+}
+
 function getTemplateTypeSvgKey(ttype) {
     for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
-        if (globals.TemplateTypesMenuOptions[i].label.toLowerCase() == ttype.toLowerCase()) {
+        if (globals.TemplateTypesMenuOptions[i].templateType == ttype.toLowerCase()) {
             return globals.TemplateTypesMenuOptions[i].icon;
 		}
     }

@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpBillingCycleType_None" xml:space="preserve">
+    <value>绝不</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>每月</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>每年</value>
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>装载机</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>订阅已过期</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>账户登录失败</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>数据库错误</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>插件更新</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>应用模式变更</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>已达到内容上限</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>已达到垃圾上限</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>内容添加被帐户阻止</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>内容恢复被帐户阻止</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>帐户已更改</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>欢迎</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>追加模式已更改</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>触发启用</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>警报行动</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>启动完成</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>文件IO警告</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>无效插件</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>无效的剪贴板格式处理程序</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>无效动作</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>错误的 Http 请求</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>分析仪超时</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>无效的请求</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>无效响应</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>执行参数请求</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>数据库密码输入</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>模态内容格式降级</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>模态 是 否 取消消息框</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>模态 是 否 消息框</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>模态确定取消消息框</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>模态确定消息框</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>模态文本框 确定 取消 消息框</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>模态可记住文本框确定取消消息框</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>模态进度取消消息框</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>确认结束追加</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>插件响应消息</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>插件响应错误</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>插件响应警告</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>带有选项的插件响应警告</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseOther" xml:space="preserve">
+    <value>插件 响应 其他</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>切换主窗口</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>切换自动复制模式</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>切换右键单击粘贴模式</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>切换收听剪贴板</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInsertMode" xml:space="preserve">
+    <value>切换追加插入模式</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendLineMode" xml:space="preserve">
+    <value>切换追加行模式</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPreMode" xml:space="preserve">
+    <value>切换追加预模式</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>切换追加暂停</value>
+  </data>
+  <data name="MpShortcutType_HideMainWindow" xml:space="preserve">
+    <value>隐藏主窗口</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>退出申请</value>
+  </data>
+  <data name="MpShortcutType_PasteSelectedItems" xml:space="preserve">
+    <value>粘贴所选项目</value>
+  </data>
+  <data name="MpShortcutType_PasteHere" xml:space="preserve">
+    <value>粘贴在这里</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>复制选择</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>剪切选区</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>删除所选项目</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>选择下一列项目</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>选择上一列项目</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>选择下一行项目</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>选择上一行项目</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>指定快捷方式</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>撤消</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>重做</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>切换内容只读</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>改名</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>滚动到主页</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>滚动至末尾</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>窗户尺寸加大</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>缩小窗口尺寸</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>左窗口尺寸</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>窗口大小正确</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>上一页</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>下一页</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>查找并替换所选项目</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>切换主窗口锁定</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>切换过滤器菜单可见</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>显示设置</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>切换固定</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>在窗口中打开</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>永久删除</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>强制最小化主窗口</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendManualMode" xml:space="preserve">
+    <value>切换追加手动模式</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>打开帮助</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>MAX PPS 快捷方式</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>粘贴复制项目</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>选择标签</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>使用预设分析复制项目</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>调用触发器</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ItemData" xml:space="preserve">
+    <value>项目数据</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ItemType" xml:space="preserve">
+    <value>物品种类</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_AppPath" xml:space="preserve">
+    <value>应用程序路径</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_AppName" xml:space="preserve">
+    <value>应用程序名称</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_UrlPath" xml:space="preserve">
+    <value>网址路径</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_UrlTitle" xml:space="preserve">
+    <value>网址标题</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_UrlDomainPath" xml:space="preserve">
+    <value>URL域路径</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>复制日期时间</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastPasteDateTime" xml:space="preserve">
+    <value>上次粘贴日期时间</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>份数</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>粘贴计数</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>源设备名称</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>源设备类型</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>最后输出</value>
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>分类</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>分析</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>有条件的</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>扳机</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>中继器</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>文件编写器</value>
+  </data>
+  <data name="MpActionType_AddFromClipboard" xml:space="preserve">
+    <value>从剪贴板添加</value>
+  </data>
+  <data name="MpActionType_KeySimulator" xml:space="preserve">
+    <value>按键模拟器</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>延迟</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>警报</value>
+  </data>
+  <data name="MpTriggerType_ContentAdded" xml:space="preserve">
+    <value>添加内容</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChange" xml:space="preserve">
+    <value>文件系统更改</value>
+  </data>
+  <data name="MpTriggerType_ContentTagged" xml:space="preserve">
+    <value>已标记的内容</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>捷径</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>内部的</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>风俗</value>
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>操作系统</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>应用程序</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>库</value>
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>网页</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>位图</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>文件删除</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>内部内容</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>统一码文本</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>原始设备制造商文本</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>沙姆尔</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>XAML包</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>风俗</value>
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>地位</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>登记</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="MpSettingsFrameType_Fonts" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>声音</value>
+  </data>
+  <data name="MpSettingsFrameType_Taskbar" xml:space="preserve">
+    <value>任务栏</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>窗户</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>国际的</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>限制</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>追踪</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>内容</value>
+  </data>
+  <data name="MpSettingsFrameType_DragAndDrop" xml:space="preserve">
+    <value>拖放</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>快捷方式</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>浏览</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>根</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>应用程序</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>设备</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>元</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>统计数据</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>网址</value>
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>和</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>或者</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>不是</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpRootOptionType_Clips" xml:space="preserve">
+    <value>剪辑</value>
+  </data>
+  <data name="MpRootOptionType_Type" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>历史</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>火柴</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>包含</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>开始于</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>以。。结束</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>正则表达式</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>等于</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>比...更棒</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>少于</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>不是</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>十六进制</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>A R G B</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>宽度</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>方面</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>声音的</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>压缩的</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>光盘和媒体</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>数据和数据库</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>文档</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>电子邮件</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>可执行文件</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>互联网</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>推介会</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>编程</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>电子表格</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>视频</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>用户自定义</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>风俗</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>小路</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>姓名</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>种类</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>应用名称</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>工艺路径</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>网址</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>领域</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>设备</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>应用程序</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>网站</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>已创建</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>掉落</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>拖拽</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>粘贴的</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>已复制</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>切</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>已编辑</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>已分析</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>附加</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>重新创建</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>链接</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>未链接</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>最后内</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>前</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>后</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>精确的</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>今天</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>昨天</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>本星期</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>这个月</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>今年</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>精确的</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>昨天</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>上星期</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>上个月</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>去年</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>精确的</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- 请选择 -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>小时</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>周数</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>几个月</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>复制日期时间</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>项目数据</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>物品种类</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>使用分数</value>
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>内部的</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>被动的</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>预</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>邮政</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>覆盖</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>独家覆盖</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>包含</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>精确的</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>开始于</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>以。。结束</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>正则表达式</value>
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>自由的</value>
+  </data>
+  <data name="MpUserAccountType_Standard" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>无限</value>
+  </data>
+  <data name="MpContentOptionType_Content" xml:space="preserve">
+    <value>内容</value>
+  </data>
+  <data name="MpContentOptionType_TypeSpecific" xml:space="preserve">
+    <value>特定类型</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>注解</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>基本的</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>老鼠</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Active" xml:space="preserve">
+    <value>积极的</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>关联</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>询问</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>团体</value>
+  </data>
+  <data name="MpReadOnlyTagType_Collections" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>收藏夹</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>过滤器</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>垃圾</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>今天</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>格式</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>已创建</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>已删除</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>改变了</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>更名</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>全部</value>
+  </data>
+</root>

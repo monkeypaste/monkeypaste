@@ -2,10 +2,12 @@
   "title": "QR Code Generator",
   "description": "Converts text to QR code",
   "version": "1.0",
-  "credits": "Thomas Kefauver",
+  "author": "Thomas Kefauver",
   "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
   "projectUrl": "https://github.com/codebude/QRCoder/",
   "iconUri": "icon.png",
+  "licenseUrl": "https://www.monkeypaste.com/legal/terms.html",
+  "requireLicenseAcceptance": true,
   "packageType": "Dll",
   "tags": "Core,Qr Code,Text,Image,Link,Converter",
   "analyzer": {

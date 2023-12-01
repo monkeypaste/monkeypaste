@@ -73,9 +73,9 @@ function localizeElement(elm, args) {
 }
 
 function localizeGlobals() {
-    // localize templateName's
-    // label is '#<ResourceKeyName>#'
+    // labels are '#<ResourceKeyName>#'
 
+    // TEMPLATE NAME 
     for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
         if (globals.TemplateTypesMenuOptions[i].label === undefined) {
             // separator
@@ -83,7 +83,13 @@ function localizeGlobals() {
         }
         let content_key = globals.TemplateTypesMenuOptions[i].label.replaceAll('#', '');
         globals.TemplateTypesMenuOptions[i].label = UiStrings[content_key];
-	}
+    }
+
+    // TEMPLATE CUSTOM DATETIME
+    let custom_label_key = globals.CUSTOM_TEMPLATE_LABEL_VAL.replaceAll('#', '');
+    globals.CUSTOM_TEMPLATE_LABEL_VAL = UiStrings[custom_label_key];
+
+    initGlobals();
 }
 function toggleRightToLeft(isRightToLeft) {
     let dir = isRightToLeft ? 'rtl' : 'ltr';

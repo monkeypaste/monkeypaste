@@ -406,7 +406,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Language
 
-        public string CurrentCultureCode { get; set; } = CultureInfo.CurrentCulture.Name;
+        public string CurrentCultureCode { get; set; } = "ar-EG";// CultureInfo.CurrentCulture.Name;
         public bool IsTextRightToLeft { get; set; }
 
         #endregion
@@ -730,7 +730,6 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void WriteToDisk(string prefStr, bool encrypt = true) {
             var sw = Stopwatch.StartNew();
-
             string backupStr = prefStr;
             if (encrypt) {
                 prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, arg1);

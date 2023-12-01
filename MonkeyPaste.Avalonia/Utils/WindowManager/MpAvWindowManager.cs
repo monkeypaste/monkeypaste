@@ -31,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpAvWindow ActiveWindow =>
             AllWindows.FirstOrDefault(x => x.IsActive);
+        public static MpAvWindow LastActiveWindow =>
+            AllWindows.OrderByDescending(x => x.LastActiveDateTime).FirstOrDefault();
 
         public static IReadOnlyList<MpAvWindow> Notifications =>
             AllWindows.Where(x => x.DataContext is MpAvNotificationViewModelBase).ToList();
@@ -189,6 +191,7 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not MpAvWindow w) {
                 return;
             }
+            w.LastActiveDateTime = DateTime.Now;
             MpMessenger.SendGlobal(MpMessageType.AppWindowActivated);
 
             if (w.DataContext is MpIActiveWindowViewModel awvm) {
