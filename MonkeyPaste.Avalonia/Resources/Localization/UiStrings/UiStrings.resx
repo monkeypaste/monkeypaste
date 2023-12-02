@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GestureProfileGlobal" xml:space="preserve">
-    <value>All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime (not currently supported on Linux)</value>
+    <value>All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime.</value>
+    <comment>#PLATFORM# Override not supported on linux</comment>
   </data>
   <data name="GestureProfileInternal" xml:space="preserve">
     <value>No global shortcuts are enabled by default. </value>
@@ -434,7 +435,32 @@
 &lt;/ul&gt;</value>
   </data>
   <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt;hide&lt;/i&gt;that key press from application-level input.&lt;/p&gt;&lt;p&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Exclusive Override&lt;/b&gt;This is a special type of override mode designed for the Caps Lock key. It only allows&lt;b&gt;one&lt;/b&gt;key (non-modifier) for its assignment.&lt;/p&gt;&lt;p&gt;In normal override mode Caps Lock can become&lt;i&gt;stuck on&lt;/i&gt;when pressed in combination with other keys.&lt;/p&gt;&lt;p&gt;So no matter what other keys are down, if a&lt;b&gt;Hotkey&lt;/b&gt;shortcut is pressed it will be overriden and prevent it from becoming&lt;i&gt;stuck on&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</value>
+    <value>&lt;html&gt;
+	&lt;head&gt;&lt;/head&gt;
+	&lt;body&gt;
+		&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+		&lt;ul&gt;
+			&lt;li&gt;
+				&lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
+				*This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
+			&lt;/li&gt;
+			&lt;li&gt;
+				&lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+			&lt;li&gt;
+				&lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+			&lt;li&gt;
+				&lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application-level input.&lt;br&gt;
+				This option will guarantee the shortcut is triggered without conflicts to the active application.
+			&lt;/li&gt;
+			&lt;li&gt;
+				&lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non-modifier) for its assignment.&lt;br&gt;
+				In normal override mode Caps Lock can become &lt;i&gt;stuck on&lt;/i&gt; when pressed in combination with other keys.&lt;br&gt;
+				So no matter what other keys are down, if a &lt;b&gt;Hotkey&lt;/b&gt; shortcut is pressed it will be overriden and prevent it from becoming &lt;i&gt;stuck on&lt;/i&gt;.
+			&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</value>
+    <comment>#PLATFORM# Linux only supports passive</comment>
   </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Disable</value>
@@ -2145,5 +2171,44 @@
   <data name="TimeSpanYears" xml:space="preserve">
     <value>{0} years ago</value>
     <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Annotations</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Application Name</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Application Path</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Case Sensitive</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>File Type</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Image Type</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Regular Expression</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Text Type</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Url Title</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Whole Word</value>
   </data>
 </root>

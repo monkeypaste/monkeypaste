@@ -35,8 +35,10 @@
 
             <!--  LABEL  -->
 
-            <TextBlock Grid.Column="0"
+            <TextBlock x:Name="ParamLabel"
+                       Grid.Column="0"
                        DockPanel.Dock="Left"
+                       local:MpAvHighlightTextExtension.IsEnabled="True"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Top"
                        FontSize="12"

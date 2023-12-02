@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 switch (contrast_type) {
                     case "compliment":
-                        return hexStr.ToComplementHexColor().ToAvColor();
+                        return hexStr.ToContrastHexColor().ToAvColor();
                     case "lighter":
                         return MpColorHelpers.GetLighterHexColor(hexStr).ToAvColor();
                     case "darker":

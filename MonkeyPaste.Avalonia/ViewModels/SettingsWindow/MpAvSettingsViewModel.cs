@@ -45,6 +45,7 @@ namespace MonkeyPaste.Avalonia {
         public string[] HiddenParamIds => new string[] {
             nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
+            //nameof(MpAvPrefViewModel.Instance.UserDefinedFileExtensionsCsv)
             //nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
             //nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
         };
@@ -137,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-
+        public bool IsBringingIntoView { get; set; }
         public bool IsTabButtonVisible0 { get; set; } = true;
         public bool IsTabButtonVisible1 { get; set; } = true;
         public bool IsTabButtonVisible2 { get; set; } = true;
@@ -839,6 +840,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Search) {
+                            // BUG sorting this so its first to prevent it always scrolling into view on tab change
+                            SortOrderIdx = int.MaxValue,
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1099,7 +1102,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-                    .OrderByDescending(x=>x.Items == null ? 0:x.Items.Count)
+                    .OrderByDescending(x=>x.Items == null ? 0:x.SortOrderIdx < 0 ? x.Items.Count : x.SortOrderIdx)
                 }
             };
 
@@ -1624,7 +1627,7 @@ namespace MonkeyPaste.Avalonia {
                     SelectedTabIdx = tab_idx;
                     return;
                 }
-
+                IsBringingIntoView = true;
                 if (TabLookup.Any(x => x.Value.Contains(focus_tuple.Item1))) {
                     var tab_kvp = TabLookup.FirstOrDefault(x => x.Value.Contains(focus_tuple.Item1));
                     SelectedTabIdx = TabLookup.IndexOf(tab_kvp);
@@ -1652,6 +1655,7 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(param_view.BringIntoView, DispatcherPriority.Background);
                 // select arg param and pulse
                 param_view.BindingContext.DoFocusPulse = true;
+                IsBringingIntoView = false;
             });
         public ICommand ToggleShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {

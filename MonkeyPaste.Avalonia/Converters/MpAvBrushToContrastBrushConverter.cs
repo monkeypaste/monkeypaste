@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvBrushToContrastBrushConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if (parameter.ToStringOrEmpty() == "test") {
+            if (parameter.ToStringOrEmpty() == "cornertest") {
 
             }
             if (MpAvColorToContrastColorConverter.Instance.Convert(value, targetType, parameter, culture) is Color color) {

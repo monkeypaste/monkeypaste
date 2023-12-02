@@ -11,6 +11,8 @@
                 Value="{DynamicResource ThemeInteractiveBgBrush}" />
         <Setter Property="Background"
                 Value="{DynamicResource ThemeInteractiveBrush}" />
+      <Setter Property="BoxShadow"
+                Value="inset 0 0 5 5 #46000000" />
     </Style>
 
     <Style Selector="local|MpAvToolTipView TextBlock#ToolTipTextBlock">

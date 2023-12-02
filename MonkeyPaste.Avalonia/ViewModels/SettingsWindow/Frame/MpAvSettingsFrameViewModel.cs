@@ -159,7 +159,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-
         public MpSettingsFrameType FrameType { get; set; } = MpSettingsFrameType.None;
 
 
@@ -174,8 +173,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public int SortOrderIdx =>
-            (int)FrameType;
+        public int SortOrderIdx { get; set; } = -1;
 
         public string FrameHint { get; set; }
         #endregion

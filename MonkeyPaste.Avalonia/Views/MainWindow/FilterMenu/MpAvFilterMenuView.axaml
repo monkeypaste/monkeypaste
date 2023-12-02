@@ -22,7 +22,8 @@
             <!--  Content Sort View  -->
 
             <local:MpAvClipTileSortView x:Name="SortView"
-                                        Opacity="{Binding IsAnyTagActive, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                                        IsHitTestVisible="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                                        Opacity="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                         DockPanel.Dock="Left"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -41,7 +42,8 @@
             <!--  SearchBox View  -->
 
             <local:MpAvSearchBoxView x:Name="SearchBoxView"
-                                     Opacity="{Binding IsAnyTagActive, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                                     IsHitTestVisible="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                                     Opacity="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                      DockPanel.Dock="Right"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Right"

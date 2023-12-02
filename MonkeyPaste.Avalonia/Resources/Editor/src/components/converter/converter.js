@@ -53,7 +53,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	//log(dataStr);
 
 
-	if (formatType == 'text') {
+	if (formatType == 'plaintext') {
 		setEditorText(dataStr, 'user');
 	} else {
 		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html');

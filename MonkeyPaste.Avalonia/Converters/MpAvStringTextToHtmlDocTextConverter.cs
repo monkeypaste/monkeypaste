@@ -8,13 +8,15 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvStringTextToHtmlDocTextConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value is not string valStr) {
+            if (value is not string valStr) {
                 return value;
             }
-            if(valStr.IsStringHtmlDocument()) {
-                return valStr;
+            if (!valStr.IsStringHtmlDocument()) {
+                valStr = valStr.ToHtmlDocumentFromTextOrPartialHtml();
             }
-            return valStr.ToHtmlDocumentFromTextOrPartialHtml();
+            // strip newlines
+            string result = valStr.ReplaceLineEndings(string.Empty);
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

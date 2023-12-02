@@ -153,6 +153,7 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
+
         #endregion
 
         #region Scrollbar Properties
@@ -404,6 +405,7 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion       
+
         #region ScrollViewer Control
         public static ScrollViewer GetScrollViewer(AvaloniaObject obj) {
             return obj.GetValue(ScrollViewerProperty);
@@ -420,6 +422,7 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
+
         #endregion
 
         #region List Properties
@@ -495,6 +498,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultBindingMode: BindingMode.TwoWay);
 
         #endregion
+
         #endregion
 
         #region IsEnabled 

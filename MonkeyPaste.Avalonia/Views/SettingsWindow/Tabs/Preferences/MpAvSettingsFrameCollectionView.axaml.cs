@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,5 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSettingsFrameCollectionView() {
             InitializeComponent();
         }
-
     }
 }

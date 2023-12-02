@@ -11,16 +11,16 @@
     <!--  NO BG  -->
     <Style Selector=":is(TemplatedControl).noBg /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Transparent" />
+                Value="{StaticResource HitTestableTransparent}" />
     </Style>
     <Style Selector=":is(TemplatedControl).noHoverBg:pointerover /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Transparent" />
+                Value="{StaticResource HitTestableTransparent}" />
     </Style>
 
     <Style Selector=":is(TemplatedControl).noBg">
         <Setter Property="Background"
-                Value="Transparent" />
+                Value="{StaticResource HitTestableTransparent}" />
     </Style>
 
     <!--  NO BORDER  -->

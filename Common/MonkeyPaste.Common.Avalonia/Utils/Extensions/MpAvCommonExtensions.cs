@@ -718,33 +718,6 @@ namespace MonkeyPaste.Common.Avalonia {
 
             var sbl = sv.GetVisualDescendants<ScrollBar>();
             return sbl.FirstOrDefault(x => x.Orientation == orientation);
-
-            //if (orientation == Orientation.Vertical) {
-            //    //return sv.Template..FindName("PART_VerticalScrollBar", sv) as ScrollBar;
-
-            //    var vresult = sv.FindControl<ScrollBar>("PART_VerticalScrollBar");
-
-            //    return vresult;
-            //}
-            ////return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
-            //var hresult = sv.FindControl<ScrollBar>("PART_HorizontalScrollBar");
-            //return hresult;
-        }
-
-        public static void ScrollToHorizontalOffset(this ScrollViewer sv, double xOffset) {
-            var newOffset = new Vector(
-                xOffset,//Math.Max(0, Math.Min(sv.Extent.Width, xOffset)),
-                sv.Offset.Y);
-
-            sv.Offset = newOffset;
-        }
-
-        public static void ScrollToVerticalOffset(this ScrollViewer sv, double yOffset) {
-            var newOffset = new Vector(
-                sv.Offset.X,
-                yOffset);//Math.Max(0, Math.Min(sv.Extent.Height, yOffset)));
-
-            sv.Offset = newOffset;
         }
 
         public static void ScrollByPointDelta(this ScrollViewer sv, MpPoint delta) {
@@ -775,6 +748,22 @@ namespace MonkeyPaste.Common.Avalonia {
 
             sv.InvalidateMeasure();
             sv.InvalidateArrange();
+        }
+
+        public static void ScrollToHorizontalOffset(this ScrollViewer sv, double xOffset) {
+            var newOffset = new Vector(
+                Math.Max(0, Math.Min(sv.Extent.Width, xOffset)),
+                sv.Offset.Y);
+
+            sv.Offset = newOffset;
+        }
+
+        public static void ScrollToVerticalOffset(this ScrollViewer sv, double yOffset) {
+            var newOffset = new Vector(
+                sv.Offset.X,
+                Math.Max(0, Math.Min(sv.Extent.Height, yOffset)));
+
+            sv.Offset = newOffset;
         }
         #endregion
 

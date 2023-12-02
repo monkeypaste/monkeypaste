@@ -12,11 +12,16 @@ namespace MonkeyPaste.Avalonia {
         public string LicenseUri { get; set; }
     }
 
-    public class MpAvTermsAgreementCollectionViewModel : MpAvViewModelBase {
+    public class MpAvTermsAgreementCollectionViewModel : MpAvViewModelBase, MpIWantsTopmostWindowViewModel {
         public IList<MpAvTermsAgreementViewModel> Items { get; set; }
         public string IntroText { get; set; }
         public string OutroText { get; set; }
+        public bool WantsTopmost =>
+            true;
+        public MpWindowType WindowType =>
+            MpWindowType.Modal;
     }
+
     [DoNotNotify]
     public partial class MpAvTermsView : MpAvUserControl {
         #region Private Variables
@@ -27,9 +32,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static async Task<bool> ShowTermsAgreementWindowAsync(MpAvTermsAgreementCollectionViewModel tacvm) {
-            var tw = new MpAvWindow(MpAvWindowManager.LastActiveWindow) {
+            var tw = new MpAvWindow() {
                 Width = 400,
                 Height = 250,
+                Topmost = true,
                 ShowInTaskbar = true,
                 ShowActivated = true,
                 WindowType = MpWindowType.Modal,

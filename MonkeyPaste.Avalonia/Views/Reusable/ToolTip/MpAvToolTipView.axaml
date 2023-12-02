@@ -66,13 +66,14 @@
                            FontSize="14"
                            Margin="0"
                            MaxWidth="250"
+                           VerticalAlignment="Center"
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding ToolTipText, ElementName=ToolTipView}" />
             </DockPanel>
 
 
             <av:HtmlLabel x:Name="ToolTipHtmlPanel"
-                          MaxWidth="300"
+                          MaxWidth="600"
                           local:MpAvHtmlStylerExtension.IsEnabled="True"
                           local:MpAvHtmlStylerExtension.DefaultFontSize="14"
                           IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"

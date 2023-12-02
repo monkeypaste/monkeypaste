@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -196,7 +197,6 @@ namespace MonkeyPaste.Avalonia {
             if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
                 return;
             }
-
             FormattedText ft = null;
             bool is_empty = false;
             if (attached_control.TryGetVisualDescendant<TextBox>(out var tb)) {
@@ -212,9 +212,9 @@ namespace MonkeyPaste.Avalonia {
 
             if (is_empty ||
                 GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm ||
-                hrivm.HighlightRanges.Where(x => x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
+                hrivm.HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
                 !hlrl.Any()) {
-                tha.DrawHighlights(null);
+                FinishUpdate(attached_control, tha, null);
                 return;
             }
 
@@ -229,14 +229,48 @@ namespace MonkeyPaste.Avalonia {
                         x));
             var gl =
                 all_brl
-                .Where(x => x.Item2.Document == attached_control)
+                .Where(x => x.Item2.Document == null || x.Item2.Document == attached_control)
                 .Select(x => (
                     x.Item1.ToHex().ToAvBrush() as IBrush,
                     ft.BuildHighlightGeometry(new Point(), x.Item2.StartIdx, x.Item2.Count)));
 
-            tha.DrawHighlights(gl);
+            FinishUpdate(attached_control, tha, gl);
         }
 
+        private static void FinishUpdate(Control attached_control, MpAvTextHighlightAdorner tha, IEnumerable<(IBrush, Geometry)> gl) {
+            tha.DrawHighlights(gl);
+            if (attached_control is not TextBlock tb ||
+                string.IsNullOrEmpty(tb.Text) ||
+                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
+                return;
+            }
+            string text = tb.Text;
+            tb.Inlines.Clear();
+            if (gl == null) {
+                // reset inlines
+                tb.Inlines.Add(new Run(text));
+                return;
+            }
+            var gll = gl.ToList();
+            foreach (var (tr, idx) in hrivm.HighlightRanges.WithIndex()) {
+                IBrush fg = tb.Foreground;
+                IBrush bg = gll[idx].Item1;
+                if (bg is SolidColorBrush scb) {
+                    fg = scb.ToHex().ToContrastForegoundColor().ToAvBrush();
+                }
+                if (idx == 0 && tr.StartIdx > 0) {
+                    tb.Inlines.Add(new Run(text.Substring(0, tr.StartIdx)));
+                }
+                tb.Inlines.Add(new Run(text.Substring(tr.StartIdx, tr.Count)) { Foreground = fg, Background = bg });
+
+                int end_idx = tr.StartIdx + tr.Count;
+                if (idx == hrivm.HighlightRanges.Count - 1) {
+                    tb.Inlines.Add(new Run(text.Substring(end_idx, text.Length - end_idx)));
+                } else if (hrivm.HighlightRanges[idx + 1].StartIdx - end_idx > 1) {
+                    tb.Inlines.Add(new Run(text.Substring(end_idx + 1, hrivm.HighlightRanges[idx + 1].StartIdx - end_idx)));
+                }
+            }
+        }
 
         private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {
             if (adorner is null || layer is null || !layer.Children.Contains(adorner)) {

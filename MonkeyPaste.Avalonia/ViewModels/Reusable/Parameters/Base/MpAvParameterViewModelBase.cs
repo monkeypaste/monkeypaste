@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,6 +18,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpISelectableViewModel,
         MpIHoverableViewModel,
+        MpIHighlightTextRangesInfoViewModel,
         MpAvIPulseViewModel {
         #region Private Variables
         protected string _lastValue = string.Empty;
@@ -41,6 +43,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIHighlightTextRangesInfoViewModel Implementation
+        public ObservableCollection<MpTextRange> HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
+        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; } = -1;
+
+        #endregion
+
         #region MpIHoverableViewModel Implementation
         public bool IsHovering { get; set; } = false;
 
@@ -57,9 +65,21 @@ namespace MonkeyPaste.Avalonia {
         #region MpIFilterMatch Implementation
 
         bool MpIFilterMatch.IsFilterMatch(string filter) {
+            if (this is not MpIHighlightTextRangesInfoViewModel { } htrivm) {
+                return false;
+            }
+            htrivm.HighlightRanges.Clear();
+            if (Label.QueryText(filter, false, false, false) is { } ranges &&
+                ranges.Any()) {
+                htrivm.HighlightRanges.AddRange(
+                    ranges
+                .Select(x => new MpTextRange(null, x.Item1, x.Item2)));
+            }
+
             return
-                Label.ToStringOrEmpty().ToLower().Contains(filter.ToStringOrEmpty().ToLower()) ||
+                htrivm.HighlightRanges.Any() ||
                 Description.ToStringOrEmpty().ToLower().Contains(filter.ToStringOrEmpty().ToLower());
+
         }
         #endregion
         #endregion

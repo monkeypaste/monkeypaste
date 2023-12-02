@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<MpPluginFormat> ReloadPluginAsync(string plugin_guid) {
             var kvp = Plugins.FirstOrDefault(x => x.Value.guid == plugin_guid);
             if (kvp.IsDefault()) {
-                throw new Exception(string.Format(UiStrings.PluginErrGuidNotFound, plugin_guid));
+                throw new Exception(string.Format(UiStrings.PluginErrMissingManifest, plugin_guid));
             }
             string manifestPath = kvp.Key;
             var reloaded_pf = await LoadPluginAsync(manifestPath);

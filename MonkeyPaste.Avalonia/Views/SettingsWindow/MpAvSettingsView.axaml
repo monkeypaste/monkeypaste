@@ -384,7 +384,8 @@
                     Orientation="Vertical">
 
             <!--  TABS PANEL  -->
-            <local:MpAvSettingsMenuView MaxHeight="200"
+            <local:MpAvSettingsMenuView x:Name="TabMenu"
+                                        MaxHeight="200"
                                         BorderThickness="0,0,0,1.5"
                                         BorderBrush="Silver" />
 

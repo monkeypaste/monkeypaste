@@ -67,67 +67,67 @@ namespace MonkeyPaste.Avalonia {
                     _filters = new ObservableCollection<MpAvSearchFilterViewModel>() {
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Content",
+                            UiStrings.SearchSimpleContentLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByContent),
                             MpContentQueryBitFlags.Content),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Title",
+                            UiStrings.SearchSimpleTitleLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByTitle),
                             MpContentQueryBitFlags.Title),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Url",
+                            UiStrings.SearchSimpleUrlLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchBySourceUrl),
                             MpContentQueryBitFlags.Url),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Url Title",
+                            UiStrings.SearchSimpleUrlTitleLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByUrlTitle),
                             MpContentQueryBitFlags.UrlTitle),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Application Path",
+                            UiStrings.SearchSimpleAppPathLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByProcessName),
                             MpContentQueryBitFlags.AppPath),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Application Name",
+                            UiStrings.SearchSimpleAppNameLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByApplicationName),
                             MpContentQueryBitFlags.AppName),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Annotations",
+                            UiStrings.SearchSimpleAnnotationLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByAnnotation),
                             MpContentQueryBitFlags.Annotations),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Text Type",
+                            UiStrings.SearchSimpleTextTypeLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByTextType),
                             MpContentQueryBitFlags.TextType,true),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "File Type",
+                            UiStrings.SearchSimpleFileTypeLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByFileType),
                             MpContentQueryBitFlags.FileType),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Image Type",
+                            UiStrings.SearchSimpleImageTypeLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByImageType),
                             MpContentQueryBitFlags.ImageType),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Case Sensitive",
+                            UiStrings.SearchSimpleCaseSensitiveLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByIsCaseSensitive),
                             MpContentQueryBitFlags.CaseSensitive,true),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Whole Word",
+                            UiStrings.SearchSimpleWholeWordLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByWholeWord),
                             MpContentQueryBitFlags.WholeWord),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Regular Expression",
+                            UiStrings.SearchSimpleRegExLabel,
                             nameof(MpAvPrefViewModel.Instance.SearchByRegex),
                             MpContentQueryBitFlags.Regex)
                     };

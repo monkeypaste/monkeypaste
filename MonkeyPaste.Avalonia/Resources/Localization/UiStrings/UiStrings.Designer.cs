@@ -2815,7 +2815,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime (not currently supported on Linux).
+        ///   Looks up a localized string similar to All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime..
         /// </summary>
         public static string GestureProfileGlobal {
             get {
@@ -3589,11 +3589,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No plugin loaded from manifest path: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to No plugin loaded with guid: &apos;{0}&apos;.
         /// </summary>
-        public static string PluginErrGuidNotFound {
+        public static string PluginErrMissingManifest {
             get {
-                return ResourceManager.GetString("PluginErrGuidNotFound", resourceCulture);
+                return ResourceManager.GetString("PluginErrMissingManifest", resourceCulture);
             }
         }
         
@@ -4453,6 +4453,123 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annotations.
+        /// </summary>
+        public static string SearchSimpleAnnotationLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleAnnotationLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Name.
+        /// </summary>
+        public static string SearchSimpleAppNameLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleAppNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Path.
+        /// </summary>
+        public static string SearchSimpleAppPathLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleAppPathLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Case Sensitive.
+        /// </summary>
+        public static string SearchSimpleCaseSensitiveLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleCaseSensitiveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        public static string SearchSimpleContentLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleContentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Type.
+        /// </summary>
+        public static string SearchSimpleFileTypeLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleFileTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Type.
+        /// </summary>
+        public static string SearchSimpleImageTypeLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleImageTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular Expression.
+        /// </summary>
+        public static string SearchSimpleRegExLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleRegExLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Type.
+        /// </summary>
+        public static string SearchSimpleTextTypeLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleTextTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string SearchSimpleTitleLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleTitleLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        public static string SearchSimpleUrlLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleUrlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url Title.
+        /// </summary>
+        public static string SearchSimpleUrlTitleLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleUrlTitleLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whole Word.
+        /// </summary>
+        public static string SearchSimpleWholeWordLabel {
+            get {
+                return ResourceManager.GetString("SearchSimpleWholeWordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Threshold.
         /// </summary>
         public static string SearchThresholdLabel {
@@ -4954,7 +5071,21 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///	&lt;head&gt;&lt;/head&gt;
+        ///	&lt;body&gt;
+        ///		&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+        ///		&lt;ul&gt;
+        ///			&lt;li&gt;
+        ///				&lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
+        ///				*This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
+        ///			&lt;/li&gt;
+        ///			&lt;li&gt;
+        ///				&lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+        ///			&lt;li&gt;
+        ///				&lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+        ///			&lt;li&gt;
+        ///				&lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ShortcutRoutingTypeHint {
             get {

@@ -504,10 +504,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool CanScrollX =>
-            CanScroll && DefaultScrollOrientation == Orientation.Horizontal;
+            CanScroll &&
+            QueryTrayTotalTileWidth > ObservedQueryTrayScreenWidth &&
+            DefaultScrollOrientation == Orientation.Horizontal;
 
         public bool CanScrollY =>
-            CanScroll && DefaultScrollOrientation == Orientation.Vertical;
+            CanScroll &&
+            QueryTrayTotalTileHeight > ObservedQueryTrayScreenHeight &&
+            DefaultScrollOrientation == Orientation.Vertical;
         public bool IsThumbDraggingX { get; set; } = false;
         public bool IsThumbDraggingY { get; set; } = false;
         public bool IsThumbDragging => IsThumbDraggingX || IsThumbDraggingY;

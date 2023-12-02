@@ -61,17 +61,29 @@
         <!--  BUTTON ICONS TINT  -->
 
 
-        <Style Selector=":is(Button).cornerButton Image">
+        <Style Selector=":is(Button).cornerButton.top Image">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
 
-        <Style Selector=":is(Button).cornerButton:pointerover Image">
+        <Style Selector=":is(Button).cornerButton.top:pointerover Image">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
-        <Style Selector="ToggleButton.cornerButton:checked.cornerButton Image">
+        <Style Selector=":is(Button).cornerButton.bottom Image">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+        </Style>
+        <Style Selector=":is(Button).cornerButton.bottom:pointerover Image">
+            <!--<Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}, ConverterParameter=compliment}" />-->
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
+        </Style>
+
+
+        <Style Selector="ToggleButton.cornerButton:checked Image">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource ThemeAccent5BgColor}" />
         </Style>

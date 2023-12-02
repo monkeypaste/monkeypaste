@@ -12,4 +12,8 @@
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
+    <Style Selector=":is(PopupRoot).tooltip">
+        <Setter Property="IsHitTestVisible"
+                Value="False" />
+    </Style>
 </Styles>

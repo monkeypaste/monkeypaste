@@ -355,7 +355,7 @@
         <!--  OFFLINE OVERLAY  -->
         <Grid RowDefinitions="Auto,*"
               HorizontalAlignment="Center"
-              VerticalAlignment="Top">
+              VerticalAlignment="Center">
             <Grid.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!IsBusy" />
@@ -380,7 +380,7 @@
         <Grid RowDefinitions="Auto,*"
               IsVisible="{Binding IsBusy}"
               HorizontalAlignment="Center"
-              VerticalAlignment="Top">
+              VerticalAlignment="Center">
             <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}"
                        Classes="emptyOverlayText" />
             <local:MpAvBusySpinnerView Grid.Row="1"

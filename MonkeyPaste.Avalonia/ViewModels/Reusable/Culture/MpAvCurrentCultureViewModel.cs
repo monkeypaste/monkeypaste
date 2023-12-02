@@ -106,8 +106,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand SetCultureCommand => new MpAsyncCommand<object>(
-            async (args) => {
+        public ICommand SetCultureCommand => new MpCommand<object>(
+            (args) => {
                 if (args is not string culture_code) {
                     return;
                 }
