@@ -4174,6 +4174,26 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi-targeted workflows.
+        ///
+        ///* Note corners are in terms of all your screens, not per monitor..
+        /// </summary>
+        public static string PrefShowWindowAndLockHint {
+            get {
+                return ResourceManager.GetString("PrefShowWindowAndLockHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Window and Lock.
+        /// </summary>
+        public static string PrefShowWindowAndLockLabel {
+            get {
+                return ResourceManager.GetString("PrefShowWindowAndLockLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This helps fluidly allow dropping data into Monkey paste from another application without extra fumbling with window placement by dragging data to the top of the screen which will activate Monkey Paste and allow drop..
         /// </summary>
         public static string PrefShowWindowOnDragHint {

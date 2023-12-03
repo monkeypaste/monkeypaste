@@ -260,53 +260,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region REST
 
-        public string CurrencyConverterFreeApiKey {
-            get {
-                return @"897d0d9538155ebeaff7";
-            }
-        }
-
-        public string AzureCognitiveServicesKey {
-            get {
-                return "b455280a2c66456e926b66a1e6656ce3";
-            }
-        }
-
-        public string AzureTextAnalyticsKey {
-            get {
-                return "ec769ed641ac48ed86b38363e67e824b";
-            }
-        }
-
-        public string AzureTextAnalyticsEndpoint {
-            get {
-                return @"https://mp-azure-text-analytics-services-resource-instance.cognitiveservices.azure.com/";
-            }
-        }
-
-        public string AzureCognitiveServicesEndpoint {
-            get {
-                return @"https://mp-azure-cognitive-services-resource-instance.cognitiveservices.azure.com/";
-            }
-        }
-
-        public string BitlyApiToken {
-            get {
-                return @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
-            }
-        }
-
-        public string RestfulOpenAiApiKey {
-            get {
-                return @"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";
-            }
-        }
-
-        public string DomainFavIconEndpoint {
-            get {
-                return @"https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&domain_url=";
-            }
-        }
         #endregion
 
         #region Settings 
@@ -343,8 +296,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Welcome Properties
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public MpShortcutRoutingProfileType DefaultRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Default;
+        [JsonIgnore]
+        public MpShortcutRoutingProfileType DefaultRoutingProfileType {
+            get => DefaultRoutingProfileTypeStr.ToEnum<MpShortcutRoutingProfileType>();
+            set {
+                if (DefaultRoutingProfileType != value) {
+                    DefaultRoutingProfileTypeStr = value.ToString();
+                    OnPropertyChanged(nameof(DefaultRoutingProfileType));
+                }
+            }
+        }
+
+        public string DefaultRoutingProfileTypeStr { get; set; } = MpShortcutRoutingProfileType.Default.ToString();
 
 
         #endregion
@@ -362,17 +325,32 @@ namespace MonkeyPaste.Avalonia {
         public bool AccountPrivacyPolicyAccepted { get; set; }
 
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public MpUserAccountType AccountType { get; set; } = MpUserAccountType.Free;
+        [JsonIgnore]
+        public MpUserAccountType AccountType {
+            get => AccountTypeStr.ToEnum<MpUserAccountType>();
+            set {
+                if (AccountType != value) {
+                    AccountTypeStr = value.ToString();
+                    OnPropertyChanged(nameof(AccountType));
+                }
+            }
+        }
+        public string AccountTypeStr { get; set; } = MpUserAccountType.Free.ToString();
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public MpBillingCycleType AccountBillingCycleType { get; set; } = MpBillingCycleType.None;
+        [JsonIgnore]
+        public MpBillingCycleType AccountBillingCycleType {
+            get => AccountBillingCycleTypeStr.ToEnum<MpBillingCycleType>();
+            set {
+                if (AccountBillingCycleType != value) {
+                    AccountBillingCycleTypeStr = value.ToString();
+                    OnPropertyChanged(nameof(AccountBillingCycleType));
+                }
+            }
+        }
+        public string AccountBillingCycleTypeStr { get; set; } = MpBillingCycleType.None.ToString();
 
         public DateTime AccountNextPaymentDateTime { get; set; }
 
-#if DEBUG
-        public MpUserAccountType TestAccountType { get; set; } = MpUserAccountType.Free;
-#endif
         #endregion
 
         #region Preferences
@@ -406,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Language
 
-        public string CurrentCultureCode { get; set; } = "ar-EG";// CultureInfo.CurrentCulture.Name;
+        public string CurrentCultureCode { get; set; } = CultureInfo.InstalledUICulture.Name;
         public bool IsTextRightToLeft { get; set; }
 
         #endregion
@@ -491,10 +469,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Shortcuts
         public bool IsDropWidgetEnabled { get; set; } = false;
-
-        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
-        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
-        public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
+        [JsonIgnore]
+        public MpScrollToOpenAndLockType ScrollToOpenAndLockType {
+            get => ScrollToOpenAndLockTypeStr.ToEnum<MpScrollToOpenAndLockType>();
+            set {
+                if (ScrollToOpenAndLockType != value) {
+                    ScrollToOpenAndLockTypeStr = value.ToString();
+                    OnPropertyChanged(nameof(ScrollToOpenAndLockType));
+                }
+            }
+        }
+        public string ScrollToOpenAndLockTypeStr { get; set; } = MpScrollToOpenAndLockType.None.ToString();
+        public bool DragToOpen { get; set; } = true;
+        public bool ScrollToOpen { get; set; } = true;
+        public string MainWindowShowBehaviorTypeStr { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
         public bool IsAutoSearchEnabled { get; set; } = true;
         #endregion
@@ -502,9 +490,6 @@ namespace MonkeyPaste.Avalonia {
         #region Runtime/Dependant Properties
 
         #region Language
-
-
-
         #endregion
 
         #region Auto-Complete
@@ -523,7 +508,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Last Load Remembers
 
-        public string MainWindowOrientation { get; set; }
+        public string MainWindowOrientationStr { get; set; }
 #if DESKTOP
         = MpMainWindowOrientationType.Bottom.ToString();
 #elif BROWSER

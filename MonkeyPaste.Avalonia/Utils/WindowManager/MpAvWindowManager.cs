@@ -24,6 +24,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        public static Screens Screens =>
+            AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
 
         public static MpAvWindow MainWindow =>

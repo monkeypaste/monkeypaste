@@ -264,7 +264,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             _curDropTargetTimer.Stop();
-            _lastGlobalMousePoint = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            _lastGlobalMousePoint = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
 
         }
         private void _curDropTargetTimer_Tick(object sender, EventArgs e) {
@@ -280,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
                 .AllWriterPresets
                 .ForEach(x => x.OnPropertyChanged(nameof(x.IsFormatPlaceholderOnTargetDragObject)));
 
-            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
             UpdateDropApp(gmp);
         }
 

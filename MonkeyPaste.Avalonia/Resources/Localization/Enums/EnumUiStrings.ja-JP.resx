@@ -1086,4 +1086,16 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>全て</value>
   </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>シフトを押しながら</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>右上隅</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>左上隅</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>トップ画面エッジジェスチャー</value>
+  </data>
 </root>

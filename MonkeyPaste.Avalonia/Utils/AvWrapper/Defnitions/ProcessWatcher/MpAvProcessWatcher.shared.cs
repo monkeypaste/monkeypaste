@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -145,6 +146,8 @@ namespace MonkeyPaste.Avalonia {
             return GetProcessInfoByHandle(handle);
         }
 
+
+
         #endregion
 
         #region Protected Methods
@@ -227,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
 #if MAC
             MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.ApplicationName}");
 #else
-            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.MainWindowTitle}"); 
+            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.MainWindowTitle}");
 #endif
             OnAppActivated?.Invoke(this, LastProcessInfo);
         }

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -437,7 +438,8 @@ namespace MonkeyPaste.Avalonia {
 
         public int SelectedShortcutIndex { get; set; }
 
-        public MpPoint GlobalMouseLocation { get; set; } = MpPoint.Zero;
+        public PixelPoint GlobalUnscaledMouseLocation { get; set; } = new PixelPoint();
+        public MpPoint GlobalScaledMouseLocation { get; set; } = MpPoint.Zero;
 
         public MpPoint? GlobalMouseLeftButtonDownLocation { get; private set; } = null;
         public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
@@ -968,7 +970,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Hook_MouseMoved(object? sender, MouseHookEventArgs e) {
-            var gmp = e.Data.GetScaledScreenPoint();
+            var gmp = e.Data.GetScaledScreenPoint(out var unscaled);
+            GlobalUnscaledMouseLocation = unscaled;
             HandlePointerMove(gmp);
         }
 
@@ -1055,7 +1058,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            var gmp = e.Data.GetScaledScreenPoint();
+            var gmp = e.Data.GetScaledScreenPoint(out var unscaled);
+            GlobalUnscaledMouseLocation = unscaled;
             HandlePointerMove(gmp);
         }
 
@@ -1191,7 +1195,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => {
                 if (isLeftButton) {
                     GlobalIsMouseLeftButtonDown = true;
-                    GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
+                    GlobalMouseLeftButtonDownLocation = GlobalScaledMouseLocation;
                     LastLeftClickDateTime = DateTime.Now;
                 } else {
                     GlobalIsMouseRightButtonDown = true;
@@ -1229,11 +1233,11 @@ namespace MonkeyPaste.Avalonia {
         }
         private void HandlePointerMove(MpPoint gmp) {
             Dispatcher.UIThread.Post(() => {
-                GlobalMouseLocation = gmp;
-                OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+                GlobalScaledMouseLocation = gmp;
+                OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalScaledMouseLocation);
 
                 if (GlobalIsPointerDragging) {
-                    OnGlobalDrag?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+                    OnGlobalDrag?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalScaledMouseLocation);
                 }
 
             });

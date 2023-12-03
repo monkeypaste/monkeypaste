@@ -322,13 +322,13 @@ namespace MonkeyPaste.Avalonia {
             };
             ScrollWheelBehaviorViewModel.Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,false,ScrollWheelBehaviorViewModel) {
-                        IsChecked = !MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IsChecked = !MpAvPrefViewModel.Instance.ScrollToOpen,
                         IconSourceObj = "NoEntryImage",
                         LabelText = UiStrings.CommonDisableLabel,
                         DescriptionText = UiStrings.WelcomeScrollToOpenDescription1
                     },
                     new MpAvWelcomeOptionItemViewModel(this,true,ScrollWheelBehaviorViewModel) {
-                        IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IsChecked = MpAvPrefViewModel.Instance.ScrollToOpen,
                         IconSourceObj = "MouseWheelImage",
                         LabelText = UiStrings.CommonEnableLabel,
                         DescriptionText = UiStrings.WelcomeScrollToOpenDescription2,
@@ -343,13 +343,13 @@ namespace MonkeyPaste.Avalonia {
             };
             DragToOpenBehaviorViewModel.Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,false,DragToOpenBehaviorViewModel) {
-                        IsChecked = !MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
+                        IsChecked = !MpAvPrefViewModel.Instance.DragToOpen,
                         IconSourceObj = "CloseWindowImage",
                         LabelText = UiStrings.CommonDisableLabel,
                         DescriptionText = UiStrings.WelcomeDragToOpenDescription1
                     },
                     new MpAvWelcomeOptionItemViewModel(this,true,DragToOpenBehaviorViewModel) {
-                        IsChecked = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
+                        IsChecked = MpAvPrefViewModel.Instance.DragToOpen,
                         IconSourceObj = "AppFrameImage",
                         LabelText = UiStrings.CommonEnableLabel,
                         DescriptionText = UiStrings.WelcomeDragToOpenDescription2
@@ -455,21 +455,21 @@ namespace MonkeyPaste.Avalonia {
 
             // SCROLL-TO-OPEN
             if (ScrollWheelBehaviorViewModel.WasVisited) {
-                MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
+                MpAvPrefViewModel.Instance.ScrollToOpen =
                     ScrollWheelBehaviorViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
             } else {
                 // when skipped, default to true
-                MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta = true;
+                MpAvPrefViewModel.Instance.ScrollToOpen = true;
             }
 
 
             // DRAG-TO-SHOW
             if (DragToOpenBehaviorViewModel.WasVisited) {
-                MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop =
+                MpAvPrefViewModel.Instance.DragToOpen =
                     DragToOpenBehaviorViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
             } else {
                 // when skipped default to true
-                MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop = true;
+                MpAvPrefViewModel.Instance.DragToOpen = true;
             }
 
             // DB PASSWORD

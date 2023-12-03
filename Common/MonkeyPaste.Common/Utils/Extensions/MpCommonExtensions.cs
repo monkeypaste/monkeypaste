@@ -85,7 +85,7 @@ namespace MonkeyPaste.Common {
             }
             return enumerable.Aggregate(func);
         }
-        public static IEnumerable<T> Difference<T>(this IEnumerable<T> enumerable, IEnumerable<T> other) {
+        public static IEnumerable<T> Difference<T>(this IEnumerable<T> enumerable, IEnumerable<T> other, IEqualityComparer<T> comparer = default) {
             if (enumerable == null && other == null) {
                 return new List<T>();
             }
@@ -95,8 +95,12 @@ namespace MonkeyPaste.Common {
             if (other == null) {
                 return enumerable;
             }
-            return enumerable.Union(other).Except(enumerable.Intersect(other)); ;
+            if (comparer == default) {
+                return enumerable.Union(other).Except(enumerable.Intersect(other)); ;
+            }
+            return enumerable.Union(other).Except(enumerable.Intersect(other, comparer)); ;
         }
+
 
         public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable) {
             List<T> enumerable_copy = enumerable.ToList();
@@ -685,9 +689,9 @@ namespace MonkeyPaste.Common {
             Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
             object safeValue = newValue;
             try {
-                if (t.IsEnum && newValue is string newValStr) {
-                    newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newValStr, t);
-                }
+                //if (t.IsEnum && newValue is string newEnumKey) {
+                //    newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newEnumKey, t);
+                //}
                 safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
             }
             catch (Exception ex) {

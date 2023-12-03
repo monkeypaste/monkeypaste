@@ -6,8 +6,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvDesktopScreenInfoCollection(Window w) :
             base(w.Screens.All.Select(x => new MpAvDesktopScreenInfo(x))) {
-
         }
-
     }
 }

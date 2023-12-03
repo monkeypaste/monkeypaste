@@ -554,30 +554,17 @@ namespace MonkeyPaste.Avalonia {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.MainWindowShowBehaviorType),
+                                            paramId = nameof(MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr),
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.PrefMainWindowShowBehaviorLabel,
                                             values =
                                                 Enum.GetNames(typeof(MpMainWindowShowBehaviorType))
                                                 .Select(x=> new MpPluginParameterValueFormat() {
-                                                    isDefault = MpAvPrefViewModel.Instance.MainWindowShowBehaviorType.ToLower() == x.ToLower(),
+                                                    isDefault = MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr.ToLower() == x.ToLower(),
                                                     value = x,
                                                     label = x.ToEnum<MpMainWindowShowBehaviorType>().EnumToUiString()
                                                 }).ToList()
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta),
-                                            description = UiStrings.PrefMainWindowShowOnScrollHint,
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = UiStrings.PrefMainWindowShowOnScrollLabel,
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta.ToString()
-                                                },
-                                            }
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AnimateMainWindow),
@@ -977,17 +964,44 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.DragAndDrop) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.TopScreenEdgeGestures) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop),
+                                            paramId = nameof(MpAvPrefViewModel.Instance.ScrollToOpen),
+                                            description = UiStrings.PrefMainWindowShowOnScrollHint,
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.PrefMainWindowShowOnScrollLabel,
+                                            values =new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpAvPrefViewModel.Instance.ScrollToOpen.ToString()
+                                                },
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.ScrollToOpenAndLockTypeStr),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = UiStrings.PrefShowWindowAndLockLabel,
+                                            description = UiStrings.PrefShowWindowAndLockHint,
+                                            values =
+                                                Enum.GetNames(typeof(MpScrollToOpenAndLockType))
+                                                .Select((x,idx)=> new MpPluginParameterValueFormat() {
+                                                    isDefault = MpAvPrefViewModel.Instance.ScrollToOpenAndLockTypeStr == x,
+                                                    value = x,
+                                                    label = x.ToEnum<MpScrollToOpenAndLockType>().EnumToUiString()
+                                                }).ToList()
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.DragToOpen),
                                             description = UiStrings.PrefShowWindowOnDragHint,
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowWindowOnDragLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString())
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.DragToOpen.ToString())
                                         }
                                     }
                                 }

@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>Holding Shift</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>Top Right Corner</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>Top Left Corner</value>
+  </data>
   <data name="MpBillingCycleType_None" xml:space="preserve">
     <value>Never</value>
   </data>
@@ -609,8 +621,8 @@
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
     <value>Content</value>
   </data>
-  <data name="MpSettingsFrameType_DragAndDrop" xml:space="preserve">
-    <value>Drag And Drop</value>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>Top Screen Edge Gestures</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
     <value>Shortcuts</value>
@@ -1061,9 +1073,6 @@
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>Mouse</value>
-  </data>
-  <data name="MpMainWindowShowBehaviorType_Active" xml:space="preserve">
-    <value>Active</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />

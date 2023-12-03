@@ -55,6 +55,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsLoaded { get; set; }
         public bool IsWebViewConverterEnabled =>
 #if CEFNET_WV
             MpAvCefNetApplication.IsCefNetLoaded;
@@ -84,6 +85,7 @@ namespace MonkeyPaste.Avalonia {
             if (IsWebViewConverterEnabled) {
                 await CreateWebViewConverterAsync();
             } else {
+                IsLoaded = true;
                 MpConsole.WriteLine("Plain Html converter has no webview for conversion. Using fallback.");
             }
         }
@@ -183,6 +185,7 @@ namespace MonkeyPaste.Avalonia {
                     quillWindow.WindowState = WindowState.Minimized;
                     sw.Stop();
                     MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
+                    IsLoaded = true;
                 };
                 quillWindow.Show();
             } else if (App.PrimaryView is MpAvMainView mv) {

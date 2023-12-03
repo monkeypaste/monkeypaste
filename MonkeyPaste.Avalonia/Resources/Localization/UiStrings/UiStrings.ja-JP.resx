@@ -2091,4 +2091,52 @@
   <data name="TimeSpanYears" xml:space="preserve">
     <value>{0}年前</value>
   </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>GUID でロードされたプラグインがありません: '{0}'</value>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>注釈</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>アプリケーション名</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>アプリケーションパス</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>大文字と小文字を区別</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>コンテンツ</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>ファイルの種類</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>画像の種類</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>正規表現</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>テキストタイプ</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL タイトル</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>単語全体</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>画面上部の端に沿ってスクロールして開くのと同様に、メイン ウィンドウが開くときにメイン ウィンドウがロックされます。</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>ウィンドウを表示してロックする</value>
+  </data>
 </root>

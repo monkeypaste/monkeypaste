@@ -94,12 +94,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-
-
-
-
         private string GetCultureDisplayValue(CultureInfo culture) {
-            return $"{culture.EnglishName} - {culture.NativeName}";
+            if (culture == CultureInfo.InvariantCulture) {
+                return new CultureInfo("en-US").NativeName;
+            }
+            return $"{culture.NativeName}";
         }
 
 

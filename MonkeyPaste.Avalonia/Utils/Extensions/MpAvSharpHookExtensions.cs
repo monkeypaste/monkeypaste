@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia;
+using MonkeyPaste.Common;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
@@ -6,16 +7,13 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvSharpHookExtensions {
-        public static MpPoint GetScaledScreenPoint(this MouseEventData med) {
-
-            //double scale = MpPlatform.Services.ScreenInfoCollection.PixelScaling;
-
+        public static MpPoint GetScaledScreenPoint(this MouseEventData med, out PixelPoint unscaled_point) {
             double scale = MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling;
-            var unscaled_p = new MpPoint((double)med.X, (double)med.Y);
-            var scaled_p = new MpPoint(Math.Max(0, (double)med.X / scale), Math.Max(0, (double)med.Y / scale));
+            int x = Math.Max(0, (int)med.X);
+            int y = Math.Max(0, (int)med.Y);
 
-            //MpConsole.WriteLine($"Unscaled: {unscaled_p} Scaled: {scaled_p} Density: {scale}");
-
+            unscaled_point = new PixelPoint(x, y);
+            var scaled_p = new MpPoint(Math.Max(0, (double)x / scale), Math.Max(0, (double)y / scale));
             return scaled_p;
         }
 

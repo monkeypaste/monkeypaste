@@ -25,6 +25,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Screens
+
+        public static Screen Primary(this Screens screens) {
+            return screens.All.FirstOrDefault(x => x.IsPrimary);
+        }
+        public static Screen ScreenFromPoint_WORKS(this Screens screens, PixelPoint pp) {
+            return screens.All.FirstOrDefault(x => x.Bounds.Contains(pp));
+        }
+        #endregion
 
         #region Controls
         public static void Redraw(this Control control) {

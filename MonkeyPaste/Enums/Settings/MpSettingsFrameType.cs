@@ -16,7 +16,7 @@
         Startup, //4
         Search, //2
         Content, //3
-        DragAndDrop, //2
+        TopScreenEdgeGestures, //2
         Shortcuts, //1
         System, //3
         Password

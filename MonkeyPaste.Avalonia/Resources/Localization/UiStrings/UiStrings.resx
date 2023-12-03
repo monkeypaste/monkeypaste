@@ -2211,4 +2211,12 @@
   <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
     <value>Whole Word</value>
   </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi-targeted workflows.
+
+* Note corners are in terms of all your screens, not per monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Show Window and Lock</value>
+  </data>
 </root>

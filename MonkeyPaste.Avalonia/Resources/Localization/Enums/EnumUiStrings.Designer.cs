@@ -1177,15 +1177,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active.
-        /// </summary>
-        public static string MpMainWindowShowBehaviorType_Active {
-            get {
-                return ResourceManager.GetString("MpMainWindowShowBehaviorType_Active", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Mouse.
         /// </summary>
         public static string MpMainWindowShowBehaviorType_Mouse {
@@ -1951,20 +1942,47 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Holding Shift.
+        /// </summary>
+        public static string MpScrollToOpenAndLockType_HoldingShift {
+            get {
+                return ResourceManager.GetString("MpScrollToOpenAndLockType_HoldingShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpScrollToOpenAndLockType_None {
+            get {
+                return ResourceManager.GetString("MpScrollToOpenAndLockType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top Left Corner.
+        /// </summary>
+        public static string MpScrollToOpenAndLockType_TopLeftCorner {
+            get {
+                return ResourceManager.GetString("MpScrollToOpenAndLockType_TopLeftCorner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top Right Corner.
+        /// </summary>
+        public static string MpScrollToOpenAndLockType_TopRightCorner {
+            get {
+                return ResourceManager.GetString("MpScrollToOpenAndLockType_TopRightCorner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content.
         /// </summary>
         public static string MpSettingsFrameType_Content {
             get {
                 return ResourceManager.GetString("MpSettingsFrameType_Content", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drag And Drop.
-        /// </summary>
-        public static string MpSettingsFrameType_DragAndDrop {
-            get {
-                return ResourceManager.GetString("MpSettingsFrameType_DragAndDrop", resourceCulture);
             }
         }
         
@@ -2109,6 +2127,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpSettingsFrameType_Theme {
             get {
                 return ResourceManager.GetString("MpSettingsFrameType_Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top Screen Edge Gestures.
+        /// </summary>
+        public static string MpSettingsFrameType_TopScreenEdgeGestures {
+            get {
+                return ResourceManager.GetString("MpSettingsFrameType_TopScreenEdgeGestures", resourceCulture);
             }
         }
         

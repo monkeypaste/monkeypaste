@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                         return "SearchImage";
                     case MpSettingsFrameType.Content:
                         return "BananaImage";
-                    case MpSettingsFrameType.DragAndDrop:
+                    case MpSettingsFrameType.TopScreenEdgeGestures:
                         return "DragAndDropImage";
                     case MpSettingsFrameType.Shortcuts:
                         return "JoystickImage";
@@ -220,11 +220,7 @@ namespace MonkeyPaste.Avalonia {
                         var to_save = Items.Where(x => x.HasModelChanged).ToList();
                         to_save.ForEach(x => x.SaveCurrentValueCommand.Execute("skip model save"));
                         foreach (var pvm in to_save) {
-                            //while (MpPrefViewModel.Instance.IsSaving) {
-                            //    await Task.Delay(100);
-                            //}
                             try {
-
                                 MpAvPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
                             }
                             catch (Exception ex) {

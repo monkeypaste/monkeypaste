@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Common {
     public interface MpIPlatformScreenInfo {
         MpRect Bounds { get; set; }
 
@@ -11,12 +11,13 @@ namespace MonkeyPaste {
 
         double Scaling { get; set; } // PixelDensity == PixelsPerDip
 
-        MpPoint PixelsPerInch { get; } // PixelsPerInch == 96 * PixelDensity
-        string Name { get; set; }
         void Rotate(double angle);
+        bool IsEqual(MpIPlatformScreenInfo other);
     }
 
     public interface MpIPlatformScreenInfoCollection {
         ObservableCollection<MpIPlatformScreenInfo> Screens { get; }
+        MpIPlatformScreenInfo Primary { get; }
+        bool Refresh();
     }
 }

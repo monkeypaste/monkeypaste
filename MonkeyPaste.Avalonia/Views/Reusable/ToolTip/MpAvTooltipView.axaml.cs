@@ -16,11 +16,6 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvToolTipView : MpAvUserControl<object> {
         #region Private Variables
 
-        private MpPoint _lastMousePos;
-        private DateTime? _lastEnterDt = null;
-
-        const int WAIT_TO_HIDE_INPUT_TOOLTIP_MS = 1_000;
-
         #endregion
 
         #region Statics
