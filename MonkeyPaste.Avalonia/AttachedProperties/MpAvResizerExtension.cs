@@ -405,7 +405,7 @@ namespace MonkeyPaste.Avalonia {
             double max_h = GetMaxHeight(control);
 
             if (bound_width + dx < 0) {
-                ResetToDefault(control);
+                //ResetToDefault(control);
                 return;
             }
 
@@ -566,6 +566,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PointerPressedHandler(object s, PointerPressedEventArgs e) {
+
             if (s is Control control &&
                 e.GetCurrentPoint(control)
                 .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
@@ -581,13 +582,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SetIsResizing(control, true);
 
-                if (control.Name == "MainWindowResizerBorder") {
-                    e.Pointer.Capture(control);
-                }
+                //if (control.Name == "MainWindowResizerBorder") {
+                e.Pointer.Capture(control);
+                //}
 
 
-                _lastMousePosition = GetScreenPosition(e);
-                _mouseDownPosition = GetScreenPosition(e);
+                _lastMousePosition = GetScreenPosition(e, control);
+                _mouseDownPosition = GetScreenPosition(e, control);
             }
         }
 
@@ -606,6 +607,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PointerMovedHandler(object s, PointerEventArgs e) {
+
             if (s is Control control) {
                 if (!GetIsResizing(control) ||
                    !GetIsEnabled(control) ||
@@ -620,7 +622,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                var mw_mp = GetScreenPosition(e);
+                var mw_mp = GetScreenPosition(e, control);
                 //MpConsole.WriteLine("mp: " + mw_mp + " s_mp"+_mouseDownPosition);
                 if (GetIsResizing(control)) {
                     var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
@@ -641,10 +643,13 @@ namespace MonkeyPaste.Avalonia {
             _lastMousePosition = _mouseDownPosition = default;
         }
 
-        private static MpPoint GetScreenPosition(PointerEventArgs e) {
+        private static MpPoint GetScreenPosition(PointerEventArgs e, Control control) {
             // NOTE commented fails on mac
             //return MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            return e.GetScreenMousePoint();
+            if (control.Name == "MainWindowResizerBorder") {
+                return e.GetScreenMousePoint();
+            }
+            return e.GetPosition(null).ToPortablePoint();
         }
         #endregion
     }

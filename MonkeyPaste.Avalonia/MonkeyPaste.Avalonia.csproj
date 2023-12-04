@@ -42,6 +42,7 @@
     <AndroidNativeLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Assets\Images\MpRichTextBox\**" />
+    <AvaloniaXaml Remove="Assets\Images\resize_backup2\**" />
     <AvaloniaXaml Remove="Assets\Images\resize_backup\**" />
     <AvaloniaXaml Remove="Assets\Images\Tests\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
@@ -81,6 +82,7 @@
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <AvaloniaXaml Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <Compile Remove="Assets\Images\MpRichTextBox\**" />
+    <Compile Remove="Assets\Images\resize_backup2\**" />
     <Compile Remove="Assets\Images\resize_backup\**" />
     <Compile Remove="Assets\Images\Tests\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
@@ -120,6 +122,7 @@
     <Compile Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Compile Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <EmbeddedResource Remove="Assets\Images\MpRichTextBox\**" />
+    <EmbeddedResource Remove="Assets\Images\resize_backup2\**" />
     <EmbeddedResource Remove="Assets\Images\resize_backup\**" />
     <EmbeddedResource Remove="Assets\Images\Tests\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
@@ -161,6 +164,7 @@
     <JavaSourceJar Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
+    <None Remove="Assets\Images\resize_backup2\**" />
     <None Remove="Assets\Images\resize_backup\**" />
     <None Remove="Assets\Images\Tests\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
@@ -200,6 +204,7 @@
     <None Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <None Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <Page Remove="Assets\Images\MpRichTextBox\**" />
+    <Page Remove="Assets\Images\resize_backup2\**" />
     <Page Remove="Assets\Images\resize_backup\**" />
     <Page Remove="Assets\Images\Tests\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
@@ -483,8 +488,6 @@
     <None Remove="Assets\Images\rename.png" />
     <None Remove="Assets\Images\replace.png" />
     <None Remove="Assets\Images\reset.png" />
-    <None Remove="Assets\Images\resize_backup2\dots_1x3.png" />
-    <None Remove="Assets\Images\resize_backup2\doubleSidedArrow.png" />
     <None Remove="Assets\Images\robotclaw.png" />
     <None Remove="Assets\Images\RoundedTexture.png" />
     <None Remove="Assets\Images\rtf.png" />
@@ -830,12 +833,6 @@
     <AvaloniaResource Include="Assets\Images\recyclebin.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\resize_backup2\dots_1x3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\share.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1038,7 +1035,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\dots_2x10.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\dots_2x2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -178,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
             return MpNotificationDialogResultType.Dismiss;
         }
 
-        public override void HideNotification() {
+        public override void HideNotification(bool force = false) {
             base.HideNotification();
             IsWindowOpen = false;
         }

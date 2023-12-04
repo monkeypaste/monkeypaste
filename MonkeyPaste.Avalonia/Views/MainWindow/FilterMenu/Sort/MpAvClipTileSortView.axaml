@@ -65,13 +65,13 @@
 
         <Style Selector="Button#SortDirectionButton:not(.descending) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
 
 
         </Style>
         <Style Selector="Button#SortDirectionButton.descending Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
 
         </Style>
         <Style Selector="Button#SortDirectionButton:pointerover:not(.descending) Image">

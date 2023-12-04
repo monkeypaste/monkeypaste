@@ -158,24 +158,24 @@
         <!--  UNCHECKED  -->
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.active):not(.popout) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.popout Image">
             <Setter Property="Margin"
                     Value="3" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).active Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
         <!--  CHECKED  -->
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:checked Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
     </local:MpAvUserControl.Styles>

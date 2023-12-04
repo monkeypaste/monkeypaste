@@ -43,10 +43,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public async Task ShowMessageAsync(
+            MpNotificationType msgType = MpNotificationType.Message,
             string title = "",
             object body = null,
             int maxShowTimeMs = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
-            MpNotificationType msgType = MpNotificationType.Message,
             object iconSourceObj = null,
             object anchor = null) {
             await ShowNotificationAsync(

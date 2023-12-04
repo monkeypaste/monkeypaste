@@ -624,6 +624,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
+                            SortOrderIdx = -1,
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1741,9 +1742,10 @@ namespace MonkeyPaste.Avalonia {
 
                             if (!success) {
                                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                                title: UiStrings.CommonErrorLabel,
-                                body: UiStrings.PrefChangeDbPwdFailedNtfText,
-                                iconSourceObj: "WarningImage").FireAndForgetSafeAsync(this);
+                                    msgType: MpNotificationType.DbError,
+                                    title: UiStrings.CommonErrorLabel,
+                                    body: UiStrings.PrefChangeDbPwdFailedNtfText,
+                                    iconSourceObj: "WarningImage").FireAndForgetSafeAsync(this);
                             }
 
                             break;
@@ -1825,17 +1827,8 @@ namespace MonkeyPaste.Avalonia {
                                 Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                     title: UiStrings.PrefThemeColorLabel,
                                     owner: MpAvWindowManager.LocateWindow(this),
-                                    selectedColor: MpAvPrefViewModel.Instance.ThemeColor,
-                                    fixedPalette: new[] {
-                                        MpSystemColors.Red,
-                                        MpSystemColors.orange1,
-                                        MpSystemColors.Yellow,
-                                        MpSystemColors.green1,
-                                        MpSystemColors.blue1,
-                                        MpSystemColors.cyan1,
-                                        MpSystemColors.magenta,
-                                        MpSystemColors.purple
-                                    }
+                                    selectedColor: MpAvPrefViewModel.Instance.ThemeColor
+                                //fixedPalette: MpSystemColors.SpectrumColors
                                 );
                             if (string.IsNullOrEmpty(result)) {
                                 // color chooser canceled

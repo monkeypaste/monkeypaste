@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfColorHelpers {
 
         public static Color GetRandomColor(byte alpha = 255) {
-            var scb = (SolidColorBrush)MpSystemColors.ContentColors[MpRandom.Rand.Next(MpSystemColors.ContentColors.Count - 1)].ToWpfBrush();
+            var scb = (SolidColorBrush)MpSystemColors.ContentColors[MpRandom.Rand.Next(MpSystemColors.ContentColors.Length - 1)].ToWpfBrush();
             var c = scb.Color;
             c.A = alpha;
             return c;

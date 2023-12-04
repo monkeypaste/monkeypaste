@@ -362,13 +362,20 @@ namespace MonkeyPaste.Avalonia {
 
                 //MpAvProcessWatcher.Instance.BreakNextTick = true;
 
-                if (TopLevel.GetTopLevel(MpAvWindowManager.MainWindow) is not { } tl ||
-                    tl.Clipboard is not { } cb) {
-                    return;
-                }
-                await cb.LogClipboardAsync();
+                //if (TopLevel.GetTopLevel(MpAvWindowManager.MainWindow) is not { } tl ||
+                //    tl.Clipboard is not { } cb) {
+                //    return;
+                //}
+                //await cb.LogClipboardAsync();
 
-                MpDebug.BreakAll();
+                //MpDebug.BreakAll();
+
+                string log = MpAvStringHexToBitmapTintConverter.GetTintCacheLog();
+                await Mp.Services.NotificationBuilder.ShowMessageAsync(
+                    msgType: MpNotificationType.Debug,
+                    title: "Tint Log",
+                    body: log,
+                    maxShowTimeMs: -1);
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

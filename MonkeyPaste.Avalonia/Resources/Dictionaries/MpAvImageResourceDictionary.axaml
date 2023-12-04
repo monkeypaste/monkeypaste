@@ -154,6 +154,7 @@
     <sys:String x:Key="QuestionMarkImage">avares://MonkeyPaste.Avalonia/Assets/Images/questionmark.png</sys:String>
     <sys:String x:Key="EmptyImage">avares://MonkeyPaste.Avalonia/Assets/Images/transparent.png</sys:String>
     <sys:String x:Key="EllipsesImage">avares://MonkeyPaste.Avalonia/Assets/Images/ellipses.png</sys:String>
+    <sys:String x:Key="Dots2x5Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_2x5.png</sys:String>
     <sys:String x:Key="Dots2x10Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_2x10.png</sys:String>
     <sys:String x:Key="Dots1x3Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_1x3.png</sys:String>
     <sys:String x:Key="Dots3x1Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_3x1.png</sys:String>

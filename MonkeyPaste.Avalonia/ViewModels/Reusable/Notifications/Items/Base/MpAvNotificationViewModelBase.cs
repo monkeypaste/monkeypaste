@@ -192,7 +192,8 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.NotificationOptionHideLabel,
                             IconResourceKey = "ErrorImage",
-                            Command = CloseNotificationCommand
+                            Command = CloseNotificationCommand,
+                            CommandParameter = "User"
                         },
                         new MpAvMenuItemViewModel() {
                             Header = string.Format(UiStrings.NotificationOptionHideAllLabel,NotificationType.EnumToUiString()),
@@ -460,7 +461,7 @@ namespace MonkeyPaste.Avalonia {
             return MpNotificationDialogResultType.None;
         }
 
-        public virtual void HideNotification() {
+        public virtual void HideNotification(bool force = false) {
             if (IsShowOnceNotification &&
                 !IsDoNotShowType) {
                 // this was initial show, add to do not show
@@ -700,9 +701,10 @@ namespace MonkeyPaste.Avalonia {
                 CloseNotificationCommand.Execute(null);
             });
 
-        public ICommand CloseNotificationCommand => new MpCommand(
-            () => {
-                HideNotification();
+        public ICommand CloseNotificationCommand => new MpCommand<object>(
+            (args) => {
+                bool force = args is string argStr && argStr == "User";
+                HideNotification(force);
                 //IsClosing = false;
             });
 

@@ -188,6 +188,7 @@ namespace MonkeyPaste.Avalonia {
                     orphan_msg = sb.ToString();
                     MpConsole.WriteLine(orphan_msg);
                     Mp.Services.NotificationBuilder.ShowMessageAsync(
+                        msgType: MpNotificationType.Debug,
                                title: $"Orphans Detected",
                                body: orphan_msg,
                                iconSourceObj: "KeyboardImage",

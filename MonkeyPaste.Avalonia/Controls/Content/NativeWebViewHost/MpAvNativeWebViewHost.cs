@@ -122,6 +122,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Mp.Services.NotificationBuilder.ShowMessageAsync(
+                msgType: MpNotificationType.Debug,
                 title: DataContext == null ? "NULL" : DataContext.ToString(),
                 body: hl.LogText,
                 maxShowTimeMs: -1).FireAndForgetSafeAsync();

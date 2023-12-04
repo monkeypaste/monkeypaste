@@ -41,7 +41,7 @@
     
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) != 'MAC'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) != 'MAC' Or $(BuildOs) != 'WINDOWS'">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>
@@ -72,5 +72,8 @@
     <!-- remove tmp dir -->
     <RemoveDir ContinueOnError="true" 
                Directories="$(TargetDatTempDir)" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'WINDOWS'">
+    <Exec Command="$(BuildScriptsDir)\bundle_plugin.bat CoreAnnotator $(TargetDir) $(TargetDatDir) $(CoreAnnGuid)" />
   </Target>
 </Project>

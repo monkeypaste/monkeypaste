@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBitmapTintConverter : IValueConverter {
@@ -31,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-        private static Dictionary<object, Dictionary<string, Bitmap>> _tintCache = new Dictionary<object, Dictionary<string, Bitmap>>();
+        private static Dictionary<object, Dictionary<string, Bitmap>> _tintCache { get; set; } = new Dictionary<object, Dictionary<string, Bitmap>>();
 
         private bool IS_DYNAMIC_TINT_ENABLED = true;
 
@@ -163,6 +164,13 @@ namespace MonkeyPaste.Avalonia {
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
             throw new NotSupportedException();
+        }
+
+
+        public static string GetTintCacheLog() {
+            var sb = new StringBuilder();
+            _tintCache.ForEach(x => sb.AppendLine(x.Key.ToString()));
+            return sb.ToString();
         }
 
     }

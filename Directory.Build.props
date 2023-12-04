@@ -53,6 +53,7 @@
     <DefaultFramework>net8.0</DefaultFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
+    <BuildScriptsRootDir>$(SolutionDir)\_build\scripts</BuildScriptsRootDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -76,6 +77,7 @@
     <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
+    <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
   </PropertyGroup>
    
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
@@ -86,6 +88,7 @@
     <UseCefNet>true</UseCefNet>
     <CefPlatformRelDir>cef\cef_linux</CefPlatformRelDir>
     <PlatformShortName>x11</PlatformShortName>
+    <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
@@ -97,6 +100,7 @@
     <UseOutSysCef>true</UseOutSysCef>
     <PlatformShortName>mac</PlatformShortName>
     <TargetRuntimeIdentifiers>osx-x64;</TargetRuntimeIdentifiers>
+    <BuildScriptsDir>$(BuildScriptsRootDir)\mac</BuildScriptsDir>
     <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>
@@ -116,6 +120,7 @@
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
     <PlatformShortName>android</PlatformShortName>
+    <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
@@ -128,7 +133,7 @@
   
   
   <PropertyGroup>
-    <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
+    <MainProjectDir>$(SolutionDir)$(MainProjectName)</MainProjectDir>
     <MainTargetDir>$(MainProjectDir)\bin\$(Configuration)\$(MainTargetFramework)</MainTargetDir>
     <PluginSourceDir>$(SolutionDir)\Plugins</PluginSourceDir>
     <DeclarativePluginBaseDir>$(PluginSourceDir)\DeclarativePlugins\DeclarativeBase</DeclarativePluginBaseDir>

@@ -13,6 +13,7 @@
         PluginUpdated,
         Message,
         AppModeChange,
+        Debug,
 
         ContentCapReached,
         TrashCapReached,

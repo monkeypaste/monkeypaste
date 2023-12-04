@@ -181,14 +181,10 @@ namespace MonkeyPaste.Avalonia {
                             Command = CopySelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                         },
-                        //new MpMenuItemViewModel() {
-                        //    IsSeparator = true,
-                        //    Header = "TEST"
-                        //},
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonDuplicateLabel,
                             //AltNavIdx = 0,
-                            IconResourceKey = UiStrings.CommonDuplicateLabel,
+                            IconResourceKey = "DuplicateImage",
                             Command = DuplicateSelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                         },
@@ -218,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonRenameLabel,
-                            //AltNavIdx = 0,
+                            IsVisible = MpAvPrefViewModel.Instance.ShowContentTitles,
                             IconResourceKey = "RenameImage",
                             Command = EditSelectedTitleCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Rename },
@@ -4384,7 +4380,8 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem.IsTitleReadOnly = false;
             },
             () => {
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading ||
+                    !MpAvPrefViewModel.Instance.ShowContentTitles) {
                     return false;
                 }
                 return SelectedItem != null;

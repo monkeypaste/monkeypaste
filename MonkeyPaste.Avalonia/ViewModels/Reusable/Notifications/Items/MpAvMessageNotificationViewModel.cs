@@ -57,12 +57,12 @@ namespace MonkeyPaste.Avalonia {
             return MpNotificationDialogResultType.None;
         }
 
-        public override void HideNotification() {
-            if (IsPinned) {
+        public override void HideNotification(bool force = false) {
+            if (IsPinned && !force) {
                 // ignore until unpinned
                 return;
             }
-            base.HideNotification();
+            base.HideNotification(force);
         }
         #endregion
     }

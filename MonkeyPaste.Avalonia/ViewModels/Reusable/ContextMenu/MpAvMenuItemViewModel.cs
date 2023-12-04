@@ -475,9 +475,9 @@ namespace MonkeyPaste.Avalonia {
                 // add alpha for matching
                 selectedHexStr = $"#FF{selectedHexStr.Substring(1)}";
             }
-            for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
+            for (int i = 0; i < MpSystemColors.ContentColors.Length; i++) {
                 string cc = MpSystemColors.ContentColors[i].ToUpper();
-                bool isCustom = i == MpSystemColors.ContentColors.Count - 1;
+                bool isCustom = i == MpSystemColors.ContentColors.Length - 1;
                 bool isSelected = selectedHexStr.ToUpper() == cc;
                 if (isSelected) {
                     isAnySelected = true;

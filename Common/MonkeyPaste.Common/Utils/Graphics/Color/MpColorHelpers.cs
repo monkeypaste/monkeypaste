@@ -87,7 +87,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetRandomHexColor(bool includeAlpha = true) {
-            int idx = MpRandom.Rand.Next(0, MpSystemColors.ContentColors.Count);
+            int idx = MpRandom.Rand.Next(0, MpSystemColors.ContentColors.Length);
             string hex = MpSystemColors.ContentColors[idx];
             if (includeAlpha) {
                 return hex;

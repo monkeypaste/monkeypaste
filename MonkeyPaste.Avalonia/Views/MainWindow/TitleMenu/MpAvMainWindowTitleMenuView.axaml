@@ -26,7 +26,7 @@
 
         <Style Selector="Button:pointerover Border#MinimizeBorder">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
         <Style Selector="PathIcon">
             <Setter Property="Foreground"
@@ -46,10 +46,15 @@
         </Style>
         <Style Selector=":is(Button):pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
         <!--  DRAG HANDLE  -->
+
+        <Style Selector="Button#WindowOrientationHandleButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
 
         <Style Selector="Button#WindowOrientationHandleButton:pointerover Image">
             <Setter Property="Source"

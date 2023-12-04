@@ -1348,6 +1348,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Debug.
+        /// </summary>
+        public static string MpNotificationType_Debug {
+            get {
+                return ResourceManager.GetString("MpNotificationType_Debug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Execute Parameters Request.
         /// </summary>
         public static string MpNotificationType_ExecuteParametersRequest {

@@ -30,6 +30,11 @@
             <Setter Property="Cursor"
                     Value="Hand" />
         </Style>
+
+        <Style Selector=":is(Button) TextBlock">
+            <Setter Property="ClipToBounds"
+                    Value="False" />
+        </Style>
         <Style Selector="Border.splitter">
             <Setter Property="Width"
                     Value="1" />
@@ -48,8 +53,8 @@
 
         <!--  ENABLE  -->
         <Style Selector=":is(Button)#EnableTriggerToggleButton:checked /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent3Color}" />
+            <!--<Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent3Color}" />-->
             <Setter Property="Content">
                 <Setter.Value>
                     <Template>
@@ -63,8 +68,8 @@
             </Setter>
         </Style>
         <Style Selector=":is(Button)#EnableTriggerToggleButton:unchecked /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent2Color}" />
+            <!--<Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent2Color}" />-->
             <Setter Property="Content">
                 <Setter.Value>
                     <Template>
@@ -79,8 +84,8 @@
         </Style>
 
         <Style Selector=":is(Button)#EnableTriggerToggleButton[IsEnabled=false] /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent1Color}" />
+            <!--<Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent1Color}" />-->
             <Setter Property="Content"
                     Value="OOPSY" />
         </Style>
@@ -135,11 +140,30 @@
         <!--  ENABLED TOGGLE  -->
         <ToggleButton x:Name="EnableTriggerToggleButton"
                       Grid.Column="0"
-                      Classes="defaultButton"
+                      Classes="defaultButton contrastFg"
                       Foreground="Black"
                       IsThreeState="False"
                       IsChecked="{Binding IsTriggerEnabled, Mode=OneWay}"
-                      Command="{Binding ToggleTriggerEnabledCommand}" />
+                      Command="{Binding ToggleTriggerEnabledCommand}">
+            <ToggleButton.Resources>
+                <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource ThemeAccent2BgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
+
+                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource ThemeAccent3Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource ThemeAccent3Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
+
+                <SolidColorBrush x:Key="ToggleButtonBackgroundDisabled" Color="{DynamicResource ThemeAccent1Color}" />
+            </ToggleButton.Resources>
+
+        </ToggleButton>
 
         <Border Grid.Column="1"
                 Classes="splitter" />
