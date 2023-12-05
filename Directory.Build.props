@@ -42,7 +42,7 @@
   <!-- CUSTOM PROPERTIES -->
 
   <PropertyGroup>
-    <!-- DEFAULTS (OVERRIDEN BY CONDITIONS) -->
+    <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
     <CefPlatformDir>cef\cef_win</CefPlatformDir>
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
@@ -54,6 +54,7 @@
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
     <BuildScriptsRootDir>$(SolutionDir)\_build\scripts</BuildScriptsRootDir>
+    <DefineConstants>$(DefineConstants);TRACE;</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

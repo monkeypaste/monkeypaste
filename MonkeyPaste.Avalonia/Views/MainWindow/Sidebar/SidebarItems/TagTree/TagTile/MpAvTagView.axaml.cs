@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                     //ended = true;
                 },
                 MIN_DISTANCE: 20);
-                
+
 #endif
         }
 

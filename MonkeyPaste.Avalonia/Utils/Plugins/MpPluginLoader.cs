@@ -228,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (!Directory.Exists(PluginRootFolderPath)) {
-                MpConsole.WriteLine("Plugin folder missing from: " + PluginRootFolderPath);
+                MpConsole.WriteLine("Plugin folder missing from: " + PluginRootFolderPath, level: MpLogLevel.Error);
                 // if plugin folder doesn't exist then no plugins so nothing to do but it should                
                 return;
             }

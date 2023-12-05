@@ -6,7 +6,7 @@ $testdata = [
     'device_guid' => 'TEST GUID SUBSCRIPTION',
     'sub_type' => 'Standard',
     'monthly' => '1',
-    'expires_utc_dt' => '11/29/2023 7:00:00 PM', //getFormattedDateTimeStr(date('Y-m-d H:i:s', time() + 1 * 24 * 60 * 60)),
+    'expires_utc_dt' => getFormattedDateTimeStr(date('Y-m-d H:i:s', time() + DEFAULT_EXPIRY_OFFSET)),
 ];
 
 $fields = [

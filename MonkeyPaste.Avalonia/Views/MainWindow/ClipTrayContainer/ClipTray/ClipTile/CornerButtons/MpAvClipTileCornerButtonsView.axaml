@@ -157,7 +157,7 @@
 
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                Classes="noBg noHoverBg noBorder cornerButton bottom left"
+                Classes="noBg noHoverBg noBorder cornerButton bottom left tt_t"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <ToolTip.Tip>
@@ -170,7 +170,7 @@
 
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="noBg noHoverBg noBorder cornerButton bottom right"
+                      Classes="noBg noHoverBg noBorder cornerButton bottom right tt_t"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
                       IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
             <ToggleButton.IsVisible>

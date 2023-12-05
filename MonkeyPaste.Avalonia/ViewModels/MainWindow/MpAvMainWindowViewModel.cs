@@ -693,6 +693,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MainWindowBottom):
                     double rb = MainWindowBottom - MainWindowOpenedScreenRect.Bottom;
+
                     Canvas.SetBottom(MpAvMainView.Instance.RootGrid, rb);
                     break;
 
@@ -702,7 +703,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 #if DESKTOP
                     MpAvWindowManager.MainWindow.Position = MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.Scaling);
-                    MpConsole.WriteLine($"Vis mw position: {MpAvWindowManager.MainWindow.Position}");
+                    //MpConsole.WriteLine($"Vis mw position: {MpAvWindowManager.MainWindow.Position}");
 #endif
                     break;
                 case nameof(MainWindowOpenedScreenRect):
@@ -817,7 +818,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
             }
-            bool mw_screen_changed = mw_screen != MainWindowScreen;
+            bool mw_screen_changed = !mw_screen.IsEqual(MainWindowScreen);
             MainWindowScreen = mw_screen;
             if (mw_screen_changed) {
                 // trigger window position change
@@ -886,6 +887,9 @@ namespace MonkeyPaste.Avalonia {
             MainWindowTop = rect.Top;
             MainWindowRight = rect.Right;
             MainWindowBottom = rect.Bottom;
+
+            MainWindowWidth = MainWindowRight - MainWindowLeft;
+            MainWindowHeight = MainWindowBottom - MainWindowTop;
         }
         private void StartMainWindowShow() {
             IsMainWindowOpening = true;
@@ -946,7 +950,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}' MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
         }
-
         public void FinishMainWindowHide() {
 
             if (_isAnimationCanceled) {
@@ -973,9 +976,9 @@ namespace MonkeyPaste.Avalonia {
             // open 
             double zeta = 0.22d;
             double omega = 25;
-            double[] x = new double[] { MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom };
-            double[] xt = endRect.Sides;
-            double[] v = new double[4];
+            double[] cur_edges = new double[] { MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom };
+            double[] end_edges = endRect.Sides;
+            double[] edge_vels = new double[4];
             double min_done_v = 0.9d; //0.1d;
             int anchor_idx = MainWindowOrientationType switch {
                 MpMainWindowOrientationType.Left => 0,
@@ -994,15 +997,15 @@ namespace MonkeyPaste.Avalonia {
                 var curTime = DateTime.Now;
                 double dt = (curTime - prevTime).TotalMilliseconds / 1000.0d;
                 prevTime = curTime;
-                for (int i = 0; i < x.Length; i++) {
+                for (int i = 0; i < cur_edges.Length; i++) {
                     if (i == anchor_idx) {
                         // anchor_idx is 'critically dampened' to 1 so it does not oscillate (doesn't animate past screen edge)
-                        MpAnimationHelpers.Spring(ref x[i], ref v[i], xt[i], dt, 1, omega);
+                        MpAnimationHelpers.Spring(ref cur_edges[i], ref edge_vels[i], end_edges[i], dt, 1, omega);
                     } else {
-                        MpAnimationHelpers.Spring(ref x[i], ref v[i], xt[i], dt, zeta, omega);
+                        MpAnimationHelpers.Spring(ref cur_edges[i], ref edge_vels[i], end_edges[i], dt, zeta, omega);
                     }
                 }
-                bool is_v_zero = v.All(x => Math.Abs(x) <= min_done_v);
+                bool is_v_zero = edge_vels.All(x => Math.Abs(x) <= min_done_v);
 
                 if (is_v_zero || _isAnimationCanceled) {
                     // consider done when all v's are pretty low or canceled
@@ -1010,8 +1013,7 @@ namespace MonkeyPaste.Avalonia {
                     _animationTimer.Stop();
                     return;
                 }
-                SetMainWindowRect(new MpRect(x));
-
+                SetMainWindowRect(new MpRect(cur_edges));
             };
 
             _animationTimer.Tick += tick;
@@ -1031,7 +1033,7 @@ namespace MonkeyPaste.Avalonia {
             _animationTimer.Tick -= tick;
 
             if (_isAnimationCanceled) {
-                //return;
+                return;
             }
 
             SetMainWindowRect(endRect);

@@ -1,6 +1,7 @@
 ﻿
 using MonkeyPaste.Common;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -196,6 +197,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+
+        private TraceListener _ctl;
+        public TraceListener ConsoleTraceListener {
+            get {
+                if (_ctl == null) {
+                    _ctl = new ConsoleTraceListener(false);
+                }
+                return _ctl;
+            }
+        }
         #endregion
 
 

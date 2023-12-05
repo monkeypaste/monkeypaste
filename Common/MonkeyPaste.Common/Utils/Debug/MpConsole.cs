@@ -9,11 +9,6 @@ using System.Text;
 namespace MonkeyPaste.Common {
     public static class MpConsole {
         #region Private Variables
-        private static bool _canLogToFile = true;
-        private static StreamWriter _logStream;
-
-        private static object _logLock = new object();
-
         #endregion
 
         #region Properties
@@ -27,11 +22,10 @@ namespace MonkeyPaste.Common {
 
         public static bool HasInitialized { get; private set; } = false;
 
-        public static double MaxLogFileSizeInMegaBytes = 3.25;
 
         public static bool LogToFile =>
 #if DEBUG
-            false;
+            true;
 #else
             true;
 #endif
@@ -39,7 +33,7 @@ namespace MonkeyPaste.Common {
 
         static string LogFileName =>
             "mp.log";
-        static string LogFilePath { get; set; }
+        public static string LogFilePath { get; set; }
 
         #endregion
 
@@ -59,30 +53,32 @@ namespace MonkeyPaste.Common {
                 pi.LogDir,
                 LogFileName);
 
-            if (MpFileIo.IsFileInUse(LogFilePath)) {
-                return;
-            }
             HasInitialized = true;
-            if (!LogToFile) {
-                return;
-            }
-            try {
-                if (LogFilePath.IsFile()) {
-                    MpFileIo.DeleteFile(LogFilePath);
+            if (LogToFile) {
+                try {
+                    if (LogFilePath.IsFile()) {
+                        MpFileIo.DeleteFile(LogFilePath);
+                    }
+                    if (!pi.LogDir.IsDirectory()) {
+                        MpFileIo.CreateDirectory(pi.LogDir);
+                    }
+                    if (!LogToConsole) {
+                        Trace.Listeners.Clear();
+                    }
+                    using (File.Create(LogFilePath)) { }
+                    TextWriterTraceListener twtl = new TextWriterTraceListener(LogFilePath);
+                    Trace.Listeners.Add(twtl);
+                    Trace.AutoFlush = true;
                 }
-                if (!pi.LogDir.IsDirectory()) {
-                    MpFileIo.CreateDirectory(pi.LogDir);
+                catch (Exception ex) {
+                    //_canLogToFile = false;
+                    WriteTraceLine(@"Error deleting previous log file w/ path: " + LogFilePath + " with exception: " + ex);
                 }
-                _logStream = new StreamWriter(File.Open(LogFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None));
             }
-            catch (Exception ex) {
-                _canLogToFile = false;
-                WriteTraceLine(@"Error deleting previous log file w/ path: " + LogFilePath + " with exception: " + ex);
-            }
+
         }
 
-
-        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false, bool stampless = false, MpLogLevel level = MpLogLevel.Debug) {
+        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false, bool stampless = false, MpLogLevel level = MpLogLevel.Verbose) {
             if (!CanLog(level)) {
                 return;
             }
@@ -91,12 +87,7 @@ namespace MonkeyPaste.Common {
                 sb.Append($"{GetLogStamp(level)}");
             }
             sb.Append(line.ToStringOrEmpty());
-            if (LogToConsole) {
-                WriteLineWrapper(sb.ToString(), false, pad_pre, pad_post, level);
-            }
-            if (LogToFile) {
-                WriteLineToFile(sb.ToString());
-            }
+            WriteLineWrapper(sb.ToString(), false, pad_pre, pad_post);
         }
 
         public static void WriteTraceLine(object line, object ex = null, MpLogLevel level = MpLogLevel.Error, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
@@ -106,36 +97,17 @@ namespace MonkeyPaste.Common {
             line = line == null ? string.Empty : line;
 
             line = $"{GetLogStamp(level)} {line}";
-            if (LogToConsole) {
-                WriteLineWrapper("", true);
-                WriteLineWrapper(@"-----------------------------------------------------------------------", true);
-                WriteLineWrapper("File: " + callerFilePath, true);
-                WriteLineWrapper("Member: " + callerName, true);
-                WriteLineWrapper("Line: " + lineNum, true);
-                WriteLineWrapper("Msg: " + line, true);
-                WriteLineWrapper(@"-----------------------------------------------------------------------", true);
-                WriteLineWrapper("", true);
-                if (ex != null) {
-                    LogException(ex);
-                }
+            WriteLineWrapper("", true);
+            WriteLineWrapper(@"-----------------------------------------------------------------------", true);
+            WriteLineWrapper("File: " + callerFilePath, true);
+            WriteLineWrapper("Member: " + callerName, true);
+            WriteLineWrapper("Line: " + lineNum, true);
+            WriteLineWrapper("Msg: " + line, true);
+            WriteLineWrapper(@"-----------------------------------------------------------------------", true);
+            WriteLineWrapper("", true);
+            if (ex != null) {
+                LogException(ex);
             }
-            if (LogToFile) {
-                WriteLineToFile(line);
-                if (ex != null) {
-                    WriteLineToFile("Exception: ");
-                    WriteLineToFile(ex);
-                }
-            }
-        }
-
-
-        public static void ShutdownLog() {
-            if (_logStream == null) {
-                return;
-            }
-            _logStream.Close();
-            _logStream.Dispose();
-            _logStream = null;
         }
 
         #endregion
@@ -165,72 +137,17 @@ namespace MonkeyPaste.Common {
                 WriteLineWrapper("Exception: " + ex.ToString(), isTrace);
             }
         }
-        private static void WriteLineToFile(object line, params object[] args) {
-            if (!_canLogToFile || _logStream == null) {
-                return;
-            }
-            line = line == null ? string.Empty : line;
-            string str = line.ToString();
-            str = $"<{DateTime.Now}> {str}";
-            if (args != null && args.Length > 0) {
-                str = string.Format(str, args);
-            }
-            line = $"<{DateTime.Now}> {line}";
 
-            try {
-                lock (_logLock) {
-                    _logStream.WriteLine(line.ToString());
-                    _logStream.Flush();
-                }
+        private static void WriteLineWrapper(string str, bool isTrace = false, bool pad_pre = false, bool pad_post = false) {
+            var sb = new StringBuilder();
+            if (pad_pre) {
+                sb.AppendLine();
             }
-            catch {
-                _canLogToFile = false;
+            sb.AppendLine(str);
+            if (pad_post) {
+                sb.AppendLine();
             }
-        }
-        private static void WriteLineWrapper(string str, bool isTrace = false, bool pad_pre = false, bool pad_post = false, MpLogLevel level = MpLogLevel.Debug) {
-            if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net framework") || isTrace) {
-                // wpf
-                if (pad_pre) {
-                    Console.WriteLine("");
-                }
-                Console.WriteLine(str);
-                if (pad_post) {
-                    Console.WriteLine("");
-                }
-                return;
-            } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6") ||
-                        RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 7") ||
-                        RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 8")) {
-                // avalonia
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                    if (pad_pre) {
-                        Debug.WriteLine("");
-                    }
-                    Debug.WriteLine(str);
-                    if (pad_post) {
-                        Debug.WriteLine("");
-                    }
-                } else {
-                    if (pad_pre) {
-                        Console.WriteLine("");
-                    }
-                    Console.WriteLine(str);
-                    if (pad_post) {
-                        Console.WriteLine("");
-                    }
-                }
-                return;
-            } else {
-                // give console space on xamarin
-
-                Console.WriteLine("");
-                Console.WriteLine(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
-                Console.WriteLine(str);
-                Console.WriteLine("");
-                Console.WriteLine(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
-            }
+            Trace.Write(sb.ToString());
         }
 
         private static bool CanLog(MpLogLevel level) {

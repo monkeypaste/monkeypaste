@@ -8,6 +8,7 @@ const SUCCESS_MSG = '[SUCCESS]';
 const ERROR_MSG = '[ERROR]';
 
 const TOMORROW_TICKS = 1 * 24 * 60 * 60;
+const DEFAULT_EXPIRY_OFFSET = TOMORROW_TICKS;
 
 const SYS_DATETIME_FORMAT = 'Y-m-d H:i:s';
 

@@ -40,7 +40,10 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             var cur_screens = scrs.All.Select(x => new MpAvDesktopScreenInfo(x));
-            if (Screens.Difference(cur_screens, _comparer).Any()) {
+            var diffs = Screens.Difference(cur_screens, _comparer).ToList();
+            if (diffs.Any()) {
+                MpConsole.WriteLine($"Screen info changed. Diffs:", true);
+                diffs.ForEach((x, idx) => MpConsole.WriteLine($"[{(Screens.Contains(x) ? "OLD" : "NEW")}] {x}", false, idx == diffs.Count - 1));
                 Screens.Clear();
                 Screens.AddRange(cur_screens);
                 MpMessenger.SendGlobal(MpMessageType.ScreenInfoChanged);

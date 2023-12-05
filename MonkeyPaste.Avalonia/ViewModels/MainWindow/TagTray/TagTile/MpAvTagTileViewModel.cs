@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -1586,7 +1587,13 @@ namespace MonkeyPaste.Avalonia {
                 if (control == null) {
                     return;
                 }
-                MpAvMenuView.ShowMenu(control, ContextMenuViewModel);
+                IsContextMenuOpen = true;
+                var mv = MpAvMenuView.ShowMenu(control, ContextMenuViewModel);
+                void Closed(object sender, RoutedEventArgs e) {
+                    IsContextMenuOpen = false;
+                    mv.Closed -= Closed;
+                }
+                mv.Closed += Closed;
             },
             (args) => {
                 return IsTagNameReadOnly;

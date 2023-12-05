@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
             // create/update uistrings.js file
             string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content, false);
             bool success = result == EditorUiStrPath;
-            MpConsole.WriteLine($"Localizer: {EditorUiStrPath} create {(success ? "SUCCESS" : "FAIL")}");
+            MpConsole.WriteLine($"Localizer: {EditorUiStrPath} create {(success ? "SUCCESS" : "FAIL")}", level: MpLogLevel.Debug);
             if (success) {
                 SetJsUiStringScriptTag();
             }

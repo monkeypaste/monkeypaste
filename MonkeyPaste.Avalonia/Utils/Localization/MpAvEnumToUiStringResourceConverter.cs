@@ -117,8 +117,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // either new/missing entries or values changed
-            MpConsole.WriteLine("Enums Changed! Here are diffs: ", true);
-            diffs.ForEach(x => MpConsole.WriteLine($"'{x.Key}'=>'{x.Value}'", stampless: true));
+            MpConsole.WriteLine("Enums Changed! Here are diffs: ", true, level: MpLogLevel.Error);
+            diffs.ForEach(x => MpConsole.WriteLine($"'{x.Key}'=>'{x.Value}'", stampless: true, level: MpLogLevel.Error));
             string target_path = ActualEnumUiResxResourcePath;
             target_path = CreateEnumResx(target_path);
 

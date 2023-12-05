@@ -25,7 +25,7 @@ function send_reset_email(string $username, string $email, string $reset_code)
     mail($email, $subject, $message, $headers);
 }
 
-function reset_account_password(int $id, string $reset_code, int $expiry = 1 * 24 * 60 * 60): bool
+function reset_account_password(int $id, string $reset_code, int $expiry = DEFAULT_EXPIRY_OFFSET): bool
 {
     $sql = 'UPDATE account
             SET reset_code = :reset_code, reset_expiry = :reset_expiry

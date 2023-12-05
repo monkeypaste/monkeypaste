@@ -1,13 +1,13 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="using:MonkeyPaste.Avalonia"
-             mc:Ignorable="d"
-             d:DesignWidth="800"
-             d:DesignHeight="450"
-             x:Class="MonkeyPaste.Avalonia.MpAvAppModeFlyoutView">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvAppModeFlyoutView">
     <local:MpAvUserControl.Resources>
         <sys:Double x:Key="ButtonSize">50</sys:Double>
     </local:MpAvUserControl.Resources>
@@ -73,7 +73,7 @@
         <!--  AUTO COPY  -->
         <ToggleButton x:Name="AutoCopyRadioButton"
                       Grid.Column="0"
-                      Classes="modeRadio"
+                      Classes="modeRadio tt_t"
                       IsChecked="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleAutoCopyModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
@@ -87,7 +87,7 @@
 
         <ToggleButton x:Name="RightClickPasteModeRadioButton"
                       Grid.Column="1"
-                      Classes="modeRadio"
+                      Classes="modeRadio tt_t"
                       IsChecked="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleRightClickPasteCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
@@ -101,7 +101,7 @@
 
         <ToggleButton x:Name="DropWidgetEnabledRadioButton"
                       Grid.Column="2"
-                      Classes="modeRadio"
+                      Classes="modeRadio tt_t"
                       IsVisible="{Binding CanEnableDropWidget, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}"
                       IsChecked="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleIsDropWidgetEnabledCommand, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}">

@@ -129,6 +129,7 @@ namespace MonkeyPaste.Avalonia {
                 PlatformInfo = new MpAvPlatformInfo_desktop();
             }
 
+            MpConsole.WriteLine($"Log Path: '{MpConsole.LogFilePath}'");
             MpConsole.WriteLine($"Storage Dir: '{PlatformInfo.StorageDir}'");
             MpConsole.WriteLine($"Executing Dir: '{PlatformInfo.ExecutingDir}'");
             string prefPath = Path.Combine(PlatformInfo.StorageDir, MpAvPrefViewModel.PREF_FILE_NAME);

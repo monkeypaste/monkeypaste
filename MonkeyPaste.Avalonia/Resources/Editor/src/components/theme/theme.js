@@ -161,7 +161,7 @@ function adjustBgToTheme(bg_color_obj) {
         hsl.l = Math.min(hsl.l, 15);
     }
     let adj_rgb = hsl2Rgb(hsl);
-    //adj_rgb.a = Math.min(rgba.a, 0.5);
+    adj_rgb.a = 0;// Math.min(rgba.a, 0.5);
 
     let css_rgba = rgbaToCssColor(adj_rgb);
     return css_rgba;

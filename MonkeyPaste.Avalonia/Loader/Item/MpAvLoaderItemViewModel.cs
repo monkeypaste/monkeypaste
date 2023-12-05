@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvLoaderItemViewModel : MpAvViewModelBase {
-        public object ItemArg { get; set; }
+        public object[] ItemArgs { get; set; }
         public Type ItemType { get; set; }
         public string Label { get; set; }
 
@@ -17,16 +17,12 @@ namespace MonkeyPaste.Avalonia {
             ItemType = itemType;
         }
 
-        public MpAvLoaderItemViewModel(Type itemType, string label = "", object arg = null) : this(itemType, label) {
-            ItemArg = arg;
+        public MpAvLoaderItemViewModel(Type itemType, string label = "", params object[] args) : this(itemType, label) {
+            ItemArgs = args;
         }
 
         public async Task LoadItemAsync(bool static_fallback = false) {
-            if (ItemType == typeof(MpAvMainWindowViewModel)) {
-
-            }
             object itemObj = null;
-            object[] args = ItemArg == null ? null : new[] { ItemArg };
             MethodInfo initMethodInfo;
             PropertyInfo instancePropertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
@@ -68,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                     Label = bsi.Label;
                 }
 
-                var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
+                var initTask = (Task)initMethodInfo.Invoke(itemObj, ItemArgs);
                 await initTask;
 
                 if (itemObj is MpIAsyncObject ao) {
@@ -81,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                 if (itemObj is MpIBootstrappedItem bsi) {
                     Label = bsi.Label;
                 }
-                initMethodInfo.Invoke(itemObj, args);
+                initMethodInfo.Invoke(itemObj, ItemArgs);
             }
         }
     }

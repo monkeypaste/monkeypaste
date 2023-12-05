@@ -3,13 +3,13 @@ require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
 function get_activate_email_msg_html($username, $activation_url): string
 {
-    $msg = "Hi " . $username . ", <br>Please click <a href='" . $activation_url . "'>here</a> to activate your account!<br><br>* The link will expire in 24 hours";
+    $msg = "Hi " . $username . ", <br><br>Please click <a href='" . $activation_url . "'>here</a> to activate your account!<br><br>* The link will expire in 24 hours";
     return $msg;
 }
 
 function send_activation_email(string $username, string $email, string $activation_code): void
 {
-    $activation_link = ACCOUNTS_URL . "/activate.php?email=$email&activation_code=$activation_code";
+    $activation_link = ACCOUNTS_URL . "/activate-account.php?email=$email&activation_code=$activation_code";
 
     $subject = "Please activate your MonkeyPaste account";
     $message = get_activate_email_msg_html($username, $activation_link);
@@ -24,7 +24,7 @@ function send_activation_email(string $username, string $email, string $activati
     mail($email, $subject, $message, $headers);
 }
 
-function register_user(string $username, string $email, string $password, string $activation_code, int $expiry = 1 * 24 * 60 * 60, bool $admin = false): bool
+function register_user(string $username, string $email, string $password, string $activation_code, int $expiry = DEFAULT_EXPIRY_OFFSET, bool $admin = false): bool
 {
     $sql = 'INSERT INTO account(username, email, password, admin, activation_code, activation_expiry)
             VALUES(:username, :email, :password, :admin, :activation_code, :activation_expiry)';

@@ -1,11 +1,11 @@
 ﻿namespace MonkeyPaste.Common {
     public enum MpLogLevel {
         None = 0,
-        Verbose,
+        Fatal,
+        Error,
         Debug,
         Informational,
-        Error,
-        Fatal
+        Verbose,
     }
 
 }

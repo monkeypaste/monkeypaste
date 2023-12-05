@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste.Common {
+﻿using System.Diagnostics;
+
+namespace MonkeyPaste.Common {
 
     public interface MpIPlatformInfo {
         string OsMachineName { get; }
@@ -19,6 +21,8 @@
 
         string EditorPath { get; }
         string TermsPath { get; }
+
+        TraceListener ConsoleTraceListener { get; }
 
         MpUserDeviceType OsType { get; }
     }

@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _attempt_login_timer;
 
         private MpSubscriptionFormat _dummySubscription = new MpSubscriptionFormat() {
-            AccountType = MpUserAccountType.Unlimited,
+            AccountType = MpUserAccountType.Free,
             IsMonthly = true,
             ExpireOffsetUtc = DateTime.UtcNow - TimeSpan.FromDays(2)
         };
@@ -464,8 +464,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
             response = response.ToStringOrEmpty();
-            MpConsole.WriteLine($"Server response: '{response}'", level: MpLogLevel.Error);
-            string msg_suffix = string.Empty;
+            MpConsole.WriteLine($"Server response: '{response}'");
+            string msg_suffix;
             bool success = false;
             ClearErrors();
 
@@ -766,8 +766,8 @@ namespace MonkeyPaste.Avalonia {
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
 
-                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
-                //MpSubscriptionFormat acct = _dummySubscription;
+                //MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
+                MpSubscriptionFormat acct = _dummySubscription;
 
                 bool is_sub_device = acct != MpSubscriptionFormat.Default;
                 MpUserAccountType acct_type = AccountType;
@@ -786,6 +786,7 @@ namespace MonkeyPaste.Avalonia {
                     {"username", (nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername) },
                     {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
                     {"device_guid", (nameof(MpDefaultDataModelTools.ThisUserDeviceGuid), MpAvPrefViewModel.Instance.ThisDeviceGuid) },
+                    {"device_type",(null,Mp.Services.PlatformInfo.OsType.ToString()) },
                     {"machine_name",(null,Environment.MachineName) },
                     {"detail1", (null,MpAvPrefViewModel.arg1)},
                     {"detail2", (null,MpAvPrefViewModel.arg2)},
@@ -829,7 +830,10 @@ namespace MonkeyPaste.Avalonia {
 
                     acct_state = MpUserAccountState.Connected;
                 } else {
-                    acct_state = IsRegistered || login_type == MpLoginSourceType.Click ? MpUserAccountState.Disconnected : MpUserAccountState.Unregistered;
+                    acct_state =
+                        IsRegistered || login_type == MpLoginSourceType.Click ?
+                            MpUserAccountState.Disconnected :
+                            MpUserAccountState.Unregistered;
                 }
                 UpdateAccountState(acct_state, acct_type, expires, monthly, is_sub_device, email);
                 StartExpirationTimer();
