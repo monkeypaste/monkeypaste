@@ -718,7 +718,7 @@
     <value>Global</value>
   </data>
   <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
-    <value>Shortcut must contain ONE and only ONE input key.Any key that is not:</value>
+    <value>Shortcut must contain ONE and only ONE non-modifier key.</value>
   </data>
   <data name="ShortcutAssignRecordLabel" xml:space="preserve">
     <value>Press any key to record...</value>
@@ -1824,7 +1824,7 @@
     <comment>Trigger Name</comment>
   </data>
   <data name="ShortcutSelectTagTitle" xml:space="preserve">
-    <value>Select '{0}' Collection</value>
+    <value>Select '{0}'</value>
     <comment>Collection Name</comment>
   </data>
   <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
@@ -2218,5 +2218,8 @@
   </data>
   <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
     <value>Show Window and Lock</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Free!</value>
   </data>
 </root>

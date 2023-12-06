@@ -36,6 +36,20 @@ namespace MonkeyPaste.Avalonia {
             return enum_ui_string;
         }
 
+        public static string EnumKeyToUiString(string key) {
+            foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
+                try {
+                    if (pi.Name != null &&
+                        pi.Name.EndsWith(key)) {
+                        return EnumUiStrings.ResourceManager.GetString(pi.Name, MpAvCurrentCultureViewModel.Instance.CurrentCulture);
+                    }
+                }
+                catch {
+                    continue;
+                }
+            }
+            return string.Empty;
+        }
         public static object UiStringToEnum(this string uiStr, Type enumType = null) {
             var keys = FindEnumKeys(uiStr);
             string key = enumType == null ?

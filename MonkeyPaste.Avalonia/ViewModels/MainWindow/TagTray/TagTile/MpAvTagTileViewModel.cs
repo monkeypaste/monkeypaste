@@ -195,28 +195,35 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
                             Header = UiStrings.CommonRenameLabel,
-                            AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.Rename },
                         },
+                        // no hotkey, show assign w/ gesture
                         new MpAvMenuItemViewModel() {
-                            IsVisible = CanHotkey,
+                            IsVisible = CanHotkey && !HasHotkey,
                             Header = UiStrings.CommonAssignShortcutLabel,
-                            AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("JoystickImage") as string,
                             Command = MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand,
+                            CommandParameter = this,
+                            ShortcutArgs = new object[] { MpShortcutType.AssignShortcut },
+                        },
+                        // hotkey, show select w/ gesture
+                        new MpAvMenuItemViewModel() {
+                            IsVisible = CanHotkey && HasHotkey,
+                            Header = string.Format(UiStrings.ShortcutSelectTagTitle,TagName),
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("SelectImage") as string,
+                            Command = MpAvTagTrayViewModel.Instance.SelectTagCommand,
                             CommandParameter = this,
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, this },
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = CanPin,
                             Header = IsModelPinned ? UiStrings.CommonUnpinItemLabel : UiStrings.CommonPinItemLabel,
-                            AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("PinImage") as string,
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this
                         },
-
                         new MpAvMenuItemViewModel() {
                             IsVisible = IsTrashTag,
                             Header = UiStrings.TagTilePermDeleteAllHeader,
@@ -372,6 +379,8 @@ namespace MonkeyPaste.Avalonia {
         public bool CanTreeMove =>
             !IsRootLevelTag;
 
+        public bool HasHotkey =>
+            !string.IsNullOrEmpty(KeyString);
         public bool CanHotkey =>
             !IsGroupTag &&
             !IsTrashTag &&

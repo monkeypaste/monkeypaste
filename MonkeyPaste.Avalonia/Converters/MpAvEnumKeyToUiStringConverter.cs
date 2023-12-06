@@ -4,15 +4,14 @@ using System;
 using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvEnumToUiStringConverter : IValueConverter {
-        public static readonly MpAvEnumToUiStringConverter Instance = new();
+    public class MpAvEnumKeyToUiStringConverter : IValueConverter {
+        public static readonly MpAvEnumKeyToUiStringConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value is not Enum enumObj) {
+            if (parameter is not string paramStr) {
                 return string.Empty;
             }
-            string none_text = parameter.ToStringOrEmpty();
-            return enumObj.EnumToUiString();
+            return MpAvEnumUiStringExtensions.EnumKeyToUiString(paramStr);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

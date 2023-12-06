@@ -238,6 +238,9 @@
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
     <value>Toggle Append Paused</value>
   </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>Manually Add From Clipboard</value>
+  </data>
   <data name="MpShortcutType_HideMainWindow" xml:space="preserve">
     <value>Hide Main Window</value>
   </data>

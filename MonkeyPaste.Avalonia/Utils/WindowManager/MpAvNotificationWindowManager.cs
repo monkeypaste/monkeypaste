@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (nvmb is not MpAvWelcomeNotificationViewModel) {
 
-                    MpAvToolWindow_Win32.InitToolWindow(nw.TryGetPlatformHandle().Handle);
+                    MpAvToolWindow_Win32.SetAsToolWindow(nw.TryGetPlatformHandle().Handle);
                 }
 #endif
                 nw.Closed += Nw_Closed;

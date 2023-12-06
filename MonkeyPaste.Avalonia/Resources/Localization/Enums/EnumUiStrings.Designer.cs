@@ -2329,6 +2329,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manually Add From Clipboard.
+        /// </summary>
+        public static string MpShortcutType_ManuallyAddFromClipboard {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ManuallyAddFromClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to M A X_A P P_S H O R T C U T.
         /// </summary>
         public static string MpShortcutType_MAX_APP_SHORTCUT {

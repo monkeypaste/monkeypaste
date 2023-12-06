@@ -80,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
             "questionmark.png",
             "remove.png",
             "rtf.png",
+            "select.png",
             "sheep.png",
             "spellcheck.png",
             "stargold.png",

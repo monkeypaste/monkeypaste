@@ -225,6 +225,9 @@
         <!--  GENERAL  -->
 
 
+        <SolidColorBrush x:Key="HighlightBrush_inactive" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="0.5" />
+        <SolidColorBrush x:Key="HighlightBrush_active" Color="{DynamicResource ThemeAccent3BgColor}" Opacity="0.5" />
+
         <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  GRID SPLITTERS  -->

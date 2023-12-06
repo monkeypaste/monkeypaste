@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIExpandableViewModel Implementation
-
+        bool HasExpanded { get; set; } = false;
         public bool IsExpanded { get; set; } = false;
 
         #endregion
@@ -215,6 +215,13 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
+                case MpMessageType.MainWindowInitialOpenComplete:
+                    Dispatcher.UIThread.Post(async () => {
+                        IsExpanded = true;
+                        await Task.Delay(300);
+                        IsExpanded = false;
+                    });
+                    break;
             }
         }
 
@@ -242,6 +249,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsExpanded):
+                    if (IsExpanded) {
+                        HasExpanded = true;
+                    }
                     if (IsExpanded && MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
                            MpAvClipTileSortDirectionViewModel.Instance.IsExpanded) {
                         MpAvClipTileSortDirectionViewModel.Instance.IsExpanded = false;
@@ -309,14 +319,21 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand BeginAutoSearchCommand => new MpAsyncCommand<object>(
             async (args) => {
+                // NOTE expand before locating tb, if first expand it won't be found otherwise
+                bool needs_text = !HasExpanded;
+                IsExpanded = true;
+
                 if (MpAvMainView.Instance.GetVisualDescendant<MpAvSearchBoxView>() is MpAvSearchBoxView sbv &&
                    sbv.FindControl<AutoCompleteBox>("SearchBox") is AutoCompleteBox acb &&
                    acb.GetTemplateChildren().OfType<TextBox>().FirstOrDefault() is TextBox tb) {
+                    if (needs_text) {
+                        // when opening for first time from auto search it'll misss first character
+                        // (i think from hiding filter menus before tag selected?)
+                        //_searchText += args.ToStringOrEmpty();
+                    }
                     // NOTE for best performance avoid using binding to set search text 
                     // otherwise search would trigger on 1st character
                     // so using actual control to mimic typical search
-
-                    IsExpanded = true;
 
                     bool success = await tb.TrySetFocusAsync(NavigationMethod.Pointer);
                     MpConsole.WriteLine($"Auto search focus success: {success}");

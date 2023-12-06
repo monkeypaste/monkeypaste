@@ -166,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_1_before_trash_cap = cur_trash_diff == 0;
             List<int> to_remove_result = Enumerable.Repeat(0, 2).ToList();
             if (needs_trash_cap_info) {
-                to_remove_result = await GetNowAndNextToRemoveAsync(trash_cap);
+                to_remove_result = await GetNowAndNextToRemoveAsync();
                 if (is_1_before_trash_cap) {
                     // when not at content cap none goes to trash yet so leave to trash blank but shift to report most recent 
                     to_remove_result[1] = to_remove_result[0];
@@ -271,28 +271,28 @@ namespace MonkeyPaste.Avalonia {
 
         #region Cap
         private async Task<List<int>> GetNowAndNextToTrashAsync(int capcount) {
-            // select oldest and next oldest created item not in trash(5) and not in favorites(3) [fallbacks] and not 
+            // select next oldest and oldest created item not in trash(5) and not in favorites(3) [fallbacks] and not 
             string to_trash_query = @"
 select pk_MpCopyItemId 
 from MpCopyItem 
 where 
 pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?) and 
 pk_MpCopyItemId != ? 
-order by LastCapRelatedDateTime desc limit 2 offset ?
+order by LastCapRelatedDateTime limit 2
 ";
 
-            var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, 0, capcount);
+            var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, 0);
             if (to_trash_result.Count < 2) {
                 // no non-favorited items to trash or next to trash has no response,
 
                 // requery allowing favorites
                 int to_trash_ciid = to_trash_result.Count == 1 ? to_trash_result[0] : 0;
-                var to_trash_fallback_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, to_trash_ciid, capcount);
+                var to_trash_fallback_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, to_trash_ciid);
                 //MpDebug.Assert(to_trash_fallback_result.Count == 2, $"Account cap fallback error, should always have 2 results if reached this point");
                 if (to_trash_result.Count == 0) {
                     // both to trash and next are favorites
                     to_trash_result = to_trash_fallback_result;
-                } else {
+                } else if (to_trash_fallback_result.Any()) {
                     // next to trash is a favorite
                     to_trash_result.Add(to_trash_fallback_result[0]);
                 }
@@ -305,17 +305,16 @@ order by LastCapRelatedDateTime desc limit 2 offset ?
             return to_trash_result;
         }
 
-        private async Task<List<int>> GetNowAndNextToRemoveAsync(int capcount) {
+        private async Task<List<int>> GetNowAndNextToRemoveAsync() {
             // select oldest and next oldest linked to trash(5)
             string to_remove_query = @"
 select pk_MpCopyItemId 
 from MpCopyItem 
 where 
 pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)
-order by LastCapRelatedDateTime desc limit 2 offset ?
+order by LastCapRelatedDateTime limit 2
 ";
-            List<int> to_remove_result = await MpDb.QueryScalarsAsync<int>(to_remove_query, MpTag.TrashTagId, capcount);
-
+            List<int> to_remove_result = await MpDb.QueryScalarsAsync<int>(to_remove_query, MpTag.TrashTagId);
             int to_add = 2 - to_remove_result.Count;
             while (to_add > 0) {
                 to_remove_result.Add(0);

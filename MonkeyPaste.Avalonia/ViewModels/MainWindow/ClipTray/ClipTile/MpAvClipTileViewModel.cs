@@ -1416,7 +1416,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (removeQueryItem && QueryOffsetIdx >= 0) {
                 // query item deleted
-                Parent.QueryItems.Where(x => x.QueryOffsetIdx > QueryOffsetIdx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
+                Parent.ShiftQuery(QueryOffsetIdx, -1);
             }
             PinPlaceholderCopyItemId = unloadAsPlaceholder ? CopyItemId : 0;
             CopyItem = null;
@@ -2469,7 +2469,10 @@ namespace MonkeyPaste.Avalonia {
                     target: control,
                     dc: ContextMenuViewModel);
             }, (args) => {
-                return CanShowContextMenu && !IsPinPlaceholder;
+                return
+                    !IsTitleFocused &&
+                    CanShowContextMenu &&
+                    !IsPinPlaceholder;
             });
 
         public MpIAsyncCommand<object> PersistContentStateCommand => new MpAsyncCommand<object>(

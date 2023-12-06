@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvClipTrayViewModel :
         MpAvViewModelBase<MpAvClipTileViewModel>,
         MpIContentBuilder,
@@ -1104,9 +1103,32 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        double LeadingHeadLength {
+            get {
+                if (HeadItem == null) {
+                    return 0;
+                }
+                if (ListOrientation == Orientation.Horizontal) {
+                    return HeadItem.ScreenRect.Left;
+                }
+
+                return HeadItem.ScreenRect.Top;
+            }
+        }
+        double TrailingTailLength {
+            get {
+                if (TailItem == null) {
+                    return 0;
+                }
+                return HeadItem.ScreenRect.Left;
+            }
+        }
         #endregion
 
         #region Appearance
+
+        public bool ShowTileShadow { get; set; } = true;
 
         public string EmptyQueryTrayText {
             get {
@@ -1190,8 +1212,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsInitialQuery { get; private set; } = true;
-        public string PlayOrPauseLabel => IsAppPaused ? UiStrings.TriggerResumeButtonLabel : UiStrings.TriggerPauseButtonLabel;
-        public string PlayOrPauseIconResoureKey => IsAppPaused ? "PlayImage" : "PauseImage";
+        public string PlayOrPauseLabel => IsIgnoringClipboardChanges ? UiStrings.TriggerResumeButtonLabel : UiStrings.TriggerPauseButtonLabel;
+        public string PlayOrPauseIconResoureKey => IsIgnoringClipboardChanges ? "PlayImage" : "PauseImage";
 
         public int RemainingItemsCountThreshold {
             get {
@@ -1269,8 +1291,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool IsAppPaused { get; set; }
+        public bool CanAddItemWhileIgnoringClipboard {
+            get {
+                return
+                    IsIgnoringClipboardChanges &&
+                    Mp.Services != null &&
+                    Mp.Services.ClipboardMonitor != null &&
+                    Mp.Services.ClipboardMonitor.LastClipboardDataObject != null &&
+                    LastAddedClipboardDataObject.IsDataNotEqual(Mp.Services.ClipboardMonitor.LastClipboardDataObject);
+            }
+        }
 
+        public bool IsIgnoringClipboardChanges { get; set; }
+        MpPortableDataObject LastAddedClipboardDataObject { get; set; }
 
         public bool IsArrowSelecting { get; set; } = false;
 
@@ -1409,7 +1442,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(LayoutType));
 
-            if (IsAppPaused == MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup) {
+            if (IsIgnoringClipboardChanges == MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup) {
                 ToggleIsAppPausedCommand.Execute(null);
             }
 
@@ -1440,19 +1473,40 @@ namespace MonkeyPaste.Avalonia {
             await ctvm.InitializeAsync(ci, queryOffsetIdx);
             return ctvm;
         }
-
+        public void ShiftQuery(int fromIdx, int deltaIdx) {
+            foreach (var ctvm in Items) {
+                if (ctvm.QueryOffsetIdx <= fromIdx) {
+                    // behind or placeholder ignore
+                    continue;
+                }
+                ctvm.UpdateQueryOffset(ctvm.QueryOffsetIdx + deltaIdx);
+            }
+        }
         public void ValidateQueryTray() {
+            if (ScrollOffset.IsValueEqual(MpPoint.Zero, 1) &&
+                HeadQueryIdx > 0) {
+                // BUG sometimes when head is unloaded the remaining items aren't
+                // shifted up. This maybe from using .ForEach extension to alter their idxs (now changed)
+                // It doesn't get caught cause there's no logic to invalidate missing head idx (or idxs)
+                // that's what this does for most common case but may need inner and tail detection too
+                // (or using a proper loop to shift offsets will fix this entirely)
+                MpDebug.Break($"Query validation failed. Ghost head detected, shifting items from former head idx: {HeadQueryIdx}", level: MpLogLevel.Debug, silent: true);
+                ShiftQuery(HeadQueryIdx, -HeadQueryIdx);
+            }
+            // TODO? add more ghost detection
+
             var dups =
                 Items.Where(x => x.QueryOffsetIdx >= 0 && Items.Any(y => y != x && x.QueryOffsetIdx == y.QueryOffsetIdx));
             var skips =
                 Enumerable.Range(HeadQueryIdx, TailQueryIdx - HeadQueryIdx)
                 .Where(x => QueryItems.All(y => y.QueryOffsetIdx != x));
 
+
             if (!dups.Any() && !skips.Any()) {
                 return;
             }
             if (dups.Count() > 0) {
-                MpConsole.WriteLine($"Query validation failed. Dup idxs: {string.Join(",", dups)}");
+                MpDebug.Break($"Query validation failed. Dup idxs: {string.Join(",", dups)}", level: MpLogLevel.Debug, silent: true);
                 dups
                     .OrderByDescending(x => x.TileCreatedDateTime)
                     .Skip(1)
@@ -1460,7 +1514,7 @@ namespace MonkeyPaste.Avalonia {
 
             }
             if (skips.Any()) {
-                MpConsole.WriteLine($"Query validation failed. Skipped idxs: {string.Join(",", skips)}");
+                MpDebug.Break($"Query validation failed. Skipped idxs: {string.Join(",", skips)}", level: MpLogLevel.Debug, silent: true);
                 QueryCommand.Execute(new List<List<int>> { skips.ToList() });
             }
         }
@@ -2065,6 +2119,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(LastAddedClipboardDataObject):
+                    OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
+                    break;
                 case nameof(PinOpCopyItemId):
                     AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsPinOpTile)));
                     break;
@@ -2422,13 +2479,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
+            OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
+
             bool is_startup_ido = !Mp.Services.StartupState.IsReady;
 
             bool is_ext_change = !MpAvWindowManager.IsAnyActive || is_startup_ido;
 
             bool is_change_ignored =
                 !is_startup_ido &&
-                (IsAppPaused ||
+                (IsIgnoringClipboardChanges ||
                  (MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges && !is_ext_change));
 
             if (is_startup_ido && !is_change_ignored && !MpAvPrefViewModel.Instance.AddClipboardOnStartup) {
@@ -2439,7 +2498,7 @@ namespace MonkeyPaste.Avalonia {
             if (is_change_ignored) {
                 MpConsole.WriteLine("Clipboard Change Ignored by tray", true);
                 MpConsole.WriteLine($"Mp.Services.StartupState.IsReady: {Mp.Services.StartupState.IsReady}");
-                MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
+                MpConsole.WriteLine($"IsIgnoringClipboardChanges: {IsIgnoringClipboardChanges}");
                 MpConsole.WriteLine($"IsThisAppActive: {MpAvWindowManager.IsAnyActive}");
                 MpConsole.WriteLine($"is_startup_ido: {is_startup_ido}");
                 MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges}", false, true);
@@ -2449,6 +2508,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 IsAddingStartupClipboardItem = is_startup_ido;
                 await AddItemFromDataObjectAsync(mpdo as MpAvDataObject);
+
                 IsAddingStartupClipboardItem = false;
             });
         }
@@ -2890,6 +2950,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpAvDataObject avdo, bool is_copy = false) {
+            LastAddedClipboardDataObject = avdo;
             try {
                 await MpFifoAsyncQueue.WaitByConditionAsync(
                     lockObj: _addDataObjectContentLock,
@@ -3492,7 +3553,6 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
             }, () => SelectedItem != null && SelectedItem.IsContentReadOnly);
-
 
         public ICommand AddNewItemsCommand => new MpAsyncCommand<object>(
             async (tagDropCopyItemOnlyArg) => {
@@ -4367,14 +4427,6 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             });
 
-        public ICommand AssignShortcutToSelectedItemCommand => new MpCommand(
-            () => {
-                MpAvShortcutCollectionViewModel.Instance
-                .ShowAssignShortcutDialogCommand.Execute(SelectedItem);
-            },
-            () => SelectedItem != null);
-
-
         public ICommand EditSelectedTitleCommand => new MpCommand(
             () => {
                 SelectedItem.IsTitleReadOnly = false;
@@ -4414,7 +4466,6 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem.DisableContentReadOnlyCommand.CanExecute(null);
             });
 
-
         public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<object>(
             async (presetIdObj) => {
                 int presetId = 0;
@@ -4444,7 +4495,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleIsAppPausedCommand => new MpCommand(
             () => {
-                IsAppPaused = !IsAppPaused;
+                IsIgnoringClipboardChanges = !IsIgnoringClipboardChanges;
             });
 
         public ICommand ToggleRightClickPasteCommand => new MpCommand(
@@ -4455,7 +4506,7 @@ namespace MonkeyPaste.Avalonia {
                     body: string.Format(UiStrings.MouseModeRightClickPasteNtfText, IsRightClickPasteMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsRightClickPasteMode ? MpMessageType.RightClickPasteEnabled : MpMessageType.RightClickPasteDisabled);
-            }, () => !IsAppPaused);
+            }, () => !IsIgnoringClipboardChanges);
 
         public ICommand ToggleAutoCopyModeCommand => new MpCommand(
             () => {
@@ -4466,9 +4517,7 @@ namespace MonkeyPaste.Avalonia {
                     body: string.Format(UiStrings.MouseModeAutoCopyNtfText, IsAutoCopyMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsAutoCopyMode ? MpMessageType.AutoCopyEnabled : MpMessageType.AutoCopyDisabled);
-            }, () => !IsAppPaused);
-
-
+            }, () => !IsIgnoringClipboardChanges);
 
         public ICommand EnableFindAndReplaceForSelectedItem => new MpCommand(
             () => {
@@ -4549,6 +4598,33 @@ namespace MonkeyPaste.Avalonia {
                 ctvm.TransactionCollectionViewModel.SelectChildCommand.Execute(anguid);
             }, (args) => {
                 return args != null;
+            });
+
+        public MpIAsyncCommand AddItemWhileIgnoringClipboardCommand => new MpAsyncCommand(
+            async () => {
+                await AddItemFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject);
+            },
+            () => {
+                return CanAddItemWhileIgnoringClipboard;
+            });
+
+        public MpIAsyncCommand DeleteAllContentCommand => new MpAsyncCommand(
+            async () => {
+                var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
+                    title: UiStrings.CommonConfirmLabel,
+                    message: "Are you sure you want to delete ALL your clips? This is not undoable!",
+                    iconResourceObj: "WarningImage");
+                if (!result) {
+                    //cancel
+                    return;
+                }
+                UnpinAllCommand.Execute(null);
+                Items.Clear();
+                _ = Task.Run(async () => {
+                    var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
+                    await Task.WhenAll(cil.Select(x => x.DeleteFromDatabaseAsync()));
+                });
+
             });
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {

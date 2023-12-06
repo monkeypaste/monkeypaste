@@ -15,17 +15,18 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
 
-        private static IBrush _DefaultInactiveHighlightBrush =>
-            Mp.Services == null || Mp.Services.PlatformResource == null ?
+        public static IBrush DefaultInactiveHighlightBrush =>
+            Mp.Services == null ||
+            Mp.Services.PlatformResource == null ?
                 null :
-            Brushes.Yellow;
-        //Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
+        //Brushes.Yellow;
+        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_inactive");
 
-        private static IBrush _DefaultActiveHighlightBrush =>
+        public static IBrush DefaultActiveHighlightBrush =>
         Mp.Services == null || Mp.Services.PlatformResource == null ?
             null :
-            Brushes.Lime;
-        //Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent3Color.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
+        //Brushes.Lime;
+        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_active");
         #endregion
 
         #region Statics
@@ -194,7 +195,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private static void UpdateHighlights(Control attached_control) {
-            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
+            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha) ||
+                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
+                return;
+            }
+            if (attached_control is MpAvMarqueeTextBox mtb) {
+                mtb.HighlightRanges = hrivm.HighlightRanges;
+                mtb.ActiveHighlightIdx = hrivm.ActiveHighlightIdx < 0 ? null : hrivm.ActiveHighlightIdx;
+                mtb.Redraw();
                 return;
             }
             FormattedText ft = null;
@@ -211,7 +219,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (is_empty ||
-                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm ||
                 hrivm.HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
                 !hlrl.Any()) {
                 FinishUpdate(attached_control, tha, null);
@@ -224,8 +231,8 @@ namespace MonkeyPaste.Avalonia {
                 .Select((x, idx) =>
                     (
                         idx == hrivm.ActiveHighlightIdx ?
-                            GetActiveHighlightBrush(attached_control) ?? _DefaultActiveHighlightBrush :
-                            GetInactiveHighlightBrush(attached_control) ?? _DefaultInactiveHighlightBrush,
+                            GetActiveHighlightBrush(attached_control) ?? DefaultActiveHighlightBrush :
+                            GetInactiveHighlightBrush(attached_control) ?? DefaultInactiveHighlightBrush,
                         x));
             var gl =
                 all_brl

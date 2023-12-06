@@ -224,7 +224,7 @@
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="4"
-                     IsEnabled="{Binding !IsAppPaused}">
+                     IsEnabled="{Binding !IsIgnoringClipboardChanges}">
             <RadioButton.Resources>
                 <!--<SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>-->

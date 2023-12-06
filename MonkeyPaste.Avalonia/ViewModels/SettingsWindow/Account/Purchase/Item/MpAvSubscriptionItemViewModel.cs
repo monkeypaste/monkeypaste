@@ -86,12 +86,12 @@ namespace MonkeyPaste.Avalonia {
         string MonthlyRateText =>
             AccountType.IsPaidType() ?
             MpAvAccountTools.Instance.GetAccountRate(AccountType, true) :
-            string.Empty;
+            UiStrings.AccountFreePriceText;
 
         string YearlyRateText =>
             AccountType.IsPaidType() ?
             MpAvAccountTools.Instance.GetAccountRate(AccountType, false) :
-            string.Empty;
+            UiStrings.AccountFreePriceText;
 
         public string RateText =>
             IsMonthlyEnabled ?

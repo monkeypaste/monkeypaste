@@ -341,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 await Task.Delay(1);
                 //Mp.Services.DebugBreakHelper.ToggleBreak();
-                //await MpTestDataBuilder.CreateTestDataAsync();
+                await MpTestDataBuilder.CreateTestDataAsync();
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
@@ -380,14 +380,15 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
+                await MpAvClipTrayViewModel.Instance.DeleteAllContentCommand.ExecuteAsync();
+                //await Task.Delay(1);
 
-                var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
-                if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {
-                    string icon = Mp.Services.IconBuilder.GetPathIconBase64(chrome_app.ProcessPath);
-                    MpFileIo.WriteByteArrayToFile(@"/Users/tkefauver/Desktop/icon_test.png", icon.ToBytesFromBase64String(), false);
-                    Mp.Services.ProcessWatcher.SetActiveProcess(chrome_app);
-                }
+                //var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
+                //if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {
+                //    string icon = Mp.Services.IconBuilder.GetPathIconBase64(chrome_app.ProcessPath);
+                //    MpFileIo.WriteByteArrayToFile(@"/Users/tkefauver/Desktop/icon_test.png", icon.ToBytesFromBase64String(), false);
+                //    Mp.Services.ProcessWatcher.SetActiveProcess(chrome_app);
+                //}
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {

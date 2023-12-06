@@ -202,8 +202,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region ActiveHighlightBrush AvaloniaProperty
 
-        private IBrush _activeHighlightBrush =
-            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString());
+        private IBrush _activeHighlightBrush = MpAvHighlightTextExtension.DefaultActiveHighlightBrush;
         public IBrush ActiveHighlightBrush {
             get => _activeHighlightBrush;
             set => SetAndRaise(ActiveHighlightBrushProperty, ref _activeHighlightBrush, value);
@@ -220,7 +219,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region InactiveHighlightBrush AvaloniaProperty
-        private IBrush _inactiveHighlightBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString());
+        private IBrush _inactiveHighlightBrush = MpAvHighlightTextExtension.DefaultInactiveHighlightBrush;
         public IBrush InactiveHighlightBrush {
             get => _inactiveHighlightBrush;
             set => SetAndRaise(InactiveHighlightBrushProperty, ref _inactiveHighlightBrush, value);
@@ -577,6 +576,7 @@ namespace MonkeyPaste.Avalonia {
             this.AddHandler(MpAvMarqueeTextBox.KeyDownEvent, HandleKeyDown, RoutingStrategies.Tunnel);
             this.AddHandler(MpAvMarqueeTextBox.KeyUpEvent, HandleKeyUp, RoutingStrategies.Tunnel);
             this.AddHandler(MpAvMarqueeTextBox.HoldingEvent, HandleHold, RoutingStrategies.Tunnel);
+
         }
 
         #region Event Handlers
@@ -601,7 +601,24 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnLostFocus(global::Avalonia.Interactivity.RoutedEventArgs e) {
             base.OnLostFocus(e);
+
             if (EnableReadOnlyOnLostFocus) {
+
+                if (ContextMenu != null && ContextMenu.IsOpen) {
+                    // when context menu opens keep editable,
+                    // and if not refocused on closed put back to readonly
+                    void OnContextMenuClosed(object sender, RoutedEventArgs e) {
+                        if (sender is not ContextMenu cm) {
+                            return;
+                        }
+                        cm.Closed -= OnContextMenuClosed;
+                        if (!this.IsKeyboardFocusWithin) {
+                            SetValue(IsReadOnlyProperty, true);
+                        }
+                    }
+                    ContextMenu.Closed += OnContextMenuClosed;
+                    return;
+                }
                 SetValue(IsReadOnlyProperty, true);
             }
         }
@@ -639,7 +656,8 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
 
-            if (NavigateUriCommand != null &&
+            if (e.IsLeftPress(this) &&
+                NavigateUriCommand != null &&
                 IsReadOnly) {
                 var req_keys =
                     Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(NavigateUriRequiredKeyString);
@@ -648,8 +666,13 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     MpConsole.WriteLine($"Cannot exec nav cmd w/ param '{NavigateUriCommandParameter}'. Mods '{NavigateUriRequiredKeyString}' not pressed.");
                 }
-
+            } else if (e.IsRightPress(this) && !IsReadOnly) {
+                // BUG suppressing context menu on marquee, weird bugs
+                // 1. it'll loose focus and go back to read only
+                // 2. on tag name it shows a blank menu
+                e.Handled = true;
             }
+
         }
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);
@@ -728,6 +751,7 @@ namespace MonkeyPaste.Avalonia {
                 base.Render(context);
             }
         }
+
 
 
         #endregion
@@ -857,9 +881,6 @@ namespace MonkeyPaste.Avalonia {
                 return 0;
             }
             var test_hl_geom = _ft.BuildHighlightGeometry(new Point(x_offset, 0), HighlightRanges[ActiveHighlightIdx.Value].StartIdx, 1);
-            if (DataContext is MpAvClipTileViewModel ctvm && ctvm.CopyItemId == 24) {
-
-            }
             double delta_x = 0;
             double max_x = x_offset + GetRenderWidth();
             if (max_x < test_hl_geom.Bounds.Left) {

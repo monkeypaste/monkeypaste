@@ -12,6 +12,7 @@
                 case MpShortcutType.ToggleAutoCopyMode:
                 case MpShortcutType.ToggleRightClickPasteMode:
                 case MpShortcutType.ToggleListenToClipboard:
+                case MpShortcutType.ManuallyAddFromClipboard:
                 // USER
                 case MpShortcutType.PasteCopyItem:
                 case MpShortcutType.InvokeTrigger:

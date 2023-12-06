@@ -104,6 +104,18 @@
             <Setter Property="RotateTransform.Angle"
                     Value="-45" />
         </Style>
+
+        <!--  BL HOTKEY TOOLTIP  -->
+
+        <!--<Style Selector="local|MpAvToolTipView.canHotkey">
+            <Setter Property="InputGestureText"
+                    Value="{Binding ., ConverterParameter=AssignShortcut, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="local|MpAvToolTipView.canHotkey.activeHotkey">
+            <Setter Property="InputGestureText"
+                    Value="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <Grid Classes.tileHover="{Binding IsHovering}"
           Classes.subselect="{Binding IsSubSelectionEnabled}"
@@ -161,7 +173,10 @@
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                <!--<local:MpAvToolTipView Classes="canHotkey"
+                                       Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       ToolTipText="{Binding ShortcutTooltipText}" />-->
+                <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=AssignShortcut}"
                                        ToolTipText="{Binding ShortcutTooltipText}" />
             </ToolTip.Tip>
             <Image Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"

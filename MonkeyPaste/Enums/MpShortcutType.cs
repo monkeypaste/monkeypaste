@@ -10,6 +10,7 @@
         ToggleAppendLineMode,
         ToggleAppendPreMode,
         ToggleAppendPaused,
+        ManuallyAddFromClipboard,
 
         // APPLICATION
         HideMainWindow,

@@ -48,7 +48,7 @@
         <!--  PIN PLACEHOLDER OVERLAY  -->
         <Style Selector="Grid#PinPlaceholderOverlay Image">
             <Setter Property="Effect"
-                    Value="{DynamicResource EmptyDropShadow}" />
+                    Value="{StaticResource EmptyDropShadow}" />
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
@@ -60,7 +60,7 @@
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay Image">
             <Setter Property="Effect"
-                    Value="{DynamicResource ThemeDropShadow}" />
+                    Value="{StaticResource ThemeDropShadow}" />
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>

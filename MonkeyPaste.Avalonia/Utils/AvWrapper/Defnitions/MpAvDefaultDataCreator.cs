@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
                             new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+Shift+F6", MpShortcutType.ToggleAppendInsertMode.ToString(), globalRouting.ToString(),"False","False"},
                             new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+Shift+F7", MpShortcutType.ToggleAppendPreMode.ToString(), globalRouting.ToString(),"False","False"},
                             new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+Shift+F8", MpShortcutType.ToggleAppendPaused.ToString(), globalRouting.ToString(),"False","False"},
+                            new string[] {"746b41c6-4155-4281-808c-f8b8a278ce54", "Control+Shift+F9", MpShortcutType.ManuallyAddFromClipboard.ToString(), globalRouting.ToString(),"False","False"},
 
                             // APPLICATION
                             new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, MpShortcutType.PasteHere.ToString(), MpRoutingType.Internal.ToString(),"True"},

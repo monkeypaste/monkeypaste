@@ -266,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.AssignShortcut,
-                            MpAvClipTrayViewModel.Instance.AssignShortcutToSelectedItemCommand
+                            MpAvApplicationCommand.Instance.AssignHotkeyFromShortcutCommand
                         },
                         {
                             MpShortcutType.Undo,
@@ -376,6 +376,10 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.OpenHelp,
                             MpAvHelpViewModel.Instance.NavigateToContextualHelpCommand
+                        },
+                        {
+                            MpShortcutType.ManuallyAddFromClipboard,
+                            MpAvClipTrayViewModel.Instance.AddItemWhileIgnoringClipboardCommand
                         }
                     };
                 }

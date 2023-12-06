@@ -33,17 +33,12 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
             var mw = new MpAvMainWindow();
 
-                if (mw.Content is MpAvMainView mv) {
-                    _instance = mv;
-                }
-                if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                    desktop.MainWindow = mw;
-                }
-                if (!MpAvPrefViewModel.Instance.ShowInTaskSwitcher) {
-                    if (OperatingSystem.IsWindows()) {
-                        MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
-                    }
-                }
+            if (mw.Content is MpAvMainView mv) {
+                _instance = mv;
+            }
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                desktop.MainWindow = mw;
+            }
 #else
             _instance = new MpAvMainView();
 #endif
@@ -124,6 +119,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvQueryTrayView>("ClipTrayView");
             var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
+            var ctrcv_ctr_lb = ctrcv_ctrv.FindControl<ListBox>("ClipTrayListBox");
 
             var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentDefaultPinTrayRatio();
             mwtg.RowDefinitions.Clear();
@@ -245,6 +241,8 @@ namespace MonkeyPaste.Avalonia {
 
                 Grid.SetRow(ctrcv_ctrv, 0);
                 Grid.SetColumn(ctrcv_ctrv, 1);
+
+                ctrcv_ctr_lb.Margin = new Thickness(0);
             } else {
                 // VERTICAL 
                 var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
@@ -363,6 +361,9 @@ namespace MonkeyPaste.Avalonia {
 
                 Grid.SetRow(ctrcv_ctrv, 1);
                 Grid.SetColumn(ctrcv_ctrv, 0);
+
+                // adj lb to line up w/ pin tiles 
+                ctrcv_ctr_lb.Margin = new Thickness(10, 0, 0, 0);
             }
 
             UpdateSidebarGridsplitter();

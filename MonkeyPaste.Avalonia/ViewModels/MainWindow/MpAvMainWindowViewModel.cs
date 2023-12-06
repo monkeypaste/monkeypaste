@@ -392,6 +392,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        bool IsToolWindow { get; set; }
         MpIPlatformScreenInfo LastOpenedScreenInfo { get; set; }
         public WindowState WindowState { get; set; } = WindowState.Normal;
         public bool IsMainWindowOrientationChanging { get; set; } = false;
@@ -888,13 +890,26 @@ namespace MonkeyPaste.Avalonia {
             MainWindowRight = rect.Right;
             MainWindowBottom = rect.Bottom;
 
-            MainWindowWidth = MainWindowRight - MainWindowLeft;
-            MainWindowHeight = MainWindowBottom - MainWindowTop;
+            //MainWindowWidth = MainWindowRight - MainWindowLeft;
+            //MainWindowHeight = MainWindowBottom - MainWindowTop;
         }
         private void StartMainWindowShow() {
             IsMainWindowOpening = true;
 
 #if DESKTOP
+
+#if WINDOWS
+            if (MpAvPrefViewModel.Instance.ShowInTaskSwitcher == IsToolWindow) {
+                // toggle tool window
+                if (IsToolWindow) {
+                    MpAvToolWindow_Win32.UnsetAsToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                    IsToolWindow = false;
+                } else {
+                    MpAvToolWindow_Win32.SetAsToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                    IsToolWindow = true;
+                }
+            }
+#endif
             if (MpAvWindowManager.MainWindow is Window w &&
                 MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Normal;
@@ -902,10 +917,10 @@ namespace MonkeyPaste.Avalonia {
 
             if (IsMainWindowInitiallyOpening) {
 #if WINDOWS
-                MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
                 MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
 #endif
-                MpAvWindowManager.MainWindow.Opacity = 0;
+                if (MpAvPrefViewModel.Instance.ShowInTaskSwitcher)
+                    MpAvWindowManager.MainWindow.Opacity = 0;
                 IsMainWindowInHiddenLoadState = true;
             } else if (IsMainWindowInHiddenLoadState) {
 #if WINDOWS
@@ -1259,7 +1274,7 @@ namespace MonkeyPaste.Avalonia {
             if (!was_loader_visible) {
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                 title: UiStrings.MainWindowLoadedNtfTitle,
-                body: string.Format(UiStrings.MainWindowLoadedNtfText, MpAvClipTrayViewModel.Instance.IsAppPaused ? UiStrings.CommonPausedLabel : UiStrings.CommonActiveLabel),
+                body: string.Format(UiStrings.MainWindowLoadedNtfText, MpAvClipTrayViewModel.Instance.IsIgnoringClipboardChanges ? UiStrings.CommonPausedLabel : UiStrings.CommonActiveLabel),
                 msgType: MpNotificationType.StartupComplete,
                 iconSourceObj: "AppImage").FireAndForgetSafeAsync();
             }

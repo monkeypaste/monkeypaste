@@ -254,6 +254,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ContextMenu.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
@@ -495,6 +496,7 @@
     <None Remove="Assets\Images\scales.png" />
     <None Remove="Assets\Images\scissors.png" />
     <None Remove="Assets\Images\search.png" />
+    <None Remove="Assets\Images\select.png" />
     <None Remove="Assets\Images\selectall.png" />
     <None Remove="Assets\Images\selection.png" />
     <None Remove="Assets\Images\sendToBack.png" />
@@ -831,6 +833,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\recyclebin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\select.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\share.png">
@@ -1440,6 +1445,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\SlideWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\ContextMenu.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TopLevel.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />

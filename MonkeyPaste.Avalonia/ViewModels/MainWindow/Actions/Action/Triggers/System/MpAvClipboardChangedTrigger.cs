@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         protected override bool ValidateStartAction(object arg) {
             bool can_start = base.ValidateStartAction(arg);
             if (can_start) {
-                can_start = !MpAvClipTrayViewModel.Instance.IsAppPaused;
+                can_start = !MpAvClipTrayViewModel.Instance.IsIgnoringClipboardChanges;
             }
             IsPerformingAction = can_start;
             return IsPerformingAction;

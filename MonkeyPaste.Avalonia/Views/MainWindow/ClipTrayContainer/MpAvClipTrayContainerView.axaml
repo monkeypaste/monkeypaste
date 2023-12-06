@@ -83,6 +83,32 @@
             </Setter>
         </Style>
 
+        <!--  TILE SHADOWS  -->
+
+        <Style Selector="Grid#ClipTrayContainerGrid.shadows.bright ListBox.clipTileListBox > ListBoxItem">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect OffsetX="5"
+                                      OffsetY="5"
+                                      Color="{DynamicResource ThemeBlack}"
+                                      BlurRadius="7"
+                                      Opacity="0.5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Grid#ClipTrayContainerGrid.shadows ListBox.clipTileListBox.bright > ListBoxItem">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect OffsetX="5"
+                                      OffsetY="5"
+                                      Color="{DynamicResource ThemeWhite}"
+                                      BlurRadius="7"
+                                      Opacity="0.5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
 
         <!--  HOVER FROZEN  -->
         <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen"
@@ -102,6 +128,7 @@
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
           Background="{DynamicResource ClipTrayBgColor}"
+          Classes.shadows="{Binding ShowTileShadow}"
           Classes.busy="{Binding IsAnyBusy}"
           Classes.scrolling="{Binding HasScrollVelocity}"
           Classes.iprqBusy="{Binding IsInPlaceRequerying}"

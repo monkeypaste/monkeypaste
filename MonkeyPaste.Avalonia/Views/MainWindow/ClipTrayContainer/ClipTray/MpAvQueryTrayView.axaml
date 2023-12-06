@@ -148,6 +148,7 @@
                                           Height="{Binding $parent.Bounds.Height}">
                 <ListBox x:Name="ClipTrayListBox"
                          Classes="clipTileListBox queryListBox"
+                         Classes.bright="{Binding Source={DynamicResource ClipTrayBgColor}, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                          IsTextSearchEnabled="False"
                          Background="Transparent"
                          HorizontalAlignment="Left"

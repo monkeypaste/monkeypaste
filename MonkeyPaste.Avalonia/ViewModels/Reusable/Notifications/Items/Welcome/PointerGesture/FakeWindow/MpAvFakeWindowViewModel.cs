@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
                     Mode = BindingMode.TwoWay
                 });
 #if WINDOWS 
-            MpAvToolWindow_Win32.InitToolWindow(fmw.TryGetPlatformHandle().Handle);
+            MpAvToolWindow_Win32.SetAsToolWindow(fmw.TryGetPlatformHandle().Handle);
 #endif
             fmw.Position = FakeWindowScreenRect.Position;
             fmw.Width = FakeWindowSize.Width;

@@ -31,7 +31,6 @@ namespace MonkeyPaste.Avalonia {
             var dataTransferManager = DataTransferManager.FromAbi(iop.GetForWindow(windowHandle, guid));
 
             dataTransferManager.DataRequested += dataRequestedHandler;
-
             interop.ShowShareUIForWindow(windowHandle);
             return dataTransferManager;
         }

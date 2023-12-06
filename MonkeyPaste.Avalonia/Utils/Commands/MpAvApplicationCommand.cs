@@ -73,6 +73,24 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             });
 
+        public ICommand AssignHotkeyFromShortcutCommand => new MpCommand(
+            () => {
+                MpIShortcutCommandViewModel focus_vm = null;
+
+                var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvTagTileViewModel>(out var ttvm)) {
+                    focus_vm = ttvm;
+                } else if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
+                    focus_vm = ctvm;
+                } else if (fc.TryGetSelfOrAncestorDataContext<MpAvAnalyticItemPresetViewModel>(out var aipvm)) {
+                    focus_vm = aipvm;
+                }
+                if (focus_vm == null) {
+                    return;
+                }
+                MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(focus_vm);
+            });
+
         public ICommand OpenPopoutCommand => new MpCommand(
              () => {
                  var fc = MpAvFocusManager.Instance.FocusElement as Control;

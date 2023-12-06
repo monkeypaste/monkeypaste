@@ -205,6 +205,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Free!.
+        /// </summary>
+        public static string AccountFreePriceText {
+            get {
+                return ResourceManager.GetString("AccountFreePriceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Free {0} - Day Trial.
         /// </summary>
         public static string AccountFreeTrialLabel {
@@ -5013,7 +5022,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shortcut must contain ONE and only ONE input key.Any key that is not:.
+        ///   Looks up a localized string similar to Shortcut must contain ONE and only ONE non-modifier key..
         /// </summary>
         public static string ShortcutAssignInvalidGestureWarning {
             get {
@@ -5141,7 +5150,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select &apos;{0}&apos; Collection.
+        ///   Looks up a localized string similar to Select &apos;{0}&apos;.
         /// </summary>
         public static string ShortcutSelectTagTitle {
             get {

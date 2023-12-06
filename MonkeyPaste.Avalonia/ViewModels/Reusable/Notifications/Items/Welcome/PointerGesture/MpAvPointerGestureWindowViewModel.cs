@@ -175,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
 #if WINDOWS
-            MpAvToolWindow_Win32.InitToolWindow(gw.TryGetPlatformHandle().Handle);
+            MpAvToolWindow_Win32.SetAsToolWindow(gw.TryGetPlatformHandle().Handle);
             //MpAvToolWindow_Win32.SetAsNoHitTestWindow(gw.TryGetPlatformHandle().Handle);
 #elif MAC
             gw.Opened += (s, e) => {

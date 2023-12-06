@@ -1607,6 +1607,7 @@ namespace MonkeyPaste.Avalonia {
                     // canceled reset all, ignore
                     return;
                 }
+
                 MpAvPrefViewModel.Instance.RestoreDefaultsCommand.Execute(null);
             });
         public ICommand SaveSettingsCommand => new MpCommand(
@@ -1889,6 +1890,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 FilterText = string.Empty;
             });
+
         #endregion
     }
 }
