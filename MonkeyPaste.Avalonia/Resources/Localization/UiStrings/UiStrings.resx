@@ -2222,4 +2222,7 @@
   <data name="AccountFreePriceText" xml:space="preserve">
     <value>Free!</value>
   </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Rate us!</value>
+  </data>
 </root>

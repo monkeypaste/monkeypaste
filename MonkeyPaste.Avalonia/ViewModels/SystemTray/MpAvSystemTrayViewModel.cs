@@ -151,6 +151,12 @@ namespace MonkeyPaste.Avalonia {
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
                         new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayRateAppLabel,
+                            IconResourceKey = "StarYellowImage",
+                            CommandSrcObj = MpAvAccountViewModel.Instance,
+                            CommandPath = nameof(MpAvAccountViewModel.Instance.RateAppCommand)
+                        },
+                        new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayAboutHeader,
                             IconResourceKey = "InfoImage",
                             Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand

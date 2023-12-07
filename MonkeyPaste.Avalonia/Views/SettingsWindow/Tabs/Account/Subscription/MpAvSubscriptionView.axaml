@@ -103,7 +103,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="Margin"
-                    Value="0,3,0,0" />
+                    Value="0,7,0,0" />
             <Setter Property="CornerRadius"
                     Value="7" />
         </Style>

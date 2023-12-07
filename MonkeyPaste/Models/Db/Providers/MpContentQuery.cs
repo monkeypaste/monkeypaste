@@ -485,8 +485,8 @@ namespace MonkeyPaste {
                     return "e_MpCopyItemType";
                 case MpContentSortType.UsageScore:
                     return "UsageScore";
-                case MpContentSortType.CopyDateTime:
-                    return "CopyDateTime";
+                case MpContentSortType.RecyclePriority:
+                    return "LastCapRelatedDateTime";
                 default:
                     return "RootId";
             }

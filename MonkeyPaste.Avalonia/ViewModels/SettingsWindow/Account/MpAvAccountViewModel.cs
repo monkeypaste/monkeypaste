@@ -138,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                 int content_count = MpAvAccountTools.Instance.LastContentCount;
-                int cap_count = Math.Max(content_count, MpAvAccountTools.Instance.GetContentCapacity(WorkingAccountType));
+                int cap_count = MpAvAccountTools.Instance.GetContentCapacity(WorkingAccountType);
                 string line_2;
                 if (WorkingAccountType == MpUserAccountType.Unlimited) {
                     line_2 = string.Format(@"({0} {1})", content_count, UiStrings.AccountInfoTotalText);
@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
                         UiStrings.AccountInfoTotalText,
                         cap_count,
                         UiStrings.AccountInfoCapacityText,
-                        (cap_count - content_count),
+                        (Math.Max(0, cap_count - content_count)),
                         UiStrings.AccountInfoRemainingText);
                 }
 
@@ -740,6 +740,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var req_args = new Dictionary<string, string>() {
                     {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
+                    {"device_type", Mp.Services.PlatformInfo.OsType.ToString() },
                     {"sub_type", acct.AccountType.ToString()},
                     {"monthly", acct.IsMonthly ? "1":"0"},
                     {"expires_utc_dt", acct.ExpireOffsetUtc.ToString()},
@@ -932,6 +933,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowLoginPanelCommand => new MpCommand(
             () => {
                 AccountState = MpUserAccountState.Disconnected;
+            });
+
+        public ICommand RateAppCommand => new MpCommand(
+            () => {
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpAvAccountTools.Instance.RateAppUri);
+            }, () => {
+                return !OperatingSystem.IsLinux();
             });
 
         #endregion

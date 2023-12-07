@@ -682,6 +682,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recycle Priority.
+        /// </summary>
+        public static string MpContentSortType_RecyclePriority {
+            get {
+                return ResourceManager.GetString("MpContentSortType_RecyclePriority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source.
         /// </summary>
         public static string MpContentSortType_Source {

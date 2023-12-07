@@ -5312,6 +5312,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rate us!.
+        /// </summary>
+        public static string SysTrayRateAppLabel {
+            get {
+                return ResourceManager.GetString("SysTrayRateAppLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Righ-Click Paste.
         /// </summary>
         public static string SysTrayRightClickPasteHeader {

@@ -162,6 +162,7 @@ namespace MonkeyPaste.Avalonia {
                         MpMessenger.SendGlobal(MpMessageType.HelpWindowOpened);
                     }
                 }
+                OnPropertyChanged(nameof(CurrentUrl));
 
                 MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{OnlineHelpUriLookup[hlt]}'");
             });

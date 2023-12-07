@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvMarqueeTextBox : TextBox, MpIOverrideRender, MpITextDocumentContainer {
 
         #region Private Variables
-
+        private bool _unloaded;
         private FormattedText _ft;
         private MpSize _ftSize;
         private MpSize _bmpSize;
@@ -580,6 +580,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Event Handlers
+        protected override void OnLoaded(RoutedEventArgs e) {
+            base.OnLoaded(e);
+            _unloaded = false;
+        }
+        protected override void OnUnloaded(RoutedEventArgs e) {
+            base.OnUnloaded(e);
+            _unloaded = true;
+        }
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
             if (AutoMarquee) {
@@ -734,7 +742,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override void Render(DrawingContext context) {
-            if (IgnoreRender) {
+            if (IgnoreRender || _unloaded) {
                 // BUG workaround for 'https://github.com/AvaloniaUI/Avalonia/issues/10057'
                 return;
             }
@@ -799,6 +807,9 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void Init() {
+            if (_unloaded) {
+                return;
+            }
             ContentRange.Count = Text == null ? 0 : Text.Length;
 
             _bmpSize = GetScaledTextSize(out _ftSize);
@@ -839,6 +850,9 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void RenderMarquee(DrawingContext ctx) {
+            if (_unloaded) {
+                return;
+            }
             if (_ft == null) {
                 Init();
                 if (_ft == null) {
@@ -953,6 +967,7 @@ namespace MonkeyPaste.Avalonia {
 
         private bool CanMarquee() {
             return
+                !_unloaded &&
                 IsMarqueeEnabled &&
                 _ft != null &&
                 this.IsVisible &&

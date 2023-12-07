@@ -1192,7 +1192,10 @@ namespace MonkeyPaste.Avalonia {
 
             } else {
                 var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
-
+                if (cit == null && IsTrashTag) {
+                    // item was deleted ignore cap update, update comes from 'Remove' in TrashOrDelete
+                    is_cap_related = false;
+                }
                 if (cit != null) {
                     // only delete link/notify if exists
                     report_link = true;

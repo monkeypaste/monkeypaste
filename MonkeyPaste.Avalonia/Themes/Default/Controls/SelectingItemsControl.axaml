@@ -2,6 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector=":is(SelectingItemsControl).hideLast > :is(ListBoxItem):nth-last-child(1)">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
     <Style Selector=":is(SelectingItemsControl).hideFirst > :is(ListBoxItem):nth-child(1)">
         <Setter Property="IsVisible"
                 Value="False" />

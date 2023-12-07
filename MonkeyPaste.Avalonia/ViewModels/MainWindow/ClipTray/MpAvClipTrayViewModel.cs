@@ -1491,7 +1491,7 @@ namespace MonkeyPaste.Avalonia {
                 // that's what this does for most common case but may need inner and tail detection too
                 // (or using a proper loop to shift offsets will fix this entirely)
                 MpDebug.Break($"Query validation failed. Ghost head detected, shifting items from former head idx: {HeadQueryIdx}", level: MpLogLevel.Debug, silent: true);
-                ShiftQuery(HeadQueryIdx, -HeadQueryIdx);
+                ShiftQuery(0, -HeadQueryIdx);
             }
             // TODO? add more ghost detection
 
@@ -1805,9 +1805,18 @@ namespace MonkeyPaste.Avalonia {
 
             _isProcessingCap = true;
 
+            if (source == MpAccountCapCheckType.Link &&
+                arg is int tid &&
+                tid < 0 &&
+                MpTag.TrashTagId == -tid) {
+                // unlinking from trash tag should be internally treated internally as add
+                source = MpAccountCapCheckType.Add;
+                MpConsole.WriteLine($"Unlinking item from trash back to content, source changed from link to add.");
+            }
+
             string last_cap_info = MpAvAccountTools.Instance.LastCapInfo.ToString();
             MpUserAccountType account_type = MpAvAccountViewModel.Instance.WorkingAccountType;
-            var cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type);
+            var cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type, source);
             MpConsole.WriteLine($"Account cap refreshed. SourceControl: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
 
@@ -1821,13 +1830,6 @@ namespace MonkeyPaste.Avalonia {
             var cap_msg_sb = new StringBuilder();
             MpNotificationType cap_msg_type = MpNotificationType.None;
 
-            if (source == MpAccountCapCheckType.Link &&
-                arg is int tid &&
-                tid < 0 &&
-                MpTag.TrashTagId == -tid) {
-                // unlinking from trash tag should be internally treated internally as add
-                source = MpAccountCapCheckType.Add;
-            }
             if (source == MpAccountCapCheckType.Add) {
                 if (cap_info.ToBeTrashed_ciid > 0) {
                     cap_msg_icon = MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
@@ -1886,19 +1888,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (apply_changes) {
-                if (cap_info.ToBeTrashed_ciid > 0) {
-                    int total_before_trash = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
-                    if (total_before_trash > 6 || total_before_trash < 5) {
-                        // acct set free at 5
-                    }
-                }
                 // only after add or (un)link to trash/favorites
 
                 await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeTrashed_ciid, false, true);
                 await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeRemoved_ciid, true, true);
 
                 // refresh cap for view changes
-                var updated_cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type);
+                var updated_cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type, MpAccountCapCheckType.Refresh);
             }
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsNextRemovedByAccount)));
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsNextTrashedByAccount)));
@@ -3897,7 +3893,7 @@ namespace MonkeyPaste.Avalonia {
                 if (itemCountDiff > 0) {
                     while (itemCountDiff > 0) {
                         // keep unneeded items as placeholders
-                        Items[--itemCountDiff].TriggerUnloadedNotification(false, false);
+                        Items[--itemCountDiff].TriggerUnloadedNotification(true, false);
                     }
                 } else if (itemCountDiff < 0) {
                     while (itemCountDiff < 0) {

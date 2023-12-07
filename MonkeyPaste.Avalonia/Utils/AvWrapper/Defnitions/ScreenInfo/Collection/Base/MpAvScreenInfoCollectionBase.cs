@@ -39,15 +39,40 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvWindowManager.Screens is not { } scrs) {
                 return false;
             }
-            var cur_screens = scrs.All.Select(x => new MpAvDesktopScreenInfo(x));
-            var diffs = Screens.Difference(cur_screens, _comparer).ToList();
-            if (diffs.Any()) {
-                MpConsole.WriteLine($"Screen info changed. Diffs:", true);
-                diffs.ForEach((x, idx) => MpConsole.WriteLine($"[{(Screens.Contains(x) ? "OLD" : "NEW")}] {x}", false, idx == diffs.Count - 1));
+            IList<MpIPlatformScreenInfo> cur_screens = scrs.All.Select(x => new MpAvDesktopScreenInfo(x)).ToList<MpIPlatformScreenInfo>();
+            //var diffs = Screens.Difference(cur_screens, _comparer);
+            bool has_changed = HasScreensChanged(Screens, cur_screens);
+            if (has_changed) {
+                MpConsole.WriteLine($"Screen info changed.", true);
+                MpConsole.WriteLine($"Old:");
+                Screens.ForEach(x => MpConsole.WriteLine(x.ToString()));
+                MpConsole.WriteLine($"New:");
+                cur_screens.ForEach(x => MpConsole.WriteLine(x.ToString()));
+                MpConsole.WriteLine($"");
+
                 Screens.Clear();
                 Screens.AddRange(cur_screens);
                 MpMessenger.SendGlobal(MpMessageType.ScreenInfoChanged);
                 return true;
+            }
+            return false;
+        }
+
+        private bool HasScreensChanged(IList<MpIPlatformScreenInfo> a, IList<MpIPlatformScreenInfo> b) {
+            if (a.Count != b.Count) {
+                return true;
+            }
+            foreach (var a_s in a) {
+                bool has_match = false;
+                foreach (var b_s in b) {
+                    if (a_s.ToString() == b_s.ToString()) {
+                        has_match = true;
+                        break;
+                    }
+                }
+                if (!has_match) {
+                    return true;
+                }
             }
             return false;
         }

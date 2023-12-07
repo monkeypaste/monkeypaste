@@ -8,11 +8,10 @@
                 Value="drop-shadow(0 0 11 white)" />
         <Setter Property="Stretch"
                 Value="Fill" />
-
         <Setter Property="Source"
                 Value="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
     </Style>
-    <Style Selector="Image.applogo:pointerover">
+    <Style Selector="Image.wink.applogo:pointerover">
         <Setter Property="Source"
                 Value="{Binding Source={StaticResource MonkeyWinkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
     </Style>

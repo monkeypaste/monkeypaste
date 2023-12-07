@@ -6,6 +6,7 @@
         RestoreBlock,
         AddBlock,
         Remove,
-        Init
+        Init,
+        Refresh
     }
 }

@@ -10,7 +10,7 @@ namespace MonkeyPaste {
         Title,
         ItemData,
         ItemType,
-        UsageScore
+        UsageScore,
     }
 
     [Flags]

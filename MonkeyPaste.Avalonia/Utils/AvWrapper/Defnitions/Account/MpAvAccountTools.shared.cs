@@ -51,14 +51,6 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
-        //        public void CheckEnumUiStrings() {
-        //#if DEBUG
-        //            SetAccountType(MpAvPrefViewModel.Instance.TestAccountType);
-        //#endif
-        //        }
-
-
-
         public int LastContentCount =>
             _lastContentCount;
 
@@ -107,13 +99,16 @@ namespace MonkeyPaste.Avalonia {
             return EMPTY_RATE_TEXT;
         }
 
-        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat) {
+        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat, MpAccountCapCheckType source) {
+            int prev_content_count = _lastContentCount;
+            int prev_trash_count = _lastTrashCount;
+
             int new_content_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
             int new_trash_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.TrashTagId);
             bool has_changed = new_content_count != _lastContentCount || new_trash_count != _lastTrashCount;
-            _lastContentCount = new_content_count;
-            _lastTrashCount = new_trash_count;
             if (has_changed) {
+                _lastContentCount = new_content_count;
+                _lastTrashCount = new_trash_count;
                 MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
             }
 
@@ -133,23 +128,16 @@ namespace MonkeyPaste.Avalonia {
 
             // TO TRASH /////////////////////////////////////////////////////
 
-            int totalCount = _lastContentCount;
+            int totalCount = source == MpAccountCapCheckType.Add ? prev_content_count : new_content_count;
 
             // examples (content cap)
             // content cap 5, actual 4 (needs next to trash)
             // content cap 5 actual 5 (needs both)
             // content cap 5 actual 3 (none)
-            int cur_content_diff = content_cap - totalCount;
-            bool needs_content_cap_info = cur_content_diff < 1;
-            bool is_1_before_content_cap = cur_content_diff == 0;
-            List<int> to_trash_result = Enumerable.Repeat(0, 2).ToList();
-            if (needs_content_cap_info) {
-                to_trash_result = await GetNowAndNextToTrashAsync(content_cap);
-                if (is_1_before_content_cap) {
-                    // when not at content cap none goes to trash yet so leave to trash blank but shift to report most recent 
-                    to_trash_result[1] = to_trash_result[0];
-                    to_trash_result[0] = 0;
-                }
+            int content_offset = totalCount - content_cap;
+            int to_trash_ciid = 0;
+            if (content_offset >= 0) {
+                to_trash_ciid = await GetNextToTrashAsync(content_offset);
             }
 
             // TO REMOVE //////////////////////////////////////////
@@ -161,24 +149,15 @@ namespace MonkeyPaste.Avalonia {
             // trash cap 100 actual 100 (both)
             // trash cap 100, actual 4 (none)
             int trash_cap = GetTrashCapacity(cur_uat);
-            int cur_trash_diff = trash_cap - totalTrash;
-            bool needs_trash_cap_info = cur_trash_diff < 1;
-            bool is_1_before_trash_cap = cur_trash_diff == 0;
-            List<int> to_remove_result = Enumerable.Repeat(0, 2).ToList();
+            bool needs_trash_cap_info = totalTrash >= trash_cap;
+            int to_remove_ciid = 0;
             if (needs_trash_cap_info) {
-                to_remove_result = await GetNowAndNextToRemoveAsync();
-                if (is_1_before_trash_cap) {
-                    // when not at content cap none goes to trash yet so leave to trash blank but shift to report most recent 
-                    to_remove_result[1] = to_remove_result[0];
-                    to_remove_result[0] = 0;
-                }
+                to_remove_ciid = await GetNextToRemoveAsync();
             }
 
             _lastCapInfo = new MpContentCapInfo() {
-                ToBeTrashed_ciid = to_trash_result[0],
-                NextToBeTrashed_ciid = to_trash_result[1],
-                ToBeRemoved_ciid = to_remove_result[0],
-                NextToBeRemoved_ciid = to_remove_result[1]
+                ToBeTrashed_ciid = to_trash_ciid,
+                ToBeRemoved_ciid = to_remove_ciid,
             };
             return _lastCapInfo;
         }
@@ -227,9 +206,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;
-
-
-
         #endregion
 
         #region Model
@@ -244,24 +220,12 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         private MpAvAccountTools() { }
 
-        public bool IsValidEmail(string email) {
-            return MpRegEx.RegExLookup[MpRegExType.ExactEmail].IsMatch(email);
-        }
-
-        public bool IsValidPassword(string str) {
-            return str != null && str.Length >= MIN_PASSWORD_LENGTH;
-        }
-
         public int GetSubscriptionTrialLength(MpUserAccountType uat, bool isMonthly) {
             if (AccountTypeTrialAvailabilityLookup.TryGetValue((uat, isMonthly), out int dayCount)) {
                 return dayCount;
             }
             return 0;
         }
-
-
-
-
         #endregion
 
         #region Protected Methods
@@ -270,57 +234,45 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         #region Cap
-        private async Task<List<int>> GetNowAndNextToTrashAsync(int capcount) {
-            // select next oldest and oldest created item not in trash(5) and not in favorites(3) [fallbacks] and not 
+        private async Task<int> GetNextToTrashAsync(int offset) {
+            // Problem: if user gets trial and accumulates 100 items then trial ends.
+            // They will end up always having a working set of 100 items.
+            // Solution: Move query offset to 100 - cap so:
+            // 1. Its ok to say you won't lose data after trial and they don't have to delete everything
+            // 2. The benefit of accumulating 100 items is gone since criteria is based off last 5
+
             string to_trash_query = @"
 select pk_MpCopyItemId 
 from MpCopyItem 
 where 
-pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?) and 
-pk_MpCopyItemId != ? 
-order by LastCapRelatedDateTime limit 2
-";
+pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?)
+order by LastCapRelatedDateTime limit 1 offset ?";
 
-            var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, 0);
-            if (to_trash_result.Count < 2) {
-                // no non-favorited items to trash or next to trash has no response,
+            var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, offset);
+            if (to_trash_result.Any()) {
+                return to_trash_result.First();
+            }
+            // no non-favorited items to trash or next to trash has no response,
 
-                // requery allowing favorites
-                int to_trash_ciid = to_trash_result.Count == 1 ? to_trash_result[0] : 0;
-                var to_trash_fallback_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, to_trash_ciid);
-                //MpDebug.Assert(to_trash_fallback_result.Count == 2, $"Account cap fallback error, should always have 2 results if reached this point");
-                if (to_trash_result.Count == 0) {
-                    // both to trash and next are favorites
-                    to_trash_result = to_trash_fallback_result;
-                } else if (to_trash_fallback_result.Any()) {
-                    // next to trash is a favorite
-                    to_trash_result.Add(to_trash_fallback_result[0]);
-                }
+            // requery allowing favorites
+            to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, offset);
+            if (to_trash_result.Any()) {
+                return to_trash_result.First();
             }
-            int to_add = 2 - to_trash_result.Count;
-            while (to_add > 0) {
-                to_trash_result.Add(0);
-                to_add--;
-            }
-            return to_trash_result;
+            return 0;
         }
 
-        private async Task<List<int>> GetNowAndNextToRemoveAsync() {
+        private async Task<int> GetNextToRemoveAsync() {
             // select oldest and next oldest linked to trash(5)
             string to_remove_query = @"
 select pk_MpCopyItemId 
 from MpCopyItem 
 where 
 pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)
-order by LastCapRelatedDateTime limit 2
+order by LastCapRelatedDateTime limit 1
 ";
             List<int> to_remove_result = await MpDb.QueryScalarsAsync<int>(to_remove_query, MpTag.TrashTagId);
-            int to_add = 2 - to_remove_result.Count;
-            while (to_add > 0) {
-                to_remove_result.Add(0);
-                to_add--;
-            }
-            return to_remove_result;
+            return to_remove_result.FirstOrDefault();
         }
 
         #endregion

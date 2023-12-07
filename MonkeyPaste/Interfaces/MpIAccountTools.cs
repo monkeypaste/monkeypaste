@@ -7,13 +7,14 @@ namespace MonkeyPaste {
         public const string ADD_BLOCKED_RESOURCE_KEY = "LockImage";
 
         public int ToBeTrashed_ciid { get; set; }
-        public int NextToBeTrashed_ciid { get; set; }
+        //public int NextToBeTrashed_ciid { get; set; }
 
         public int ToBeRemoved_ciid { get; set; }
-        public int NextToBeRemoved_ciid { get; set; }
+        //public int NextToBeRemoved_ciid { get; set; }
 
         public override string ToString() {
-            return $"ToTrash: {ToBeTrashed_ciid} NextTrash: {NextToBeTrashed_ciid} ToRemove: {ToBeRemoved_ciid} NextRemove: {NextToBeRemoved_ciid}";
+            //return $"ToTrash: {ToBeTrashed_ciid} NextTrash: {NextToBeTrashed_ciid} ToRemove: {ToBeRemoved_ciid} NextRemove: {NextToBeRemoved_ciid}";
+            return $"ToTrash: {ToBeTrashed_ciid} ToRemove: {ToBeRemoved_ciid}";
         }
     }
     //public interface MpIAccountTools {

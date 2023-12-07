@@ -597,12 +597,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsNextTrashedByAccount =>
             Parent != null &&
             CopyItemId != 0 &&
-            MpAvAccountTools.Instance.LastCapInfo.NextToBeTrashed_ciid == CopyItemId;
+            MpAvAccountTools.Instance.LastCapInfo.ToBeTrashed_ciid == CopyItemId;
 
         public bool IsNextRemovedByAccount =>
             Parent != null &&
             CopyItemId != 0 &&
-            MpAvAccountTools.Instance.LastCapInfo.NextToBeRemoved_ciid == CopyItemId;
+            MpAvAccountTools.Instance.LastCapInfo.ToBeRemoved_ciid == CopyItemId;
 
         public bool IsAnyNextCapByAccount =>
             IsNextTrashedByAccount || IsNextRemovedByAccount;
@@ -610,6 +610,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTrashed =>
             MpAvTagTrayViewModel.Instance != null &&
             MpAvTagTrayViewModel.Instance.TrashedCopyItemIds.Contains(CopyItemId);
+
         public bool IsExpanded {
             get {
                 //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ||
