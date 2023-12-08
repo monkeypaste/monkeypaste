@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
 
             return DeletePlugin(plugin_kvp.Key, plugin_kvp.Value, delete_cache);
         }
-        public static async Task<MpPluginFormat> InstallPluginAsync(string packageUrl, bool silentInstall = false) {
+        public static async Task<MpPluginFormat> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall = false) {
             try {
                 // download package (should always be a zip file of the plugins root folder or contents of root folder)
                 var package_bytes = await MpFileIo.ReadBytesFromUriAsync(packageUrl, string.Empty, 30_000);
@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     pluginName = Path.GetFileName(tpfl[0]);
-                    string dest_dir = Path.Combine(PluginRootFolderPath, pluginName);
+                    string dest_dir = Path.Combine(PluginRootFolderPath, plugin_guid, pluginName);
                     if (dest_dir.IsDirectory()) {
                         // just in case remove existing dir if found
                         MpFileIo.DeleteDirectory(dest_dir);
@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
-                string manifest_path = Path.Combine(PluginRootFolderPath, pluginName, "manifest.json");
+                string manifest_path = Path.Combine(PluginRootFolderPath, plugin_guid, pluginName, "manifest.json");
                 if (!manifest_path.IsFile()) {
                     Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
@@ -262,7 +262,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (var core_guid in CorePluginGuids) {
                 string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
                 MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
-                _ = await InstallPluginAsync(core_plugin_zip_path.ToFileSystemUriFromPath(), true);
+                _ = await InstallPluginAsync(core_guid, core_plugin_zip_path.ToFileSystemUriFromPath(), true);
                 MpConsole.WriteLine($"Core plugin '{core_plugin_zip_path}' installed.");
             }
         }

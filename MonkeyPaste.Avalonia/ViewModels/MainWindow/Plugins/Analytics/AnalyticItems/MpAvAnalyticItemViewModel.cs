@@ -926,7 +926,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var def_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(PluginIconId);
-
+                if (def_icon == null) {
+                    def_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(MpDefaultDataModelTools.UnknownIconId);
+                }
                 var np_icon = await def_icon.CloneDbModelAsync();
 
                 MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(

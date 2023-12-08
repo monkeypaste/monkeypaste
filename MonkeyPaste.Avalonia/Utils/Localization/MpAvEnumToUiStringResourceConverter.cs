@@ -102,9 +102,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static bool CheckEnumUiStrings() {
             // returns true if needs restart
-#if !DEBUG || !WINDOWS
-            return false;
-#endif
+#if DEBUG && WINDOWS
             if (!string.IsNullOrWhiteSpace(EnumUiStrings.Culture.Name)) {
                 // non-invariant don't update
                 MpConsole.WriteLine($"Enum UI Strings ignoring culture '{EnumUiStrings.Culture}' its non-invariant '{EnumUiStrings.Culture.Name}'");
@@ -128,6 +126,9 @@ namespace MonkeyPaste.Avalonia {
 
             //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.ResourceUpdate, $"Enum UI strings updated at path '{target_path}'");
             return true;
+#else
+            return false;
+#endif
         }
 
         #region Extensions

@@ -78,6 +78,7 @@ namespace MonkeyPaste.Avalonia {
         public const double BASE_DEFAULT_FONT_SIZE = 12;
 
         #endregion
+
         #region Statics
 
         [JsonIgnore]
@@ -251,45 +252,6 @@ namespace MonkeyPaste.Avalonia {
             ThemeType == MpThemeType.Dark;
         #endregion
 
-        #region Ole
-
-        // This is used to discern core cb handler so it is automatically enabled on first startup (not the typical workflow)
-
-
-        #endregion
-
-        #region REST
-
-        #endregion
-
-        #region Settings 
-        public string AutoSelectionElementTag {
-            get {
-                return "AutoSelectionElement";
-            }
-        }
-        public int MaxCommandLineArgumentLength {
-            get {
-                return 1024;
-            }
-        }
-
-
-        public int MaxQrCodeCharLength {
-            get {
-                return 4296;
-            }
-        }
-
-        public int MaxTemplateTextLength {
-            get {
-                return 10;
-            }
-        }
-
-
-        #endregion
-
         #endregion
 
         #region Dynamic Properties          
@@ -350,6 +312,11 @@ namespace MonkeyPaste.Avalonia {
         public string AccountBillingCycleTypeStr { get; set; } = MpBillingCycleType.None.ToString();
 
         public DateTime AccountNextPaymentDateTime { get; set; }
+
+        public int ContentCountAtAccountDowngrade { get; set; } = 0;
+
+        public bool HasRated { get; set; }
+
 
         #endregion
 
@@ -614,7 +581,6 @@ namespace MonkeyPaste.Avalonia {
             IsSaving = false;
         }
 
-
         public async Task<IList<string>> AddOrUpdateAutoCompleteTextAsync(string ac_property_name, string new_text) {
             MpDebug.Assert(this.HasProperty(ac_property_name), $"Update auto-complete error, cannot find pref property '{ac_property_name}'");
             List<string> ac_items = (this.GetPropertyValue(ac_property_name) as string).ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
@@ -635,6 +601,27 @@ namespace MonkeyPaste.Avalonia {
             return ac_items;
         }
 
+        public void RestoreDefaults() {
+            // create dummy pref with default values
+            // then set each non-omitted pref individually so the change flows through its intended channels
+            MpAvPrefViewModel def_pref = new();
+            var propNames =
+                this.GetType().GetProperties()
+                .Where(x => x.SetMethod != null && !IsPropertyResetOmitted(x.Name))
+                .Select(x => x.Name);
+            MpConsole.WriteLine("Reseting prefs...", true);
+            foreach (var pn in propNames) {
+                try {
+                    object old_val = this.GetPropertyValue(pn);
+                    this.SetPropertyValue(pn, def_pref.GetPropertyValue(pn));
+                    object new_val = this.GetPropertyValue(pn);
+                    MpConsole.WriteLine($"Property '{pn}' changed from '{old_val}' to '{new_val}'");
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error reseting '{pn}'.", ex);
+                }
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -779,28 +766,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand RestoreDefaultsCommand => new MpCommand(
-            () => {
-                // create dummy pref with default values
-                // then set each non-omitted pref individually so the change flows through its intended channels
-                MpAvPrefViewModel def_pref = new();
-                var propNames =
-                    this.GetType().GetProperties()
-                    .Where(x => x.SetMethod != null && !IsPropertyResetOmitted(x.Name))
-                    .Select(x => x.Name);
-                MpConsole.WriteLine("Reseting prefs...", true);
-                foreach (var pn in propNames) {
-                    try {
-                        object old_val = this.GetPropertyValue(pn);
-                        this.SetPropertyValue(pn, def_pref.GetPropertyValue(pn));
-                        object new_val = this.GetPropertyValue(pn);
-                        MpConsole.WriteLine($"Property '{pn}' changed from '{old_val}' to '{new_val}'");
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Error reseting '{pn}'.", ex);
-                    }
-                }
-            });
 #if DEBUG
         public ICommand LogDecryptedPrefsCommand => new MpCommand(
             () => {

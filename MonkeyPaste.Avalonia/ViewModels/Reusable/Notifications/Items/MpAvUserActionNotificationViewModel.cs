@@ -19,8 +19,10 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
+        public override bool CanPin => true;
 
         public override bool ShowOptionsButton =>
+            //NotificationType == MpNotificationType.RateApp ||
             NotificationType == MpNotificationType.ContentCapReached ||
             NotificationType == MpNotificationType.TrashCapReached ||
             NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
@@ -39,14 +41,16 @@ namespace MonkeyPaste.Avalonia {
 
         public bool ShowShutdownButton => ShowIgnoreButton && !CanFix;
 
-        public bool ShowYesButton { get; set; } = false;
-        public bool ShowNoButton { get; set; } = false;
-        public bool ShowCancelButton { get; set; } = false;
-        public bool ShowProgressSpinner { get; set; } = false;
-        public bool ShowOkButton { get; set; } = false;
-        public bool ShowUpgradeButton { get; set; } = false;
-        public bool ShowLearnMoreButton { get; set; } = false;
-        public bool ShowTextBox { get; set; } = false;
+        public bool ShowYesButton { get; set; }
+        public bool ShowNoButton { get; set; }
+        public bool ShowCancelButton { get; set; }
+        public bool ShowProgressSpinner { get; set; }
+        public bool ShowBusySpinner { get; set; }
+        public bool ShowOkButton { get; set; }
+        public bool ShowRateButton { get; set; }
+        public bool ShowUpgradeButton { get; set; }
+        public bool ShowLearnMoreButton { get; set; }
+        public bool ShowTextBox { get; set; }
         public MpNotificationDialogResultType DialogResult { get; private set; }
         public string InputResult { get; private set; }
         public string BoundInputText { get; set; }
@@ -148,11 +152,28 @@ namespace MonkeyPaste.Avalonia {
                     ShowNoButton = true;
                     ShowCancelButton = true;
                     break;
-
-                case MpNotificationButtonsType.ProgressCancel:
-                    ShowCancelButton = true;
-                    ShowProgressSpinner = true;
+                case MpNotificationButtonsType.Rate:
+                    ShowRateButton = true;
                     break;
+                case MpNotificationButtonsType.Progress: {
+                        ShowProgressSpinner = true;
+                        ShowCancelButton =
+                            OtherArgs is CancellationToken ||
+                            (OtherArgs is object[] argParts &&
+                             argParts.Any(x => x is CancellationToken));
+                        break;
+                    }
+
+                case MpNotificationButtonsType.Busy: {
+                        ShowBusySpinner = true;
+
+                        ShowCancelButton =
+                            OtherArgs is CancellationToken ||
+                            (OtherArgs is object[] argParts &&
+                             argParts.Any(x => x is CancellationToken));
+                        break;
+                    }
+
                 case MpNotificationButtonsType.SubmitCancel:
                     ShowSubmitButton = true;
                     ShowCancelButton = true;
@@ -196,28 +217,19 @@ namespace MonkeyPaste.Avalonia {
                 HideNotification();
                 return base_result;
             }
+            await WaitForFullVisibilityAsync();
             DateTime startTime = DateTime.Now;
             while (true) {
                 if (DialogResult != MpNotificationDialogResultType.None) {
                     break;
                 }
-                if (ShowProgressSpinner) {
-                    if (OtherArgs is object[] argParts) {
-                        if (argParts.OfType<MpIProgressIndicatorViewModel>().FirstOrDefault() is MpIProgressIndicatorViewModel prog_vm) {
-                            PercentLoaded = prog_vm.PercentLoaded;
-                        }
-                        if (argParts.OfType<CancellationToken>().FirstOrDefault() is CancellationToken ct &&
-                            ct.IsCancellationRequested) {
-                            MpConsole.WriteLine($"Progress canceled by token!");
-                            DialogResult = MpNotificationDialogResultType.Cancel;
-                        }
-                    }
-                    MpConsole.WriteLine($"Cur Percent loaded: " + PercentLoaded);
-                    if (PercentLoaded >= 1.0) {
-                        DialogResult = MpNotificationDialogResultType.Dismiss;
-                    }
-                } else if (MaxShowTimeMs > 0) {
-                    await WaitForFullVisibilityAsync();
+                if (DoNotShowAgain) {
+                    // set from CheckDoNotShowAgainCmd
+                    DialogResult = MpNotificationDialogResultType.DoNotShow;
+                    CloseNotificationCommand.Execute(null);
+                    return DialogResult;
+                }
+                if (MaxShowTimeMs > 0) {
                     if (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                         // max show not reache yet
                         while (IsFadeDelayFrozen) {
@@ -232,12 +244,30 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         DialogResult = MpNotificationDialogResultType.Dismiss;
                     }
-                } else if (DoNotShowAgain) {
-                    // set from CheckDoNotShowAgainCmd
-                    DialogResult = MpNotificationDialogResultType.DoNotShow;
-                    CloseNotificationCommand.Execute(null);
-                    return DialogResult;
+                }
 
+                if (ShowProgressSpinner || ShowBusySpinner) {
+                    object[] argParts = OtherArgs as object[];
+                    if (argParts == null) {
+                        argParts = new[] { OtherArgs };
+                    }
+                    while (true) {
+                        if (argParts.OfType<MpIProgressIndicatorViewModel>().FirstOrDefault() is MpIProgressIndicatorViewModel prog_vm) {
+                            PercentLoaded = prog_vm.PercentLoaded;
+                        }
+                        if (argParts.OfType<CancellationToken>().FirstOrDefault() is CancellationToken ct &&
+                            ct.IsCancellationRequested) {
+                            MpConsole.WriteLine($"Progress canceled by token!");
+                            DialogResult = MpNotificationDialogResultType.Cancel;
+                            return DialogResult;
+                        }
+                        MpConsole.WriteLine($"Cur Percent loaded: " + PercentLoaded);
+                        if (PercentLoaded >= 1.0) {
+                            DialogResult = MpNotificationDialogResultType.Dismiss;
+                            return DialogResult;
+                        }
+                        await Task.Delay(100);
+                    }
                 }
                 await Task.Delay(100);
             }
@@ -396,6 +426,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand LearnMoreCommand => new MpCommand(
             () => {
                 MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand.Execute(MpHelpLinkType.ContentLimits);
+                DialogResult = MpNotificationDialogResultType.Dismiss;
+            });
+
+        public ICommand RateAppCommand => new MpCommand(
+            () => {
+                MpAvPrefViewModel.Instance.HasRated = true;
+                MpAvAccountViewModel.Instance.RateAppCommand.Execute(null);
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 

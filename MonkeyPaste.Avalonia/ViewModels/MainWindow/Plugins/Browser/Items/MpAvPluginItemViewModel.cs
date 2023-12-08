@@ -359,11 +359,12 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = true;
 
                 await MpAvAnalyticItemCollectionViewModel.Instance
-                    .InstallAnalyzerCommand.ExecuteAsync(PackageUrl);
+                    .InstallAnalyzerCommand.ExecuteAsync(new object[] { PluginGuid, PackageUrl });
 
                 IsBusy = false;
                 OnPropertyChanged(nameof(LoadedPluginRef));
                 OnPropertyChanged(nameof(IsInstalled));
+                OnPropertyChanged(nameof(ToggleInstallText));
 
             }, () => {
                 return !IsInstalled;

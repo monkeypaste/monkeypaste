@@ -82,4 +82,15 @@
         <Setter Property="Margin"
                 Value="7,0,0,0" />
     </Style>
+
+    <Style Selector=":is(Button):disabled, :is(Button).disabled">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeGrayAccent3Brush}" />
+        <Setter Property="Cursor"
+                Value="No" />
+    </Style>
+    <Style Selector=":is(Button):disabled TextBlock, :is(Button).disabled TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeGrayAccent3Brush}" />
+    </Style>
 </Styles>

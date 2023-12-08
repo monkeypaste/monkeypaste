@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is DateTime dt) {
-                string format = parameter is string ? parameter as string : UiStrings.CommonDateTimeFormat;
+                string format = parameter is string ? parameter as string : UiStrings.CommonDateFormat;
                 return dt.ToString(format);
             }
             return null;

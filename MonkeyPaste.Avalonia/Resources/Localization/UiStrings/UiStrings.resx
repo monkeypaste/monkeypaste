@@ -555,8 +555,8 @@
   <data name="SettingsPrefTabLabel" xml:space="preserve">
     <value>Preferences</value>
   </data>
-  <data name="SettingsResetAllButtonLabel" xml:space="preserve">
-    <value>Reset All</value>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Restore Defaults</value>
   </data>
   <data name="SettingsSearchWatermark" xml:space="preserve">
     <value>Filter...</value>
@@ -652,7 +652,7 @@
     <value>Select application path</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>Are you sure you want to remove custom shortcuts for {1}</value>
+    <value>Are you sure you want to remove custom shortcuts for {0}?</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
     <value>Are you sure you want to remove custom formats for {0}?</value>
@@ -848,7 +848,8 @@
     <value>Account Changed</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Your subscription is now {0}/{1} with {2} content and {3} trash storage. \n But fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
+    <value>Your subscription is now {0}/{1} with {2} content and {3} trash storage. 
+But fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
@@ -922,7 +923,8 @@
     <value>Note</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>Microsoft Store doesn't allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?</value>
+    <value>Microsoft Store doesn't allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. 
+Would you like to go do that now?</value>
     <comment>Old Subscription Type, Old Billing Cycle</comment>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
@@ -1032,7 +1034,7 @@
     <value>Disabled</value>
   </data>
   <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
-    <value>Note! This password is optional and only for EXTRA security. If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
+    <value>Note! This password is optional and only for EXTRA security. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
   </data>
   <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
     <value>Remember Drop Settings For:</value>
@@ -1244,7 +1246,7 @@
     <value>Content</value>
   </data>
   <data name="PrefContentFontSizeLabel" xml:space="preserve">
-    <value>Size</value>
+    <value>Content Font Size</value>
   </data>
   <data name="PrefDestFormatHint" xml:space="preserve">
     <value>When true, external content inserted into a clip will use the clips rich formatting and not the source content.</value>
@@ -1330,11 +1332,13 @@
   <data name="PrefRecentTextLimitLabel" xml:space="preserve">
     <value>Recent Text Limit</value>
   </data>
-  <data name="PrefResetAllNtfMsgText" xml:space="preserve">
-    <value>Are you sure you want to reset all preferences? This action cannot be undone. *Some Settings will not update until restart</value>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Are you sure you want to restore default preferences? This cannot be undone!
+*The application will restart once complete.</value>
   </data>
-  <data name="PrefResetAllNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset all notifications?</value>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Are you sure you want to reset all notifications?
+*This cannot be undone!</value>
   </data>
   <data name="PrefResetClipboardHint" xml:space="preserve">
     <value>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).</value>
@@ -1788,7 +1792,8 @@
     <value>Hide</value>
   </data>
   <data name="MainWindowLoadedNtfText" xml:space="preserve">
-    <value>Monkey Paste is now loaded. \nClipboard listening is: {0}</value>
+    <value>Monkey Paste is now loaded. 
+Clipboard listening is: {0}</value>
     <comment>Paused or active</comment>
   </data>
   <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
@@ -2223,6 +2228,22 @@
     <value>Free!</value>
   </data>
   <data name="SysTrayRateAppLabel" xml:space="preserve">
-    <value>Rate us!</value>
+    <value>Give us 5 stars!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Delete All</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Delete All Content</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Are you sure you want to delete ALL your clips? This cannot be undone! 
+* Requires a restart once complete.</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>I'm an indy dev please show some support!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Like MonkeyPaste?</value>
   </data>
 </root>

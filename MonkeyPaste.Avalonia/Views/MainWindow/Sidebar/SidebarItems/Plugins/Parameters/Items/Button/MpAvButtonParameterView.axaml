@@ -27,8 +27,9 @@
         <!--  NOTE when control is hyperlink and cmd is not set it'll use CurrentValue as Nav uri  -->
         <Button Classes="defaultButton param"
                 Classes.link="{Binding IsLink}"
+                MinWidth="100"
                 Classes.trynav="{Binding ClickCommand, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 CommandParameter="{Binding ClickCommandParameter}">
             <Grid>

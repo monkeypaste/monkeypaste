@@ -49,9 +49,9 @@
 
             switch (profile) {
                 case MpShortcutRoutingProfileType.Default:
-                    if (st == MpShortcutType.ToggleMainWindow) {
-                        return MpRoutingType.ExclusiveOverride;
-                    }
+                    //if (st == MpShortcutType.ToggleMainWindow) {
+                    //    return MpRoutingType.ExclusiveOverride;
+                    //}
                     return MpRoutingType.Passive;
                 default:
                 case MpShortcutRoutingProfileType.Internal:

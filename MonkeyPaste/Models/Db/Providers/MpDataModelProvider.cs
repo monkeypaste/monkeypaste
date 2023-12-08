@@ -32,6 +32,14 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<List<int>> GetItemsIdsAsync<T>() where T : MpDbModelBase {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string key_name = $"pk_{table_name}Id";
+            string query = $"select {key_name} from {table_name}";
+            var result = await MpDb.QueryScalarsAsync<int>(query);
+            return result;
+        }
+
         public static List<T> GetItems<T>() where T : new() {
             string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
             string query = $"select * from {table_name}";

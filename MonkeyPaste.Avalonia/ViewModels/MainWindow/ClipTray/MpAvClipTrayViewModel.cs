@@ -12,6 +12,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -1158,6 +1159,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        bool IgnoreContentDelete { get; set; }
         public int PinOpCopyItemId { get; set; } = -1;
 
         public bool IsAutoEditEnabled =>
@@ -1986,7 +1988,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (e is MpCopyItem ci) {
+            if (e is MpCopyItem ci && !IgnoreContentDelete) {
                 if (AppendClipTileViewModel != null &&
                     ci.Id == AppendClipTileViewModel.CopyItemId &&
                     IsAnyAppendMode) {
@@ -3011,6 +3013,8 @@ namespace MonkeyPaste.Avalonia {
                     await MpAvTagTrayViewModel.Instance.TrashTagViewModel.UnlinkCopyItemCommand.ExecuteAsync(ci.Id);
                     MpConsole.WriteLine($"Duplicate item '{ci.Title}' unlinked from trash");
                 }
+                // update cap in view
+                ProcessAccountCapsAsync(MpAccountCapCheckType.Refresh).FireAndForgetSafeAsync();
             } else {
                 await ProcessAccountCapsAsync(MpAccountCapCheckType.Add);
                 MpAvTagTrayViewModel.Instance.AllTagViewModel.UpdateClipCountAsync().FireAndForgetSafeAsync();
@@ -4608,19 +4612,22 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
                     title: UiStrings.CommonConfirmLabel,
-                    message: "Are you sure you want to delete ALL your clips? This is not undoable!",
+                    message: UiStrings.ClipTrayDeleteAllMessageText,
                     iconResourceObj: "WarningImage");
                 if (!result) {
                     //cancel
                     return;
                 }
-                UnpinAllCommand.Execute(null);
-                Items.Clear();
-                _ = Task.Run(async () => {
-                    var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
-                    await Task.WhenAll(cil.Select(x => x.DeleteFromDatabaseAsync()));
-                });
+                // clear trays
+                IgnoreContentDelete = true;
+                Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
+                    title: UiStrings.CommonBusyLabel,
+                    iconResourceObj: "ClockArrowImage").FireAndForgetSafeAsync();
 
+                var ciidl = await MpDataModelProvider.GetItemsIdsAsync<MpCopyItem>();
+
+                await Task.WhenAll(ciidl.Select(x => MpDataModelProvider.DeleteItemAsync<MpCopyItem>(x)));
+                MpAvAppRestarter.ShutdownWithRestartTask();
             });
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
@@ -5040,9 +5047,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
-
         //public ICommand SendToEmailCommand => new MpCommand(
         //    () => {
         //        // for gmail see https://stackoverflow.com/a/60741242/105028
@@ -5060,5 +5064,9 @@ namespace MonkeyPaste.Avalonia {
         //    });
 
         #endregion
+    }
+
+    public class MpAvCommonProgressIndicatorViewModel : MpAvViewModelBase, MpIProgressIndicatorViewModel {
+        public double PercentLoaded { get; set; }
     }
 }

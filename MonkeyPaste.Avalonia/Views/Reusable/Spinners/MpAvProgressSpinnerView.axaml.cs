@@ -16,10 +16,6 @@ namespace MonkeyPaste.Avalonia {
             //this.AttachedToVisualTree += MpAvProgressSpinnerView_AttachedToVisualTree;
         }
 
-        private void MpAvProgressSpinnerView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            Test();
-        }
-
         private void Test() {
             Dispatcher.UIThread.Post(async () => {
                 var ps = this.GetVisualDescendant<MpAvProgressSpinner>();

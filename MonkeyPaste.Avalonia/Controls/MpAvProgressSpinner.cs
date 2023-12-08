@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region PercentBrush AvaloniaProperty
 
-        private IBrush _PercentBrush = Brushes.Silver;
+        private IBrush _PercentBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString());
         public IBrush PercentBrush {
             get => _PercentBrush;
             set => SetAndRaise(PercentBrushProperty, ref _PercentBrush, value);
@@ -105,14 +105,14 @@ namespace MonkeyPaste.Avalonia {
                 nameof(PercentBrush),
                 o => o.PercentBrush,
                 (o, v) => o.PercentBrush = v,
-                Brushes.Silver
+                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
             );
 
         #endregion
 
         #region RingBrush AvaloniaProperty
 
-        private IBrush _RingBrush = Brushes.DimGray;
+        private IBrush _RingBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString());
         public IBrush RingBrush {
             get => _RingBrush;
             set => SetAndRaise(RingBrushProperty, ref _RingBrush, value);
@@ -123,8 +123,7 @@ namespace MonkeyPaste.Avalonia {
             (
                 nameof(RingBrush),
                 o => o.RingBrush,
-                (o, v) => o.RingBrush = v,
-                Brushes.DimGray
+                (o, v) => o.RingBrush = v, Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString())
             );
 
         #endregion

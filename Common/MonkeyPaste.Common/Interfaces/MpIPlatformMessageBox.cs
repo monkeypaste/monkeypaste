@@ -8,13 +8,21 @@ namespace MonkeyPaste.Common {
             object anchor = null,
             object iconResourceObj = null,
             object owner = null);
-        Task<bool> ShowCancelableProgressMessageBoxAsync(
+        Task<bool> ShowProgressMessageBoxAsync(
             string title,
-            string message,
+            string message = default,
             object anchor = null,
             object iconResourceObj = null,
             object owner = null,
             object iprog_and_or_cancel_token_arg = default);
+
+        Task ShowBusyMessageBoxAsync(
+            string title,
+            string message = default,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            object cancel_token_arg = default);
         Task<bool> ShowOkCancelMessageBoxAsync(
             string title,
             string message,

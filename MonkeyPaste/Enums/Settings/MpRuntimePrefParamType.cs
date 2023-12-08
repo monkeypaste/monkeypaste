@@ -15,6 +15,7 @@
         ThemeHexColor,
         ChangeDbPassword,
         ClearDbPassword,
-        ForgetDbPassword
+        ForgetDbPassword,
+        DeleteAllContent
     }
 }

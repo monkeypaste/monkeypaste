@@ -522,7 +522,7 @@
   <data name="SettingsPrefTabLabel" xml:space="preserve">
     <value>環境設定</value>
   </data>
-  <data name="SettingsResetAllButtonLabel" xml:space="preserve">
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
     <value>すべてリセット</value>
   </data>
   <data name="SettingsSearchWatermark" xml:space="preserve">
@@ -1275,10 +1275,10 @@
   <data name="PrefRecentTextLimitLabel" xml:space="preserve">
     <value>最近のテキストの制限</value>
   </data>
-  <data name="PrefResetAllNtfMsgText" xml:space="preserve">
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
     <value>すべての設定をリセットしてもよろしいですか?</value>
   </data>
-  <data name="PrefResetAllNtfText" xml:space="preserve">
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
     <value>すべての通知をリセットしてもよろしいですか?</value>
   </data>
   <data name="PrefResetClipboardHint" xml:space="preserve">

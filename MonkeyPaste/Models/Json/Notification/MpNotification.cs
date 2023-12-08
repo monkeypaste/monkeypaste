@@ -51,11 +51,11 @@ namespace MonkeyPaste {
             }
             NotificationType = pluginNotfication.NotificationType.ToString().ToEnum<MpNotificationType>();
 
-            if (pluginNotfication.NotificationType == MpPluginNotificationType.PluginResponseWarningWithOption) {
-                MaxShowTimeMs = -1;
-            } else {
-                MaxShowTimeMs = MAX_MESSAGE_DISPLAY_MS;
-            }
+            //if (pluginNotfication.NotificationType == MpPluginNotificationType.PluginResponseWarningWithOption) {
+            //    MaxShowTimeMs = -1;
+            //} else {
+            //    MaxShowTimeMs = MAX_MESSAGE_DISPLAY_MS;
+            //}
 
             Title = pluginNotfication.Title;
             Body = pluginNotfication.Body;

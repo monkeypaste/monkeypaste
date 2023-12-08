@@ -45,6 +45,7 @@ namespace MonkeyPaste.Avalonia {
         public string[] HiddenParamIds => new string[] {
             nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
+            MpRuntimePrefParamType.ChangeRoutingType.ToString()
             //nameof(MpAvPrefViewModel.Instance.UserDefinedFileExtensionsCsv)
             //nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
             //nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
@@ -143,8 +144,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTabButtonVisible1 { get; set; } = true;
         public bool IsTabButtonVisible2 { get; set; } = true;
         public bool IsTabButtonVisible3 { get; set; } = true;
+        public bool IsPrefTabSelected =>
+           (MpSettingsTabType)SelectedTabIdx == MpSettingsTabType.Preferences;
+
         public string FilterText { get; set; } = string.Empty;
 
+        public bool IsBatchUpdate { get; set; }
 
         public int SelectedTabIdx {
             get {
@@ -413,7 +418,7 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.ThemeHexColor.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefThemeColorLabel,
-                                            description = UiStrings.PrefThemeColorHint,
+                                            description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.PrefThemeColorHint,
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
@@ -426,7 +431,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Fonts) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.DefaultFonts) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -451,7 +456,6 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
-                                            description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.CommonRequiresRestartHint,
                                             label = UiStrings.PrefContentFontLabel,
                                             values =
                                                 FontManager.Current.SystemFonts
@@ -624,7 +628,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
-                            SortOrderIdx = -1,
+                            SortOrderIdx = int.MinValue,
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1111,13 +1115,26 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpRuntimePrefParamType.ResetPluginCache.ToString()
                                                 }
                                             }
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.DeleteAllContent.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = UiStrings.PrefDeleteAllLabel,
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = UiStrings.PrefDeleteAllButtonText,
+                                                    value = MpRuntimePrefParamType.DeleteAllContent.ToString()
+                                                }
+                                            }
+                                        },
                                     }
                                 }
                             }
                         }
                     }
-                    .OrderByDescending(x=>x.Items == null ? 0:x.SortOrderIdx < 0 ? x.Items.Count : x.SortOrderIdx)
+                    .OrderByDescending(x=>x.SortOrderIdx)
+                    .ThenByDescending(x=>x.Items == null ? 0 : x.Items.Where(x=>x.IsVisible).Count())
                 }
             };
 
@@ -1402,6 +1419,9 @@ namespace MonkeyPaste.Avalonia {
                 MpAvThemeViewModel.Instance.UpdateThemeResources(true);
             }
 
+            if (IsBatchUpdate) {
+                return;
+            }
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
                 Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
                     .Where(x => x.GetContentView() != null)
@@ -1594,22 +1614,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ResetSettingsCommand => new MpAsyncCommand(
-            async () => {
-                var result = await Mp.Services.PlatformMessageBox
-                .ShowOkCancelMessageBoxAsync(
-                    title: UiStrings.CommonConfirmLabel,
-                    message: UiStrings.PrefResetAllNtfMsgText,
-                    iconResourceObj: "WarningImage",
-                    owner: MpAvWindowManager.LocateWindow(this));
-
-                if (!result) {
-                    // canceled reset all, ignore
-                    return;
-                }
-
-                MpAvPrefViewModel.Instance.RestoreDefaultsCommand.Execute(null);
-            });
         public ICommand SaveSettingsCommand => new MpCommand(
             () => {
                 IsWindowOpen = false;
@@ -1779,7 +1783,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpRuntimePrefParamType.ResetNtf: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: UiStrings.CommonConfirmLabel,
-                            message: UiStrings.PrefResetAllNtfText,
+                            message: UiStrings.PrefResetAllNtfForgetsText,
                             iconResourceObj: "QuestionMarkImage");
                             if (!result) {
                                 return;
@@ -1882,6 +1886,10 @@ namespace MonkeyPaste.Avalonia {
                             MpAvAccountViewModel.Instance.ShowLoginPanelCommand.Execute(null);
                             break;
                         }
+                    case MpRuntimePrefParamType.DeleteAllContent: {
+                            MpAvClipTrayViewModel.Instance.DeleteAllContentCommand.Execute(null);
+                            break;
+                        }
 
                 }
             });
@@ -1891,6 +1899,23 @@ namespace MonkeyPaste.Avalonia {
                 FilterText = string.Empty;
             });
 
+        public ICommand RestoreDefaultsCommand => new MpAsyncCommand(
+            async () => {
+                var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
+                    title: UiStrings.CommonConfirmLabel,
+                    message: UiStrings.PrefRestoreDefaultsNtfText,
+                    iconResourceObj: "WarningImage");
+                if (!result) {
+                    //cancel
+                    return;
+                }
+                IsBatchUpdate = true;
+                MpAvPrefViewModel.Instance.RestoreDefaults();
+                IsBatchUpdate = false;
+
+                MpAvAppRestarter.ShutdownWithRestartTask();
+
+            });
         #endregion
     }
 }

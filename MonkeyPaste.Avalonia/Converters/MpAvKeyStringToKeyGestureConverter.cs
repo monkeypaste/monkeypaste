@@ -15,9 +15,6 @@ namespace MonkeyPaste.Avalonia {
             if (value is not string valStr) {
                 return null;
             }
-            if (valStr.ToLower().Contains("cap")) {
-
-            }
             var result = Mp.Services.KeyConverter.ConvertStringToKeyLiteralSequence(valStr);
             if (result != null && result.Any()) {
 

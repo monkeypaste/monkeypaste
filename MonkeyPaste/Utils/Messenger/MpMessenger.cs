@@ -142,8 +142,6 @@ namespace MonkeyPaste {
         ThemeChanged,
 
         ScreenInfoChanged,
-
-        Loaded, //has context (object)
         Busy,
         NotBusy,
     }

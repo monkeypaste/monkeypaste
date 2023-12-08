@@ -141,7 +141,6 @@ namespace MonkeyPaste.Avalonia {
                 return MpInputConstants.MAC_META_KEY_LITERAL;
 #endif
             }
-
             if (key == Key.OemSemicolon) {
                 return ";";
             }

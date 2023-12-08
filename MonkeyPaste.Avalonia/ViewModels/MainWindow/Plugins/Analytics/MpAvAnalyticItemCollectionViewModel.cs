@@ -330,8 +330,12 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand<object> InstallAnalyzerCommand => new MpAsyncCommand<object>(
             async (args) => {
-                string package_url = args as object as string;
-                var plugin_format = await MpPluginLoader.InstallPluginAsync(package_url);
+                if (args is not object[] argParts ||
+                    argParts[0] is not string plugin_guid ||
+                    argParts[1] is not string package_url) {
+                    return;
+                }
+                var plugin_format = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
                 if (plugin_format == null) {
                     return;
                 }
@@ -417,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
                     try {
                         // 
                         string package_url = (args as object[])[1] as string;
-                        var updated_pf = await MpPluginLoader.InstallPluginAsync(package_url);
+                        var updated_pf = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
                         await aivm.InitializeAsync(updated_pf);
                     }
                     catch (Exception ex) {

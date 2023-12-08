@@ -376,7 +376,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Store doesn&apos;t allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?.
+        ///   Looks up a localized string similar to Microsoft Store doesn&apos;t allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. 
+        ///Would you like to go do that now?.
         /// </summary>
         public static string AccountPrePurchaseWindowsNtfCaption {
             get {
@@ -1789,6 +1790,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete ALL your clips? This cannot be undone! 
+        ///* Requires a restart once complete..
+        /// </summary>
+        public static string ClipTrayDeleteAllMessageText {
+            get {
+                return ResourceManager.GetString("ClipTrayDeleteAllMessageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cutom.
         /// </summary>
         public static string ColorPaletteCustomColorToolTip {
@@ -3130,7 +3141,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Monkey Paste is now loaded. \nClipboard listening is: {0}.
+        ///   Looks up a localized string similar to Monkey Paste is now loaded. 
+        ///Clipboard listening is: {0}.
         /// </summary>
         public static string MainWindowLoadedNtfText {
             get {
@@ -3238,7 +3250,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your subscription is now {0}/{1} with {2} content and {3} trash storage. \n But fret not! No data is lost after downgrading. Only new stuff will be evaluated..
+        ///   Looks up a localized string similar to Your subscription is now {0}/{1} with {2} content and {3} trash storage. 
+        ///But fret not! No data is lost after downgrading. Only new stuff will be evaluated..
         /// </summary>
         public static string NtfCapAccountDowngradeText {
             get {
@@ -3351,6 +3364,24 @@ namespace MonkeyPaste.Avalonia {
         public static string NtfLoaderTitle {
             get {
                 return ResourceManager.GetString("NtfLoaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I&apos;m an indy dev please show some support!.
+        /// </summary>
+        public static string NtfRateAppText {
+            get {
+                return ResourceManager.GetString("NtfRateAppText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like MonkeyPaste?.
+        /// </summary>
+        public static string NtfRateAppTitle {
+            get {
+                return ResourceManager.GetString("NtfRateAppTitle", resourceCulture);
             }
         }
         
@@ -3715,11 +3746,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
+        ///   Looks up a localized string similar to Content Font Size.
         /// </summary>
         public static string PrefContentFontSizeLabel {
             get {
                 return ResourceManager.GetString("PrefContentFontSizeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete All.
+        /// </summary>
+        public static string PrefDeleteAllButtonText {
+            get {
+                return ResourceManager.GetString("PrefDeleteAllButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete All Content.
+        /// </summary>
+        public static string PrefDeleteAllLabel {
+            get {
+                return ResourceManager.GetString("PrefDeleteAllLabel", resourceCulture);
             }
         }
         
@@ -3994,20 +4043,12 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to reset all preferences? This action cannot be undone. *Some Settings will not update until restart.
+        ///   Looks up a localized string similar to Are you sure you want to reset all notifications?
+        ///*This cannot be undone!.
         /// </summary>
-        public static string PrefResetAllNtfMsgText {
+        public static string PrefResetAllNtfForgetsText {
             get {
-                return ResourceManager.GetString("PrefResetAllNtfMsgText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to reset all notifications?.
-        /// </summary>
-        public static string PrefResetAllNtfText {
-            get {
-                return ResourceManager.GetString("PrefResetAllNtfText", resourceCulture);
+                return ResourceManager.GetString("PrefResetAllNtfForgetsText", resourceCulture);
             }
         }
         
@@ -4098,6 +4139,25 @@ namespace MonkeyPaste.Avalonia {
         public static string PrefRestartConfirmNtfText {
             get {
                 return ResourceManager.GetString("PrefRestartConfirmNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Defaults.
+        /// </summary>
+        public static string PrefRestoreDefaultsLabel {
+            get {
+                return ResourceManager.GetString("PrefRestoreDefaultsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to restore default preferences? This cannot be undone!
+        ///*The application will restart once complete..
+        /// </summary>
+        public static string PrefRestoreDefaultsNtfText {
+            get {
+                return ResourceManager.GetString("PrefRestoreDefaultsNtfText", resourceCulture);
             }
         }
         
@@ -4689,7 +4749,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove custom shortcuts for {1}.
+        ///   Looks up a localized string similar to Are you sure you want to remove custom shortcuts for {0}?.
         /// </summary>
         public static string SettingsInteropAppConfirmRemoveShortcutsBody {
             get {
@@ -4919,15 +4979,6 @@ namespace MonkeyPaste.Avalonia {
         public static string SettingsPrefTabLabel {
             get {
                 return ResourceManager.GetString("SettingsPrefTabLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reset All.
-        /// </summary>
-        public static string SettingsResetAllButtonLabel {
-            get {
-                return ResourceManager.GetString("SettingsResetAllButtonLabel", resourceCulture);
             }
         }
         
@@ -5312,7 +5363,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rate us!.
+        ///   Looks up a localized string similar to Give us 5 stars!.
         /// </summary>
         public static string SysTrayRateAppLabel {
             get {
@@ -6068,7 +6119,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note! This password is optional and only for EXTRA security. If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.)..
+        ///   Looks up a localized string similar to Note! This password is optional and only for EXTRA security. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.)..
         /// </summary>
         public static string WelcomeRememberDbPasswordTooltip {
             get {

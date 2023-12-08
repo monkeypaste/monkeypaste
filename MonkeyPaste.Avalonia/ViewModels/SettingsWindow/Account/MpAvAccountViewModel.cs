@@ -460,7 +460,34 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.SettingsWindowOpened:
                     UpdateAccountViews();
                     break;
+                case MpMessageType.MainWindowLoadComplete:
+                    SetupRatingTimer();
+                    break;
             }
+        }
+        private void SetupRatingTimer() {
+            if (MpAvPrefViewModel.Instance.HasRated) {
+                return;
+            }
+            TimeSpan min_wait = TimeSpan.FromMinutes(2);
+            TimeSpan max_wait = TimeSpan.FromMinutes(5);
+            int wait_ms = MpRandom.Rand.Next((int)min_wait.TotalMilliseconds, (int)max_wait.TotalMilliseconds);
+
+            var rate_timer = new DispatcherTimer() {
+                Interval = TimeSpan.FromMilliseconds(wait_ms)
+            };
+            void ShowRatingNtf(object sender, EventArgs e) {
+                rate_timer.Stop();
+                rate_timer.Tick -= ShowRatingNtf;
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                           title: UiStrings.NtfRateAppTitle,
+                           body: UiStrings.NtfRateAppText,
+                           msgType: MpNotificationType.RateApp,
+                           iconSourceObj: "MonkeyWinkImage",
+                           maxShowTimeMs: 5_000).FireAndForgetSafeAsync();
+            }
+            rate_timer.Tick += ShowRatingNtf;
+            rate_timer.Start();
         }
         private bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
             response = response.ToStringOrEmpty();
@@ -695,7 +722,7 @@ namespace MonkeyPaste.Avalonia {
             CheckForAccountChange();
         }
 
-        private void CheckForAccountChange() {
+        private async void CheckForAccountChange() {
             int old_val = MpAvAccountTools.Instance.GetAccountPriority(_lastAccountType, _lastBillingCycleType == MpBillingCycleType.Monthly);
             int new_val = AccountPriority;
             if (old_val == new_val) {
@@ -703,8 +730,20 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpAccountNtfType change_type = new_val > old_val ? MpAccountNtfType.SubscriptionUpgraded : MpAccountNtfType.SubscriptionDowngraded;
-            ShowAccountNotficationAsync(change_type).FireAndForgetSafeAsync();
+            MpAccountNtfType change_type =
+                new_val > old_val ?
+                    MpAccountNtfType.SubscriptionUpgraded :
+                    MpAccountNtfType.SubscriptionDowngraded;
+            if (Mp.Services.StartupState.IsReady) {
+                ShowAccountNotficationAsync(change_type).FireAndForgetSafeAsync();
+            }
+            if (change_type == MpAccountNtfType.SubscriptionDowngraded) {
+                // ensure count is set if downgrade on startup
+                await MpAvAccountTools.Instance.RefreshCapInfoAsync(AccountType, MpAccountCapCheckType.None);
+                MpAvPrefViewModel.Instance.ContentCountAtAccountDowngrade =
+                    MpAvAccountTools.Instance.LastContentCount;
+                MpConsole.WriteLine($"ContentCountAtAccountDowngrade set to: {MpAvPrefViewModel.Instance.ContentCountAtAccountDowngrade}");
+            }
 
             // if welcome active this will disable subscription items and nav forward
             MpMessenger.SendGlobal(MpMessageType.AccountStateChanged);
@@ -767,8 +806,8 @@ namespace MonkeyPaste.Avalonia {
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
 
-                //MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
-                MpSubscriptionFormat acct = _dummySubscription;
+                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
+                //MpSubscriptionFormat acct = _dummySubscription;
 
                 bool is_sub_device = acct != MpSubscriptionFormat.Default;
                 MpUserAccountType acct_type = AccountType;
@@ -777,6 +816,7 @@ namespace MonkeyPaste.Avalonia {
                 string email = MpAvPrefViewModel.Instance.AccountEmail;
 
                 if (is_sub_device) {
+                    MpConsole.WriteLine($"Subscription type found: {acct.AccountType}");
                     // this device has active subscription
                     acct_type = acct.AccountType;
                     monthly = !acct.IsYearly;

@@ -343,7 +343,7 @@
                                 Command="{Binding ToggleIsPluginInstalledCommand}">
                             <Grid>
 
-                                <SelectableTextBlock IsVisible="{Binding !IsBusy}"
+                                <TextBlock IsVisible="{Binding !IsBusy}"
                                            Text="{Binding ToggleInstallText}" />
                                 <local:MpAvBusySpinnerView Width="15"
                                                            Height="15"

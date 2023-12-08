@@ -166,21 +166,6 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            //if (itemType == MpCopyItemType.Text) {
-            //    // TODO should not need to do this
-            //    // but from bugs converting html and special entity encoding use plain text for dup check
-            //    var matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.Text, compare_data);
-            //    if (matches.FirstOrDefault() is MpDataObjectItem dup_text_doi) {
-            //        dupCheck = await MpDataModelProvider.GetCopyItemByDataObjectIdAsync(dup_text_doi.DataObjectId);
-            //    }
-
-            //} else {
-            //    dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(compare_data);
-            //}
-            //if(dupCheck == null) {
-            //    return null;
-            //}
-
             MpConsole.WriteLine($"Duplicate item detected, returning original id:'{dupCheck.Id}'");
             dupCheck.WasDupOnCreate = true;
             return dupCheck;

@@ -91,7 +91,7 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeGrayAccent1Color}" />
     </Style>
-    <Style Selector=":is(Window).userActionNotificationWindow Button:not(.optionsButton):pointerover">
+    <Style Selector=":is(Window).userAction Button:not(.optionsButton):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"

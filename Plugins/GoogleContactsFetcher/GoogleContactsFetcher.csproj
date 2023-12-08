@@ -12,7 +12,11 @@
 
   <ItemGroup>
     <None Remove="contacts_icon.png" />
-    <None Include="README.md" Pack="true" PackagePath="\"/>
+    <None Remove="manifest.json" />
+    <Content Include="manifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,9 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="contacts_icon.png">
+    <EmbeddedResource Include="contacts_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

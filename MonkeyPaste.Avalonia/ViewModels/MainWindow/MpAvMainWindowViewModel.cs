@@ -1143,7 +1143,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
             Dispatcher.UIThread.Post(() => {
-                if (MpAvWindowManager.MainWindow.IsActive ||
+                if (MpAvWindowManager.MainWindow == null ||
+                    MpAvWindowManager.MainWindow.IsActive ||
                     !isLeftButton ||
                     !IsMainWindowOpen ||
                     IsMainWindowClosing) {

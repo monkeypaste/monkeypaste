@@ -5,7 +5,7 @@
         Status, //1 X
         Register,
         Theme, //2 X
-        Fonts, //3
+        DefaultFonts, //3
         Sound, //2
         Taskbar, //2
         Window, //4

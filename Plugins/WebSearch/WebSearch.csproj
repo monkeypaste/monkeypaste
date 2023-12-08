@@ -6,7 +6,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    
+    <None Remove="bingIcon.png" />
+    <None Remove="duckduckgoIcon.png" />
+    <None Remove="googleIcon.png" />
+    <None Remove="icon.png" />
+    <None Remove="manifest.json" />
+    <None Remove="yandexIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bingIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="duckduckgoIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="googleIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="manifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="yandexIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

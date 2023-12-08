@@ -40,8 +40,10 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
+                case MpNotificationType.ModalBusyMessageBox:
                 case MpNotificationType.ExecuteParametersRequest:
                 case MpNotificationType.ContentCapReached:
+                case MpNotificationType.RateApp:
                 case MpNotificationType.TrashCapReached:
                 case MpNotificationType.ContentAddBlockedByAccount:
                 case MpNotificationType.ContentRestoreBlockedByAccount:
@@ -86,7 +88,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalContentFormatDegradation:
                     return MpNotificationButtonsType.OkCancel;
                 case MpNotificationType.ModalProgressCancelMessageBox:
-                    return MpNotificationButtonsType.ProgressCancel;
+                    return MpNotificationButtonsType.Progress;
+                case MpNotificationType.ModalBusyMessageBox:
+                    return MpNotificationButtonsType.Busy;
                 case MpNotificationType.ExecuteParametersRequest:
                     return MpNotificationButtonsType.SubmitCancel;
                 case MpNotificationType.ModalOkMessageBox:
@@ -96,6 +100,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ContentAddBlockedByAccount:
                 case MpNotificationType.ContentRestoreBlockedByAccount:
                     return MpNotificationButtonsType.UpgradeLearnMore;
+                case MpNotificationType.RateApp:
+                    return MpNotificationButtonsType.Rate;
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
                     switch (layoutType) {
@@ -123,6 +129,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
+                case MpNotificationType.ModalBusyMessageBox:
                 case MpNotificationType.Welcome:
                     return MpNotificationPlacementType.ModalAnchor;
                 default:
@@ -140,6 +147,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
+                case MpNotificationType.ModalBusyMessageBox:
                 case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.Welcome:
                     return true;

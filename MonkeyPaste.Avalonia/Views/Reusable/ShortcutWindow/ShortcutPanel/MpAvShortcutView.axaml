@@ -39,8 +39,8 @@
         </Style>
 
         <Style Selector="Grid#ContainerGrid.recordable:pointerover local|MpAvShortcutLabel#ShortcutLabel">
-            <Setter Property="IsVisible"
-                    Value="False" />
+            <Setter Property="Opacity"
+                    Value="0.001" />
         </Style>
 
         <Style Selector="Grid#ContainerGrid.recordable:pointerover Button#RecordButton">

@@ -5,8 +5,8 @@
     <Styles.Resources>
         <!--<sys:TimeSpan x:Key="FadeDur">0:0:0.4</sys:TimeSpan>
         <sys:TimeSpan x:Key="CloseDur">0:0:1.4</sys:TimeSpan>-->
-        <sys:TimeSpan x:Key="FadeInDur">0:0:1.0</sys:TimeSpan>
-        <sys:TimeSpan x:Key="FadeOutDur">0:0:1.0</sys:TimeSpan>
+        <sys:TimeSpan x:Key="FadeInDur">0:0:0.5</sys:TimeSpan>
+        <sys:TimeSpan x:Key="FadeOutDur">0:0:0.5</sys:TimeSpan>
         <sys:TimeSpan x:Key="CloseDur">0:0:0.0</sys:TimeSpan>
     </Styles.Resources>
     <!--  NTF FADE IN/OUT  -->

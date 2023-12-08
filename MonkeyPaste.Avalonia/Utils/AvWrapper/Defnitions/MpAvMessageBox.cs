@@ -3,9 +3,15 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpIPlatformMessageBox {
-        public async Task<bool> ShowCancelableProgressMessageBoxAsync(
-            string title, string message, object anchor = null, object iconResourceObj = null, object owner = null, object iprog_and_or_cancel_token_arg = null) {
+        public async Task<bool> ShowProgressMessageBoxAsync(
+            string title,
+            string message,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            object iprog_and_or_cancel_token_arg = null) {
             // NOTE returns true if percent completes, false if canceled by user or token
+            // NOTE2 only shows cancel if arg contains cancellation token
             var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalProgressCancelMessageBox,
                                     title: title,
@@ -13,13 +19,36 @@ namespace MonkeyPaste.Avalonia {
                                     iconSourceObj: iconResourceObj,
                                     anchor: anchor,
                                     owner: owner,
+                                    maxShowTimeMs: -1,
                                     otherArgs: iprog_and_or_cancel_token_arg);
             if (result == MpNotificationDialogResultType.Dismiss) {
                 return true;
             }
             return false;
         }
-        public async Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
+        public async Task ShowBusyMessageBoxAsync(
+            string title,
+            string message,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            object cancel_token_arg = null) {
+            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalBusyMessageBox,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor,
+                                    owner: owner,
+                                    maxShowTimeMs: -1,
+                                    otherArgs: cancel_token_arg);
+        }
+        public async Task ShowOkMessageBoxAsync(
+            string title,
+            string message,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null) {
             await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalOkMessageBox,
                                     title: title,
@@ -61,7 +90,12 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-        public async Task<bool> ShowYesNoMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
+        public async Task<bool> ShowYesNoMessageBoxAsync(
+            string title,
+            string message,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null) {
             var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalYesNoMessageBox,
                                     title: title,
@@ -73,7 +107,12 @@ namespace MonkeyPaste.Avalonia {
             return result == MpNotificationDialogResultType.Yes;
         }
 
-        public async Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
+        public async Task<bool?> ShowYesNoCancelMessageBoxAsync(
+            string title,
+            string message,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null) {
             var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalYesNoCancelMessageBox,
                                     title: title,
@@ -96,7 +135,16 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        public async Task<string> ShowTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null, object owner = null, char passwordChar = default, MpNotificationType ntfType = MpNotificationType.ModalTextBoxOkCancelMessageBox) {
+        public async Task<string> ShowTextBoxMessageBoxAsync(
+            string title,
+            string message,
+            string currentText = null,
+            string placeholderText = null,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            char passwordChar = default,
+            MpNotificationType ntfType = MpNotificationType.ModalTextBoxOkCancelMessageBox) {
             var result = await Mp.Services.NotificationBuilder.ShowInputResultNotificationAsync(
                                     title: title,
                                     body: message,
@@ -110,7 +158,16 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        public async Task<(string, bool)> ShowRememberableTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null, object owner = null, char passwordChar = default, MpNotificationType ntfType = MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox) {
+        public async Task<(string, bool)> ShowRememberableTextBoxMessageBoxAsync(
+            string title,
+            string message,
+            string currentText = null,
+            string placeholderText = null,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            char passwordChar = default,
+            MpNotificationType ntfType = MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox) {
             var result = await Mp.Services.NotificationBuilder.ShowRememberableInputResultNotificationAsync(
                                     title: title,
                                     body: message,

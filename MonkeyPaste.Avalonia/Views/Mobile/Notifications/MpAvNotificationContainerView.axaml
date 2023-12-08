@@ -12,7 +12,7 @@
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvNotificationContainerView"
                        Classes="notificationWindow resizable fadeIn fadeOut"
-                       Classes.userActionNotificationWindow="True">
+                       Classes.userAction="True">
     <local:MpAvUserControl.Styles>
         <!--  OUTER BORDER  -->
         <Style Selector="Border#OuterBorder">

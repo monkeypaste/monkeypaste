@@ -11,6 +11,8 @@
         IgnoreRetryShutdown,
         ProgressBar,
         UpgradeLearnMore,
-        ProgressCancel
+        Progress,
+        Busy,
+        Rate
     }
 }

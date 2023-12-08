@@ -228,6 +228,9 @@
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
     <value>Db Password Input</value>
   </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>Rate App</value>
+  </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
     <value>Modal Content Format Degradation</value>
   </data>
@@ -251,6 +254,9 @@
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
     <value>Modal Progress Cancel Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>Modal Busy Message Box</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
     <value>Confirm End Append</value>
@@ -594,8 +600,8 @@
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
     <value>Theme</value>
   </data>
-  <data name="MpSettingsFrameType_Fonts" xml:space="preserve">
-    <value>Fonts</value>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>Default Fonts</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
     <value>Sound</value>
@@ -1007,9 +1013,6 @@
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
     <value>Usage Score</value>
-  </data>
-  <data name="MpContentSortType_RecyclePriority" xml:space="preserve">
-    <value>Recycle Priority</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />

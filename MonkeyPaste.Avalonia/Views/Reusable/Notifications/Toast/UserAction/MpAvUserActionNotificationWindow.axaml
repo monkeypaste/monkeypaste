@@ -11,8 +11,7 @@
         x:DataType="local:MpAvUserActionNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
-        Classes="notificationWindow resizable fadeIn fadeOut"
-        Classes.userActionNotificationWindow="True">
+        Classes="notificationWindow fadeIn fadeOut userAction">
     <Window.Styles>
         <!--  PARAM LISTBOXITEM  -->
         <Style Selector="ListBox#ExecuteParameterListBox > ListBoxItem"
@@ -51,7 +50,7 @@
             VerticalAlignment="Stretch"
             MinHeight="130"
             BorderThickness="7"
-            Padding="10"
+            Padding="3,5"
             BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -74,11 +73,11 @@
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Margin="10,5,10,0" />
+                   Margin="0,0,5,0" />
 
-            <!--  TITLE/UNDERLINE  -->
+            <!--  TITLE  -->
 
-            <local:MpAvMarqueeTextBox Grid.Row="0"
+            <!--<local:MpAvMarqueeTextBox Grid.Row="0"
                                       Grid.Column="1"
                                       AutoMarquee="False"
                                       EditOnFocus="False"
@@ -95,7 +94,23 @@
                                       HorizontalContentAlignment="Left"
                                       VerticalContentAlignment="Top"
                                       FontWeight="SemiBold"
-                                      Text="{Binding Title}" />
+                                      Text="{Binding Title}" />-->
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
+                       MinHeight="30"
+                       FontSize="24"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Left"
+                       TextAlignment="Left"
+                       Margin="0,0,5,0"
+                       TextWrapping="WrapWithOverflow"
+                       Effect="drop-shadow(0 0 3 black)"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       Text="{Binding Title}" />
+            <!--  UNDERLINE  -->
             <Border x:Name="TitleUnderline"
                     Grid.Row="0"
                     Grid.Column="1"
@@ -203,22 +218,36 @@
                               IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
-            <!--  PROGRESS (Optional)  -->
-            <Border Grid.Row="2"
+            <!--  BUSY / PROGRESS (Optional)  -->
+            <Border Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     MinHeight="100"
-                    IsVisible="{Binding ShowProgressSpinner}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="ShowProgressSpinner" />
+                        <Binding Path="ShowBusySpinner" />
+                    </MultiBinding>
+                </Border.IsVisible>
 
-                <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           LabelBrush="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
-                                           Width="100"
-                                           Height="100"
-                                           Percent="{Binding PercentLoaded}" />
+                <Grid>
+                    <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               IsVisible="{Binding ShowProgressSpinner}"
+                                               LabelBrush="Transparent"
+                                               Width="50"
+                                               Height="50"
+                                               Percent="{Binding PercentLoaded}" />
+
+                    <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               IsVisible="{Binding ShowBusySpinner}"
+                                               Width="70"
+                                               Height="70" />
+                </Grid>
             </Border>
 
             <!--  BUTTONS ROW  -->
@@ -229,6 +258,28 @@
                         Margin="0,10,0,0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
+                <!--  RATE APP  -->
+                <Button Padding="0"
+                        IsDefault="True"
+                        MaxWidth="{StaticResource PosInf}"
+                        IsVisible="{Binding ShowRateButton}"
+                        Command="{Binding RateAppCommand}">
+                    <Border Background="Blue"
+                            Padding="10,5">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="7">
+                            <Image Width="25"
+                                   Height="25"
+                                   Margin="0,5"
+                                   VerticalAlignment="Center"
+                                   Source="{Binding Source={StaticResource StarYellowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
+                            <TextBlock Text="{x:Static local:UiStrings.SysTrayRateAppLabel}"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                </Button>
                 <!--  Upgrade, LearnMore  -->
                 <Button Padding="0"
                         IsDefault="True"
@@ -236,9 +287,9 @@
                         Command="{Binding UpgradeCommand}">
                     <Border Background="Green"
                             Padding="10,5">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="15"
-                                   Height="15"
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <Image Width="25"
+                                   Height="25"
                                    Margin="0,5"
                                    VerticalAlignment="Center"
                                    Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
@@ -306,7 +357,7 @@
 
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="1"
-                                     RenderTransform="translateX(13px) translateY(-10px)"
+                                     RenderTransform="translateX(9px) translateY(-5px)"
                                      HorizontalAlignment="Right"
                                      IsVisible="{Binding ShowOptionsButton}"
                                      Command="{Binding ShowOptionsPopupCommand}"

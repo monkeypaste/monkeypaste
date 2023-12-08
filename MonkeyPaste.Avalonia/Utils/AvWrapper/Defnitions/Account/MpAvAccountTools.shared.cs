@@ -128,26 +128,22 @@ namespace MonkeyPaste.Avalonia {
 
             // TO TRASH /////////////////////////////////////////////////////
 
-            int totalCount = source == MpAccountCapCheckType.Add ? prev_content_count : new_content_count;
+            //int totalCount = source == MpAccountCapCheckType.Add ? prev_content_count : new_content_count;
 
-            // examples (content cap)
-            // content cap 5, actual 4 (needs next to trash)
-            // content cap 5 actual 5 (needs both)
-            // content cap 5 actual 3 (none)
-            int content_offset = totalCount - content_cap;
             int to_trash_ciid = 0;
-            if (content_offset >= 0) {
+            int max_diff = source == MpAccountCapCheckType.Add ? 0 : -1;
+            if (new_content_count - content_cap > max_diff) {
+                int content_offset = MpAvPrefViewModel.Instance.ContentCountAtAccountDowngrade - content_cap;
+                if (content_offset >= new_content_count ||
+                    content_offset < 0) {
+                    content_offset = 0;
+                }
                 to_trash_ciid = await GetNextToTrashAsync(content_offset);
             }
 
             // TO REMOVE //////////////////////////////////////////
 
             int totalTrash = _lastTrashCount;
-
-            // examples (trash cap)
-            // trash cap 100 actual 99 (needs next)
-            // trash cap 100 actual 100 (both)
-            // trash cap 100, actual 4 (none)
             int trash_cap = GetTrashCapacity(cur_uat);
             bool needs_trash_cap_info = totalTrash >= trash_cap;
             int to_remove_ciid = 0;

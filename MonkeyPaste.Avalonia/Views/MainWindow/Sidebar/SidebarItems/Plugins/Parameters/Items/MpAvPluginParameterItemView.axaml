@@ -145,7 +145,7 @@
 
                         <DataTemplate x:Key="SliderParameterTemplate"
                                       DataType="local:MpAvSliderParameterViewModel">
-                            <local:MpAvSliderParameterView Margin="10,0"
+                            <local:MpAvSliderParameterView Margin="3,0"
                                                            local:MpAvIsHoveringExtension.IsEnabled="True"
                                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
                         </DataTemplate>

@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel parent, object optId) : this(parent, optId, null) { }
         public MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel parent, object optId, MpAvWelcomeOptionGroupViewModel group) : base(parent) {
             _group = group;
-            PropertyChanged += MpAvGestureProfileItemViewModel_PropertyChanged;
+            PropertyChanged += MpAvWelcomeOptionItemViewModel_PropertyChanged;
             OptionId = optId;
         }
         #endregion
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void MpAvGestureProfileItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAvWelcomeOptionItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
                     OnPropertyChanged(nameof(LabelText));

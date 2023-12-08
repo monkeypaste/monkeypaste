@@ -20,9 +20,9 @@ namespace MonkeyPaste.Avalonia {
 
                         // GLOBAL
                 
-                            new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", MpShortcutType.ToggleMainWindow.ToString(), mw_routing.ToString(),"False","False"},
+                            new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Control+F1", MpShortcutType.ToggleMainWindow.ToString(), mw_routing.ToString(),"False","False"},
                             new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+Shift+F1", MpShortcutType.ToggleListenToClipboard.ToString(), globalRouting.ToString(),"False","False"},
-                            new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c", "Control+Shift+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), globalRouting.ToString(),"False","False"},
+                            new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c","Control+Shift+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), globalRouting.ToString(),"False","False"},
                             new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c", "Control+Shift+F3", MpShortcutType.ToggleRightClickPasteMode.ToString(), globalRouting.ToString(),"False","False"},
                             new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff", "Control+Shift+F5", MpShortcutType.ToggleAppendLineMode.ToString(), globalRouting.ToString(),"False","False"},
                             new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+Shift+F6", MpShortcutType.ToggleAppendInsertMode.ToString(), globalRouting.ToString(),"False","False"},

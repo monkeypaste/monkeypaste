@@ -682,15 +682,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recycle Priority.
-        /// </summary>
-        public static string MpContentSortType_RecyclePriority {
-            get {
-                return ResourceManager.GetString("MpContentSortType_RecyclePriority", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Source.
         /// </summary>
         public static string MpContentSortType_Source {
@@ -1456,6 +1447,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Busy Message Box.
+        /// </summary>
+        public static string MpNotificationType_ModalBusyMessageBox {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalBusyMessageBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Content Format Degradation.
         /// </summary>
         public static string MpNotificationType_ModalContentFormatDegradation {
@@ -1587,6 +1587,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpNotificationType_PluginUpdated {
             get {
                 return ResourceManager.GetString("MpNotificationType_PluginUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rate App.
+        /// </summary>
+        public static string MpNotificationType_RateApp {
+            get {
+                return ResourceManager.GetString("MpNotificationType_RateApp", resourceCulture);
             }
         }
         
@@ -2005,11 +2014,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fonts.
+        ///   Looks up a localized string similar to Default Fonts.
         /// </summary>
-        public static string MpSettingsFrameType_Fonts {
+        public static string MpSettingsFrameType_DefaultFonts {
             get {
-                return ResourceManager.GetString("MpSettingsFrameType_Fonts", resourceCulture);
+                return ResourceManager.GetString("MpSettingsFrameType_DefaultFonts", resourceCulture);
             }
         }
         

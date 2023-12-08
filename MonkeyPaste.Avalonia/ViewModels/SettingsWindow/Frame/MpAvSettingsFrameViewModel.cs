@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                         return "UserImage";
                     case MpSettingsFrameType.Theme:
                         return "BrushImage";
-                    case MpSettingsFrameType.Fonts:
+                    case MpSettingsFrameType.DefaultFonts:
                         return "FontImage";
                     case MpSettingsFrameType.Sound:
                         return "SpeakerImage";

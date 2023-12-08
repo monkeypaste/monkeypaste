@@ -39,6 +39,7 @@
         InvalidResponse,
         ExecuteParametersRequest,
         DbPasswordInput,
+        RateApp,
 
         // User Action (Modal) 
 
@@ -50,6 +51,7 @@
         ModalTextBoxOkCancelMessageBox,
         ModalRememberableTextBoxOkCancelMessageBox,
         ModalProgressCancelMessageBox,
+        ModalBusyMessageBox,
 
         ConfirmEndAppend,
 

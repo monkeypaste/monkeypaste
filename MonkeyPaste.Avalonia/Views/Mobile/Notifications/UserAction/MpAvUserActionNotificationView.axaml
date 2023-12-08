@@ -209,22 +209,37 @@
                           IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
             </StackPanel>
         </Grid>
-        <!--  PROGRESS (Optional)  -->
+        
+      <!--  BUSY / PROGRESS (Optional)  -->
         <Border Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 MinHeight="100"
-                IsVisible="{Binding ShowProgressSpinner}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="ShowProgressSpinner" />
+                    <Binding Path="ShowBusySpinner" />
+                </MultiBinding>
+            </Border.IsVisible>
 
-            <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       LabelBrush="{DynamicResource ThemeWhiteBrush}"
-                                       Width="100"
-                                       Height="100"
-                                       Percent="{Binding PercentLoaded}" />
+            <Grid>
+                <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding ShowProgressSpinner}"
+                                           LabelBrush="{DynamicResource ThemeWhiteBrush}"
+                                           Width="100"
+                                           Height="100"
+                                           Percent="{Binding PercentLoaded}" />
+
+                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding ShowBusySpinner}"
+                                           Width="70"
+                                           Height="70" />
+            </Grid>
         </Border>
 
         <!--  BUTTONS ROW  -->

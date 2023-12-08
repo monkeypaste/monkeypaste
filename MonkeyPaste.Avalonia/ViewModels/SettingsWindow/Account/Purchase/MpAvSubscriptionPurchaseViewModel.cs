@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
             var sw = Stopwatch.StartNew();
             IsStoreAvailable = await MpAvAccountTools.Instance.RefreshAddOnInfoAsync();
-            MpConsole.WriteLine($"AddOn Refresh: {sw.ElapsedMilliseconds}ms");
+            MpConsole.WriteLine($"Store available: {IsStoreAvailable.ToTestResultLabel()} AddOn Refresh: {sw.ElapsedMilliseconds}ms");
             Items.Clear();
             int test = typeof(MpUserAccountType).Length();
             for (int i = 0; i < 4; i++) {
@@ -90,14 +90,14 @@ namespace MonkeyPaste.Avalonia {
                 MpWelcomePageType.Account) {
                 Title = UiStrings.WelcomeAccountTitle,
                 Caption = UiStrings.WelcomeAccountCaption,
-                NeedsSkip = !IsStoreAvailable
+                NeedsSkip = !IsStoreAvailable || MpAvAccountViewModel.Instance.AccountType.IsPaidType()
             };
             wogvm.Items = new List<MpAvWelcomeOptionItemViewModel>();
             foreach (var item in Items) {
-                wogvm.Items.Add(item.ToWelcomeOptionItem(false));
+                wogvm.Items.Add(item.ToWelcomeOptionItem(wogvm, false));
             }
             foreach (var item in Items) {
-                wogvm.Items.Add(item.ToWelcomeOptionItem(true));
+                wogvm.Items.Add(item.ToWelcomeOptionItem(wogvm, true));
                 wogvm.Items.Last().IsOptionVisible = false;
             }
             return wogvm;

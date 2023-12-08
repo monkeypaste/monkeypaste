@@ -86,12 +86,16 @@ namespace MonkeyPaste.Avalonia {
         string MonthlyRateText =>
             AccountType.IsPaidType() ?
             MpAvAccountTools.Instance.GetAccountRate(AccountType, true) :
-            UiStrings.AccountFreePriceText;
+            AccountType == MpUserAccountType.None ?
+                string.Empty :
+                UiStrings.AccountFreePriceText;
 
         string YearlyRateText =>
             AccountType.IsPaidType() ?
             MpAvAccountTools.Instance.GetAccountRate(AccountType, false) :
-            UiStrings.AccountFreePriceText;
+            AccountType == MpUserAccountType.None ?
+                string.Empty :
+                UiStrings.AccountFreePriceText;
 
         public string RateText =>
             IsMonthlyEnabled ?
@@ -101,12 +105,12 @@ namespace MonkeyPaste.Avalonia {
         string MonthlyTrialText =>
             HasMonthlyTrial ?
                 string.Format(UiStrings.AccountFreeTrialLabel, MonthlyTrialDayCount) :
-                null;
+                string.Empty;
 
         string YearlyTrialText =>
             HasYearlyTrial ?
                 string.Format(UiStrings.AccountFreeTrialLabel, YearlyTrialDayCount) :
-                null;
+                string.Empty;
 
         public string TrialText =>
             IsMonthlyEnabled ?
@@ -239,14 +243,15 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(YearlyRateText));
             OnPropertyChanged(nameof(IconSourceObj));
         }
-        public MpAvWelcomeOptionItemViewModel ToWelcomeOptionItem(bool isMonthly) {
-            var woivm = new MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel.Instance, AccountType) {
+        public MpAvWelcomeOptionItemViewModel ToWelcomeOptionItem(MpAvWelcomeOptionGroupViewModel group, bool isMonthly) {
+            var woivm = new MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel.Instance, AccountType, group) {
                 IconSourceObj = IconSourceObj,
                 LabelText = LabelText,
                 LabelText2 = isMonthly ? MonthlyTrialText : YearlyTrialText,
                 DescriptionText = DescriptionText,
                 DescriptionText2 = isMonthly ? MonthlyRateText : YearlyRateText,
-                IsEnabled = isMonthly ? CanBuyMonthly : CanBuyYearly,
+                //IsEnabled = isMonthly ? CanBuyMonthly : CanBuyYearly,
+                IsEnabled = true,
                 IsChecked = AccountType == MpUserAccountType.Unlimited && !isMonthly
             };
 

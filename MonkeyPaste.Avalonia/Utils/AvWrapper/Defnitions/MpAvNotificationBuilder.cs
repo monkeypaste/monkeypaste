@@ -62,6 +62,7 @@ namespace MonkeyPaste.Avalonia {
             var result = await ShowNotificationAsync(
                 title: loader.Title,
                 notificationType: MpNotificationType.Loader,
+                maxShowTimeMs: -1,
                 loader: loader);
             return result;
         }

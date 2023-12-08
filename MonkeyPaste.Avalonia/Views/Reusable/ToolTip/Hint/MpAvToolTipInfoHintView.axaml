@@ -9,8 +9,7 @@
              d:DesignHeight="450"
              x:Name="InfoHintView"
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipInfoHintView"
-             Background="Transparent"
-             IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}">
+             Background="Transparent">
     <UserControl.Styles>
         <Style Selector="Ellipse.hint">
             <Setter Property="HorizontalAlignment"
@@ -43,6 +42,7 @@
                                ToolTipHtml="{Binding ToolTipHtml, ElementName=InfoHintView}" />
     </ToolTip.Tip>
     <Grid x:Name="HintContainerGrid"
+          IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}"
           Cursor="Help"
           Width="15"
           Height="15">
