@@ -17,7 +17,7 @@
         <Setter Property="ToolTip.Placement"
                 Value="Pointer" />
         <Setter Property="ToolTip.ShowDelay"
-                Value="1000" />
+                Value="700" />
     </Style>
     <Style Selector=":is(Control).tt_t">
         <Setter Property="ToolTip.VerticalOffset"

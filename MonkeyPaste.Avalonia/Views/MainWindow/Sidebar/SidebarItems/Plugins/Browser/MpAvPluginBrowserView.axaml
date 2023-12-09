@@ -94,11 +94,9 @@
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="VerticalAlignment"
-                    Value="Top" />
+                    Value="Bottom" />
             <Setter Property="MinWidth"
                     Value="80" />
-            <Setter Property="Margin"
-                    Value="0,10,0,0" />
         </Style>
 
         <!--  SELECTED ITEM DETAIL  -->
@@ -173,18 +171,33 @@
                       SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center" />
-            <!--  BROWSER CONFIG BUTTON  -->
-            <Button x:Name="OpenSettingsButton"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right"
-                    Classes="defaultButton noBg noHoverBg outline outlineOver square"
-                    Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
-                    CommandParameter="2">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSettingsTitle}" />
-                </ToolTip.Tip>
-                <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-            </Button>
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="5"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right">
+
+                <!--  HELP BUTTON  -->
+                <Button x:Name="ShowPluginHelpButton"
+                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
+                        CommandParameter="PluginOverview">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{Binding ., ConverterParameter=PluginOverview, Converter={x:Static local:MpAvEnumKeyToUiStringConverter.Instance}}" />
+                    </ToolTip.Tip>
+                    <Image Source="{Binding ., Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                </Button>
+
+                <!--  OPEN FOLDER BUTTON  -->
+                <Button x:Name="OpenPluginFolderButton"
+                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Command="{Binding OpenPluginFolderCommand}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.PluginBrowserOpenPluginFolder}" />
+                    </ToolTip.Tip>
+                    <Image Source="{Binding ., Source={StaticResource FolderOutlineImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                </Button>
+            </StackPanel>
         </Grid>
 
         <!--  PLUGIN LIST  -->
@@ -291,8 +304,7 @@
                 Margin="10,0,0,0"
                 IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <Border.Background>
-                <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}"
-                                 Opacity="0.15" />
+                <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="0.15" />
             </Border.Background>
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -306,13 +318,13 @@
                           x:DataType="local:MpAvPluginItemViewModel"
                           MinHeight="300">
                 <Grid x:Name="SelectedPluginContainer"
-                      RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-                      ColumnDefinitions="200,*"
+                      RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                      ColumnDefinitions="Auto,50,*"
                       Margin="10,10,20,10">
 
                     <!--  SELECTED HEADER  -->
                     <DockPanel Grid.Row="0"
-                               Grid.ColumnSpan="2"
+                               Grid.ColumnSpan="3"
                                Margin="0,0,0,15">
                         <!--  PLUGIN ICON  -->
                         <Image x:Name="SelectedPluginIcon"
@@ -323,14 +335,14 @@
 
                         <!--  PLUGIN TITLE  -->
                         <SelectableTextBlock x:Name="SelectedPluginTitleBlock"
-                                   Grid.Row="0"
-                                   Grid.Column="1"
-                                   Foreground="{DynamicResource ThemeInteractiveColor}"
-                                   FontSize="24"
-                                   Margin="5,0,0,0"
-                                   FontWeight="SemiBold"
-                                   TextWrapping="NoWrap"
-                                   Text="{Binding PluginTitle}" />
+                                             Grid.Row="0"
+                                             Grid.Column="1"
+                                             Foreground="{DynamicResource ThemeInteractiveColor}"
+                                             FontSize="24"
+                                             Margin="5,0,0,0"
+                                             FontWeight="SemiBold"
+                                             TextWrapping="NoWrap"
+                                             Text="{Binding PluginTitle}" />
                     </DockPanel>
 
                     <!--  TOGGLE INSTALL BUTTON  -->
@@ -358,7 +370,7 @@
                                 Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                 CommandParameter="{Binding PluginDonateUri}"
                                 IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                            <SelectableTextBlock Text="{x:Static local:UiStrings.PluginBrowserDonateLabel}" />
+                            <TextBlock Text="{x:Static local:UiStrings.PluginBrowserDonateLabel}" />
                         </Button>
                     </StackPanel>
 
@@ -371,7 +383,7 @@
                             Command="{Binding UpdatePluginCommand}">
                         <Grid>
 
-                            <SelectableTextBlock IsVisible="{Binding !IsBusy}"
+                            <TextBlock IsVisible="{Binding !IsBusy}"
                                        Text="{x:Static local:UiStrings.PluginBrowserUpdateLabel}" />
                             <local:MpAvBusySpinnerView Width="15"
                                                        Height="15"
@@ -383,112 +395,131 @@
 
                     <!--  DESCRIPTION  -->
                     <SelectableTextBlock Grid.Row="3"
-                               Text="{x:Static local:UiStrings.PluginBrowserDescriptionLabel}"
-                               Classes="detailLabel" />
+                                         Text="{x:Static local:UiStrings.PluginBrowserDescriptionLabel}"
+                                         Classes="detailLabel" />
                     <SelectableTextBlock Grid.Row="4"
-                               Grid.ColumnSpan="2"
-                               Text="{Binding PluginDescription}"
-                               Classes="detailInfo" />
+                                         Grid.ColumnSpan="3"
+                                         Text="{Binding PluginDescription}"
+                                         Classes="detailInfo" />
 
                     <!--  VERSION  -->
                     <SelectableTextBlock Grid.Row="5"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserVersionLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserVersionLabel}" />
                     <SelectableTextBlock Grid.Row="5"
-                               Grid.Column="1"
-                               Classes="detailInfo"
-                               Text="{Binding PluginVersion}" />
+                                         Grid.Column="2"
+                                         Classes="detailInfo"
+                                         Text="{Binding PluginVersion}" />
 
                     <!--  CREDITS  -->
                     <SelectableTextBlock Grid.Row="6"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserCreditsLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserCreditsLabel}" />
                     <SelectableTextBlock Grid.Row="6"
-                               Grid.Column="1"
-                               Classes="detailInfo"
-                               Text="{Binding PluginAuthor}" />
+                                         Grid.Column="2"
+                                         Classes="detailInfo"
+                                         Text="{Binding PluginAuthor}" />
 
                     <!--  LICENSE URL  -->
                     <SelectableTextBlock Grid.Row="7"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserLicenseLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserLicenseLabel}" />
                     <local:MpAvMarqueeTextBox Grid.Row="7"
-                                              Grid.Column="1"
-                                              Classes="detailInfo"
-                                              Text="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvStringUrlToComponentPartConverter.Instance}, Mode=OneWay}"
+                                              Grid.Column="2"
+                                              Classes="detailInfo link"
+                                              VerticalAlignment="Bottom"
+                                              NavigateUriRequiredKeyString="{x:Null}"
+                                              Text="{x:Static local:UiStrings.PluginBrowserSeeLicenseLinkText}"
                                               NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                              NavigateUriCommandParameter="{Binding PluginLicenseUrl}" />
+                                              NavigateUriCommandParameter="{Binding PluginLicenseUrl}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView ToolTipText="{Binding PluginLicenseUrl}" />
+                        </ToolTip.Tip>
+                    </local:MpAvMarqueeTextBox>
 
                     <!--  PUBLISHED  -->
                     <SelectableTextBlock Grid.Row="8"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserPublishedLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserPublishedLabel}" />
                     <SelectableTextBlock Grid.Row="8"
-                               Grid.Column="1"
-                               Classes="detailInfo"
-                               Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+                                         Grid.Column="2"
+                                         Classes="detailInfo"
+                                         Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
 
                     <!--  PROJECT URL  -->
                     <SelectableTextBlock Grid.Row="9"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserProjectUrlLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserProjectUrlLabel}" />
                     <local:MpAvMarqueeTextBox Grid.Row="9"
-                                              Grid.Column="1"
-                                              Classes="detailInfo"
+                                              Grid.Column="2"
+                                              Classes="detailInfo link"
+                                              VerticalAlignment="Bottom"
+                                              NavigateUriRequiredKeyString="{x:Null}"
                                               Text="{Binding PluginProjectUrl}"
                                               NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                               NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
 
                     <!--  ABUSE URL  -->
                     <SelectableTextBlock Grid.Row="10"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLabel}" />
                     <local:MpAvMarqueeTextBox Grid.Row="10"
-                                              Grid.Column="1"
-                                              Classes="detailInfo"
-                                              Text="{Binding PluginAbuseUrl}"
+                                              Grid.Column="2"
+                                              Classes="detailInfo link"
+                                              VerticalAlignment="Bottom"
+                                              Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLinkText}"
+                                              NavigateUriRequiredKeyString="{x:Null}"
                                               NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                              NavigateUriCommandParameter="{Binding PluginAbuseUrl}" />
+                                              NavigateUriCommandParameter="{Binding PluginAbuseUrl}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView ToolTipText="{Binding PluginAbuseUrl}" />
+                        </ToolTip.Tip>
+                    </local:MpAvMarqueeTextBox>
 
                     <!--  TAGS  -->
                     <SelectableTextBlock Grid.Row="11"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserTagsLabel}" />
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserTagsLabel}" />
                     <SelectableTextBlock Grid.Row="11"
-                               Grid.Column="1"
-                               Classes="detailInfo"
-                               Text="{Binding PluginTags}" />
+                                         Grid.Column="2"
+                                         Classes="detailInfo"
+                                         Text="{Binding PluginTags}" />
 
                     <!--  DEPENDENCIES  -->
+                    <SelectableTextBlock Grid.Row="12"
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         Text="{x:Static local:UiStrings.PluginBrowserDependenciesLabel}" />
 
                     <TreeView Grid.Row="12"
-                              Grid.Column="0"
-                              Grid.ColumnSpan="2"
+                              Grid.Column="2"
                               Margin="0,10,0,0"
                               ItemsSource="{Binding RootDependencyCollection}">
                         <TreeView.ItemTemplate>
                             <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
                                               ItemsSource="{Binding Items}">
                                 <SelectableTextBlock Classes="detailLabel"
-                                           Text="{Binding LabelText}" />
+                                                     Text="{Binding LabelText}" />
                             </TreeDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
 
                     <!--  README VIEW  -->
-                    <SelectableTextBlock Grid.Row="13"
-                               Grid.Column="0"
-                               Classes="detailLabel"
-                               Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
-                    <av:HtmlPanel Grid.Row="14"
-                                  Grid.Column="1"
+                    <SelectableTextBlock Grid.Row="14"
+                                         Grid.Column="0"
+                                         Classes="detailLabel"
+                                         IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                         Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
+                    <av:HtmlPanel Grid.Row="15"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3"
                                   Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
 
                 </Grid>

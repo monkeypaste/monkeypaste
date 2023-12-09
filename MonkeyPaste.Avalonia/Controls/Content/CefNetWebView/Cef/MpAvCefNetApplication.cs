@@ -219,20 +219,26 @@ namespace MonkeyPaste.Avalonia {
 
             //commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
 
+            //commandLine.AppendSwitch("disable-gpu");
+            //commandLine.AppendSwitch("disable-gpu-compositing");
+            //commandLine.AppendSwitch("in-process-gpu");
 
-            commandLine.AppendSwitch("disable-gpu");
-            commandLine.AppendSwitch("disable-gpu-compositing");
-            commandLine.AppendSwitch("in-process-gpu");
-
-            commandLine.AppendSwitch("no-proxy-server");
-            commandLine.AppendSwitch("disable-component-update");
+            //commandLine.AppendSwitch("no-proxy-server");
+            //commandLine.AppendSwitch("disable-component-update");
             //commandLine.AppendSwitch("process-per-site");
 
             // NOTE this seemed to fix network crash restart exception
             //commandLine.AppendSwitchWithValue("password-store", "basic");
-            if (OperatingSystem.IsLinux()) {
-                commandLine.AppendSwitch("no-zygote");
-                commandLine.AppendSwitch("no-sandbox");
+            //if (OperatingSystem.IsLinux()) {
+            //    commandLine.AppendSwitch("no-zygote");
+            //    commandLine.AppendSwitch("no-sandbox");
+            //}
+            foreach (var arg in MpAvCefCommandLineArgs.Args) {
+                if (arg.Value == null) {
+                    commandLine.AppendSwitch(arg.Key);
+                } else {
+                    commandLine.AppendSwitchWithValue(arg.Key, arg.Value);
+                }
             }
         }
 

@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,10 +18,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
         #region MpIContentQueryTextBoxViewModel Implementation
-        bool MpIContentQueryTextBoxViewModel.IsMultiline =>
-            false;
+        ICommand MpIContentQueryTextBoxViewModel.OpenPopOutWindowCommand => null;
+        bool MpIContentQueryTextBoxViewModel.IsWindowOpen => false;
+        bool MpIContentQueryTextBoxViewModel.CanPopOut => false;
         bool MpIContentQueryTextBoxViewModel.IsSecure =>
             false;
         public bool IsFieldButtonVisible =>
@@ -230,7 +232,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-
         #endregion
 
         #region Commands

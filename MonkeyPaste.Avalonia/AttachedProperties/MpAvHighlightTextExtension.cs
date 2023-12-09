@@ -251,12 +251,22 @@ namespace MonkeyPaste.Avalonia {
                 GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
                 return;
             }
+
+            if (attached_control != null &&
+                attached_control.GetVisualAncestor<MpAvAnalyticItemSelectorView>() != null) {
+
+            }
             string text = tb.Text;
             tb.Inlines.Clear();
-            if (gl == null) {
+            if (gl == null || !hrivm.HighlightRanges.Any()) {
                 // reset inlines
-                tb.Inlines.Add(new Run(text));
+                tb.Text = text;
                 return;
+            }
+
+            if (attached_control != null &&
+                attached_control.GetVisualAncestor<MpAvAnalyticItemSelectorView>() != null) {
+
             }
             var gll = gl.ToList();
             foreach (var (tr, idx) in hrivm.HighlightRanges.WithIndex()) {

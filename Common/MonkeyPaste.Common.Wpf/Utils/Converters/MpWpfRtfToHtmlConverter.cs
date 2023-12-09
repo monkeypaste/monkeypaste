@@ -1,10 +1,9 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -22,11 +21,16 @@ namespace MonkeyPaste.Common.Wpf {
         private static HtmlDocument _htmlDoc;
         #endregion
 
+        #region Constants
+
+        public const string HTML_SPECIAL_ENTITY_CLASS = "rtf-html-entity";
+
+        #endregion
+
         #region Public Methods
 
         public static string ConvertFormatToHtml(
             string formatData,
-            string formatName,
             Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             // allow empty document creation
             formatData = formatData == null ? string.Empty : formatData;
@@ -40,8 +44,6 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             _htmlDoc = new HtmlDocument();
-
-            var sb = new StringBuilder();
             foreach (Block b in fd.Blocks) {
                 if (b is Table t) {
                     // quill-better-table requires each row and cell to have unique identifiers
@@ -55,15 +57,23 @@ namespace MonkeyPaste.Common.Wpf {
                         }
                     }
                 }
-                sb.Append(ConvertTextElementToHtml(b));
+                var node = ConvertTextElementToHtml(b);
+                _htmlDoc.DocumentNode.AppendChild(node);
             }
 
-            string html = sb.ToString();
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(html);
-
-            SetGlobalAttributes(htmlDoc, globalBlockAttributes, globalInlineAttributes);
-            return htmlDoc.DocumentNode.InnerHtml;
+            try {
+                SetGlobalAttributes(_htmlDoc, globalBlockAttributes, globalInlineAttributes);
+                string encoded_html = _htmlDoc.DocumentNode.InnerHtml;
+                var errors = _htmlDoc.ParseErrors;
+                foreach (var error in errors) {
+                    MpConsole.WriteLine("rtf2html parse error: " + error);
+                }
+                return encoded_html;//HttpUtility.HtmlDecode(encoded_html);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error converting rtf to html.", ex);
+            }
+            return fd.ContentRange().Text;
         }
 
         #region Global Attributes
@@ -91,92 +101,175 @@ namespace MonkeyPaste.Common.Wpf {
 
         #endregion
 
-        private static string ConvertTextElementToHtml(TextElement te) {
-            string html = string.Empty;
+        private static HtmlNode ConvertTextElementToHtml(TextElement te) {
+            //string html = string.Empty;
+            List<HtmlNode> children = new List<HtmlNode>();
             var cl = GetChildren(te);
             foreach (var cte in cl) {
-                html += ConvertTextElementToHtml(cte);
+                var child_node = ConvertTextElementToHtml(cte);
+                children.Add(child_node);
             }
-            return ConvertTextElementToHtmlHelper(te, html);
+            return ConvertTextElementToHtmlHelper(te, children);
         }
 
-        private static string ConvertTextElementToHtmlHelper(TextElement te, string content) {
-            if (te is Table) {
-                return WrapWithTable(te as Table, content);
+        private static HtmlNode ConvertTextElementToHtmlHelper(TextElement te, List<HtmlNode> children) {
+            if (te is Table t) {
+                return WrapWithTable(t, children);
             } else if (te is TableRowGroup trg) {
-                return WrapWithTableRowGroup(trg, content);
+                return WrapWithTableRowGroup(trg, children);
             } else if (te is TableRow tr) {
-                return WrapWithTableRow(tr, content);
+                return WrapWithTableRow(tr, children);
             } else if (te is TableCell tc) {
-                return WrapWithTableCell(tc, content);
-            } else if (te is List) {
-                return WrapWithList(te as List, content);
-            } else if (te is ListItem) {
-                return WrapWithListItem(te as ListItem, content);
-            } else if (te is InlineUIContainer) {
-                return UnwrapInlineUIContainer(te as InlineUIContainer, content);
-            } else if (te is Paragraph) {
-                return WrapWithParagraph(te as Paragraph, content);
+                return WrapWithTableCell(tc, children);
+            } else if (te is List l) {
+                return WrapWithList(l, children);
+            } else if (te is ListItem li) {
+                return WrapWithListItem(li, children);
+            } else if (te is InlineUIContainer iuic) {
+                return UnwrapInlineUIContainer(iuic, children);
+            } else if (te is Paragraph p) {
+                return WrapWithParagraph(p, children);
             } else if (te is LineBreak) {
-                return @"<br>";
-            } else if (te is Span) {
-                return WrapWithSpan(te as Span, content);
-            } else if (te is Run) {
-                return (te as Run).Text;
+                return _htmlDoc.CreateElement("br");
+            } else if (te is Span s) {
+                return WrapWithSpan(s, children);
+            } else if (te is Run r) {
+                return ProcessRun(r, children);
             } else {
                 throw new Exception(@"Unknown text element: " + te.ToString());
             }
         }
 
-        private static string WrapWithTable(Table t, string content) {
-            double tableWidth = 0;
-            string colGroupInnerHtml = string.Empty;
+        private static string GetRunText(string text) {
+            return text.EncodeSpecialHtmlEntities();
+            //return text;
+        }
 
+        private static HtmlNode ProcessRun(Run r, List<HtmlNode> children) {
+            if (!r.Text.ContainsEncodedSpecialHtmlEntities()) {
+                // valid example "if (CopyItemData == "<p><br></p>" || CopyItemData == null)"
+
+                // no encoded entities to wrap with code tag so return encoded run
+                return _htmlDoc.CreateTextNode(GetRunText(r.Text));
+            }
+            // example "{'>',"&gt;" },"
+            // since there's encoded entities will need return a container node (span)
+            HtmlNode span_node = _htmlDoc.CreateElement("span");
+            int cur_idx = 0;
+            Match m = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity].Match(r.Text);
+            while (m.Success) {
+                int match_idx = r.Text.Substring(cur_idx).IndexOf(m.Value);
+
+                if (match_idx > 0) {
+                    // create lead run (in example "{'>',"")
+                    string lead_text = r.Text.Substring(cur_idx, match_idx);
+                    HtmlNode lead_text_node = _htmlDoc.CreateTextNode(GetRunText(lead_text));
+                    HtmlNode lead_text_node_wrapper_span = _htmlDoc.CreateElement("span");
+                    lead_text_node_wrapper_span.AppendChild(lead_text_node);
+                    span_node.AppendChild(lead_text_node_wrapper_span);
+                }
+
+                // wrap encoded special entity in code tag
+                HtmlNode match_text_node = _htmlDoc.CreateTextNode(m.Value);
+                HtmlNode code_node = _htmlDoc.CreateElement("code");
+
+                //
+                code_node.AppendChild(match_text_node);
+                span_node.AppendChild(code_node);
+
+                cur_idx += match_idx + m.Value.Length;
+                string test = r.Text.Substring(cur_idx);
+                m = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
+            }
+            if (cur_idx < r.Text.Length) {
+                // create trailing run after encoded special entities
+                string trailing_text = r.Text.Substring(cur_idx);
+                HtmlNode trail_text_node = _htmlDoc.CreateTextNode(GetRunText(trailing_text));
+                HtmlNode trailing_text_node_wrapper_span = _htmlDoc.CreateElement("span");
+                trailing_text_node_wrapper_span.AppendChild(trail_text_node);
+                span_node.AppendChild(trailing_text_node_wrapper_span);
+            }
+
+            string valid_check = GetRunText(r.Text);
+            string test_check = span_node.InnerText;
+            if (valid_check != test_check) {
+                MpConsole.WriteLine("Error encoding run.", true);
+                MpConsole.WriteLine($"Actual Text:");
+                MpConsole.WriteLine(r.Text);
+                MpConsole.WriteLine($"Encoded Text:");
+                MpConsole.WriteLine(valid_check);
+                MpConsole.WriteLine($"Processed Text:");
+                MpConsole.WriteLine(test_check, false, true);
+                MpDebug.Break();
+            }
+
+            return span_node;
+        }
+
+        private static HtmlNode WrapWithTable(Table t, List<HtmlNode> children) {
+            double tableWidth = 0;
+            //string colGroupInnerHtml = string.Empty;
+
+            HtmlNode colGroupNode = _htmlDoc.CreateElement("colgroup");
             foreach (var tc in t.Columns) {
                 double colWidth = 100;
                 if (tc.Width.GridUnitType == GridUnitType.Pixel) {
                     colWidth = tc.Width.Value;
                 } else {
-                    Debugger.Break();
+                    MpDebug.Break();
 
                 }
-                colGroupInnerHtml += string.Format(@"<col width='{0}px'>", colWidth);
+                //colGroupInnerHtml += string.Format(@"<col width='{0}px'>", colWidth);
+                HtmlNode colNode = _htmlDoc.CreateElement("col");
+                colNode.SetAttributeValue("width", $"{colWidth}px");
+                colGroupNode.AppendChild(colNode);
                 tableWidth += colWidth;
             }
-            string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", colGroupInnerHtml);
-            return string.Format(
-                @"<div class='quill-better-table-wrapper'><table class='quill-better-table' style='width: {0}px'>{1}{2}</table></div>",
-                tableWidth,
-                colGroupHtml,
-                content);
+            //string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", colGroupInnerHtml);
+            //return string.Format(
+            //    @"<div class='quill-better-table-wrapper'><table class='quill-better-table' style='width: {0}px'>{1}{2}</table></div>",
+            //    tableWidth,
+            //    colGroupHtml,
+            //    children);
+
+            HtmlNode tableNode = _htmlDoc.CreateElement("table");
+            tableNode.AddClass("quill-better-table");
+            tableNode.SetAttributeValue("style", $"width: {tableWidth}px;");
+            tableNode.AppendChild(colGroupNode);
+            children.ForEach(x => tableNode.AppendChild(x));
+
+            HtmlNode tableContainerNode = _htmlDoc.CreateElement("div");
+            tableContainerNode.AddClass("quill-better-table-wrapper");
+            tableContainerNode.AppendChild(tableNode);
+            return tableContainerNode;
         }
 
-        private static string WrapWithTableRowGroup(TableRowGroup trg, string content) {
-            return WrapWithTag("tbody", content);
+        private static HtmlNode WrapWithTableRowGroup(TableRowGroup trg, List<HtmlNode> children) {
+            return WrapWithTag("tbody", children);
         }
 
-        private static string WrapWithTableRow(TableRow tr, string content) {
-            var sb = new StringBuilder(@"<tr");
-            sb.AppendFormat(@" {0}>", string.Format(@"data-row='{0}'", tr.Tag as string));
-            sb.AppendFormat(@"{0}</tr>", content);
-            return sb.ToString();
+        private static HtmlNode WrapWithTableRow(TableRow tr, List<HtmlNode> children) {
+            var tr_node = _htmlDoc.CreateElement("tr");
+            tr_node.SetAttributeValue("data-row", tr.Tag.ToString());
+            children.ForEach(x => tr_node.AppendChild(x));
+            return tr_node;
         }
 
-        private static string WrapWithTableCell(TableCell tc, string content) {
-            var sb = new StringBuilder(@"<td");
-            sb.AppendFormat(@" {0}>", GetTableCellAttributes(tc));
-            sb.AppendFormat(@"{0}</td>", content);
-            return sb.ToString();
+        private static HtmlNode WrapWithTableCell(TableCell tc, List<HtmlNode> children) {
+            var td_node = _htmlDoc.CreateElement("td");
+            td_node = SetTableCellAttributes(tc, td_node);
+            children.ForEach(x => td_node.AppendChild(x));
+            return td_node;
         }
 
-        private static string WrapWithList(List l, string content) {
+        private static HtmlNode WrapWithList(List l, List<HtmlNode> children) {
             if (l.MarkerStyle == TextMarkerStyle.Decimal) {
-                return WrapWithTag("ol", content);
+                return WrapWithTag("ol", children);
             }
-            return WrapWithTag("ul", content);
+            return WrapWithTag("ul", children);
         }
 
-        private static string WrapWithListItem(ListItem li, string content) {
+        private static HtmlNode WrapWithListItem(ListItem li, List<HtmlNode> children) {
             var l = li.FindParentOfType<List>();
             string listType = @"bullet";
             if (l.MarkerStyle == TextMarkerStyle.Decimal) {
@@ -186,55 +279,59 @@ namespace MonkeyPaste.Common.Wpf {
             } else if (l.MarkerStyle == TextMarkerStyle.Box) {
                 listType = "checked";
             }
-            return string.Format(
-                @"<li data-list='{0}'><span class='ql-ui' contenteditable='false'></span>{1}</li>",
-                listType,
-                content);
+            var bullet_span = _htmlDoc.CreateElement("span");
+            bullet_span.SetAttributeValue("contenteditable", false.ToString());
+            bullet_span.AddClass("ql-ui");
+            var li_node = _htmlDoc.CreateElement("li");
+            li_node.SetAttributeValue("data-list", listType);
+            li_node.AppendChild(bullet_span);
+            foreach (var child in children) {
+                if (child.Name.ToLower() == "p") {
+                    //rtf list items are parents of paragraphs but quills are the direct content
+                    child.GetClasses().ForEach(x => li_node.AddClass(x));
+                    child.GetAttributes().ForEach(x => li_node.SetAttributeValue(x.Name, x.Value));
+                    child.ChildNodes.ForEach(x => li_node.AppendChild(x));
+                } else {
+                    li_node.AppendChild(child);
+                }
+            }
+            children.ForEach(x => li_node.AppendChild(x));
+            return li_node;
         }
 
-        private static string WrapWithParagraph(Paragraph p, string content) {
-            if (p.Parent is ListItem) {
-                //rtf list items are parents of paragraphs but quills are the direct content
-                return content;
-            }
-
-            var sb = new StringBuilder(@"<p ");
+        private static HtmlNode WrapWithParagraph(Paragraph p, List<HtmlNode> children) {
+            //if (p.Parent is ListItem) {
+            //    //rtf list items are parents of paragraphs but quills are the direct content
+            //    return content;
+            //}
+            var p_node = _htmlDoc.CreateElement("p");
+            //var sb = new StringBuilder(@"<p ");
+            string align_class = "ql-align-left";
             switch (p.TextAlignment) {
                 case TextAlignment.Left:
-                    sb.Append(@"class='ql-align-left");
+                    align_class = "ql-align-left";
                     break;
                 case TextAlignment.Center:
-                    sb.Append(@"class='ql-align-center");
+                    align_class = "ql-align-center";
                     break;
                 case TextAlignment.Right:
-                    sb.Append(@"class='ql-align-right");
+                    align_class = "ql-align-right";
                     break;
                 case TextAlignment.Justify:
-                    sb.Append(@"class='ql-align-justify");
+                    align_class = "ql-align-justify";
                     break;
             }
-            if (p.Parent is TableCell) {
-                sb.Append(@" qlbt-cell-line");
-            }
-            sb.Append(GetParagraphIndent(p) + "'");
+            p_node.AddClass(align_class);
+            p_node = SetParagraphIndent(p, p_node);
             if (p.Parent is TableCell tc) {
-                string tcAttr = GetTableCellAttributes(tc);
-                tcAttr = tcAttr
-                    .Replace("rowspan", "data-rowspan")
-                    .Replace("colspan", "data-colspan");
-                string tcId = tc.Tag as string;
-                string trId = (tc.Parent as TableRow).Tag as string;
-                tcAttr += string.Format(@" data-row='{0}' data-cell='{1}'", trId, tcId);
-                sb.Append(" " + tcAttr);
+                p_node.AddClass("qlbt-cell-line");
+                p_node = SetTableCellParagraphAttributes(tc, p_node);
             }
-            if (string.IsNullOrWhiteSpace(content)) {
-                content = $"{(content == null ? string.Empty : content)}<br>";
-            }
-            sb.AppendFormat(@">{0}</p>", content);
-            return sb.ToString();
+            children.ForEach(x => p_node.AppendChild(x));
+            return p_node;
         }
 
-        private static string WrapWithSpan(Span span, string content) {
+        private static HtmlNode WrapWithSpan(Span span, List<HtmlNode> children) {
             //if (content == "<br>") {
             //    //when adding linebreak inside a span quill internally converts
             //    //the one linebreak into two empty paragraphs
@@ -246,72 +343,99 @@ namespace MonkeyPaste.Common.Wpf {
             //    //so just return the space
             //    return content;
             //}
-            content = content == null ? string.Empty : content;
+            //children = children == null ? string.Empty : children;
+            HtmlNode span_node = null;
             if (span is Hyperlink hl) {
-                content = WrapWithHyperlink(hl, content);
+                span_node = WrapWithHyperlink(hl, children, span_node);
             }
 
             if (span.TextDecorations.Equals(TextDecorations.Underline) || span is Underline) {
-                content = WrapWithTag("u", content);
+                span_node = WrapWithTag("u", children, span_node);
             }
             if (span.FontStyle.Equals(FontStyles.Italic) || span is Italic) {
-                content = WrapWithTag("em", content);
+                span_node = WrapWithTag("em", children, span_node);
             }
             if (span.FontWeight.Equals(FontWeights.Bold) || span is Bold) {
-                content = WrapWithTag("strong", content);
+                span_node = WrapWithTag("strong", children, span_node);
             }
-            var sb = new StringBuilder(@"<span");
-            if (span.Parent is Paragraph) {
-                sb.AppendFormat(@" {0}>", GetSpanAttributes(span as Span));
+            //var sb = new StringBuilder(@"<span");
+            //if (span.Parent is Paragraph) {
+            //    sb.AppendFormat(@" {0}>", GetSpanAttributes(span as Span));
+            //} else {
+            //    sb.Append(@">");
+            //}
+            //sb.AppendFormat(@"{0}</span>", children);
+            //return sb.ToString();
+            span_node = SetSpanAttributes(span, children, span_node);
+            return span_node;
+        }
+
+        private static HtmlNode WrapWithTag(string tag, List<HtmlNode> children, HtmlNode cur_node = null) {
+            var node = _htmlDoc.CreateElement(tag);
+            if (cur_node == null) {
+                children.ForEach(x => node.AppendChild(x));
             } else {
-                sb.Append(@">");
+                // span should already have children attached
+                node.AppendChild(cur_node);
             }
-            sb.AppendFormat(@"{0}</span>", content);
-            return sb.ToString();
+            return node;
         }
 
-        private static string WrapWithTag(string tag, string content) {
-            return string.Format(@"<{0}>{1}</{0}>", tag, content);
+        private static HtmlNode WrapWithHyperlink(Hyperlink hl, List<HtmlNode> children, HtmlNode cur_node = null) {
+            //return string.Format(@"<a href='{0}'>{1}</a>", hl.NavigateUri.AbsoluteUri, content);
+            var a_node = WrapWithTag("a", children, cur_node);
+            a_node.SetAttributeValue("href", hl.NavigateUri.AbsoluteUri);
+            return a_node;
         }
 
-        private static string WrapWithHyperlink(Hyperlink hl, string content) {
-            return string.Format(@"<a href='{0}'>{1}</a>", hl.NavigateUri.AbsoluteUri, content);
-        }
-
-        private static string WrapWithImage(Image img, string content) {
-            if (!string.IsNullOrEmpty(content)) {
-                // pretty sure images can't have child content but investigate here
-                Debugger.Break();
-            }
+        private static HtmlNode WrapWithImage(Image img, List<HtmlNode> children) {
+            //if (!string.IsNullOrEmpty(content)) {
+            //    // pretty sure images can't have child content but investigate here
+            //    MpDebug.Break();
+            //}
             var bmpSrc = img.Source as BitmapSource;
 
             string srcAttrbValue = string.Format(@"data:image/png;base64,{0}", bmpSrc.ToBase64String());
 
-            return string.Format(
-                @"<img src='{0}'>",
-                srcAttrbValue);
+            //return string.Format(
+            //    @"<img src='{0}'>",
+            //    srcAttrbValue);
+            var img_node = WrapWithTag("img", children);
+            img_node.SetAttributeValue("src", srcAttrbValue);
+            return img_node;
         }
 
-        private static string UnwrapInlineUIContainer(InlineUIContainer ioc, string content) {
+        private static HtmlNode UnwrapInlineUIContainer(InlineUIContainer ioc, List<HtmlNode> children) {
             var child = ioc.Child;
             if (child is Image img) {
-                return WrapWithImage(img, content);
+                return WrapWithImage(img, children);
             }
             throw new Exception(@"Unknown InlineUIContainer child: " + child.ToString());
         }
 
-        private static string GetParagraphIndent(Paragraph p) {
+        private static HtmlNode SetParagraphIndent(Paragraph p, HtmlNode p_node) {
             if (p.TextIndent > 0) {
                 int indentLevel = (int)(p.TextIndent / _indentCharCount);
-                return @" ql-indent-" + indentLevel; ;
+                //return @" ql-indent-" + indentLevel; ;
+                p_node.AddClass($"ql-indent-{indentLevel}");
             }
-            return string.Empty;
+            return p_node;
         }
 
-        private static string GetTableCellAttributes(TableCell tc) {
-            return string.Format(@"rowspan='{0}' colspan='{1}' data-row='{2}'", tc.RowSpan, tc.ColumnSpan, (tc.Parent as TableRow).Tag as string);
+        private static HtmlNode SetTableCellAttributes(TableCell tc, HtmlNode tr_node) {
+            //return string.Format(@"rowspan='{0}' colspan='{1}' data-row='{2}'", tc.RowSpan, tc.ColumnSpan, (tc.Parent as TableRow).Tag as string);
+            tr_node.SetAttributeValue("rowspan", tc.RowSpan.ToString());
+            tr_node.SetAttributeValue("colspan", tc.ColumnSpan.ToString());
+            tr_node.SetAttributeValue("data-row", (tc.Parent as TableRow).Tag.ToString());
+            return tr_node;
         }
-
+        private static HtmlNode SetTableCellParagraphAttributes(TableCell tc, HtmlNode p_node) {
+            p_node.SetAttributeValue("data-rowspan", tc.RowSpan.ToString());
+            p_node.SetAttributeValue("data-colspan", tc.ColumnSpan.ToString());
+            p_node.SetAttributeValue("data-row", (tc.Parent as TableRow).Tag.ToString());
+            p_node.SetAttributeValue("data-cell", tc.Tag.ToString());
+            return p_node;
+        }
 
         private static string GetNewTableItemIdentifier(string prefix) {
             string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -322,31 +446,49 @@ namespace MonkeyPaste.Common.Wpf {
             return string.Format(@"{0}-{1}", prefix, id);
         }
 
-        private static string GetSpanAttributes(Span s) {
-            var sb = new StringBuilder();
-            sb.AppendFormat(@"class='ql-font-{0}'", GetHtmlFont(s));
-            sb.AppendFormat(GetFontSize(s));
-            if (s.Foreground != null) {
-                sb.AppendFormat(@" color: {0};", GetHtmlColor((s.Foreground as SolidColorBrush).Color));
-            }
-            if (s.Background != null) {
-                sb.AppendFormat(@" background-color: {0};'", GetHtmlColor((s.Background as SolidColorBrush).Color));
-            } else {
-                sb.Append(@"'");
-            }
+        private static HtmlNode SetSpanAttributes(Span s, List<HtmlNode> children, HtmlNode span_node) {
+            //var sb = new StringBuilder();
+            //sb.AppendFormat(@"class='ql-font-{0}'", GetHtmlFont(s));
+            //sb.AppendFormat(GetFontSize(s));
+            //if (s.Foreground != null) {
+            //    sb.AppendFormat(@" color: {0};", GetHtmlColor((s.Foreground as SolidColorBrush).Color));
+            //}
+            //if (s.Background != null) {
+            //    sb.AppendFormat(@" background-color: {0};'", GetHtmlColor((s.Background as SolidColorBrush).Color));
+            //} else {
+            //    sb.Append(@"'");
+            //}
 
-            return sb.ToString();
+            //return sb.ToString();
+            if (span_node == null) {
+                span_node = WrapWithTag("span", children);
+            }
+            span_node.AddClass($"ql-font-{GetHtmlFont(s)}");
+            var style_parts = new List<string>();
+            if (s.FontSize.IsNumber()) {
+                style_parts.Add(GetFontSize(s));
+            }
+            if (s.Foreground is SolidColorBrush fg_scb) {
+                style_parts.Add($"color: {GetHtmlColor(fg_scb.Color)}");
+                //span_node.AddClass("font-color-override-on");
+            }
+            if (s.Background is SolidColorBrush bg_scb) {
+                style_parts.Add($"background-color: {GetHtmlColor(bg_scb.Color)}");
+                //span_node.AddClass("font-bg-color-override-on");
+            }
+            span_node.SetAttributeValue("style", string.Join(" ", style_parts));
+            return span_node;
         }
 
         private static string GetFontSize(Span s) {
             double fs = (double)((int)s.FontSize);//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
             //MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
-            return string.Format(@" style='font-size: {0}px;", fs);
+            return string.Format(@"font-size: {0}px;", fs);
         }
 
         private static string GetHtmlColor(Color c) {
             //MpWpfRtfDefaultProperties.Instance.AddFontColor(c);
-            return string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B);
+            return string.Format(@"rgb({0},{1},{2});", c.R, c.G, c.B);
         }
 
         private static string GetHtmlFont(Span s) {
@@ -409,7 +551,7 @@ namespace MonkeyPaste.Common.Wpf {
 
             //string itemGuid = System.Guid.NewGuid().ToString();
             string rtf = ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample_short.rtf");
-            string plain_html = ConvertFormatToHtml(rtf, MpPortableDataFormats.AvRtf_bytes);
+            string plain_html = ConvertFormatToHtml(rtf);
 
             WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf_sample_to_plain_html_test.html", plain_html);
             return plain_html;
@@ -425,7 +567,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return null;
             }
         }
@@ -438,7 +580,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine($"Error writing to path '{filePath}' with text '{text}'", ex);
+                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
                 return null;
             }
         }

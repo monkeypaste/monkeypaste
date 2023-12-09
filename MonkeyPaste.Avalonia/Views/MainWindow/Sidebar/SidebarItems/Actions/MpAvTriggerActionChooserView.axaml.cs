@@ -9,6 +9,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 
@@ -23,8 +24,36 @@ namespace MonkeyPaste.Avalonia {
                 MpAvTriggerActionChooserView_DataContextChanged(this, null);
             }
             this.DataContextChanged += MpAvTriggerActionChooserView_DataContextChanged;
+
+            TriggerScrollViewer.AddHandler(ScrollViewer.ScrollChangedEvent, TriggerScrollViewer_ScrollChanged, RoutingStrategies.Tunnel);
+            PropertyScrollViewer.AddHandler(ScrollViewer.ScrollChangedEvent, TriggerScrollViewer_ScrollChanged, RoutingStrategies.Tunnel);
+
+            this.GetObservable(IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
         }
 
+        private DateTime? _lastVisibleDateTime;
+
+        private void OnIsVisibleChanged() {
+            if (!IsVisible) {
+                _lastVisibleDateTime = null;
+                return;
+            }
+            _lastVisibleDateTime = DateTime.Now;
+
+            TriggerScrollViewer.ScrollToHome();
+            PropertyScrollViewer.ScrollToHome();
+        }
+
+        private void TriggerScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e) {
+            if (_lastVisibleDateTime.HasValue && DateTime.Now - _lastVisibleDateTime < TimeSpan.FromMilliseconds(5000)) {
+                e.Handled = true;
+                if (sender is ScrollViewer sv) {
+                    sv.ScrollToVerticalOffset(0);
+                }
+            } else {
+                MpConsole.WriteLine("Scroll allowed");
+            }
+        }
 
         private void MpAvTriggerActionChooserView_DataContextChanged(object sender, EventArgs e) {
             if (BindingContext == null) {

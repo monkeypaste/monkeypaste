@@ -2246,4 +2246,27 @@ Clipboard listening is: {0}</value>
   <data name="NtfRateAppTitle" xml:space="preserve">
     <value>Like MonkeyPaste?</value>
   </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} only accepts input of type(s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Auto Copy Mode will trigger a copy command every time the mouse is released.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Right Click Paste Mode will SUPPRESS (not available on linux) right mouse click and issue a paste command to the active application.</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Show Plugin Folder</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>View</value>
+  </data>
 </root>

@@ -160,6 +160,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string MpAnalyzerInputFormatFlags_File {
+            get {
+                return ResourceManager.GetString("MpAnalyzerInputFormatFlags_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image.
+        /// </summary>
+        public static string MpAnalyzerInputFormatFlags_Image {
+            get {
+                return ResourceManager.GetString("MpAnalyzerInputFormatFlags_Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpAnalyzerInputFormatFlags_None {
+            get {
+                return ResourceManager.GetString("MpAnalyzerInputFormatFlags_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text.
+        /// </summary>
+        public static string MpAnalyzerInputFormatFlags_Text {
+            get {
+                return ResourceManager.GetString("MpAnalyzerInputFormatFlags_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application Name.
         /// </summary>
         public static string MpAppOptionType_ApplicationName {

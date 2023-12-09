@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -9,12 +10,12 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTextBoxParameterViewModel :
         MpAvParameterViewModelBase,
+        MpIWantsTopmostWindowViewModel,
+        MpIWindowStateViewModel,
+        MpICloseWindowViewModel,
         MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
         #region Private Variables
-
-        //private string _defaultValue;
-
         #endregion
 
         #region Interfaces
@@ -30,10 +31,20 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIWindowViewModel Implementation
+
+        public WindowState WindowState { get; set; }
+        public MpWindowType WindowType =>
+            MpWindowType.PopOut;
+
+        public bool WantsTopmost =>
+            true;
+        public bool IsWindowOpen { get; set; }
+        #endregion
+
         #region MpIContentQueryTextBoxViewModel Implementation
 
-        bool MpIContentQueryTextBoxViewModel.IsMultiline =>
-            ControlType == MpParameterControlType.MultiLineTextBox;
+        bool MpIContentQueryTextBoxViewModel.CanPopOut => true;
         bool MpIContentQueryTextBoxViewModel.IsSecure =>
             ControlType == MpParameterControlType.PasswordBox;
 
@@ -116,13 +127,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-
         #endregion
 
         #region Model
 
-        public bool IsContentQuery => UnitType == MpParameterValueUnitType.PlainTextContentQuery;
+        public bool IsContentQuery =>
+            UnitType == MpParameterValueUnitType.PlainTextContentQuery;
 
         #endregion
 
@@ -187,6 +197,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private MpAvWindow CreatePopoutWindow() {
+            var pow = new MpAvWindow() {
+                DataContext = this,
+                ShowInTaskbar = true,
+                Width = 300,
+                Height = 300,
+                Title = Label.ToWindowTitleText(),
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", null, null, null) as WindowIcon,
+                Content = new MpAvContentQueryTextBoxView(),
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
+            };
+            return pow;
+        }
 
         #endregion
 
@@ -218,6 +241,15 @@ namespace MonkeyPaste.Avalonia {
                     dc: PopupMenuViewModel);
             });
 
+
+        public ICommand OpenPopOutWindowCommand => new MpCommand(
+            () => {
+                if (IsWindowOpen) {
+                    WindowState = WindowState.Normal;
+                    return;
+                }
+                CreatePopoutWindow().Show();
+            });
 
         #endregion
     }

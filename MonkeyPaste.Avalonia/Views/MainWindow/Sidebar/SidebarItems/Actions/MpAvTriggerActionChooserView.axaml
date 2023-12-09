@@ -12,6 +12,11 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        <Style Selector=":is(SelectingItemsControl)">
+            <Setter Property="AutoScrollToSelectedItem"
+                    Value="False" />
+        </Style>
+
         <Style Selector="Border#ActionPropertyOuterContainer">
             <Setter Property="MaxHeight"
                     Value="{x:Static sys:Double.PositiveInfinity}" />
@@ -42,6 +47,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <ScrollViewer x:Name="TriggerScrollViewer"
+                      ScrollViewer.IsScrollChainingEnabled="False"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <Grid x:Name="TriggerSidebarContainer"
@@ -59,6 +65,7 @@
                     <ScrollViewer x:Name="PropertyScrollViewer"
                                   Grid.Column="0"
                                   Grid.Row="0"
+                                  ScrollViewer.IsScrollChainingEnabled="False"
                                   VerticalAlignment="Stretch"
                                   HorizontalScrollBarVisibility="Hidden"
                                   VerticalScrollBarVisibility="Hidden">

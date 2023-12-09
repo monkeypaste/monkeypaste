@@ -60,6 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 typeof(MpShortcutAssignmentClearButtonType),
                 typeof(MpTagType),
                 typeof(MpReadOnlyTagType),
+                typeof(MpAnalyzerInputFormatFlags),
                 typeof(WatcherChangeTypes), //external
             };
 

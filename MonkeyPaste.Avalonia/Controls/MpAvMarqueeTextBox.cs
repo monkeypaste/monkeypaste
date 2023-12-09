@@ -645,13 +645,15 @@ namespace MonkeyPaste.Avalonia {
                 IsReadOnly) {
                 if (NavigateUriCommand.CanExecute(NavigateUriCommandParameter)) {
                     this.Cursor = new Cursor(StandardCursorType.Hand);
-                    string tt_prefix = string.IsNullOrEmpty(NavigateUriRequiredKeyString) ?
+                    if (!string.IsNullOrEmpty(NavigateUriRequiredKeyString)) {
+                        string tt_prefix = string.IsNullOrEmpty(NavigateUriRequiredKeyString) ?
                         string.Empty :
                         $"[{NavigateUriRequiredKeyString}] + ";
-                    string tt_text = $"{tt_prefix}Click to follow...";
-                    ToolTip.SetTip(this, new MpAvToolTipView() {
-                        ToolTipText = tt_text
-                    });
+                        string tt_text = $"{tt_prefix}Click to follow...";
+                        ToolTip.SetTip(this, new MpAvToolTipView() {
+                            ToolTipText = tt_text
+                        });
+                    }
                 } else {
                     this.Cursor = new Cursor(StandardCursorType.No);
                 }

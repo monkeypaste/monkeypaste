@@ -11,31 +11,36 @@ namespace WpfTextToSpeech {
         MpIAnalyzeComponent,
         MpISupportHeadlessAnalyzerComponentFormat,
         MpISupportDeferredValue {
-        private const int TEXT_PARAM_ID = 1;
-        private const int VOICE_PARAM_ID = 2;
+        const int TEXT_PARAM_ID = 1;
+        const int VOICE_PARAM_ID = 2;
+        const int VOLUME_PARAM_ID = 3;
 
-        private SpeechSynthesizer speechSynthesizer;
+        SpeechSynthesizer speechSynthesizer;
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
-            string text = req.GetRequestParamStringValue(TEXT_PARAM_ID) ?? string.Empty;
-            string voice_name = req.GetRequestParamStringValue(VOICE_PARAM_ID);
+            _ = Task.Run(() => {
+                string text = req.GetRequestParamStringValue(TEXT_PARAM_ID) ?? string.Empty;
+                string voice_name = req.GetRequestParamStringValue(VOICE_PARAM_ID);
+                int volume = req.GetRequestParamIntValue(VOLUME_PARAM_ID);
 
-            speechSynthesizer = new SpeechSynthesizer();
-            if (!string.IsNullOrEmpty(voice_name)) {
-                // when no voice provided, use default
-                speechSynthesizer.SelectVoice(voice_name);
-            }
-            speechSynthesizer.SetOutputToDefaultAudioDevice();
-            speechSynthesizer.Rate = 0;
-            speechSynthesizer.SpeakCompleted += SpeechSynthesizer_SpeakCompleted;
-            // Create a PromptBuilder object and append a text string.
-            PromptBuilder promptBuilder = new PromptBuilder();
+                if (speechSynthesizer == null) {
+                    speechSynthesizer = new SpeechSynthesizer();
+                    speechSynthesizer.SpeakCompleted += SpeechSynthesizer_SpeakCompleted;
+                }
+                if (!string.IsNullOrEmpty(voice_name)) {
+                    // when no voice provided, use default
+                    speechSynthesizer.SelectVoice(voice_name);
+                }
+                speechSynthesizer.SetOutputToDefaultAudioDevice();
+                speechSynthesizer.Volume = volume;
+                speechSynthesizer.Rate = 0;
 
-            promptBuilder.AppendText(Environment.NewLine + text);
+                //PromptBuilder promptBuilder = new PromptBuilder();
+                //promptBuilder.AppendText(text);
+                //speechSynthesizer.SpeakAsync(promptBuilder);
+                speechSynthesizer.Speak(text);
+            });
 
-            // Speak the contents of the prompt asynchronously.
-            speechSynthesizer.SpeakAsync(promptBuilder);
-
-            return new MpAnalyzerPluginResponseFormat();
+            return null;
         }
 
         private void SpeechSynthesizer_SpeakCompleted(object sender, SpeakCompletedEventArgs e) {
@@ -76,7 +81,6 @@ namespace WpfTextToSpeech {
                         description = "Will speak text with selected voice",
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                        isVisible = false,
                         paramId = "1",
                         values = new List<MpPluginParameterValueFormat>() {
                             new MpPluginParameterValueFormat() {
@@ -92,6 +96,16 @@ namespace WpfTextToSpeech {
                         isVisible = true,
                         paramId = "2",
                         isValueDeferred = true
+                    },
+                    new MpParameterFormat() {
+                        label = "Volume",
+                        controlType = MpParameterControlType.Slider,
+                        unitType = MpParameterValueUnitType.Integer,
+                        isVisible = true,
+                        paramId = "3",
+                        minimum = 0,
+                        maximum = 100,
+                        value = new MpPluginParameterValueFormat("50",true)
                     }
                 }
             };

@@ -132,7 +132,13 @@
             </Style.Animations>
         </Style>
 
-        <Style Selector="Border#SearchTextBoxBorder.expanded:not(.valid)">
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="BorderThickness"
+                    Value="1.5" />
+            <Setter Property="BorderBrush"
+                    Value="Tranparent" />
+        </Style>
+        <Style Selector="AutoCompleteBox.invalid">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
@@ -194,7 +200,7 @@
 
             <Border x:Name="SearchTextBoxBorder"
                     Classes.searchBorder="True"
-                    Classes.valid="{Binding IsSearchValid}"
+                    Classes.invalid="{Binding !IsSearchValid}"
                     Classes.expanded="{Binding IsExpanded}"
                     Classes.unexpanded="{Binding !IsExpanded}"
                     Classes.expandAnimating="{Binding IsExpandAnimating}"

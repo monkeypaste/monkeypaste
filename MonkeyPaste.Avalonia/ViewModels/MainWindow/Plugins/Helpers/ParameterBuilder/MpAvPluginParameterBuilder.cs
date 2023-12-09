@@ -64,7 +64,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpParameterControlType.PasswordBox:
                 case MpParameterControlType.TextBox:
-                case MpParameterControlType.MultiLineTextBox:
                     naipvm = new MpAvTextBoxParameterViewModel(parent);
                     break;
                 case MpParameterControlType.DateTimePicker:

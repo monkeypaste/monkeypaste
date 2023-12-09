@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpPluginBrowserTabType {
@@ -200,7 +201,6 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeColor.ToString()),
                 Content = new MpAvPluginBrowserView(),
                 Topmost = true
             };
@@ -286,6 +286,11 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"SubItems COunt: {Items.Count} Filtered Count: {filtered_ml.Count()} Manifest COunt: {manifests_to_filter.Count()}");
 
                 await AddOrUpdateRecentFilterTextsAsync(FilterText);
+            });
+
+        public ICommand OpenPluginFolderCommand => new MpCommand(
+            () => {
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpPluginLoader.PluginRootFolderPath);
             });
         #endregion
     }

@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Speech.Synthesis;
+
 #if CEFNET_WV
 using CefNet.Avalonia;
 #endif
@@ -386,8 +388,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                await MpAvClipTrayViewModel.Instance.DeleteAllContentCommand.ExecuteAsync();
-                //await Task.Delay(1);
+                SpeechSynthesizer synth = new SpeechSynthesizer();
+                synth.SetOutputToDefaultAudioDevice();
+                synth.Speak("Hey dude");
+                await Task.Delay(1);
 
                 //var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
                 //if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {

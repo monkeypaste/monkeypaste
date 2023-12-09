@@ -415,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
-            string uniqueName = $"{Title} Preset";
+            string uniqueName = $"{Title} {UiStrings.CommonPresetLabel}";
             string testName = string.Format(
                                         @"{0}{1}",
                                         uniqueName.ToLower(),
@@ -574,9 +574,11 @@ namespace MonkeyPaste.Avalonia {
             //}
             CannotExecuteTooltip = string.Empty;
 
-            MpAvAnalyticItemPresetViewModel spvm = null;
-            MpCopyItem sci = null;
-            string sstr = null;
+            MpAvAnalyticItemPresetViewModel exec_aipvm = SelectedItem ?? Items.FirstOrDefault();
+            MpCopyItem exec_ci =
+                MpAvClipTrayViewModel.Instance.SelectedItem == null ?
+                null : MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+            string exec_action_data = null;
             if (args is MpAvAnalyticItemPresetViewModel) {
                 // analyzer request from MpAnalyticItemPresetDataGridView
                 // or
@@ -585,34 +587,39 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
                     return false;
                 }
-                spvm = args as MpAvAnalyticItemPresetViewModel;
-                sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+                exec_aipvm = args as MpAvAnalyticItemPresetViewModel;
+                exec_ci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
             } else if (args is object[] argParts) {
                 // analyzer request from MpAnalyzerActionViewModel
 
-                spvm = argParts[0] as MpAvAnalyticItemPresetViewModel;
-                sci = argParts[1] as MpCopyItem;
-                if (sci == null) {
-                    sstr = argParts[1] as string;
+                exec_aipvm = argParts[0] as MpAvAnalyticItemPresetViewModel;
+                exec_ci = argParts[1] as MpCopyItem;
+                if (exec_ci == null) {
+                    exec_action_data = argParts[1] as string;
                 }
             }
 
-            if ((sci == null && sstr == null) || spvm == null) {
+            if ((exec_ci == null && exec_action_data == null) || exec_aipvm == null) {
                 return false;
             }
             bool isOkType = true;
-            if (sci != null) {
-                isOkType = IsContentTypeValid(sci.ItemType);
+            if (exec_ci != null) {
+                isOkType = IsContentTypeValid(exec_ci.ItemType);
             } else {
                 isOkType = IsContentTypeValid(MpCopyItemType.Text);
             }
 
             var sb = new StringBuilder();
             if (!isOkType) {
-                sb.AppendLine($"{SelectedItem.FullName} only accepts input of type(s): {InputFormatFlags}");
+                string accept_text =
+                    string.Format(
+                        UiStrings.AnalyzerCannotExecuteMessage,
+                        exec_aipvm,
+                        string.Join(",", InputFormatFlags.All().Select(x => x.EnumToUiString())));
+                sb.AppendLine(accept_text);
             }
-            spvm.FormItems.ForEach(x => x.Validate());
-            spvm.FormItems.Where(x => !x.IsValid).ForEach(x => sb.AppendLine(x.ValidationMessage));
+            exec_aipvm.FormItems.ForEach(x => x.Validate());
+            exec_aipvm.FormItems.Where(x => !x.IsValid).ForEach(x => sb.AppendLine(x.ValidationMessage));
 
             CannotExecuteTooltip = sb.ToString().Trim();
 

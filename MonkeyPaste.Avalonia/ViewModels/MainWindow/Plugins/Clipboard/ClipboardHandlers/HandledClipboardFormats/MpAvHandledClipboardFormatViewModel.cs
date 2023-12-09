@@ -316,7 +316,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
-            string uniqueName = $"Preset";
+            string uniqueName = UiStrings.CommonPresetLabel;
             string testName = string.Format(
                                         @"{0}{1}",
                                         uniqueName.ToLower(),

@@ -1241,6 +1241,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} only accepts input of type(s): {1}.
+        /// </summary>
+        public static string AnalyzerCannotExecuteMessage {
+            get {
+                return ResourceManager.GetString("AnalyzerCannotExecuteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter Values.
         /// </summary>
         public static string AnalyzerExecuteParamNtfTitle {
@@ -1435,6 +1444,24 @@ namespace MonkeyPaste.Avalonia {
         public static string AppendResumedNtfTitle {
             get {
                 return ResourceManager.GetString("AppendResumedNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto Copy Mode will trigger a copy command every time the mouse is released..
+        /// </summary>
+        public static string AppModeToggleLeftClickCopyHint {
+            get {
+                return ResourceManager.GetString("AppModeToggleLeftClickCopyHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Click Paste Mode will SUPPRESS (not available on linux) right mouse click and issue a paste command to the active application..
+        /// </summary>
+        public static string AppModeToggleRightClickPasteHint {
+            get {
+                return ResourceManager.GetString("AppModeToggleRightClickPasteHint", resourceCulture);
             }
         }
         
@@ -2156,6 +2183,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonPinItemLabel {
             get {
                 return ResourceManager.GetString("CommonPinItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preset.
+        /// </summary>
+        public static string CommonPresetLabel {
+            get {
+                return ResourceManager.GetString("CommonPresetLabel", resourceCulture);
             }
         }
         
@@ -3521,6 +3557,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Plugin Folder.
+        /// </summary>
+        public static string PluginBrowserOpenPluginFolder {
+            get {
+                return ResourceManager.GetString("PluginBrowserOpenPluginFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project URL:.
         /// </summary>
         public static string PluginBrowserProjectUrlLabel {
@@ -3553,6 +3598,24 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginBrowserReportAbuseLabel {
             get {
                 return ResourceManager.GetString("PluginBrowserReportAbuseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        public static string PluginBrowserReportAbuseLinkText {
+            get {
+                return ResourceManager.GetString("PluginBrowserReportAbuseLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        public static string PluginBrowserSeeLicenseLinkText {
+            get {
+                return ResourceManager.GetString("PluginBrowserSeeLicenseLinkText", resourceCulture);
             }
         }
         

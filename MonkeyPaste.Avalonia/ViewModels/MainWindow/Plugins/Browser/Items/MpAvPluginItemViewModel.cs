@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_rootDependencyCollection == null) {
                     _rootDependencyCollection = new ObservableCollection<MpAvPluginDependencyViewModel>() {
                         new MpAvPluginDependencyViewModel(this) {
-                            LabelText = UiStrings.PluginBrowserDependenciesLabel
+                            //LabelText = UiStrings.PluginBrowserDependenciesLabel
                         }
                     };
                 }
@@ -187,11 +187,11 @@ namespace MonkeyPaste.Avalonia {
         public string PluginAbuseUrl =>
             $"{ABUSE_BASE_URL}{PluginGuid}";
 
-        public DateTime PluginPublishedDateTime {
+        public DateTime? PluginPublishedDateTime {
             get {
                 if (PluginFormat == null ||
                    !PluginFormat.datePublished.HasValue) {
-                    return DateTime.MinValue;
+                    return DateTime.Now;
                 }
                 return PluginFormat.datePublished.Value;
             }
@@ -211,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
                 if (PluginFormat == null) {
                     return string.Empty;
                 }
-                return PluginFormat.tags;
+                return string.Join(", ", PluginFormat.tags.ToStringOrEmpty().Split(",").Select(x => x.Trim()));
             }
         }
         #endregion

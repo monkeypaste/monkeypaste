@@ -82,7 +82,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Converters\MpWpfHtmlToRtfConverter.cs" />
-    <Compile Include="Utils\Converters\MpWpfRtfToHtmlConverter2.cs" />
+    <Compile Include="Utils\Converters\MpWpfRtfToHtmlConverter.cs" />
     <Compile Include="Utils\Converters\Properties\MpWpfHtmlDefaultProperties.cs" />
     <Compile Include="Utils\Converters\Properties\MpWpfRtfDefaultProperties.cs" />
     <Compile Include="Utils\Extensions\MpCsvToRtfTableConverter.cs" />

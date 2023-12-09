@@ -256,6 +256,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ContextMenu.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\DataGrid.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Image.axaml" />
@@ -269,6 +270,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvParameterItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginBrowser.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvShortcut.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTree.axaml" />
@@ -1448,8 +1450,10 @@
     <AvaloniaResource Include="Themes\Default\Accents\Gradients.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\SlideWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\DataGrid.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ContextMenu.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginBrowser.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TopLevel.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />

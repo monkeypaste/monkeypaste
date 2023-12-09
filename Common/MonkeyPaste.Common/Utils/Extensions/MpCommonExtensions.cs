@@ -440,6 +440,11 @@ namespace MonkeyPaste.Common {
             value = (T)Enum.Parse(typeof(T), result);
         }
 
+        public static IEnumerable<T> All<T>(this T value) where T : struct, Enum {
+            // remove flag from string of value and any leading/trailing commas 
+            return value.ToString().SplitNoEmpty(",").Select(x => x.ToEnum<T>());
+        }
+
         public static void AddFlag<T>(ref this T value, T flag) where T : struct, Enum {
             string result = $"{value}, {flag}".Trim(new[] { ' ', ',' }); ;
             value = (T)Enum.Parse(typeof(T), result);

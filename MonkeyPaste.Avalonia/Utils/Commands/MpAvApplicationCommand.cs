@@ -105,6 +105,11 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvTextBoxParameterViewModel>(out var tbpvm)) {
+                     tbpvm.OpenPopOutWindowCommand.Execute(null);
+                     return;
+                 }
+
                  if (fc.TryGetSelfOrAncestorDataContext<MpAvTriggerCollectionViewModel>(out _)) {
                      MpAvTriggerCollectionViewModel.Instance.ShowDesignerWindowCommand.Execute(null);
                      return;

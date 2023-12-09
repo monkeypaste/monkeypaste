@@ -42,11 +42,22 @@
                     Value="180" />
         </Style>
         <!--  CONTINER BUTTON  -->
+        <Style Selector="Button#ContainerButton.param.picker">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+        </Style>
+        <Style Selector="Button#ContainerButton.param.picker:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
         <Style Selector="Button#ContainerButton.param.picker /template/ ContentPresenter">
             <Setter Property="HorizontalContentAlignment"
                     Value="Stretch" />
             <Setter Property="Padding"
                     Value="0" />
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 2 2 #46000000" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Button x:Name="ContainerButton"
@@ -55,7 +66,6 @@
             Padding="0,5"
             CornerRadius="10"
             BorderThickness="1"
-            BorderBrush="DimGray"
             Command="{Binding ShowSelectorMenuCommand}"
             CommandParameter="{Binding $self}"
             HorizontalAlignment="Stretch"

@@ -30,7 +30,7 @@
         <Setter Property="Background"
                 Value="{StaticResource HitTestableTransparent}" />
     </Style>
-    <Style Selector="Border.paramBorder:not(.sliderBorder) TextBox">
+    <Style Selector="Border.paramBorder:not(.sliderBorder):not(.popout) TextBox">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource ThemeInteractiveColor}" />
         <Setter Property="BorderThickness"
@@ -42,9 +42,13 @@
         <Setter Property="FontSize"
                 Value="14" />
         <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
+                Value="Left" />
+        <Setter Property="Width"
+                Value="120" />
+        <Setter Property="MaxWidth"
+                Value="120" />
     </Style>
-    <Style Selector="Border.paramBorder.sliderBorder:pointerover">
+  <Style Selector="Border.paramBorder.sliderBorder:pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>
@@ -84,4 +88,6 @@
         <Setter Property="KeyboardNavigation.IsTabStop"
                 Value="True" />
     </Style>
+
+    <!--  TEXTBOX POPOUT  -->
 </Styles>

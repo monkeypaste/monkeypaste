@@ -199,6 +199,9 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ScreenInfoCollection == null) {
                 Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);
             }
+            if (MpAvPrefViewModel.Instance.IsThemeDark) {
+                Classes.Add("dark");
+            }
 
             MpAvWindowManager.AllWindows.Add(this);
             this.Closed += MpAvWindow_Closed;

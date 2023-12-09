@@ -179,7 +179,7 @@
                  Grid.Row="1"
                  Padding="0"
                  Classes="tabcontinue"
-                 AutoScrollToSelectedItem="True"
+                 AutoScrollToSelectedItem="False"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"

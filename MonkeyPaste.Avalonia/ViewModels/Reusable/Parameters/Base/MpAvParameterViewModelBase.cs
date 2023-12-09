@@ -69,6 +69,9 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             htrivm.HighlightRanges.Clear();
+            if (string.IsNullOrEmpty(filter)) {
+                return true;
+            }
             if (Label.QueryText(filter, false, false, false) is { } ranges &&
                 ranges.Any()) {
                 htrivm.HighlightRanges.AddRange(
@@ -342,7 +345,6 @@ namespace MonkeyPaste.Avalonia {
                         case MpParameterControlType.Button:
                         case MpParameterControlType.PasswordBox:
                         case MpParameterControlType.TextBox:
-                        case MpParameterControlType.MultiLineTextBox:
                         case MpParameterControlType.Hyperlink:
                         case MpParameterControlType.List:
                         case MpParameterControlType.ComboBox:

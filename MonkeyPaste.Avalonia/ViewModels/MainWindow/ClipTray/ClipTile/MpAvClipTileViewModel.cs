@@ -1874,7 +1874,10 @@ namespace MonkeyPaste.Avalonia {
                         //    return;
                         //}
                         Task.Run(async () => {
-                            await CopyItem.WriteToDatabaseAsync(IsContentChangeModelChange, IsContentChangeModelChange ? SearchableText : null);
+                            if (CopyItem != null) {
+
+                                await CopyItem.WriteToDatabaseAsync(IsContentChangeModelChange, IsContentChangeModelChange ? SearchableText : null);
+                            }
                             Dispatcher.UIThread.Post(() => {
                                 // BUG i think this is a preview5 bug
                                 // something w/ WeakEvent has no obj ref

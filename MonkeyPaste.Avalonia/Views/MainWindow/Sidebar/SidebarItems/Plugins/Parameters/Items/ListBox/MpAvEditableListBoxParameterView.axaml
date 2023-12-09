@@ -30,10 +30,14 @@
         <Style Selector="local|MpAvContentQueryTextBoxView.canDelete">
             <Setter Property="MaxWidth"
                     Value="{StaticResource PosInf}" />
-            <Setter Property="Width"
-                    Value="100" />
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
+        </Style>
+        <Style Selector="local|MpAvContentQueryTextBoxView.canDelete TextBox">
+            <Setter Property="Width"
+                    Value="100" />
+            <Setter Property="MaxWidth"
+                    Value="100" />
         </Style>
         <Style Selector="local|MpAvContentQueryTextBoxView">
             <Setter Property="Width"

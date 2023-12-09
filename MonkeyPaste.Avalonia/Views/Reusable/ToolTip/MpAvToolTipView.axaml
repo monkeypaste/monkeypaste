@@ -21,7 +21,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Border#TooltipOuterContainer.html DockPanel#ToolTipTextContainer">
+        <Style Selector="Border#TooltipOuterContainer.html TextBlock#ToolTipTextBlock">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
@@ -54,14 +54,14 @@
             Classes.gesture="{Binding InputGestureText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-        <Grid>
-            <DockPanel x:Name="ToolTipTextContainer">
-                <local:MpAvShortcutLabel Classes="menuItemGesture"
-                                         KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}"
-                                         DockPanel.Dock="Right"
-                                         Margin="5,0,0,0"
-                                         HorizontalAlignment="Right"
-                                         VerticalAlignment="Center" />
+        <DockPanel x:Name="ToolTipTextContainer">
+            <local:MpAvShortcutLabel Classes="menuItemGesture"
+                                     KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}"
+                                     DockPanel.Dock="Right"
+                                     Margin="5,0,0,0"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center" />
+            <Grid>
                 <TextBlock x:Name="ToolTipTextBlock"
                            FontSize="14"
                            Margin="0"
@@ -69,15 +69,13 @@
                            VerticalAlignment="Center"
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding ToolTipText, ElementName=ToolTipView}" />
-            </DockPanel>
-
-
-            <av:HtmlLabel x:Name="ToolTipHtmlPanel"
-                          MaxWidth="600"
-                          local:MpAvHtmlStylerExtension.IsEnabled="True"
-                          local:MpAvHtmlStylerExtension.DefaultFontSize="14"
-                          IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                          Text="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
-        </Grid>
+                <av:HtmlLabel x:Name="ToolTipHtmlPanel"
+                              MaxWidth="600"
+                              local:MpAvHtmlStylerExtension.IsEnabled="True"
+                              local:MpAvHtmlStylerExtension.DefaultFontSize="14"
+                              IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                              Text="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
+            </Grid>
+        </DockPanel>
     </Border>
 </local:MpAvUserControl>

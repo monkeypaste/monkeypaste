@@ -226,15 +226,19 @@ namespace MonkeyPaste.Avalonia {
 
             var mp = e.GetPosition(sb);
             var sbr = new Rect(new Point(), sb.Bounds.Size);
-            if (sbr.Contains(mp)) {
-                newWidth = mp.X;
-            } else {
-                double deltaX = mp.X - _lastMousePosition.X;
+            newWidth = Math.Clamp(mp.X, 0, sb.Bounds.Width);
+            //if (sbr.Contains(mp)) {
+            //    newWidth = mp.X;
+            //} else {
+            //    double deltaX = mp.X - _lastMousePosition.X;
 
-                var svr = this.FindControl<Rectangle>("SliderValueRectangle");
-                newWidth = svr.Bounds.Width + deltaX;
-                newWidth = Math.Min(Math.Max(0, newWidth), sb.Bounds.Width);
-            }
+            //    var svr = this.FindControl<Rectangle>("SliderValueRectangle");
+            //    newWidth = svr.Bounds.Width + deltaX;
+            //    newWidth = Math.Min(Math.Max(0, newWidth), sb.Bounds.Width);
+            //    if(mp.X > sb.Bounds.Width) {
+            //        // BUG slider doesn't 
+            //    }
+            //}
 
             double widthPercent = newWidth / sb.Bounds.Width;
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;

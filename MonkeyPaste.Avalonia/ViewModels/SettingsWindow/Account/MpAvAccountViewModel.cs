@@ -469,8 +469,8 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPrefViewModel.Instance.HasRated) {
                 return;
             }
-            TimeSpan min_wait = TimeSpan.FromMinutes(2);
-            TimeSpan max_wait = TimeSpan.FromMinutes(5);
+            TimeSpan min_wait = TimeSpan.FromMinutes(5);
+            TimeSpan max_wait = TimeSpan.FromMinutes(15);
             int wait_ms = MpRandom.Rand.Next((int)min_wait.TotalMilliseconds, (int)max_wait.TotalMilliseconds);
 
             var rate_timer = new DispatcherTimer() {

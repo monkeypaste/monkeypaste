@@ -1,4 +1,5 @@
 ﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvContentQueryTextBoxView"
+                       x:Name="ContentQueryTextBoxView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,43 +22,57 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource FilterImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
-        <!--  PASSWORD CHAR  -->
+        <Style Selector="Border#QueryItemGridContainer:not(.popout) TextBox">
+            <Setter Property="MaxHeight"
+                    Value="400" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Hidden" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
 
-        <!--  WRAPPING  -->
-        <Style Selector="TextBox.multiline">
-            <Setter Property="AcceptsReturn"
+        <Style Selector="Border#QueryItemGridContainer.popout TextBox">
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Auto" />
+            <Setter Property="AcceptsTab"
                     Value="True" />
-            <Setter Property="TextWrapping"
-                    Value="WrapWithOverflow" />
-            <Setter Property="MaxHeight"
-                    Value="400" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Padding"
+                    Value="3" />
         </Style>
 
-        <!--  READ-ONLY  -->
-        <Style Selector="SelectableTextBlock#ReadOnlyBlock.multiline">
-            <Setter Property="TextWrapping"
-                    Value="WrapWithOverflow" />
-            <Setter Property="MaxHeight"
-                    Value="400" />
+        <Style Selector="Border.paramBorder.popout">
+            <Setter Property="Margin"
+                    Value="5" />
         </Style>
+
+        <Style Selector=":is(Button).outerButton">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="Margin"
+                    Value="5,0,0,0" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
+            Classes.popout="{Binding IsPopOut, ElementName=ContentQueryTextBoxView}"
             Classes="paramBorder">
-        <Grid ColumnDefinitions="*,Auto,Auto"
-              Margin="0,0,10,0">
+        <Grid ColumnDefinitions="*,Auto,Auto,Auto">
 
             <!--  TEXTBOX  -->
 
             <TextBox x:Name="ContentQueryTextBox"
+                     Classes.popout="{Binding IsWindowOpen}"
                      Grid.Column="0"
                      Grid.ColumnSpan="2"
                      IsVisible="{Binding !IsReadOnly}"
                      Classes="dnd param"
-                     Classes.multiline="{Binding IsMultiline}"
                      Classes.password="{Binding IsSecure}"
                      Classes.revealPasswordButton="{Binding IsSecure}"
-                     HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
+                     TextWrapping="NoWrap"
+                     AcceptsReturn="True"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
@@ -68,13 +83,22 @@
                                  Grid.Column="0"
                                  Grid.ColumnSpan="2"
                                  FontWeight="SemiBold"
+                                 TextWrapping="WrapWithOverflow"
+                                 MaxHeight="400"
                                  Text="{Binding ContentQuery}"
                                  Foreground="{DynamicResource ThemeAccent1Color}"
                                  FontSize="{Binding FontSize, ElementName=ContentQueryTextBox}"
                                  IsVisible="{Binding IsReadOnly}"
-                                 Classes.multiline="{Binding IsMultiline}"
-                                 HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Stretch" />
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Stretch">
+                <SelectableTextBlock.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsReadOnly" />
+                        <Binding Path="!IsPopOut"
+                                 ElementName="ContentQueryTextBoxView" />
+                    </MultiBinding>
+                </SelectableTextBlock.IsVisible>
+            </SelectableTextBlock>
 
             <!--  CLEAR TEXT BUTTON  -->
 
@@ -94,6 +118,8 @@
                                  Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
                         <Binding Path="!IsReadOnly" />
                         <Binding Path="!IsSecure" />
+                        <Binding Path="!IsPopOut"
+                                 ElementName="ContentQueryTextBoxView" />
                     </MultiBinding>
                 </local:MpAvClearTextButton.IsVisible>
             </local:MpAvClearTextButton>
@@ -102,22 +128,44 @@
 
             <Button x:Name="FilterButton"
                     Grid.Column="2"
-                    Margin="0,0,5,0"
-                    Classes="defaultButton noBg noHoverBg noBorder"
+                    Classes="defaultButton noBg noHoverBg noBorder outerButton"
                     IsVisible="{Binding IsFieldButtonVisible}"
-                    HorizontalAlignment="Right"
-                    local:MpAvPointerCommandExtension.IsEnabled="True"
-                    local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowQueryMenuCommand}"
-                    local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
+                    Command="{Binding ShowQueryMenuCommand}"
+                    CommandParameter="{Binding $self}">
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="IsFieldButtonVisible" />
                         <Binding Path="!IsReadOnly" />
                         <Binding Path="!IsSecure" />
+                        <Binding Path="!IsPopOut"
+                                 ElementName="ContentQueryTextBoxView" />
                     </MultiBinding>
                 </Button.IsVisible>
                 <Image />
             </Button>
+
+            <!--  POPOUT BUTTON  -->
+
+            <ToggleButton x:Name="PopOutTextBoxButton"
+                          Grid.Column="3"
+                          Classes="defaultButton noBg noHoverBg noBorder outerButton"
+                          IsChecked="{Binding IsWindowOpen, Mode=OneWay}"
+                          Command="{Binding OpenPopOutWindowCommand}">
+                <ToggleButton.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="CanPopOut" />
+                        <Binding Path="!IsReadOnly" />
+                        <Binding Path="!IsPopOut"
+                                 ElementName="ContentQueryTextBoxView" />
+                    </MultiBinding>
+                </ToggleButton.IsVisible>
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                           ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
+                </ToolTip.Tip>
+
+                <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+            </ToggleButton>
         </Grid>
     </Border>
 </local:MpAvUserControl>
