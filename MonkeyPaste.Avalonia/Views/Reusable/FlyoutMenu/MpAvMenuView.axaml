@@ -14,6 +14,8 @@
         <!--  MENU ITEM  -->
 
         <Style Selector="MenuItem">
+            <Setter Property="Cursor"
+                    Value="Hand" />
             <Setter Property="Padding"
                     Value="10,5,15,5" />
         </Style>

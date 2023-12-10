@@ -340,6 +340,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool HideCapWarnings { get; set; }
         public bool ShowHints { get; set; } = true;
+        public bool ShowTooltips { get; set; } = true;
         public double GlobalBgOpacity { get; set; }
 #if DESKTOP
         = 0.7;

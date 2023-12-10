@@ -214,6 +214,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 data = typed_data;
                 return true;
             }
+
             if (typeof(T) == typeof(string)) {
                 // wants string
                 if (dataObj is byte[] bytes) {
@@ -241,6 +242,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 } else if (dataObj is IEnumerable<IStorageItem> sil) {
                     // si[] -> string
                     typed_data = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath())) as T;
+                } else if (dataObj is int intVal) {
+                    // int -> string (occurs internally putting actionId on clipboard)
+                    typed_data = intVal.ToString() as T;
                 }
             } else if (typeof(T) == typeof(byte[])) {
                 // wants bytes

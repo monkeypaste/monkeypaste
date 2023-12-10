@@ -336,6 +336,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
+        protected virtual MpAvMenuItemViewModel GetAddContextMenuItem() {
+            return new MpAvMenuItemViewModel() {
+                Header = UiStrings.CommonAddLabel,
+                HasLeadingSeparator = true,
+                IconResourceKey = "AddImage",
+                SubItems =
+                        typeof(MpActionType)
+                        .EnumerateEnum<MpActionType>()
+                        .Where(x => x != MpActionType.None && x != MpActionType.Trigger)
+                        .Select(x =>
+                            new MpAvMenuItemViewModel() {
+                                Header = x.EnumToUiString(),
+                                IconResourceKey = GetDefaultActionIconResourceKey(x),
+                                IconTintHexStr = GetActionHexColor(x),
+                                Command = AddChildActionCommand,
+                                CommandParameter = x
+                            }).ToList()
+            };
+        }
+
         public virtual MpAvMenuItemViewModel PopupMenuViewModel {
             get {
                 IEnumerable<MpAvMenuItemViewModel> move_items =
@@ -356,18 +376,21 @@ namespace MonkeyPaste.Avalonia {
                     ParentObj = this,
                     SubItems = new List<MpAvMenuItemViewModel>() {
                          new MpAvMenuItemViewModel() {
+                             IsVisible = !IsTrigger,
                             Header = UiStrings.CommonCutOpLabel,
                             IconResourceKey = "ScissorsImage",
                             ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                             Command = CutActionCommand
                         },
                          new MpAvMenuItemViewModel() {
+                             IsVisible = !IsTrigger,
                             Header = UiStrings.CommonCopyOpLabel,
                             IconResourceKey = "CopyImage",
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                             Command = CopyActionCommand
                         },
                          new MpAvMenuItemViewModel() {
+                             IsVisible = CanPaste,
                             Header = UiStrings.CommonPasteOpLabel,
                             IconResourceKey = "PasteImage",
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
@@ -377,28 +400,13 @@ namespace MonkeyPaste.Avalonia {
                             HasLeadingSeparator = true,
                             Header = UiStrings.ActionMoveLabel,
                             IconResourceKey = "ChainImage",
-                            IsVisible = move_items.Any(),
+                            IsVisible = move_items.Any() && !IsTrigger,
                             SubItems = move_items.ToList()
                         },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonAddLabel,
-                            HasLeadingSeparator = true,
-                            IconResourceKey = "AddImage",
-                            SubItems =
-                                typeof(MpActionType)
-                                .EnumerateEnum<MpActionType>()
-                                .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
-                                .Select(x =>
-                                    new MpAvMenuItemViewModel() {
-                                        Header = x.EnumToUiString(),
-                                        IconResourceKey = GetDefaultActionIconResourceKey(x),
-                                        IconTintHexStr = GetActionHexColor(x),
-                                        Command = AddChildActionCommand,
-                                        CommandParameter = x
-                                    }).ToList()
-                        },
+                        GetAddContextMenuItem(),
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
+                            IsVisible = !IsTrigger,
                             Header = UiStrings.CommonRemoveLabel,
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand
@@ -528,6 +536,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        bool CanPaste { get; set; }
         public bool IsValidating { get; set; }
         public virtual bool AllowNullArg =>
             false;
@@ -1308,6 +1317,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         Parent.SelectActionCommand.Execute(this);
                         LastSelectedDateTime = DateTime.Now;
+                        UpdateCanPasteAsync().FireAndForgetSafeAsync();
                     }
                     OnPropertyChanged(nameof(DesignerZIndex));
                     OnPropertyChanged(nameof(IsTrigger));
@@ -1399,7 +1409,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region DesignerItem Placement Methods
 
-        private MpPoint FindOpenDesignerLocation(MpPoint anchorPoint, object ignoreItem = null) {
+        private MpPoint FindOpenDesignerLocation(MpPoint anchorPoint) {
             int attempts = 0;
             int maxAttempts = 10;
             int count = 4;
@@ -1475,6 +1485,10 @@ namespace MonkeyPaste.Avalonia {
         //}
         #endregion
 
+        private async Task UpdateCanPasteAsync() {
+            var dfl = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
+            CanPaste = dfl.Contains(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
+        }
         private async Task<MpCopyItem> GetPrimaryCopyItemToProcessAsync() {
             MpCopyItem ci = null;
             var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -1516,6 +1530,7 @@ namespace MonkeyPaste.Avalonia {
                                         prefix.ToLower(),
                                         uniqueIdx);
             }
+
             return prefix + uniqueIdx;
         }
 
@@ -1547,7 +1562,13 @@ namespace MonkeyPaste.Avalonia {
             clone_action.ParentActionId = parent_id;
             clone_action.SortOrderIdx = sort_idx;
 
-            // TODO need to translate designer loc to new parent here...
+            // get clone's parent
+            if (RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x => x.ActionId == parent_id) is { } avm) {
+                // position clone somewhere near parent
+                var clone_loc = FindOpenDesignerLocation(avm.Location);
+                clone_action.X = clone_loc.X;
+                clone_action.Y = clone_loc.Y;
+            }
             await clone_action.WriteToDatabaseAsync();
 
             clone_action.ParameterValues.ForEach(x => x.ParameterHostId = clone_action.Id);
@@ -1658,15 +1679,20 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CopyActionCommand => new MpAsyncCommand(
             async () => {
-                var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, ActionId);
+                var unwritten_action_clone = await Action.CloneDbModelAsync(true, true);
+                var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, unwritten_action_clone.SerializeJsonObject());
                 await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+                //wait MpAvCommonTools.Services.DeviceClipboard.SetDataObjectAsync(avdo);
                 MpConsole.WriteLine("Copied action avdo: ");
                 MpConsole.WriteLine(avdo.ToString());
+            },
+            () => {
+                return !IsTrigger;
             });
 
         public ICommand CutActionCommand => new MpAsyncCommand(
             async () => {
-                // clone parent action to use children prop for undo which contains all children and params before cut
+                // clone action to use children prop for undo which contains all children and params before cut
                 var unwritten_action_clone = await Action.CloneDbModelAsync(true, true);
 
                 await Parent.DeleteActionCommand.ExecuteAsync(new object[] { this, true });
@@ -1688,25 +1714,9 @@ namespace MonkeyPaste.Avalonia {
                 //    return;
                 //}
                 object action_data = await MpAvCommonTools.Services.DeviceClipboard.GetDataAsync(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
-                if (action_data == null) {
-                    return;
-                }
-
-                MpAction child_to_assign = null;
-                if (action_data is int copy_child_actionId) {
-                    // paste from copy
-                    var copy_child = await MpDataModelProvider.GetItemAsync<MpAction>(copy_child_actionId);
-                    if (copy_child == null) {
-                        return;
-                    }
-                    child_to_assign = await copy_child.CloneDbModelAsync(true, true);
-                } else if (action_data is byte[] action_bytes &&
-                            action_bytes.ToDecodedString() is string action_json &&
-                            MpJsonConverter.DeserializeObject<MpAction>(action_json) is MpAction cut_child) {
-                    // paste from cut
-                    child_to_assign = cut_child;
-                }
-                if (child_to_assign == null) {
+                if (action_data is not byte[] json_bytes ||
+                    json_bytes.ToDecodedString() is not string action_json ||
+                    MpJsonConverter.DeserializeObject<MpAction>(action_json) is not MpAction child_to_assign) {
                     return;
                 }
                 await SetChildRestoreStateAsync();
@@ -1715,12 +1725,7 @@ namespace MonkeyPaste.Avalonia {
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
             },
             () => {
-                //if (MpAvUndoManagerViewModel.Instance.UndoList.FirstOrDefault() is MpIUndoRedo ur &&
-                //    ur.Name.StartsWith(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT)) {
-                //    return true;
-                //}
-                //return false;
-                return true;
+                return CanPaste;
             });
 
         #endregion

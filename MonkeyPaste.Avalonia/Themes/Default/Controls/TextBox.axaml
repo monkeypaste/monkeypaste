@@ -50,17 +50,12 @@
                 Value="True" />
     </Style>
 
-    <!--<Style Selector="TextBox.clearButton /template/ Button">
-        <Setter Property="CornerRadius"
-                Value="7" />
-        <Setter Property="MinWidth"
-                Value="20" />
-        <Setter Property="Padding"
-                Value="3" />
-    </Style>-->
-
-
-
-
-
+    <!--  DARK PASSWORD BUTTON  -->
+    <Style Selector=":is(Window).dark TextBox.revealPasswordButton">
+        <Style.Resources>
+            <SolidColorBrush x:Key="TextControlButtonBackground">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="TextControlButtonBackgroundPointerOver">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="TextControlButtonBackgroundPressed">Transparent</SolidColorBrush>
+        </Style.Resources>
+    </Style>
 </Styles>

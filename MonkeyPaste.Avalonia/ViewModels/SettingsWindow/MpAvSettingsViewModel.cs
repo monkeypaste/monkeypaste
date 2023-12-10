@@ -605,6 +605,18 @@ namespace MonkeyPaste.Avalonia {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.ShowTooltips),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.PrefShowTooltipsLabel,
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpAvPrefViewModel.Instance.ShowTooltips.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.ShowHints),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
@@ -1164,6 +1176,21 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var para_item in fvm.Items) {
                     if (HiddenParamIds.Any(x => x == para_item.ParameterFormat.paramId)) {
                         para_item.ParameterFormat.isVisible = false;
+                    }
+                }
+
+                if (TabLookup.FirstOrDefault(x => x.Value.Contains(fvm)) is { } kvp &&
+                    kvp.Key == MpSettingsTabType.Account) {
+                    // hide popout button on account textboxes
+                    foreach (var sfvm in kvp.Value) {
+                        if (sfvm.Items == null) {
+                            continue;
+                        }
+                        foreach (var pivm in sfvm.Items) {
+                            if (pivm is MpAvTextBoxParameterViewModel tbpivm) {
+                                tbpivm.CanPopOut = false;
+                            }
+                        }
                     }
                 }
 

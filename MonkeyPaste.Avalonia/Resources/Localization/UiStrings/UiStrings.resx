@@ -2124,7 +2124,7 @@ Clipboard listening is: {0}</value>
     <value>Analyze with Annotator</value>
   </data>
   <data name="TriggerAnnTriggerLabel" xml:space="preserve">
-    <value>Annotate New Text Trigger</value>
+    <value>Annotate Trigger</value>
   </data>
   <data name="SearchDisabeledCriteriaTooltip" xml:space="preserve">
     <value>Pre-Loaded Filters are read-only. Duplicate to alter.</value>
@@ -2268,5 +2268,8 @@ Clipboard listening is: {0}</value>
   </data>
   <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
     <value>View</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Show Tooltips</value>
   </data>
 </root>

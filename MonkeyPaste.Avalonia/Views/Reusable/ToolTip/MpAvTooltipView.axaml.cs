@@ -115,6 +115,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
         }
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            if (!MpAvPrefViewModel.Instance.ShowTooltips) {
+                IsVisible = false;
+                return;
+            }
+        }
 
         //protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
         //    base.OnAttachedToVisualTree(e);

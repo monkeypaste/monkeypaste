@@ -574,10 +574,8 @@ namespace MonkeyPaste.Avalonia {
             //}
             CannotExecuteTooltip = string.Empty;
 
-            MpAvAnalyticItemPresetViewModel exec_aipvm = SelectedItem ?? Items.FirstOrDefault();
-            MpCopyItem exec_ci =
-                MpAvClipTrayViewModel.Instance.SelectedItem == null ?
-                null : MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+            MpAvAnalyticItemPresetViewModel exec_aipvm = null;
+            MpCopyItem exec_ci = null;
             string exec_action_data = null;
             if (args is MpAvAnalyticItemPresetViewModel) {
                 // analyzer request from MpAnalyticItemPresetDataGridView
@@ -587,8 +585,8 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
                     return false;
                 }
-                exec_aipvm = args as MpAvAnalyticItemPresetViewModel;
                 exec_ci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+                exec_aipvm = args as MpAvAnalyticItemPresetViewModel;
             } else if (args is object[] argParts) {
                 // analyzer request from MpAnalyzerActionViewModel
 
@@ -597,6 +595,13 @@ namespace MonkeyPaste.Avalonia {
                 if (exec_ci == null) {
                     exec_action_data = argParts[1] as string;
                 }
+            } else if (args == null) {
+                // tile selection change
+                if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
+                    return false;
+                }
+                exec_ci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+                exec_aipvm = SelectedItem ?? Items.FirstOrDefault();
             }
 
             if ((exec_ci == null && exec_action_data == null) || exec_aipvm == null) {

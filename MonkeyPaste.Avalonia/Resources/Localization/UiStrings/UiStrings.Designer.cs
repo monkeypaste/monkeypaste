@@ -4306,6 +4306,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Tooltips.
+        /// </summary>
+        public static string PrefShowTooltipsLabel {
+            get {
+                return ResourceManager.GetString("PrefShowTooltipsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi-targeted workflows.
         ///
         ///* Note corners are in terms of all your screens, not per monitor..
@@ -5750,7 +5759,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Annotate New Text Trigger.
+        ///   Looks up a localized string similar to Annotate Trigger.
         /// </summary>
         public static string TriggerAnnTriggerLabel {
             get {

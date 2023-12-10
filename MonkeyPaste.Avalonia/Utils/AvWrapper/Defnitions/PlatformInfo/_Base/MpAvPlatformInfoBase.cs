@@ -10,7 +10,12 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-
+        public virtual bool IsTraceEnabled { get; set; } =
+#if DEBUG
+            true;
+#else
+            false;
+#endif
         public virtual bool IsDesktop =>
             OperatingSystem.IsWindows() ||
             OperatingSystem.IsMacOS() ||
@@ -168,8 +173,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string LogDir =>
-            Path.Combine(StorageDir, "logs");
 
 
 
@@ -196,7 +199,17 @@ namespace MonkeyPaste.Avalonia {
                 return Path.Combine(ExecutingDir, "Resources", "Help", "index.html");
             }
         }
+
+        public string LogDir =>
+            Path.Combine(StorageDir, "logs");
+        string LogFileName =>
+            "mp.log";
+        public string LogPath =>
+            Path.Combine(LogDir, LogFileName);
+
         #endregion
+
+        #region Console
 
         private TraceListener _ctl;
         public TraceListener ConsoleTraceListener {
@@ -208,8 +221,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+        #endregion
 
-
+        #region Constructors
+        public MpAvPlatformInfoBase() {
+#if RELEASE
+            IsTraceEnabled = App.HasStartupArg(App.TRACE_ARG); 
+#endif
+        }
+        #endregion
 
         #region Private Methods
 

@@ -15,25 +15,23 @@ namespace MonkeyPaste.Common {
 
         public static MpLogLevel MinLogLevel =>
 #if DEBUG
-            MpLogLevel.Debug;
+             MpLogLevel.Debug;
 #else
             MpLogLevel.Error;
 #endif
 
-        public static bool HasInitialized { get; private set; } = false;
+        static bool HasInitialized { get; set; } = false;
 
 
-        public static bool LogToFile =>
-#if DEBUG
-            true;
-#else
-            true;
-#endif
-        public static bool LogToConsole { get; set; } = true;
+        static bool LogToFile { get; set; }// =>
+                                           //#if DEBUG
+                                           //            true;
+                                           //#else
+                                           //            true;
+                                           //#endif
+        static bool LogToConsole { get; set; } = true;
 
-        static string LogFileName =>
-            "mp.log";
-        public static string LogFilePath { get; set; }
+        static string LogFilePath { get; set; }
 
         #endregion
 
@@ -48,12 +46,18 @@ namespace MonkeyPaste.Common {
             // and then initializes console w/ temp info so in main startup init has already happened 
             pi = pi == null ? MpCommonTools.Services.PlatformInfo : pi;
 
-            LogFilePath =
-                Path.Combine(
-                pi.LogDir,
-                LogFileName);
+            LogFilePath = pi.LogPath;
+            LogToFile = pi.IsTraceEnabled;
+            LogToConsole = pi.IsTraceEnabled;
+            //LogFilePath =
+            //    Path.Combine(
+            //    pi.LogDir,
+            //    LogFileName);
 
             HasInitialized = true;
+            if (!LogToConsole) {
+                Trace.Listeners.Clear();
+            }
             if (LogToFile) {
                 try {
                     if (LogFilePath.IsFile()) {
@@ -62,9 +66,7 @@ namespace MonkeyPaste.Common {
                     if (!pi.LogDir.IsDirectory()) {
                         MpFileIo.CreateDirectory(pi.LogDir);
                     }
-                    if (!LogToConsole) {
-                        Trace.Listeners.Clear();
-                    }
+
                     using (File.Create(LogFilePath)) { }
                     TextWriterTraceListener twtl = new TextWriterTraceListener(LogFilePath);
                     Trace.Listeners.Add(twtl);

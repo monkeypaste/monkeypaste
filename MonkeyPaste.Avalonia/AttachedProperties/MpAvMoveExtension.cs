@@ -278,7 +278,6 @@ namespace MonkeyPaste.Avalonia {
                 if (!GetIsMoving(control)) {
                     SetCanMove(control, false);
                 }
-                //MpPlatformWrapper.Services.Cursor.UnsetCursor(Control.DataContext);
             }
         }
 

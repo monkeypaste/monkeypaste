@@ -13,10 +13,12 @@ namespace MonkeyPaste.Common {
         string ExecutingPath { get; }
         string StorageDir { get; }
         string LogDir { get; }
+        string LogPath { get; }
         bool IsDesktop { get; }
         bool IsMobile { get; }
         bool IsBrowser { get; }
         bool IsTouchInputEnabled { get; }
+        bool IsTraceEnabled { get; }
         string OsShortName { get; }
 
         string EditorPath { get; }

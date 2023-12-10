@@ -311,7 +311,7 @@
         <!--  ACTION SIDEBAR  -->
 
         <SolidColorBrush x:Key="ActionPropertyListBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  TAG TILE  -->
         <!--  BG  -->

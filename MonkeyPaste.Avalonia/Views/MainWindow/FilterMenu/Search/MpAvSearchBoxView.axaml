@@ -82,6 +82,12 @@
                     Value="2" />
             <Setter Property="CornerRadius"
                     Value="10" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="Border.searchBorder.invalid">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
         <Style Selector="Border#SearchTextBoxBorder.expanded"
                x:DataType="local:MpAvSearchBoxViewModel">
@@ -93,15 +99,11 @@
                                 Value="{StaticResource SearchIconSize}" />
                         <Setter Property="Background"
                                 Value="Transparent" />
-                        <Setter Property="BorderBrush"
-                                Value="Transparent" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="Width"
                                 Value="{StaticResource SearchTextBoxBorder_width_opened}" />
                         <Setter Property="Background"
-                                Value="{DynamicResource ThemeInteractiveBgBrush}" />
-                        <Setter Property="BorderBrush"
                                 Value="{DynamicResource ThemeInteractiveBgBrush}" />
                     </KeyFrame>
                 </Animation>
@@ -117,30 +119,15 @@
                                 Value="{StaticResource SearchTextBoxBorder_width_opened}" />
                         <Setter Property="Background"
                                 Value="{DynamicResource ThemeInteractiveBgBrush}" />
-                        <Setter Property="BorderBrush"
-                                Value="{DynamicResource ThemeInteractiveBgBrush}" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="Width"
                                 Value="{StaticResource SearchIconSize}" />
                         <Setter Property="Background"
                                 Value="Transparent" />
-                        <Setter Property="BorderBrush"
-                                Value="Transparent" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
-        </Style>
-
-        <Style Selector="AutoCompleteBox">
-            <Setter Property="BorderThickness"
-                    Value="1.5" />
-            <Setter Property="BorderBrush"
-                    Value="Tranparent" />
-        </Style>
-        <Style Selector="AutoCompleteBox.invalid">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
 
         <!--  AUTOCOMPLETE BOX  -->
@@ -199,8 +186,8 @@
             <!--  ROUNDED SEARCH BOX OUTER BORDER  -->
 
             <Border x:Name="SearchTextBoxBorder"
-                    Classes.searchBorder="True"
                     Classes.invalid="{Binding !IsSearchValid}"
+                    Classes.searchBorder="True"
                     Classes.expanded="{Binding IsExpanded}"
                     Classes.unexpanded="{Binding !IsExpanded}"
                     Classes.expandAnimating="{Binding IsExpandAnimating}"
@@ -334,6 +321,8 @@
                     <!--  SEARCH AUTOCOMPLETE BOX  -->
 
                     <AutoCompleteBox x:Name="SearchBox"
+                                     BorderThickness="1.5"
+                                     Classes.invalid="{Binding !IsSearchValid}"
                                      IsDropDownOpen="{Binding IsAutoCompleteOpen, Mode=TwoWay}"
                                      TabIndex="1"
                                      VerticalAlignment="Stretch"
@@ -350,7 +339,6 @@
                                      MinimumPrefixLength="0"
                                      MinimumPopulateDelay="0.25"
                                      ItemsSource="{Binding RecentSearchTexts}"
-                                     BorderThickness="0"
                                      Padding="0"
                                      Margin="5,0">
                         <AutoCompleteBox.IsVisible>

@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
         public const string MULTI_TOUCH_ARG = "multitouch";
         public const string LOGIN_LOAD_ARG = "loginload";
         public const string RESTART_ARG = "restarted";
+        public const string TRACE_ARG = "trace";
 
         #endregion
 

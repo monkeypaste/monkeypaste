@@ -48,17 +48,18 @@
         </Style>
 
         <Style Selector=":is(Button).outerButton">
-            <Setter Property="HorizontalAlignment"
+            <!--<Setter Property="HorizontalAlignment"
                     Value="Left" />
             <Setter Property="Margin"
-                    Value="5,0,0,0" />
+                    Value="5,0,0,0" />-->
         </Style>
 
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
             Classes.popout="{Binding IsPopOut, ElementName=ContentQueryTextBoxView}"
             Classes="paramBorder">
-        <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+        <!--<Grid ColumnDefinitions="*,Auto,Auto,Auto">-->
+        <StackPanel Orientation="Horizontal" Spacing="5">
 
             <!--  TEXTBOX  -->
 
@@ -72,7 +73,7 @@
                      Classes.revealPasswordButton="{Binding IsSecure}"
                      VerticalAlignment="Stretch"
                      TextWrapping="NoWrap"
-                     AcceptsReturn="True"
+                     AcceptsReturn="{Binding !IsSecure}"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
@@ -166,6 +167,7 @@
 
                 <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
             </ToggleButton>
-        </Grid>
+            <!--</Grid>-->
+        </StackPanel>
     </Border>
 </local:MpAvUserControl>

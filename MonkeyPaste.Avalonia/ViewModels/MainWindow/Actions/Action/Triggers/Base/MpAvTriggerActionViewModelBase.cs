@@ -78,49 +78,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public override MpAvMenuItemViewModel PopupMenuViewModel {
-            get {
-                return new MpAvMenuItemViewModel() {
-                    SubItems = new List<MpAvMenuItemViewModel>() {
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonAddLabel,
-                            IconResourceKey = "AddImage",
-                            SubItems =
-                                typeof(MpActionType)
-                                .EnumerateEnum<MpActionType>()
-                                .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
-                                .Select(x =>
-                                    new MpAvMenuItemViewModel() {
-                                        Header = x.EnumToUiString(),
-                                        IconResourceKey = GetDefaultActionIconResourceKey(x),
-                                        IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
-                                        Command = AddChildActionCommand,
-                                        CommandParameter = x
-                                    }).ToList()
-                        },
-                        new MpAvMenuItemViewModel() {
-                            IsSeparator = true
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = ToggleEnableOrDisableLabel,
-                            IconBorderHexColor = MpSystemColors.Transparent,
-                            //IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
-                            //IconResourceKey = IsAllValid ? null : ToggleEnableOrDisableResourceKey,
-                            IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
-                            IconResourceKey = IsAllValid ? null : "WarningImage",
-                            IconCornerRadius = IsAllValid ? 20 : 0,
-                            Command = ToggleTriggerEnabledCommand,
-                        },
-                        new MpAvMenuItemViewModel() {IsSeparator = true},
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonRemoveLabel,
-                            IconResourceKey = "DeleteImage",
-                            Command = DeleteThisActionCommand
-                        }
-                    }
-                };
-            }
+        protected override MpAvMenuItemViewModel GetAddContextMenuItem() {
+            return new MpAvMenuItemViewModel() {
+                Header = UiStrings.CommonAddLabel,
+                IconResourceKey = "AddImage",
+                SubItems =
+                        typeof(MpActionType)
+                        .EnumerateEnum<MpActionType>()
+                        .Where(x => x != MpActionType.None && x != MpActionType.Trigger)
+                        .Select(x =>
+                            new MpAvMenuItemViewModel() {
+                                Header = x.EnumToUiString(),
+                                IconResourceKey = GetDefaultActionIconResourceKey(x),
+                                IconTintHexStr = GetActionHexColor(x),
+                                Command = AddChildActionCommand,
+                                CommandParameter = x
+                            }).ToList()
+            };
         }
+
         #endregion
 
         #region Appearance

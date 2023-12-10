@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
-        bool MpIContentQueryTextBoxViewModel.CanPopOut => true;
+        public bool CanPopOut { get; set; } = true;
         bool MpIContentQueryTextBoxViewModel.IsSecure =>
             ControlType == MpParameterControlType.PasswordBox;
 
@@ -193,6 +193,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(CurrentValue):
                     (this as MpIContentQueryTextBoxViewModel).OnPropertyChanged(nameof(MpIContentQueryTextBoxViewModel.ContentQuery));
+                    break;
+                case nameof(ControlType):
+                    if (ControlType == MpParameterControlType.PasswordBox) {
+                        CanPopOut = false;
+                    }
                     break;
             }
         }

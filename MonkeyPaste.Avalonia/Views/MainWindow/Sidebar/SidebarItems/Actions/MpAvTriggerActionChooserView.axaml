@@ -12,11 +12,6 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
-        <Style Selector=":is(SelectingItemsControl)">
-            <Setter Property="AutoScrollToSelectedItem"
-                    Value="False" />
-        </Style>
-
         <Style Selector="Border#ActionPropertyOuterContainer">
             <Setter Property="MaxHeight"
                     Value="{x:Static sys:Double.PositiveInfinity}" />
@@ -47,7 +42,6 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <ScrollViewer x:Name="TriggerScrollViewer"
-                      ScrollViewer.IsScrollChainingEnabled="False"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <Grid x:Name="TriggerSidebarContainer"
@@ -65,7 +59,6 @@
                     <ScrollViewer x:Name="PropertyScrollViewer"
                                   Grid.Column="0"
                                   Grid.Row="0"
-                                  ScrollViewer.IsScrollChainingEnabled="False"
                                   VerticalAlignment="Stretch"
                                   HorizontalScrollBarVisibility="Hidden"
                                   VerticalScrollBarVisibility="Hidden">
@@ -79,16 +72,38 @@
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch">
                                 <Grid RowDefinitions="Auto,Auto,Auto"
-                                      ColumnDefinitions="*,Auto">
+                                      ColumnDefinitions="*">
+
+                                    <!--  TRIGGER LABEL  -->
 
                                     <Label Grid.Row="0"
                                            Grid.Column="0"
-                                           Grid.ColumnSpan="2"
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Top"
                                            Classes="h1"
                                            Margin="0"
                                            Content="{x:Static local:UiStrings.SidebarTriggersToolTip}" />
+
+                                    <!--  ADD TRIGGER BUTTON  -->
+
+                                    <Button x:Name="AddTriggerButton"
+                                            Grid.Row="0"
+                                            HorizontalAlignment="Right"
+                                            Cursor="Hand"
+                                            Classes="noBg noHoverBg outlineOver"
+                                            Command="{Binding ShowTriggerSelectorMenuCommand}"
+                                            CommandParameter="{Binding $self}">
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.TriggersAddNewTriggerToolTip}" />
+                                        </ToolTip.Tip>
+                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
+                                               Margin="5"
+                                               Width="15"
+                                               Height="15" />
+                                    </Button>
+
+                                    <!--  TRIGGER UNDERLINE  -->
+
                                     <Border Grid.Row="1"
                                             Grid.Column="0"
                                             Grid.ColumnSpan="2"
@@ -97,15 +112,17 @@
                                             VerticalAlignment="Bottom" />
 
                                     <Grid Grid.Row="2"
-                                          ColumnDefinitions="Auto,35"
+                                          ColumnDefinitions="Auto,Auto"
                                           RowDefinitions="Auto,Auto">
+
                                         <!--  TRIGGER SELECTOR  -->
+
                                         <Border Classes="iconLabelComboBox"
                                                 HorizontalAlignment="Left"
                                                 Grid.Row="0"
                                                 Grid.Column="0">
                                             <ComboBox x:Name="TriggerComboBox"
-                                                      Width="275"
+                                                      Width="330"
                                                       SelectedIndex="{Binding SelectedTriggerIdx, Mode=TwoWay}"
                                                       ItemsSource="{Binding Triggers}">
                                                 <ComboBox.ItemTemplate>
@@ -122,25 +139,6 @@
                                                 </ComboBox.ItemTemplate>
                                             </ComboBox>
                                         </Border>
-
-                                        <!--  ADD TRIGGER BUTTON  -->
-
-                                        <Button x:Name="AddTriggerButton"
-                                                Grid.Row="0"
-                                                Grid.Column="1"
-                                                Margin="10,0,0,0"
-                                                Cursor="Hand"
-                                                Classes="noBg noHoverBg outlineOver"
-                                                Command="{Binding ShowTriggerSelectorMenuCommand}"
-                                                CommandParameter="{Binding $self}">
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.TriggersAddNewTriggerToolTip}" />
-                                            </ToolTip.Tip>
-                                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
-                                                   Margin="5"
-                                                   Width="15"
-                                                   Height="15" />
-                                        </Button>
 
                                         <!--  TRIGGER OPTIONS  -->
                                         <local:MpAvTriggerOptionsView Grid.Row="1"
