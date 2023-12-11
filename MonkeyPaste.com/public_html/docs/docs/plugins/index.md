@@ -15,7 +15,12 @@ All of MonkeyPaste's core platform integration is handled through the *Core Clip
 :::
 
 ## Analyzers
-Analyzers open many powerful and interesting doorways to enhancing your clipboard and workflows between different applications. As their name implies, they analyze a clip's content and/or properties to create some type of useful output. That output could be new, generated content or meta-information about the input clip. For example translating a clip of text would create a new clip of that translation. Or running image analysis on a picture will provide a set of annotations for the picture, be it regions of interest or general information about the image that is *dependant* on the source clip. MonkeyPaste calls that information an *annotation*.
+Analyzers open many powerful and interesting doorways to enhancing your clipboard and workflows between different applications. As their name implies, they analyze a clip's content and/or properties to create some type of useful output. 
+
+Analyzer output can be new, generated content or meta-information about the input clip. For example translating a clip of text would create a new clip of that translation. Or running image analysis on a picture will provide a set of annotations for the picture, be it regions of interest or general information about the image that is *dependant* on the source clip. MonkeyPaste calls that information an *annotation*.
+
+### Annotations
+
 
  
 ## Plugin Browser

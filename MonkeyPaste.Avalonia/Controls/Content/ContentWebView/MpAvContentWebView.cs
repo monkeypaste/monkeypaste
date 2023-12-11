@@ -1411,7 +1411,6 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
             BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
 
-            //Dispatcher.UIThread.Post(() => {
             if (contentChanged_ntf.itemData != null) {
                 bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
                 if (is_empty &&
@@ -1443,16 +1442,15 @@ namespace MonkeyPaste.Avalonia {
                     var append_mpdo = await GetDataObjectAsync(null, false, true);
                     await Mp.Services.DataObjectTools
                         .WriteToClipboardAsync(append_mpdo, true);
-                    MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
-                    if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
-                        MpConsole.WriteLine(pt);
-                    } else {
-                        MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
-                    }
+
+                    //MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
+                    //if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
+                    //    MpConsole.WriteLine(pt);
+                    //} else {
+                    //    MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
+                    //}
                 });
             }
-            // });
-
         }
 
         private void ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {

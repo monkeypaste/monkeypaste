@@ -597,7 +597,7 @@ namespace MonkeyPaste.Avalonia {
                     Validate();
                     break;
                 case nameof(ValidationMessage):
-                    MpConsole.WriteLine($"'{Label}' Validation Msg Changed to '{ValidationMessage}'");
+                    //MpConsole.WriteLine($"'{Label}' Validation Msg Changed to '{ValidationMessage}'");
                     OnPropertyChanged(nameof(IsValid));
                     break;
                 case nameof(IsSelected):

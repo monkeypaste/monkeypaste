@@ -668,6 +668,46 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
+        public MpIAsyncCommand<object> UninstallHandlerCommand => new MpAsyncCommand<object>(
+            async (args) => {
+
+                string plugin_guid = args as string;
+
+                var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
+                if (aivm == null) {
+                    MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
+                    return;
+                }
+                // NOTE assume confirm handled in calling command (plugin browser)
+
+                while (aivm.IsBusy) {
+                    // wait if executing
+                    await Task.Delay(100);
+                }
+                IsBusy = true;
+
+                Mp.Services.ClipboardMonitor.StopMonitor();
+
+                await Task.WhenAll(
+                    aivm.Items
+                    .SelectMany(x => x.Items)
+                    .Select(x => x.Preset.DeleteFromDatabaseAsync()));
+
+                // remove from plugin dir
+                MpPluginLoader.DeletePluginByGuid(aivm.PluginGuid);
+
+
+                // remove from collection
+                Items.Remove(aivm);
+                OnPropertyChanged(nameof(Items));
+
+                IsBusy = false;
+
+                Mp.Services.ClipboardMonitor.StartMonitor(true);
+            }) {
+
+
+        };
         #endregion
     }
 }

@@ -33,7 +33,7 @@
     <Nullable>disable</Nullable>
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <DefineConstants>$(DefineConstants)</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
     <LocalServerUrl>https://localhost</LocalServerUrl>
     <RemoteServerUrl>https://www.monkeypaste.com</RemoteServerUrl>
   </PropertyGroup>

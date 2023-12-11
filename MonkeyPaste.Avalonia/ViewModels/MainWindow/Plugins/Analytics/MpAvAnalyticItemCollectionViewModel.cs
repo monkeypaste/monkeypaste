@@ -349,8 +349,11 @@ namespace MonkeyPaste.Avalonia {
                 string plugin_guid = args as string;
 
                 var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
+                if (aivm == null) {
+                    MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
+                    return;
+                }
 
-                MpDebug.Assert(aivm != null, $"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
 
                 // NOTE assume confirm handled in calling command (plugin browser)
 

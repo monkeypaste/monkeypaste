@@ -15,14 +15,30 @@ Add the MonkeyPaste.Common.Plugin dll from nuget or the cli:
 dotnet add package MonkeyPaste.Common.Plugin
 ```
 
-
 :::info 
 Javascript and python plugin wrappers are currently in an alpha-stage of development. Check back at the [repo](https://github.com/monkeypaste) for more updates!
 :::
 
-(nuget install)
-(hello world)
+```c#
+using MonkeyPaste.Common.Plugin;
 
-## Parameters
+namespace MinimalExample {
+    public class MinimalExample : MpIAnalyzeComponent {
+        public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
+            return new MpAnalyzerPluginResponseFormat() {
+                dataObjectLookup = new Dictionary<string, object>() {
+                    {"Text", "Hello World!" }
+                }
+            };
+        }
+    }
+}
+```
+
+
+
+## Requests
+
+### Parameters
 
 

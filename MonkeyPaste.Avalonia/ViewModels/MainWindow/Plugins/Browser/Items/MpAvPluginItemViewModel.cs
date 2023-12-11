@@ -383,8 +383,16 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = true;
-                await MpAvAnalyticItemCollectionViewModel.Instance
-                    .UninstallAnalyzerCommand.ExecuteAsync(PluginGuid);
+                if (MpAvAnalyticItemCollectionViewModel.Instance.Items.Any(x => x.PluginGuid == PluginGuid)) {
+
+                    await MpAvAnalyticItemCollectionViewModel.Instance
+                        .UninstallAnalyzerCommand.ExecuteAsync(PluginGuid);
+                } else if (MpAvClipboardHandlerCollectionViewModel.Instance.Items.Any(x => x.PluginGuid == PluginGuid)) {
+                    await MpAvClipboardHandlerCollectionViewModel.Instance
+                        .UninstallHandlerCommand.ExecuteAsync(PluginGuid);
+                } else {
+                    MpDebug.Break($"Plugin not found '{PluginGuid}'");
+                }
 
                 // refresh list to remove this plugin
                 Parent.PerformFilterCommand.Execute(null);

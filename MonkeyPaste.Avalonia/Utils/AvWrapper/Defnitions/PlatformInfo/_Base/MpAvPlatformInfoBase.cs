@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
             true;
 #else
-            false;
+            true;
 #endif
         public virtual bool IsDesktop =>
             OperatingSystem.IsWindows() ||

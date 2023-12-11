@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <LangVersion>$(DefaultLangVersion)</LangVersion>
+    <TargetFramework>$(MainTargetFramework)</TargetFramework>
+    <RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+    <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
+  </ItemGroup>
+
+</Project>

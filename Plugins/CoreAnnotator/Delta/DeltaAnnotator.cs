@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 
 namespace CoreAnnotator {
     public static class DeltaAnnotator {
-
         #region Private Variable
         #endregion
 
@@ -61,8 +60,6 @@ namespace CoreAnnotator {
                 };
 
                 delta.ops.Add(op);
-                //    }
-                //}
             }
             return delta;
         }
@@ -110,7 +107,7 @@ namespace CoreAnnotator {
             List<Op> ops_to_remove = new List<Op>();
             // order ops by desc length,
             // then remove any op that collides with it
-            // (so longest match in any collision remains)
+            // so longest match in any collision remains
             foreach (var op in delta.ops.OrderByDescending(x => x.format.length)) {
                 if (ops_to_remove.Contains(op)) {
                     continue;

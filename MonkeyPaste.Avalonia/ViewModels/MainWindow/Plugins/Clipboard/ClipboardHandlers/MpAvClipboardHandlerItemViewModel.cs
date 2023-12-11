@@ -122,7 +122,8 @@ namespace MonkeyPaste.Avalonia {
                 return PluginFormat.title;
             }
         }
-
+        public string PluginGuid =>
+            PluginFormat == null ? string.Empty : PluginFormat.guid;
         public MpPluginFormat PluginFormat { get; set; }
 
         public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
