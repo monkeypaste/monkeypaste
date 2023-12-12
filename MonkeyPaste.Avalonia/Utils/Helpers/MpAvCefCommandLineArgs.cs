@@ -10,6 +10,7 @@ namespace MonkeyPaste.Avalonia {
             {"process-per-site",null },
             {"enable-devtools-experiments",null },
 #if CEFNET_WV
+            {"ignore-certificate-errors",null },
             {"enable-begin-frame-scheduling",null },
             {"enable-media-stream",null },
             {"enable-blink-features", "CSSPseudoHas"},

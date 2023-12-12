@@ -15,9 +15,9 @@ namespace MonkeyPaste.Common {
 
         public static MpLogLevel MinLogLevel =>
 #if DEBUG
-             MpLogLevel.Debug;
+             MpLogLevel.None;
 #else
-            MpLogLevel.Error;
+            MpLogLevel.None;
 #endif
 
         static bool HasInitialized { get; set; } = false;
@@ -41,6 +41,7 @@ namespace MonkeyPaste.Common {
             if (HasInitialized) {
                 return;
             }
+            HasInitialized = true;
             // NOTE on desktop cefnet MUST be initialized before basically anything (any services)
             // or bizarre crashes occur. So cefnet creates a temp platform info to setup its logging
             // and then initializes console w/ temp info so in main startup init has already happened 
@@ -54,9 +55,9 @@ namespace MonkeyPaste.Common {
             //    pi.LogDir,
             //    LogFileName);
 
-            HasInitialized = true;
-            if (!LogToConsole) {
+            if (LogToConsole && pi.ConsoleTraceListener != null) {
                 Trace.Listeners.Clear();
+                Trace.Listeners.Add(pi.ConsoleTraceListener);
             }
             if (LogToFile) {
                 try {

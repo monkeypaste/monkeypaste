@@ -1,6 +1,7 @@
 ﻿using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System.Windows;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvScreenInfoBase : MpIPlatformScreenInfo {

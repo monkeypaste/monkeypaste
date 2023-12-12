@@ -215,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
         public TraceListener ConsoleTraceListener {
             get {
                 if (_ctl == null) {
-                    _ctl = new ConsoleTraceListener(false);
+                    _ctl = new ConsoleTraceListener();
                 }
                 return _ctl;
             }

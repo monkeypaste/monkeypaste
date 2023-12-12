@@ -254,7 +254,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static void ResetCefNetLogging() {
 
-            if (LogFilePath.IsFile()) {
+            if (LogFilePath.IsFile() && !MpFileIo.IsFileInUse(LogFilePath)) {
                 MpFileIo.DeleteFile(LogFilePath);
             }
         }

@@ -390,6 +390,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 SpeechSynthesizer synth = new SpeechSynthesizer();
                 synth.SetOutputToDefaultAudioDevice();
+                synth.Volume = 100;
                 synth.Speak("Hey dude");
                 await Task.Delay(1);
 

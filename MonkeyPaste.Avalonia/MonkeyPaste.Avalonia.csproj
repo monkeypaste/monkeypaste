@@ -1741,34 +1741,34 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.5" />
+    <PackageReference Include="Avalonia" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.6" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.5" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.6" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.5" />
     <PackageReference Include="CefGlue.Avalonia" Version="117.5938.8-avalonia11" />
     <PackageReference Include="CefGlue.Common" Version="117.5938.8-avalonia11" />
     <PackageReference Include="Markdig" Version="0.33.0" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="ResXResourceReader.NetStandard" Version="1.1.0" />
+    <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
     <PackageReference Include="SharpHook" Version="5.1.2" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
-    <PackageReference Include="NetCoreAudio" Version="1.7.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
-    <PackageReference Include="System.Speech" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="NetCoreAudio" Version="1.8.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
     <PackageReference Include="WebViewControl-Avalonia" Version="2.117.7-avalonia11" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
   
@@ -1804,15 +1804,6 @@
     <None Include="Resources\Localization\Listings\ListingStrings.resx">
       <Generator></Generator>
     </None>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
-    <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
-    </Reference>
-    <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
-    </Reference>
   </ItemGroup>
   
   <ItemGroup>
@@ -1862,6 +1853,15 @@
 
   <ItemGroup>
     <Folder Include="Resources\Editor\src\components\editor\NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CefNet">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

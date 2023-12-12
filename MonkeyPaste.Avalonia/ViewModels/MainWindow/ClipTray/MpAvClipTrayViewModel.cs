@@ -3897,7 +3897,7 @@ namespace MonkeyPaste.Avalonia {
                 if (itemCountDiff > 0) {
                     while (itemCountDiff > 0) {
                         // keep unneeded items as placeholders
-                        Items[--itemCountDiff].TriggerUnloadedNotification(true, false);
+                        Items[--itemCountDiff].TriggerUnloadedNotification(false, false);
                     }
                 } else if (itemCountDiff < 0) {
                     while (itemCountDiff < 0) {

@@ -376,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RetryCommand => new MpCommand(
             () => {
                 IsFixing = false;
-                //DialogResult = MpNotificationDialogResultType.Retry;
+                DialogResult = MpNotificationDialogResultType.Retry;
             });
 
 
