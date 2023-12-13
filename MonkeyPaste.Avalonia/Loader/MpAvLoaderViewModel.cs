@@ -200,8 +200,9 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
-                        //new MpLoaderItemViewModel(typeof(MpAppendNotificationViewModel)),
-                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
+#if OUTSYS_WV || CEFNET_WV || MOBILE
+		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
+#endif
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView), UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
                    });
@@ -209,7 +210,9 @@ namespace MonkeyPaste.Avalonia {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView),  UiStrings.LoaderMainWindowLabel),
-                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
+#if OUTSYS_WV || CEFNET_WV || MOBILE
+		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
+#endif
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
                    });
             }

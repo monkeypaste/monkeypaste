@@ -996,103 +996,106 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task AnimateAsync() {
-            while (true) {
+            await Task.Delay(0);
+            return;
 
-                if (!CanMarquee()) {
-                    return;
-                }
+            //while (true) {
 
-                //double bmp_width = _marqueeBitmap.Size.Width;
-                //double bmp_width = _bmpSize.Width;
-                double bmp_width = _ftSize.Width;
+            //    if (!CanMarquee()) {
+            //        return;
+            //    }
 
-                var cmp = _tb_mp == null ? new MpPoint() : _tb_mp;
-                bool isReseting = _tb_mp == null || !new MpRect(MpPoint.Zero, this.Bounds.Size.ToPortableSize()).Contains(cmp);
+            //    //double bmp_width = _marqueeBitmap.Size.Width;
+            //    //double bmp_width = _bmpSize.Width;
+            //    double bmp_width = _ftSize.Width;
 
-                double max_width = Math.Max(1, this.Bounds.Width); //GetRenderWidth();
-                double velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, cmp.X / max_width));
+            //    var cmp = _tb_mp == null ? new MpPoint() : _tb_mp;
+            //    bool isReseting = _tb_mp == null || !new MpRect(MpPoint.Zero, this.Bounds.Size.ToPortableSize()).Contains(cmp);
 
-                if (AutoMarquee) {
-                    if (_tb_mp != null) {
-                        AutoMarquee = false;
-                    } else {
-                        velMultiplier = 1.0d;
-                        isReseting = false;
-                    }
-                }
-                double deltaX = MaxVelocity * velMultiplier;
+            //    double max_width = Math.Max(1, this.Bounds.Width); //GetRenderWidth();
+            //    double velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, cmp.X / max_width));
 
-                double left1 = _offsetX1;
-                double right1 = _offsetX1 + bmp_width;
+            //    if (AutoMarquee) {
+            //        if (_tb_mp != null) {
+            //            AutoMarquee = false;
+            //        } else {
+            //            velMultiplier = 1.0d;
+            //            isReseting = false;
+            //        }
+            //    }
+            //    double deltaX = MaxVelocity * velMultiplier;
 
-                double left2 = _offsetX2;
-                double right2 = _offsetX2 + bmp_width;
+            //    double left1 = _offsetX1;
+            //    double right1 = _offsetX1 + bmp_width;
 
-                if (isReseting) {
-                    if (Math.Abs(left1) < Math.Abs(left2)) {
-                        if (left1 < 0) {
-                            deltaX *= -1;
-                        }
-                    } else {
-                        if (left2 < 0) {
-                            deltaX *= -1;
-                        }
-                    }
-                }
+            //    double left2 = _offsetX2;
+            //    double right2 = _offsetX2 + bmp_width;
 
-                double nLeft1 = left1 + deltaX;
-                double nRight1 = right1 + deltaX;
-                double nLeft2 = left2 + deltaX;
-                double nRight2 = right2 + deltaX;
+            //    if (isReseting) {
+            //        if (Math.Abs(left1) < Math.Abs(left2)) {
+            //            if (left1 < 0) {
+            //                deltaX *= -1;
+            //            }
+            //        } else {
+            //            if (left2 < 0) {
+            //                deltaX *= -1;
+            //            }
+            //        }
+            //    }
 
-                if (!isReseting) {
-                    if (nLeft1 < nLeft2 && nLeft2 < 0) {
-                        nLeft1 = nRight2;
-                    } else if (nLeft2 < nLeft1 && nLeft1 < 0) {
-                        nLeft2 = nRight1;
-                    }
-                }
+            //    double nLeft1 = left1 + deltaX;
+            //    double nRight1 = right1 + deltaX;
+            //    double nLeft2 = left2 + deltaX;
+            //    double nRight2 = right2 + deltaX;
 
-                if (isReseting) {
-                    if (Math.Abs(nLeft1) < deltaX || Math.Abs(nLeft2) < deltaX) {
-                        _offsetX1 = 0;
-                        _offsetX2 = bmp_width;
-                        this.Redraw();
+            //    if (!isReseting) {
+            //        if (nLeft1 < nLeft2 && nLeft2 < 0) {
+            //            nLeft1 = nRight2;
+            //        } else if (nLeft2 < nLeft1 && nLeft1 < 0) {
+            //            nLeft2 = nRight1;
+            //        }
+            //    }
 
-                        _curLoopWaitMs = 0;
-                        _distTraveled = 0;
-                        return;
-                    }
-                }
+            //    if (isReseting) {
+            //        if (Math.Abs(nLeft1) < deltaX || Math.Abs(nLeft2) < deltaX) {
+            //            _offsetX1 = 0;
+            //            _offsetX2 = bmp_width;
+            //            this.Redraw();
 
-                double maxLoopDeltaX = 5;
-                bool isInitialLoop = Math.Abs(_distTraveled) < bmp_width;
-                bool isLoopDelaying = !isInitialLoop &&
-                                        (Math.Abs(nLeft1) < maxLoopDeltaX || Math.Abs(nLeft2) < maxLoopDeltaX);
+            //            _curLoopWaitMs = 0;
+            //            _distTraveled = 0;
+            //            return;
+            //        }
+            //    }
 
-                if (isLoopDelaying) {
-                    //pause this cycle
-                    _curLoopWaitMs += _delayMs;
-                    // initial loop delay (snap to 0)
-                    nLeft1 = 0;
-                    nLeft2 = bmp_width;
-                }
-                if (_curLoopWaitMs > 1000) {
-                    //loop delay is over reset elapsed and bump so not caught next pass
-                    _curLoopWaitMs = 0;
-                    double vel_dir = MaxVelocity > 0 ? 1 : -1;
-                    nLeft1 = (maxLoopDeltaX + 0.5) * vel_dir;
-                    nLeft2 = nLeft1 + bmp_width;
-                }
+            //    double maxLoopDeltaX = 5;
+            //    bool isInitialLoop = Math.Abs(_distTraveled) < bmp_width;
+            //    bool isLoopDelaying = !isInitialLoop &&
+            //                            (Math.Abs(nLeft1) < maxLoopDeltaX || Math.Abs(nLeft2) < maxLoopDeltaX);
 
-                _offsetX1 = nLeft1;
-                _offsetX2 = nLeft2;
-                if (IsEffectivelyVisible) {
-                    this.Redraw();
-                }
+            //    if (isLoopDelaying) {
+            //        //pause this cycle
+            //        _curLoopWaitMs += _delayMs;
+            //        // initial loop delay (snap to 0)
+            //        nLeft1 = 0;
+            //        nLeft2 = bmp_width;
+            //    }
+            //    if (_curLoopWaitMs > 1000) {
+            //        //loop delay is over reset elapsed and bump so not caught next pass
+            //        _curLoopWaitMs = 0;
+            //        double vel_dir = MaxVelocity > 0 ? 1 : -1;
+            //        nLeft1 = (maxLoopDeltaX + 0.5) * vel_dir;
+            //        nLeft2 = nLeft1 + bmp_width;
+            //    }
 
-                await Task.Delay(_delayMs);
-            }
+            //    _offsetX1 = nLeft1;
+            //    _offsetX2 = nLeft2;
+            //    if (IsEffectivelyVisible) {
+            //        this.Redraw();
+            //    }
+
+            //    await Task.Delay(_delayMs);
+            //}
         }
 
         private MpSize GetScaledTextSize(out MpSize ftSize) {

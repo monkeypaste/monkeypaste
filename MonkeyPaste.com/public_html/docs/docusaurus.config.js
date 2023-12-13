@@ -9,6 +9,7 @@ const darkTheme = themes.dracula;
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'MonkeyPaste',
+  staticDirectories: ['static'],
   tagline: '(coming soon!)',
   favicon: 'img/favicon.ico',
 

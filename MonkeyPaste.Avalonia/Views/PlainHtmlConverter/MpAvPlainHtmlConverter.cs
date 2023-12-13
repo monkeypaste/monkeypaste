@@ -55,7 +55,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsLoaded { get; set; }
+        public bool IsLoaded { get; set; } =
+#if CEFNET_WV || OUTSYS_WV || MOBILE
+            false;
+#else
+            true;
+#endif
         public bool IsWebViewConverterEnabled =>
 #if CEFNET_WV
             MpAvCefNetApplication.IsCefNetLoaded;

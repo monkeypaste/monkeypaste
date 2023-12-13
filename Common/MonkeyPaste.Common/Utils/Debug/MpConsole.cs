@@ -50,14 +50,10 @@ namespace MonkeyPaste.Common {
             LogFilePath = pi.LogPath;
             LogToFile = pi.IsTraceEnabled;
             LogToConsole = pi.IsTraceEnabled;
-            //LogFilePath =
-            //    Path.Combine(
-            //    pi.LogDir,
-            //    LogFileName);
 
             if (LogToConsole && pi.ConsoleTraceListener != null) {
-                Trace.Listeners.Clear();
-                Trace.Listeners.Add(pi.ConsoleTraceListener);
+                //Trace.Listeners.Clear();
+                //Trace.Listeners.Add(pi.ConsoleTraceListener);
             }
             if (LogToFile) {
                 try {
@@ -74,7 +70,6 @@ namespace MonkeyPaste.Common {
                     Trace.AutoFlush = true;
                 }
                 catch (Exception ex) {
-                    //_canLogToFile = false;
                     WriteTraceLine(@"Error deleting previous log file w/ path: " + LogFilePath + " with exception: " + ex);
                 }
             }

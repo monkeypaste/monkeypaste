@@ -28,7 +28,13 @@ namespace MonkeyPaste.Avalonia {
         public override async Task FindHighlightingAsync() {
             SetMatchCount(0);
             var sw = Stopwatch.StartNew();
-            while (!AssociatedObject.IsEditorLoaded) {
+            while (true) {
+                if (AssociatedObject == null) {
+                    return;
+                }
+                if (AssociatedObject.IsEditorLoaded) {
+                    break;
+                }
                 if (AssociatedObject.BindingContext.IsPlaceholder) {
                     // this is likely a tile that was filtered out of query
                     // by new search criteria and will block here until

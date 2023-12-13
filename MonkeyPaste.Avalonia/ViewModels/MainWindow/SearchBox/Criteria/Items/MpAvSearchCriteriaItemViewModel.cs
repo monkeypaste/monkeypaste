@@ -74,8 +74,10 @@ namespace MonkeyPaste.Avalonia {
                 if ((MpContentQueryBitFlags)SearchCriteriaItem.QueryFlagsValue != flags) {
                     long old_flags = SearchCriteriaItem.QueryFlagsValue;
                     SearchCriteriaItem.QueryFlagsValue = (long)flags;
-                    if (IgnoreHasModelChanged && old_flags == 0) {
-                        // NOTE this should only really be needed for default queries 
+                    if (IgnoreHasModelChanged && old_flags == 0 && QueryTagId > 0) {
+                        // NOTE this how to cache criteria flags to run queries w/o ui (not used anywhere but probably good to do)
+
+                        // NOTE2 this should only really be needed for default queries 
                         // because flags is built from ui and any other query will be
                         // create from ui
                         SearchCriteriaItem.WriteToDatabaseAsync(true).FireAndForgetSafeAsync();
@@ -93,6 +95,8 @@ namespace MonkeyPaste.Avalonia {
         public MpIQueryInfo Next {
             get {
                 /*
+                from https://www.macworld.com/article/189989/spotlight3.html
+
                 Join Notes:
                     Although it’s not obvious, you can also 
                     use Boolean search terms to set up a Finder 
@@ -102,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
                     the plus sign. The plus sign will turn into an ellipsis (…), 
                     and you’ll get a new pull-down menu with options for Any (OR), 
                     All (AND), or None (NOT). (For more details, see Add conditions 
-                    to Finder searches) from https://www.macworld.com/article/189989/spotlight3.html
+                    to Finder searches) 
                 */
                 if (Parent == null) {
                     return null;
@@ -1346,7 +1350,10 @@ namespace MonkeyPaste.Avalonia {
             SearchCriteriaItem.MatchValue = null;
             SearchCriteriaItem.IsCaseSensitive = false;
             SearchCriteriaItem.IsWholeWord = false;
-            await SearchCriteriaItem.WriteToDatabaseAsync();
+            if (QueryTagId > 0) {
+                await SearchCriteriaItem.WriteToDatabaseAsync();
+            }
+
             await InitializeAsync(SearchCriteriaItem);
         }
         private MpSearchCriteriaItem GetCurrentItemState() {

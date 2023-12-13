@@ -1,0 +1,74 @@
+{
+  "title": "Image Annotator",
+  "description": "local image analysis",
+  "version": "1.0",
+  "author": "Thomas Kefauver",
+  "guid": "f1988931-c39a-4ea4-b39a-32346c23094b",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Core, Image Detection, Annotation, Image, AI, Text",
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageToken": true
+    },
+    "parameters": [
+      {
+        "label": "Model",
+        "description": "How detailed the analysis will be. Simple will be faster than Complex",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "paramId": 1,
+        "values": [
+          {
+            "label": "Simple",
+            "value": "yolov5n.onnx",
+            "isDefault": true
+          },
+          {
+            "label": "Medium",
+            "value": "yolo5n6.onnx",
+            "isDefault": false
+          },
+          {
+            "label": "Complex",
+            "value": "yolov5s.onnx",
+            "isDefault": false
+          },
+        ]
+      },
+      {
+        "label": "Confidence",
+        "description": "A value between 0 and 1 to filter detected accuracy",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "minimum": 0,
+        "maximum": 1,
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": 3,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      }
+    ]
+  }
+}

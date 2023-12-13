@@ -55,14 +55,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        public void OpenDevTools() =>
 #if OUTSYS_WV
+        public void OpenDevTools() =>
             ShowDeveloperTools();
-#else
-        ShowDevTools();
+#elif CEFNET_WV
+        public void OpenDevTools() =>
+            base.ShowDevTools();
 #endif
 
         #region MpAvIWebViewBindingResponseHandler Implemention
+
 #if CEFNET_WV
 #elif OUTSYS_WV
         public MpAvIWebViewBindingResponseHandler BindingHandler =>
@@ -248,7 +250,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        
+
 
         private void W_Closed(object sender, EventArgs e) {
             if (sender is not Window w) {
@@ -266,7 +268,7 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
             if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
                 w.Closed += W_Closed;
-            } 
+            }
 #endif
         }
         #endregion

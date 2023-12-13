@@ -399,6 +399,8 @@ namespace MonkeyPaste.Avalonia {
             return plugin;
         }
         private static bool DeletePlugin(string manifest_path, MpPluginFormat plugin, bool delete_cache) {
+            // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
+            // https://stackoverflow.com/a/62018508/105028
             bool success = true;
             if (manifest_path.IsFile()) {
                 // delete plugin folder
@@ -540,11 +542,11 @@ namespace MonkeyPaste.Avalonia {
         }
         private static object[] GetDllComponents(string dllPath, string pluginName, out Assembly component_assembly) {
             try {
-#if !ANDROID
-                component_assembly = Assembly.Load(File.ReadAllBytes(dllPath));
-#else
+                //#if !ANDROID
+                //                component_assembly = Assembly.Load(File.ReadAllBytes(dllPath),);
+                //#else
                 component_assembly = Assembly.LoadFrom(dllPath);
-#endif
+                //#endif
 
             }
             catch (Exception rtle) {
