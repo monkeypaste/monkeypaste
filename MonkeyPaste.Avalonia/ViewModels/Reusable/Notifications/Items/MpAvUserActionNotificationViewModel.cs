@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System;
 using System.Linq;
 using System.Threading;
@@ -276,13 +277,13 @@ namespace MonkeyPaste.Avalonia {
                 // if fix is result, fix button becomes retry 
                 // either wait for retry to become result or immediatly trigger
                 // retry where caller should block return until retry invoked (isFixing becomes false)
-                _ = Task.Run(async () => {
-                    while (IsFixing) {
-                        await Task.Delay(100);
-                    }
-                    HideNotification();
-                    var result = RetryAction?.Invoke(RetryActionObj);
-                });
+                //Dispatcher.UIThread.Post(async () => {
+                while (IsFixing) {
+                    await Task.Delay(100);
+                }
+                HideNotification();
+                var result = RetryAction?.Invoke(RetryActionObj);
+                //});
             } else {
                 HideNotification();
                 //while (IsClosing) {

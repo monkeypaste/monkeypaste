@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Implementation
 
-        public override MpPluginFormat PluginFormat {
+        public override MpPluginWrapper PluginFormat {
             get {
                 if (Parent == null) {
                     return null;

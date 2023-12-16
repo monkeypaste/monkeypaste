@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static async Task<MpPluginTransactionBase> PerformTransactionAsync(
-            MpPluginFormat pluginFormat,
+            MpPluginWrapper pluginFormat,
             MpIPluginComponentBase pluginComponent,
             Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static async Task<MpPluginTransactionBase> HandleErrorAsync(
             Exception ex,
-            MpPluginFormat pluginFormat,
+            MpPluginWrapper pluginFormat,
             MpPluginTransactionBase trans,
             MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
             MpConsole.WriteTraceLine(ex);

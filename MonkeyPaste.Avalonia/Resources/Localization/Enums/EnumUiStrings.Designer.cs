@@ -1672,6 +1672,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unload Plugin Error.
+        /// </summary>
+        public static string MpNotificationType_UnloadPluginError {
+            get {
+                return ResourceManager.GetString("MpNotificationType_UnloadPluginError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome.
         /// </summary>
         public static string MpNotificationType_Welcome {
@@ -1798,15 +1807,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collections.
-        /// </summary>
-        public static string MpReadOnlyTagType_Collections {
-            get {
-                return ResourceManager.GetString("MpReadOnlyTagType_Collections", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Favorites.
         /// </summary>
         public static string MpReadOnlyTagType_Favorites {
@@ -1857,6 +1857,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpReadOnlyTagType_None {
             get {
                 return ResourceManager.GetString("MpReadOnlyTagType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string MpReadOnlyTagType_Tags {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Tags", resourceCulture);
             }
         }
         
@@ -3049,20 +3058,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Content Added.
+        ///   Looks up a localized string similar to Clip Added.
         /// </summary>
-        public static string MpTriggerType_ContentAdded {
+        public static string MpTriggerType_ClipAdded {
             get {
-                return ResourceManager.GetString("MpTriggerType_ContentAdded", resourceCulture);
+                return ResourceManager.GetString("MpTriggerType_ClipAdded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Content Tagged.
+        ///   Looks up a localized string similar to Clip Tagged.
         /// </summary>
-        public static string MpTriggerType_ContentTagged {
+        public static string MpTriggerType_ClipTagged {
             get {
-                return ResourceManager.GetString("MpTriggerType_ContentTagged", resourceCulture);
+                return ResourceManager.GetString("MpTriggerType_ClipTagged", resourceCulture);
             }
         }
         

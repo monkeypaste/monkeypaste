@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
         where C : MpAvViewModelBase, MpISelectableViewModel, MpITreeItemViewModel {
         #region Interfaces
         public abstract int IconId { get; }
-        public abstract MpPluginFormat PluginFormat { get; }
+        public abstract MpPluginWrapper PluginFormat { get; }
         public abstract MpParameterHostBaseFormat ComponentFormat { get; }
         public abstract MpParameterHostBaseFormat BackupComponentFormat { get; }
         public abstract string PluginGuid { get; }

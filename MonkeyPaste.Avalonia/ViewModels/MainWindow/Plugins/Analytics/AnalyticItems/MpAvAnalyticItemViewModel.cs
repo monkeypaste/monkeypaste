@@ -31,8 +31,8 @@ namespace MonkeyPaste.Avalonia {
         public override string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        private MpPluginFormat _pluginFormat;
-        public override MpPluginFormat PluginFormat => _pluginFormat;
+        private MpPluginWrapper _pluginFormat;
+        public override MpPluginWrapper PluginFormat => _pluginFormat;
 
         public override MpParameterHostBaseFormat ComponentFormat => AnalyzerComponentFormat;
 
@@ -355,7 +355,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginFormat analyzerPlugin) {
+        public async Task InitializeAsync(MpPluginWrapper analyzerPlugin) {
             if (!ValidateAnalyzer(analyzerPlugin)) {
                 return;
             }
@@ -364,7 +364,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            _pluginFormat = analyzerPlugin as MpPluginFormat;
+            _pluginFormat = analyzerPlugin as MpPluginWrapper;
 
             if (PluginComponent == null) {
                 throw new Exception("Cannot find component");
@@ -542,7 +542,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private bool ValidateAnalyzer(MpPluginFormat pf) {
+        private bool ValidateAnalyzer(MpPluginWrapper pf) {
             if (pf == null) {
                 MpConsole.WriteTraceLine("plugin error, not registered");
                 return false;

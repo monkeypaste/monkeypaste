@@ -28,6 +28,7 @@
         AlertAction,
         StartupComplete,
         FileIoWarning,
+        UnloadPluginError,
 
         // User Action (System Tray)
         InvalidPlugin,

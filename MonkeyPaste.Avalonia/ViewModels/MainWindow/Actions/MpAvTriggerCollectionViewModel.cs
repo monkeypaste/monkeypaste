@@ -438,10 +438,10 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvTriggerActionViewModelBase tavm = null;
             switch ((MpTriggerType)(int.Parse(a.Arg3))) {
-                case MpTriggerType.ContentAdded:
+                case MpTriggerType.ClipAdded:
                     tavm = new MpAvContentAddTriggerViewModel(this);
                     break;
-                case MpTriggerType.ContentTagged:
+                case MpTriggerType.ClipTagged:
                     tavm = new MpAvContentTaggedTriggerViewModel(this);
                     break;
                 case MpTriggerType.FileSystemChange:
@@ -707,7 +707,7 @@ namespace MonkeyPaste.Avalonia {
                 actionType: MpActionType.Trigger,
                 sortOrderIdx: 0,
                 arg2: "True",
-                arg3: ((int)MpTriggerType.ContentAdded).ToString(),
+                arg3: ((int)MpTriggerType.ClipAdded).ToString(),
                 location: DefaultDesignerItemLocationLocation);
 
             var annotate_trigger_action_text_type_param = await MpParameterValue.CreateAsync(

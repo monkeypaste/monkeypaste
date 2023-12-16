@@ -54,9 +54,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (actionOrTriggerType is MpTriggerType tt) {
                 switch (tt) {
-                    case MpTriggerType.ContentAdded:
+                    case MpTriggerType.ClipAdded:
                         return "ClipboardImage";
-                    case MpTriggerType.ContentTagged:
+                    case MpTriggerType.ClipTagged:
                         return "PinToCollectionImage";
                     case MpTriggerType.FileSystemChange:
                         return "FolderEventImage";
@@ -99,9 +99,9 @@ namespace MonkeyPaste.Avalonia {
                     switch (tt) {
                         case MpTriggerType.Shortcut:
                             return MpSystemColors.dodgerblue2;
-                        case MpTriggerType.ContentAdded:
+                        case MpTriggerType.ClipAdded:
                             return MpSystemColors.forestgreen;
-                        case MpTriggerType.ContentTagged:
+                        case MpTriggerType.ClipTagged:
                             return MpSystemColors.bisque3;
                         case MpTriggerType.FileSystemChange:
                             return MpSystemColors.coral3;
@@ -260,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginFormat PluginFormat { get; set; }
+        public MpPluginWrapper PluginFormat { get; set; }
 
         public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
@@ -1588,7 +1588,7 @@ namespace MonkeyPaste.Avalonia {
                  MpActionType at = (MpActionType)args;
                  MpAction na = await MpAction.CreateAsync(
                                          actionType: at,
-                                         label: GetUniqueActionName(at.ToString()),
+                                         label: GetUniqueActionName(at.EnumToUiString()),
                                          parentId: ActionId,
                                          sortOrderIdx: Children.Count(),
                                          location: FindOpenDesignerLocation(Location));

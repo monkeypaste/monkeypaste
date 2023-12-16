@@ -17,7 +17,7 @@ namespace MonkeyPaste {
 
     public enum MpReadOnlyTagType {
         None = 0,
-        Collections,
+        Tags,
         All,
         Favorites,
         Filters,

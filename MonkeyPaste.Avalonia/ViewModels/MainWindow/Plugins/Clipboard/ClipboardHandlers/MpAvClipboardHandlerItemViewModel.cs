@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
-        public MpPluginFormat PluginFormat { get; set; }
+        public MpPluginWrapper PluginFormat { get; set; }
 
         public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
 
@@ -145,10 +145,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginFormat pf) {
+        public async Task InitializeAsync(MpPluginWrapper pf) {
             IsBusy = true;
 
-            PluginFormat = pf as MpPluginFormat;
+            PluginFormat = pf as MpPluginWrapper;
             bool is_plugin_valid = await ValidateClipboardHandlerAsync();
             if (!is_plugin_valid) {
                 PluginFormat = null;
@@ -324,7 +324,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                //PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpPluginFormat;
+                //PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpPluginWrapper;
                 PluginFormat = await MpPluginLoader.ReloadPluginAsync(PluginFormat.guid);
                 // loop through another validation pass
                 return await ValidateClipboardHandlerAsync();

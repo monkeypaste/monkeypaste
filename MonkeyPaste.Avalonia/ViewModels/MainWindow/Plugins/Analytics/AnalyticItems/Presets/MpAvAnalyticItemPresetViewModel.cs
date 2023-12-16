@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         string MpIParameterHostViewModel.PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginFormat PluginFormat => Parent == null ? null : Parent.PluginFormat;
+        public MpPluginWrapper PluginFormat => Parent == null ? null : Parent.PluginFormat;
 
         MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
 

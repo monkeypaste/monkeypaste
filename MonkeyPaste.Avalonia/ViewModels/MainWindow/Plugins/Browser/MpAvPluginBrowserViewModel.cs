@@ -283,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
 
-                MpConsole.WriteLine($"SubItems COunt: {Items.Count} Filtered Count: {filtered_ml.Count()} Manifest COunt: {manifests_to_filter.Count()}");
+                MpConsole.WriteLine($"SubItems Count: {Items.Count} Filtered Count: {filtered_ml.Count()} Manifest Count: {manifests_to_filter.Count()}");
 
                 await AddOrUpdateRecentFilterTextsAsync(FilterText);
             });

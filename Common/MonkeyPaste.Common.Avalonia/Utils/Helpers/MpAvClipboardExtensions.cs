@@ -52,6 +52,9 @@ namespace MonkeyPaste.Common.Avalonia {
             avdo.LogDataObject();
         }
         public static async Task<string[]> GetFormatsSafeAsync(this IClipboard cb, int retryCount = 0) {
+            if (cb == null) {
+                return new string[] { };
+            }
             await WaitForClipboardAsync();
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = await Dispatcher.UIThread.InvokeAsync(async () => {

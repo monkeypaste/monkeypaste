@@ -208,6 +208,12 @@ namespace MonkeyPaste.Avalonia {
                 .Plugins.Where(x =>
                     x.Value.Components.Any(y => y is MpIAnalyzeAsyncComponent) ||
                     x.Value.Components.Any(y => y is MpIAnalyzeComponent));
+
+            //var pail =
+            //    MpPluginLoader
+            //    .Plugins.Where(x =>
+            //        x.Value.Components.Any(y => y.GetType().IsAssignableFrom(typeof(MpIAnalyzeAsyncComponent))) ||
+            //        x.Value.Components.Any(y => y.GetType().IsAssignableFrom(typeof(MpIAnalyzeComponent))));
             foreach (var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModelAsync(pai.Value);
                 if (paivm.PluginFormat == null) {
@@ -294,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SortedItems));
         }
 
-        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginFormat plugin) {
+        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginWrapper plugin) {
             MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
 
             await aivm.InitializeAsync(plugin);

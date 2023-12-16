@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
             .Cast<MpIAsyncObject>()
             .Any(x => x.IsBusy);
 
-        public MpPluginFormat LoadedPluginRef =>
+        public MpPluginWrapper LoadedPluginRef =>
             MpPluginLoader.Plugins.Any(x => x.Value.guid == PluginGuid) ?
                 MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid).Value :
                 null;
@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string PluginRootDirectory {
             get {
-                if (PluginFormat is MpPluginFormat pf) {
+                if (PluginFormat is MpPluginWrapper pf) {
                     return pf.RootDirectory;
                 }
                 return string.Empty;
