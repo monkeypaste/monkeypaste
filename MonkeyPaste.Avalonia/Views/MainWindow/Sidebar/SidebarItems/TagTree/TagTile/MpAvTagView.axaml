@@ -320,26 +320,13 @@
         </Border>
 
         <!--  BADGE COUNT  -->
-        <Border Background="Red"
-                ClipToBounds="False"
-                MinWidth="15"
-                Height="15"
-                CornerRadius="7.5"
-                BorderThickness="1"
-                BorderBrush="White"
+        <Border Classes="badge"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
                 IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <Grid>
                 <!--  NOTE Text won't horizontally align unless in grid  -->
-                <TextBlock Foreground="White"
-                           FontSize="10"
-                           MinWidth="15"
-                           Height="15"
-                           TextAlignment="Center"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch"
-                           Text="{Binding BadgeCount}" />
+                <TextBlock Text="{Binding BadgeCount}" />
             </Grid>
         </Border>
     </Grid>

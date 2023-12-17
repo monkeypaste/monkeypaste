@@ -29,7 +29,7 @@
           },
           {
             "label": "Medium",
-            "value": "yolo5n6.onnx",
+            "value": "yolov5n6.onnx",
             "isDefault": false
           },
           {

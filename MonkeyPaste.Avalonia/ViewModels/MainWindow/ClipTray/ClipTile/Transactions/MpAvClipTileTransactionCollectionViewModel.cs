@@ -416,15 +416,17 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsAnyAnalysisTransaction));
         }
         private void SetTransactionViewGridLength(GridLength gl) {
-            if (Parent.GetContentView() is Control cv &&
-                    cv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
-                    ctv.FindControl<Grid>("TileGrid") is Grid tileGrid) {
-                // setting all column 1 view to IsVisible=false doesn't decrease 
-                // the column's grid length so all other tileGrid views (column 0) 
-                // are <transaction width> less than total width, so this reset column 1 width
-                var trans_gl = tileGrid.ColumnDefinitions[1];
-                trans_gl.Width = gl;// new GridLength(0, GridUnitType.Auto);
+            if (Parent.GetContentView() is not Control cv ||
+                    cv.GetVisualAncestor<MpAvClipTileView>() is not MpAvClipTileView ctv ||
+                    ctv.FindControl<Grid>("TileGrid") is not Grid tileGrid) {
+                return;
             }
+
+            // setting all column 1 view to IsVisible=false doesn't decrease 
+            // the column's grid length so all other tileGrid views (column 0) 
+            // are <transaction width> less than total width, so this reset column 1 width
+            var trans_gl = tileGrid.ColumnDefinitions[1];
+            trans_gl.Width = gl;// new GridLength(0, GridUnitType.Auto);
         }
 
         #endregion
@@ -542,6 +544,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 Dispatcher.UIThread.VerifyAccess();
                 IsTransactionPaneOpen = false;
+                SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
                 await Task.Delay(1);
                 //SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
                 //IsTransactionPaneAnimating = true;
@@ -569,6 +572,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await Task.Delay(1);
                 IsTransactionPaneOpen = true;
+                SetTransactionViewGridLength(new GridLength(0.6, GridUnitType.Star));
                 return;
 
                 //OnPropertyChanged(nameof(MaxWidth));

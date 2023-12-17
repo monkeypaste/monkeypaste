@@ -10,6 +10,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvPluginItemViewModel :
         MpAvViewModelBase<MpAvPluginBrowserViewModel>,
         //MpISelectableViewModel,
+        MpIFilterMatch,
+        MpIFilterMatchScore,
         MpIHoverableViewModel {
         #region Private Variables
         #endregion
@@ -29,6 +31,39 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+
+        #region MpIFilterMatch Implementation
+        private string[] _filterFields => new string[] {
+            PluginTitle,
+            PluginDescription,
+            PluginAuthor,
+            PluginTags,
+            PluginProjectUrl
+        };
+
+        bool MpIFilterMatch.IsFilterMatch(string filter) {
+            if (string.IsNullOrEmpty(filter)) {
+                return true;
+            }
+            string lc_filter = filter.ToLower();
+            return
+                _filterFields
+                .Where(x => x != null)
+                .Any(x => x.ToLower().Contains(lc_filter));
+        }
+        int MpIFilterMatchScore.MatchScore(string filter) {
+            if (string.IsNullOrEmpty(filter)) {
+                return 1;
+            }
+            string lc_filter = filter.ToLower();
+            return
+                _filterFields
+                .Where(x => x.ToLower().Contains(lc_filter))
+                .Min(x => x.ComputeLevenshteinDistance(filter));
+            //.Sum(x => x.ToLower().IndexListOfAll(lc_filter).Count);
+        }
+        #endregion
 
         #region MpISelectableViewModel Implementation
         public bool IsSelected =>
@@ -70,11 +105,31 @@ namespace MonkeyPaste.Avalonia {
         public string ReadMeMarkDownText { get; set; } = string.Empty;
 
         public string ToggleInstallText =>
-            IsInstalled ? UiStrings.PluginBrowserUninstallLabel : UiStrings.PluginBrowserInstallLabel;
+            IsInstalled ||
+            (IsRemote && HasLocalInstall) ?
+                UiStrings.PluginBrowserUninstallLabel :
+                UiStrings.PluginBrowserInstallLabel;
         #endregion
 
         #region State
-
+        public bool IsVisible {
+            get {
+                if (Parent == null ||
+                    !(this as MpIFilterMatch).IsFilterMatch(Parent.FilterText)) {
+                    return false;
+                }
+                switch (Parent.SelectedTabType) {
+                    case MpPluginBrowserTabType.Browse:
+                        return IsRemote;
+                    case MpPluginBrowserTabType.Installed:
+                        return IsInstalled;
+                    case MpPluginBrowserTabType.Updates:
+                        return CanUpdate;
+                    default:
+                        return false;
+                }
+            }
+        }
         public bool IsAnyBusy =>
             IsBusy ||
             RootDependencyViewModel
@@ -82,25 +137,43 @@ namespace MonkeyPaste.Avalonia {
             .Cast<MpIAsyncObject>()
             .Any(x => x.IsBusy);
 
-        public MpPluginWrapper LoadedPluginRef =>
-            MpPluginLoader.Plugins.Any(x => x.Value.guid == PluginGuid) ?
-                MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid).Value :
-                null;
         public bool IsInstalled =>
-            LoadedPluginRef != null;
+            !IsRemote;
+
+        public bool IsRemote =>
+            PluginFormat is not MpPluginFormat;
+        public bool HasLocalInstall =>
+            MpPluginLoader.Plugins.Any(x => x.Value != null && x.Value.guid == PluginGuid);
 
         public bool CanUpdate {
             get {
-                if (!IsInstalled ||
-                    PluginVersion == LoadedPluginRef.version) {
-                    return false;
-                }
-                var temp = new[] { PluginVersion, LoadedPluginRef.version }.OrderDescending();
-                return temp.FirstOrDefault() == PluginVersion;
+                return PluginVersion.CompareTo(MaxKnownVersion) != 0;
             }
         }
 
-
+        public Version MaxKnownVersion {
+            get {
+                if (Parent == null) {
+                    return PluginVersion;
+                }
+                return
+                    Parent.Items
+                    .Where(x => x.PluginGuid == PluginGuid)
+                    .OrderByDescending(x => x.PluginVersion)
+                    .FirstOrDefault()
+                    .PluginVersion;
+            }
+        }
+        private Version _pluginVersion;
+        public Version PluginVersion {
+            get {
+                if (_pluginVersion == null ||
+                    new Version(PluginVersionText).CompareTo(_pluginVersion) != 0) {
+                    _pluginVersion = new Version(PluginVersionText);
+                }
+                return _pluginVersion;
+            }
+        }
         #endregion
 
         #region Model
@@ -157,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Details
-        public string PluginVersion {
+        public string PluginVersionText {
             get {
                 if (PluginFormat == null) {
                     return string.Empty;
@@ -362,8 +435,8 @@ namespace MonkeyPaste.Avalonia {
                     .InstallAnalyzerCommand.ExecuteAsync(new object[] { PluginGuid, PackageUrl });
 
                 IsBusy = false;
-                OnPropertyChanged(nameof(LoadedPluginRef));
                 OnPropertyChanged(nameof(IsInstalled));
+                OnPropertyChanged(nameof(CanUpdate));
                 OnPropertyChanged(nameof(ToggleInstallText));
 
             }, () => {
@@ -391,7 +464,8 @@ namespace MonkeyPaste.Avalonia {
                     await MpAvClipboardHandlerCollectionViewModel.Instance
                         .UninstallHandlerCommand.ExecuteAsync(PluginGuid);
                 } else {
-                    MpDebug.Break($"Plugin not found '{PluginGuid}'");
+                    MpDebug.Break($"Plugin not found '{PluginGuid}' trying to delete");
+                    MpPluginLoader.DeletePluginByGuid(PluginGuid);
                 }
 
                 // refresh list to remove this plugin
@@ -412,6 +486,8 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
                 OnPropertyChanged(nameof(CanUpdate));
+
+                Parent.RefreshItems();
             }, () => {
                 return CanUpdate;
             });

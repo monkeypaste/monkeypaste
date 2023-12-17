@@ -228,6 +228,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedPreset):
                     OnPropertyChanged(nameof(IconResourceObj));
                     break;
+                case nameof(IsPerformingAction):
+                    MpConsole.WriteLine($"Analyzer '{this}' IsPerformingAction: {IsPerformingAction}");
+                    break;
             }
         }
 

@@ -132,7 +132,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
-        public bool IsActionParameter { get; set; } = false;
+        public bool IsActionParameter =>
+            Parent is MpAvActionViewModelBase;
 
         public object CurrentTypedValue {
             get {

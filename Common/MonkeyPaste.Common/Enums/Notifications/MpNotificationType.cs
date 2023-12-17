@@ -28,9 +28,9 @@
         AlertAction,
         StartupComplete,
         FileIoWarning,
-        UnloadPluginError,
 
         // User Action (System Tray)
+        UnloadPluginError,
         InvalidPlugin,
         InvalidClipboardFormatHandler,
         InvalidAction,

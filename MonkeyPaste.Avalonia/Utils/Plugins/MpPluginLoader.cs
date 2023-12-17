@@ -115,7 +115,11 @@ namespace MonkeyPaste.Avalonia {
                 // delete plugin folder
                 string dir_to_backup = Path.GetDirectoryName(original_dir);
                 backup_path = Path.Combine(MpFileIo.GetThisAppTempDir(), Path.GetFileName(dir_to_backup));
-
+                if (backup_path.IsFileOrDirectory()) {
+                    if (!MpFileIo.DeleteFileOrDirectory(backup_path)) {
+                        throw new Exception($"Error deleting existing backup dir '{backup_path}'");
+                    }
+                }
                 try {
                     MpFileIo.CopyDirectory(dir_to_backup, backup_path, true, true);
                 }
@@ -432,6 +436,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
             bool success = true;
+            string fix_path = null;
             try {
                 RemovePlugin(manifest_path);
                 if (manifest_path.IsFile()) {
@@ -442,6 +447,7 @@ namespace MonkeyPaste.Avalonia {
                         dir_to_remove = Path.GetDirectoryName(dir_to_remove);
                     }
                     if (!MpFileIo.DeleteDirectory(dir_to_remove)) {
+                        fix_path = dir_to_remove;
                         throw new MpUserNotifiedException($"Error unloading '{plugin.title}'. Try shutting down MonkeyPaste and deleting the following folder manually: '{dir_to_remove}'");
                     }
                 }
@@ -449,6 +455,7 @@ namespace MonkeyPaste.Avalonia {
                     string cache_path = Path.Combine(PluginManifestBackupFolderPath, GetCachedPluginFileName(plugin));
                     if (cache_path.IsFile()) {
                         if (!MpFileIo.DeleteFile(cache_path)) {
+                            fix_path = cache_path;
                             throw new MpUserNotifiedException($"Error unloading cache for '{plugin.title}'. Try shutting down MonkeyPaste and deleting the following file manually: '{cache_path}'");
                         }
                     }
@@ -459,6 +466,7 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.UnloadPluginError,
                             body: ex.ToString(),
+                            fixCommand: fix_path == null ? null : new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(fix_path), fix_path)),
                             iconSourceObj: "ErrorImage");
             }
             return success;

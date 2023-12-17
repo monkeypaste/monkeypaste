@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpFileIo {
+        public const int MAX_WIN_PATH_LENGTH = 32_767;
+
         private static string _tempDirPath;
         public static string TempDirPath {
             get {

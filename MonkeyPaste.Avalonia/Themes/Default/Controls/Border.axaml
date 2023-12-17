@@ -4,22 +4,14 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
 
-        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_light"
-                             StartPoint="0%,0%"
-                             EndPoint="100%,0%">
-            <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeWhiteColor}" />
-            <GradientStop Offset="0.75"
-                          Color="Transparent" />
+        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_light" StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Offset="0" Color="{DynamicResource ThemeWhiteColor}" />
+            <GradientStop Offset="0.75" Color="Transparent" />
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_long_light"
-                             StartPoint="0%,0%"
-                             EndPoint="100%,0%">
-            <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeWhiteColor}" />
-            <GradientStop Offset="0.9"
-                          Color="Transparent" />
+        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_long_light" StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Offset="0" Color="{DynamicResource ThemeWhiteColor}" />
+            <GradientStop Offset="0.9" Color="Transparent" />
         </LinearGradientBrush>
     </Styles.Resources>
 
@@ -60,5 +52,41 @@
     <Style Selector="Border.roundedTextBoxContainer:focus-within">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource ThemeGrayAccent3Color}" />
+    </Style>
+
+    <!--  BADGE  -->
+    <Style Selector="Border.badge">
+      <!-- NOTE set alignment in actual border -->
+        <Setter Property="Background"
+                Value="Red" />
+        <Setter Property="ClipToBounds"
+                Value="False" />
+        <Setter Property="MinWidth"
+                Value="15" />
+        <Setter Property="Height"
+                Value="15" />
+        <Setter Property="CornerRadius"
+                Value="7.5" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="White" />
+    </Style>
+
+    <Style Selector="Border.badge TextBlock">
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="FontSize"
+                Value="10" />
+        <Setter Property="MinWidth"
+                Value="15" />
+        <Setter Property="Height"
+                Value="15" />
+        <Setter Property="TextAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
     </Style>
 </Styles>

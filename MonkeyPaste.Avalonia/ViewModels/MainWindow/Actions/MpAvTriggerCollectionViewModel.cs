@@ -645,26 +645,16 @@ namespace MonkeyPaste.Avalonia {
                 new Binding() {
                     Source = this,
                     Path = nameof(FocusActionName),
-                    StringFormat = "Trigger Designer '{0}'".ToWindowTitleText()
+                    StringFormat = UiStrings.ActionDesignerWindowTitle.ToWindowTitleText()
                 });
 
-            //dw.Bind(
-            //    Window.BackgroundProperty,
-            //    new Binding() {
-            //        Source = FocusAction,
-            //        Path = nameof(MpAvActionViewModelBase.ActionBackgroundHexColor),
-            //        Mode = BindingMode.OneWay,
-            //        Converter = MpAvStringHexToContrastBrushConverter.Instance,
-            //        ConverterParameter =
-            //            MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
-            //                "darker" :
-            //                "lighter"
-            //    });
-
-            dw.Opened += (s, e) => {
+            void OnOpened(object sender, EventArgs e) {
+                dw.Opened -= OnOpened;
                 ResetDesignerViewCommand.Execute(null);
                 MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
-            };
+            }
+
+            dw.Opened += OnOpened;
             return dw;
         }
 

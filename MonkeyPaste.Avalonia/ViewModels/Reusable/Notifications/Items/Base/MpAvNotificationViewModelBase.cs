@@ -63,10 +63,11 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
                     return MpNotificationLayoutType.ErrorWithOption;
+                case MpNotificationType.UnloadPluginError:
                 case MpNotificationType.BadHttpRequest:
                 case MpNotificationType.DbError:
                 case MpNotificationType.PluginResponseError:
-                    return MpNotificationLayoutType.Error;
+                    return MpNotificationLayoutType.ErrorAndShutdown;
                 //case MpNotificationType.AppendChanged:
                 //    return MpNotificationLayoutType.Append;
                 default:
@@ -110,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
                             return MpNotificationButtonsType.IgnoreRetryFix;
                         case MpNotificationLayoutType.Warning:
                             return MpNotificationButtonsType.Ok;
-                        case MpNotificationLayoutType.Error:
+                        case MpNotificationLayoutType.ErrorAndShutdown:
                             return MpNotificationButtonsType.IgnoreRetryShutdown;
                         default:
                             return MpNotificationButtonsType.None;
@@ -158,16 +159,13 @@ namespace MonkeyPaste.Avalonia {
 
         public static bool GetIsErrorNotification(MpNotificationFormat nf) {
             var lt = GetLayoutTypeFromNotificationType(nf.NotificationType);
-            return lt == MpNotificationLayoutType.Error ||
-                   lt == MpNotificationLayoutType.ErrorAndShutdown ||
+            return lt == MpNotificationLayoutType.ErrorAndShutdown ||
                    lt == MpNotificationLayoutType.ErrorWithOption;
         }
 
         public static bool GetIsWarningNotification(MpNotificationFormat nf) {
             var lt = GetLayoutTypeFromNotificationType(nf.NotificationType);
-            return lt == MpNotificationLayoutType.Error ||
-                   lt == MpNotificationLayoutType.ErrorAndShutdown ||
-                   lt == MpNotificationLayoutType.ErrorWithOption;
+            return lt == MpNotificationLayoutType.Warning;
         }
 
         #endregion

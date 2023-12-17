@@ -2272,4 +2272,21 @@ Clipboard listening is: {0}</value>
   <data name="PrefShowTooltipsLabel" xml:space="preserve">
     <value>Show Tooltips</value>
   </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analyzers annotate their input or create new clips as output. Children of analyzers need to decide which one they need as their input. This typically is the Last Output.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Input Type</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger Designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Pick a {0}...</value>
+    <comment>Parameter Name</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Not found...</value>
+  </data>
 </root>

@@ -200,7 +200,6 @@ namespace MonkeyPaste.Avalonia {
                     nvmb = MpAvWelcomeNotificationViewModel.Instance;
                     break;
                 case MpNotificationLayoutType.Warning:
-                case MpNotificationLayoutType.Error:
                 case MpNotificationLayoutType.Message:
                     nvmb = new MpAvMessageNotificationViewModel();
                     break;

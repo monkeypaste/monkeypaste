@@ -87,6 +87,14 @@ namespace MonkeyPaste.Avalonia {
             if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
                 string res_uri = valStr.IsAvResourceString() ? valStr : Mp.Services.PlatformResource.GetResource<string>(valStr);
                 using (var icon_stream = AssetLoader.Open(new Uri(res_uri))) {
+                    if (res_uri.EndsWith("png") && OperatingSystem.IsWindows()) {
+                        // avoid exception using png
+                        using (var conv_stream = new MemoryStream()) {
+                            if (MpPngToIcoConverter.ConvertToIcon(icon_stream, conv_stream)) {
+                                return new WindowIcon(conv_stream);
+                            }
+                        }
+                    }
                     return new WindowIcon(icon_stream);
                 }
             }

@@ -764,6 +764,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyzers annotate their input or create new clips as output. Children of analyzers need to decide which one they need as their input. This typically is the Last Output..
+        /// </summary>
+        public static string ActionAnalyzerChildInputParamHint {
+            get {
+                return ResourceManager.GetString("ActionAnalyzerChildInputParamHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Type.
+        /// </summary>
+        public static string ActionAnalyzerChildInputParamLabel {
+            get {
+                return ResourceManager.GetString("ActionAnalyzerChildInputParamLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Analyzer - Processes triggered content or previous action output using a selected plugin..
         /// </summary>
         public static string ActionAnalyzerHint {
@@ -985,6 +1003,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ActionDelayHint {
             get {
                 return ResourceManager.GetString("ActionDelayHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trigger Designer &apos;{0}&apos;.
+        /// </summary>
+        public static string ActionDesignerWindowTitle {
+            get {
+                return ResourceManager.GetString("ActionDesignerWindowTitle", resourceCulture);
             }
         }
         
@@ -3436,6 +3463,24 @@ namespace MonkeyPaste.Avalonia {
         public static string NtfRejectRemoveClipsTitle {
             get {
                 return ResourceManager.GetString("NtfRejectRemoveClipsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick a {0}....
+        /// </summary>
+        public static string ParamComponentPickerDefaultLabel {
+            get {
+                return ResourceManager.GetString("ParamComponentPickerDefaultLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found....
+        /// </summary>
+        public static string ParamComponentPickerEmptyLabel {
+            get {
+                return ResourceManager.GetString("ParamComponentPickerEmptyLabel", resourceCulture);
             }
         }
         

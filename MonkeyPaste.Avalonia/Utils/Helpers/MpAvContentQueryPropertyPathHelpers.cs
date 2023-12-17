@@ -56,7 +56,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            root_mivml.Add(new MpAvMenuItemViewModel() { IsSeparator = true });
             root_mivml.Add(adv_mivm);
             return new MpAvMenuItemViewModel() {
                 SubItems = root_mivml
@@ -111,6 +110,10 @@ namespace MonkeyPaste.Avalonia {
                 default:
                     return string.Empty;
             }
+        }
+
+        public static string ToQueryFragmentString(this MpContentQueryPropertyPathType cppt) {
+            return string.Format(@"{{{0}}}", cppt.ToString());
         }
     }
 }

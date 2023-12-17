@@ -28,24 +28,9 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     Header =
-                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, null, null) as string,
+                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, UiStrings.CommonDateTimeFormat, null) as string,
                     IconSourceObj = PresetViewModel.IconId,
                     SubItems = new List<MpAvMenuItemViewModel>() {
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonSelectLabel,
-                            IconSourceObj = "SlidersImage",
-                            Command = PresetViewModel.Parent.SelectPresetCommand,
-                            CommandParameter = new object[] { PresetViewModel, ParameterReqFormat }
-                        },
-                        //new MpMenuItemViewModel() {
-                        //    Header = "View",
-                        //    IconSourceObj = "GraphImage",
-                        //    IsVisible = Parent.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null,
-                        //    Command = HostClipTileViewModel.TransactionCollectionViewModel.SelectChildCommand,
-                        //    CommandParameter =
-                        //        Parent.Response is MpAvAnnotationMessageViewModel amvm2 && amvm2.RootAnnotationViewModel != null ?
-                        //        amvm2.RootAnnotationViewModel : null
-                        //},
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.ClipTileTransactionViewSourceHeader,
                             IconSourceObj = "GraphImage",

@@ -19,7 +19,6 @@ namespace MonkeyPaste.Avalonia {
         Installed,
         Updates
     }
-
     public class MpAvPluginBrowserViewModel :
         MpAvViewModelBase,
         MpICloseWindowViewModel,
@@ -92,6 +91,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int CanUpdateCount =>
+            Items.Where(x => x.CanUpdate).Count();
         public MpPluginBrowserTabType SelectedTabType =>
             (MpPluginBrowserTabType)SelectedTabIdx;
 
@@ -125,6 +126,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public void RefreshItems() {
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
+
+            Selection.Clear();
+            if (Items.FirstOrDefault(x => x.IsVisible) is { } first_vis_item) {
+                Selection.Select(Items.IndexOf(first_vis_item));
+            }
+            OnPropertyChanged(nameof(CanUpdateCount));
+        }
         #endregion
 
         #region Protected Methods
@@ -238,52 +248,76 @@ namespace MonkeyPaste.Avalonia {
             pbw.ShowChild();
             OnPropertyChanged(nameof(IsWindowOpen));
         }
+        private async Task CreateAllItemsAsync() {
+            Items.Clear();
+            var all_manifests = new List<MpManifestFormat>();
+            all_manifests.AddRange(await GetRemoteManifests());
+            all_manifests.AddRange(MpPluginLoader.Plugins.Select(x => x.Value));
+            foreach (var mf in all_manifests.OrderBy(x => x.title)) {
+                var pivm = await CreatePluginItemViewModelAsync(mf);
+                Items.Add(pivm);
+            }
+            OnPropertyChanged(nameof(Items));
+            RefreshItems();
+
+        }
         #endregion
 
         #region Commands
 
 
-        public MpIAsyncCommand PerformFilterCommand => new MpAsyncCommand(
-            async () => {
+        public MpIAsyncCommand<object> PerformFilterCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 while (IsBusy) {
                     await Task.Delay(100);
                 }
 
                 IsBusy = true;
-
-                IEnumerable<MpManifestFormat> manifests_to_filter = new List<MpManifestFormat>();
-                switch (SelectedTabType) {
-                    case MpPluginBrowserTabType.Browse:
-                        manifests_to_filter = await GetRemoteManifests();
-                        break;
-                    case MpPluginBrowserTabType.Installed:
-                        manifests_to_filter = MpPluginLoader.Plugins.Select(x => x.Value);
-                        break;
+                if (!Items.Any() || args.ToStringOrEmpty() == "Click") {
+                    await CreateAllItemsAsync();
+                } else {
+                    RefreshItems();
                 }
 
-                var filtered_ml =
-                        manifests_to_filter
-                        .Cast<MpIFilterMatch>()
-                        .Where(x => x.IsFilterMatch(FilterText))
-                        .Cast<MpManifestFormat>()
-                        .OrderBy(x => x.title);
+                //IEnumerable<MpManifestFormat> manifests_to_filter = new List<MpManifestFormat>();
+                //switch (SelectedTabType) {
+                //    case MpPluginBrowserTabType.Browse:
+                //        manifests_to_filter = await GetRemoteManifests();
+                //        break;
+                //    case MpPluginBrowserTabType.Installed:
+                //        manifests_to_filter = MpPluginLoader.Plugins.Select(x => x.Value);
+                //        break;
+                //    case MpPluginBrowserTabType.Updates:
+                //        var remote_manifests = await GetRemoteManifests();
+                //        var local_manifests = MpPluginLoader.Plugins.Select(x => x.Value);
 
-                Items.Clear();
-                Selection.Clear();
-                foreach (var filtered_m in filtered_ml) {
-                    var mvm = await CreatePluginItemViewModelAsync(filtered_m);
-                    Items.Add(mvm);
-                }
+                //        break;
+                //}
 
-                if (Items.Any()) {
-                    Selection.Select(0);
-                }
+                //var filtered_ml =
+                //        manifests_to_filter
+                //        .Cast<MpIFilterMatch>()
+                //        .Where(x => x.IsFilterMatch(FilterText))
+                //        .Cast<MpManifestFormat>()
+                //        .OrderBy(x => x.title);
+
+                //Items.Clear();
+                //Selection.Clear();
+                //foreach (var filtered_m in filtered_ml) {
+                //    var mvm = await CreatePluginItemViewModelAsync(filtered_m);
+                //    Items.Add(mvm);
+                //}
+
+                //if (Items.Any()) {
+                //    Selection.Select(0);
+                //}
+
 
                 IsBusy = false;
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
 
-                MpConsole.WriteLine($"SubItems Count: {Items.Count} Filtered Count: {filtered_ml.Count()} Manifest Count: {manifests_to_filter.Count()}");
+                //MpConsole.WriteLine($"SubItems Count: {Items.Count} Filtered Count: {filtered_ml.Count()} Manifest Count: {manifests_to_filter.Count()}");
 
                 await AddOrUpdateRecentFilterTextsAsync(FilterText);
             });

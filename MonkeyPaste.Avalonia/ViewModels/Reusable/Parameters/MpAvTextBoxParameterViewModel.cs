@@ -235,8 +235,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-                string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
-                CurrentValue = CurrentValue.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
+                CurrentValue = CurrentValue.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, cppt.ToQueryFragmentString());
             });
         public ICommand ShowContentQueryPopupCommand => new MpCommand<object>(
             (args) => {

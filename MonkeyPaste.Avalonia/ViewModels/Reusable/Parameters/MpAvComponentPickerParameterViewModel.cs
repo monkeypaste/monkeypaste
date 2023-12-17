@@ -47,9 +47,9 @@ namespace MonkeyPaste.Avalonia {
                     SelectedComponentMenuItemViewModel.IconSourceObj;
         public string SelectedLabel =>
             ComponentId == 0 ?
-                $"Select {ComponentType}..." :
+                string.Format(UiStrings.ParamComponentPickerDefaultLabel, Label) :
                 SelectedComponentMenuItemViewModel == null ?
-                    "Not found..." :
+                    UiStrings.ParamComponentPickerEmptyLabel :
                     SelectedComponentMenuItemViewModel.Header;
         #endregion
 

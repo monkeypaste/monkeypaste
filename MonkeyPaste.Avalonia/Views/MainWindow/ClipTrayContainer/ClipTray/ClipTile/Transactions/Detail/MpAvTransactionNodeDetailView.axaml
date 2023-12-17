@@ -37,8 +37,6 @@
                                                        VerticalAlignment="Center"
                                                        Percent="{Binding CurScorePercent}" />
 
-                            <!--<TextBlock Grid.Row="1"
-                                               Text="{Binding AnnotationScore, StringFormat='Score: {0}'}" />-->
                             <TextBlock Grid.Row="2"
                                        Foreground="{DynamicResource ThemeInteractiveColor}"
                                        Text="{Binding Body}" />

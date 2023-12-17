@@ -15,7 +15,10 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginBrowserView">
     <local:MpAvUserControl.Styles>
         <!--  SELECTOR LISTBOX ITEM  -->
-        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem">
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem"
+               x:DataType="local:MpAvPluginItemViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IsVisible}" />
             <Setter Property="Padding"
                     Value="0" />
             <Setter Property="Margin"
@@ -148,7 +151,8 @@
                         HorizontalAlignment="Center"
                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                         IsEnabled="{Binding !IsBusy}"
-                        Command="{Binding PerformFilterCommand}">
+                        Command="{Binding PerformFilterCommand}"
+                        CommandParameter="Click">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonRefreshTooltip}" />
                     </ToolTip.Tip>
@@ -163,14 +167,30 @@
             </StackPanel>
 
 
-            <!--  TABS  -->
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <!--  TABS  -->
+                <TabStrip x:Name="PluginTabStrip"
+                          Grid.Column="1"
+                          ItemsSource="{Binding Tabs}"
+                          SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center" />
+                <!--  UPDATE BADGE COUNT  -->
+                <Border Classes="badge"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        IsVisible="{Binding CanUpdateCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                    <Border.RenderTransform>
+                        <TranslateTransform X="-10" Y="7" />
+                    </Border.RenderTransform>
+                    <Grid>
+                        <TextBlock Text="{Binding CanUpdateCount}" />
+                    </Grid>
+                </Border>
+            </StackPanel>
 
-            <TabStrip x:Name="PluginTabStrip"
-                      Grid.Column="1"
-                      ItemsSource="{Binding Tabs}"
-                      SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center" />
 
             <StackPanel Orientation="Horizontal"
                         Spacing="5"
@@ -257,8 +277,8 @@
                         BUG virtualizing messes layout up but not many plugins atm so fix later
                         see https://github.com/AvaloniaUI/Avalonia/issues/12464
                     -->
-                    <!--<VirtualizingStackPanel />-->
-                    <StackPanel />
+                    <VirtualizingStackPanel />
+                    <!--<StackPanel />-->
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
@@ -410,7 +430,7 @@
                     <SelectableTextBlock Grid.Row="5"
                                          Grid.Column="2"
                                          Classes="detailInfo"
-                                         Text="{Binding PluginVersion}" />
+                                         Text="{Binding PluginVersionText}" />
 
                     <!--  CREDITS  -->
                     <SelectableTextBlock Grid.Row="6"

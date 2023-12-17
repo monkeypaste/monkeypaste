@@ -4,6 +4,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -307,6 +308,54 @@ namespace MonkeyPaste.Avalonia {
             return aivm;
         }
 
+        private async Task RemoveAnalyzerReferencesAsync(MpAvAnalyticItemViewModel aivm, bool deletePresets) {
+            // NOTE since async calling method needs to null aivm param after this
+
+            var preset_ids = aivm.Items.Select(x => x.AnalyticItemPresetId).ToList();
+
+            while (aivm.IsBusy) {
+                // wait if executing
+                await Task.Delay(100);
+            }
+
+            var sw = Stopwatch.StartNew();
+            while (GetAnalyzerActions(preset_ids, true).Any()) {
+                // wait for any running actions w/ this analyzer to complete
+                await Task.Delay(100);
+                if (sw.ElapsedMilliseconds > 5_000) {
+                    MpDebug.Break($"Running timeout reached for analyzer '{aivm}', delete/update will probably fail but oh well");
+                    break;
+                }
+            }
+
+            // remove from collection
+            Items.Remove(aivm);
+            OnPropertyChanged(nameof(Items));
+
+            // get ALL action analyzer refs
+            var all_aivm_actions = GetAnalyzerActions(preset_ids, false);
+
+            if (deletePresets) {
+                foreach (var aaivm in all_aivm_actions) {
+                    aaivm.AnalyticItemPresetId = 0;
+                }
+                await Task.WhenAll(aivm.Items.Select(x => x.Preset.DeleteFromDatabaseAsync()));
+            }
+            // update actions to clear their preset vm ref
+            all_aivm_actions.ForEach(x => x.OnPropertyChanged(nameof(x.SelectedPreset)));
+        }
+
+        private IEnumerable<MpAvAnalyzeActionViewModel> GetAnalyzerActions(IEnumerable<int> presetIds, bool onlyRunning) {
+            return
+                    MpAvTriggerCollectionViewModel.Instance
+                        .Items
+                        .OfType<MpAvAnalyzeActionViewModel>()
+                        .Where(x =>
+                            presetIds.Contains(x.AnalyticItemPresetId) &&
+                            onlyRunning ?
+                                x.RootTriggerActionViewModel.SelfAndAllDescendants.Any(y => y.IsPerformingAction) :
+                                true);
+        }
         #endregion
 
         #region Commands
@@ -359,47 +408,13 @@ namespace MonkeyPaste.Avalonia {
                     MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
                     return;
                 }
-
-
                 // NOTE assume confirm handled in calling command (plugin browser)
-
-                while (aivm.IsBusy) {
-                    // wait if executing
-                    await Task.Delay(100);
-                }
-
-                var running_triggers_with_this_analyzer =
-                    MpAvTriggerCollectionViewModel.Instance
-                        .Items
-                        .OfType<MpAvAnalyzeActionViewModel>()
-                        .Where(x =>
-                            aivm.Items.Any(y => y.AnalyticItemPresetId == x.AnalyticItemPresetId) &&
-                            x.RootTriggerActionViewModel.SelfAndAllDescendants.Any(y => y.IsPerformingAction));
-
-                if (running_triggers_with_this_analyzer.Any()) {
-                    while (running_triggers_with_this_analyzer.Any()) {
-                        // wait for any action change w/ this analyzer to complete
-                        await Task.Delay(100);
-                        running_triggers_with_this_analyzer =
-                            MpAvTriggerCollectionViewModel.Instance
-                                .Items
-                                .OfType<MpAvAnalyzeActionViewModel>()
-                                .Where(x =>
-                                    aivm.Items.Any(y => y.AnalyticItemPresetId == x.AnalyticItemPresetId) &&
-                                    x.RootTriggerActionViewModel.SelfAndAllDescendants.Any(y => y.IsPerformingAction));
-                    }
-                }
-
-                // remove from db
-                await Task.WhenAll(aivm.Items.Select(x => x.Preset.DeleteFromDatabaseAsync()));
+                await RemoveAnalyzerReferencesAsync(aivm, true);
+                // clear local ref
+                aivm = null;
 
                 // remove from plugin dir
-                MpPluginLoader.DeletePluginByGuid(aivm.PluginGuid);
-
-
-                // remove from collection
-                Items.Remove(aivm);
-                OnPropertyChanged(nameof(Items));
+                bool success = MpPluginLoader.DeletePluginByGuid(plugin_guid);
 
                 IsBusy = false;
             });
@@ -420,6 +435,10 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
+                await RemoveAnalyzerReferencesAsync(aivm, false);
+                // remove local ref
+                aivm = null;
+
                 bool success = true;
                 // remove from plugin dir (retain cache)
                 if (!MpPluginLoader.DeletePluginByGuid(plugin_guid, false)) {
@@ -431,7 +450,11 @@ namespace MonkeyPaste.Avalonia {
                         // 
                         string package_url = (args as object[])[1] as string;
                         var updated_pf = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
-                        await aivm.InitializeAsync(updated_pf);
+                        aivm = await CreateAnalyticItemViewModelAsync(updated_pf);
+                        if (aivm.PluginGuid == null) {
+                            throw new Exception("Plugin init error");
+                        }
+                        Items.Add(aivm);
                     }
                     catch (Exception ex) {
                         // if something goes wrong 

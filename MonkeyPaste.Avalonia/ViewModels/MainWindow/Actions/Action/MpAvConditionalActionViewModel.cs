@@ -56,6 +56,7 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_PATH_PARAM_ID,
                                 description = UiStrings.ActionCondInPropHint,
+                                value = new MpPluginParameterValueFormat(MpContentQueryPropertyPathType.ItemData.ToQueryFragmentString(),true)
                             },new MpParameterFormat() {
                                 label = UiStrings.ActionCondInFilterLabel,
                                 controlType = MpParameterControlType.TextBox,
@@ -114,38 +115,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public double CompareDataTextBoxWidth { get; set; } = 200;
-
-        public double CompareDataTextBoxHeight { get; set; } = 30;
-
         public override string ActionHintText =>
             UiStrings.ActionConditionalHint;
-
-        #endregion
-
-        #region Business Logic
-
-        public string PhysicalPropertyPath {
-            get {
-                switch (ComparePropertyPathType) {
-                    case MpContentQueryPropertyPathType.ItemData:
-                    case MpContentQueryPropertyPathType.ItemType:
-                    case MpContentQueryPropertyPathType.Title:
-                    case MpContentQueryPropertyPathType.CopyDateTime:
-                    case MpContentQueryPropertyPathType.CopyCount:
-                    case MpContentQueryPropertyPathType.PasteCount:
-                        return ComparePropertyPathType.ToString();
-                    case MpContentQueryPropertyPathType.AppName:
-                    case MpContentQueryPropertyPathType.AppPath:
-                        return string.Format(@"SourceControl.App.{0}", ComparePropertyPathType.ToString());
-                    case MpContentQueryPropertyPathType.UrlPath:
-                    case MpContentQueryPropertyPathType.UrlTitle:
-                    case MpContentQueryPropertyPathType.UrlDomainPath:
-                        return string.Format(@"SourceControl.App.{0}", ComparePropertyPathType.ToString());
-                }
-                return string.Empty;
-            }
-        }
 
         #endregion
 

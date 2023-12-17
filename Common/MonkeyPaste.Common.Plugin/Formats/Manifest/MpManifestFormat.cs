@@ -6,43 +6,12 @@ using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpManifestFormat :
-        MpJsonObject,
-        MpIFilterMatch,
-        MpIFilterMatchCount {
+        MpJsonObject {
         #region Statics
 
         #endregion
 
         #region Interfaces
-        #region MpIFilterMatch Implementation
-        private string[] _filterFields => new string[] {
-            title,
-            description,
-            author,
-            tags,
-            projectUrl
-        };
-        bool MpIFilterMatch.IsFilterMatch(string filter) {
-            if (string.IsNullOrEmpty(filter)) {
-                return true;
-            }
-            string lc_filter = filter.ToLower();
-            return
-                _filterFields
-                .Where(x => x != null)
-                .Any(x => x.ToLower().Contains(lc_filter));
-        }
-        int MpIFilterMatchCount.MatchCount(string filter) {
-            if (string.IsNullOrEmpty(filter)) {
-                return 1;
-            }
-            string lc_filter = filter.ToLower();
-            return
-                _filterFields
-                .Where(x => x != null)
-                .Sum(x => x.ToLower().IndexListOfAll(lc_filter).Count);
-        }
-        #endregion
 
         #endregion
 

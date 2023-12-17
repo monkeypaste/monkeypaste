@@ -13,6 +13,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpAnalyzerChildInputType {
+        LastOutput,
+        SourceClip
+    }
 
     public abstract class MpAvActionViewModelBase :
         MpAvViewModelBase<MpAvTriggerCollectionViewModel>,
@@ -407,7 +411,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             IsVisible = !IsTrigger,
-                            Header = UiStrings.CommonRemoveLabel,
+                            Header = UiStrings.CommonDeleteLabel,
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand
                         }
@@ -930,7 +934,7 @@ namespace MonkeyPaste.Avalonia {
             ActionArgs.Clear();
 
             if (ParentActionViewModel is MpAvAnalyzeActionViewModel aavm) {
-                // TODO for any child of analyzer (and maybe conditional?)
+                // NOTE for any child of analyzer (and maybe conditional?)
                 // insert inputType parameter to args w/ options of 'Source' or 'LastOutput'
                 // then if lastoutput is input type
                 // update GetInput to set CopyItem to last output (may need to check at end of analyze perform)
@@ -942,38 +946,39 @@ namespace MonkeyPaste.Avalonia {
                 ActionComponentFormat.parameters.Insert(
                     0,
                     new MpParameterFormat() {
-                        label = "Input Type",
+                        label = UiStrings.ActionAnalyzerChildInputParamLabel,
                         controlType = MpParameterControlType.ComboBox,
                         unitType = MpParameterValueUnitType.PlainText,
+                        description = UiStrings.ActionAnalyzerChildInputParamHint,
                         isRequired = true,
                         paramId = INPUT_TYPE_PARAM_ID,
                         values = new List<MpPluginParameterValueFormat>() {
                             new MpPluginParameterValueFormat() {
                                 isDefault = true,
-                                value = "SourceControl"
+                                value = MpAnalyzerChildInputType.LastOutput.ToString(),
+                                label = MpAnalyzerChildInputType.LastOutput.EnumToUiString()
                             },
                             new MpPluginParameterValueFormat() {
-                                value = "Output"
-                            }
+                                value = MpAnalyzerChildInputType.SourceClip.ToString(),
+                                label = MpAnalyzerChildInputType.SourceClip.EnumToUiString()
+                            },
                         }.ToList()
-                    });
+                    }); ;
             }
             if (ComponentFormat != null &&
                 ComponentFormat.parameters != null) {
+                // locate param values
                 var param_values = await MpAvPluginParameterValueLocator.LocateValuesAsync(
                     MpParameterHostType.Action, ActionId, this);
                 foreach (var param_format in param_values) {
                     var param_vm = await CreateActionParameterViewModel(param_format);
                     ActionArgs.Add(param_vm);
                 }
-
-
                 OnPropertyChanged(nameof(ActionArgs));
             }
+
+            // attach validation handlers
             ActionArgs.ForEach(x => x.OnValidate += ActionArg_OnValidate);
-
-
-
 
             var cal = await MpDataModelProvider.GetChildActionsAsync(ActionId);
             foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {
@@ -1126,13 +1131,13 @@ namespace MonkeyPaste.Avalonia {
             _isSettingChildRestorePoint = true;
             var action_clone = await Action.CloneDbModelAsync(true, true);
             UndoableChildren = action_clone.Children.ToList();
-            if (UndoableChildren == null) {
-                MpConsole.WriteLine($"Child restore state for '{FullName}' SET to NULL", true, true);
-            } else {
-                MpConsole.WriteLine($"Child restore state for '{FullName}' SET to:", true);
-                UndoableChildren.ForEach(x => MpConsole.WriteLine(x.SerializeJsonObject().ToPrettyPrintJson()));
-                MpConsole.WriteLine("");
-            }
+            //if (UndoableChildren == null) {
+            //    MpConsole.WriteLine($"Child restore state for '{FullName}' SET to NULL", true, true);
+            //} else {
+            //    MpConsole.WriteLine($"Child restore state for '{FullName}' SET to:", true);
+            //    UndoableChildren.ForEach(x => MpConsole.WriteLine(x.SerializeJsonObject().ToPrettyPrintJson()));
+            //    MpConsole.WriteLine("");
+            //}
 
             _isSettingChildRestorePoint = false;
         }
@@ -1195,7 +1200,7 @@ namespace MonkeyPaste.Avalonia {
                 };
             } else if (arg is MpAvActionOutput ao) {
                 if (ArgLookup.TryGetValue(INPUT_TYPE_PARAM_ID, out var input_type_pvm) &&
-                    input_type_pvm.CurrentValue == "Output" &&
+                    input_type_pvm.CurrentValue == MpAnalyzerChildInputType.LastOutput.ToString() &&
                     ao is MpAvAnalyzeOutput anao &&
                     anao.NewCopyItem is MpCopyItem output_item) {
                     anao.CopyItem = output_item;

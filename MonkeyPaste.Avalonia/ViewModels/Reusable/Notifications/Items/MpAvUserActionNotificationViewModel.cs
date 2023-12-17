@@ -38,9 +38,9 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowIgnoreButton { get; set; }
         public bool ShowFixButton => CanFix && !IsFixing;
         public bool ShowSubmitButton { get; set; }
-        public bool ShowRetryButton => IsFixing;
+        public bool ShowRetryButton => IsFixing && RetryAction != null;
 
-        public bool ShowShutdownButton => ShowIgnoreButton && !CanFix;
+        public bool ShowShutdownButton { get; set; }
 
         public bool ShowYesButton { get; set; }
         public bool ShowNoButton { get; set; }
@@ -201,6 +201,9 @@ namespace MonkeyPaste.Avalonia {
                     ShowCancelButton = true;
                     break;
                 case MpNotificationButtonsType.IgnoreRetryShutdown:
+                    ShowIgnoreButton = true;
+                    ShowShutdownButton = true;
+                    break;
                 case MpNotificationButtonsType.IgnoreRetryFix:
                     ShowIgnoreButton = true;
                     // others based on args (fix,retry non-null)

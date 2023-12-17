@@ -3343,6 +3343,19 @@ namespace MonkeyPaste.Avalonia {
                          pinType == MpPinType.Window ?
                             MpAppendModeType.None :
                             appendType);
+                     var sw = Stopwatch.StartNew();
+                     while (true) {
+                         // wait for window to actually open
+                         if (PinnedItems.Where(x => x.CopyItemId == PinOpCopyItemId).Any(x => x.IsWindowOpen)) {
+                             break;
+                         }
+                         if (sw.ElapsedMilliseconds > 5_000) {
+                             // timeout
+                             MpDebug.Break("Tile popout time out reached");
+                             break;
+                         }
+                         await Task.Delay(100);
+                     }
                  } else {
                      // reset pinned item size (may have been missed if init was before adding to 1 of the item collections)
                      ctvm_to_pin.ResetTileSizeToDefaultCommand.Execute(null);

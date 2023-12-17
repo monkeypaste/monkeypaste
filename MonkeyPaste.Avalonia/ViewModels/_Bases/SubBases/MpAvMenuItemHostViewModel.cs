@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
             if (cur_mivm == null) {
                 return null;
             }
-            if (cur_mivm.Identifier == identifier) {
+            if (identifier.Equals(cur_mivm.Identifier)) {
                 return cur_mivm;
             }
             if (cur_mivm.SubItems == null) {

@@ -64,7 +64,7 @@
             Classes="param picker"
             Cursor="Hand"
             Padding="0,5"
-            CornerRadius="10"
+            CornerRadius="5"
             BorderThickness="1"
             Command="{Binding ShowSelectorMenuCommand}"
             CommandParameter="{Binding $self}"

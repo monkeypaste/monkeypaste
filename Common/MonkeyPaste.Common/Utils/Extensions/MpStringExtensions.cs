@@ -740,10 +740,22 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsFile(this string str) {
+#if WINDOWS
+            if (str != null && str.Length > MpFileIo.MAX_WIN_PATH_LENGTH) {
+                // prevent PathLength exception (happens checking base64)
+                return false;
+            }
+#endif
             return File.Exists(str);
         }
 
         public static bool IsDirectory(this string str) {
+#if WINDOWS
+            if (str != null && str.Length > MpFileIo.MAX_WIN_PATH_LENGTH) {
+                // prevent PathLength exception (happens checking base64)
+                return false;
+            }
+#endif
             return Directory.Exists(str);
         }
 

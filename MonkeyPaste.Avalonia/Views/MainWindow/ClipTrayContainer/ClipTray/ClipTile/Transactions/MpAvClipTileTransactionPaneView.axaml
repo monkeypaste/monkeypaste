@@ -85,7 +85,7 @@
 
         <Style Selector="Button#CloseTransactionsButton Image">
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
         <Style Selector="Button#CloseTransactionsButton:pointerover Image">
@@ -96,12 +96,12 @@
         <!--  PLAIN TEXT TOGGLE  -->
         <Style Selector="ToggleButton#PlainTextToggleButton Image, ToggleButton#PlainTextToggleButton:unchecked Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
         <Style Selector="ToggleButton#PlainTextToggleButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
+                    Value="{Binding Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
         </Style>
 
         <Style Selector="ToggleButton#PlainTextToggleButton:checked Image">

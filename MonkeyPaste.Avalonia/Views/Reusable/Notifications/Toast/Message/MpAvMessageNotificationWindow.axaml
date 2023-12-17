@@ -41,6 +41,7 @@
                 <!--  TITLE  -->
                 <local:MpAvMarqueeTextBox AutoMarquee="True"
                                           EditOnFocus="False"
+                                          ClipToBounds="False"
                                           MinWidth="200"
                                           MinHeight="30"
                                           FontSize="24"
