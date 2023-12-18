@@ -141,20 +141,24 @@ namespace MonkeyPaste.Avalonia {
                 //}
 
                 if (aipvm.Parent.LastTransaction != null) {
-                    if (output.CopyItem != null && aipvm.Parent.LastTransaction.ResponseContent != null &&
-                        output.CopyItem.Id != aipvm.Parent.LastTransaction.ResponseContent.Id &&
-                        aipvm.Parent.LastTransaction.RequestContent is MpCopyItem req_ci) {
+                    // grab ref in case another transaction is queued
+                    var ltr = aipvm.Parent.LastTransaction;
+                    // clone response
+                    output.TransactionResult = MpJsonConverter.DeserializeObject<MpAnalyzerPluginResponseFormat>(ltr.Response.SerializeJsonObject());
+
+                    if (output.CopyItem != null && ltr.ResponseContent != null &&
+                        output.CopyItem.Id != ltr.ResponseContent.Id &&
+                        ltr.RequestContent is MpCopyItem req_ci) {
                         // analyzer created NEW content
                         // TODO how should new content be handled?
 
-                        output.NewCopyItem = aipvm.Parent.LastTransaction.ResponseContent;
+                        output.NewCopyItem = ltr.ResponseContent;
                         output.CopyItem = req_ci;
-                    } else if (aipvm.Parent.LastTransaction.ResponseContent != null) {
+                    } else if (ltr.ResponseContent != null) {
                         // use (possibly) updated item from analysis result
-                        output.CopyItem = aipvm.Parent.LastTransaction.ResponseContent;
+                        output.CopyItem = ltr.ResponseContent;
                     }
 
-                    //output.TransactionResult = aipvm.Parent.LastTransaction.Response;
                 } else {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Analyzer '{aipvm.FullName}' returned null to Action({ActionId}) '{FullName}', so {RootTriggerActionViewModel.Label} will stop.");
@@ -222,6 +226,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAnalyzeActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(AnalyticItemPresetId):
+                    OnPropertyChanged(nameof(SelectedPreset));
+                    OnPropertyChanged(nameof(IconResourceObj));
+                    break;
                 case nameof(ActionArgs):
                     OnPropertyChanged(nameof(SelectedPreset));
                     break;

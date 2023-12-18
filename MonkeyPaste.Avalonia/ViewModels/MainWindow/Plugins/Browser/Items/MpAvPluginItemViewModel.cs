@@ -342,6 +342,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        public override string ToString() {
+            return $"{PluginFormat} {(IsInstalled ? "LOCAL" : "REMOTE")}";
+        }
+
         #endregion
 
         #region Protected Methods

@@ -2289,4 +2289,8 @@ Clipboard listening is: {0}</value>
   <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
     <value>Not found...</value>
   </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
 </root>

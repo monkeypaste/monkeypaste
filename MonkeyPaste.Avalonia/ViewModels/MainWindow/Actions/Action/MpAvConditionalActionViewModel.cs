@@ -270,6 +270,7 @@ namespace MonkeyPaste.Avalonia {
 
             string compareStr = await GetCompareStr(ao, lastOutputCallback);
             if (compareStr == null) {
+                base.PerformActionAsync(null).FireAndForgetSafeAsync(this);
                 return;
             }
             MpConsole.WriteLine($"Comprarer '{Label}' match result:");

@@ -82,6 +82,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalExample", "Plugins\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotator", "Plugins\ImageAnnotator\ImageAnnotator.csproj", "{7F4639BA-0525-4F98-9382-6F3050668B0A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotatorv7", "Plugins\ImageAnnotatorv7\ImageAnnotatorv7.csproj", "{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1324,6 +1326,48 @@ Global
 		{7F4639BA-0525-4F98-9382-6F3050668B0A}.Release|x64.Build.0 = Release|Any CPU
 		{7F4639BA-0525-4F98-9382-6F3050668B0A}.Release|x86.ActiveCfg = Release|Any CPU
 		{7F4639BA-0525-4F98-9382-6F3050668B0A}.Release|x86.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|x64.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Debug|x86.Build.0 = Debug|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|Any CPU.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|ARM.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|ARM.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|ARM64.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|ARM64.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|iPhone.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|iPhone.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|x64.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|x64.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|x86.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Nuget_Release|x86.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|ARM.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|ARM64.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|iPhone.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x64.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x64.Build.0 = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x86.ActiveCfg = Release|Any CPU
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1346,14 +1390,15 @@ Global
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02} = {E0839402-4D82-4FF2-8778-A2E538ABCEAB}
 		{1CC97E27-71F3-4DB2-BB09-55F9919A4644} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{7F4639BA-0525-4F98-9382-6F3050668B0A} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
 		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
 	EndGlobalSection
 EndGlobal

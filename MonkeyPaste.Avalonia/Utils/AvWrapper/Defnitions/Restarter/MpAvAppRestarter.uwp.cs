@@ -1,8 +1,7 @@
 ﻿using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste.Common;
 using System;
-using System.IO;
-using System.Threading.Tasks;
+using SchedulerTask = Microsoft.Win32.TaskScheduler.Task;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvAppRestarter {
@@ -50,6 +49,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void RemoveRestartTask() {
+            if (TaskService.Instance.FindTask(RestartTaskPath) is not SchedulerTask rt) {
+                return;
+            }
             try {
                 TaskService.Instance.RootFolder.DeleteTask(RestartTaskPath);
                 MpConsole.WriteLine("Restart task successfully removed");

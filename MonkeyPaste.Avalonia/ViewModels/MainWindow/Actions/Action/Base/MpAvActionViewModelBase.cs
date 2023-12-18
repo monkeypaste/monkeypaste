@@ -933,38 +933,8 @@ namespace MonkeyPaste.Avalonia {
 
             ActionArgs.Clear();
 
-            if (ParentActionViewModel is MpAvAnalyzeActionViewModel aavm) {
-                // NOTE for any child of analyzer (and maybe conditional?)
-                // insert inputType parameter to args w/ options of 'Source' or 'LastOutput'
-                // then if lastoutput is input type
-                // update GetInput to set CopyItem to last output (may need to check at end of analyze perform)
-                if (ActionComponentFormat == null) {
-                    ActionComponentFormat = new MpHeadlessPluginFormat() {
-                        parameters = new List<MpParameterFormat>()
-                    };
-                }
-                ActionComponentFormat.parameters.Insert(
-                    0,
-                    new MpParameterFormat() {
-                        label = UiStrings.ActionAnalyzerChildInputParamLabel,
-                        controlType = MpParameterControlType.ComboBox,
-                        unitType = MpParameterValueUnitType.PlainText,
-                        description = UiStrings.ActionAnalyzerChildInputParamHint,
-                        isRequired = true,
-                        paramId = INPUT_TYPE_PARAM_ID,
-                        values = new List<MpPluginParameterValueFormat>() {
-                            new MpPluginParameterValueFormat() {
-                                isDefault = true,
-                                value = MpAnalyzerChildInputType.LastOutput.ToString(),
-                                label = MpAnalyzerChildInputType.LastOutput.EnumToUiString()
-                            },
-                            new MpPluginParameterValueFormat() {
-                                value = MpAnalyzerChildInputType.SourceClip.ToString(),
-                                label = MpAnalyzerChildInputType.SourceClip.EnumToUiString()
-                            },
-                        }.ToList()
-                    }); ;
-            }
+            //AddAncestorParams();
+
             if (ComponentFormat != null &&
                 ComponentFormat.parameters != null) {
                 // locate param values
@@ -1199,13 +1169,13 @@ namespace MonkeyPaste.Avalonia {
                     CopyItem = ci
                 };
             } else if (arg is MpAvActionOutput ao) {
-                if (ArgLookup.TryGetValue(INPUT_TYPE_PARAM_ID, out var input_type_pvm) &&
-                    input_type_pvm.CurrentValue == MpAnalyzerChildInputType.LastOutput.ToString() &&
-                    ao is MpAvAnalyzeOutput anao &&
-                    anao.NewCopyItem is MpCopyItem output_item) {
-                    anao.CopyItem = output_item;
-                    return anao;
-                }
+                //if (ArgLookup.TryGetValue(INPUT_TYPE_PARAM_ID, out var input_type_pvm) &&
+                //    input_type_pvm.CurrentValue == MpAnalyzerChildInputType.LastOutput.ToString() &&
+                //    ao is MpAvAnalyzeOutput anao &&
+                //    anao.NewCopyItem is MpCopyItem output_item) {
+                //    anao.CopyItem = output_item;
+                //    return anao;
+                //}
                 return ao;
             }
             throw new Exception("Unknown action input: " + arg.ToString());
@@ -1214,25 +1184,28 @@ namespace MonkeyPaste.Avalonia {
         protected virtual MpAvActionOutput GetInputWithCallback(object arg, string filter, out Func<string> callback) {
             MpAvActionOutput input = GetInput(arg);
             callback = () => {
-                if (input is MpAvActionOutput ao) {
-                    if (ao.OutputData is MpPluginResponseFormatBase prfb) {
-                        try {
-                            return MpJsonPathProperty.Query(prfb, filter);
-                        }
-                        catch (Exception ex) {
-                            MpConsole.WriteLine(@"Error parsing/querying json response:");
-                            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
-                            MpConsole.WriteLine(@"For JSONPath: ");
-                            MpConsole.WriteLine(filter);
-                            MpConsole.WriteTraceLine(ex);
-
-                            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                            ShowValidationNotification();
+                if (input is not MpAvActionOutput ao) {
+                    return string.Empty;
+                }
+                if (ao.OutputData is MpPluginResponseFormatBase prfb) {
+                    try {
+                        string query_result = MpJsonPathProperty.Query(prfb, filter);
+                        if (!string.IsNullOrEmpty(query_result)) {
+                            return query_result;
                         }
                     }
-                    return ao.OutputData.ToStringOrDefault();
+                    catch (Exception ex) {
+                        MpConsole.WriteLine(@"Error parsing/querying json response:");
+                        MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
+                        MpConsole.WriteLine(@"For JSONPath: ");
+                        MpConsole.WriteLine(filter);
+                        MpConsole.WriteTraceLine(ex);
+
+                        ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+                        ShowValidationNotification();
+                    }
                 }
-                return string.Empty;
+                return ao.OutputData.ToStringOrDefault();
             };
             return input;
         }
@@ -1490,6 +1463,40 @@ namespace MonkeyPaste.Avalonia {
         //}
         #endregion
 
+        private void AddAncestorParams() {
+            if (ParentActionViewModel is MpAvAnalyzeActionViewModel aavm) {
+                // NOTE for any child of analyzer (and maybe conditional?)
+                // insert inputType parameter to args w/ options of 'Source' or 'LastOutput'
+                // then if lastoutput is input type
+                // update GetInput to set CopyItem to last output (may need to check at end of analyze perform)
+                if (ActionComponentFormat == null) {
+                    ActionComponentFormat = new MpHeadlessPluginFormat() {
+                        parameters = new List<MpParameterFormat>()
+                    };
+                }
+                ActionComponentFormat.parameters.Insert(
+                    0,
+                    new MpParameterFormat() {
+                        label = UiStrings.ActionAnalyzerChildInputParamLabel,
+                        controlType = MpParameterControlType.ComboBox,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        description = UiStrings.ActionAnalyzerChildInputParamHint,
+                        isRequired = true,
+                        paramId = INPUT_TYPE_PARAM_ID,
+                        values = new List<MpPluginParameterValueFormat>() {
+                            new MpPluginParameterValueFormat() {
+                                isDefault = true,
+                                value = MpAnalyzerChildInputType.LastOutput.ToString(),
+                                label = MpAnalyzerChildInputType.LastOutput.EnumToUiString()
+                            },
+                            new MpPluginParameterValueFormat() {
+                                value = MpAnalyzerChildInputType.SourceClip.ToString(),
+                                label = MpAnalyzerChildInputType.SourceClip.EnumToUiString()
+                            },
+                        }.ToList()
+                    }); ;
+            }
+        }
         private async Task UpdateCanPasteAsync() {
             var dfl = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
             CanPaste = dfl.Contains(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
@@ -1525,14 +1532,14 @@ namespace MonkeyPaste.Avalonia {
             int uniqueIdx = 1;
             string testName = string.Format(
                                         @"{0}{1}",
-                                        prefix.ToLower(),
+                                        prefix,
                                         uniqueIdx);
 
-            while (RootTriggerActionViewModel.SelfAndAllDescendants.Any(x => x.Label.ToLower() == testName)) {
+            while (RootTriggerActionViewModel.SelfAndAllDescendants.Any(x => x.Label == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
-                                        prefix.ToLower(),
+                                        prefix,
                                         uniqueIdx);
             }
 

@@ -491,10 +491,11 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDbSettingsAsync() {
+            // from https://gist.github.com/phiresky/978d8e204f77feaa0ab5cca08d2d5b27
             var settings = new List<string>() {
                 $"pragma synchronous = normal;",
                 $"pragma temp_store = memory;",
-                $"pragma mmap_size = 30000000000;",
+                //$"pragma mmap_size = 30000000000;",
                 $"pragma page_size = 32768;"
             };
 

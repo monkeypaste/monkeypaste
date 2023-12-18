@@ -459,20 +459,20 @@ namespace MonkeyPaste.Avalonia {
 
 
         public string GetUniqueTriggerName(string given_name) {
-            if (!Triggers.Any(x => x.Label.ToLower() == given_name)) {
+            if (!Triggers.Any(x => x.Label == given_name)) {
                 return given_name;
             }
             int uniqueIdx = 1;
             string testName = string.Format(
                                         @"{0}{1}",
-                                        given_name.ToLower(),
+                                        given_name,
                                         uniqueIdx);
 
-            while (Triggers.Any(x => x.Label.ToLower() == testName)) {
+            while (Triggers.Any(x => x.Label == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
-                                        given_name.ToLower(),
+                                        given_name,
                                         uniqueIdx);
             }
             return given_name + uniqueIdx;
@@ -742,7 +742,7 @@ namespace MonkeyPaste.Avalonia {
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
 
                  MpAction na = await MpAction.CreateAsync(
-                         label: GetUniqueTriggerName($"{tt} Trigger"),
+                         label: GetUniqueTriggerName(string.Format(UiStrings.ActionTriggerDefaultLabel, tt.EnumToUiString())),
                          actionType: MpActionType.Trigger,
                          sortOrderIdx: Items.Count,
                          arg2: true.ToString(),

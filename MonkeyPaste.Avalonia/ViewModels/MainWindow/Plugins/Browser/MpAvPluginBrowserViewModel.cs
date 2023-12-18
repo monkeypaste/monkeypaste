@@ -70,9 +70,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvPluginItemViewModel> Items { get; private set; } = new ObservableCollection<MpAvPluginItemViewModel>();
 
-        public SelectionModel<MpAvPluginItemViewModel> Selection { get; }
-        public MpAvPluginItemViewModel SelectedItem =>
-            Selection == null ? null : Selection.SelectedItem;
+        public IEnumerable<MpAvPluginItemViewModel> FilteredItems =>
+            Items.Where(x => x.IsVisible).ToList();
+
+        public MpAvPluginItemViewModel SelectedItem { get; set; }
         #endregion
 
         #region Appearance
@@ -115,10 +116,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvPluginBrowserViewModel() {
-            MpConsole.WriteLine("plug browser ctor");
             PropertyChanged += MpAvPluginBrowserViewModel_PropertyChanged;
-            Selection = new SelectionModel<MpAvPluginItemViewModel>(Items);
-            Selection.SelectionChanged += Selection_SelectionChanged;
             AddOrUpdateRecentFilterTextsAsync(null).FireAndForgetSafeAsync(this);
         }
 
@@ -127,13 +125,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void RefreshItems() {
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
-
-            Selection.Clear();
-            if (Items.FirstOrDefault(x => x.IsVisible) is { } first_vis_item) {
-                Selection.Select(Items.IndexOf(first_vis_item));
-            }
             OnPropertyChanged(nameof(CanUpdateCount));
+            OnPropertyChanged(nameof(FilteredItems));
+            SelectedItem = FilteredItems.FirstOrDefault();
         }
         #endregion
 
@@ -161,19 +155,14 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsWindowOpen) {
                         break;
                     }
-
                     PerformFilterCommand.Execute(null);
                     break;
             }
         }
 
-        private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvPluginItemViewModel> e) {
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
-            OnPropertyChanged(nameof(Selection));
-            OnPropertyChanged(nameof(SelectedItem));
-        }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredItems));
         }
         private async Task<MpAvPluginItemViewModel> CreatePluginItemViewModelAsync(MpManifestFormat pf) {
             var pivm = new MpAvPluginItemViewModel(this);
@@ -241,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
                         await Task.Delay(100);
                     }
                     if (Items.FirstOrDefault(x => x.PluginGuid == selectedGuid) is MpAvPluginItemViewModel pivm) {
-                        Selection.SelectedItem = pivm;
+                        SelectedItem = pivm;
                     }
                 };
             }
@@ -257,7 +246,6 @@ namespace MonkeyPaste.Avalonia {
                 var pivm = await CreatePluginItemViewModelAsync(mf);
                 Items.Add(pivm);
             }
-            OnPropertyChanged(nameof(Items));
             RefreshItems();
 
         }
@@ -278,53 +266,18 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     RefreshItems();
                 }
-
-                //IEnumerable<MpManifestFormat> manifests_to_filter = new List<MpManifestFormat>();
-                //switch (SelectedTabType) {
-                //    case MpPluginBrowserTabType.Browse:
-                //        manifests_to_filter = await GetRemoteManifests();
-                //        break;
-                //    case MpPluginBrowserTabType.Installed:
-                //        manifests_to_filter = MpPluginLoader.Plugins.Select(x => x.Value);
-                //        break;
-                //    case MpPluginBrowserTabType.Updates:
-                //        var remote_manifests = await GetRemoteManifests();
-                //        var local_manifests = MpPluginLoader.Plugins.Select(x => x.Value);
-
-                //        break;
-                //}
-
-                //var filtered_ml =
-                //        manifests_to_filter
-                //        .Cast<MpIFilterMatch>()
-                //        .Where(x => x.IsFilterMatch(FilterText))
-                //        .Cast<MpManifestFormat>()
-                //        .OrderBy(x => x.title);
-
-                //Items.Clear();
-                //Selection.Clear();
-                //foreach (var filtered_m in filtered_ml) {
-                //    var mvm = await CreatePluginItemViewModelAsync(filtered_m);
-                //    Items.Add(mvm);
-                //}
-
-                //if (Items.Any()) {
-                //    Selection.Select(0);
-                //}
-
-
                 IsBusy = false;
-                OnPropertyChanged(nameof(Items));
-                OnPropertyChanged(nameof(SelectedItem));
-
-                //MpConsole.WriteLine($"SubItems Count: {Items.Count} Filtered Count: {filtered_ml.Count()} Manifest Count: {manifests_to_filter.Count()}");
-
                 await AddOrUpdateRecentFilterTextsAsync(FilterText);
             });
 
         public ICommand OpenPluginFolderCommand => new MpCommand(
             () => {
                 MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpPluginLoader.PluginRootFolderPath);
+            });
+
+        public ICommand ClearFilterTextCommand => new MpCommand(
+            () => {
+                FilterText = string.Empty;
             });
         #endregion
     }

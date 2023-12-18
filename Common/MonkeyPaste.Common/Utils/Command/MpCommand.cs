@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 //using Xamarin.Forms;
 
@@ -10,9 +11,9 @@ namespace MonkeyPaste.Common {
     public class MpCommandErrorHandler : MpIErrorHandler {
         private static MpCommandErrorHandler _instance;
         public static MpCommandErrorHandler Instance => _instance ??= (_instance = new MpCommandErrorHandler());
-        public void HandleError(Exception ex) {
+        public void HandleError(Exception ex, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             MpDebug.Break();
-            MpConsole.WriteTraceLine("Command error: ", ex);
+            MpConsole.WriteTraceLine("Command error: ", ex, MpLogLevel.Error, callerName, callerFilePath, lineNum);
         }
     }
     public class MpCommand<T> : ICommand where T : class {

@@ -14,11 +14,18 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginBrowserView">
     <local:MpAvUserControl.Styles>
+        <!--  FILTER BOX  -->
+        <Style Selector="local|MpAvClipBorder#FilterContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#FilterContainer.empty">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+
         <!--  SELECTOR LISTBOX ITEM  -->
-        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem"
-               x:DataType="local:MpAvPluginItemViewModel">
-            <Setter Property="IsVisible"
-                    Value="{Binding IsVisible}" />
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem">
             <Setter Property="Padding"
                     Value="0" />
             <Setter Property="Margin"
@@ -125,25 +132,57 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
                         Margin="5">
-                <!--  FILTER BOX  -->
 
-                <AutoCompleteBox x:Name="FilterPluginBox"
-                                 VerticalAlignment="Stretch"
-                                 HorizontalAlignment="Stretch"
-                                 Padding="5,0,0,0"
-                                 Background="{DynamicResource ThemeInteractiveBgColor}"
-                                 local:MpAvDropExtension.IsEnabled="True"
-                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                 local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
-                                 Width="150"
-                                 Height="30"
-                                 Watermark="{x:Static local:UiStrings.CommonSearchWatermark}"
-                                 FontSize="14"
-                                 IsTextCompletionEnabled="False"
-                                 MinimumPrefixLength="0"
-                                 MinimumPopulateDelay="0.25"
-                                 ItemsSource="{Binding RecentPluginSearches}" />
+                <!--  FILTER CONTAINER  -->
+                <local:MpAvClipBorder x:Name="FilterContainer"
+                                      Padding="0"
+                                      CornerRadius="5"
+                                      BorderThickness="1"
+                                      Background="{DynamicResource ThemeInteractiveBgColor}"
+                                      Width="150"
+                                      Height="30"
+                                      VerticalContentAlignment="Center">
+                    <Classes.empty>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="FilterText"
+                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                            <Binding Path="FilteredItems"
+                                     ConverterParameter="flip"
+                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                        </MultiBinding>
+                    </Classes.empty>
+                    <Grid>
+
+                        <!--  FILTER TEXTBOX  -->
+
+                        <AutoCompleteBox MinWidth="150"
+                                         MinHeight="30"
+                                         VerticalAlignment="Stretch"
+                                         BorderThickness="0"
+                                         Margin="0"
+                                         Padding="5,0,0,0"
+                                         IsTextCompletionEnabled="False"
+                                         MinimumPrefixLength="0"
+                                         MinimumPopulateDelay="0.25"
+                                         ItemsSource="{Binding RecentPluginSearches}"
+                                         local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                         local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                         local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
+                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
+
+
+                        <!--  CLEAR FILTER BUTTON  -->
+
+                        <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
+                                                   Classes="TextBoxButton square"
+                                                   Height="20"
+                                                   Margin="5"
+                                                   IsVisible="{Binding FilterText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                   ClearCommand="{Binding ClearFilterTextCommand}"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center" />
+                    </Grid>
+                </local:MpAvClipBorder>
 
                 <!--  REFRESH BUTTON  -->
                 <Button x:Name="RefreshFilterButton"
@@ -220,6 +259,7 @@
             </StackPanel>
         </Grid>
 
+
         <!--  PLUGIN LIST  -->
         <ListBox x:Name="PluginSelectorListBox"
                  Margin="5,5,0,5"
@@ -229,9 +269,8 @@
                  BorderBrush="{DynamicResource ThemeInteractiveColor}"
                  Grid.Row="1"
                  Grid.Column="0"
-                 ItemsSource="{Binding Items}"
-                 SelectionMode="AlwaysSelected"
-                 Selection="{Binding Selection}">
+                 ItemsSource="{Binding FilteredItems}"
+                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvPluginItemViewModel">
                     <Border x:Name="PluginBrowserItemContainer"
@@ -277,8 +316,8 @@
                         BUG virtualizing messes layout up but not many plugins atm so fix later
                         see https://github.com/AvaloniaUI/Avalonia/issues/12464
                     -->
-                    <VirtualizingStackPanel />
-                    <!--<StackPanel />-->
+                    <!--<VirtualizingStackPanel />-->
+                    <StackPanel />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
@@ -297,18 +336,13 @@
         <TextBlock x:Name="EmptPluginListTextBlock"
                    Grid.Row="1"
                    Grid.Column="0"
-                   IsVisible="{Binding IsBusy}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   TextAlignment="Center"
-                   TextWrapping="Wrap"
-                   FontSize="24"
+                   FontSize="32"
                    Text="{x:Static local:UiStrings.CommonEmptyListText}"
-                   Classes="disabled">
+                   Classes="disabled emptyOverlayText">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!IsBusy" />
-                    <Binding Path="Items"
+                    <Binding Path="FilteredItems"
                              Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
                              ConverterParameter="flip" />
                 </MultiBinding>

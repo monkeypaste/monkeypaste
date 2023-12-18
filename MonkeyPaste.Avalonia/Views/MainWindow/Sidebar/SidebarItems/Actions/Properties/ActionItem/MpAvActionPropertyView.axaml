@@ -117,11 +117,13 @@
     </local:MpAvUserControl.Styles>
     <Grid RowDefinitions="Auto,Auto,Auto,Auto">
         <Label Grid.Row="0"
+               IsVisible="False"
                Margin="0"
                HorizontalAlignment="Left"
                Classes="h1"
                Content="{x:Static local:UiStrings.TriggerActionLabel}" />
         <Border Grid.Row="1"
+                IsVisible="False"
                 Classes="labelUnderline"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom" />
@@ -129,14 +131,31 @@
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch">
             <StackPanel Orientation="Vertical">
+
+                <!--  ACTION HEADER  -->
+
                 <local:MpAvActionPropertyHeaderView CornerRadius="10"
                                                     BorderBrush="{Binding $self.Background, ConverterParameter=compliment, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                     Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                     Padding="5,0"
-                                                    Margin="0,0,0,15"
+                                                    Margin="0,0,0,10"
+                                                    ClipToBounds="False"
+                                                    Effect="drop-shadow(3 3 7 black)"
                                                     HorizontalAlignment="Stretch" />
-                <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
+                <!--  ACTION PARAMS  -->
+                <local:MpAvParameterCollectionView Margin="0,0,0,5"
+                                                   HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
+                <!--  ANALYZE SUB-PARAM COLLECTION  -->
+                <Border x:DataType="local:MpAvAnalyzeActionViewModel"
+                        x:CompileBindings="False"
+                        Margin="20,0,0,0"
+                        IsVisible="{Binding ActionType, ConverterParameter=Analyze, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}">
+                    <local:MpAvParameterCollectionView IsVisible="{Binding SelectedPreset, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                       DataContext="{Binding SelectedPreset}"
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Stretch" />
+                </Border>
             </StackPanel>
         </Border>
     </Grid>

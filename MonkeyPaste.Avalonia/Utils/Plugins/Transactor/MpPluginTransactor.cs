@@ -35,6 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
                 MpAnalyzerTransaction trans = new MpAnalyzerTransaction() {
+                    RequestContent = sourceCopyItem,
                     RequestTime = DateTime.Now,
                 };
 
@@ -50,15 +51,6 @@ namespace MonkeyPaste.Avalonia {
                 catch (Exception ex) {
                     return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
                 }
-
-                // FIND CONTENT
-                MpParameterFormat contentParam = pluginFormat.analyzer.parameters
-                    .FirstOrDefault(x => x.unitType == MpParameterValueUnitType.PlainTextContentQuery);
-
-                trans.RequestContent = contentParam == null ?
-                    null :
-                    (trans.Request as MpAnalyzerPluginRequestFormat).items
-                    .FirstOrDefault(x => x.paramId.Equals(contentParam.paramId)).value;
 
                 // TODO (for http) phone home w/ request half of transaction and await return
 

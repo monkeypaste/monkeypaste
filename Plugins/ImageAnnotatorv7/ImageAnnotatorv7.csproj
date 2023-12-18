@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultFramework)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <BuildFiles Include="$(TargetDir)\*.*" />
+      <ProjectFiles Include="$(ProjectDir)\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+  
+  <ItemGroup>
+    <None Remove="Assets\yolov7-tiny.onnx" />
+    <None Remove="Assets\yolov7-tiny_640x640.onnx" />
+    <None Remove="Assets\yolov8n.onnx" />
+    <None Remove="icon.png" />
+    <None Remove="manifest.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Assets\yolov7-tiny.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\yolov7-tiny_640x640.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\yolov8n.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="manifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="IVilson.AI.Yolov7net" Version="1.0.3" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="manifest_w_persistant_props_example.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

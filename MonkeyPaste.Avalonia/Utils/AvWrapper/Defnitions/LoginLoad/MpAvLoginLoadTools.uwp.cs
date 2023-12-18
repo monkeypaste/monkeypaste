@@ -1,21 +1,19 @@
 ﻿using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using SchedulerTask = Microsoft.Win32.TaskScheduler.Task;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoginLoadTools {
-        string LoginLoadTaskPath =>
+        string LoginLoadTaskName =>
             $"{Mp.Services.ThisAppInfo.ThisAppProductName}LoginLoad".Replace(" ", string.Empty);
 
         public bool IsLoadOnLoginEnabled {
             get {
-                if (TaskService.Instance.GetTask(LoginLoadTaskPath) is Task t) {
-                    return t.Enabled;
+                if (TaskService.Instance.FindTask(LoginLoadTaskName) is not SchedulerTask t) {
+                    return false;
                 }
-                return false;
+                return t.Enabled;
             }
         }
         public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {
@@ -41,15 +39,15 @@ namespace MonkeyPaste.Avalonia {
                     td.Actions.Add(new ExecAction(Mp.Services.PlatformInfo.ExecutingPath, App.LOGIN_LOAD_ARG));
 
                     // Register the task in the root folder
-                    var task = TaskService.Instance.RootFolder.RegisterTaskDefinition(LoginLoadTaskPath, td);
+                    var task = TaskService.Instance.RootFolder.RegisterTaskDefinition(LoginLoadTaskName, td);
                     success = true;
                 } else {
-                    TaskService.Instance.RootFolder.DeleteTask(LoginLoadTaskPath);
+                    TaskService.Instance.RootFolder.DeleteTask(LoginLoadTaskName);
                     success = true;
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error creating login load task '{LoginLoadTaskPath}'.", ex);
+                MpConsole.WriteTraceLine($"Error creating login load task '{LoginLoadTaskName}'.", ex);
                 success = false;
             }
 

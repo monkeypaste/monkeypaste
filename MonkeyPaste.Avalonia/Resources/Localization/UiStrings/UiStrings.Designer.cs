@@ -1214,6 +1214,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} Trigger.
+        /// </summary>
+        public static string ActionTriggerDefaultLabel {
+            get {
+                return ResourceManager.GetString("ActionTriggerDefaultLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url already exists: &apos;{0}&apos;.
         /// </summary>
         public static string AddUrlNtfDupText {

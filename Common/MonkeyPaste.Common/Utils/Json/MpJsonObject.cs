@@ -17,7 +17,6 @@ namespace MonkeyPaste.Common {
             return MpJsonConverter.SerializeObjectToBase64JsonStr(this, settings, enc);
         }
 
-
         public override string ToString() {
             return SerializeJsonObject();
         }

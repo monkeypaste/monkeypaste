@@ -92,6 +92,28 @@
                     Value="12.5" />
         </Style>
 
+        <!--  DESIGNER ITEM ICON BORDER CONTENT  -->
+        <Style Selector="Border#DesignerIconContainer"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Child">
+                <Setter.Value>
+                    <Template>
+                        <Grid>
+                            <Image IsVisible="{Binding !IsPerformingAction}" />
+                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       IsVisible="{Binding IsPerformingAction}"
+                                                       Width="20"
+                                                       Height="20" />
+                        </Grid>
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Border#DesignerIconContainer.shiftY">
+            <Setter Property="RenderTransform"
+                    Value="translateY(10px)" />
+        </Style>
         <!--  DESIGNER ITEM IMAGE  -->
 
         <Style Selector="ContentControl#DesignerItemContentControl Image"
@@ -162,9 +184,7 @@
                         <DataTemplate x:Key="TriggerDesignerTemplate">
                             <Grid>
                                 <Ellipse />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -173,9 +193,7 @@
                         <DataTemplate x:Key="ConditionalDesignerTemplate">
                             <Grid>
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -184,9 +202,7 @@
                         <DataTemplate x:Key="AddFromClipboardDesignerTemplate">
                             <Grid>
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -195,9 +211,7 @@
                         <DataTemplate x:Key="DelayDesignerTemplate">
                             <Grid>
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
                         <!--  Alert Diamond  -->
@@ -205,9 +219,7 @@
                         <DataTemplate x:Key="AlertDesignerTemplate">
                             <Grid>
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -216,9 +228,7 @@
                         <DataTemplate x:Key="AnalyzeDesignerTemplate">
                             <Grid>
                                 <Rectangle />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -227,9 +237,7 @@
                         <DataTemplate x:Key="MacroDesignerTemplate">
                             <Grid>
                                 <Rectangle />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -238,9 +246,7 @@
                         <DataTemplate x:Key="FileWriterDesignerTemplate">
                             <Grid>
                                 <Rectangle />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
@@ -250,14 +256,8 @@
                         <DataTemplate x:Key="ClassifyDesignerTemplate">
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
-
-                                <Border x:Name="DesignerIconContainer">
-                                    <Border.RenderTransform>
-                                        <TranslateTransform X="0"
-                                                            Y="10" />
-                                    </Border.RenderTransform>
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer"
+                                        Classes="shiftY" />
                             </Grid>
                         </DataTemplate>
 
@@ -266,14 +266,8 @@
                         <DataTemplate x:Key="KeySimulatorDesignerTemplate">
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
-
-                                <Border x:Name="DesignerIconContainer">
-                                    <Border.RenderTransform>
-                                        <TranslateTransform X="0"
-                                                            Y="10" />
-                                    </Border.RenderTransform>
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer"
+                                        Classes="shiftY" />
                             </Grid>
                         </DataTemplate>
 
@@ -282,13 +276,8 @@
                         <DataTemplate x:Key="RepeaterDesignerTemplate">
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
-                                <Border x:Name="DesignerIconContainer">
-                                    <Border.RenderTransform>
-                                        <TranslateTransform X="0"
-                                                            Y="10" />
-                                    </Border.RenderTransform>
-                                    <Image />
-                                </Border>
+                                <Border x:Name="DesignerIconContainer"
+                                        Classes="shiftY" />
                             </Grid>
                         </DataTemplate>
                     </local:MpAvActionDesignerItemTemplateSelector>

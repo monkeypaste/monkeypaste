@@ -166,6 +166,10 @@
                     Value="SemiBold" />
             <Setter Property="TextAlignment"
                     Value="Center" />
+          <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+          <Setter Property="ClipToBounds"
+                    Value="False" />
             <Setter Property="FontSize"
                     Value="24" />
             <Setter Property="Effect"

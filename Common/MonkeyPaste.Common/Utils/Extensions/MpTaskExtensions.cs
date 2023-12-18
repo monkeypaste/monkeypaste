@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpTaskUtilities {
 #pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
-        public static async void FireAndForgetSafeAsync(this Task task, MpIErrorHandler handler = null)
+        public static async void FireAndForgetSafeAsync(this Task task, MpIErrorHandler handler = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0)
 #pragma warning restore RECS0165 // Asynchronous methods should return a Task instead of void
     {
             try {
@@ -13,7 +14,7 @@ namespace MonkeyPaste.Common {
             }
             catch (Exception ex) {
                 handler = handler == null ? MpDefaultErrorHandler.Instance : handler;
-                handler?.HandleError(ex);
+                handler?.HandleError(ex, callerName, callerFilePath, lineNum);
             }
         }
 

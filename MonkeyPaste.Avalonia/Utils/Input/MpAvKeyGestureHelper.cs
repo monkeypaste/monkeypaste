@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static bool LOG_ORPHANS =
 #if DEBUG && WINDOWS
-            true;
+            false;
 #elif DEBUG
             true;
 #else

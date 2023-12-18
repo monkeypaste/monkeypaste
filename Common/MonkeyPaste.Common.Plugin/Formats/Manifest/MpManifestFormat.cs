@@ -42,6 +42,10 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         public DateTime? datePublished { get; set; }
         #endregion
+
+        public override string ToString() {
+            return $"{title} ({version})";
+        }
     }
 
 

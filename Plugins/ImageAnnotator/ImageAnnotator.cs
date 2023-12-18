@@ -11,7 +11,7 @@ using System.Reflection;
 using Yolov5Net.Scorer;
 using Yolov5Net.Scorer.Models;
 
-namespace Yolo {
+namespace ImageAnnotatorv7 {
     public class ImageAnnotator : MpIAnalyzeAsyncComponent {
         private string _model;
         private YoloScorer<YoloCocoP5Model> _scorer = null;
@@ -47,7 +47,7 @@ namespace Yolo {
                                     bottom = x.Rectangle.Y + x.Rectangle.Height
                                 }).Cast<MpAnnotationNodeFormat>().ToList()
                         };
-                        rootNode.body = $"{rootNode.children.Count} objects detected with {Math.Round(rootNode.children.Average(x => x.score), 2)} avg confidence";
+                        rootNode.body = $"{rootNode.children.Count} objects detected";
 
                         return new MpAnalyzerPluginResponseFormat() {
                             dataObjectLookup = new Dictionary<string, object> {
