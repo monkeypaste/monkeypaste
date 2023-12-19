@@ -97,14 +97,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Overrides
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
 
             var actionInput = GetInput(arg);
             await Task.Delay(DelayMs);
-            await base.PerformActionAsync(actionInput);
+            await FinishActionAsync(actionInput);
         }
 
         #endregion

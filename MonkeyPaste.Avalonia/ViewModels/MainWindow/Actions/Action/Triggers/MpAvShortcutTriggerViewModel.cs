@@ -242,7 +242,7 @@ namespace MonkeyPaste.Avalonia {
             // invoke is handled by shortcut listener and invokeCmd.CanExec
         }
 
-        protected override bool ValidateStartAction(object arg) {
+        protected override bool ValidateStartAction(object arg, bool is_starting = true) {
             if (!base.ValidateStartAction(arg)) {
                 return false;
             }

@@ -338,8 +338,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler<MpCopyItem> OnAnalysisCompleted;
-
         #endregion
 
         #region Constructors
@@ -455,6 +453,74 @@ namespace MonkeyPaste.Avalonia {
             return isOkType;
         }
 
+        public async Task<MpAnalyzerTransaction> PerformAnalysisAsync(object args) {
+            bool suppressWrite = false;
+
+            MpCopyItem sourceCopyItem = null;
+            MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
+
+            if (args is object[] argParts &&
+                argParts.Length >= 0 &&
+                argParts[0] is MpAvAnalyticItemPresetViewModel action_aipvm) {
+                targetAnalyzer = action_aipvm;
+                // when analyzer is triggered from action not user selection 
+                if (argParts.Length > 1 &&
+                    argParts[1] is MpCopyItem ci) {
+                    sourceCopyItem = ci;
+                }
+            } else {
+                if (args is MpAvAnalyticItemPresetViewModel aipvm) {
+                    targetAnalyzer = aipvm;
+                } else {
+                    targetAnalyzer = SelectedItem;
+                }
+                sourceCopyItem = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+            }
+
+            // show exec params if present and validate them
+            bool can_begin = await PrepareAnalysisAsync(targetAnalyzer, CanExecuteAnalysis(args));
+            if (!can_begin) {
+                FinishAnalysis(targetAnalyzer);
+                return null;
+            }
+
+            // rollup target params and cont
+            MpAnalyzerTransaction result = await MpPluginTransactor.PerformTransactionAsync(
+                                       PluginFormat,
+                                       PluginComponent,
+                                       targetAnalyzer.ParamLookup
+                                           .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
+                                       sourceCopyItem,
+                                       targetAnalyzer.Preset,
+                                       suppressWrite) as MpAnalyzerTransaction;
+            if (result == null) {
+                FinishAnalysis(targetAnalyzer);
+                return null; ;
+            }
+
+            Func<Task<MpAnalyzerPluginResponseFormat>> retryAnalyzerFunc = () => {
+                PerformAnalysisCommand.Execute(args);
+                return null;
+            };
+
+            result.Response = await MpPluginTransactor.ValidatePluginResponseAsync(
+                result.Request,
+                result.Response,
+                retryAnalyzerFunc);
+
+            if (result.ResponseContent is MpCopyItem rci) {
+                rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
+                await MpAvClipTrayViewModel.Instance.AddUpdateOrAppendCopyItemAsync(rci);
+            } else if (result.Response != null &&
+                        result.Response.dataObjectLookup != null &&
+                        new MpAvDataObject(result.Response.dataObjectLookup) is MpAvDataObject avdo) {
+                result.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
+            }
+            LastTransaction = result;
+
+            FinishAnalysis(targetAnalyzer);
+            return result;
+        }
         #endregion
 
         #region Protected Methods
@@ -558,20 +624,47 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
+        private async Task<bool> PrepareAnalysisAsync(MpAvAnalyticItemPresetViewModel targetAnalyzer, object args) {
+            // returns false if exec params invalid on submit
+            targetAnalyzer.IsExecuting = true;
+            if (targetAnalyzer.ExecuteItems.Any()) {
+                // always show if has non-required params or missing req'd
+                bool needs_to_show =
+                    targetAnalyzer.ExecuteItems.Any(x => x.IsVisible && !x.IsRequired) ||
+                    !CanExecuteAnalysis(args);
 
-        #endregion
+                while (needs_to_show) {
+                    // show execute params
+                    var exec_ntf_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.ExecuteParametersRequest,
+                        title: UiStrings.AnalyzerExecuteParamNtfTitle,
+                        body: targetAnalyzer,
+                        iconSourceObj: targetAnalyzer.IconId);
 
-        #region Commands
-        public virtual bool CanExecuteAnalysis(object args) {
-            //if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
-            //    MpConsole.WriteLine($"Analyzer '{this}' execute analysis rejected. Account capped");
-            //    return false;
-            //}
+                    if (exec_ntf_result == MpNotificationDialogResultType.Cancel) {
+                        // halt analysis
+                        CurrentExecuteArgs = null;
+                        targetAnalyzer.IsExecuting = false;
+                        //IsBusy = false;
+                        return false;
+                    }
 
+                    needs_to_show = !CanExecuteAnalysis(args);
+                    if (!needs_to_show) {
+                        targetAnalyzer.SaveCommand.Execute(null);
+                    }
+                }
+            }
+            return true;
+        }
+        private void FinishAnalysis(MpAvAnalyticItemPresetViewModel targetAnalyzer, MpAnalyzerTransaction result = null) {
+            CurrentExecuteArgs = null;
+            if (targetAnalyzer != null) {
+                targetAnalyzer.IsExecuting = false;
+            }
+        }
+        private bool CanExecuteAnalysis(object args) {
             CurrentExecuteArgs = args;
-            //if (IsBusy && (SelectedItem == null || !SelectedItem.IsExecuting)) {
-            //    return false;
-            //}
             CannotExecuteTooltip = string.Empty;
 
             MpAvAnalyticItemPresetViewModel exec_aipvm = null;
@@ -630,127 +723,13 @@ namespace MonkeyPaste.Avalonia {
 
             return string.IsNullOrEmpty(CannotExecuteTooltip);
         }
+        #endregion
 
-        public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
+        #region Commands        
+
+        public MpIAsyncCommand<object> PerformAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
-
-                //IsBusy = true;
-                bool suppressWrite = false;
-
-                MpCopyItem sourceCopyItem = null;
-                MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
-                Func<string> lastOutputCallback = null;
-                bool is_user_initiated = true;
-
-                if (args is object[] argParts &&
-                    argParts.Length >= 0 &&
-                    argParts[0] is MpAvAnalyticItemPresetViewModel action_aipvm) {
-                    is_user_initiated = false;
-                    targetAnalyzer = action_aipvm;
-                    // when analyzer is triggered from action not user selection 
-                    if (argParts.Length > 1 &&
-                        argParts[1] is MpCopyItem ci) {
-                        sourceCopyItem = ci;
-                    }
-
-                    if (argParts.Length > 2 &&
-                        argParts[2] is Func<string> valCallback) {
-                        lastOutputCallback = valCallback;
-                    }
-                } else {
-                    if (args is MpAvAnalyticItemPresetViewModel aipvm) {
-                        targetAnalyzer = aipvm;
-                    } else {
-                        targetAnalyzer = SelectedItem;
-                    }
-                    sourceCopyItem = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
-                }
-                Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
-                OnPropertyChanged(nameof(SelectedItem));
-
-                SelectedItem.IsExecuting = true;
-                if (SelectedItem.ExecuteItems.Any()) {
-                    // always show if has non-required params or missing req'd
-                    bool needs_to_show =
-                        SelectedItem.ExecuteItems.Any(x => x.IsVisible && !x.IsRequired) ||
-                        !CanExecuteAnalysis(args);
-
-                    while (needs_to_show) {
-                        // show execute params
-                        var exec_ntf_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                            notificationType: MpNotificationType.ExecuteParametersRequest,
-                            title: UiStrings.AnalyzerExecuteParamNtfTitle,
-                            body: SelectedItem,
-                            iconSourceObj: SelectedItem.IconId);
-
-                        if (exec_ntf_result == MpNotificationDialogResultType.Cancel) {
-                            // halt analysis
-                            CurrentExecuteArgs = null;
-                            SelectedItem.IsExecuting = false;
-                            //IsBusy = false;
-                            return;
-                        }
-
-                        needs_to_show = !CanExecuteAnalysis(args);
-                        if (!needs_to_show) {
-                            SelectedItem.SaveCommand.Execute(null);
-                        }
-                    }
-                }
-                MpAvClipTileViewModel source_ctvm = null;
-                if (is_user_initiated &&
-                    sourceCopyItem != null) {
-                    source_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == sourceCopyItem.Id);
-                    if (source_ctvm != null) {
-                        source_ctvm.IsBusy = true;
-                    }
-                }
-
-                MpPluginTransactionBase result = await MpPluginTransactor.PerformTransactionAsync(
-                                           PluginFormat,
-                                           PluginComponent,
-                                           SelectedItem.ParamLookup
-                                               .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
-                                           sourceCopyItem,
-                                           SelectedItem.Preset,
-                                           lastOutputCallback,
-                                           suppressWrite);
-                if (result == null) {
-                    CurrentExecuteArgs = null;
-                    SelectedItem.IsExecuting = false;
-                    return;
-                }
-
-                Func<Task<MpAnalyzerPluginResponseFormat>> retryAnalyzerFunc = () => {
-                    ExecuteAnalysisCommand.Execute(args);
-                    return null;
-                };
-
-                result.Response = await MpPluginTransactor.ValidatePluginResponseAsync(
-                    result.Request,
-                    result.Response,
-                    retryAnalyzerFunc);
-
-                if (is_user_initiated && source_ctvm != null) {
-                    source_ctvm.IsBusy = false;
-                }
-
-                if (result is MpAnalyzerTransaction result_trans) {
-                    if (result_trans.ResponseContent is MpCopyItem rci) {
-                        rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
-                        await MpAvClipTrayViewModel.Instance.AddUpdateOrAppendCopyItemAsync(rci);
-                    } else if (result_trans.Response != null &&
-                                result_trans.Response.dataObjectLookup != null &&
-                                new MpAvDataObject(result_trans.Response.dataObjectLookup) is MpAvDataObject avdo) {
-                        result_trans.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
-                    }
-                    LastTransaction = result_trans;
-                    OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
-                }
-
-                CurrentExecuteArgs = null;
-                SelectedItem.IsExecuting = false;
-                //IsBusy = false;
+                _ = await PerformAnalysisAsync(args);
             }, (args) => CanExecuteAnalysis(args));
 
 

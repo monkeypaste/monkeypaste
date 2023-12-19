@@ -12,10 +12,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIActionOutputNode.Output => OutputData;
         string MpILabelText.LabelText => ActionDescription;
 
-        public MpCopyItem CopyItem {
-            get;
-            set;
-        }
+        public MpCopyItem CopyItem { get; set; }
         public override string ToString() {
             return OutputData.ToStringOrDefault();
         }

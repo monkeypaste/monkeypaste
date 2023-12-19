@@ -44,6 +44,26 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpILabelText Implementation
+        string MpILabelText.LabelText => Title;
+
+        #endregion
+
+        #region MpISourceRef Implementation
+        [Ignore]
+        int MpISourceRef.Priority => (int)MpTransactionSourceType.CopyItem;
+        [Ignore]
+        int MpISourceRef.SourceObjId => Id;
+
+        [Ignore]
+        MpTransactionSourceType MpISourceRef.SourceType => MpTransactionSourceType.CopyItem;
+
+
+        public object IconResourceObj =>
+            IconId;
+        public string Uri => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
+        #endregion
+
         #endregion
 
         #region Column Definitions
@@ -122,31 +142,8 @@ namespace MonkeyPaste {
         [Ignore]
         public string ItemRefUrl => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
 
-        #endregion
-
-        #region Interfaces
-
-        #region MpILabelText Implementation
-        string MpILabelText.LabelText => Title;
-
-        #endregion
-
-        #region MpISourceRef Implementation
         [Ignore]
-        int MpISourceRef.Priority => (int)MpTransactionSourceType.CopyItem;
-        [Ignore]
-        int MpISourceRef.SourceObjId => Id;
-
-        [Ignore]
-        MpTransactionSourceType MpISourceRef.SourceType => MpTransactionSourceType.CopyItem;
-
-
-        public object IconResourceObj =>
-            IconId;
-        public string Uri => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
-        #endregion
-
-
+        public bool IgnoreDb { get; set; } = false;
         #endregion
 
         #region Static Methods
@@ -182,8 +179,6 @@ namespace MonkeyPaste {
             }
             return newCopyItem;
         }
-        [Ignore]
-        public bool IgnoreDb { get; set; } = false;
 
         #endregion
 

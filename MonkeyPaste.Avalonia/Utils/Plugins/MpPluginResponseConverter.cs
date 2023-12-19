@@ -94,8 +94,7 @@ namespace MonkeyPaste.Avalonia {
                                         pluginFormat.analyzer.parameters,
                                         paramValues,
                                         sourceCopyItem,
-                                        false,
-                                        null);
+                                        false);
 
             await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,

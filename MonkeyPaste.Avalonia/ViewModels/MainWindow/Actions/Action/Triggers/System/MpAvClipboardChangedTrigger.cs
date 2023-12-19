@@ -68,12 +68,12 @@ namespace MonkeyPaste.Avalonia {
             return IsPerformingAction;
         }
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!base.ValidateStartAction(arg)) {
                 return;
             }
             if (arg is MpPortableDataObject mpdo) {
-                await base.PerformActionAsync(
+                await FinishActionAsync(
                         new MpAvClipboardChangedTriggerOutput() {
                             Previous = null,
                             ClipboardDataObject = mpdo

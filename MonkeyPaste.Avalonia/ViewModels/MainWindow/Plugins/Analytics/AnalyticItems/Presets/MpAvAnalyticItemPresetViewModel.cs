@@ -177,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
         public object ShortcutCommandParameter =>
             AnalyticItemPresetId;
         ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
-            Parent == null ? null : Parent.ExecuteAnalysisCommand;
+            Parent == null ? null : Parent.PerformAnalysisCommand;
 
         #endregion
 
@@ -607,13 +607,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ExecutePresetAnalysisOnSelectedContentCommand => new MpCommand(
             () => {
-                Parent.ExecuteAnalysisCommand.Execute(this);
+                Parent.PerformAnalysisCommand.Execute(this);
 
             }, () => {
                 if (Parent == null) {
                     return false;
                 }
-                return Parent.ExecuteAnalysisCommand.CanExecute(this);
+                return Parent.PerformAnalysisCommand.CanExecute(this);
             });
         public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(
             () => {

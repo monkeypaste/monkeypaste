@@ -84,6 +84,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotator", "Plugins\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotatorv7", "Plugins\ImageAnnotatorv7\ImageAnnotatorv7.csproj", "{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotatorv2", "Plugins\ImageAnnotatorv2\ImageAnnotatorv2.csproj", "{18DD9517-4191-464A-8307-559E38C17870}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1368,6 +1370,48 @@ Global
 		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x64.Build.0 = Release|Any CPU
 		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x86.ActiveCfg = Release|Any CPU
 		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435}.Release|x86.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|ARM.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|x64.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Debug|x86.Build.0 = Debug|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|Any CPU.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|ARM.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|ARM.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|ARM64.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|ARM64.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|iPhone.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|iPhone.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|x64.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|x64.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|x86.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Nuget_Release|x86.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|ARM.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|ARM.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|ARM64.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|iPhone.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|x64.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|x64.Build.0 = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|x86.ActiveCfg = Release|Any CPU
+		{18DD9517-4191-464A-8307-559E38C17870}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1391,14 +1435,15 @@ Global
 		{1CC97E27-71F3-4DB2-BB09-55F9919A4644} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{7F4639BA-0525-4F98-9382-6F3050668B0A} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{E96B3DA7-6530-4ACA-B0E2-6EF64E533435} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{18DD9517-4191-464A-8307-559E38C17870} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = Text
-		RESX_TaskErrorCategory = Message
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_RemoveEmptyEntries = False
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_DuplicateKeyHandling = Fail
 		RESX_ShowPerformanceTraces = True
+		RESX_DuplicateKeyHandling = Fail
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_RemoveEmptyEntries = False
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_TaskErrorCategory = Message
+		RESX_ExcelExportMode = Text
 	EndGlobalSection
 EndGlobal

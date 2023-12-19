@@ -4499,11 +4499,19 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                if (MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(x => x.AnalyticItemPresetId == presetId))
-                    is MpAvAnalyticItemViewModel aivm &&
-                    aivm.Items.FirstOrDefault(x => x.AnalyticItemPresetId == presetId) is MpAvAnalyticItemPresetViewModel aipvm) {
-                    await aivm.ExecuteAnalysisCommand.ExecuteAsync(aipvm);
+                if (MpAvAnalyticItemCollectionViewModel.Instance.Items
+                    .FirstOrDefault(x => x.Items.Any(x => x.AnalyticItemPresetId == presetId))
+                    is not MpAvAnalyticItemViewModel aivm ||
+                    aivm.Items.FirstOrDefault(x => x.AnalyticItemPresetId == presetId) is not MpAvAnalyticItemPresetViewModel aipvm) {
+                    return;
                 }
+                SelectedItem.IsBusy = true;
+
+                await aivm.PerformAnalysisCommand.ExecuteAsync(aipvm);
+
+                SelectedItem.IsBusy = false;
+            }, (args) => {
+                return SelectedItem != null;
             });
 
         public ICommand ToggleIsAppPausedCommand => new MpCommand(

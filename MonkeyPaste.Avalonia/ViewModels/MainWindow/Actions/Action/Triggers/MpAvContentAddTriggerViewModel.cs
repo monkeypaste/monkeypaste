@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override bool ValidateStartAction(object arg) {
+        protected override bool ValidateStartAction(object arg, bool is_starting = true) {
             if (!base.ValidateStartAction(arg)) {
                 return false;
             }

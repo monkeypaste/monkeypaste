@@ -269,14 +269,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Overrides
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!_isPreviewing) {
                 if (!ValidateStartAction(arg)) {
                     return;
                 }
             }
-
-            var actionInput = GetInputWithCallback(arg, string.Empty, out var callback);
+            var actionInput = GetInput(arg);
 
             if (IsToast) {
                 string evald_msg = ToastMsg;
@@ -288,7 +287,7 @@ namespace MonkeyPaste.Avalonia {
                             MpParameterValueUnitType.PlainTextContentQuery,
                             ToastMsg,
                             actionInput.CopyItem,
-                            callback);
+                            new object[] { actionInput, null });
                 }
 
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
@@ -306,7 +305,7 @@ namespace MonkeyPaste.Avalonia {
             if (_isPreviewing) {
                 return;
             }
-            await base.PerformActionAsync(actionInput);
+            await FinishActionAsync(actionInput);
         }
 
         #endregion

@@ -3,7 +3,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Drawing;
 
-namespace ImageAnnotatorv7 {
+namespace ImageAnnotatorv2 {
     public class ImageAnnotatorv7 : MpIAnalyzeAsyncComponent {
 
         private string _model;

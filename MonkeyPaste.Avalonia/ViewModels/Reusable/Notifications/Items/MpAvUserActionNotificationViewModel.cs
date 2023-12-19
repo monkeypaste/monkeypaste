@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
+        public bool HasParams =>
+            Body is MpAvAnalyticItemPresetViewModel;
         public override bool CanPin => true;
 
         public override bool ShowOptionsButton =>
@@ -209,6 +212,7 @@ namespace MonkeyPaste.Avalonia {
                     // others based on args (fix,retry non-null)
                     break;
             }
+            SetupParams();
             IsBusy = false;
         }
 
@@ -349,6 +353,35 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     break;
+                case nameof(IsWindowOpen):
+                    if (IsWindowOpen) {
+                        break;
+                    }
+                    CleanupParams();
+                    break;
+            }
+        }
+
+        private void SetupParams() {
+            if (Body is not MpAvAnalyticItemPresetViewModel aipvm) {
+                return;
+            }
+            aipvm.ExecuteItems.ForEach(x => x.PropertyChanged += HandleParamPropChange);
+            CanSubmit = aipvm.Parent.PerformAnalysisCommand.CanExecute(aipvm.Parent.CurrentExecuteArgs);
+        }
+        private void CleanupParams() {
+            if (Body is not MpAvAnalyticItemPresetViewModel aipvm) {
+                return;
+            }
+            aipvm.ExecuteItems.ForEach(x => x.PropertyChanged -= HandleParamPropChange);
+        }
+        private void HandleParamPropChange(object s, PropertyChangedEventArgs e) {
+            if (Body is not MpAvAnalyticItemPresetViewModel aipvm ||
+                s is not MpAvParameterViewModelBase pvm) {
+                return;
+            }
+            if (e.PropertyName == nameof(pvm.CurrentValue)) {
+                CanSubmit = aipvm.Parent.PerformAnalysisCommand.CanExecute(aipvm.Parent.CurrentExecuteArgs);
             }
         }
 

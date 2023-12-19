@@ -444,7 +444,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpTriggerType.ClipTagged:
                     tavm = new MpAvContentTaggedTriggerViewModel(this);
                     break;
-                case MpTriggerType.FileSystemChange:
+                case MpTriggerType.FileSystemChanged:
                     tavm = new MpAvFolderWatcherTriggerViewModel(this);
                     break;
                 case MpTriggerType.Shortcut:

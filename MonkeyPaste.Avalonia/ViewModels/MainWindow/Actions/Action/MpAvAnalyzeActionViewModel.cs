@@ -115,12 +115,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Overrides
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
 
-            var actionInput = GetInputWithCallback(arg, string.Empty, out var lastOutputCallback);
+            var actionInput = GetInput(arg);
 
             var aipvm =
                 MpAvAnalyticItemCollectionViewModel.Instance
@@ -130,46 +130,35 @@ namespace MonkeyPaste.Avalonia {
                 Previous = arg as MpAvActionOutput,
                 CopyItem = actionInput.CopyItem
             };
-            object[] args = new object[] { aipvm, actionInput.CopyItem, lastOutputCallback };
+            object[] args = new object[] { aipvm, actionInput.CopyItem };
             if (aipvm != null &&
                aipvm.Parent != null &&
-               aipvm.Parent.ExecuteAnalysisCommand.CanExecute(args)) {
-                await aipvm.Parent.ExecuteAnalysisCommand.ExecuteAsync(args);
-
-                //while (aipvm.Parent.IsBusy) {
-                //    await Task.Delay(100);
-                //}
-
-                if (aipvm.Parent.LastTransaction != null) {
-                    // grab ref in case another transaction is queued
-                    var ltr = aipvm.Parent.LastTransaction;
-                    // clone response
-                    output.TransactionResult = MpJsonConverter.DeserializeObject<MpAnalyzerPluginResponseFormat>(ltr.Response.SerializeJsonObject());
+               aipvm.Parent.PerformAnalysisCommand.CanExecute(args)) {
+                MpAnalyzerTransaction ltr = await aipvm.Parent.PerformAnalysisAsync(args);
+                if (ltr == null) {
+                    MpConsole.WriteLine("");
+                    MpConsole.WriteLine($"Analyzer '{aipvm.FullName}' returned null to Action({ActionId}) '{FullName}', so {RootTriggerActionViewModel.Label} will stop.");
+                    MpConsole.WriteLine("");
+                } else {
+                    output.PluginResponse = ltr.Response;
 
                     if (output.CopyItem != null && ltr.ResponseContent != null &&
-                        output.CopyItem.Id != ltr.ResponseContent.Id &&
-                        ltr.RequestContent is MpCopyItem req_ci) {
+                       output.CopyItem.Id != ltr.ResponseContent.Id &&
+                       ltr.RequestContent is MpCopyItem req_ci) {
                         // analyzer created NEW content
-                        // TODO how should new content be handled?
-
                         output.NewCopyItem = ltr.ResponseContent;
                         output.CopyItem = req_ci;
                     } else if (ltr.ResponseContent != null) {
                         // use (possibly) updated item from analysis result
                         output.CopyItem = ltr.ResponseContent;
                     }
-
-                } else {
-                    MpConsole.WriteLine("");
-                    MpConsole.WriteLine($"Analyzer '{aipvm.FullName}' returned null to Action({ActionId}) '{FullName}', so {RootTriggerActionViewModel.Label} will stop.");
-                    MpConsole.WriteLine("");
                 }
             } else {
                 MpConsole.WriteLine("");
                 MpConsole.WriteLine($"Action({ActionId}) '{FullName}' Failed to execute, analyzer w/ presetId({AnalyticItemPresetId}) not found");
                 MpConsole.WriteLine("");
             }
-            await base.PerformActionAsync(output);
+            await FinishActionAsync(output);
         }
 
         #endregion
@@ -227,13 +216,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvAnalyzeActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(AnalyticItemPresetId):
-                    OnPropertyChanged(nameof(SelectedPreset));
-                    OnPropertyChanged(nameof(IconResourceObj));
-                    break;
                 case nameof(ActionArgs):
+                case nameof(ArgLookup):
                     OnPropertyChanged(nameof(SelectedPreset));
-                    break;
-                case nameof(SelectedPreset):
                     OnPropertyChanged(nameof(IconResourceObj));
                     break;
                 case nameof(IsPerformingAction):

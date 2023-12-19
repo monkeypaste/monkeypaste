@@ -122,12 +122,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!base.ValidateStartAction(arg)) {
                 return;
             }
             if (arg is MpPortableProcessInfo ppi) {
-                await base.PerformActionAsync(
+                await FinishActionAsync(
                         new MpAvActiveAppChangedTriggerOutput() {
                             Previous = null,
                             ProcessInfo = ppi

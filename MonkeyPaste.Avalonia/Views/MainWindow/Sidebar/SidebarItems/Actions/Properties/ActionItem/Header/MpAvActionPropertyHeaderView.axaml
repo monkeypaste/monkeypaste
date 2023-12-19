@@ -79,6 +79,10 @@
                         Content="{Binding}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView Classes="error"
+                                       ToolTipText="{Binding ValidationText}" />
+            </ToolTip.Tip>
             <ContentControl.DataTemplates>
                 <local:MpAvActionPropertyIconTemplateSelector>
                     <DataTemplate x:Key="TriggerTemplate"

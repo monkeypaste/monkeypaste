@@ -520,8 +520,8 @@ namespace MonkeyPaste {
             IEnumerable<int> tids_to_omit = null,
             IEnumerable<int> ciids_to_omit = null,
             bool ignore_trash_if_not_tid = true) {
-            var result = await GetCopyItemTagDataAsync_internal(true, tid, ignore_descendants, tids_to_omit, ciids_to_omit, ignore_trash_if_not_tid);
-            return (List<MpCopyItem>)result;
+            var result = await GetCopyItemTagDataAsync_internal(false, tid, ignore_descendants, tids_to_omit, ciids_to_omit, ignore_trash_if_not_tid);
+            return result as List<MpCopyItem>;
         }
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByQueryTagIdAsync(

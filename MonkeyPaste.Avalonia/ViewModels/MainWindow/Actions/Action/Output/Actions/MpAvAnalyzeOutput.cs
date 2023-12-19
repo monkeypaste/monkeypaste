@@ -4,8 +4,9 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyzeOutput : MpAvActionOutput {
-        public override object OutputData => NewCopyItem == null ? TransactionResult : NewCopyItem;
-        public MpAnalyzerPluginResponseFormat TransactionResult { get; set; }
+        public override object OutputData =>
+            NewCopyItem == null ? PluginResponse : NewCopyItem;
+        public MpAnalyzerPluginResponseFormat PluginResponse { get; set; }
         public MpCopyItem NewCopyItem { get; set; }
         public override string ActionDescription {
             get {

@@ -151,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Overrides
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
@@ -161,7 +161,8 @@ namespace MonkeyPaste.Avalonia {
 
             object[] args = new object[] { ParentActionViewModel, actionInput.CopyItem };
             if (ParentActionViewModel != null) {
-                ParentActionViewModel.PerformActionAsync(args).FireAndForgetSafeAsync(this);
+                //ParentActionViewModel.PerformActionAsync(args).FireAndForgetSafeAsync(this);
+                ParentActionViewModel.InvokeThisActionCommand.Execute(args);
 
                 if (_actionTickTimer == null) {
                     _actionTickTimer = new DispatcherTimer();
@@ -175,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (isInitialRun) {
                 // no unique output for timer, just pass through
-                await base.PerformActionAsync(args);
+                await FinishActionAsync(args);
             }
         }
 

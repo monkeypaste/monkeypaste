@@ -278,7 +278,7 @@
                         <local:MpAvProgressSpinner x:Name="TagCountProgressSpinner"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch"
-                                                   ArcWidth="1"
+                                                   ArcWidth="2.5"
                                                    PercentBrush="{DynamicResource ThemeAccent3Color}"
                                                    RingBrush="{DynamicResource ThemeAccent2Color}"
                                                    LabelBrush="Transparent"

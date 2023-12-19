@@ -10,8 +10,8 @@ namespace MonkeyPaste.Avalonia {
             List<MpParameterFormat> paramFormats,
             Dictionary<object, string> paramValues,
             MpCopyItem sourceContent,
-            bool evaluateSourceRefs,
-            Func<string> lastOutputCallback) {
+            bool evaluateSourceRefs) {
+            // evaluate all content queries and map params to req kvps
 
             List<MpParameterRequestItemFormat> requestItems = new List<MpParameterRequestItemFormat>();
 
@@ -20,8 +20,7 @@ namespace MonkeyPaste.Avalonia {
                     paramFormat,
                     paramValues[paramFormat.paramId],
                     sourceContent,
-                    evaluateSourceRefs,
-                    lastOutputCallback);
+                    evaluateSourceRefs);
                 requestItems.Add(requestItem);
             }
 
@@ -34,8 +33,7 @@ namespace MonkeyPaste.Avalonia {
             MpParameterFormat paramFormat,
             string paramValue,
             MpCopyItem sourceContent,
-            bool evaluateSourceRefs,
-            Func<string> lastOutputCallback) {
+            bool evaluateSourceRefs) {
 
             // NOTE for logging, return paramValue expression not result
             string req_item_value =
@@ -44,8 +42,7 @@ namespace MonkeyPaste.Avalonia {
                     paramFormat.controlType,
                     paramFormat.unitType,
                     paramValue,
-                    sourceContent,
-                    lastOutputCallback) :
+                    sourceContent) :
                     paramValue;
             return new MpParameterRequestItemFormat() {
                 paramId = paramFormat.paramId,

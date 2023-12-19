@@ -373,7 +373,7 @@ namespace MonkeyPaste.Avalonia {
                 if (core_aipvm == null) {
                     return;
                 }
-                core_aipvm.Parent.ExecuteAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
+                core_aipvm.Parent.PerformAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
             });
 
         public ICommand ShowPluginBrowserCommand => new MpCommand(

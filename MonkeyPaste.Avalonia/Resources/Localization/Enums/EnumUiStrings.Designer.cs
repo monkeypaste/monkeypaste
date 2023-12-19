@@ -3094,11 +3094,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File System Change.
+        ///   Looks up a localized string similar to File System Changed.
         /// </summary>
-        public static string MpTriggerType_FileSystemChange {
+        public static string MpTriggerType_FileSystemChanged {
             get {
-                return ResourceManager.GetString("MpTriggerType_FileSystemChange", resourceCulture);
+                return ResourceManager.GetString("MpTriggerType_FileSystemChanged", resourceCulture);
             }
         }
         

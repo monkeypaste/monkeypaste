@@ -59,6 +59,7 @@
     <AvaloniaXaml Remove="Resources\Localization\UiStrings\Baselines\**" />
     <AvaloniaXaml Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <AvaloniaXaml Remove="Utils\WindowManager\Helpers\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\Actions\Action\Triggers\System\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -99,6 +100,7 @@
     <Compile Remove="Resources\Localization\UiStrings\Baselines\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <Compile Remove="Utils\WindowManager\Helpers\**" />
+    <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\System\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -139,6 +141,7 @@
     <EmbeddedResource Remove="Resources\Localization\UiStrings\Baselines\**" />
     <EmbeddedResource Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <EmbeddedResource Remove="Utils\WindowManager\Helpers\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\Actions\Action\Triggers\System\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -181,6 +184,7 @@
     <None Remove="Resources\Localization\UiStrings\Baselines\**" />
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <None Remove="Utils\WindowManager\Helpers\**" />
+    <None Remove="ViewModels\MainWindow\Actions\Action\Triggers\System\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -217,6 +221,7 @@
     <Page Remove="dat\**" />
     <Page Remove="Interfaces\Content\**" />
     <Page Remove="Resources\Localization\UiStrings\Baselines\**" />
+    <Page Remove="ViewModels\MainWindow\Actions\Action\Triggers\System\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />

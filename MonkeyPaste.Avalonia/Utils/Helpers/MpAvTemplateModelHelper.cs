@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
                 //if(MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == guid) is MpAvAnalyticItemViewModel aivm) {
                 //    if(aivm.Items.FirstOrDefault(x=>x.IsGeneratedDefaultPreset) is MpAvAnalyticItemPresetViewModel aipvm) {
                 //        aipvm.Ex
-                //        aivm.ExecuteAnalysisCommand
+                //        aivm.PerformAnalysisCommand
                 //    }
                 //}
                 string fetcher_dir = fetcher_kvp.Value.RootDirectory;

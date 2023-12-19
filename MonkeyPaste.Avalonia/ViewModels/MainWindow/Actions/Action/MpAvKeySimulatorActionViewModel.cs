@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
 
             Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(KeyString);
 
-            await base.PerformActionAsync(actionInput);
+            await FinishActionAsync(actionInput);
         }
 
         #endregion

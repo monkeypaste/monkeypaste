@@ -791,16 +791,13 @@ namespace MonkeyPaste.Common {
                     }
                     return fallback.ParseOrConvertToDouble(fallback);
                 }
-                try {
-                    return double.Parse(strObj);
+                if (double.TryParse(strObj, out double dblVal)) {
+                    return dblVal;
                 }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error parsing double from '{strObj}'", ex);
-                    if (obj == fallback) {
-                        return 0;
-                    }
-                    return fallback.ParseOrConvertToDouble(fallback);
+                if (obj == fallback) {
+                    return 0;
                 }
+                return fallback.ParseOrConvertToDouble(fallback);
             }
 
             MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert double. Returning 0");
@@ -908,16 +905,14 @@ namespace MonkeyPaste.Common {
                 if (strObj == "1") {
                     return true;
                 }
-                try {
-                    return bool.Parse(strObj);
+                if (bool.TryParse(strObj, out bool boolVal)) {
+                    return boolVal;
                 }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error parsing bool from '{strObj}'", ex);
-                    if (obj == fallback) {
-                        return false;
-                    }
-                    return fallback.ParseOrConvertToBool(fallback);
+
+                if (obj == fallback) {
+                    return false;
                 }
+                return fallback.ParseOrConvertToBool(fallback);
             }
 
             MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert bool. Returning 0");

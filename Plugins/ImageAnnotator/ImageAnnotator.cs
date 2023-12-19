@@ -11,7 +11,7 @@ using System.Reflection;
 using Yolov5Net.Scorer;
 using Yolov5Net.Scorer.Models;
 
-namespace ImageAnnotatorv7 {
+namespace ImageAnnotatorv2 {
     public class ImageAnnotator : MpIAnalyzeAsyncComponent {
         private string _model;
         private YoloScorer<YoloCocoP5Model> _scorer = null;

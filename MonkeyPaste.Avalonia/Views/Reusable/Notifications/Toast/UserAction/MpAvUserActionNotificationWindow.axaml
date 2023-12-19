@@ -11,7 +11,8 @@
         x:DataType="local:MpAvUserActionNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
-        Classes="notificationWindow fadeIn fadeOut userAction">
+        Classes="notificationWindow fadeIn fadeOut resizable userAction"
+        Classes.params="{Binding HasParams}">
     <Window.Styles>
         <!--  PARAM LISTBOXITEM  -->
         <Style Selector="ListBox#ExecuteParameterListBox > ListBoxItem"

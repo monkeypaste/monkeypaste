@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                         return "ClipboardImage";
                     case MpTriggerType.ClipTagged:
                         return "PinToCollectionImage";
-                    case MpTriggerType.FileSystemChange:
+                    case MpTriggerType.FileSystemChanged:
                         return "FolderEventImage";
                     case MpTriggerType.Shortcut:
                         return "JoystickImage";
@@ -107,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
                             return MpSystemColors.forestgreen;
                         case MpTriggerType.ClipTagged:
                             return MpSystemColors.bisque3;
-                        case MpTriggerType.FileSystemChange:
+                        case MpTriggerType.FileSystemChanged:
                             return MpSystemColors.coral3;
                         default:
                             return MpSystemColors.maroon;
@@ -167,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIActionPluginComponent Implementation
         Task MpIActionPluginComponent.PerformActionAsync(object arg) => PerformActionAsync(arg);
 
-        bool MpIActionPluginComponent.CanPerformAction(object arg) => ValidateStartAction(arg);
+        bool MpIActionPluginComponent.CanPerformAction(object arg) => ValidateStartAction(arg, false);
 
         Task MpIActionPluginComponent.ValidateActionAsync() => ValidateActionAsync();
 
@@ -1046,45 +1046,44 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        public virtual async Task PerformActionAsync(object arg) {
-            if (!ValidateStartAction(arg)) {
+        protected abstract Task PerformActionAsync(object arg);
+        protected async Task FinishActionAsync(object arg) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(() => FinishActionAsync(arg));
                 return;
             }
-
-
+            object output_arg = arg;
+            if (arg is MpAvCompareOutput co && !co.WasConditionMet) {
+                // prevent conditional children from executing 
+                // but finish processing to keep id's in sync for batch processing
+                output_arg = null;
+            }
             // trigger children so current item added BEFORE removing from here
             // to avoid a gap for blocking threads (tag drop progress spinner)
 
-            NotifyActionComplete(arg);
+            OnActionComplete?.Invoke(this, output_arg);
+            // wait briefly for children to start before flagging as done
+            await Task.Delay(50);
+
+            IsPerformingAction = false;
 
             await Task.Delay(5);
-            if (arg is MpAvActionOutput ao) {
-                MpConsole.WriteLine("");
-                MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed Successfully");
-                MpConsole.WriteLine(ao.ActionDescription);
-                MpConsole.WriteLine("");
+            MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed ", true);
 
-                if (ao.CopyItem != null) {
-                    if (_currentInputItemIds.Remove(ao.CopyItem.Id)) {
-                        MpConsole.WriteLine($"Action '{Label}' processing ciid {ao.CopyItem.Id} COMPLETED");
-                    } else {
-                        MpConsole.WriteLine($"Action '{Label}' processed ciid {ao.CopyItem.Id} NOT FOUND");
-                    }
-
-                }
+            if (arg is not MpAvActionOutput ao) {
+                return;
+            }
+            MpConsole.WriteLine(ao.ActionDescription, false, true);
+            if (ao.CopyItem == null) {
+                return;
+            }
+            if (_currentInputItemIds.Remove(ao.CopyItem.Id)) {
+                MpConsole.WriteLine($"Action '{Label}' processing ciid {ao.CopyItem.Id} COMPLETED");
+            } else {
+                MpConsole.WriteLine($"Action '{Label}' processed ciid {ao.CopyItem.Id} NOT FOUND");
             }
         }
 
-        protected virtual void NotifyActionComplete(object outputArg) {
-            OnActionComplete?.Invoke(this, outputArg);
-            Dispatcher.UIThread.Post(async () => {
-                // wait briefly for children to start before flagging as done
-                await Task.Delay(300);
-
-                IsPerformingAction = false;
-            });
-
-        }
 
         public async Task UpdateSortOrderAsync() {
             Children.ForEach(x => x.SortOrderIdx = Children.IndexOf(x));
@@ -1181,35 +1180,6 @@ namespace MonkeyPaste.Avalonia {
             throw new Exception("Unknown action input: " + arg.ToString());
         }
 
-        protected virtual MpAvActionOutput GetInputWithCallback(object arg, string filter, out Func<string> callback) {
-            MpAvActionOutput input = GetInput(arg);
-            callback = () => {
-                if (input is not MpAvActionOutput ao) {
-                    return string.Empty;
-                }
-                if (ao.OutputData is MpPluginResponseFormatBase prfb) {
-                    try {
-                        string query_result = MpJsonPathProperty.Query(prfb, filter);
-                        if (!string.IsNullOrEmpty(query_result)) {
-                            return query_result;
-                        }
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteLine(@"Error parsing/querying json response:");
-                        MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
-                        MpConsole.WriteLine(@"For JSONPath: ");
-                        MpConsole.WriteLine(filter);
-                        MpConsole.WriteTraceLine(ex);
-
-                        ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                        ShowValidationNotification();
-                    }
-                }
-                return ao.OutputData.ToStringOrDefault();
-            };
-            return input;
-        }
-
         protected virtual async Task ValidateActionAsync() {
             if (IsValidating || _isShowingValidationMsg) {
                 return;
@@ -1241,7 +1211,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        protected virtual bool ValidateStartAction(object arg) {
+        protected virtual bool ValidateStartAction(object arg, bool is_starting = true) {
             if (arg == null && !AllowNullArg) {
                 return false;
             }
@@ -1249,9 +1219,12 @@ namespace MonkeyPaste.Avalonia {
             if (!IsValid || !IsTriggerEnabled) {
                 can_start = false;
             }
-            IsPerformingAction = can_start;
+            if (is_starting) {
+                IsPerformingAction = can_start;
+            }
 
             if (can_start &&
+                is_starting &&
                 GetInput(arg) is MpAvActionOutput ao &&
                 ao.CopyItem != null &&
                 !_currentInputItemIds.Contains(ao.CopyItem.Id)) {
@@ -1259,7 +1232,7 @@ namespace MonkeyPaste.Avalonia {
                 _currentInputItemIds.Add(ao.CopyItem.Id);
             }
 
-            return IsPerformingAction;
+            return can_start;
         }
 
         protected void ResetArgs(params object[] argNums) {

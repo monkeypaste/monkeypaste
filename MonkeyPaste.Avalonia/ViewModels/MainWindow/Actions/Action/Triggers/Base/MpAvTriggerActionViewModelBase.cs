@@ -242,6 +242,13 @@ namespace MonkeyPaste.Avalonia {
 
             });
         }
+
+        protected override async Task PerformActionAsync(object arg) {
+            if (!ValidateStartAction(arg)) {
+                return;
+            }
+            await FinishActionAsync(arg);
+        }
         #endregion
 
         #region Private Methods

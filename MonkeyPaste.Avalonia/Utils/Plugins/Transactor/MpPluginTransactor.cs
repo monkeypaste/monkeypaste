@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
             Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
-            Func<string> lastOutputCallback,
             bool suppressWrite = false) {
 
             // This method:
@@ -29,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
             // 1. prepares plugin parameters using sourceCopyItem and given param values
             // 2. sends request to the plugin
             // 3. checks response from the plugin to ensure it was successful
-            // 4. logs the transaction (needed for restful api call auditing or  yet to be implemented more detailed source information) 
+            // 4. logs the transaction (needed for restful api call auditing or  et to be implemented more detailed source information) 
             // 5. Converts the response to new content and/or updates source content (since from another, potentially 3rd party module)
             // 6. Returns new or updated content
 
@@ -45,8 +44,7 @@ namespace MonkeyPaste.Avalonia {
                                         pluginFormat.analyzer.parameters,
                                         paramValues,
                                         sourceCopyItem,
-                                        true,
-                                        lastOutputCallback);
+                                        true);
                 }
                 catch (Exception ex) {
                     return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);

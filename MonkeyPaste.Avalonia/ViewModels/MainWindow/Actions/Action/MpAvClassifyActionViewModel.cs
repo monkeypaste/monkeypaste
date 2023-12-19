@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
                 ttvm.LinkCopyItemCommand.Execute(actionInput.CopyItem.Id);
             }
 
-            await base.PerformActionAsync(new MpAvClassifyOutput() {
+            await FinishActionAsync(new MpAvClassifyOutput() {
                 Previous = arg as MpAvActionOutput,
                 CopyItem = actionInput.CopyItem,
                 TagId = TagId

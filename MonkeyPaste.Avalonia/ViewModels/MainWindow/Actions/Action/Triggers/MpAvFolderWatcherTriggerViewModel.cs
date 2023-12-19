@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                     CopyItem = ci,
                     FileSystemChangeType = e.ChangeType
                 };
-                await base.PerformActionAsync(ao);
+                await FinishActionAsync(ao);
             });
         }
 

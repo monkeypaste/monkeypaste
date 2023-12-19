@@ -5,6 +5,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvCompareOutput : MpAvActionOutput {
         public override object OutputData => Matches;
         public List<MpAvConditionalMatch> Matches { get; set; }
+        public bool WasConditionMet =>
+            Matches != null && Matches.Count > 0;
 
         public override string ActionDescription {
             get {

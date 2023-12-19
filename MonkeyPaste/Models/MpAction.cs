@@ -33,7 +33,7 @@ namespace MonkeyPaste {
     public enum MpTriggerType {
         None = 0,
         ClipAdded,
-        FileSystemChange,
+        FileSystemChanged,
         ClipTagged,
         Shortcut,
         //ActiveAppChanged,

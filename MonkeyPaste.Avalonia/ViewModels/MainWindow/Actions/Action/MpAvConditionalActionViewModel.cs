@@ -262,33 +262,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
-            MpAvActionOutput ao = GetInputWithCallback(arg, CompareFilterText, out var lastOutputCallback);
+            MpAvActionOutput ao = GetInput(arg);
 
-            string compareStr = await GetCompareStr(ao, lastOutputCallback);
-            if (compareStr == null) {
-                base.PerformActionAsync(null).FireAndForgetSafeAsync(this);
-                return;
-            }
+            string compareStr = await GetCompareStr(ao);
+            var compareOutput = new MpAvCompareOutput() {
+                Previous = ao,
+                CopyItem = ao.CopyItem,
+                Matches = GetMatches(compareStr)
+            };
+
             MpConsole.WriteLine($"Comprarer '{Label}' match result:");
             MpConsole.WriteLine($"Op: '{ComparisonOperatorType}'");
             MpConsole.WriteLine($"compare string: '{CompareData}'");
-
-            var compareOutput = new MpAvCompareOutput() {
-                Previous = ao,
-                CopyItem = ao.CopyItem
-            };
-
-            compareOutput.Matches = GetMatches(compareStr);
-            MpConsole.WriteLine($"matches with: '{compareStr}' ");
+            MpConsole.WriteLine($"matches with: '{compareStr.ToStringOrEmpty()}' ");
             MpConsole.WriteLine($"Total: '{compareOutput.Matches.Count}' ");
 
-            if (compareOutput.Matches != null && compareOutput.Matches.Count > 0) {
-                base.PerformActionAsync(compareOutput).FireAndForgetSafeAsync(this);
-            }
+            await FinishActionAsync(compareOutput);
         }
 
         #endregion
@@ -332,52 +325,43 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<string> GetCompareStr(MpAvActionOutput ao, Func<string> callback) {
+        private async Task<string> GetCompareStr(MpAvActionOutput ao) {
             if (ao == null) {
                 return null;
             }
-            //if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput) {
-            //    if (ao.OutputData is MpPluginResponseFormatBase prf && HasInputFilter) {
-            //        try {
-            //            return MpJsonPathProperty.Query(prf, CompareFilterText);
-            //        }
-            //        catch (Exception ex) {
-            //            MpConsole.WriteLine(@"Error parsing/querying json response:");
-            //            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
-            //            MpConsole.WriteLine(@"For JSONPath: ");
-            //            MpConsole.WriteLine(CompareData);
-            //            MpConsole.WriteTraceLine(ex);
+            try {
+                var copyItemPropObj =
+                    await MpPluginParameterValueEvaluator.QueryPropertyAsync(
+                        ao.CopyItem,
+                        ComparePropertyPathType,
+                        new object[] { ao, CompareFilterText });
+                return copyItemPropObj.ToStringOrDefault();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteLine(@"Error parsing/querying json response:");
+                MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
+                MpConsole.WriteLine(@"For JSONPath: ");
+                MpConsole.WriteLine(CompareData);
+                MpConsole.WriteTraceLine(ex);
 
-            //            ValidationText = $"Error performing action '{RootTriggerActionViewModel.LabelText}/{LabelText}': {ex}";
-            //            ShowValidationNotification();
-            //        }
-            //    } else if (ao.OutputData != null) {
-            //        return ao.OutputData.ToString();
-            //    }
-            //} else {
-            //    var copyItemPropObj = await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType, callback);
-            //    if (copyItemPropObj != null) {
-            //        return copyItemPropObj.ToString();
-            //    }
-            //}
-            var copyItemPropObj =
-                await MpPluginParameterValueEvaluator.QueryPropertyAsync(
-                    ao.CopyItem, ComparePropertyPathType, callback);
-            if (copyItemPropObj != null) {
-                return copyItemPropObj.ToString();
+                ValidationText = $"Error performing action '{FullName}': {ex}";
+                ShowValidationNotification();
             }
             return null;
         }
 
         private List<MpAvConditionalMatch> GetMatches(string compareStr) {
+            if (compareStr == null) {
+                return new();
+            }
             object compareObj = null;
             if (compareStr.IsStringRtf()) {
                 //compareObj = compareStr.ToFlowDocument();
             } else {
                 compareObj = compareStr;
             }
-
             var matches = new List<MpAvConditionalMatch>();
+
             int idx = 0;
             switch (ComparisonOperatorType) {
                 case MpComparisonOperatorType.Contains:

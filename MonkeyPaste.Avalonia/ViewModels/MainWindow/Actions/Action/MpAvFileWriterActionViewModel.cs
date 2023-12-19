@@ -130,7 +130,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
-        public override async Task PerformActionAsync(object arg) {
+        protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
                 return;
             }
@@ -162,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
                 outputData += output;
             }
 
-            await base.PerformActionAsync(
+            await FinishActionAsync(
                     new MpAvFileWriterOutput() {
                         Previous = arg as MpAvActionOutput,
                         CopyItem = actionInput.CopyItem,

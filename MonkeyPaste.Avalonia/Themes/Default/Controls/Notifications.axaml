@@ -42,6 +42,14 @@
                 Value="Transparent" />
     </Style>
 
+    <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
+    <Style Selector=":is(Window).notificationWindow.params">
+        <Setter Property="Width"
+                Value="{StaticResource NaN}" />
+        <Setter Property="SizeToContent"
+                Value="WidthAndHeight" />
+    </Style>
+
     <Style Selector=":is(Window).notificationWindow.loader"
            x:DataType="local:MpAvNotificationViewModelBase">
         <Setter Property="ShowInTaskbar"
