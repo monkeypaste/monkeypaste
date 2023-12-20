@@ -21,15 +21,21 @@ namespace MonkeyPaste.Common {
             if (asException) {
                 throw new Exception(args.ToString());
             }
-            BreakAll(true, true);
+            BreakAll(true, true, args.ToString());
         }
-        public static void BreakAll(bool pre = true, bool post = false) {
+        public static void BreakAll(bool pre = true, bool post = false, string msg = default) {
 #if DEBUG
             bool can_handle = MpCommonTools.Services != null && MpCommonTools.Services.DebugBreakHelper != null;
+
+            MpCommonTools.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                title: "Assert failure",
+                message: msg.ToStringOrEmpty()).FireAndForgetSafeAsync();
+
             if (Debugger.IsAttached) {
                 if (pre && can_handle) {
                     MpCommonTools.Services.DebugBreakHelper.HandlePreBreak();
                 }
+
                 Debugger.Break();
                 if (post && can_handle) {
                     MpCommonTools.Services.DebugBreakHelper.HandlePostBreak();

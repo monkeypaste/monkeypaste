@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public interface MpISidebarItemViewModel : MpIViewModel {
+    public interface MpISidebarItemViewModel : MpIViewModel, MpISelectableViewModel {
         double DefaultSidebarWidth { get; }
         double DefaultSidebarHeight { get; }
         double SidebarWidth { get; set; }

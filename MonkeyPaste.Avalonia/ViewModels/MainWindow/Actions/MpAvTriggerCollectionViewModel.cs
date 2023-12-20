@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
+        MpISelectableViewModel,
         MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
@@ -35,12 +36,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpISelectableViewModel Implementation
+        private bool _isSelected;
+        public bool IsSelected {
+            get => _isSelected;
+            set {
+                if (IsSelected != value) {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+                if (IsSelected) {
+                    // always update datetime
+                    LastSelectedDateTime = DateTime.Now;
+                }
+            }
+        }
+        public DateTime LastSelectedDateTime { get; set; } = DateTime.MinValue;
+
+        #endregion
         #region MpIWindowViewModel Implementation
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.PopOut;
 
 
         #endregion
+
         #region MpICloseWindowViewModel Implementation
         public bool IsWindowOpen { get; set; }
 

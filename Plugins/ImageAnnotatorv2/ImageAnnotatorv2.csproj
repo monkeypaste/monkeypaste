@@ -48,4 +48,8 @@
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Assets\YOLOv9\data\" />
+  </ItemGroup>
 </Project>

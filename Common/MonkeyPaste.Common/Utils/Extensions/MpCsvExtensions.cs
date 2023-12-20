@@ -28,6 +28,28 @@ namespace MonkeyPaste.Common {
                 .ToList();
         }
 
+        public static string AddCsvItem(this string csvStr, string item, bool allowDup = true, MpCsvFormatProperties csvProps = null) {
+            csvProps = csvProps ?? MpCsvFormatProperties.Default;
+            var items = csvStr.ToListFromCsv(csvProps);
+            if (allowDup || !items.Contains(item)) {
+                items.Add(item);
+            }
+            return items.ToCsv(csvProps);
+        }
+
+        public static string RemoveCsvItem(this string csvStr, string item, bool removeAll = true, MpCsvFormatProperties csvProps = null) {
+            csvProps = csvProps ?? MpCsvFormatProperties.Default;
+            var items = csvStr.ToListFromCsv(csvProps);
+            List<string> to_remove = new();
+            foreach (var curitem in items) {
+                if (curitem == item && (removeAll || !to_remove.Any())) {
+                    to_remove.Add(curitem);
+                }
+            }
+            to_remove.ForEach(x => items.Remove(x));
+            return items.ToCsv(csvProps);
+        }
+
         public static string CsvStrToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {
             return MpCsvToRichHtmlTableConverter.CreateRichHtmlTableFromCsv(csvStr, csvProps);
         }

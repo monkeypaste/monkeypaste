@@ -4505,11 +4505,16 @@ namespace MonkeyPaste.Avalonia {
                     aivm.Items.FirstOrDefault(x => x.AnalyticItemPresetId == presetId) is not MpAvAnalyticItemPresetViewModel aipvm) {
                     return;
                 }
-                SelectedItem.IsBusy = true;
+                // store sel before potentially long running task
+                int sel_ciid = SelectedItem.CopyItemId;
+                var sel_ctvm = SelectedItem;
+                sel_ctvm.IsBusy = true;
 
                 await aivm.PerformAnalysisCommand.ExecuteAsync(aipvm);
 
-                SelectedItem.IsBusy = false;
+                if (sel_ctvm != null) {
+                    sel_ctvm.IsBusy = false;
+                }
             }, (args) => {
                 return SelectedItem != null;
             });

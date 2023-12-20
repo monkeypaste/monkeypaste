@@ -64,23 +64,6 @@ namespace MonkeyPaste.Avalonia {
         public virtual string OsVersionInfo =>
             Environment.OSVersion.VersionString;
 
-
-        public string OsFileManagerName {
-            get {
-                if (OperatingSystem.IsWindows()) {
-                    return "Explorer";
-                }
-                if (OperatingSystem.IsLinux()) {
-                    // TODO will need to handle more than ubuntu here
-                    return "Nautilus";
-                }
-                if (OperatingSystem.IsMacOS()) {
-                    return @"Finder";
-                }
-                return null;
-            }
-        }
-
         public MpUserDeviceType OsType {
             get {
                 if (OperatingSystem.IsWindows()) {

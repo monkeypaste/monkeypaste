@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.ExceptionServices;
 
 namespace ImageAnnotatorv2 {
@@ -27,7 +28,7 @@ namespace ImageAnnotatorv2 {
                         var predictions = _scorer.Detect(Convert.FromBase64String(imgBase64));
                         // filter and convert predictions to annotations
                         var rootNode = new MpAnnotationNodeFormat() {
-                            label = $"Yolo Analysis",
+                            label = $"Yolo Analysis ({_model})",
                             children = predictions
                                 .Where(x => x.Confidence >= confidence)
                                 .Select(x => new MpImageAnnotationNodeFormat() {

@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                             var userAction = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                                     notificationType: MpNotificationType.BadHttpRequest,
                                                     body: $"{response.ReasonPhrase}",
-                                                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(MpPluginLoader.PluginRootFolderPath))));
+                                                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(MpPluginLoader.PluginRootFolderPath)));
 
                             //if(userAction == MpNotificationDialogResultType.Retry) {
                             //    return new MpPluginResponseFormatBase() {

@@ -20,7 +20,7 @@ namespace GoogleContactsFetcher {
         MpIContactFetcherComponentAsync,
         MpISupportDeferredParameterCommand,
         MpIAnalyzeAsyncComponent {
-
+        private const string SECRETS_FILE_NAME = "client_secrets_desktop.json";
         private string _clientSecretsPath = null;
         //string ClientSecretsPath {
         //    get {
@@ -46,20 +46,23 @@ namespace GoogleContactsFetcher {
         //photos,relations,,sipAddresses,skills,urls,userDefined";
 
         public async Task<IEnumerable<MpIContact>> FetchAsync(object args) {
-            if (_clientSecretsPath == null &&
-                args is string manifestDir) {
-                try {
-                    _clientSecretsPath = Path.Combine(manifestDir, @"client_secrets_desktop.json");
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error finding google secrets at path '{manifestDir}'", ex);
-                    return new MpIContact[] { };
-                }
-            }
+            SetSecretsPath(args);
             var result = await FetchContactsAsync_internal(_personFields);
             return result;
         }
+        private void SetSecretsPath(object args) {
+            // default to root plugin dir
+            string secrets_dir = Path.GetDirectoryName(this.GetType().Assembly.Location);
+            if (args is string custom_secrets_dir && custom_secrets_dir.IsDirectory()) {
+                secrets_dir = custom_secrets_dir;
+            }
+            string secrets_path = Path.Combine(secrets_dir, SECRETS_FILE_NAME);
+            if (!secrets_path.IsFile()) {
+                throw new FileNotFoundException("Must have secrets file", secrets_path);
+            }
+            _clientSecretsPath = secrets_path;
 
+        }
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
             string fields_str = null;
             if (req.GetRequestParamStringListValue(1) is IEnumerable<string> fields) {

@@ -1,15 +1,44 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Loader;
 
 namespace MonkeyPaste.Avalonia {
     public class MpPluginWrapper : MpPluginFormat {
         [JsonIgnore]
-        public MpPluginAssemblyLoadContext LoadContext { get; set; }
+        public AssemblyLoadContext LoadContext { get; set; }
+        [JsonIgnore]
+        public string ManifestPath { get; set; }
 
         [JsonIgnore]
-        public string RootDirectory { get; set; }
+        public string ManifestDir =>
+            ManifestPath.IsFile() ? Path.GetDirectoryName(ManifestPath) : null;
+
+        [JsonIgnore]
+        public string RootDirectory {
+            get {
+                if (!ManifestDir.IsDirectory()) {
+                    return null;
+                }
+                if (Path.GetDirectoryName(ManifestDir).EndsWith(guid)) {
+                    // when plugin is installed it'll be in wrapper dir using guid as its name
+                    return Path.GetDirectoryName(ManifestDir);
+                }
+                return ManifestDir;
+            }
+        }
+
+        [JsonIgnore]
+        public string CachePath {
+            get {
+                return Path.Combine(
+                    MpPluginLoader.PluginCacheDir,
+                    $"{guid}.{MpPluginLoader.MANIFEST_FILE_EXT}");
+            }
+        }
         [JsonIgnore]
         public DateTime manifestLastModifiedDateTime { get; set; }
 

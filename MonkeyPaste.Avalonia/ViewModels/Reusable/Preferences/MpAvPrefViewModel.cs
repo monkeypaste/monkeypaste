@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpICustomCsvFormat Implementation
         [JsonIgnore]
-        MpCsvFormatProperties MpICustomCsvFormat.CsvFormat =>
+        public MpCsvFormatProperties CsvFormat =>
             MpCsvFormatProperties.DefaultBase64Value;
 
         #endregion
@@ -465,11 +465,10 @@ namespace MonkeyPaste.Avalonia {
         public string RecentSettingsSearchTexts { get; set; } = string.Empty;
         #endregion
 
-        #region Ignored Ntf
 
+        public string PluginDirsToUnloadCsvStr { get; set; } = string.Empty;
         public string DoNotShowAgainNotificationIdCsvStr { get; set; } = string.Empty;
 
-        #endregion
 
         #region Last Load Remembers
 

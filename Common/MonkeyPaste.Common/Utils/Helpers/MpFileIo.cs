@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -160,28 +161,34 @@ namespace MonkeyPaste.Common {
             }
             return string.Empty;
         }
-        public static void OpenFileBrowser(string path, string browserFileName = null) {
+        public static void OpenFileBrowser(string path, IEnumerable<string> selected_file_names = default) {
             if (!path.IsFileOrDirectory()) {
                 MpCommonTools.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync($"Error", $"{path} not found");
-                path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            }
+                // give up on any selected paths
+                selected_file_names = default;
 
-            if (string.IsNullOrEmpty(browserFileName)) {
-                if (MpCommonTools.Services.PlatformInfo.OsType == MpUserDeviceType.Windows) {
-                    browserFileName = "explorer.exe";
-                } else {
-                    throw new Exception("need file browser paths for non-windows os here");
+                // fallback to dir
+                path = Path.GetDirectoryName(path);
+                if (!path.IsFileOrDirectory()) {
+                    // no luck fallback to desktop dir
+                    path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 }
             }
 
             string args = path;
-            if (File.Exists(path)) {
-                // when path is file and not folder add select arg to process start
-                args = string.Format("/select,\"{0}\"", path);
+#if WINDOWS
+            if (selected_file_names != null) {
+                ShowSelectedInExplorer.FilesOrFolders(path.IsFile() ? path.GetDir() : path, selected_file_names.ToArray());
+                return;
             }
+            if (path.IsFile()) {
+                // when path is file and not folder add select arg to process start
+                args = $"/select,\"{path}\"";
+            }
+#endif
             ProcessStartInfo startInfo = new ProcessStartInfo {
                 Arguments = args,
-                FileName = browserFileName
+                FileName = Path.GetFileName(MpCommonTools.Services.PlatformInfo.OsFileManagerPath)
             };
 
             Process.Start(startInfo);
@@ -612,6 +619,10 @@ namespace MonkeyPaste.Common {
             return true;
         }
         public static bool DeleteDirectory(string path, bool recursive = true) {
+            if (!path.IsFileOrDirectory()) {
+                // if path doesn't exist treat as success
+                return true;
+            }
             if (path.IsDirectory()) {
                 try {
                     Directory.Delete(path, recursive);
@@ -792,4 +803,6 @@ namespace MonkeyPaste.Common {
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
         }
     }
+
+
 }

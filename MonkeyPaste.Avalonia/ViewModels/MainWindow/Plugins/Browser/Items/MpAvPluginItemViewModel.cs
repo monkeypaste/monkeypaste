@@ -138,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
             .Any(x => x.IsBusy);
 
         public bool IsInstalled =>
-            !IsRemote;
+            !IsRemote && HasLocalInstall;
 
         public bool IsRemote =>
             PluginFormat is not MpPluginFormat;
@@ -289,10 +289,10 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        public string PluginRootDirectory {
+        public string PluginManifestDirectory {
             get {
                 if (PluginFormat is MpPluginWrapper pf) {
-                    return pf.RootDirectory;
+                    return pf.ManifestDir;
                 }
                 return string.Empty;
 
@@ -329,7 +329,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrEmpty(PluginIconUri)) {
                 IconBase64 = MpBase64Images.QuestionMark;
             } else {
-                var icon_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginIconUri, PluginRootDirectory);
+                var icon_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginIconUri, PluginManifestDirectory);
                 if (icon_bytes == null || icon_bytes.Length == 0) {
                     IconBase64 = MpBase64Images.QuestionMark;
                 } else {
@@ -386,7 +386,7 @@ namespace MonkeyPaste.Avalonia {
             // temp test delay
             await Task.Delay(1000);
 
-            var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginRootDirectory);
+            var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginManifestDirectory);
             ReadMeMarkDownText = read_me_bytes.ToDecodedString();
             IsBusy = was_busy;
         }
@@ -483,12 +483,22 @@ namespace MonkeyPaste.Avalonia {
         public ICommand UpdatePluginCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
+                string url = PackageUrl;
+                if (IsInstalled &&
+                    Parent.Items.FirstOrDefault(x => x.PluginGuid == PluginGuid && x.PluginVersion.CompareTo(MaxKnownVersion) == 0) is { } remote_vm) {
+                    // workaround since update list shows local packages, use the package url from the remote manifest
+                    url = remote_vm.PackageUrl;
+                }
 
                 await MpAvAnalyticItemCollectionViewModel.Instance
-                        .UpdatePluginCommand.ExecuteAsync(new object[] { PluginGuid, PackageUrl });
-
+                        .UpdatePluginCommand.ExecuteAsync(new object[] { PluginGuid, url });
 
                 IsBusy = false;
+
+                if (MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid) is { } kvp && kvp.Value != null) {
+                    // reload w/ updated manifest
+                    await InitializeAsync(kvp.Value);
+                }
                 OnPropertyChanged(nameof(CanUpdate));
 
                 Parent.RefreshItems();

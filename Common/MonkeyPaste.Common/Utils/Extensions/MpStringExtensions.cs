@@ -758,7 +758,9 @@ namespace MonkeyPaste.Common {
 #endif
             return Directory.Exists(str);
         }
-
+        public static string GetDir(this string path) {
+            return Path.GetDirectoryName(path);
+        }
         public static bool IsFileOrDirectory(this string str) {
             return str.IsFile() || str.IsDirectory();
         }

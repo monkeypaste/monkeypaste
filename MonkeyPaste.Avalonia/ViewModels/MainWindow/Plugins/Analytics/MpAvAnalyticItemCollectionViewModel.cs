@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -319,11 +320,20 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var sw = Stopwatch.StartNew();
-            while (GetAnalyzerActions(preset_ids, true).Any()) {
+            while (true) {
+                var running_action_analyzers = GetAnalyzerActions(preset_ids, true);
+                if (!running_action_analyzers.Any()) {
+                    break;
+                }
                 // wait for any running actions w/ this analyzer to complete
                 await Task.Delay(100);
                 if (sw.ElapsedMilliseconds > 5_000) {
-                    MpDebug.Break($"Running timeout reached for analyzer '{aivm}', delete/update will probably fail but oh well");
+                    var sb = new StringBuilder($"Running timeout reached for analyzer '{aivm.Title}'. Running actions: ");
+                    running_action_analyzers
+                        .Select(x => x.RootTriggerActionViewModel)
+                        .SelectMany(x => x.SelfAndAllDescendants.Where(y => y.IsPerformingAction))
+                        .ForEach(x => sb.AppendLine(x.FullName));
+                    MpDebug.Break(sb.ToString());
                     break;
                 }
             }
@@ -346,15 +356,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private IEnumerable<MpAvAnalyzeActionViewModel> GetAnalyzerActions(IEnumerable<int> presetIds, bool onlyRunning) {
-            return
+            var actions_w_presets =
                     MpAvTriggerCollectionViewModel.Instance
                         .Items
                         .OfType<MpAvAnalyzeActionViewModel>()
                         .Where(x =>
-                            presetIds.Contains(x.AnalyticItemPresetId) &&
-                            onlyRunning ?
-                                x.RootTriggerActionViewModel.SelfAndAllDescendants.Any(y => y.IsPerformingAction) :
-                                true);
+                            presetIds.Contains(x.AnalyticItemPresetId));
+            if (onlyRunning) {
+                return actions_w_presets.Where(x => x.IsPerformingAction);
+            }
+            return actions_w_presets;
         }
         #endregion
 
@@ -421,8 +432,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> UpdatePluginCommand => new MpAsyncCommand<object>(
             async (args) => {
+                if (args is not object[] argParts ||
+                    argParts[0] is not string plugin_guid ||
+                    argParts[1] is not string package_url) {
+                    return;
+                }
                 IsBusy = true;
-                string plugin_guid = (args as object[])[0] as string;
                 var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
                 MpDebug.Assert(aivm != null, $"Error upgrading plugin guid '{plugin_guid}' can't find analyer");
 
@@ -447,8 +462,6 @@ namespace MonkeyPaste.Avalonia {
 
                 if (success) {
                     try {
-                        // 
-                        string package_url = (args as object[])[1] as string;
                         var updated_pf = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
                         aivm = await CreateAnalyticItemViewModelAsync(updated_pf);
                         if (aivm.PluginGuid == null) {

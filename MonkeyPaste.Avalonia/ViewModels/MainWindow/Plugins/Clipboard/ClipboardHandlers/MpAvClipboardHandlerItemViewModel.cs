@@ -335,7 +335,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<int> GetOrCreateIconIdAsync() {
-            var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory);
+            var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.ManifestDir);
             var icon = await Mp.Services.IconBuilder.CreateAsync(bytes.ToBase64String());
             return icon.Id;
         }

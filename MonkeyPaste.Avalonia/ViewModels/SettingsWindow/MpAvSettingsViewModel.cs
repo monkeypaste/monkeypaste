@@ -1841,7 +1841,7 @@ namespace MonkeyPaste.Avalonia {
                             }
 
                             // delete cache dir (it will be recreated on restart)
-                            string cache_dir = MpPluginLoader.PluginManifestBackupFolderPath;
+                            string cache_dir = MpPluginLoader.PluginCacheDir;
                             bool success = MpFileIo.DeleteDirectory(cache_dir);
 
                             IsBusy = false;

@@ -146,7 +146,8 @@ namespace MonkeyPaste.Avalonia {
                 //        aivm.PerformAnalysisCommand
                 //    }
                 //}
-                string fetcher_dir = fetcher_kvp.Value.RootDirectory;
+                //string fetcher_dir = fetcher_kvp.Value.RootDirectory;
+                string fetcher_dir = null;
                 if (fetcher is MpIContactFetcherComponent cfc) {
                     contacts.AddRange(cfc.Fetch(fetcher_dir));
                 } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
