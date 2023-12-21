@@ -108,57 +108,60 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ShowDesktopNotification(MpAvNotificationViewModelBase nvmb) {
-            Dispatcher.UIThread.Post(() => {
-                MpAvWindow nw = null;
-                var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
-                switch (layoutType) {
-                    case MpNotificationLayoutType.Welcome:
-                        nw = new MpAvWelcomeWindow() {
-                            DataContext = nvmb
-                        };
-                        break;
-                    case MpNotificationLayoutType.Loader:
-                        nvmb.IsVisible = true;
-                        nw = new MpAvLoaderNotificationWindow() {
-                            DataContext = nvmb,
-                            Topmost = true,
-                            ShowActivated = true
-                        };
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => ShowDesktopNotification(nvmb));
+                return;
+            }
+            // BUG setting owner seems locks everything up, don't know
+            // if its or avalonia but just ignoring it for now
+            nvmb.Owner = null;
+            Window owner = nvmb.Owner as Window;
+            MpAvWindow nw = null;
+            switch (nvmb) {
+                case MpAvWelcomeNotificationViewModel:
+                    nw = new MpAvWelcomeWindow(owner) {
+                        DataContext = nvmb
+                    };
+                    break;
+                case MpAvLoaderNotificationViewModel:
+                    nvmb.IsVisible = true;
+                    nw = new MpAvLoaderNotificationWindow(owner) {
+                        DataContext = nvmb,
+                        Topmost = true,
+                        ShowActivated = true
+                    };
 
-                        //#if WINDOWS
-                        App.Current.SetMainWindow(nw);
-                        //#endif
+                    //#if WINDOWS
+                    App.Current.SetMainWindow(nw);
+                    //#endif
 
-                        break;
-                    case MpNotificationLayoutType.ErrorWithOption:
-                    case MpNotificationLayoutType.UserAction:
-                    case MpNotificationLayoutType.ErrorAndShutdown:
-                        nw = new MpAvUserActionNotificationWindow() {
-                            DataContext = nvmb
-                        };
-                        break;
-                    default:
-                        nw = new MpAvMessageNotificationWindow() {
-                            DataContext = nvmb,
-                        };
-                        break;
-                }
-                if (nw == null) {
-                    // somethings wrong
-                    return;
-                }
+                    break;
+                case MpAvUserActionNotificationViewModel:
+                    nw = new MpAvUserActionNotificationWindow(owner) {
+                        DataContext = nvmb
+                    };
+                    break;
+                default:
+                    nw = new MpAvMessageNotificationWindow(owner) {
+                        DataContext = nvmb,
+                    };
+                    break;
+            }
+            if (nw == null) {
+                // somethings wrong
+                return;
+            }
 
 #if WINDOWS
 
-                if (nvmb is not MpAvWelcomeNotificationViewModel) {
+            if (nvmb is not MpAvWelcomeNotificationViewModel) {
 
-                    MpAvToolWindow_Win32.SetAsToolWindow(nw.TryGetPlatformHandle().Handle);
-                }
+                MpAvToolWindow_Win32.SetAsToolWindow(nw.TryGetPlatformHandle().Handle);
+            }
 #endif
-                nw.Closed += Nw_Closed;
+            nw.Closed += Nw_Closed;
 
-                BeginOpen(nw);
-            });
+            BeginOpen(nw);
         }
         private void BeginOpen(MpAvWindow nw) {
             var nvmb = nw.DataContext as MpAvNotificationViewModelBase;

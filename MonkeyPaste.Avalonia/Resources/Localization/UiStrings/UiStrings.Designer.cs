@@ -890,6 +890,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does Not - When checked the true or false outcome of the condition will be flipped. So for example, a &apos;Contains&apos; condition will become &apos;Does Not Contain&apos;..
+        /// </summary>
+        public static string ActionCondNotHint {
+            get {
+                return ResourceManager.GetString("ActionCondNotHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does Not.
+        /// </summary>
+        public static string ActionCondNotLabel {
+            get {
+                return ResourceManager.GetString("ActionCondNotLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All true or false operations where child actions will only execute if the result is true..
         /// </summary>
         public static string ActionCondOpHint {
@@ -899,7 +917,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operation.
+        ///   Looks up a localized string similar to Condition.
         /// </summary>
         public static string ActionCondOpLabel {
             get {
@@ -1853,8 +1871,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete ALL your clips? This cannot be undone! 
-        ///* Requires a restart once complete..
+        ///   Looks up a localized string similar to Are you sure you want to delete ALL your clips? This operation is SLOW and CANNOT be undone! .
         /// </summary>
         public static string ClipTrayDeleteAllMessageText {
             get {

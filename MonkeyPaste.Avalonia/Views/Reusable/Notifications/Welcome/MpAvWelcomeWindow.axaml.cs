@@ -8,8 +8,8 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvWelcomeWindow : MpAvWindow<MpAvWelcomeNotificationViewModel> {
-
-        public MpAvWelcomeWindow() {
+        public MpAvWelcomeWindow() : this(null) { }
+        public MpAvWelcomeWindow(Window owner = default) : base(owner) {
             InitializeComponent();
             var mb = this.FindControl<Button>("MinimizeButton");
             mb.Click += (s, e) => {

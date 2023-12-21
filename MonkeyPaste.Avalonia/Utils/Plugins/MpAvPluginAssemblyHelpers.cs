@@ -7,11 +7,17 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginAssemblyHelpers {
-        public static void Unload(MpPluginWrapper plugin) {
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Unload(ref MpPluginWrapper plugin) {
+            if (plugin == null) {
+                return;
+            }
             if (MpPluginLoader.USE_ASSEMBLY_LOAD_CONTEXT) {
                 plugin.Components = null;
                 if (plugin.LoadContext != null) {
@@ -19,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
                     WeakReference wr = new WeakReference(plugin.LoadContext);
                     plugin.LoadContext.Unload();
                     plugin.LoadContext = null;
-                    for (int i = 0; wr.IsAlive && (i < 10); i++) {
+                    for (int i = 0; wr.IsAlive && (i < 100); i++) {
                         GC.Collect();
                         GC.WaitForPendingFinalizers();
                     }
@@ -27,6 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
                     }
                 }
+                plugin = null;
                 return;
             }
             MpPluginUnloader.AddPluginToUnload(plugin);

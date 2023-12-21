@@ -4644,16 +4644,38 @@ namespace MonkeyPaste.Avalonia {
                     //cancel
                     return;
                 }
-                // clear trays
-                IgnoreContentDelete = true;
-                Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
+
+                // NOTE settings total to 1 before finding actual to actually set lazily but not appear complete initially
+                MpAvCommonProgressIndicatorViewModel delete_all_prog_vm = new(this, 1, 0);
+
+                Mp.Services.PlatformMessageBox.ShowProgressMessageBoxAsync(
                     title: UiStrings.CommonBusyLabel,
-                    iconResourceObj: "ClockArrowImage").FireAndForgetSafeAsync();
+                    iconResourceObj: "ClockArrowImage",
+                    iprog_and_or_cancel_token_arg: delete_all_prog_vm).FireAndForgetSafeAsync();
 
-                var ciidl = await MpDataModelProvider.GetItemsIdsAsync<MpCopyItem>();
+                var all_ciidl = await MpDataModelProvider.GetItemsIdsAsync<MpCopyItem>();
+                delete_all_prog_vm.TotalCount = all_ciidl.Count;
 
-                await Task.WhenAll(ciidl.Select(x => MpDataModelProvider.DeleteItemAsync<MpCopyItem>(x)));
-                MpAvAppRestarter.ShutdownWithRestartTask();
+                async Task DeleteItemAsync(int ciid) {
+                    await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
+                    Dispatcher.UIThread.Post(() => {
+                        delete_all_prog_vm.CurrentCount++;
+                        delete_all_prog_vm.OnPropertyChanged(nameof(delete_all_prog_vm.CurrentCount));
+                    });
+                }
+
+                await Task.WhenAll(all_ciidl.Select(x => DeleteItemAsync(x)));
+
+                // clear trays
+                //IgnoreContentDelete = true;
+                //Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
+                //    title: UiStrings.CommonBusyLabel,
+                //    iconResourceObj: "ClockArrowImage").FireAndForgetSafeAsync();
+
+                //var ciidl = await MpDataModelProvider.GetItemsIdsAsync<MpCopyItem>();
+
+                //await Task.WhenAll(ciidl.Select(x => MpDataModelProvider.DeleteItemAsync<MpCopyItem>(x)));
+                //MpAvAppRestarter.ShutdownWithRestartTask();
             });
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
@@ -5092,7 +5114,33 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 
-    public class MpAvCommonProgressIndicatorViewModel : MpAvViewModelBase, MpIProgressIndicatorViewModel {
-        public double PercentLoaded { get; set; }
+    public class MpAvCommonProgressIndicatorViewModel : MpAvViewModelBase<MpAvViewModelBase>, MpIProgressIndicatorViewModel {
+        public int TotalCount { get; set; }
+        public int CurrentCount { get; set; }
+        public double PercentLoaded =>
+            TotalCount == 0 ? 1 : (double)CurrentCount / (double)TotalCount;
+        public override bool IsLoaded =>
+            PercentLoaded >= 1;
+
+        public MpAvCommonProgressIndicatorViewModel(MpAvViewModelBase parent) : this(parent, 0, 0) { }
+        public MpAvCommonProgressIndicatorViewModel(MpAvViewModelBase parent = default, int total = 0, int current = 0) : base(parent) {
+            PropertyChanged += MpAvCommonProgressIndicatorViewModel_PropertyChanged;
+            TotalCount = total;
+            CurrentCount = current;
+        }
+
+
+        private void MpAvCommonProgressIndicatorViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(TotalCount):
+                case nameof(CurrentCount):
+                    OnPropertyChanged(nameof(PercentLoaded));
+                    break;
+            }
+        }
+
+        public override string ToString() {
+            return $"Current: {CurrentCount} Total: {TotalCount} Percent: {PercentLoaded}";
+        }
     }
 }

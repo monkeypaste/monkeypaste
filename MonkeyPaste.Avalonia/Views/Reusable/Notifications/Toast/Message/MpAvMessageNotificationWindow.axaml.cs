@@ -1,11 +1,11 @@
+using Avalonia.Controls;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMessageNotificationWindow : MpAvWindow<MpAvMessageNotificationViewModel> {
-        #region Private Variables
-        #endregion
-        public MpAvMessageNotificationWindow() {
+        public MpAvMessageNotificationWindow() : this(null) { }
+        public MpAvMessageNotificationWindow(Window owner = default) : base(owner) {
             InitializeComponent();
         }
 

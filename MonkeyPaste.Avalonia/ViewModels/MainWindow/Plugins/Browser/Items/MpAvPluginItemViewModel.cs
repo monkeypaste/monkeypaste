@@ -438,6 +438,7 @@ namespace MonkeyPaste.Avalonia {
                 await MpAvAnalyticItemCollectionViewModel.Instance
                     .InstallAnalyzerCommand.ExecuteAsync(new object[] { PluginGuid, PackageUrl });
 
+                Parent.PerformFilterCommand.Execute("refresh");
                 IsBusy = false;
                 OnPropertyChanged(nameof(IsInstalled));
                 OnPropertyChanged(nameof(CanUpdate));
@@ -473,7 +474,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 // refresh list to remove this plugin
-                Parent.PerformFilterCommand.Execute(null);
+                Parent.PerformFilterCommand.Execute("refresh");
 
                 IsBusy = false;
             }, () => {
@@ -501,7 +502,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 OnPropertyChanged(nameof(CanUpdate));
 
-                Parent.RefreshItems();
+                Parent.RefreshItemsState();
             }, () => {
                 return CanUpdate;
             });

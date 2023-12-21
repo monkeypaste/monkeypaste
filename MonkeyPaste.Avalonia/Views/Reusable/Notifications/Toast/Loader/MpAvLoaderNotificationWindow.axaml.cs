@@ -8,8 +8,8 @@ using System;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvLoaderNotificationWindow : MpAvWindow<MpAvLoaderNotificationViewModel> {
-
-        public MpAvLoaderNotificationWindow() {
+        public MpAvLoaderNotificationWindow() : this(null) { }
+        public MpAvLoaderNotificationWindow(Window owner = default) : base(owner) {
             InitializeComponent();
         }
 

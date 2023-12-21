@@ -16,5 +16,9 @@
                        Background="Transparent">
     <local:MpAvProgressSpinner HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
-                               Opacity="{DynamicResource GlobalBgOpacity}" />
+                               ArcWidth="2.5"
+                               PercentBrush="{DynamicResource ThemeAccent3Color}"
+                               RingBrush="{DynamicResource ThemeAccent2Color}"
+                               LabelBrush="Transparent"
+                               Percent="{Binding PercentLoaded}" />
 </local:MpAvUserControl>

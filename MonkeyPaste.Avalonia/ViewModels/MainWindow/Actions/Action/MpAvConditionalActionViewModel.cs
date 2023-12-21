@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
         public const string SELECTED_COMPARE_OP_PARAM_ID = "SelectedCompareOp";
         public const string IS_CASE_SENSITIVE_PARAM_ID = "IsCaseSensitive";
         public const string COMPARE_TEXT_PARAM_ID = "CompareText";
+        public const string IS_NOT_COND_PARAM_ID = "IsNotCond";
 
         #endregion
 
@@ -64,6 +65,13 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = false,
                                 paramId = COMPARE_FILTER_TEXT_PARAM_ID,
                                 description = UiStrings.ActionCondInFilterHint
+                            },new MpParameterFormat() {
+                                label = UiStrings.ActionCondNotLabel,
+                                description = UiStrings.ActionCondNotHint,
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                isRequired = false,
+                                paramId = IS_NOT_COND_PARAM_ID
                             },new MpParameterFormat() {
                                 label = UiStrings.ActionCondOpLabel,
                                 controlType = MpParameterControlType.ComboBox,
@@ -152,7 +160,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //Arg3
         public bool IsCaseSensitive {
             get {
                 if (ArgLookup.TryGetValue(IS_CASE_SENSITIVE_PARAM_ID, out var param_vm) &&
@@ -166,6 +173,22 @@ namespace MonkeyPaste.Avalonia {
                     ArgLookup[IS_CASE_SENSITIVE_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsCaseSensitive));
+                }
+            }
+        }
+        public bool IsNotCond {
+            get {
+                if (ArgLookup.TryGetValue(IS_NOT_COND_PARAM_ID, out var param_vm) &&
+                    param_vm.BoolValue is bool boolVal) {
+                    return boolVal;
+                }
+                return false;
+            }
+            set {
+                if (IsNotCond != value) {
+                    ArgLookup[IS_NOT_COND_PARAM_ID].CurrentValue = value.ToString();
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsNotCond));
                 }
             }
         }
@@ -270,12 +293,14 @@ namespace MonkeyPaste.Avalonia {
 
             string compareStr = await GetCompareStr(ao);
             var compareOutput = new MpAvCompareOutput() {
+                Flip = IsNotCond,
                 Previous = ao,
                 CopyItem = ao.CopyItem,
                 Matches = GetMatches(compareStr)
             };
 
-            MpConsole.WriteLine($"Comprarer '{Label}' match result:");
+            MpConsole.WriteLine($"Comprarer '{Label}' match result:"); ;
+            MpConsole.WriteLine($"Is Not: '{IsNotCond}'");
             MpConsole.WriteLine($"Op: '{ComparisonOperatorType}'");
             MpConsole.WriteLine($"compare string: '{CompareData}'");
             MpConsole.WriteLine($"matches with: '{compareStr.ToStringOrEmpty()}' ");
@@ -313,9 +338,6 @@ namespace MonkeyPaste.Avalonia {
         private void MpCompareActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    //OnPropertyChanged(nameof(SelectedContentTypeMenuItemViewModel));
-                    //OnPropertyChanged(nameof(SelectedComparePropertyPathMenuItemViewModel));
-                    //OnPropertyChanged(nameof(SelectedCompareTypeMenuItemViewModel));
                     OnPropertyChanged(nameof(IsCompareTypeRegex));
                     OnPropertyChanged(nameof(IsCaseSensitive));
                     break;

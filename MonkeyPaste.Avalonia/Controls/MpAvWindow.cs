@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Platform;
 using Avalonia.Diagnostics;
 using Avalonia.Threading;
 using PropertyChanged;
@@ -30,13 +31,6 @@ namespace MonkeyPaste.Avalonia {
                     ShowAsChildWindow = false,
                     //StartupScreenIndex = 0
                 });
-
-        public static MpAvWindow Create(Window owner = default) {
-            if (owner == default) {
-                return new MpAvWindow();
-            }
-            return new MpAvWindow(owner);
-        }
 
         #endregion
 
@@ -94,14 +88,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvWindow() : base() {
+        public MpAvWindow() : this(null) { }
+        public MpAvWindow(Window owner = default) : base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) {
             Init();
         }
 
-        public MpAvWindow(Window owner) : base(owner.PlatformImpl) {
-            //Owner = owner;
-            Init();
-        }
         #endregion
 
         #region Public Methods
@@ -238,12 +229,6 @@ namespace MonkeyPaste.Avalonia {
             get => BindingContext;
             set => BindingContext = value;
         }
-
-        //object? IViewFor.ViewModel {
-        //    get => ViewModel;
-        //    set => ViewModel = (TViewModel)value;
-        //}
-        public MpAvWindow() : base() { }
-        public MpAvWindow(Window owner) : base(owner) { }
+        public MpAvWindow(Window owner = default) : base(owner) { }
     }
 }

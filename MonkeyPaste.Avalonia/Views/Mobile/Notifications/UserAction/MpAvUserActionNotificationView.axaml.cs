@@ -6,7 +6,6 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvUserActionNotificationView : MpAvUserControl<MpAvUserActionNotificationViewModel> {
 
-
         public MpAvUserActionNotificationView() : base() {
             InitializeComponent();
 

@@ -169,9 +169,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            var base_result = await base.ShowNotificationAsync();
-            if (base_result == MpNotificationDialogResultType.DoNotShow) {
-                return base_result;
+            DialogResult = BeginShow();
+            if (DialogResult == MpNotificationDialogResultType.DoNotShow) {
+                return DialogResult;
             }
             await BeginWelcomeSetupAsync();
 

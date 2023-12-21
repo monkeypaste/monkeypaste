@@ -272,6 +272,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public MpNotificationDialogResultType DialogResult { get; protected set; }
         public bool IsLoader =>
             this is MpAvLoaderNotificationViewModel;
         public bool CanMoveWindow =>
@@ -455,17 +456,16 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = wasBusy;
         }
-
-        public virtual async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
+        public MpNotificationDialogResultType BeginShow() {
             if (IsDoNotShowType) {
                 MpConsole.WriteTraceLine($"Notification: {NotificationType} marked as hidden");
                 return MpNotificationDialogResultType.DoNotShow;
             }
-            await Task.Delay(1);
             MpAvNotificationWindowManager.Instance.ShowNotification(this);
-
             return MpNotificationDialogResultType.None;
         }
+
+        public abstract Task<MpNotificationDialogResultType> ShowNotificationAsync();
 
         public virtual void HideNotification(bool force = false) {
             if (IsShowOnceNotification &&
@@ -505,6 +505,16 @@ namespace MonkeyPaste.Avalonia {
                     //} else {
                     //    WindowOpenDateTime = DateTime.MaxValue;
                     //}
+                    break;
+
+                case nameof(DialogResult):
+                    switch (DialogResult) {
+                        case MpNotificationDialogResultType.Cancel:
+                        case MpNotificationDialogResultType.Dismiss:
+                        case MpNotificationDialogResultType.DoNotShow:
+                            HideNotification();
+                            break;
+                    }
                     break;
             }
         }

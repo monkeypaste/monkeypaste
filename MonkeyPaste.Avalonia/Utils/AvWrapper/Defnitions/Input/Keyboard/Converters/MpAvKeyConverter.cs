@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                     T t_key = default(T);
                     if (typeof(T) == typeof(KeyCode) &&
                         _globalConverter.ConvertStringToKey(k) is KeyCode gk &&
-                        gk != KeyCode.VcX11Unknown &&
+                        //gk != KeyCode.VcX11Unknown &&
                         //gk != KeyCode.CharUndefined &&
                         gk != KeyCode.VcUndefined) {
                         t_key = (T)Convert.ChangeType(gk, Enum.GetUnderlyingType(typeof(T)));

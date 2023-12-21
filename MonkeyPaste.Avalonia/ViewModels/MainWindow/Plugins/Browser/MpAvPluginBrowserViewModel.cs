@@ -125,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public void RefreshItems() {
+        public void RefreshItemsState() {
             OnPropertyChanged(nameof(CanUpdateCount));
             OnPropertyChanged(nameof(FilteredItems));
             SelectedItem = FilteredItems.FirstOrDefault();
@@ -247,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
                 var pivm = await CreatePluginItemViewModelAsync(mf);
                 Items.Add(pivm);
             }
-            RefreshItems();
+            RefreshItemsState();
 
         }
         #endregion
@@ -262,10 +262,10 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = true;
-                if (!Items.Any() || args.ToStringOrEmpty() == "Click") {
+                if (!Items.Any() || args != null) {
                     await CreateAllItemsAsync();
                 } else {
-                    RefreshItems();
+                    RefreshItemsState();
                 }
                 IsBusy = false;
                 await AddOrUpdateRecentFilterTextsAsync(FilterText);

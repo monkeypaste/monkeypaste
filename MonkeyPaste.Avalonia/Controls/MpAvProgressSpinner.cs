@@ -33,116 +33,67 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Overrides
-        protected override Type StyleKeyOverride => typeof(UserControl);
+        //protected override Type StyleKeyOverride => typeof(UserControl);
         #endregion
 
         #region Percent AvaloniaProperty
-        private double _percent = 0;
         public double Percent {
-            get => _percent;
-            set => SetAndRaise(PercentProperty, ref _percent, value);
+            get { return GetValue(PercentProperty); }
+            set { SetValue(PercentProperty, value); }
         }
-
-        public static readonly DirectProperty<MpAvProgressSpinner, double> PercentProperty =
-            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, double>
-            (
-                nameof(Percent),
-                o => o.Percent,
-                (o, v) => o.Percent = v,
-                0
-            );
-
+        public static readonly StyledProperty<double> PercentProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, double>(nameof(Percent), 0);
         #endregion
 
         #region ArcWidth AvaloniaProperty
-        private double _ArcWidth = 7;
-        public double ArcWidth {
-            get => _ArcWidth;
-            set => SetAndRaise(ArcWidthProperty, ref _ArcWidth, value);
-        }
 
-        public static readonly DirectProperty<MpAvProgressSpinner, double> ArcWidthProperty =
-            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, double>
-            (
-                nameof(ArcWidth),
-                o => o.ArcWidth,
-                (o, v) => o.ArcWidth = v,
-                7
-            );
+        public double ArcWidth {
+            get { return GetValue(ArcWidthProperty); }
+            set { SetValue(ArcWidthProperty, value); }
+        }
+        public static readonly StyledProperty<double> ArcWidthProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, double>(nameof(ArcWidth), 7);
 
         #endregion
 
 
         #region ZeroAngle AvaloniaProperty
-        private double _ZeroAngle = 0;
         public double ZeroAngle {
-            get => _ZeroAngle;
-            set => SetAndRaise(ZeroAngleProperty, ref _ZeroAngle, value);
+            get { return GetValue(ZeroAngleProperty); }
+            set { SetValue(ZeroAngleProperty, value); }
         }
-
-        public static readonly DirectProperty<MpAvProgressSpinner, double> ZeroAngleProperty =
-            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, double>
-            (
-                nameof(ZeroAngle),
-                o => o.ZeroAngle,
-                (o, v) => o.ZeroAngle = v,
-                0
-            );
-
+        public static readonly StyledProperty<double> ZeroAngleProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, double>(nameof(ZeroAngle), 0);
         #endregion
 
         #region PercentBrush AvaloniaProperty
-
-        private IBrush _PercentBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString());
         public IBrush PercentBrush {
-            get => _PercentBrush;
-            set => SetAndRaise(PercentBrushProperty, ref _PercentBrush, value);
+            get { return GetValue(PercentBrushProperty); }
+            set { SetValue(PercentBrushProperty, value); }
         }
-
-        public static readonly DirectProperty<MpAvProgressSpinner, IBrush> PercentBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, IBrush>
-            (
-                nameof(PercentBrush),
-                o => o.PercentBrush,
-                (o, v) => o.PercentBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
-            );
-
+        public static readonly StyledProperty<IBrush> PercentBrushProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, IBrush>(nameof(PercentBrush), Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString()));
         #endregion
 
         #region RingBrush AvaloniaProperty
 
-        private IBrush _RingBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString());
         public IBrush RingBrush {
-            get => _RingBrush;
-            set => SetAndRaise(RingBrushProperty, ref _RingBrush, value);
+            get { return GetValue(RingBrushProperty); }
+            set { SetValue(RingBrushProperty, value); }
         }
-
-        public static readonly DirectProperty<MpAvProgressSpinner, IBrush> RingBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, IBrush>
-            (
-                nameof(RingBrush),
-                o => o.RingBrush,
-                (o, v) => o.RingBrush = v, Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString())
-            );
-
+        public static readonly StyledProperty<IBrush> RingBrushProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, IBrush>(nameof(RingBrush), Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString()));
         #endregion
 
         #region LabelBrush AvaloniaProperty
-        private IBrush _LabelBrush = Brushes.Black;
-        public IBrush LabelBrush {
-            get => _LabelBrush;
-            set => SetAndRaise(LabelBrushProperty, ref _LabelBrush, value);
-        }
 
-        public static readonly DirectProperty<MpAvProgressSpinner, IBrush> LabelBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, IBrush>
-            (
-                nameof(LabelBrush),
-                o => o.LabelBrush,
-                (o, v) => o.LabelBrush = v,
-                Brushes.Black
-            );
+        public IBrush LabelBrush {
+            get { return GetValue(LabelBrushProperty); }
+            set { SetValue(LabelBrushProperty, value); }
+        }
+        public static readonly StyledProperty<IBrush> LabelBrushProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, IBrush>(nameof(LabelBrush), Brushes.Black);
+
 
         #endregion
         #endregion
@@ -169,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
             double cy = h / 2;
             double r = d / 2;
 
+            // draw full circle
             context.DrawEllipse(
                 brush: Brushes.Transparent,
                 pen: new Pen(RingBrush, arc_width),
@@ -195,18 +147,24 @@ namespace MonkeyPaste.Avalonia {
                 gc.EndFigure(false);
             }
 
+            // draw progress arc
             context.DrawGeometry(
                 brush: Brushes.Transparent,
                 pen: new Pen(PercentBrush, arc_width),
                 pg);
 
             string percent_label = ((int)Math.Clamp(Percent * 100, 0, 100)).ToString();
+            if (percent_label.Length == 1) {
+                // NOTE padding single digits so font size is consistent
+                percent_label = "0" + percent_label;
+            }
             double fs = Math.Max(7, d / (double)percent_label.Length);
             var ft = percent_label.ToFormattedText(
                     fontSize: fs,
                     foreground: LabelBrush,
                     textAlignment: TextAlignment.Center);
             var tl = c.ToPortablePoint() - (new MpPoint(ft.Width, ft.Height) * 0.5);
+            // draw progress text
             context.DrawText(
                 ft,
                 tl.ToAvPoint());

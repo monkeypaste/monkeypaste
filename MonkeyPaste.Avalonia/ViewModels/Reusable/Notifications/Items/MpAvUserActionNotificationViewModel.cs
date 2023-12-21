@@ -8,17 +8,41 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase, MpIProgressIndicatorViewModel {
+    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase {
         #region Private Variables
         bool _wasIgnoreHiddenToFix = false;
         #endregion
 
         #region Interfaces
-        public double PercentLoaded { get; set; }
-
         #endregion
 
         #region Properties
+
+        #region OtherArgs
+        public MpIProgressIndicatorViewModel ProgressIndicatorViewModel {
+            get {
+                if (OtherArgs is MpIProgressIndicatorViewModel pivm) {
+                    return pivm;
+                }
+                if (OtherArgs is object[] argParts && argParts.OfType<MpIProgressIndicatorViewModel>().FirstOrDefault() is { } pivm2) {
+                    return pivm2;
+                }
+                return null;
+            }
+        }
+
+        public CancellationToken? BusyCancellationToken {
+            get {
+                if (OtherArgs is CancellationToken ct) {
+                    return ct;
+                }
+                if (OtherArgs is object[] argParts && argParts.OfType<CancellationToken>().FirstOrDefault() is { } ct2) {
+                    return ct2;
+                }
+                return null;
+            }
+        }
+        #endregion
 
         #region State
         public bool HasParams =>
@@ -55,7 +79,6 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowUpgradeButton { get; set; }
         public bool ShowLearnMoreButton { get; set; }
         public bool ShowTextBox { get; set; }
-        public MpNotificationDialogResultType DialogResult { get; private set; }
         public string InputResult { get; private set; }
         public string BoundInputText { get; set; }
         public bool RememberInputText { get; set; }
@@ -217,13 +240,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            var base_result = await base.ShowNotificationAsync();
+            DialogResult = BeginShow();
 
-            if (base_result == MpNotificationDialogResultType.DoNotShow) {
+            if (DialogResult == MpNotificationDialogResultType.DoNotShow) {
                 // NOTE pretty sure do not show isn't allowed for action notifications 
                 // so this shouldn't happen
-                HideNotification();
-                return base_result;
+                return DialogResult;
             }
             await WaitForFullVisibilityAsync();
             DateTime startTime = DateTime.Now;
@@ -234,10 +256,11 @@ namespace MonkeyPaste.Avalonia {
                 if (DoNotShowAgain) {
                     // set from CheckDoNotShowAgainCmd
                     DialogResult = MpNotificationDialogResultType.DoNotShow;
-                    CloseNotificationCommand.Execute(null);
                     return DialogResult;
                 }
                 if (MaxShowTimeMs > 0) {
+                    MpDebug.Assert(!ShowProgressSpinner && !ShowBusySpinner, "Spinner ntfs shouldn't have max show time");
+
                     if (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                         // max show not reache yet
                         while (IsFadeDelayFrozen) {
@@ -251,28 +274,28 @@ namespace MonkeyPaste.Avalonia {
                         }
                     } else {
                         DialogResult = MpNotificationDialogResultType.Dismiss;
+                        return DialogResult;
                     }
                 }
 
                 if (ShowProgressSpinner || ShowBusySpinner) {
-                    object[] argParts = OtherArgs as object[];
-                    if (argParts == null) {
-                        argParts = new[] { OtherArgs };
-                    }
+                    MpDebug.Assert(ProgressIndicatorViewModel != null || BusyCancellationToken.HasValue, "For busy or progress, must have ct or progress vm in OtherArgs");
+
                     while (true) {
-                        if (argParts.OfType<MpIProgressIndicatorViewModel>().FirstOrDefault() is MpIProgressIndicatorViewModel prog_vm) {
-                            PercentLoaded = prog_vm.PercentLoaded;
-                        }
-                        if (argParts.OfType<CancellationToken>().FirstOrDefault() is CancellationToken ct &&
-                            ct.IsCancellationRequested) {
+                        if (BusyCancellationToken.HasValue && BusyCancellationToken.Value.IsCancellationRequested) {
                             MpConsole.WriteLine($"Progress canceled by token!");
                             DialogResult = MpNotificationDialogResultType.Cancel;
                             return DialogResult;
                         }
-                        MpConsole.WriteLine($"Cur Percent loaded: " + PercentLoaded);
-                        if (PercentLoaded >= 1.0) {
-                            DialogResult = MpNotificationDialogResultType.Dismiss;
-                            return DialogResult;
+
+                        if (ProgressIndicatorViewModel != null) {
+                            MpConsole.WriteLine(ProgressIndicatorViewModel.ToString());
+
+                            if (ProgressIndicatorViewModel.PercentLoaded >= 1.0) {
+                                MpConsole.WriteLine($"Progress completed by percent!");
+                                DialogResult = MpNotificationDialogResultType.Dismiss;
+                                return DialogResult;
+                            }
                         }
                         await Task.Delay(100);
                     }
@@ -284,31 +307,19 @@ namespace MonkeyPaste.Avalonia {
                 // if fix is result, fix button becomes retry 
                 // either wait for retry to become result or immediatly trigger
                 // retry where caller should block return until retry invoked (isFixing becomes false)
-                //Dispatcher.UIThread.Post(async () => {
                 while (IsFixing) {
                     await Task.Delay(100);
                 }
-                HideNotification();
-                var result = RetryAction?.Invoke(RetryActionObj);
-                //});
-            } else {
-                HideNotification();
-                //while (IsClosing) {
-                //    await Task.Delay(100);
-                //}
             }
 
-            //if (DialogResult == MpNotificationDialogResultType.Retry) {
-            //    RetryAction?.Invoke(RetryActionObj);
-            //} else if(DialogResult != MpNotificationDialogResultType.Fix) {
-            //    HideNotification();
-            //}
+            HideNotification();
+            var test = RetryAction?.Invoke(RetryActionObj);
 
             return DialogResult;
         }
 
         public async Task<string> ShowInputResultNotificationAsync() {
-            _ = await base.ShowNotificationAsync();
+            DialogResult = BeginShow();
 
             while (DialogResult == MpNotificationDialogResultType.None) {
                 await Task.Delay(100);

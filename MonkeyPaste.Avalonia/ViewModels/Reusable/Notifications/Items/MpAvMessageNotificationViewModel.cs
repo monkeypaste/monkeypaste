@@ -31,13 +31,11 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            var base_result = await base.ShowNotificationAsync();
+            var base_result = BeginShow();
             if (base_result == MpNotificationDialogResultType.DoNotShow) {
-                HideNotification();
                 return base_result;
             }
 
-            var w = MpAvWindowManager.LocateWindow(this);
             if (MaxShowTimeMs > 0) {
                 await WaitForFullVisibilityAsync();
                 DateTime startTime = DateTime.Now;

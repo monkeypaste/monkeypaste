@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            var base_result = await base.ShowNotificationAsync();
+            var base_result = BeginShow();
             if (base_result == MpNotificationDialogResultType.DoNotShow) {
                 // when loader is DoNotShow base never shows it (and StartLoader is called from window)
                 // so manually perform load

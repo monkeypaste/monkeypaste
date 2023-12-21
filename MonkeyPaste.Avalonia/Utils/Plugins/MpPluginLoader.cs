@@ -136,15 +136,13 @@ namespace MonkeyPaste.Avalonia {
             }
             return backup_path;
         }
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static bool DeletePluginByGuid(string guid, bool delete_cache = true) {
-            if (Plugins.All(x => x.Value.guid != guid)) {
+            if (Plugins.FirstOrDefault(x => x.Value.guid != guid).IsDefault()) {
                 // not found
                 return false;
             }
-            var plugin_kvp = Plugins.FirstOrDefault(x => x.Value.guid == guid);
-            string manifest_path = plugin_kvp.Key;
-
-            return DeletePlugin(plugin_kvp.Value, delete_cache);
+            return DeletePlugin(Plugins.FirstOrDefault(x => x.Value.guid == guid).Value, delete_cache);
         }
         public static async Task<MpPluginWrapper> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall = false) {
             try {
@@ -419,29 +417,33 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             Plugins.Remove(manifest_path);
-            MpAvPluginAssemblyHelpers.Unload(plugin);
-
-
+            MpAvPluginAssemblyHelpers.Unload(ref plugin);
             return true;
         }
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private static bool DeletePlugin(MpPluginWrapper plugin, bool delete_cache) {
             // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
             bool success = true;
             string fix_path = null;
             string manifest_path = plugin.ManifestPath;
+            string title = plugin.title;
+            string root_dir = plugin.RootDirectory;
+            string cache_path = plugin.CachePath;
+            // clear ref to plugin
+            plugin = null;
             try {
                 success = RemovePlugin(manifest_path);
                 if (USE_ASSEMBLY_LOAD_CONTEXT) {
                     // delete actual plugin on demand
-                    if (!MpFileIo.DeleteDirectory(plugin.RootDirectory)) {
-                        fix_path = plugin.RootDirectory;
-                        throw new MpUserNotifiedException($"Error unloading '{plugin.title}'. Try shutting down MonkeyPaste and deleting the following folder manually: '{fix_path}'");
+                    if (!MpFileIo.DeleteDirectory(root_dir)) {
+                        fix_path = root_dir;
+                        throw new MpUserNotifiedException($"Error unloading '{title}'. Try shutting down MonkeyPaste and deleting the following folder manually: '{fix_path}'");
                     }
-                    if (delete_cache && plugin.CachePath.IsFile()) {
-                        if (!MpFileIo.DeleteFile(plugin.CachePath)) {
-                            fix_path = plugin.CachePath;
-                            throw new MpUserNotifiedException($"Error unloading cache for '{plugin.title}'. Try shutting down MonkeyPaste and deleting the following file manually: '{fix_path}'");
+                    if (delete_cache && cache_path.IsFile()) {
+                        if (!MpFileIo.DeleteFile(cache_path)) {
+                            fix_path = cache_path;
+                            throw new MpUserNotifiedException($"Error unloading cache for '{title}'. Try shutting down MonkeyPaste and deleting the following file manually: '{fix_path}'");
                         }
                     }
                 }

@@ -2019,7 +2019,7 @@ Clipboard listening is: {0}</value>
     <value>All true or false operations where child actions will only execute if the result is true.</value>
   </data>
   <data name="ActionCondOpLabel" xml:space="preserve">
-    <value>Operation</value>
+    <value>Condition</value>
   </data>
   <data name="ActionContentAddAllLabel" xml:space="preserve">
     <value>All</value>
@@ -2237,8 +2237,7 @@ Clipboard listening is: {0}</value>
     <value>Delete All Content</value>
   </data>
   <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
-    <value>Are you sure you want to delete ALL your clips? This cannot be undone! 
-* Requires a restart once complete.</value>
+    <value>Are you sure you want to delete ALL your clips? This operation is SLOW and CANNOT be undone! </value>
   </data>
   <data name="NtfRateAppText" xml:space="preserve">
     <value>I'm an indy dev please show some support!</value>
@@ -2292,5 +2291,11 @@ Clipboard listening is: {0}</value>
   <data name="ActionTriggerDefaultLabel" xml:space="preserve">
     <value>{0} Trigger</value>
     <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Does Not - When checked the true or false outcome of the condition will be flipped. So for example, a 'Contains' condition will become 'Does Not Contain'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Does Not</value>
   </data>
 </root>
