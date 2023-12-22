@@ -57,8 +57,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIClipboardFormatHandlers Implementation
-        public IEnumerable<MpIOlePluginComponent> Handlers =>
-            EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
 
         #endregion
 
@@ -231,22 +229,6 @@ namespace MonkeyPaste.Avalonia {
             AllPresets.Where(x => x.IsWriter);
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllReaderPresets =>
             AllPresets.Where(x => x.IsReader);
-        //public IEnumerable<MpAvClipboardFormatPresetViewModel> AllWriterPresets {
-        //    get {
-        //        var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
-        //        foreach (var handlerItem in Items) {
-        //            foreach (var writerFormat in handlerItem.Writers) {
-        //                yield return writerFormat.Items.OrderByDescending(x => x.LastSelectedDateTime).First();
-        //            }
-        //        }
-        //    }
-        //}
-
-        public IEnumerable<MpIOleReaderComponent> EnabledReaderComponents =>
-            EnabledReaders
-            .Select(x => x.Parent.ClipboardPluginComponent)
-            .Distinct()
-            .Cast<MpIOleReaderComponent>();
 
         public MpAvClipboardFormatPresetViewModel SelectedPresetViewModel {
             get {
@@ -335,18 +317,14 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var pail =
-                MpPluginLoader
-                .Plugins.Where(x =>
-                    x.Value.Components.Any(y => y is MpIOlePluginComponent));
+            var ole_guids = MpPluginLoader.Plugins.Where(x => x.Value.oleHandler != null).Select(x => x.Value.guid);
 
-            foreach (var pai in pail) {
-                var paivm = await CreateClipboardHandlerItemViewModelAsync(pai.Value);
+            foreach (var ole_guid in ole_guids) {
+                var paivm = await CreateClipboardHandlerItemViewModelAsync(ole_guid);
                 bool success = await ValidateHandlerFormatsAsync(paivm);
                 if (success) {
                     Items.Add(paivm);
                 }
-
             }
 
             while (Items.Any(x => x.IsBusy)) {
@@ -397,9 +375,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModelAsync(MpPluginWrapper plugin) {
+        private async Task<MpAvClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModelAsync(string ole_guid) {
             MpAvClipboardHandlerItemViewModel aivm = new MpAvClipboardHandlerItemViewModel(this);
-            await aivm.InitializeAsync(plugin);
+            await aivm.InitializeAsync(ole_guid);
             return aivm;
         }
 
@@ -491,10 +469,11 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                //hivm.PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
-                hivm.PluginFormat = await MpPluginLoader.ReloadPluginAsync(hivm.PluginFormat.guid);
+                _ = await MpPluginLoader.ReloadPluginAsync(hivm.PluginFormat.guid);
+                hivm.OnPropertyChanged(nameof(hivm.PluginFormat));
                 // loop through another validation pass
-                return await ValidateHandlerFormatsAsync(hivm);
+                bool is_valid = await ValidateHandlerFormatsAsync(hivm);
+                return is_valid;
             }
 
             return true;
@@ -536,10 +515,8 @@ namespace MonkeyPaste.Avalonia {
                     isRead ?
                         EnabledReaders : EnabledWriters;
 
-            IEnumerable<MpIOlePluginComponent> ole_components =
-                preset_vms
-                    .Select(x => x.Parent.ClipboardPluginComponent)
-                    .Distinct();
+            var handled_formats =
+                preset_vms.Select(x => x.Parent).Distinct();
 
             var ido_formats = ido.GetAllDataFormats().ToList();
             if (ido != null) {
@@ -562,7 +539,7 @@ namespace MonkeyPaste.Avalonia {
             var avdo = new MpAvDataObject();
 
             // only make 1 request per component
-            foreach (var component in ole_components) {
+            foreach (var hcfvm in handled_formats) {
                 // req to component contains unprocessed input ido
                 // with only the formats/params for the custom or def enabled presets 
                 var req = new MpOlePluginRequest() {
@@ -571,14 +548,14 @@ namespace MonkeyPaste.Avalonia {
                     ignoreParams = ignorePlugins,
                     formats =
                     preset_vms
-                        .Where(x => x.Parent.ClipboardPluginComponent == component)
+                        .Where(x => x.Parent == hcfvm)
                         .Select(x => x.FormatName)
                         .Union(ido_formats)
                         .Distinct()
                         .ToList(),
                     items =
                         preset_vms
-                            .Where(x => x.Parent.ClipboardPluginComponent == component)
+                            .Where(x => x.Parent == hcfvm)
                             .SelectMany(x => x.Items
                                 .Select(y =>
                                     new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue))).ToList(),
@@ -587,12 +564,13 @@ namespace MonkeyPaste.Avalonia {
                 Func<Task<MpOlePluginResponse>> retryHandlerFunc = async () => {
                     // this is mainly just testing retry from plugin
                     // like if format is > max length, change and retry..
-                    var result = await component.ProcessOleRequestAsync(req);
+                    //var result = await component.ProcessOleRequestAsync(req);
+                    var result = await hcfvm.IssueOleRequestAsync(req);
                     return result;
                 };
 
                 // get response from request
-                MpOlePluginResponse resp = await component.ProcessOleRequestAsync(req);
+                MpOlePluginResponse resp = await hcfvm.IssueOleRequestAsync(req);
 
                 // process response for any ntf or retry requests
                 resp = await MpPluginTransactor.ValidatePluginResponseAsync(

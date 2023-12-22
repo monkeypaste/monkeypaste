@@ -3,7 +3,7 @@ using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpPluginLogger {
+    public static class MpTransactionLogger {
         public static async Task<int> LogTransactionAsync(
             MpPluginWrapper pluginFormat,
             MpPluginTransactionBase trans,

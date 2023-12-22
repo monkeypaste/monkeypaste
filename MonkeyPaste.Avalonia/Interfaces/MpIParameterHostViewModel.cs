@@ -7,6 +7,5 @@ namespace MonkeyPaste.Avalonia {
         MpParameterHostBaseFormat ComponentFormat { get; }
         MpParameterHostBaseFormat BackupComponentFormat { get; }
         string PluginGuid { get; }
-        MpIPluginComponentBase PluginComponent { get; }
     }
 }

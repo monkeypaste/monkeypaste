@@ -1,5 +1,5 @@
 {
-  "title": "Core Annotator",
+  "title": "Text Annotator",
   "description": "Provides basic hyperlink support for text based content",
   "version": "1.0",
   "author": "Thomas Kefauver",
@@ -7,7 +7,7 @@
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
   "packageType": "Dll",
-  "tags": "Core,Annotate,Text,Link,Color,Parsing,Address,Phone,Email,Currency,Finance",
+  "tags": "Core, Annotate, Text, Link, Color, Parsing, Address, Phone, Email, Currency,Finance",
   "analyzer": {
     "inputType": {
       "text": true

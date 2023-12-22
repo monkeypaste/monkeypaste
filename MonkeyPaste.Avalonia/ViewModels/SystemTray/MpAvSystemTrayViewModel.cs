@@ -13,6 +13,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Speech.Synthesis;
+using System.IO;
+using System;
+
+
 
 #if CEFNET_WV
 using CefNet.Avalonia;
@@ -173,6 +177,10 @@ namespace MonkeyPaste.Avalonia {
                             Command = NavigateToCefNetUriCommand,
                         },
                         new MpAvMenuItemViewModel() {
+                            Header = "Duplicate storage to desktop",
+                            Command = CreateLocalStorageCopyCommand,
+                        },
+                        new MpAvMenuItemViewModel() {
                             HeaderSrcObj = MpAvShortcutCollectionViewModel.Instance,
                             HeaderPropPath = nameof(MpAvShortcutCollectionViewModel.Instance.HookPauseLabel),
                             CommandSrcObj = MpAvShortcutCollectionViewModel.Instance,
@@ -323,7 +331,7 @@ namespace MonkeyPaste.Avalonia {
                     Height = 500,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Title = result.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon,
                     Content = new MpAvWebView() {
                         Address = result,
                         HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -344,6 +352,16 @@ namespace MonkeyPaste.Avalonia {
                 w.AddHandler(Window.PointerPressedEvent, W_PointerPressed, RoutingStrategies.Tunnel);
 
                 w.ShowChild();
+            });
+        public ICommand CreateLocalStorageCopyCommand => new MpCommand(
+            () => {
+                string source_dir = Mp.Services.PlatformInfo.StorageDir;
+                string target_dir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    Path.GetFileName(source_dir));
+
+                MpFileIo.DeleteDirectory(target_dir);
+                MpFileIo.CopyDirectory(source_dir, target_dir, true);
             });
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
@@ -403,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Text, "TEXT TEST"), true);
+
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {

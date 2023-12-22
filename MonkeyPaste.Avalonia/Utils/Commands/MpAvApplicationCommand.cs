@@ -123,6 +123,9 @@ namespace MonkeyPaste.Avalonia {
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
                     return MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand.CanExecute(null);
                 }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvTextBoxParameterViewModel>(out var tbpvm)) {
+                    return tbpvm.OpenPopOutWindowCommand.CanExecute(null);
+                }
 
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvSearchBoxViewModel>(out _) ||
                     fc.TryGetSelfOrAncestorDataContext<MpAvSearchCriteriaItemCollectionViewModel>(out _)) {

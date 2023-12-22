@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -16,8 +17,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static async Task<MpPluginTransactionBase> PerformTransactionAsync(
-            MpPluginWrapper pluginFormat,
-            MpIPluginComponentBase pluginComponent,
+            MpPluginWrapper plugin,
             Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
@@ -32,59 +32,57 @@ namespace MonkeyPaste.Avalonia {
             // 5. Converts the response to new content and/or updates source content (since from another, potentially 3rd party module)
             // 6. Returns new or updated content
 
-            if (pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
-                MpAnalyzerTransaction trans = new MpAnalyzerTransaction() {
-                    RequestContent = sourceCopyItem,
-                    RequestTime = DateTime.Now,
-                };
+            MpAnalyzerTransaction trans = new MpAnalyzerTransaction() {
+                RequestContent = sourceCopyItem,
+                RequestTime = DateTime.Now,
+            };
 
-                // CREATE REQUEST
-                try {
-                    trans.Request = await MpPluginRequestBuilder.BuildRequestAsync(
-                                        pluginFormat.analyzer.parameters,
-                                        paramValues,
-                                        sourceCopyItem,
-                                        true);
-                }
-                catch (Exception ex) {
-                    return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
-                }
-
-                // TODO (for http) phone home w/ request half of transaction and await return
-
-                // GET RESPONSE
-                try {
-                    if (pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
-                        trans.Response = await analyzeAsyncComponent.AnalyzeAsync(trans.Request as MpAnalyzerPluginRequestFormat);
-                    } else if (pluginComponent is MpIAnalyzeComponent analyzeComponent) {
-                        trans.Response = analyzeComponent.Analyze(trans.Request as MpAnalyzerPluginRequestFormat);
-                    }
-                    trans.ResponseTime = DateTime.Now;
-
-                }
-                catch (Exception ex) {
-                    return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
-                }
-
-                // LOG TRANSACTION (create record of params, ref to plugin source(local/remote))
-
-                //int ci_trans_id = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-
-                // TODO (for http) phone home w/ response to finish transaction record and await return
-
-                // PROCESS RESPONSE
-                try {
-                    trans.ResponseContent =
-                        await MpPluginResponseConverter.ConvertAsync(pluginFormat, trans, paramValues, sourceCopyItem, sourceHandler, suppressWrite);
-                    return trans;
-                }
-                catch (Exception ex) {
-                    var error_response = await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
-                    return error_response;
-                }
+            // CREATE REQUEST
+            try {
+                trans.Request = await MpPluginRequestBuilder.BuildRequestAsync(
+                                    plugin.analyzer.parameters,
+                                    paramValues,
+                                    sourceCopyItem,
+                                    true);
+            }
+            catch (Exception ex) {
+                return await HandleErrorAsync(ex, plugin, trans, sourceCopyItem, sourceHandler, suppressWrite);
             }
 
-            return null;
+            // TODO (for http) phone home w/ request half of transaction and await return
+
+            // GET RESPONSE
+            try {
+                trans.Response = await IssueRequestAsync(plugin, trans.Request as MpAnalyzerPluginRequestFormat);
+                trans.ResponseTime = DateTime.Now;
+
+            }
+            catch (Exception ex) {
+                return await HandleErrorAsync(ex, plugin, trans, sourceCopyItem, sourceHandler, suppressWrite);
+            }
+
+            // LOG TRANSACTION (create record of params, ref to plugin source(local/remote))
+
+            //int ci_trans_id = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+
+            // TODO (for http) phone home w/ response to finish transaction record and await return
+
+            // PROCESS RESPONSE
+            try {
+                trans.ResponseContent =
+                    await MpPluginResponseConverter.ConvertAsync(plugin, trans, paramValues, sourceCopyItem, sourceHandler, suppressWrite);
+                return trans;
+            }
+            catch (Exception ex) {
+                var error_response = await HandleErrorAsync(ex, plugin, trans, sourceCopyItem, sourceHandler, suppressWrite);
+                return error_response;
+            }
+        }
+        private static async Task<MpAnalyzerPluginResponseFormat> IssueRequestAsync(MpPluginWrapper plugin, MpAnalyzerPluginRequestFormat req) {
+            string method_name = nameof(MpIAnalyzeComponent.Analyze);
+            string on_type = typeof(MpIAnalyzeComponent).FullName;
+            var resp = await plugin.IssueRequestAsync(method_name, on_type, req) as MpAnalyzerPluginResponseFormat;
+            return resp;
         }
 
         public static async Task<T> ValidatePluginResponseAsync<T>(

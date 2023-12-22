@@ -4,12 +4,99 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpPluginWrapper : MpPluginFormat {
+        //[JsonIgnore]
+        //public AssemblyLoadContext LoadContext { get; set; }
         [JsonIgnore]
-        public AssemblyLoadContext LoadContext { get; set; }
+        public IEnumerable<MpIPluginComponentBase> Components { private get; set; } = null;
+        [JsonIgnore]
+        public AssemblyLoadContext LoadContext { private get; set; }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public void Unload() {
+            if (MpPluginLoader.USE_ASSEMBLY_LOAD_CONTEXT) {
+                try {
+
+                    IssueRequestAsync(nameof(MpIUnloadPluginComponent.Unload), typeof(MpIUnloadPluginComponent).FullName, null, sync_only: true).FireAndForgetSafeAsync();
+                }
+                catch (Exception ex) {
+                    if (ex is TargetParameterCountException) {
+                        // expected when no unload implemented
+                    } else {
+
+                        MpConsole.WriteTraceLine($"Error unloading {this}", ex);
+                    }
+                }
+                Components = null;
+
+                analyzer = null;
+                oleHandler = null;
+                headless = null;
+                contactFetcher = null;
+
+                WeakReference wr = new WeakReference(LoadContext);
+                // from https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability#use-a-custom-collectible-assemblyloadcontext
+                LoadContext.Unload();
+                for (int i = 0; wr.IsAlive && (i < 10); i++) {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+                LoadContext = null;
+                return;
+            }
+            MpPluginUnloader.AddPluginToUnload(this);
+        }
+        public bool ValidatePluginComponents() {
+            foreach (var component in Components) {
+                if (component is MpIAnalyzeComponentAsync || component is MpIAnalyzeComponent) {
+                    if (analyzer == null) {
+                        throw new MpUserNotifiedException($"Plugin error '{ManifestPath}' must define 'analyzer' definition for '{component.GetType()}' which implements analyzer interface.");
+                    }
+                } else if (component is MpIOlePluginComponent &&
+                        (this is not MpPluginWrapper avpf ||
+                        avpf.oleHandler == null)) {
+                    throw new MpUserNotifiedException($"Plugin error '{ManifestPath}' must define 'oleHandler' definition for '{component.GetType()}' which implements analyzer interface.");
+                }
+            }
+            return true;
+        }
+
+        //[MethodImpl(MethodImplOptions.NoInlining)]
+        public async Task<object> IssueRequestAsync(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false) {
+            Type onType = typeof(MpPluginFormat).Assembly.GetType(typeName);
+            if (onType == null) {
+                MpDebug.Break($"Plugin type '{typeName}' not found");
+                return null;
+            }
+            foreach (var comp in Components) {
+                if (!comp.GetType().IsClassSubclassOfOrImplements(onType) ||
+                     comp.GetType().GetMethod(methodName) is not { } mi) {
+                    continue;
+                }
+                if (methodName.EndsWith("Async")) {
+                    dynamic task = mi.Invoke(comp, new[] { req });
+                    object result = await task;
+                    return result;
+                } else {
+                    object result = mi.Invoke(comp, new[] { req });
+                    return result;
+                }
+            }
+            if (!methodName.EndsWith("Async") && !sync_only) {
+                // re issue async
+                var async_result = await IssueRequestAsync(methodName + "Async", typeName + "Async", req);
+                return async_result;
+            }
+            return null;
+        }
+
         [JsonIgnore]
         public string ManifestPath { get; set; }
 
@@ -42,8 +129,6 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public DateTime manifestLastModifiedDateTime { get; set; }
 
-        [JsonIgnore]
-        public IEnumerable<MpIPluginComponentBase> Components { get; set; } = null;
 
         [JsonIgnore]
         public bool IsManifestChangedFromBackup { get; set; }

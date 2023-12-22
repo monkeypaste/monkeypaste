@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvPresetParamHostViewModelBase<P, C> :
@@ -8,11 +10,19 @@ namespace MonkeyPaste.Avalonia {
         where C : MpAvViewModelBase, MpISelectableViewModel, MpITreeItemViewModel {
         #region Interfaces
         public abstract int IconId { get; }
-        public abstract MpPluginWrapper PluginFormat { get; }
+        public virtual string PluginGuid { get; set; }
+        public virtual MpPluginWrapper PluginFormat {
+            get {
+                var kvp = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid);
+                if (kvp.IsDefault()) {
+                    return null;
+                }
+                return kvp.Value;
+            }
+        }
         public abstract MpParameterHostBaseFormat ComponentFormat { get; }
         public abstract MpParameterHostBaseFormat BackupComponentFormat { get; }
-        public abstract string PluginGuid { get; }
-        public abstract MpIPluginComponentBase PluginComponent { get; }
+        //public abstract MpIPluginComponentBase PluginComponent { get; }
         #endregion
 
         #region Properties

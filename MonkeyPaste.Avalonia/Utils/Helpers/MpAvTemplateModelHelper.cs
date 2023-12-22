@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -128,37 +129,18 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<IEnumerable<MpIContact>> GetContactsAsync() {
-            var contacts = new List<MpIContact>();
-
-            var fetchers =
-                MpPluginLoader.Plugins
-                .Where(x => x.Value.Components.Any(y => y is MpIAnalyzeComponent))
-                .Select(x => x);
-            //.Select(x => x.Value.Component).Distinct();
-
-            foreach (var fetcher_kvp in fetchers) {
-                string guid = fetcher_kvp.Key;
-                var fetcher = fetcher_kvp.Value.Components.FirstOrDefault(x => x is MpIContactFetcherComponent);
-                //MpPluginRequestFormatBase req = null;
-                //if(MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == guid) is MpAvAnalyticItemViewModel aivm) {
-                //    if(aivm.Items.FirstOrDefault(x=>x.IsGeneratedDefaultPreset) is MpAvAnalyticItemPresetViewModel aipvm) {
-                //        aipvm.Ex
-                //        aivm.PerformAnalysisCommand
-                //    }
-                //}
-                //string fetcher_dir = fetcher_kvp.Value.RootDirectory;
-                string fetcher_dir = null;
-                if (fetcher is MpIContactFetcherComponent cfc) {
-                    contacts.AddRange(cfc.Fetch(fetcher_dir));
-                } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
-                    var results = await cfac.FetchAsync(fetcher_dir);
-                    contacts.AddRange(results);
-                }
-            }
+            // TODO passing args as null cause dunno what should use
+            var contact_fetches = await Task.WhenAll(MpPluginLoader.Plugins.Select(x => IssueFetchRequestAsync(x.Value, null)));
+            var contacts = contact_fetches.SelectMany(x => x.Contacts).Distinct();
             return contacts;
-            //return contacts.Select(x => new MpContact(x));
         }
 
+        private static async Task<MpPluginContactFetchResponseFormat> IssueFetchRequestAsync(MpPluginWrapper plugin, MpPluginContactFetchRequestFormat req) {
+            string method_name = nameof(MpIContactFetcherComponent.Fetch);
+            string on_type = typeof(MpIContactFetcherComponent).FullName;
+            var resp = await plugin.IssueRequestAsync(method_name, on_type, req) as MpPluginContactFetchResponseFormat;
+            return resp;
+        }
         public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {
             switch (templateType) {
                 case MpTextTemplateType.Contact:

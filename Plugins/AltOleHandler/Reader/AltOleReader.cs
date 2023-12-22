@@ -16,7 +16,7 @@ namespace AltOleHandler {
 
         #region Public Methods
 
-        public Task<MpOlePluginResponse> ProcessOleRequestAsync(MpOlePluginRequest request) =>
+        public Task<MpOlePluginResponse> ProcessOleReadRequestAsync(MpOlePluginRequest request) =>
             ProcessReadRequestAsync_internal(request);
 
         #endregion

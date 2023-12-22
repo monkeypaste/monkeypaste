@@ -8,13 +8,14 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public interface MpIOlePluginComponent : MpIPluginComponentBase {
-        Task<MpOlePluginResponse> ProcessOleRequestAsync(MpOlePluginRequest request);
     }
 
     public interface MpIOleReaderComponent : MpIOlePluginComponent {
+        Task<MpOlePluginResponse> ProcessOleReadRequestAsync(MpOlePluginRequest request);
     }
 
     public interface MpIOleWriterComponent : MpIOlePluginComponent {
+        Task<MpOlePluginResponse> ProcessOleWriteRequestAsync(MpOlePluginRequest request);
     }
 
     public class MpClipboardHandlerFormats : MpJsonObject {

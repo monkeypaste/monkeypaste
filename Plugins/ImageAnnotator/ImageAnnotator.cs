@@ -4,7 +4,7 @@ using MonkeyPaste.Common.Plugin;
 using SixLabors.ImageSharp;
 
 namespace ImageAnnotator {
-    public class ImageAnnotator : MpIAnalyzeAsyncComponent {
+    public class ImageAnnotator : MpIAnalyzeComponentAsync, MpIUnloadPluginComponent {
 
         private YoloV8 _scorer = null;
 
@@ -56,6 +56,10 @@ namespace ImageAnnotator {
                     errorMessage = ex.Message
                 };
             }
+        }
+
+        public void Unload() {
+            MpConsole.WriteLine("I'm unloading see ya later!");
         }
     }
 }

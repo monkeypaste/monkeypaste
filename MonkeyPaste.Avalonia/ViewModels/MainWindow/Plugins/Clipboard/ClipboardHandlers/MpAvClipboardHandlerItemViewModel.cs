@@ -122,9 +122,16 @@ namespace MonkeyPaste.Avalonia {
                 return PluginFormat.title;
             }
         }
-        public string PluginGuid =>
-            PluginFormat == null ? string.Empty : PluginFormat.guid;
-        public MpPluginWrapper PluginFormat { get; set; }
+        public string PluginGuid { get; private set; }
+        public MpPluginWrapper PluginFormat {
+            get {
+                var kvp = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid);
+                if (kvp.IsDefault()) {
+                    return null;
+                }
+                return kvp.Value;
+            }
+        }
 
         public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
 
@@ -145,13 +152,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginWrapper pf) {
+        public async Task InitializeAsync(string ole_guid) {
             IsBusy = true;
+            PluginGuid = ole_guid;
 
-            PluginFormat = pf as MpPluginWrapper;
             bool is_plugin_valid = await ValidateClipboardHandlerAsync();
             if (!is_plugin_valid) {
-                PluginFormat = null;
+                PluginGuid = null;
                 IsBusy = false;
                 return;
             }
@@ -324,10 +331,11 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                //PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpPluginWrapper;
-                PluginFormat = await MpPluginLoader.ReloadPluginAsync(PluginFormat.guid);
+                _ = await MpPluginLoader.ReloadPluginAsync(PluginFormat.guid);
+                OnPropertyChanged(nameof(PluginFormat));
                 // loop through another validation pass
-                return await ValidateClipboardHandlerAsync();
+                bool is_valid = await ValidateClipboardHandlerAsync();
+                return is_valid;
             }
             //MpConsole.WriteLine(output);
 

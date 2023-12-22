@@ -29,11 +29,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpIParameterHost Implementation
 
         public override int IconId => PluginIconId;
-        public override string PluginGuid =>
-            PluginFormat == null ? string.Empty : PluginFormat.guid;
-
-        private MpPluginWrapper _pluginFormat;
-        public override MpPluginWrapper PluginFormat => _pluginFormat;
 
         public override MpParameterHostBaseFormat ComponentFormat => AnalyzerComponentFormat;
 
@@ -44,10 +39,10 @@ namespace MonkeyPaste.Avalonia {
         public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public override MpIPluginComponentBase PluginComponent =>
-            PluginFormat == null || PluginFormat.Components == null ?
-                null :
-                PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
+        //public override MpIPluginComponentBase PluginComponent =>
+        //    PluginFormat == null || PluginFormat.Components == null ?
+        //        null :
+        //        PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
 
         #endregion
 
@@ -354,8 +349,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginWrapper analyzerPlugin) {
-            if (!ValidateAnalyzer(analyzerPlugin)) {
+        public async Task InitializeAsync(string plugin_guid) {
+            PluginGuid = plugin_guid;
+            if (!ValidateAnalyzer(PluginFormat)) {
+                PluginGuid = null;
                 return;
             }
             if (IsLoaded) {
@@ -363,11 +360,6 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            _pluginFormat = analyzerPlugin as MpPluginWrapper;
-
-            if (PluginComponent == null) {
-                throw new Exception("Cannot find component");
-            }
 
             PluginIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(PluginFormat);
 
@@ -488,7 +480,6 @@ namespace MonkeyPaste.Avalonia {
             // rollup target params and cont
             MpAnalyzerTransaction result = await MpPluginTransactor.PerformTransactionAsync(
                                        PluginFormat,
-                                       PluginComponent,
                                        targetAnalyzer.ParamLookup
                                            .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
                                        sourceCopyItem,

@@ -60,10 +60,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public MpIPluginComponentBase PluginComponent =>
-            PluginFormat == null || PluginFormat.Components == null ?
-                null :
-                PluginFormat.Components.OfType<MpIPluginComponentBase>().FirstOrDefault();
 
         #endregion
 

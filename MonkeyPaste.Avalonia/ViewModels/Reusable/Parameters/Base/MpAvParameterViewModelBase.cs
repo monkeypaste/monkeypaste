@@ -488,7 +488,7 @@ namespace MonkeyPaste.Avalonia {
         private MpParameterFormat _paramFormat;
         public MpParameterFormat ParameterFormat {
             get {
-                if (Parent is MpIParameterHostViewModel phvm) {
+                if (Parent is MpIParameterHostViewModel phvm && phvm.ComponentFormat != null && phvm.ComponentFormat.parameters != null) {
                     return phvm.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == PresetValueModel.ParamId);
                 }
                 return _paramFormat;

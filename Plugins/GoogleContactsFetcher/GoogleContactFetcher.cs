@@ -19,7 +19,7 @@ namespace GoogleContactsFetcher {
     public class GoogleContactFetcher :
         MpIContactFetcherComponentAsync,
         MpISupportDeferredParameterCommand,
-        MpIAnalyzeAsyncComponent {
+        MpIAnalyzeComponentAsync {
         private const string SECRETS_FILE_NAME = "client_secrets_desktop.json";
         private string _clientSecretsPath = null;
         //string ClientSecretsPath {
@@ -45,10 +45,12 @@ namespace GoogleContactsFetcher {
         //imClients,interests,locales,locations,memberships,metadata,miscKeywords,names,,nicknames,occupations,organizations,phoneNumbers,
         //photos,relations,,sipAddresses,skills,urls,userDefined";
 
-        public async Task<IEnumerable<MpIContact>> FetchAsync(object args) {
+        public async Task<MpPluginContactFetchResponseFormat> FetchAsync(MpPluginContactFetchRequestFormat args) {
             SetSecretsPath(args);
             var result = await FetchContactsAsync_internal(_personFields);
-            return result;
+            return new MpPluginContactFetchResponseFormat() {
+                Contacts = result
+            };
         }
         private void SetSecretsPath(object args) {
             // default to root plugin dir

@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
             this.AttachDevTools(DefaultDevToolOptions);
 #endif
-            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
+            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon;
             if (Mp.Services != null &&
                 Mp.Services.ScreenInfoCollection == null) {
                 Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);

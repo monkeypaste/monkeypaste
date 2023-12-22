@@ -582,8 +582,6 @@ namespace MonkeyPaste.Avalonia {
             tmv.PositionZoomValueButton();
         }
         private void UpdateSidebarGridsplitter() {
-            //UpdateSidebarGridsplitter2();
-            //return;
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
@@ -639,7 +637,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool skip_anim =
 #if DESKTOP
-                mwvm.IsMainWindowOrientationDragging;
+                true;// mwvm.IsMainWindowOrientationDragging;
 #else
                 false;
 #endif
@@ -652,9 +650,9 @@ namespace MonkeyPaste.Avalonia {
 
                 ctrvm.ContainerBoundWidth = nctrcb_w;
                 ctrvm.ContainerBoundHeight = nctrcb_h;
-#if MOBILE
-                UpdateClipTrayContainerSize(null);
-#endif
+                if (!mwvm.IsMainWindowOrientationDragging) {
+                    UpdateClipTrayContainerSize(null);
+                }
                 return;
             }
 

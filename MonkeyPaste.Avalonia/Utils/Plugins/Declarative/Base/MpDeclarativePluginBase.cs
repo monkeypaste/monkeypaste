@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpDeclarativePluginBase : MpIAnalyzeAsyncComponent, MpIAnalyzeComponent {
+    public abstract class MpDeclarativePluginBase : MpIAnalyzeComponentAsync, MpIAnalyzeComponent {
         #region Private Variables
         #endregion
 

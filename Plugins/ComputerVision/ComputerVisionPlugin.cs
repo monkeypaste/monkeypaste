@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ComputerVision {
-    public class ComputerVisionPlugin : MpIAnalyzeAsyncComponent {
+    public class ComputerVisionPlugin : MpIAnalyzeComponentAsync {
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
             string subscriptionKey = req.GetRequestParamStringValue(5);
             string endpoint = req.GetRequestParamStringValue(6);

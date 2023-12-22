@@ -336,7 +336,7 @@
         <TextBlock x:Name="EmptPluginListTextBlock"
                    Grid.Row="1"
                    Grid.Column="0"
-                   FontSize="32"
+                   FontSize="24"
                    Text="{x:Static local:UiStrings.CommonEmptyListText}"
                    Classes="disabled emptyOverlayText">
             <TextBlock.IsVisible>

@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvIconSourceObjToBitmapConverter.Instance
                     });
             } else if (tmivm.IconSourceObj != null) {
-                rootIcon.Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(tmivm.IconSourceObj, null, null, null) as WindowIcon;
+                rootIcon.Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), null, null) as WindowIcon;
 
             }
 

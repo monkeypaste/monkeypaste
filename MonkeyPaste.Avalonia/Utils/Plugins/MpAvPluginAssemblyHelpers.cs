@@ -12,58 +12,37 @@ using System.Runtime.Loader;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginAssemblyHelpers {
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Unload(ref MpPluginWrapper plugin) {
-            if (plugin == null) {
-                return;
-            }
-            if (MpPluginLoader.USE_ASSEMBLY_LOAD_CONTEXT) {
-                plugin.Components = null;
-                if (plugin.LoadContext != null) {
-                    // from https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability#use-a-custom-collectible-assemblyloadcontext
-                    WeakReference wr = new WeakReference(plugin.LoadContext);
-                    plugin.LoadContext.Unload();
-                    plugin.LoadContext = null;
-                    for (int i = 0; wr.IsAlive && (i < 100); i++) {
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                    }
-                    if (wr.IsAlive) {
-
-                    }
-                }
-                plugin = null;
-                return;
-            }
-            MpPluginUnloader.AddPluginToUnload(plugin);
-        }
-
-        public static IEnumerable<MpIPluginComponentBase> Load(string manifestPath, MpPluginWrapper plugin, out Assembly component_assembly) {
+        //[MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Load(string manifestPath, MpPluginWrapper plugin, out Assembly component_assembly) {
             component_assembly = null;
             AssemblyLoadContext alc = null;
             plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
             string bundle_path = GetBundlePath(manifestPath, plugin);
+            IEnumerable<MpIPluginComponentBase> components = null;
             switch (plugin.packageType) {
                 case MpPluginPackageType.None:
                     throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' defined in '{manifestPath}' must specify a bundle type.");
                 case MpPluginPackageType.Dll:
                     component_assembly = LoadDll(bundle_path, out alc);
+                    components = component_assembly.FindSubTypes<MpIPluginComponentBase>();
                     break;
                 case MpPluginPackageType.Nuget:
                     component_assembly = LoadNuget(bundle_path, out alc);
+                    components = component_assembly.FindSubTypes<MpIPluginComponentBase>();
                     break;
                 case MpPluginPackageType.Python:
                     component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
-                    return new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
+                    components = new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
+                    break;
                 case MpPluginPackageType.Http:
                     component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
-                    return new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
+                    components = new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
+                    break;
                 default:
                     throw new MpUserNotifiedException($"Unhandled plugin bundle type for '{plugin.title}' defined at '{manifestPath}' with type '{plugin.packageType}'");
             }
             plugin.LoadContext = alc;
-            return component_assembly.FindSubTypes<MpIPluginComponentBase>();
+            plugin.Components = components.ToArray();
         }
         private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
             alc = null;

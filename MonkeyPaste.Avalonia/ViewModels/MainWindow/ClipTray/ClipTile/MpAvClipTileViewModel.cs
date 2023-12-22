@@ -1984,7 +1984,7 @@ namespace MonkeyPaste.Avalonia {
             var pow = new MpAvWindow() {
                 DataContext = this,
                 ShowInTaskbar = true,
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
                 Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")

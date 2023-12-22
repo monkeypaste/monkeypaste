@@ -40,6 +40,8 @@
                     Value="Stretch" />
             <Setter Property="Padding"
                     Value="3" />
+            <Setter Property="MinWidth"
+                    Value="{Binding $parent[Border].Bounds.Width}" />
         </Style>
 
         <Style Selector="Border.paramBorder.popout">
@@ -59,7 +61,8 @@
             Classes.popout="{Binding IsPopOut, ElementName=ContentQueryTextBoxView}"
             Classes="paramBorder">
         <!--<Grid ColumnDefinitions="*,Auto,Auto,Auto">-->
-        <StackPanel Orientation="Horizontal" Spacing="5">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="5">
 
             <!--  TEXTBOX  -->
 

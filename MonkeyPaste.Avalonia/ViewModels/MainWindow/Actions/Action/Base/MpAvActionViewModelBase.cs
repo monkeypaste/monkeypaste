@@ -275,10 +275,10 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual MpHeadlessPluginFormat ActionComponentFormat { get; protected set; }
 
-        public MpIPluginComponentBase PluginComponent =>
-            PluginFormat == null || PluginFormat.Components == null ?
-                null :
-                PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
+        //public MpIPluginComponentBase PluginComponent =>
+        //    PluginFormat == null || PluginFormat.Components == null ?
+        //        null :
+        //        PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
 
         public Dictionary<object, MpAvParameterViewModelBase> ArgLookup =>
            ActionArgs.ToDictionary(x => x.ParamId, x => x);

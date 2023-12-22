@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -70,7 +71,6 @@ namespace MonkeyPaste.Avalonia {
                 IsReader ?
                     PluginFormat.backupCheckPluginFormat.oleHandler.readers.FirstOrDefault(x => x.formatGuid == FormatGuid) :
                     PluginFormat.backupCheckPluginFormat.oleHandler.writers.FirstOrDefault(x => x.formatGuid == FormatGuid);
-        public override MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
         public string FormatGuid { get; private set; }
 
@@ -90,12 +90,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpIOlePluginComponent ClipboardPluginComponent =>
-            PluginFormat == null || PluginFormat.Components == null ?
-                null :
-                IsReader ?
-                    PluginFormat.Components.OfType<MpIOleReaderComponent>().FirstOrDefault() :
-                    PluginFormat.Components.OfType<MpIOleWriterComponent>().FirstOrDefault();
 
         public bool IsReader =>
             PluginFormat == null ?
@@ -281,10 +275,6 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
 
-            if (ClipboardPluginComponent == null) {
-                throw new Exception("Cannot find component");
-            }
-
             HandledFormatIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(PluginFormat, ClipboardPluginFormat.iconUri);
             var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
                 this,
@@ -348,7 +338,17 @@ namespace MonkeyPaste.Avalonia {
         public bool IsDataObjectValid(MpPortableDataObject pdo) {
             return pdo.ContainsData(HandledFormat);
         }
-
+        public async Task<MpOlePluginResponse> IssueOleRequestAsync(MpOlePluginRequest req) {
+            string method_name =
+                IsReader ?
+                    nameof(MpIOleReaderComponent.ProcessOleReadRequestAsync) :
+                    nameof(MpIOleWriterComponent.ProcessOleWriteRequestAsync);
+            string on_type = IsReader ?
+                typeof(MpIOleReaderComponent).FullName :
+                typeof(MpIOleWriterComponent).FullName;
+            var resp = await PluginFormat.IssueRequestAsync(method_name, on_type, req) as MpOlePluginResponse;
+            return resp;
+        }
         public override string ToString() {
             return $"Format: {Title} Preset: {(SelectedItem == null ? "None" : SelectedItem.Label)} Enabled: {(SelectedItem == null ? "Null" : SelectedItem.IsEnabled)}";
         }

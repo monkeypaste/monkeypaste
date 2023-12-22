@@ -205,19 +205,11 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var pail =
-                MpPluginLoader
-                .Plugins.Where(x =>
-                    x.Value.Components.Any(y => y is MpIAnalyzeAsyncComponent) ||
-                    x.Value.Components.Any(y => y is MpIAnalyzeComponent));
+            var analyzer_guids =
+                MpPluginLoader.Plugins.Where(x => x.Value.analyzer != null).Select(x => x.Value.guid);
 
-            //var pail =
-            //    MpPluginLoader
-            //    .Plugins.Where(x =>
-            //        x.Value.Components.Any(y => y.GetType().IsAssignableFrom(typeof(MpIAnalyzeAsyncComponent))) ||
-            //        x.Value.Components.Any(y => y.GetType().IsAssignableFrom(typeof(MpIAnalyzeComponent))));
-            foreach (var pai in pail) {
-                var paivm = await CreateAnalyticItemViewModelAsync(pai.Value);
+            foreach (var analyzer_guid in analyzer_guids) {
+                var paivm = await CreateAnalyticItemViewModelAsync(analyzer_guid);
                 if (paivm.PluginFormat == null) {
                     // internal error/invalid issue with plugin, ignore it
                     continue;
@@ -302,10 +294,10 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SortedItems));
         }
 
-        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginWrapper plugin) {
+        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(string plugin_guid) {
             MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
 
-            await aivm.InitializeAsync(plugin);
+            await aivm.InitializeAsync(plugin_guid);
             return aivm;
         }
 
@@ -401,11 +393,11 @@ namespace MonkeyPaste.Avalonia {
                     argParts[1] is not string package_url) {
                     return;
                 }
-                var plugin_format = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
-                if (plugin_format == null) {
+                bool success = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
+                if (!success) {
                     return;
                 }
-                var aivm = await CreateAnalyticItemViewModelAsync(plugin_format);
+                var aivm = await CreateAnalyticItemViewModelAsync(plugin_guid);
                 Items.Add(aivm);
             });
         public MpIAsyncCommand<object> UninstallAnalyzerCommand => new MpAsyncCommand<object>(
@@ -462,8 +454,11 @@ namespace MonkeyPaste.Avalonia {
 
                 if (success) {
                     try {
-                        var updated_pf = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
-                        aivm = await CreateAnalyticItemViewModelAsync(updated_pf);
+                        success = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
+                        if (!success) {
+                            throw new Exception("Plugin install error");
+                        }
+                        aivm = await CreateAnalyticItemViewModelAsync(plugin_guid);
                         if (aivm.PluginGuid == null) {
                             throw new Exception("Plugin init error");
                         }

@@ -16,10 +16,10 @@ namespace CoreOleHandler {
 
         #region Public Methods
 
-        public async Task<MpOlePluginResponse> ProcessOleRequestAsync(MpOlePluginRequest request) {
+        public async Task<MpOlePluginResponse> ProcessOleWriteRequestAsync(MpOlePluginRequest request) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 return await Dispatcher.UIThread.InvokeAsync(async () => {
-                    return await ProcessOleRequestAsync(request);
+                    return await ProcessOleWriteRequestAsync(request);
                 });
             }
             if (request == null ||

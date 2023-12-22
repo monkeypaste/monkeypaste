@@ -1,8 +1,10 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using MonoMac.CoreImage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -23,16 +25,8 @@ namespace MonkeyPaste.Avalonia {
                 if (paramFormat.isValueDeferred) {
                     // make deferred value request
                     var req = new MpPluginDeferredParameterValueRequestFormat() { paramId = paramFormat.paramId };
-                    MpPluginDeferredParameterValueResponseFormat resp = null;
-                    //if (pluginHost.PluginFormat.Component is MpISupportDeferredValue sdv) {
-                    if (pluginHost.PluginComponent is MpISupportDeferredValue sdv) {
-                        resp = sdv.RequestParameterValue(req);
-                        //} else if (pluginHost.PluginFormat.Component is MpISupportDeferredValueAsync sdva) {
-                    } else if (pluginHost.PluginComponent is MpISupportDeferredValueAsync sdva) {
-                        resp = await sdva.RequestParameterValueAsync(req);
-                    } else {
-                        throw new Exception($"Plugin '{pluginHost.PluginFormat.title}' does not support deferred values, value will be unavailable");
-                    }
+                    MpPluginDeferredParameterValueResponseFormat resp = await RequestDefferredValuesAsync(pluginHost, req);
+
                     if (resp == null) {
                         // values will just be empty, up to plugin configuration to handle that
                     } else {
@@ -95,5 +89,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        private static async Task<MpPluginDeferredParameterValueResponseFormat> RequestDefferredValuesAsync(MpIParameterHostViewModel pluginHost, MpPluginDeferredParameterValueRequestFormat req) {
+            string method_name = nameof(MpISupportDeferredValue.RequestParameterValue);
+            string on_type = typeof(MpISupportDeferredValue).FullName;
+            var resp = await pluginHost.PluginFormat.IssueRequestAsync(method_name, on_type, req) as MpPluginDeferredParameterValueResponseFormat;
+            return resp;
+        }
     }
 }

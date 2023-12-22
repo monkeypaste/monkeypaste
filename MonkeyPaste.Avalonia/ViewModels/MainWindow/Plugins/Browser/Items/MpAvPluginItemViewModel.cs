@@ -469,7 +469,7 @@ namespace MonkeyPaste.Avalonia {
                     await MpAvClipboardHandlerCollectionViewModel.Instance
                         .UninstallHandlerCommand.ExecuteAsync(PluginGuid);
                 } else {
-                    MpDebug.Break($"Plugin not found '{PluginGuid}' trying to delete");
+                    //MpDebug.Break($"Plugin not found '{PluginGuid}' trying to delete");
                     MpPluginLoader.DeletePluginByGuid(PluginGuid);
                 }
 
