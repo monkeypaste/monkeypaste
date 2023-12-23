@@ -1869,7 +1869,7 @@
   <data name="PrefRestartConfirmNtfText" xml:space="preserve">
     <value>この操作を行うには、アプリを再起動する必要があります。</value>
   </data>
-  <data name="ActionAddFromClipboardHint" xml:space="preserve">
+  <data name="ActionSetClipboardHint" xml:space="preserve">
     <value>クリップボードから作成 - 実行時に現在のクリップボードから新しいコンテンツ項目を作成します。</value>
   </data>
   <data name="ActionAlertHint" xml:space="preserve">

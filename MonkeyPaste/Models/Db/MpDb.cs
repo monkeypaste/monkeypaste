@@ -223,6 +223,7 @@ namespace MonkeyPaste {
                 await CreateConnectionAsync();
             }
             try {
+
                 var result = await _connectionAsync.QueryAsync<T>(query, args);
                 return result;
             }
@@ -232,6 +233,19 @@ namespace MonkeyPaste {
             }
         }
 
+        public static async Task<int> ExeucuteAsync(string query, params object[] args) {
+            if (_connectionAsync == null) {
+                await CreateConnectionAsync();
+            }
+            try {
+                var result = await _connectionAsync.ExecuteAsync(query, args);
+                return result;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error executing query '{GetParameterizedQueryString(query, args)}'", ex);
+                return 0;
+            }
+        }
         public static async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
             if (_connectionAsync == null) {
                 await CreateConnectionAsync();

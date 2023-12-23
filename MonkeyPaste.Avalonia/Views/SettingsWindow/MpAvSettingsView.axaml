@@ -166,9 +166,9 @@
                     Value="SemiBold" />
             <Setter Property="TextAlignment"
                     Value="Center" />
-          <Setter Property="TextWrapping"
+            <Setter Property="TextWrapping"
                     Value="WrapWithOverflow" />
-          <Setter Property="ClipToBounds"
+            <Setter Property="ClipToBounds"
                     Value="False" />
             <Setter Property="FontSize"
                     Value="24" />
@@ -413,13 +413,11 @@
 
                         <AutoCompleteBox MinWidth="150"
                                          MinHeight="30"
+                                         Classes="common"
                                          VerticalAlignment="Stretch"
                                          BorderThickness="0"
                                          Margin="0"
                                          Padding="10,0,0,0"
-                                         IsTextCompletionEnabled="False"
-                                         MinimumPrefixLength="0"
-                                         MinimumPopulateDelay="0.25"
                                          ItemsSource="{Binding RecentSettingsSearches}"
                                          local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                          local:MpAvDelayedTextChangedExtension.DelayMs="500"

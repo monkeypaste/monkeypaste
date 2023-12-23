@@ -837,8 +837,7 @@ namespace MonkeyPaste.Avalonia {
                             result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                                 title: msgBoxReq.title,
                                 message: msgBoxReq.msg,
-                                iconResourceObj: msgBoxReq.iconResourceObj,
-                                owner: TopLevel.GetTopLevel(this));
+                                iconResourceObj: msgBoxReq.iconResourceObj);
                             break;
                     }
 

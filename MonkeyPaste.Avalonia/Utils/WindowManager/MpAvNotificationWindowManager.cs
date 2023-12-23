@@ -114,18 +114,16 @@ namespace MonkeyPaste.Avalonia {
             }
             // BUG setting owner seems locks everything up, don't know
             // if its or avalonia but just ignoring it for now
-            nvmb.Owner = null;
-            Window owner = nvmb.Owner as Window;
             MpAvWindow nw = null;
             switch (nvmb) {
                 case MpAvWelcomeNotificationViewModel:
-                    nw = new MpAvWelcomeWindow(owner) {
+                    nw = new MpAvWelcomeWindow() {
                         DataContext = nvmb
                     };
                     break;
                 case MpAvLoaderNotificationViewModel:
                     nvmb.IsVisible = true;
-                    nw = new MpAvLoaderNotificationWindow(owner) {
+                    nw = new MpAvLoaderNotificationWindow() {
                         DataContext = nvmb,
                         Topmost = true,
                         ShowActivated = true
@@ -137,12 +135,12 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case MpAvUserActionNotificationViewModel:
-                    nw = new MpAvUserActionNotificationWindow(owner) {
+                    nw = new MpAvUserActionNotificationWindow() {
                         DataContext = nvmb
                     };
                     break;
                 default:
-                    nw = new MpAvMessageNotificationWindow(owner) {
+                    nw = new MpAvMessageNotificationWindow() {
                         DataContext = nvmb,
                     };
                     break;
@@ -171,61 +169,46 @@ namespace MonkeyPaste.Avalonia {
                 desktop.MainWindow is not MpAvMainWindow) {
                 desktop.MainWindow = nw;
             }
-            if (!nvmb.IsModal) {
-                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
-            }
             if (nvmb.CanMoveWindow) {
                 MpAvMoveWindowExtension.SetIsEnabled(nw, true);
             }
-            if (nvmb.Owner is not Window &&
-                nvmb.Owner is Control owner_c &&
-                TopLevel.GetTopLevel(owner_c) is Window owner_w) {
-                // owner is some control so swap to its window
-                // and adjust startup to be center of that control
-                if (owner_w.WindowState == WindowState.Minimized) {
-                    // remove owner
-                    nvmb.Owner = null;
-                    nvmb.AnchorTarget = null;
+
+            MpAvWindow owner = MpAvWindowManager.CurrentOwningWindow;
+            Visual anchor = nvmb.AnchorTarget as Visual;
+            if (anchor == null && MpAvFocusManager.Instance.FocusElement is Visual v) {
+                anchor = v;
+            }
+
+            if (nvmb.IsModal) {
+                if (owner == null) {
                     nw.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    anchor = null;
                 } else {
-                    nvmb.Owner = owner_w;
-                    MpDebug.Assert(nvmb.AnchorTarget == null, $"Use owner not anchorTarget");
-                    nvmb.AnchorTarget = owner_c;
-                    nw.WindowStartupLocation = WindowStartupLocation.Manual;
-                    nw.Opened += (s, e) => {
-                        var anchor_s_origin = owner_c.PointToScreen(new Point());
-                        var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
-                        var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
-                        double nw_x = anchor_s_origin.X + (anchor_s_size.Width / 2) - (nw_s_size.Width / 2);
-                        double nw_y = anchor_s_origin.Y + (anchor_s_size.Height / 2) - (nw_s_size.Height / 2);
-                        var s_size = owner_w.Screens.ScreenFromVisual(owner_w).WorkingArea.Size;
-                        nw_x = Math.Clamp(nw_x, 0, s_size.Width - nw_s_size.Width);
-                        nw_y = Math.Clamp(nw_y, 0, s_size.Height - nw_s_size.Height);
-                        nw.Position = new PixelPoint((int)nw_x, (int)nw_y);
-                    };
+                    nw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 }
-
+            } else {
+                owner = null;
+                anchor = null;
+                nw.WindowStartupLocation = WindowStartupLocation.Manual;
+                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
+            }
+            if (anchor != null) {
+                nw.WindowStartupLocation = WindowStartupLocation.Manual;
             }
 
-            if (nvmb.Owner is Window w &&
-                nvmb.AnchorTarget == null) {
-                // let anchor to precedence over owner for positioning
-                nw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            void OnWindowOpened(object sender, EventArgs e) {
+                nw.Opened -= OnWindowOpened;
+                if (anchor == null) {
+                    return;
+                }
+                nw.Position = MpAvNotificationPositioner.GetWindowPositionByVisual(nw, anchor);
             }
+            nw.Opened += OnWindowOpened;
+            nvmb.Owner = owner;
 
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
                 _positioner.AddWindow(nw);
-            }
-            bool is_platform_loaded = Mp.Services != null &&
-                     Mp.Services.StartupState != null &&
-                     Mp.Services.StartupState.IsPlatformLoaded;
-
-            if (nw.WindowStartupLocation != WindowStartupLocation.CenterScreen &&
-                nw.WindowStartupLocation != WindowStartupLocation.CenterOwner &&
-                nw.WindowStartupLocation != WindowStartupLocation.Manual
-                ) {
-                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
             }
             try {
                 if (nvmb.Owner is Window ow) {

@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
 #if MAC
             double y = primaryScreen.WorkArea.Top + pad;
 #else
-            double y = primaryScreen.WorkArea.Bottom - s.Height - pad; 
+            double y = primaryScreen.WorkArea.Bottom - s.Height - pad;
 #endif
             x *= primaryScreen.Scaling;
             y *= primaryScreen.Scaling;
@@ -37,6 +37,20 @@ namespace MonkeyPaste.Avalonia {
             // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
             y = Math.Max(0, y);
             return new PixelPoint((int)x, (int)y);
+        }
+
+        public static PixelPoint GetWindowPositionByVisual(Window nw, Visual owner_c) {
+            var anchor_s_origin = owner_c.PointToScreen(new Point());
+            var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
+            var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
+            double nw_x = anchor_s_origin.X + (anchor_s_size.Width / 2) - (nw_s_size.Width / 2);
+            double nw_y = anchor_s_origin.Y + (anchor_s_size.Height / 2) - (nw_s_size.Height / 2);
+            if (TopLevel.GetTopLevel(owner_c) is Window owner_w) {
+                var s_size = owner_w.Screens.ScreenFromVisual(owner_w).WorkingArea.Size;
+                nw_x = Math.Clamp(nw_x, 0, s_size.Width - nw_s_size.Width);
+                nw_y = Math.Clamp(nw_y, 0, s_size.Height - nw_s_size.Height);
+            }
+            return new PixelPoint((int)nw_x, (int)nw_y);
         }
         #endregion
 
@@ -108,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
                     PositionWindowToSystemTray(w);
                     return;
                 case MpNotificationPlacementType.ModalAnchor:
-                    PositionWindowToAnchor(w, nvmb.AnchorTarget);
+                    //PositionWindowToAnchor(w, nvmb.AnchorTarget);
                     return;
             }
         }

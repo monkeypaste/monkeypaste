@@ -293,6 +293,26 @@ namespace MonkeyPaste {
 
         #region MpCopyItem
 
+        public static async Task DeleteAllContentAsync() {
+            string[] querys = new string[] {
+                "DELETE FROM MpCopyItemTag WHERE pk_MpCopyItemTagId > 0;",
+                "DELETE FROM MpTransactionSource WHERE pk_MpTransactionSourceId > 0;",
+                "DELETE FROM MpDataObject WHERE pk_MpDataObjectId > 0;",
+                "DELETE FROM MpDataObjectItem WHERE pk_MpDataObjectItemId > 0;",
+                "DELETE FROM MpCopyItemTransaction WHERE pk_MpCopyItemTransactionId > 0;",
+                "DELETE FROM MpShortcut WHERE ShortcutTypeName='{0}';",
+                string.Format("DELETE FROM MpCopyItem WHERE pk_MpCopyItemId > 0;", MpShortcutType.PasteCopyItem.ToString())
+            };
+
+            int rows_deleted = 0;
+            foreach (string query in querys) {
+                int cur_del = await MpDb.ExeucuteAsync(query);
+                rows_deleted += cur_del;
+            }
+
+            MpConsole.WriteLine($"Total rows deleted: {rows_deleted}");
+        }
+
         public static async Task<List<MpCopyItem>> GetCopyItemsBySourceTypeAndIdAsync(
             MpTransactionSourceType sourceType,
             int sourceObjId) {

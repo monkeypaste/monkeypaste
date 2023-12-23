@@ -322,6 +322,7 @@
 
                     <AutoCompleteBox x:Name="SearchBox"
                                      BorderThickness="1.5"
+                                     Classes="common"
                                      Classes.invalid="{Binding !IsSearchValid}"
                                      IsDropDownOpen="{Binding IsAutoCompleteOpen, Mode=TwoWay}"
                                      TabIndex="1"
@@ -335,9 +336,6 @@
                                      Watermark="{x:Static local:UiStrings.CommonSearchWatermark}"
                                      FontSize="14"
                                      Background="Transparent"
-                                     IsTextCompletionEnabled="False"
-                                     MinimumPrefixLength="0"
-                                     MinimumPopulateDelay="0.25"
                                      ItemsSource="{Binding RecentSearchTexts}"
                                      Padding="0"
                                      Margin="5,0">

@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIActionComponent Implementation
+        List<MpIInvokableAction> _registeredActions = new List<MpIInvokableAction>();
         void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
             if (OnShortcutExecuted.HasInvoker(mvm)) {
                 return;
@@ -94,11 +95,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool HasInvoker =>
-            //OnShortcutExecuted != null &&
-            //OnShortcutExecuted.GetInvocationList().Length > 0;
-            OnShortcutExecuted.HasInvokers();
         public bool IsEditorShortcut =>
             ShortcutType.IsEditorShortcut();
 

@@ -1407,7 +1407,10 @@ namespace MonkeyPaste.Avalonia {
                     );
 
                 bool isModalActive =
-                    MpAvWindowManager.AllWindows.Any(x => x.IsActive && (x.DataContext is MpIWindowViewModel && (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
+                    MpAvWindowManager.AllWindows
+                    .Any(x => x.Owner == MpAvWindowManager.MainWindow &&
+                                (x.DataContext is MpIWindowViewModel &&
+                                    (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
 
                 bool isNtfActive =
                     MpAvWindowManager.AllWindows.Any(x => x.IsActive && x.DataContext is MpAvNotificationViewModelBase);

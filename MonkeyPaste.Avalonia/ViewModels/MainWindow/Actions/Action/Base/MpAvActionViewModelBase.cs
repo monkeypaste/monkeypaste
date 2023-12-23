@@ -66,6 +66,8 @@ namespace MonkeyPaste.Avalonia {
                         return "FolderEventImage";
                     case MpTriggerType.Shortcut:
                         return "JoystickImage";
+                    case MpTriggerType.MonkeyCopyShortcut:
+                        return "MonkeyWinkImage";
                 }
             }
             if (actionOrTriggerType is MpActionType at) {
@@ -80,8 +82,8 @@ namespace MonkeyPaste.Avalonia {
                         return "ResetImage";
                     case MpActionType.FileWriter:
                         return "FolderEventImage";
-                    case MpActionType.AddFromClipboard:
-                        return "ClipboardImage";
+                    case MpActionType.SetClipboard:
+                        return "ClipboardBwImage";
                     case MpActionType.KeySimulator:
                         return "KeyboardImage";
                     case MpActionType.Delay:
@@ -109,6 +111,8 @@ namespace MonkeyPaste.Avalonia {
                             return MpSystemColors.bisque3;
                         case MpTriggerType.FileSystemChanged:
                             return MpSystemColors.coral3;
+                        case MpTriggerType.MonkeyCopyShortcut:
+                            return MpSystemColors.rosybrown4;
                         default:
                             return MpSystemColors.maroon;
                     }
@@ -116,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.magenta;
                 case MpActionType.Classify:
                     return MpSystemColors.tomato1;
-                case MpActionType.AddFromClipboard:
+                case MpActionType.SetClipboard:
                     return MpSystemColors.olivedrab;
                 case MpActionType.Conditional:
                     return MpSystemColors.darkturquoise;
@@ -993,8 +997,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Repeater:
                     avm = new MpAvRepeaterActionViewModel(Parent);
                     break;
-                case MpActionType.AddFromClipboard:
-                    avm = new MpAvAddFromClipboardActionViewModel(Parent);
+                case MpActionType.SetClipboard:
+                    avm = new MpAvSetClipboardActionViewModel(Parent);
                     break;
                 case MpActionType.FileWriter:
                     avm = new MpAvFileWriterActionViewModel(Parent);
@@ -1070,17 +1074,22 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(5);
             MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed ", true);
 
-            if (arg is not MpAvActionOutput ao) {
+            int ciid = 0;
+            if (arg is MpCopyItem ci) {
+                ciid = ci.Id;
+            } else if (arg is MpAvActionOutput ao) {
+                MpConsole.WriteLine(ao.ActionDescription, false, true);
+                if (ao.CopyItem != null) {
+                    ciid = ao.CopyItem.Id;
+                }
+            }
+            if (ciid == 0) {
                 return;
             }
-            MpConsole.WriteLine(ao.ActionDescription, false, true);
-            if (ao.CopyItem == null) {
-                return;
-            }
-            if (_currentInputItemIds.Remove(ao.CopyItem.Id)) {
-                MpConsole.WriteLine($"Action '{Label}' processing ciid {ao.CopyItem.Id} COMPLETED");
+            if (_currentInputItemIds.Remove(ciid)) {
+                MpConsole.WriteLine($"Action '{Label}' processing ciid {ciid} COMPLETED");
             } else {
-                MpConsole.WriteLine($"Action '{Label}' processed ciid {ao.CopyItem.Id} NOT FOUND");
+                MpConsole.WriteLine($"Action '{Label}' processed ciid {ciid} NOT FOUND");
             }
         }
 

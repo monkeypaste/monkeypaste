@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
             "MonkeyPasteRestart";
 
 
-        public static void ShutdownWithRestartTask() {
+        public static void ShutdownWithRestartTask(string detail) {
             RemoveRestartTask();
 
             int start_delay_ms = 1_000;
@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.Restart, $"Broken if not restarted by: '{et}'");
+            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.Restart, detail);
         }
 
         public static void RemoveRestartTask() {

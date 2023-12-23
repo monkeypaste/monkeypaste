@@ -138,8 +138,7 @@ namespace MonkeyPaste.Avalonia {
                     var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                         title: UiStrings.CommonConfirmLabel,
                         message: string.Format(UiStrings.UrlNavConfirmText, uri),
-                        iconResourceObj: "QuestionMarkImage",
-                        owner: MpAvWindowManager.ActiveWindow);
+                        iconResourceObj: "QuestionMarkImage");
                     if (!result) {
                         // cancel
                         return;

@@ -75,17 +75,11 @@ namespace MonkeyPaste.Avalonia {
             bool allowAlpha = false) {
             string result = await Dispatcher.UIThread.InvokeAsync(async () => {
                 MpConsole.WriteLine("Custom color menu opened");
-                owner = owner == null ? MpAvWindowManager.ActiveWindow : owner;
-                if (owner == null) {
-                    // i think when context menu opens the window deactivates so
-                    // just using mainwindow
-                    // TODO should add LastActiveDateTime to MpAvWindow to handle this better
-                    owner = MpAvWindowManager.MainWindow;
-                }
+                title = title == null ? UiStrings.ColorChooserDefaultWindowTitle : title;
                 var cw = new MpAvWindow() {
                     DataContext = this,
                     Topmost = true,
-                    Title = "Color Chooser".ToWindowTitleText(),
+                    Title = title.ToWindowTitleText(),
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("ColorsImage", typeof(WindowIcon), null, null) as WindowIcon,
                     Width = 350,
                     Height = 450,
@@ -95,15 +89,10 @@ namespace MonkeyPaste.Avalonia {
                     Content = new MpAvColorPickerView(selectedColor, fixedPalette, allowAlpha),
                 };
 
-                //if (owner is MpAvMainWindow) {
-                //    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                //}
-
                 // NOTE pre-closing context menu cause it'll make funny activation behavior
 
-                //MpAvMenuView.CloseMenu();
 
-                var result = await cw.ShowChildDialogWithResultAsync(owner as Window);
+                var result = await cw.ShowChildDialogWithResultAsync(MpAvWindowManager.CurrentOwningWindow);
                 MpConsole.WriteLine($"Custom color result: '{result.ToStringOrEmpty("NULL")}'");
                 //await Task.Delay(200);
                 MpAvMenuView.CloseMenu();

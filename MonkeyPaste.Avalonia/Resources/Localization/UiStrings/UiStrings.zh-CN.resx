@@ -1848,7 +1848,7 @@
   <data name="PrefLanguageLabel" xml:space="preserve">
     <value>语言</value>
   </data>
-  <data name="ActionAddFromClipboardHint" xml:space="preserve">
+  <data name="ActionSetClipboardHint" xml:space="preserve">
     <value>从剪贴板创建 - 在执行时从当前剪贴板创建新的内容项。</value>
   </data>
   <data name="ActionAlertAlertSound" xml:space="preserve">

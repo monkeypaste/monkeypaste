@@ -3541,15 +3541,25 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand UnpinAllCommand => new MpAsyncCommand(
             async () => {
-                int pin_count = PinnedItems.Count;
-                while (pin_count > 0) {
-                    var to_unpin_ctvm = PinnedItems[--pin_count];
-                    if (to_unpin_ctvm.IsWindowOpen ||
-                        to_unpin_ctvm.IsAppendNotifier) {
-                        continue;
+                //int pin_count = PinnedItems.Count;
+                //while (pin_count > 0) {
+                //    var to_unpin_ctvm = PinnedItems[--pin_count];
+                //    if (to_unpin_ctvm.IsWindowOpen ||
+                //        to_unpin_ctvm.IsAppendNotifier) {
+                //        continue;
+                //    }
+                //    await UnpinTileCommand.ExecuteAsync(to_unpin_ctvm);
+                //}
+                var to_unpin_ciidl = InternalPinnedItems.Select(x => x.CopyItemId).ToList();
+                for (int i = 0; i < to_unpin_ciidl.Count; i++) {
+                    if (PinnedItems.FirstOrDefault(x => x.CopyItemId == to_unpin_ciidl[i]) is { } to_unpin_ctvm) {
+                        PinnedItems.Remove(to_unpin_ctvm);
                     }
-                    await UnpinTileCommand.ExecuteAsync(to_unpin_ctvm);
                 }
+                while (!QueryCommand.CanExecute(string.Empty)) {
+                    await Task.Delay(50);
+                }
+                await QueryCommand.ExecuteAsync(string.Empty);
             });
 
         public ICommand OpenSelectedTileInWindowCommand => new MpCommand(
@@ -4645,37 +4655,8 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                // NOTE settings total to 1 before finding actual to actually set lazily but not appear complete initially
-                MpAvCommonProgressIndicatorViewModel delete_all_prog_vm = new(this, 1, 0);
-
-                Mp.Services.PlatformMessageBox.ShowProgressMessageBoxAsync(
-                    title: UiStrings.CommonBusyLabel,
-                    iconResourceObj: "ClockArrowImage",
-                    iprog_and_or_cancel_token_arg: delete_all_prog_vm).FireAndForgetSafeAsync();
-
-                var all_ciidl = await MpDataModelProvider.GetItemsIdsAsync<MpCopyItem>();
-                delete_all_prog_vm.TotalCount = all_ciidl.Count;
-
-                async Task DeleteItemAsync(int ciid) {
-                    await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
-                    Dispatcher.UIThread.Post(() => {
-                        delete_all_prog_vm.CurrentCount++;
-                        delete_all_prog_vm.OnPropertyChanged(nameof(delete_all_prog_vm.CurrentCount));
-                    });
-                }
-
-                await Task.WhenAll(all_ciidl.Select(x => DeleteItemAsync(x)));
-
-                // clear trays
-                //IgnoreContentDelete = true;
-                //Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
-                //    title: UiStrings.CommonBusyLabel,
-                //    iconResourceObj: "ClockArrowImage").FireAndForgetSafeAsync();
-
-                //var ciidl = await MpDataModelProvider.GetItemsIdsAsync<MpCopyItem>();
-
-                //await Task.WhenAll(ciidl.Select(x => MpDataModelProvider.DeleteItemAsync<MpCopyItem>(x)));
-                //MpAvAppRestarter.ShutdownWithRestartTask();
+                await MpDataModelProvider.DeleteAllContentAsync();
+                MpAvAppRestarter.ShutdownWithRestartTask("Deleted all content");
             });
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {

@@ -45,6 +45,7 @@ var UiStrings = {
 	EditorTemplateStaticHint: `<p>The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.</p><p>The specified format is shared so changes here will update system-wide.</p>`,
 	EditorTemplateStaticName: `Static`,
 	EditorTemplateTeaserText: `More coming soon!`,
+	EditorWatermark: `Please wait...`,
 	EditorWholeWordLabel: ` Whole Word`,
 	EditorWrapLabel: ` Wrap Around`,
 

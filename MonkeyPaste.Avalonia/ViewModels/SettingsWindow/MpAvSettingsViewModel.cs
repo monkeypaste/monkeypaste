@@ -1468,7 +1468,7 @@ namespace MonkeyPaste.Avalonia {
                 // cancel
                 return;
             }
-            MpAvAppRestarter.ShutdownWithRestartTask();
+            MpAvAppRestarter.ShutdownWithRestartTask("System Preference Change");
         }
 
         private void SetLanguage(string cultureCode) {
@@ -1858,7 +1858,6 @@ namespace MonkeyPaste.Avalonia {
                             var result = await
                                 Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                     title: UiStrings.PrefThemeColorLabel,
-                                    owner: MpAvWindowManager.LocateWindow(this),
                                     selectedColor: MpAvPrefViewModel.Instance.ThemeColor
                                 //fixedPalette: MpSystemColors.SpectrumColors
                                 );
@@ -1940,7 +1939,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance.RestoreDefaults();
                 IsBatchUpdate = false;
 
-                MpAvAppRestarter.ShutdownWithRestartTask();
+                MpAvAppRestarter.ShutdownWithRestartTask("Restoring Default Preferences");
 
             });
         #endregion

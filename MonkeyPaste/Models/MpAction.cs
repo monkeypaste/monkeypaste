@@ -36,6 +36,7 @@ namespace MonkeyPaste {
         FileSystemChanged,
         ClipTagged,
         Shortcut,
+        MonkeyCopyShortcut
         //ActiveAppChanged,
         //ClipboardChanged
     }
@@ -49,7 +50,7 @@ namespace MonkeyPaste {
         Trigger,    //TriggerTypeEnumId 
         Repeater,
         FileWriter,
-        AddFromClipboard,
+        SetClipboard,
         KeySimulator,
         Delay,
         Alert

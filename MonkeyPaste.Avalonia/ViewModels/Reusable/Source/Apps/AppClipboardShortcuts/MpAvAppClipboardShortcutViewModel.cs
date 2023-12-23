@@ -127,8 +127,7 @@ namespace MonkeyPaste.Avalonia {
                     keys: ShortcutCmdKeyString,
                     curShortcutId: 0,
                     assignmentType: IsCopyShortcut ? MpShortcutAssignmentType.AppCopy : MpShortcutAssignmentType.AppPaste,
-                    iconResourceObj: Parent.IconId,
-                    owner: MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == MpAvSettingsViewModel.Instance));
+                    iconResourceObj: Parent.IconId);
 
             if (result_tuple == null || result_tuple.Item1 == null) {
                 // canceled

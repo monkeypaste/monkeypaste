@@ -470,6 +470,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpTriggerType.Shortcut:
                     tavm = new MpAvShortcutTriggerViewModel(this);
                     break;
+                case MpTriggerType.MonkeyCopyShortcut:
+                    tavm = new MpAvMonkeyCopyTriggerViewModel(this);
+                    break;
             }
 
             await tavm.InitializeAsync(a);
@@ -826,11 +829,14 @@ namespace MonkeyPaste.Avalonia {
                     remove_descendants = true;
                 } else if (child_to_delete_avm.Children.Count() > 0) {
                     //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                    MpAvWindow anchor_win = IsWindowOpen ? MpAvWindowManager.LocateWindow(this) : MpAvWindowManager.MainWindow;
+                    Control anchor = anchor_win == null ? null : anchor_win.GetVisualDescendant<MpAvActionDesignerView>();
+
                     bool? remove_descendants_result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: UiStrings.TriggerRemoveActionTitle,
                         message: string.Format(UiStrings.TriggerRemoveActionText, child_to_delete_avm.Label, child_to_delete_avm.ParentActionViewModel.Label),
                         iconResourceObj: "ChainImage",
-                        anchor: ObservedDesignerBounds);
+                        anchor: anchor);
                     //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
                     if (remove_descendants_result.IsNull()) {
                         // cancel

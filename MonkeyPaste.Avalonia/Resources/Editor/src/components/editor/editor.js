@@ -98,7 +98,6 @@ function setEditorPlaceholderText(text) {
 
 function setEditorIsLoaded(isLoaded) {
 	globals.IsLoaded = isLoaded;
-	updateEditorPlaceholderText();
 }
 
 // #endregion Setters
@@ -162,7 +161,7 @@ function isEditorFocused() {
 // #region Actions
 
 function updateEditorPlaceholderText() {
-	let plt = UiStrings.CommonBusyLabel; //'Please wait...';// globals.IsLoaded ? 'Empty content...' : 'Please wait...';
+	let plt = UiStrings.EditorWatermark;
 	setEditorPlaceholderText(plt);
 }
 function hideEditorScrollbars() {

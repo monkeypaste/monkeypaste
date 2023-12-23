@@ -1928,8 +1928,8 @@ Clipboard listening is: {0}</value>
   <data name="PrefLanguageLabel" xml:space="preserve">
     <value>Language</value>
   </data>
-  <data name="ActionAddFromClipboardHint" xml:space="preserve">
-    <value>Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content.</value>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Set Clipboard - sets the clipboard to the input clip</value>
   </data>
   <data name="ActionAlertAlertSound" xml:space="preserve">
     <value>Alert</value>
@@ -2237,7 +2237,9 @@ Clipboard listening is: {0}</value>
     <value>Delete All Content</value>
   </data>
   <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
-    <value>Are you sure you want to delete ALL your clips? This operation is SLOW and CANNOT be undone! </value>
+    <value>Are you SURE you want to delete ALL your clips?!
+*The application will restart!
+*This operation CANNOT be undone!</value>
   </data>
   <data name="NtfRateAppText" xml:space="preserve">
     <value>I'm an indy dev please show some support!</value>
@@ -2297,5 +2299,47 @@ Clipboard listening is: {0}</value>
   </data>
   <data name="ActionCondNotLabel" xml:space="preserve">
     <value>Does Not</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Color Chooser</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Pick Match color</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Monkey Copy Trigger - Simulates a 'Copy' key combination in the active application so this triggers input will be whatever is selected.
+
+This allows you to have some unique action workflow in the background while still behaving like a 'Copy' command in the active application. 
+
+So for example, if you have a text translation plugin available you can select some text, perform a Monkey Copy shortcut, translate the text with an 'Analyze' action and then use the translation in a 'Set Clipboard' action to seamless translate text.
+
+Or another example, you have a 'Dessert Receipes' collection and with a Monkey Copy trigger you can copy a receipe you like with the shortcut and it wil be automatically added to 'Dessert Receipes' by using a 'Classify' action.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Advanced Filter</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Hide Filters</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Restore Filters</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Create Filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Optional) When left empty the clipboard will be set using this actions input. Anything provided here will be treated as plain text only.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Content for clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>When true, no clip will be added after this action sets the clipboard.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignore</value>
   </data>
 </root>

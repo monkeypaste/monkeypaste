@@ -223,7 +223,6 @@ namespace MonkeyPaste {
             delete_tasks.AddRange(cisl.Select(x => x.DeleteFromDatabaseAsync()));
 
 
-
             var do_model = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
             if (do_model != null) {
                 delete_tasks.Add(do_model.DeleteFromDatabaseAsync());

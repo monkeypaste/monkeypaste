@@ -17,6 +17,11 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private List<MpUndoableProperty> _undoables;
+
+        #endregion
+
+        #region Statics
+
         #endregion
 
         #region Properties

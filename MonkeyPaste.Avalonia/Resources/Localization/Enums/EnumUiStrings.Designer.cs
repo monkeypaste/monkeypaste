@@ -61,15 +61,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add From Clipboard.
-        /// </summary>
-        public static string MpActionType_AddFromClipboard {
-            get {
-                return ResourceManager.GetString("MpActionType_AddFromClipboard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Alert.
         /// </summary>
         public static string MpActionType_Alert {
@@ -147,6 +138,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpActionType_Repeater {
             get {
                 return ResourceManager.GetString("MpActionType_Repeater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Clipboard.
+        /// </summary>
+        public static string MpActionType_SetClipboard {
+            get {
+                return ResourceManager.GetString("MpActionType_SetClipboard", resourceCulture);
             }
         }
         
@@ -3099,6 +3099,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpTriggerType_FileSystemChanged {
             get {
                 return ResourceManager.GetString("MpTriggerType_FileSystemChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monkey Copy Shortcut.
+        /// </summary>
+        public static string MpTriggerType_MonkeyCopyShortcut {
+            get {
+                return ResourceManager.GetString("MpTriggerType_MonkeyCopyShortcut", resourceCulture);
             }
         }
         

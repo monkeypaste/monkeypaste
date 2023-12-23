@@ -117,15 +117,15 @@ namespace MonkeyPaste.Avalonia {
         public string ExpandTooltipText {
             get {
                 if (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsCriteriaWindowOpen) {
-                    return "Restore Filters";
+                    return UiStrings.SearchExpanderRestoreTooltip;
                 }
-                if (IsExpanded) {
-                    return "Hide Filters";
+                if (IsExpanded && MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
+                    return UiStrings.SearchExpanderExpandedTooltip;
                 }
                 if (!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsSavedQuery) {
-                    return "Create Filter";
+                    return UiStrings.SearchExpanderTempQueryTooltip;
                 }
-                return "Show Filters";
+                return UiStrings.SearchExpanderDefaultTooltip;
             }
         }
         #endregion
@@ -140,10 +140,8 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (_searchText != value) {
                     _searchText = value;
-                    //SearchText = Text;
                     OnPropertyChanged(nameof(SearchText));
                     OnPropertyChanged(nameof(HasText));
-                    //OnPropertyChanged(nameof(TextBoxFontStyle));
                 }
             }
         }
@@ -339,6 +337,8 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Auto search focus success: {success}");
                 }
 
+            }, (args) => {
+                return MpAvTagTrayViewModel.Instance.IsAnyTagActive;
             });
 
         public ICommand ShowSimpleSearchFilterPopupMenuCommand => new MpCommand<object>(

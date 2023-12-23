@@ -611,15 +611,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content..
-        /// </summary>
-        public static string ActionAddFromClipboardHint {
-            get {
-                return ResourceManager.GetString("ActionAddFromClipboardHint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Alert.
         /// </summary>
         public static string ActionAlertAlertSound {
@@ -1151,6 +1142,19 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monkey Copy Trigger - Simulates a &apos;Copy&apos; key combination in the active application so this triggers input will be whatever is selected.
+        ///
+        ///This allows you to have some unique action workflow in the background while still behaving like a &apos;Copy&apos; command in the active application. 
+        ///
+        ///So for example, if you have a text translation plugin available you can select some text, perform a Monkey Copy shortcut, translate the text with an &apos;Analyze&apos; action and then use the translation in a &apos;Set Clipboard&apos; action to sea [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ActionMonkeyCopyTriggerHint {
+            get {
+                return ResourceManager.GetString("ActionMonkeyCopyTriggerHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move.
         /// </summary>
         public static string ActionMoveLabel {
@@ -1201,6 +1205,51 @@ namespace MonkeyPaste.Avalonia {
         public static string ActionRepeaterHint {
             get {
                 return ResourceManager.GetString("ActionRepeaterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Optional) When left empty the clipboard will be set using this actions input. Anything provided here will be treated as plain text only..
+        /// </summary>
+        public static string ActionSetClipboardContentHint {
+            get {
+                return ResourceManager.GetString("ActionSetClipboardContentHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content for clipboard.
+        /// </summary>
+        public static string ActionSetClipboardContentLabel {
+            get {
+                return ResourceManager.GetString("ActionSetClipboardContentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Clipboard - sets the clipboard to the input clip.
+        /// </summary>
+        public static string ActionSetClipboardHint {
+            get {
+                return ResourceManager.GetString("ActionSetClipboardHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When true, no clip will be added after this action sets the clipboard..
+        /// </summary>
+        public static string ActionSetClipboardIgnoreChangeHint {
+            get {
+                return ResourceManager.GetString("ActionSetClipboardIgnoreChangeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore.
+        /// </summary>
+        public static string ActionSetClipboardIgnoreChangeLabel {
+            get {
+                return ResourceManager.GetString("ActionSetClipboardIgnoreChangeLabel", resourceCulture);
             }
         }
         
@@ -1871,11 +1920,22 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete ALL your clips? This operation is SLOW and CANNOT be undone! .
+        ///   Looks up a localized string similar to Are you SURE you want to delete ALL your clips?!
+        ///*The application will restart!
+        ///*This operation CANNOT be undone!.
         /// </summary>
         public static string ClipTrayDeleteAllMessageText {
             get {
                 return ResourceManager.GetString("ClipTrayDeleteAllMessageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Chooser.
+        /// </summary>
+        public static string ColorChooserDefaultWindowTitle {
+            get {
+                return ResourceManager.GetString("ColorChooserDefaultWindowTitle", resourceCulture);
             }
         }
         
@@ -2902,6 +2962,15 @@ namespace MonkeyPaste.Avalonia {
         public static string EditorTemplateTeaserText {
             get {
                 return ResourceManager.GetString("EditorTemplateTeaserText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait....
+        /// </summary>
+        public static string EditorWatermark {
+            get {
+                return ResourceManager.GetString("EditorWatermark", resourceCulture);
             }
         }
         
@@ -4681,6 +4750,51 @@ namespace MonkeyPaste.Avalonia {
         public static string SearchDisabeledCriteriaTooltip {
             get {
                 return ResourceManager.GetString("SearchDisabeledCriteriaTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced Filter.
+        /// </summary>
+        public static string SearchExpanderDefaultTooltip {
+            get {
+                return ResourceManager.GetString("SearchExpanderDefaultTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide Filters.
+        /// </summary>
+        public static string SearchExpanderExpandedTooltip {
+            get {
+                return ResourceManager.GetString("SearchExpanderExpandedTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Filters.
+        /// </summary>
+        public static string SearchExpanderRestoreTooltip {
+            get {
+                return ResourceManager.GetString("SearchExpanderRestoreTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Filter.
+        /// </summary>
+        public static string SearchExpanderTempQueryTooltip {
+            get {
+                return ResourceManager.GetString("SearchExpanderTempQueryTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick Match color.
+        /// </summary>
+        public static string SearchMatchColorWindowTitlePrefix {
+            get {
+                return ResourceManager.GetString("SearchMatchColorWindowTitlePrefix", resourceCulture);
             }
         }
         

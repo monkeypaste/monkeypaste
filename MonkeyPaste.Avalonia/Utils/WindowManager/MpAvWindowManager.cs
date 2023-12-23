@@ -37,6 +37,12 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvWindow LastActiveWindow =>
             AllWindows.OrderByDescending(x => x.LastActiveDateTime).FirstOrDefault();
 
+        public static MpAvWindow CurrentOwningWindow =>
+            AllWindows
+            .Where(x => x.DataContext is not MpAvNotificationViewModelBase && x.WindowState != WindowState.Minimized && x.IsVisible)
+            .OrderByDescending(x => x.LastActiveDateTime)
+            .FirstOrDefault();
+
         public static IReadOnlyList<MpAvWindow> Notifications =>
             AllWindows.Where(x => x.DataContext is MpAvNotificationViewModelBase).ToList();
 

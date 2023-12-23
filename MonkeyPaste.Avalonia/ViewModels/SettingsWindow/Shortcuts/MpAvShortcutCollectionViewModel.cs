@@ -576,8 +576,7 @@ namespace MonkeyPaste.Avalonia {
                     shortcutType.CanBeGlobal() ?
                         MpShortcutAssignmentType.CanBeGlobalCommand :
                         MpShortcutAssignmentType.InternalCommand,
-                iconResourceObj: icon_obj,
-                owner: MpAvWindowManager.ActiveWindow);
+                iconResourceObj: icon_obj);
 
             string shortcutKeyString = result_tuple == null ? null : result_tuple.Item1;
             MpRoutingType result_routing_type = result_tuple == null ? MpRoutingType.None : result_tuple.Item2;
@@ -867,6 +866,8 @@ namespace MonkeyPaste.Avalonia {
 
         private string _activePasteKeystring = null;
         private string _activeCopyKeystring = null;
+        public string ActiveCopyKeystring =>
+            _activeCopyKeystring;
 
         private MpPortableProcessInfo _activeProcessInfo = null;
         public void InitExternalPasteTracking() {

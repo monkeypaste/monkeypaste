@@ -17,31 +17,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const string SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID = "ShortcutTriggerKeyString";
+        const string SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID = "ShortcutTriggerKeyString";
 
         #endregion
 
         #region Interfaces
-
-        //#region MpAvIKeyGestureViewModel Implementation
-
-        //public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
-        //    new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyString.ToKeyItems());
-        //#endregion
-
-        //#region MpIShortcutCommandViewModel Implementation
-        //public MpShortcutType ShortcutType =>
-        //    MpShortcutType.InvokeTrigger;
-
-        //public string KeyString =>
-        //    MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
-
-        //public object ShortcutCommandParameter =>
-        //    ActionId;
-        //ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
-        //    InvokeThisActionCommand;
-        //#endregion
-
 
         #region MpAvIApplicationCommandViewModel Implementation
 
@@ -87,9 +67,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        //public MpAvShortcutViewModel ShortcutViewModel =>
-        //    MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
-
         private MpAvShortcutViewModel _shortcutViewModel;
         public MpAvShortcutViewModel ShortcutViewModel {
             get {
@@ -118,39 +95,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        //public string KeyString {
-        //    get {
-        //        if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var param_vm)) {
-        //            return param_vm.CurrentValue;
-        //        }
-        //        return string.Empty;
-        //    }
-        //    set {
-        //        if (KeyString != value) {
-        //            ArgLookup[SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID].CurrentValue = value;
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(KeyString));
-        //        }
-        //    }
-        //}
-
-        //public int ShortcutId {
-        //    get {
-        //        if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var param_vm) &&
-        //            param_vm.IntValue is int curVal) {
-        //            return curVal;
-        //        }
-        //        return 0;
-        //    }
-        //    set {
-        //        if (ShortcutId != value) {
-        //            ArgLookup[SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID].IntValue = value;
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(ShortcutId));
-        //        }
-        //    }
-        //}
-        //public int ShortcutId { get; private set; }
         public int ShortcutId =>
             ShortcutViewModel == null ? 0 : ShortcutViewModel.ShortcutId;
         #endregion
@@ -206,22 +150,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
-            //if (!IsValid) {
-            //    return;
-            //}
-            //if (ShortcutViewModel == null) {
-            //    ValidationText = $"Shortcut for Trigger '{FullName}' not found";
-            //} else {
-
-            //    ValidationText = string.Empty;
-            //}
-            //if (!IsValid) {
-            //    ShowValidationNotification();
-            //}
-        }
-
         protected override void EnableTrigger() {
             if (Parent.IsRestoringEnabled &&
                 !Mp.Services.StartupState.IsPlatformLoaded) {
@@ -240,17 +168,6 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE nothing to enable
             // invoke is handled by shortcut listener and invokeCmd.CanExec
-        }
-
-        protected override bool ValidateStartAction(object arg, bool is_starting = true) {
-            if (!base.ValidateStartAction(arg)) {
-                return false;
-            }
-            if (ShortcutViewModel == null) {
-                return false;
-            }
-            // NOTE only perform action if trigger is attachd to shortcut if not its disabled
-            return ShortcutViewModel.HasInvoker;
         }
 
         #endregion

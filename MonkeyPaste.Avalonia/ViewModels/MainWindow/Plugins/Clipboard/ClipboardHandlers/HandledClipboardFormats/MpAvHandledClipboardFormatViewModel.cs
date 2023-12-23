@@ -575,8 +575,7 @@ namespace MonkeyPaste.Avalonia {
                     var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: UiStrings.CommonConfirmLabel,
                         message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
-                        iconResourceObj: "QuestionMarkImage",
-                        owner: MpAvWindowManager.MainWindow);
+                        iconResourceObj: "QuestionMarkImage");
                     if (result.IsNull()) {
                         // cancel
                         IsBusy = false;

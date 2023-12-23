@@ -9,6 +9,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     public class MpAvKeyStrokeSimulator : MpIKeyStrokeSimulator {
         #region Private Variable
+        private object _simLock = new object();
         private EventSimulator _eventSimulator;
         private List<KeyCode> _simualtedDowns = new List<KeyCode>();
         #endregion
@@ -44,52 +45,56 @@ namespace MonkeyPaste.Avalonia {
             if (gesture.Count > 1) {
                 throw new NotImplementedException("Only single gestures currently supported");
             }
-            // NOTE retain combo order and key priority order
-            // NOTE2 remove keys that are physically down,
-            // the simulate up will interfere w/ the keyboard state
+            lock (_simLock) {
+                // NOTE retain combo order and key priority order
+                // NOTE2 remove keys that are physically down,
+                // the simulate up will interfere w/ the keyboard state
 
-            var filtered_gesture =
-                gesture
-                    .Where(x => x != null && x.Any())
-                    .OrderBy(x => gesture.IndexOf(x))
-                    .Select(x => x
-                        .Cast<KeyCode>()
-                        .OrderBy(z => z.GesturePriority())
-                        .ToList())
-                    .ToList();
+                var filtered_gesture =
+                    gesture
+                        .Where(x => x != null && x.Any())
+                        .OrderBy(x => gesture.IndexOf(x))
+                        .Select(x => x
+                            .Cast<KeyCode>()
+                            .OrderBy(z => z.GesturePriority())
+                            .ToList())
+                        .ToList();
 
-            if (filtered_gesture == null ||
-                !filtered_gesture.Any() ||
-                !filtered_gesture.First().Any()) {
-                return true;
+                if (filtered_gesture == null ||
+                    !filtered_gesture.Any() ||
+                    !filtered_gesture.First().Any()) {
+                    return true;
+                }
+
+                // NOTE this is simplifying gesture to non-sequence since seq currently invalid
+                KeyCode[] already_downs = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToArray();
+                var gesture_keys = filtered_gesture.SelectMany(x => x).Distinct();
+                KeyCode[] to_press = gesture_keys.Where(x => !already_downs.Contains(x)).ToArray();
+                KeyCode[] to_hide = already_downs.Where(x => !gesture_keys.Contains(x)).ToArray();
+                bool success = true;
+                try {
+                    // temporarily release cur downs (Hide) not in this gesture
+                    SimulateKeys(to_hide, false);
+
+                    // press needed downs for this gesture
+                    SimulateKeys(to_press, true);
+
+                    // release needed downs for this gesture
+                    SimulateKeys(to_press, false);
+
+                    // restore downs
+                    SimulateKeys(to_hide, true);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(string.Empty, ex);
+                    success = false;
+                }
+
+                _simualtedDowns.Clear();
+                string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
+                MpConsole.WriteLine($"Key Gesture '{gesture_label}' {(success ? "was successful" : "failed")}. ");
+                return success;
             }
-
-            // NOTE this is simplifying gesture to non-sequence since seq currently invalid
-            KeyCode[] to_press = filtered_gesture.SelectMany(x => x).Distinct().ToArray();
-            KeyCode[] to_hide = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToArray();
-            bool success = true;
-            try {
-                // temporarily release cur downs (Hide) not in this gesture
-                SimulateKeys(to_hide, false);
-
-                // press needed downs for this gesture
-                SimulateKeys(to_press, true);
-
-                // release needed downs for this gesture
-                SimulateKeys(to_press, false);
-
-                // requery downs
-                KeyCode[] to_restore = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToArray();
-                SimulateKeys(to_hide, true);
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine(string.Empty, ex);
-                success = false;
-            }
-
-            string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
-            MpConsole.WriteLine($"Key Gesture '{gesture_label}' {(success ? "was successful" : "failed")}. ");
-            return success;
 
         }
         #endregion
@@ -127,11 +132,13 @@ namespace MonkeyPaste.Avalonia {
             UioHookResult result;
             if (isDown) {
                 // NOTE adding is down BEFORE simulating
+
                 _simualtedDowns.Add(key);
                 result = _eventSimulator.SimulateKeyPress(key);
             } else {
                 result = _eventSimulator.SimulateKeyRelease(key);
                 // NOTE removing is down AFTER simulating
+
                 _simualtedDowns.Remove(key);
             }
 

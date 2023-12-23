@@ -467,14 +467,9 @@ namespace MonkeyPaste.Avalonia {
                     selected_color = MpColorHelpers.ParseHexFromString(
                         $"({string.Join(",", Values)})");
                 }
-                Window owner = TopLevel.GetTopLevel(MpAvMainView.Instance) as Window;
-                if (HostCriteriaItem.Parent.IsCriteriaWindowOpen) {
-                    owner = MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == HostCriteriaItem.Parent);
-                }
                 var result = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                     selectedColor: selected_color,
-                    title: "Pick Match color",
-                    owner: owner);
+                    title: UiStrings.SearchMatchColorWindowTitlePrefix);
 
                 if (string.IsNullOrEmpty(result)) {
                     // cancel

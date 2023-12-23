@@ -42,6 +42,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	});
 
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
+	updateEditorPlaceholderText();
 	log('quill version: ' + Quill.version);
 	return quill_instance;
 }
