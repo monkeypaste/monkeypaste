@@ -96,7 +96,7 @@
                     <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                            ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadePopoutTooltipText}" />
                 </ToolTip.Tip>
-                <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
         </StackPanel>
     </DockPanel>

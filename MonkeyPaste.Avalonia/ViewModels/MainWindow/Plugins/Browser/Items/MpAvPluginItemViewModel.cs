@@ -140,6 +140,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsInstalled =>
             !IsRemote && HasLocalInstall;
 
+        public bool CanUninstall =>
+            PluginFormat != null && !MpPluginLoader.CorePluginGuids.Contains(PluginGuid);
         public bool IsRemote =>
             PluginFormat is not MpPluginFormat;
         public bool HasLocalInstall =>
@@ -323,23 +325,27 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitializeAsync(MpManifestFormat pf) {
             IsBusy = true;
-            await Task.Delay(1);
             PluginFormat = pf;
 
             if (string.IsNullOrEmpty(PluginIconUri)) {
-                IconBase64 = MpBase64Images.QuestionMark;
+                IconBase64 = MpBase64Images.JigsawPiece;
             } else {
                 var icon_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginIconUri, PluginManifestDirectory);
                 if (icon_bytes == null || icon_bytes.Length == 0) {
-                    IconBase64 = MpBase64Images.QuestionMark;
+                    IconBase64 = MpBase64Images.JigsawPiece;
                 } else {
                     IconBase64 = icon_bytes.ToBase64String();
                 }
             }
-            OnPropertyChanged(nameof(IsInstalled));
+            RefreshState();
 
-            CreateRootDependencyViewModelAsync().FireAndForgetSafeAsync(this);
+            await CreateRootDependencyViewModelAsync();
             IsBusy = false;
+        }
+        public void RefreshState() {
+            OnPropertyChanged(nameof(IsInstalled));
+            OnPropertyChanged(nameof(CanUninstall));
+            OnPropertyChanged(nameof(CanUpdate));
         }
 
         public override string ToString() {
@@ -359,6 +365,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsSelected) {
                         break;
                     }
+                    RefreshState();
                     LoadReadMeAsync().FireAndForgetSafeAsync(this);
                     OnPropertyChanged(nameof(RootDependencyCollection));
                     break;
@@ -469,7 +476,7 @@ namespace MonkeyPaste.Avalonia {
                         .UninstallHandlerCommand.ExecuteAsync(PluginGuid);
                 } else {
                     //MpDebug.Break($"Plugin not found '{PluginGuid}' trying to delete");
-                    MpPluginLoader.DeletePluginByGuid(PluginGuid);
+                    await MpPluginLoader.DeletePluginByGuidAsync(PluginGuid);
                 }
 
                 // refresh list to remove this plugin
@@ -477,7 +484,7 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
             }, () => {
-                return IsInstalled;
+                return IsInstalled && CanUninstall;
             });
 
         public ICommand UpdatePluginCommand => new MpAsyncCommand(
@@ -512,6 +519,12 @@ namespace MonkeyPaste.Avalonia {
                     UninstallPluginCommand.Execute(null);
                 } else {
                     InstallPluginCommand.Execute(null);
+                }
+            }, () => {
+                if (IsInstalled) {
+                    return UninstallPluginCommand.CanExecute(null);
+                } else {
+                    return InstallPluginCommand.CanExecute(null);
                 }
             });
         #endregion

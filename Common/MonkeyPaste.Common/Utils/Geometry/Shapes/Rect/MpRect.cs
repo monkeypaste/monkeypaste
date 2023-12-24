@@ -141,22 +141,6 @@ namespace MonkeyPaste.Common {
 
         #region Public Methods
 
-        public bool IsEqual(MpRect otherRect, double thresh = 0) {
-            if (otherRect == null) {
-                return false;
-            }
-            return
-                Location.IsValueEqual(otherRect.Location, thresh) &&
-                Size.IsValueEqual(otherRect.Size, thresh);
-        }
-
-        public void Move(MpPoint newLocation) {
-            if (newLocation == null) {
-                return;
-            }
-            X = newLocation.X;
-            Y = newLocation.Y;
-        }
         public override string ToString() {
             return $"X:{X} Y:{Y} Width: {Width} Height: {Height}";
         }

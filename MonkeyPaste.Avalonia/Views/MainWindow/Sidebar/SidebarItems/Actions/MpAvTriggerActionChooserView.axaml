@@ -96,7 +96,7 @@
                                         <ToolTip.Tip>
                                             <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.TriggersAddNewTriggerToolTip}" />
                                         </ToolTip.Tip>
-                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
+                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddGreenImage}}"
                                                Margin="5"
                                                Width="15"
                                                Height="15" />

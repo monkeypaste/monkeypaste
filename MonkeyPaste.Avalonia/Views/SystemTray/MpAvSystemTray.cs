@@ -238,10 +238,10 @@ namespace MonkeyPaste.Avalonia {
                     new Binding() {
                         Source = iconSourcBindingObj,
                         Path = iconSrcPath,
-                        Converter = MpAvIconSourceObjToBitmapConverter.Instance
+                        Converter = MpAvStringHexToBitmapTintConverter.Instance,
                     });
             } else if (iconSourcObj != null) {
-                nmi.Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(iconSourcObj, null, null, null) as Bitmap;
+                nmi.Icon = MpAvStringHexToBitmapTintConverter.Instance.Convert(iconSourcObj, null, null, null) as Bitmap;
             }
 
             // COMMAND

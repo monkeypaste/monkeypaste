@@ -27,51 +27,53 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top">
                     <StackPanel Orientation="Vertical">
-                        <Label Classes="h1"
-                               Content="{x:Static local:UiStrings.AnalyzerSelectorLabel}" />
+                        <Grid>
+
+                            <Label Classes="h1"
+                                   Content="{x:Static local:UiStrings.AnalyzerSelectorLabel}" />
+
+                            <!--  SHOW BROWSER BUTTON  -->
+                            <Button x:Name="ShowPluginBrowserButton"
+                                    DockPanel.Dock="Right"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    Width="30"
+                                    Height="30"
+                                    Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                                    Command="{Binding ShowPluginBrowserCommand}">
+                                <ToolTip.Tip>
+                                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
+                                </ToolTip.Tip>
+                                <Image Width="25"
+                                       Height="25"
+                                       Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+
+                            </Button>
+                        </Grid>
                         <Border Classes="labelUnderline" />
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
                                 Grid.Column="0">
-                            <DockPanel>
-                                <!--  SHOW BROWSER BUTTON  -->
-                                <Button x:Name="ShowPluginBrowserButton"
-                                        DockPanel.Dock="Right"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        Width="30"
-                                        Height="30"
-                                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
-                                        Command="{Binding ShowPluginBrowserCommand}">
-                                    <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
-                                    </ToolTip.Tip>
-                                    <Image Width="25"
-                                           Height="25"
-                                           Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                            <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
+                                      Margin="0,0,5,0"
+                                      ItemsSource="{Binding SortedItems}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="outerComboBoxItemBorder">
+                                            <DockPanel>
+                                                <Image Effect="drop-shadow(0 0 10 white)"
+                                                       Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
-                                </Button>
-                                <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
-                                          Margin="0,0,5,0"
-                                          ItemsSource="{Binding SortedItems}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Classes="outerComboBoxItemBorder">
-                                                <DockPanel>
-                                                    <Image Effect="drop-shadow(0 0 10 white)"
-                                                           Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-
-                                                    <Border Classes="comboBoxItemBusyBorder"
-                                                            IsVisible="{Binding IsBusy}">
-                                                        <local:MpAvBusySpinnerView />
-                                                    </Border>
-                                                    <TextBlock Text="{Binding Title}" />
-                                                </DockPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </DockPanel>
+                                                <Border Classes="comboBoxItemBusyBorder"
+                                                        IsVisible="{Binding IsBusy}">
+                                                    <local:MpAvBusySpinnerView />
+                                                </Border>
+                                                <TextBlock Text="{Binding Title}" />
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </Border>
                         <Label Classes="h1"
                                Content="{x:Static local:UiStrings.AnalyzerPresetGridTitle}" />

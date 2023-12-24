@@ -39,6 +39,7 @@ namespace MonkeyPaste.Avalonia {
         public static string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
         public static string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
+
         #endregion
 
         #region Properties
@@ -136,13 +137,13 @@ namespace MonkeyPaste.Avalonia {
             return backup_path;
         }
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        public static bool DeletePluginByGuid(string guid, bool delete_cache = true) {
+        public static async Task<bool> DeletePluginByGuidAsync(string guid, bool delete_cache = true) {
             var kvp = Plugins.FirstOrDefault(x => x.Value.guid == guid);
             if (kvp.IsDefault()) {
                 // not found
                 return false;
             }
-            bool success = DeletePlugin(kvp.Value, delete_cache);
+            bool success = await DeletePluginAsync(kvp.Value, delete_cache);
             return success;
         }
         public static async Task<bool> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall = false) {
@@ -390,7 +391,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!agreed) {
                     // uninstall here
-                    bool success = DeletePlugin(plugin, true);
+                    bool success = await DeletePluginAsync(plugin, true);
                     MpDebug.Assert(success, $"Error deleting unaccepted plugin '{plugin}'");
                     Plugins.Remove(manifestPath);
                     return false;
@@ -415,7 +416,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        private static bool DeletePlugin(MpPluginWrapper plugin, bool delete_cache) {
+        private static async Task<bool> DeletePluginAsync(MpPluginWrapper plugin, bool delete_cache) {
             // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
             bool success = true;
@@ -426,6 +427,10 @@ namespace MonkeyPaste.Avalonia {
             string cache_path = plugin.CachePath;
             // clear ref to plugin
             plugin = null;
+            Func<object, object> retryFunc = (args) => {
+                //needsFixing = false;
+                return null;
+            };
             try {
                 success = RemovePlugin(manifest_path);
                 if (USE_ASSEMBLY_LOAD_CONTEXT) {
@@ -444,11 +449,18 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 success = false;
-                Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.UnloadPluginError,
                             body: ex.ToString(),
+                            retryAction: retryFunc,
                             fixCommand: fix_path == null ? null : new MpCommand(() => MpFileIo.OpenFileBrowser(fix_path)),
                             iconSourceObj: "ErrorImage");
+                if (result == MpNotificationDialogResultType.Ignore) {
+                    return false;
+                }
+                // TODO need to make inner method that doesn't rely on plugin and call that here
+                //bool retry_success = await DeletePluginAsync(plugin, delete_cache);
+                return false;
             }
 
             return success;

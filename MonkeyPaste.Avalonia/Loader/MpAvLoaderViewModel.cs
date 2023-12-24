@@ -176,6 +176,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), UiStrings.LoaderAnalyzersLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvTaskbarViewModel), UiStrings.LoaderTaskbarLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), UiStrings.LoaderSoundLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), UiStrings.LoaderIconsLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvAppCollectionViewModel), UiStrings.LoaderAppLabel),

@@ -235,7 +235,7 @@
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
                         </ToolTip.Tip>
-                        <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </Button>
                 </Grid>
             </Border>

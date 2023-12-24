@@ -9,6 +9,8 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -368,6 +370,7 @@ namespace MonkeyPaste.Avalonia {
 
             UpdateSidebarGridsplitter();
             UpdateTitleLayout();
+            UpdateEdgyTooltips();
             //UpdateResizerLayout();
             mwtg.InvalidateAll();
 
@@ -376,6 +379,41 @@ namespace MonkeyPaste.Avalonia {
             ctrcv_ptr_cg.InvalidateAll();
         }
 
+        private void UpdateEdgyTooltips() {
+            var sbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
+            var sb_edgies = sbg
+                .GetVisualDescendants<Control>()
+                .Where(x => x.Classes.Any(x => x.StartsWith("tt_")));
+
+            // clear old edgies
+            foreach (var sbc in sb_edgies) {
+                var to_remove_classes = sbc.Classes.Where(x => x.StartsWith("tt_")).ToList(); ;
+                foreach (var to_remove_class in to_remove_classes) {
+                    sbc.Classes.Remove(to_remove_class);
+                }
+            }
+
+            IEnumerable<Control> new_edgies = null;
+
+            switch (BindingContext.MainWindowOrientationType) {
+                case MpMainWindowOrientationType.Left:
+                case MpMainWindowOrientationType.Right:
+                    new_edgies = sbg.GetVisualDescendants<Button>();
+                    break;
+                case MpMainWindowOrientationType.Top:
+                    new_edgies = new[] { sbg.GetVisualDescendants<Button>().FirstOrDefault() };
+                    break;
+                case MpMainWindowOrientationType.Bottom:
+                    new_edgies = new[] { sbg.GetVisualDescendants<Button>().LastOrDefault() };
+                    break;
+            }
+            string edgy_tooltip_class = $"tt_near_{BindingContext.MainWindowOrientationType.ToString().ToLower()}";
+
+            foreach (var sbc in new_edgies) {
+                sbc.Classes.Add(edgy_tooltip_class);
+            }
+
+        }
         private void UpdateTitleLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;

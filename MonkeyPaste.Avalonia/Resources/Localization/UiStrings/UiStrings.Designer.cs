@@ -782,6 +782,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No analyzer selection for action &apos;{0}&apos;.
+        /// </summary>
+        public static string ActionAnalyzeValidation1 {
+            get {
+                return ResourceManager.GetString("ActionAnalyzeValidation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyzer for Action &apos;{0}&apos; not found.
+        /// </summary>
+        public static string ActionAnalyzeValidation2 {
+            get {
+                return ResourceManager.GetString("ActionAnalyzeValidation2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent &apos;{0}&apos; filters only for &apos;{1}&apos; type content and analyzer &apos;{2}&apos; will never execute because it does not support &apos;{3}&apos; type of input.
+        /// </summary>
+        public static string ActionAnalyzeValidation3 {
+            get {
+                return ResourceManager.GetString("ActionAnalyzeValidation3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input content is linked to the selected collection.
         /// </summary>
         public static string ActionClassifyActionHint {
@@ -805,6 +832,24 @@ namespace MonkeyPaste.Avalonia {
         public static string ActionClassifyLabel {
             get {
                 return ResourceManager.GetString("ActionClassifyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Collection selected for Classifier &apos;{0}&apos;.
+        /// </summary>
+        public static string ActionClassifyValidation1 {
+            get {
+                return ResourceManager.GetString("ActionClassifyValidation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection for Classifier &apos;{0}&apos; not found.
+        /// </summary>
+        public static string ActionClassifyValidation2 {
+            get {
+                return ResourceManager.GetString("ActionClassifyValidation2", resourceCulture);
             }
         }
         
@@ -877,6 +922,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ActionConditionalHint {
             get {
                 return ResourceManager.GetString("ActionConditionalHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compare Value can only be letters, numbers or spaces.
+        /// </summary>
+        public static string ActionConditionalValidation1 {
+            get {
+                return ResourceManager.GetString("ActionConditionalValidation1", resourceCulture);
             }
         }
         
@@ -989,6 +1043,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Collection selected for Classify Trigger &apos;{0}&apos;.
+        /// </summary>
+        public static string ActionContentTaggedValidation1 {
+            get {
+                return ResourceManager.GetString("ActionContentTaggedValidation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection for Classify Trigger &apos;{0}&apos; not found.
+        /// </summary>
+        public static string ActionContentTaggedValidation2 {
+            get {
+                return ResourceManager.GetString("ActionContentTaggedValidation2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The amount of time in milliseconds waited before children execute.
         /// </summary>
         public static string ActionDelayActionHint {
@@ -1021,6 +1093,24 @@ namespace MonkeyPaste.Avalonia {
         public static string ActionDesignerWindowTitle {
             get {
                 return ResourceManager.GetString("ActionDesignerWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No folder specified for trigger action &apos;{0}&apos;.
+        /// </summary>
+        public static string ActionFileSystemChangedValidation1 {
+            get {
+                return ResourceManager.GetString("ActionFileSystemChangedValidation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder&apos;{0}&apos; not found for trigger action &apos;{1}&apos;.
+        /// </summary>
+        public static string ActionFileSystemChangedValidation2 {
+            get {
+                return ResourceManager.GetString("ActionFileSystemChangedValidation2", resourceCulture);
             }
         }
         
@@ -1066,6 +1156,24 @@ namespace MonkeyPaste.Avalonia {
         public static string ActionFileWriterHint {
             get {
                 return ResourceManager.GetString("ActionFileWriterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Writer Path for Action &apos;{0}&apos; not set.
+        /// </summary>
+        public static string ActionFileWriterValidation1 {
+            get {
+                return ResourceManager.GetString("ActionFileWriterValidation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Writer Path &apos;{0}&apos; for Action &apos;{1}&apos; not found..
+        /// </summary>
+        public static string ActionFileWriterValidation2 {
+            get {
+                return ResourceManager.GetString("ActionFileWriterValidation2", resourceCulture);
             }
         }
         
@@ -1921,7 +2029,6 @@ namespace MonkeyPaste.Avalonia {
         
         /// <summary>
         ///   Looks up a localized string similar to Are you SURE you want to delete ALL your clips?!
-        ///*The application will restart!
         ///*This operation CANNOT be undone!.
         /// </summary>
         public static string ClipTrayDeleteAllMessageText {
@@ -3223,6 +3330,15 @@ namespace MonkeyPaste.Avalonia {
         public static string LoaderTagsLabel {
             get {
                 return ResourceManager.GetString("LoaderTagsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taskbar.
+        /// </summary>
+        public static string LoaderTaskbarLabel {
+            get {
+                return ResourceManager.GetString("LoaderTaskbarLabel", resourceCulture);
             }
         }
         

@@ -12,6 +12,7 @@ namespace AltOleHandler {
                 }
                 return _clipboardRef;
             }
+            set => _clipboardRef = value;
         }
     }
 }

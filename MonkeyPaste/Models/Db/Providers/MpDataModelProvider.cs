@@ -300,8 +300,8 @@ namespace MonkeyPaste {
                 "DELETE FROM MpDataObject WHERE pk_MpDataObjectId > 0;",
                 "DELETE FROM MpDataObjectItem WHERE pk_MpDataObjectItemId > 0;",
                 "DELETE FROM MpCopyItemTransaction WHERE pk_MpCopyItemTransactionId > 0;",
-                "DELETE FROM MpShortcut WHERE ShortcutTypeName='{0}';",
-                string.Format("DELETE FROM MpCopyItem WHERE pk_MpCopyItemId > 0;", MpShortcutType.PasteCopyItem.ToString())
+                string.Format("DELETE FROM MpShortcut WHERE ShortcutTypeName='{0}';", MpShortcutType.PasteCopyItem.ToString()),
+                "DELETE FROM MpCopyItem WHERE pk_MpCopyItemId > 0;"
             };
 
             int rows_deleted = 0;

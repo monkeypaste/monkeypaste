@@ -507,9 +507,6 @@
   <data name="MpActionType_SetClipboard" xml:space="preserve">
     <value>Set Clipboard</value>
   </data>
-  <data name="MpActionType_KeySimulator" xml:space="preserve">
-    <value>Key Simulator</value>
-  </data>
   <data name="MpActionType_Delay" xml:space="preserve">
     <value>Delay</value>
   </data>

@@ -30,8 +30,7 @@ namespace MonkeyPaste.Avalonia {
     };
 
     public class MpAvThemeViewModel :
-        MpAvViewModelBase,
-        MpICloseWindowViewModel {
+        MpAvViewModelBase {
 
         #region Private Variable
 
@@ -45,11 +44,10 @@ namespace MonkeyPaste.Avalonia {
             };
 
         private string[] _colorImageFileNames = new string[] {
-            "add.png",
+            "add_green.png",
             "appstore.png",
             "banana.png",
-            "bitmap.png",
-            "bingicon.png",
+            "butterfly.png",
             "clipboard.png",
             "close.png",
             "cogcolor.png",
@@ -57,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
             "delete.png",
             "delete2.png",
             "device.png",
-            "duckduckgoicon.png",
+            "egg.png",
             "error.png",
             "folder.png",
             "gavel.png",
@@ -76,10 +74,8 @@ namespace MonkeyPaste.Avalonia {
             "pindown.png",
             "pindownover.png",
             "pinover.png",
-            "preferences.png",
             "questionmark.png",
             "remove.png",
-            "rtf.png",
             "select.png",
             "sheep.png",
             "spellcheck.png",
@@ -90,7 +86,6 @@ namespace MonkeyPaste.Avalonia {
             "trophy.png",
             "warning.png",
             "warningtime.png",
-            "yandexicon.png",
         };
 
 
@@ -112,14 +107,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpIChildWindowViewModel Implementation
-
-        public bool IsWindowOpen { get; set; }
-        public MpWindowType WindowType =>
-            MpWindowType.Modal;
-
-        #endregion
         #endregion
 
         #region Properties
@@ -209,6 +196,12 @@ namespace MonkeyPaste.Avalonia {
                 "Habanero",
                 "Nunito"
             };
+
+        public bool IsThemeDark =>
+            MpAvPrefViewModel.Instance.IsThemeDark;
+
+        public bool IsThemeLight =>
+            !MpAvPrefViewModel.Instance.IsThemeDark;
         #endregion
 
         #endregion
@@ -236,11 +229,12 @@ namespace MonkeyPaste.Avalonia {
             _themePrefPropNames.ForEach(x => SyncThemePref(x));
 
             if (showWait) {
-                ShowWaitWindow();
+                // TODO create cancellationToken and show busy mtf here
             }
+
             CreatePalette();
             if (showWait) {
-                IsWindowOpen = false;
+                // TODO cancel token here...
             }
         }
 
@@ -289,8 +283,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-
         private void SyncThemePref(string prefName) {
             if (!this.HasProperty(prefName)) {
                 return;
@@ -306,37 +298,6 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformResource.SetResource(trk.ToString(), value);
 
         }
-        private void ShowWaitWindow() {
-            var w = new MpAvWindow() {
-                Width = 350,
-                Height = 300,
-                SystemDecorations = SystemDecorations.None,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                DataContext = this,
-                Content = new StackPanel() {
-                    Orientation = Orientation.Vertical
-                }
-            };
-            if (w.Content is StackPanel sp) {
-                sp.Children.Add(new TextBlock() {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Height = 125,
-                    TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 0, 0, 15),
-                    Text = UiStrings.CommonWaitLabel
-                });
-                sp.Children.Add(new MpAvBusySpinnerView() {
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Width = 70,
-                    Height = 70
-                });
-            }
-
-            w.ShowChild(MpAvWindowManager.LocateWindow(MpAvSettingsViewModel.Instance));
-        }
-
         private void CreatePalette() {
             // test: #b511db
 

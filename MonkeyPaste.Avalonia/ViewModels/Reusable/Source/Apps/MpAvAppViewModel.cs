@@ -295,41 +295,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand<object> AddNewAppComponentCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (Parent == null ||
-                    args is not string comp_type) {
-                    return;
-                }
-                switch (comp_type) {
-                    case "shortcuts":
-                        _ = await MpAppClipboardShortcuts.CreateAsync(appId: AppId);
-                        break;
-                }
-
-                await InitializeAsync(App);
-                Parent.UpdateComponentSources();
-            });
-
-        public MpIAsyncCommand<object> RemoveAppComponentCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (args is not string comp_type) {
-                    return;
-                }
-                switch (comp_type) {
-                    case "shortcuts":
-                        var cs = await MpDataModelProvider.GetItemAsync<MpAppClipboardShortcuts>(ClipboardShortcutsId);
-                        if (cs == null) {
-                            // nothign to remove
-                            return;
-                        }
-                        await cs.DeleteFromDatabaseAsync();
-                        break;
-                }
-                await InitializeAsync(App);
-                Parent.UpdateComponentSources();
-            });
-
         public MpIAsyncCommand ToggleIsRejectedCommand => new MpAsyncCommand(
             async () => {
                 IsRejected = !IsRejected;

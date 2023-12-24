@@ -90,7 +90,7 @@
                     HorizontalAlignment="Right"
                     Command="{Binding AddValueCommand}">
                 <DockPanel>
-                    <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
+                    <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddGreenImage}}"
                            DockPanel.Dock="Left" />
                     <TextBlock DockPanel.Dock="Right"
                                Text="{x:Static local:UiStrings.CommonAddLabel}" />

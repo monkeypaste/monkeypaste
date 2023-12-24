@@ -163,13 +163,13 @@
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
             </ToolTip.Tip>
-            <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource NewWindowImage}" />
+            <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource OpenImage}" />
 
         </Button>
 
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                Classes="noBg noHoverBg noBorder cornerButton bottom left tt_t"
+                Classes="noBg noHoverBg noBorder cornerButton bottom left tt_near_bottom"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <ToolTip.Tip>
@@ -185,7 +185,7 @@
 
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="noBg noHoverBg noBorder cornerButton bottom right tt_t"
+                      Classes="noBg noHoverBg noBorder cornerButton bottom right tt_near_bottom"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
                       IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
             <ToggleButton.IsVisible>

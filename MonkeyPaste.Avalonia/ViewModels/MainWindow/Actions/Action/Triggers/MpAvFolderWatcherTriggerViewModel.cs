@@ -227,9 +227,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (string.IsNullOrEmpty(FolderPath)) {
-                ValidationText = $"No folder specified for trigger action '{FullName}'";
+                //ValidationText = $"No folder specified for trigger action '{FullName}'";
+                ValidationText = string.Format(UiStrings.ActionFileSystemChangedValidation1, FullName);
             } else if (!FolderPath.IsDirectory()) {
-                ValidationText = $"Folder'{FolderPath}' not found for trigger action '{FullName}'";
+                //ValidationText = $"Folder'{FolderPath}' not found for trigger action '{FullName}'";
+                ValidationText = string.Format(UiStrings.ActionFileSystemChangedValidation2, FolderPath, FullName);
             } else {
                 ValidationText = string.Empty;
             }

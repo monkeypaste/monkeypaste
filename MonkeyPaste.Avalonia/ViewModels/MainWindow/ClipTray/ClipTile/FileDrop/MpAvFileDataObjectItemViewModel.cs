@@ -21,9 +21,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHovering { get; set; }
         #endregion
 
-        #region View Models 
+        #region State
 
-
+        public bool IsAvailable =>
+            Path.IsFileOrDirectory();
         #endregion
 
         #region Appearance

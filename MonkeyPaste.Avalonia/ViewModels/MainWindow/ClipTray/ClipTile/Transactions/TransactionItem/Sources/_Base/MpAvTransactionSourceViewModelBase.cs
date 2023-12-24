@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                 var sub_mivml = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
                             Header = string.Format(UiStrings.ClipTileSourceBrowseToLabel,SourceLabel),
-                            IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "NewWindowImage",
+                            IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "OpenImage",
                             AltNavIdx = 5,
                             Command = MpAvUriNavigator.Instance.NavigateToSourceRefCommand,
                             CommandParameter = SourceRef
@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
                             HasLeadingSeparator = true,
                             Header = $"{(IsSourceRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} '{SourceLabel}'",
                             AltNavIdx = 0,
-                            IconResourceKey = IsSourceRejected ? "AddImage" : "NoEntryImage",
+                            IconResourceKey = IsSourceRejected ? "AddGreenImage" : "NoEntryImage",
                             Command = ToggleSourceRejectionCommand
                         });
 
@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
                             new MpAvMenuItemViewModel() {
                                 Header = $"{(url.IsDomainRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} {UiStrings.SourceDomainLabel} '{url.UrlDomainPath}'",
                                 AltNavIdx = 0,
-                                IconResourceKey = url.IsDomainRejected ? "AddImage" : "NoEntryImage",
+                                IconResourceKey = url.IsDomainRejected ? "AddGreenImage" : "NoEntryImage",
                                 Command = ToggleSourceRejectionCommand,
                                 CommandParameter = "domain"
                             });

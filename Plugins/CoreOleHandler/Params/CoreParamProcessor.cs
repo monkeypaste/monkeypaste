@@ -10,6 +10,7 @@ namespace CoreOleHandler {
             string format,
             object data,
             IEnumerable<string> all_formats,
+            List<MpParameterRequestItemFormat> all_params,
             out Dictionary<string, object> convData,
             out Exception ex,
             out List<MpPluginUserNotificationFormat> ntfl) {
@@ -293,10 +294,36 @@ namespace CoreOleHandler {
                         break;
                     case MpPortableDataFormats.Image:
                         switch (paramType) {
+                            case CoreOleParamType.PNG_R_SCALEOVERSIZED: {
+                                    // NOTE this also handles maxw,maxh since they are dependant
+                                    if (data is not string base64 || base64.ToAvBitmap() is not { } bmp) {
+                                        break;
+                                    }
+                                    bool do_scale = paramVal.ParseOrConvertToBool(false);
+                                    double max_w = all_params.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.PNG_R_MAXW).ParseOrConvertToDouble(-1);
+                                    double max_h = all_params.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.PNG_R_MAXH).ParseOrConvertToDouble(-1);
 
+                                    MpSize bmp_size = bmp.Size.ToPortableSize();
+                                    MpSize adj_size = bmp_size.ResizeKeepAspect(max_w, max_h);
+                                    bool needs_scale = !bmp_size.IsValueEqual(adj_size);
+                                    MpConsole.WriteLine($"Image size: {bmp_size}", true);
+                                    MpConsole.WriteLine($"Scaled size: {adj_size}");
+                                    MpConsole.WriteLine($"Max size: {new MpSize(max_w, max_h)}");
+                                    MpConsole.WriteLine($"Scaled: {needs_scale}");
+                                    if (!needs_scale) {
+                                        // no resize needed
+                                        break;
+                                    }
+                                    if (!do_scale) {
+                                        // too big ignore
+                                        data = null;
+                                        AddIgnoreNotification(ref ntfl, format);
+                                    }
+                                    data = bmp.Resize(adj_size).ToBase64String();
+                                }
+                                break;
                             case CoreOleParamType.PNG_R_IGNORE: {
-                                    if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
-                                    ignImg) {
+                                    if (paramVal.ParseOrConvertToBool(false) is bool ignImg && ignImg) {
                                         data = null;
                                         AddIgnoreNotification(ref ntfl, format);
                                     }

@@ -1076,7 +1076,7 @@ namespace MonkeyPaste.Avalonia {
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
             //MpConsole.WriteLine($" [HOOK KEY] {e.RawEvent}");
             if (Mp.Services.KeyStrokeSimulator.IsSimulatingKey(e.Data.KeyCode)) {
-                MpConsole.WriteLine($"Simulated Key[{e.Data.KeyCode}] Press IGNORED");
+                MpConsole.WriteLine($"Hook ignoring simkey '{e.Data.KeyCode}' PRESS");
                 return;
             }
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
@@ -1137,10 +1137,9 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Recognized GESTURE: '{down_gesture}' SHORTCUT: {_exact_match.ShortcutType}");
         }
 
-
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
             if (Mp.Services.KeyStrokeSimulator.IsSimulatingKey(e.Data.KeyCode)) {
-                MpConsole.WriteLine($"Simulated Key[{e.Data.KeyCode}] Release IGNORED");
+                MpConsole.WriteLine($"Hook ignoring simkey '{e.Data.KeyCode}' RELEASE");
                 return;
             }
             bool was_down = _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
@@ -1350,13 +1349,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args is MpIShortcutCommandViewModel scvm) {
-                    string result = await CreateOrUpdateViewModelShortcutAsync(scvm);
-                    if (args is MpAvShortcutRecorderParameterViewModel scpvm &&
-                        scpvm.Parent is MpAvKeySimulatorActionViewModel ksavm) {
-                        // handle special case for input and hard-assign
-                        // param's keystring once sure parent is key simulator
-                        scpvm.KeyString = result;
-                    }
+                    _ = await CreateOrUpdateViewModelShortcutAsync(scvm);
                 }
                 UpdateFilteredItems();
                 MpAvDataGridRefreshExtension.RefreshDataGrid(this);

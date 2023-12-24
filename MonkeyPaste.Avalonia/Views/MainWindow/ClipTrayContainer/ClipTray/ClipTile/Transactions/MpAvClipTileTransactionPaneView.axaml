@@ -93,21 +93,6 @@
                     Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
         </Style>
 
-        <!--  PLAIN TEXT TOGGLE  -->
-        <Style Selector="ToggleButton#PlainTextToggleButton Image, ToggleButton#PlainTextToggleButton:unchecked Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
-        </Style>
-
-        <Style Selector="ToggleButton#PlainTextToggleButton:pointerover Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
-        </Style>
-
-        <Style Selector="ToggleButton#PlainTextToggleButton:checked Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent5BgColor}" />
-        </Style>
 
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TransactionContainerGrid"
@@ -150,7 +135,8 @@
                     <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.ClipTileTransactionTogglePlainTextLabel}" />
                 </ToolTip.Tip>
                 <Image Width="20"
-                       Height="20" />
+                       Height="20"
+                       Source="{Binding Source={StaticResource TextFormatImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </ToggleButton>
             <TextBlock Text="{x:Static local:UiStrings.ClipTileTransactionAnnotationTitle}"
                        Foreground="{DynamicResource ThemeInteractiveColor}"

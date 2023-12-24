@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
         protected override MpAvMenuItemViewModel GetAddContextMenuItem() {
             return new MpAvMenuItemViewModel() {
                 Header = UiStrings.CommonAddLabel,
-                IconResourceKey = "AddImage",
+                IconResourceKey = "AddGreenImage",
                 SubItems =
                         typeof(MpActionType)
                         .EnumerateEnum<MpActionType>()
@@ -148,7 +148,6 @@ namespace MonkeyPaste.Avalonia {
         protected virtual MpIActionComponent TriggerComponent { get; }
         public bool IsAllValid =>
             IsValid && AllDescendants.All(x => x.IsValid);
-
         #endregion
 
         #region Model       
@@ -357,9 +356,13 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                Parent.DeleteActionCommand.Execute(this);
+                await Parent.DeleteActionCommand.ExecuteAsync(this);
+                if (Parent.Triggers.FirstOrDefault() is { } tvm) {
+                    Parent.SelectActionCommand.Execute(tvm);
+                }
+
             }, (args) => {
-                return Parent != null;
+                return Parent != null && CanDelete;
             });
 
         public ICommand DuplicateTriggerCommand => new MpAsyncCommand(

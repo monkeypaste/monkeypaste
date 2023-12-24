@@ -117,7 +117,7 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static string ChangeBrushBrightness(string hexStr, double correctionFactor, bool removeAlpha = true) {
+        public static string ChangeHexBrightness(string hexStr, double correctionFactor, bool removeAlpha = true) {
             if (correctionFactor == 0.0f) {
                 return hexStr;
             }
@@ -141,11 +141,27 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetDarkerHexColor(string hexStr, double factor = -0.5) {
-            return ChangeBrushBrightness(hexStr, factor);
+            return ChangeHexBrightness(hexStr, factor);
         }
 
         public static string GetLighterHexColor(string hexStr, double factor = 0.5) {
-            return ChangeBrushBrightness(hexStr, factor);
+            return ChangeHexBrightness(hexStr, factor);
+        }
+        public static string MakeBright(string hexStr, double delta_factor = 0.1, double factor = 0, int brightThreshold = 150) {
+            if (IsBright(hexStr, brightThreshold)) {
+                return hexStr;
+            }
+            factor += delta_factor;
+            hexStr = GetLighterHexColor(hexStr, factor);
+            return MakeBright(hexStr, delta_factor, factor, brightThreshold);
+        }
+        public static string MakeDark(string hexStr, double delta_factor = 0.1, double factor = 0, int brightThreshold = 150) {
+            if (!IsBright(hexStr, brightThreshold)) {
+                return hexStr;
+            }
+            factor -= delta_factor;
+            hexStr = GetDarkerHexColor(hexStr, factor);
+            return MakeDark(hexStr, delta_factor, factor, brightThreshold);
         }
 
         #region HSV

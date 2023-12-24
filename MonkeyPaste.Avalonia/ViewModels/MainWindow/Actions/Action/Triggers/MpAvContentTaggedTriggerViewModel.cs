@@ -104,15 +104,12 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (TagId == 0) {
-                ValidationText = $"No Collection selected for Classify Trigger '{FullName}'";
+                //ValidationText = $"No Collection selected for Classify Trigger '{FullName}'";
+                ValidationText = string.Format(UiStrings.ActionContentTaggedValidation1, FullName);
             } else {
-                //while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
-                //    await Task.Delay(100);
-                //}
-                //var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-
                 if (SelectedTag == null) {
-                    ValidationText = $"Collection for Classify Trigger '{FullName}' not found";
+                    //ValidationText = $"Collection for Classify Trigger '{FullName}' not found";
+                    ValidationText = string.Format(UiStrings.ActionContentTaggedValidation2, FullName);
                 } else {
                     ValidationText = string.Empty;
                 }

@@ -107,7 +107,36 @@ namespace CoreOleHandler {
                     });
                     break;
                 case MpPortableDataFormats.Image:
-                    if (!isReader) {
+                    if (isReader) {
+                        pfl.Add(new MpParameterFormat() {
+                            label = "Max Width",
+                            description = "Images can be very large sometimes and can create serious performance issues. Try to keep this value low.",
+                            controlType = MpParameterControlType.Slider,
+                            unitType = MpParameterValueUnitType.Integer,
+                            paramId = GetParamId(format, isReader, "maxw"),
+                            minimum = 0,
+                            maximum = 30_000,
+                            value = new MpPluginParameterValueFormat(3000.ToString(), true)
+                        });
+                        pfl.Add(new MpParameterFormat() {
+                            label = "Max Height",
+                            description = "Images can be very large sometimes and can create serious performance issues. Try to keep this value low.",
+                            controlType = MpParameterControlType.Slider,
+                            unitType = MpParameterValueUnitType.Integer,
+                            paramId = GetParamId(format, isReader, "maxh"),
+                            minimum = 0,
+                            maximum = 30_000,
+                            value = new MpPluginParameterValueFormat(3000.ToString(), true)
+                        });
+                        pfl.Add(new MpParameterFormat() {
+                            label = "Scale Oversized",
+                            controlType = MpParameterControlType.CheckBox,
+                            unitType = MpParameterValueUnitType.Bool,
+                            description = "When checked, images larger than max dimension will be scaled while retaining aspect ratio. This does not affect the image on the clipboard.",
+                            paramId = GetParamId(format, isReader, "scaleoversized"),
+                            value = new MpPluginParameterValueFormat(true.ToString(), true)
+                        });
+                    } else {
                         pfl.Add(new MpParameterFormat() {
                             label = "Default Export Type",
                             description = $"When pasting or dropping a bitmap this will be the default file type",

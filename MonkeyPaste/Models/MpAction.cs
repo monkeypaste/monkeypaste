@@ -51,7 +51,6 @@ namespace MonkeyPaste {
         Repeater,
         FileWriter,
         SetClipboard,
-        KeySimulator,
         Delay,
         Alert
     }

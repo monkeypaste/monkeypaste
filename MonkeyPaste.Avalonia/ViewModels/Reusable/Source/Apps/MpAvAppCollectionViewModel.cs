@@ -424,6 +424,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 await AddOrRemoveAppComponentByTypeAsync(avm, comp_type_to_remove, true);
+                if (comp_type_to_remove == "formats") {
+                    MpAvClipTrayViewModel.Instance.UpdatePasteInfoMessageCommand.Execute(null);
+                }
             });
 
         public MpIAsyncCommand<object> AddAppComponentCommand => new MpAsyncCommand<object>(

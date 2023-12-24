@@ -99,6 +99,11 @@ namespace MonkeyPaste.Avalonia {
                         //}
                         ////MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
                         hex = MpSystemColors.ContentColors[rand_idx].RemoveHexAlpha();
+                        if (MpAvThemeViewModel.Instance.IsThemeDark) {
+                            hex = MpColorHelpers.MakeBright(hex);
+                        } else {
+                            hex = MpColorHelpers.MakeDark(hex);
+                        }
                     } else if (trk == MpThemeResourceKey.ThemeInteractiveColor_norand) {
                         // only used by cap overlay currently
                         hex = Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString());

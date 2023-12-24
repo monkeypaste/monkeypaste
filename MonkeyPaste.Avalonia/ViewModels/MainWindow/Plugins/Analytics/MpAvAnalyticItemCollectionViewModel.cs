@@ -417,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
                 aivm = null;
 
                 // remove from plugin dir
-                bool success = MpPluginLoader.DeletePluginByGuid(plugin_guid);
+                bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
 
                 IsBusy = false;
             });
@@ -446,11 +446,7 @@ namespace MonkeyPaste.Avalonia {
                 // remove local ref
                 aivm = null;
 
-                bool success = true;
-                // remove from plugin dir (retain cache)
-                if (!MpPluginLoader.DeletePluginByGuid(plugin_guid, false)) {
-                    success = false;
-                }
+                bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid, false);
 
                 if (success) {
                     try {

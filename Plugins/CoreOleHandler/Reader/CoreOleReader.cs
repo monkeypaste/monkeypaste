@@ -89,6 +89,7 @@ namespace CoreOleHandler {
                                 format: read_format,
                                 data: dataStr,
                                 all_formats: readFormats,
+                                all_params: request.items,
                                 convData: out Dictionary<string, object> conv_result,
                                 ex: out var ex,
                                 ntfl: out var param_nfl);

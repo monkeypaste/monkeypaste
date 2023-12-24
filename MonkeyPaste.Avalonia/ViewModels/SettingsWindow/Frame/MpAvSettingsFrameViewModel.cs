@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpSettingsFrameType.DefaultFonts:
                         return "FontImage";
                     case MpSettingsFrameType.Sound:
-                        return "SpeakerImage";
+                        return "SoundImage";
                     case MpSettingsFrameType.Taskbar:
                         return "Dots2x2Image";
                     case MpSettingsFrameType.Window:

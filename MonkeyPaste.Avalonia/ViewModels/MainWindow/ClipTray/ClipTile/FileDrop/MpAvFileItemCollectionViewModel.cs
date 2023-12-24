@@ -28,6 +28,19 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvFileDataObjectItemViewModel> Items { get; set; } = new ObservableCollection<MpAvFileDataObjectItemViewModel>();
         #endregion
 
+        #region Appearance
+
+        public object PrimaryIconSourceObj {
+            get {
+                if (Items.All(x => !x.IsAvailable)) {
+                    return "FolderImage";
+                }
+                return Items.FirstOrDefault(x => x.IsAvailable).IconBase64;
+            }
+        }
+
+        #endregion
+
         #region State
 
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);

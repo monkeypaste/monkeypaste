@@ -64,7 +64,9 @@ namespace CoreOleHandler {
                     data = CoreParamProcessor.ProcessParam(
                         paramInfo: param,
                         format: write_format,
-                        data: data, writeFormats,
+                        data: data,
+                        all_formats: writeFormats,
+                        all_params: request.items,
                         convData: out _,
                         ex: out var ex,
                         ntfl: out var param_nfl);

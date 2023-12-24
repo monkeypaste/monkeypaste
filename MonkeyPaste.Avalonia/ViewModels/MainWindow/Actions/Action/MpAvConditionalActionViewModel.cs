@@ -322,7 +322,8 @@ namespace MonkeyPaste.Avalonia {
             // TODO compare validation will only be needed for last output but not sure, need use case
             if (!CompareData.IsNullEmptyWhitespaceOrAlphaNumeric()) {
                 var cdpvm = ArgLookup[COMPARE_TEXT_PARAM_ID];
-                cdpvm.ValidationMessage = "Compare Value can only be letters, numbers or spaces";
+                //cdpvm.ValidationMessage = "Compare Value can only be letters, numbers or spaces";
+                cdpvm.ValidationMessage = UiStrings.ActionConditionalValidation1;
                 cdpvm.OnPropertyChanged(nameof(cdpvm.IsValid));
                 ValidationText = cdpvm.ValidationMessage;
                 focus_arg_num = ActionArgs.IndexOf(cdpvm);

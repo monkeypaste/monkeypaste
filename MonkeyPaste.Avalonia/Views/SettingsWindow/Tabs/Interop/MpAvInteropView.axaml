@@ -86,7 +86,7 @@
                                     Command="{Binding ShowAddAppPopupMenuCommand}"
                                     CommandParameter="{Binding $self, ConverterParameter=formats, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
-                            <Image Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <Image Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                             <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
                         </DockPanel>
                     </DropDownButton>
@@ -307,7 +307,7 @@
                                     Command="{Binding ShowAddAppPopupMenuCommand}"
                                     CommandParameter="{Binding $self, ConverterParameter=shortcuts, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
-                            <Image Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <Image Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                             <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
                         </DockPanel>
                     </DropDownButton>
@@ -479,7 +479,7 @@
                                                 Command="{Binding ShowAddAppPopupMenuCommand}"
                                                 CommandParameter="{Binding $self, ConverterParameter=rejects, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                                     <DockPanel>
-                                        <Image Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                        <Image Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                         <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
                                     </DockPanel>
                                 </DropDownButton>
@@ -585,7 +585,7 @@
                                         Command="{Binding AddUrlCommand}">
                                     <DockPanel>
                                         <Image DockPanel.Dock="Left"
-                                               Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                               Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                         <Label Content="{x:Static local:UiStrings.SettingsInteropAddUrlButtonLabel}" />
                                     </DockPanel>
                                 </Button>

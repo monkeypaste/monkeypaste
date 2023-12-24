@@ -269,7 +269,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MaxVelocity AvaloniaProperty
 
-        private double _maxVelocity = -3.0d;
+        private double _maxVelocity = -1.5d;
         public double MaxVelocity {
             get => _maxVelocity;
             set => SetAndRaise(MaxVelocityProperty, ref _maxVelocity, value);
@@ -281,7 +281,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(MaxVelocity),
                 o => o.MaxVelocity,
                 (o, v) => o.MaxVelocity = v,
-                -3.0d
+                -1.5
             );
 
         #endregion

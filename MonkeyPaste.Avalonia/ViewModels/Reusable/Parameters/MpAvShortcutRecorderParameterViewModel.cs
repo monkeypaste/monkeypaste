@@ -84,9 +84,6 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(aipv);
 
-            if (Parent is MpAvKeySimulatorActionViewModel) {
-                KeyString = CurrentValue;
-            }
             if (Parent is MpAvShortcutTriggerViewModel sctvm) {
                 var sc = await MpDataModelProvider.GetItemAsync<MpShortcut>(sctvm.ShortcutId);
                 KeyString = sc == null ? string.Empty : sc.KeyString;

@@ -2238,7 +2238,6 @@ Clipboard listening is: {0}</value>
   </data>
   <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
     <value>Are you SURE you want to delete ALL your clips?!
-*The application will restart!
 *This operation CANNOT be undone!</value>
   </data>
   <data name="NtfRateAppText" xml:space="preserve">
@@ -2341,5 +2340,55 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
   </data>
   <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
     <value>Ignore</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>No analyzer selection for action '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analyzer for Action '{0}' not found</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Parent '{0}' filters only for '{1}' type content and analyzer '{2}' will never execute because it does not support '{3}' type of input</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>No Collection selected for Classifier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Collection for Classifier '{0}' not found</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Compare Value can only be letters, numbers or spaces</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>No Collection selected for Classify Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Collection for Classify Trigger '{0}' not found</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>No folder specified for trigger action '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Folder'{0}' not found for trigger action '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer Path for Action '{0}' not set</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' for Action '{1}' not found.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Taskbar</value>
   </data>
 </root>

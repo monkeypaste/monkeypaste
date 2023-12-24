@@ -397,11 +397,11 @@
                                              Text="{Binding PluginTitle}" />
                     </DockPanel>
 
-                    <!--  TOGGLE INSTALL BUTTON  -->
                     <StackPanel Orientation="Horizontal"
                                 Grid.Row="1"
                                 Spacing="20">
 
+                    <!--  TOGGLE INSTALL BUTTON  -->
                         <Button x:Name="ToggleInstallSelectedPluginButton"
                                 Classes="defaultButton textOnlyButton manageButton"
                                 Command="{Binding ToggleIsPluginInstalledCommand}">
@@ -417,6 +417,7 @@
                             </Grid>
                         </Button>
 
+                    <!--  DONATE BUTTON  -->
                         <Button x:Name="DonateToPluginButton"
                                 Classes="defaultButton textOnlyButton manageButton"
                                 Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"

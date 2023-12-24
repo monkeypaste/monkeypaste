@@ -178,9 +178,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (AnalyticItemPresetId == 0) {
-                ValidationText = $"No analyzer selection for action '{FullName}'";
+                //ValidationText = $"No analyzer selection for action '{FullName}'";
+                ValidationText = string.Format(UiStrings.ActionAnalyzeValidation1, FullName);
             } else if (SelectedPreset == null) {
-                ValidationText = $"Analyzer for Action '{FullName}' not found";
+                //ValidationText = $"Analyzer for Action '{FullName}' not found";
+                ValidationText = string.Format(UiStrings.ActionAnalyzeValidation2, FullName);
             } else {
                 ValidationText = string.Empty;
                 // check ancestors to ensure analyzer supports content type as input
@@ -191,7 +193,8 @@ namespace MonkeyPaste.Avalonia {
                     if (closest_type_dep_ancestor is MpAvContentAddTriggerViewModel cavm &&
                         cavm.AddedContentType != MpCopyItemType.None &&
                          !SelectedPreset.Parent.IsContentTypeValid(cavm.AddedContentType)) {
-                        ValidationText = $"Parent '{closest_type_dep_ancestor.Label}' filters only for '{cavm.AddedContentType}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.AddedContentType}' type of input ";
+                        //ValidationText = $"Parent '{closest_type_dep_ancestor.Label}' filters only for '{cavm.AddedContentType}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.AddedContentType}' type of input ";
+                        ValidationText = string.Format(UiStrings.ActionAnalyzeValidation3, closest_type_dep_ancestor.Label, SelectedPreset.FullName, cavm.AddedContentType.ToString());
                         break;
                     }
                     if (closest_type_dep_ancestor is MpAvAnalyzeActionViewModel aavm &&

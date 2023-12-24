@@ -160,14 +160,18 @@ namespace MonkeyPaste.Avalonia {
                             Command = ShowDevToolsCommand,
                             IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
+#endif
                         new MpAvMenuItemViewModel() {
-                            Header = @"Reload",
+#if DEBUG
+                            HasLeadingSeparator = true,
+#endif
+                            Header = UiStrings.CommonRefreshTooltip,
+                            IconResourceKey = "ResetImage",
                             Command = ReloadSelectedItemCommand,
                             IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
-                        new MpAvMenuItemViewModel() { IsSeparator = true },
-#endif
                         new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
                             Header = UiStrings.CommonCutOpLabel,
                             IconResourceKey = "ScissorsImage",
                             Command = CutSelectionFromContextMenuCommand,
@@ -1156,6 +1160,51 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #region System Tray Icons
+
+        public string PlayOrPauseLabel => IsIgnoringClipboardChanges ? UiStrings.TriggerResumeButtonLabel : UiStrings.TriggerPauseButtonLabel;
+
+        public object PlayOrPauseIconResoureKey =>
+            new object[] {
+                IsIgnoringClipboardChanges ? "PlayImage" : "PauseImage",
+                IsIgnoringClipboardChanges ? MpSystemColors.green3 : MpSystemColors.red4 };
+
+        public object AutoCopySysTrayIconSourceObj =>
+            new object[] {
+                "MouseLeftClickImage",
+                IsAutoCopyMode ?
+                    MpSystemColors.limegreen :
+                        MpAvThemeViewModel.Instance.IsThemeDark ?
+                            MpSystemColors.White :
+                            MpSystemColors.Black };
+
+        public object RightClickPasteSysTrayIconSourceObj =>
+            new object[] {
+                "MouseRightClickImage",
+                IsRightClickPasteMode ?
+                    MpSystemColors.limegreen :
+                        MpAvThemeViewModel.Instance.IsThemeDark ?
+                            MpSystemColors.White :
+                            MpSystemColors.Black };
+
+        public object AppendInlineSysTrayIconSourceObj =>
+            new object[] {
+                "AppendRunImage",
+                IsAppendInsertMode ?
+                    MpSystemColors.limegreen :
+                        MpAvThemeViewModel.Instance.IsThemeDark ?
+                            MpSystemColors.White :
+                            MpSystemColors.Black };
+        public object AppendLineSysTrayIconSourceObj =>
+            new object[] {
+                "AppendLineImage",
+                IsAppendLineMode ?
+                    MpSystemColors.limegreen :
+                        MpAvThemeViewModel.Instance.IsThemeDark ?
+                            MpSystemColors.White :
+                            MpSystemColors.Black };
+        #endregion
+
         #endregion
 
         #region State
@@ -1214,9 +1263,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsInitialQuery { get; private set; } = true;
-        public string PlayOrPauseLabel => IsIgnoringClipboardChanges ? UiStrings.TriggerResumeButtonLabel : UiStrings.TriggerPauseButtonLabel;
-        public string PlayOrPauseIconResoureKey => IsIgnoringClipboardChanges ? "PlayImage" : "PauseImage";
-
         public int RemainingItemsCountThreshold {
             get {
                 if (LayoutType == MpClipTrayLayoutType.Stack) {
@@ -4537,6 +4583,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleRightClickPasteCommand => new MpCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
+                OnPropertyChanged(nameof(RightClickPasteSysTrayIconSourceObj));
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: UiStrings.MouseModeChangeNtfTitle,
                     body: string.Format(UiStrings.MouseModeRightClickPasteNtfText, IsRightClickPasteMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
@@ -4547,6 +4594,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleAutoCopyModeCommand => new MpCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
+                OnPropertyChanged(nameof(AutoCopySysTrayIconSourceObj));
 
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: UiStrings.MouseModeChangeNtfTitle,
@@ -4654,9 +4702,38 @@ namespace MonkeyPaste.Avalonia {
                     //cancel
                     return;
                 }
+                // clear trays (retaining query placeholders)
+                PinnedItems.Clear();
+                while (QueryItems.Any()) {
+                    QueryItems.FirstOrDefault().TriggerUnloadedNotification(false, true, true);
+                }
 
+                // clear paste clip shortcuts
+                var to_remove_scidl = MpAvShortcutCollectionViewModel.Instance.Items.Where(x => x.ShortcutType == MpShortcutType.PasteCopyItem).Select(x => x.ShortcutId).ToList();
+                foreach (int to_remove_scid in to_remove_scidl) {
+                    if (MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == to_remove_scid) is { } scvm) {
+                        MpAvShortcutCollectionViewModel.Instance.Items.Remove(scvm);
+                    }
+                }
+                MpAvShortcutCollectionViewModel.Instance.RefreshFilters();
+
+                // clear tag badges
+                var to_clear_ttvm = MpAvTagTrayViewModel.Instance.Items.Where(x => x.BadgeCount > 0);
+                foreach (var ttvm in to_clear_ttvm) {
+                    ttvm.CopyItemIdsNeedingView.Clear();
+                    ttvm.OnPropertyChanged(nameof(ttvm.BadgeCount));
+                    ttvm.OnPropertyChanged(nameof(ttvm.CopyItemIdsNeedingView));
+                }
+
+                // delete content
                 await MpDataModelProvider.DeleteAllContentAsync();
-                MpAvAppRestarter.ShutdownWithRestartTask("Deleted all content");
+
+                // refresh tag counts
+                await Task.WhenAll(MpAvTagTrayViewModel.Instance.Items.Select(x => x.UpdateClipCountAsync()));
+
+                // refresh query
+                await QueryCommand.ExecuteAsync(null);
+                //MpAvAppRestarter.ShutdownWithRestartTask("Deleted all content");
             });
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
@@ -4736,9 +4813,12 @@ namespace MonkeyPaste.Avalonia {
             IsAppendPaused = flags.HasFlag(MpAppendModeFlags.Paused);
             IsAppendPreMode = flags.HasFlag(MpAppendModeFlags.Pre);
 
+
             var last_flags = _appendModeFlags;
             _appendModeFlags = flags;
             OnPropertyChanged(nameof(AppendModeStateFlags));
+            OnPropertyChanged(nameof(AppendInlineSysTrayIconSourceObj));
+            OnPropertyChanged(nameof(AppendLineSysTrayIconSourceObj));
 
             if (silent) {
                 // is silent is so append stateis set BEFORE popout window is created 
@@ -4765,7 +4845,7 @@ namespace MonkeyPaste.Avalonia {
             if (cur_flags.HasFlag(MpAppendModeFlags.Manual) != last_flags.HasFlag(MpAppendModeFlags.Manual)) {
                 string title = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? UiStrings.AppendManualNtfTitle : UiStrings.AppendExtentNtfTitle;
                 string body = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? UiStrings.AppendManualNtfText : UiStrings.AppendExtentNtfText;
-                string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "CaretImage" : "DoubleSidedArrowSolidImage";
+                string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "IbeamImage" : "ManualImage";
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: title,
                        body: body,
@@ -5069,7 +5149,11 @@ namespace MonkeyPaste.Avalonia {
                     pi = avm.ToProcessInfo();
                 }
                 if (pi == null) {
-                    return;
+                    if (Mp.Services.ProcessWatcher.LastProcessInfo is { } lpi) {
+                        pi = lpi;
+                    } else {
+                        return;
+                    }
                 }
                 SetCurPasteInfoMessage(pi);
             });

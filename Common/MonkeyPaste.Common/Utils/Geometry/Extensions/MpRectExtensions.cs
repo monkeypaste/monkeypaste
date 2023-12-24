@@ -29,6 +29,26 @@ namespace MonkeyPaste.Common {
         public static MpPoint ToPortablePoint(this MpSize size) {
             return new MpPoint(size.Width, size.Height);
         }
+
+        public static bool IsEqual(this MpRect rect, MpRect otherRect, double thresh = 0) {
+            if (rect == otherRect) {
+                return true;
+            }
+            if (rect == null || otherRect == null) {
+                return false;
+            }
+            return
+                rect.Location.IsValueEqual(otherRect.Location, thresh) &&
+                rect.Size.IsValueEqual(otherRect.Size, thresh);
+        }
+
+        public static void Move(this MpRect rect, MpPoint newLocation) {
+            if (newLocation == null) {
+                return;
+            }
+            rect.X = newLocation.X;
+            rect.Y = newLocation.Y;
+        }
         public static MpTriangle[] ToFaces(this MpRect rect) {
             // NOTE wrapping clock-wise
 

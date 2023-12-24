@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                 if (AnnotationScore > 0) {
                     return "EquationImage";
                 }
-                return "ObjectImage";
+                return "CurlyBracesImage";
             }
         }
         public MpAvMenuItemViewModel ContextMenuItemViewModel =>

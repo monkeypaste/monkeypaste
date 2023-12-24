@@ -168,7 +168,7 @@
                                            ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
                 </ToolTip.Tip>
 
-                <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
             </ToggleButton>
             <!--</Grid>-->
         </StackPanel>

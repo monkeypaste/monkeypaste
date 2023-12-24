@@ -72,15 +72,15 @@
 
         <Style Selector="Button#AddTagButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5Color}" />
+                    Value="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5Color}" />
         </Style>
         <Style Selector="Button#AddTagButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5LighterColor}" />
+                    Value="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5LighterColor}" />
         </Style>
         <Style Selector="Button#AddTagButton:pressed Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5DarkColor}" />
+                    Value="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5DarkColor}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid HorizontalAlignment="Stretch"

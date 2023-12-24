@@ -179,10 +179,12 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (string.IsNullOrWhiteSpace(FileSystemPath)) {
-                ValidationText = $"File Writer Path for Action '{FullName}' not set";
+                //ValidationText = $"File Writer Path for Action '{FullName}' not set";
+                ValidationText = string.Format(UiStrings.ActionFileWriterValidation1);
                 ShowValidationNotification(1);
             } else if (!IsValidFileSystemPath) {
-                ValidationText = $"File Writer Path '{FileSystemPath}' for Action '{FullName}' not found.";
+                //ValidationText = $"File Writer Path '{FileSystemPath}' for Action '{FullName}' not found.";
+                ValidationText = string.Format(UiStrings.ActionFileWriterValidation2, FileSystemPath, FullName);
                 ShowValidationNotification(1);
             } else {
                 ValidationText = string.Empty;

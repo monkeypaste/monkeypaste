@@ -19,11 +19,29 @@
         <Setter Property="ToolTip.ShowDelay"
                 Value="700" />
     </Style>
-    <Style Selector=":is(Control).tt_t">
+    <Style Selector=":is(Control).tt_near_bottom">
         <Setter Property="ToolTip.VerticalOffset"
                 Value="-10" />
         <Setter Property="ToolTip.Placement"
                 Value="Top" />
+    </Style>
+    <Style Selector=":is(Control).tt_near_top">
+        <Setter Property="ToolTip.VerticalOffset"
+                Value="10" />
+        <Setter Property="ToolTip.Placement"
+                Value="Bottom" />
+    </Style>
+    <Style Selector=":is(Control).tt_near_left">
+        <Setter Property="ToolTip.HorizontalOffset"
+                Value="10" />
+        <Setter Property="ToolTip.Placement"
+                Value="Right" />
+    </Style>
+    <Style Selector=":is(Control).tt_near_right">
+        <Setter Property="ToolTip.HorizontalOffset"
+                Value="-10" />
+        <Setter Property="ToolTip.Placement"
+                Value="Left" />
     </Style>
     <Style Selector=":is(PopupRoot).tooltip">
         <Setter Property="IsHitTestVisible"

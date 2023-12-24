@@ -115,15 +115,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Key Simulator.
-        /// </summary>
-        public static string MpActionType_KeySimulator {
-            get {
-                return ResourceManager.GetString("MpActionType_KeySimulator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string MpActionType_None {

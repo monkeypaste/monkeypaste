@@ -195,13 +195,6 @@ namespace MonkeyPaste.Avalonia {
             if (!IsValid) {
                 return;
             }
-            //if (!IsValid) {
-            //    return IsValid;
-            //}
-
-            //if(TickActionId == 0) {
-            //    return IsValid;
-            //}
 
             //if(TickActionId == ActionId) {
             //    ValidationText = $"Timed Action '{FullName}' cannot invoke itself";

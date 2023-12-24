@@ -31,9 +31,10 @@ namespace MonkeyPaste.Avalonia {
         public const string DEFAULT_ANNOTATOR_ANALYZE_GUID = "6cfa5188-5c9a-48aa-aa01-6c4cad8af3e4";
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
-
         #endregion
 
+        #region Statics
+        #endregion
         #region Interfaces
 
         #region MpISelectableViewModel Implementation
@@ -376,6 +377,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+
+        public string[] DefaultActionGuids => new string[] {
+            DEFAULT_ANNOTATOR_ANALYZE_GUID,
+            DEFAULT_ANNOTATOR_TRIGGER_GUID
+        };
 
         public string FocusActionName =>
             FocusAction == null ? string.Empty : FocusAction.Label;

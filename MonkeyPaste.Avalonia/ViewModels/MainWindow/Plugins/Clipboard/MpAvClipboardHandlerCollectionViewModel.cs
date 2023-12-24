@@ -266,6 +266,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        bool IsProcessingOleRequest { get; set; }
+        bool IsOleProcessingBlocked { get; set; }
         public bool IsAnyBusy =>
             Items.Any(x => x.IsBusy) || IsBusy;
 
@@ -485,8 +487,9 @@ namespace MonkeyPaste.Avalonia {
             IDataObject ido,
             bool ignorePlugins,
             bool ignoreClipboardChange = false) {
-            if (isDnd) {
-
+            if (IsOleProcessingBlocked) {
+                MpConsole.WriteLine($"Ole request attempt BLOCKED");
+                return new MpAvDataObject();
             }
             // if ido provided carry use provided pi if exits
             MpPortableProcessInfo active_pi =
@@ -501,6 +504,7 @@ namespace MonkeyPaste.Avalonia {
 
             // wait for any other clipboard comm to finish
             await WaitForBusyAsync($"ole req. isRead: {isRead} isDnd: {isDnd} ignorePlugins: {ignorePlugins}");
+            IsProcessingOleRequest = true;
 
             // when writing to clipboard disable internal monitor
             bool was_cb_monitoring = Mp.Services.ClipboardMonitor.IsMonitoring;
@@ -610,23 +614,10 @@ namespace MonkeyPaste.Avalonia {
             if (ignoreClipboardChange && was_cb_monitoring) {
                 Mp.Services.ClipboardMonitor.StartMonitor(true);
             }
+            IsProcessingOleRequest = false;
             return avdo;
         }
         private async Task WaitForBusyAsync(string debug_label) {
-            //if (IsBusy) {
-            //    string req_guid = System.Guid.NewGuid().ToString();
-            //    _oleReqGuids.Add(req_guid);
-            //    while (true) {
-            //        if (!IsBusy && _oleReqGuids.First() == req_guid) {
-            //            IsBusy = true;
-            //            _oleReqGuids.Remove(req_guid);
-            //            return;
-            //        }
-            //        await Task.Delay(100);
-            //    }
-            //}
-            //IsBusy = true;
-
             try {
                 await MpFifoAsyncQueue.WaitByConditionAsync(
                 lockObj: _oleLock,
@@ -656,8 +647,12 @@ namespace MonkeyPaste.Avalonia {
                     MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
                     return;
                 }
-                // NOTE assume confirm handled in calling command (plugin browser)
+                // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
 
+                IsOleProcessingBlocked = true;
+                while (IsProcessingOleRequest) {
+                    await Task.Delay(100);
+                }
                 while (aivm.IsBusy) {
                     // wait if executing
                     await Task.Delay(100);
@@ -666,14 +661,14 @@ namespace MonkeyPaste.Avalonia {
 
                 Mp.Services.ClipboardMonitor.StopMonitor();
 
+
                 await Task.WhenAll(
                     aivm.Items
                     .SelectMany(x => x.Items)
                     .Select(x => x.Preset.DeleteFromDatabaseAsync()));
 
                 // remove from plugin dir
-                MpPluginLoader.DeletePluginByGuid(aivm.PluginGuid);
-
+                await MpPluginLoader.DeletePluginByGuidAsync(aivm.PluginGuid);
 
                 // remove from collection
                 Items.Remove(aivm);
@@ -682,6 +677,8 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
 
                 Mp.Services.ClipboardMonitor.StartMonitor(true);
+                IsOleProcessingBlocked = false;
+
             }) {
 
 

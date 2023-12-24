@@ -121,15 +121,12 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (TagId == 0) {
-                ValidationText = $"No Collection selected for Classifier '{FullName}'";
+                //ValidationText = $"No Collection selected for Classifier '{FullName}'";
+                ValidationText = string.Format(UiStrings.ActionClassifyValidation1, FullName);
             } else {
-                //while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
-                //    await Task.Delay(100);
-                //}
-                //var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-
                 if (SelectedTag == null) {
-                    ValidationText = $"Collection for Classifier '{FullName}' not found";
+                    //ValidationText = $"Collection for Classifier '{FullName}' not found";
+                    ValidationText = string.Format(UiStrings.ActionClassifyValidation2, FullName);
                 } else {
                     ValidationText = string.Empty;
                 }

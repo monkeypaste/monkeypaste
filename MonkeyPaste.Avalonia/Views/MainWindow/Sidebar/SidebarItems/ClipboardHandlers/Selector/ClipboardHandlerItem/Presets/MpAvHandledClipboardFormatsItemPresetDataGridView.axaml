@@ -194,8 +194,13 @@
                                                 Header="Enabled?">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                    <CheckBox Command="{Binding TogglePresetIsEnabledCommand}"
-                                              IsChecked="{Binding IsEnabled, Mode=OneWay}" />
+                                  <CheckBox Command="{Binding TogglePresetIsEnabledCommand}"
+                                            IsChecked="{Binding IsEnabled, Mode=OneWay}">
+
+                                    <ToolTip.Tip>
+                                      <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEnabledLabel}" />
+                                    </ToolTip.Tip>
+                                  </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -216,6 +221,8 @@
                                         <Grid DataContext="{Binding Parent}"
                                               x:DataType="local:MpAvAnalyticItemViewModel">
                                             <Image IsVisible="{Binding !IsBusy}"
+                                                   Width="25"
+                                                   Height="25"
                                                    Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource SheepImage}}" />
                                             <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
                                                                        VerticalAlignment="Stretch"
@@ -268,7 +275,7 @@
                         HorizontalContentAlignment="Right"
                         Command="{Binding CreateNewPresetCommand}">
                     <DockPanel>
-                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
+                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddGreenImage}}"
                                DockPanel.Dock="Left" />
                         <TextBlock DockPanel.Dock="Right"
                                    Text="{x:Static local:UiStrings.CommonAddPresetButtonLabel}" />

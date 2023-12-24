@@ -1144,12 +1144,6 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItem != null && CopyItem.ItemData != value) {
-                    if (CopyItemType != MpCopyItemType.Text && !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-
-                    }
-                    //CopyItem.ItemData = value;
-                    //HasModelChanged = true;
-
                     NotifyModelChanged(CopyItem, nameof(CopyItem.ItemData), value);
                     OnPropertyChanged(nameof(CopyItemData));
                 }
@@ -1159,17 +1153,13 @@ namespace MonkeyPaste.Avalonia {
         public object IconResourceObj {
             get {
                 if (CopyItemType == MpCopyItemType.FileList &&
-                    FileItemCollectionViewModel != null &&
-                    FileItemCollectionViewModel.Items.Count > 0) {
-                    return FileItemCollectionViewModel.Items.FirstOrDefault().IconBase64;
+                    FileItemCollectionViewModel != null) {
+                    return FileItemCollectionViewModel.PrimaryIconSourceObj;
                 }
                 if (CopyItemIconId == 0) {
                     return MpBase64Images.QuestionMark;
                 }
                 return CopyItemIconId;
-                //return TransactionCollectionViewModel.CreateTransaction == null ?
-                //            MpDefaultDataModelTools.ThisAppIconId :
-                //            TransactionCollectionViewModel.CreateTransaction.IconSourceObj;
             }
         }
 
@@ -2112,6 +2102,7 @@ namespace MonkeyPaste.Avalonia {
             // ALLOW CLOSE
             if (IsFinalClosingState) {
                 // handled in secondary closing
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, -1);
                 return;
             }
             if (!IsPopoutCloseRequireConfirm ||

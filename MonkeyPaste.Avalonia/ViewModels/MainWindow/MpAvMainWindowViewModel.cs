@@ -389,6 +389,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+
+        public object ShowOrHideIconSourceObj =>
+            new object[] {
+                IsMainWindowOpen ? "ClosedEyeImage" : "OpenImage",
+                IsMainWindowOpen ? MpSystemColors.red3 : MpSystemColors.navyblue };
         #endregion
 
         #region State
@@ -421,7 +426,6 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo != null &&
             Mp.Services.PlatformInfo.IsDesktop;
         public string ShowOrHideLabel => IsMainWindowOpen ? UiStrings.MainWindowHideLabel : UiStrings.MainWindowShowLabel;
-        public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow =>
             Mp.Services.PlatformInfo.IsDesktop &&
             MpAvPrefViewModel.Instance.AnimateMainWindow;
@@ -1314,7 +1318,7 @@ namespace MonkeyPaste.Avalonia {
                  }
                  FinishMainWindowShow();
 
-                 if (args is bool lock_on_open && lock_on_open) {
+                 if (args is object[] argParts && argParts[0] is bool lock_on_open && lock_on_open) {
                      IsMainWindowLocked = true;
                  }
              },

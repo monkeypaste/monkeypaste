@@ -7,11 +7,11 @@ using MonkeyPaste.Common.Plugin;
 using System.Text;
 
 namespace AltOleHandler {
-    public class AltOleReader : MpIOleReaderComponent {
+    public class AltOleReader : MpIOleReaderComponent, MpIUnloadPluginComponent {
         #region Private Variables
         #endregion
         static AltOleReader() {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         #region Public Methods
@@ -139,6 +139,10 @@ namespace AltOleHandler {
                 dataStr = string.Join(Environment.NewLine, pl);
             }
             return dataStr;
+        }
+
+        public void Unload() {
+            AltOleHelpers.ClipboardRef = null;
         }
 
         #endregion

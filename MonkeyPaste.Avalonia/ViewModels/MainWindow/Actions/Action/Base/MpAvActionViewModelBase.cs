@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpTriggerType.ClipTagged:
                         return "PinToCollectionImage";
                     case MpTriggerType.FileSystemChanged:
-                        return "FolderEventImage";
+                        return "FolderImage";
                     case MpTriggerType.Shortcut:
                         return "JoystickImage";
                     case MpTriggerType.MonkeyCopyShortcut:
@@ -81,15 +81,13 @@ namespace MonkeyPaste.Avalonia {
                     case MpActionType.Repeater:
                         return "ResetImage";
                     case MpActionType.FileWriter:
-                        return "FolderEventImage";
+                        return "FolderImage";
                     case MpActionType.SetClipboard:
-                        return "ClipboardBwImage";
-                    case MpActionType.KeySimulator:
                         return "KeyboardImage";
                     case MpActionType.Delay:
                         return "AlarmClockImage";
                     case MpActionType.Alert:
-                        return "SpeakImage";
+                        return "BellImage";
                 }
             }
             // whats params?
@@ -128,8 +126,6 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.steelblue;
                 case MpActionType.FileWriter:
                     return MpSystemColors.forestgreen;
-                case MpActionType.KeySimulator:
-                    return MpSystemColors.plum3;
                 case MpActionType.Delay:
                     return MpSystemColors.gray53;
                 case MpActionType.Alert:
@@ -348,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvMenuItemViewModel() {
                 Header = UiStrings.CommonAddLabel,
                 HasLeadingSeparator = true,
-                IconResourceKey = "AddImage",
+                IconResourceKey = "AddGreenImage",
                 SubItems =
                         typeof(MpActionType)
                         .EnumerateEnum<MpActionType>()
@@ -414,7 +410,7 @@ namespace MonkeyPaste.Avalonia {
                         GetAddContextMenuItem(),
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
-                            IsVisible = !IsTrigger,
+                            IsVisible = !IsTrigger && CanDelete,
                             Header = UiStrings.CommonDeleteLabel,
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand
@@ -604,6 +600,9 @@ namespace MonkeyPaste.Avalonia {
             Action != null &&
             (Action.Guid == MpAvTriggerCollectionViewModel.DEFAULT_ANNOTATOR_TRIGGER_GUID ||
              Action.Guid == MpAvTriggerCollectionViewModel.DEFAULT_ANNOTATOR_ANALYZE_GUID);
+
+        public bool CanDelete =>
+            Parent != null && Action != null && !Parent.DefaultActionGuids.Contains(Action.Guid);
 
         #endregion
 
@@ -1002,9 +1001,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpActionType.FileWriter:
                     avm = new MpAvFileWriterActionViewModel(Parent);
-                    break;
-                case MpActionType.KeySimulator:
-                    avm = new MpAvKeySimulatorActionViewModel(Parent);
                     break;
                 case MpActionType.Delay:
                     avm = new MpAvDelayActionViewModel(Parent);
@@ -1604,7 +1600,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteThisActionCommand => new MpCommand(
             () => {
                 Parent.DeleteActionCommand.Execute(this);
-            }, () => !IsAnyBusy);
+            },
+            () => {
+                return !IsAnyBusy && CanDelete;
+            });
 
 
         public ICommand FinishMoveCommand => new MpCommand(() => {

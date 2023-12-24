@@ -40,11 +40,12 @@ namespace MonkeyPaste.Avalonia {
                 oleHandler = null;
                 headless = null;
                 contactFetcher = null;
+                backupCheckPluginFormat = null;
 
                 WeakReference wr = new WeakReference(LoadContext);
                 // from https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability#use-a-custom-collectible-assemblyloadcontext
                 LoadContext.Unload();
-                for (int i = 0; wr.IsAlive && (i < 10); i++) {
+                for (int i = 0; wr.IsAlive && (i < 50); i++) {
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
                 }
