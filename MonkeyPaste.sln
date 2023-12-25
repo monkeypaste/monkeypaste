@@ -32,6 +32,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Avalonia", "Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj", "{42B33C51-4F2A-4877-A98D-44033E7719EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia", "MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj", "{93C05D8F-3E75-4221-B7D1-A59C0BFFECFD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C} = {969D99E5-9576-4E1D-8E9E-08E6495C963C}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrCoder", "Plugins\QrCoder\QrCoder.csproj", "{F90586A6-7D6B-4784-B6DC-56BAC2ECAA87}"
 EndProject
@@ -81,6 +84,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalExample", "Plugins\MinimalExample\MinimalExample.csproj", "{1CC97E27-71F3-4DB2-BB09-55F9919A4644}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotator", "Plugins\ImageAnnotator\ImageAnnotator.csproj", "{90176F3E-02B4-424C-A654-D91B1D1D378F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Common.Plugin.Localizer", "Common\MonkeyPaste.Common.Plugin.Localizer\MonkeyPaste.Common.Plugin.Localizer.csproj", "{969D99E5-9576-4E1D-8E9E-08E6495C963C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1324,6 +1329,48 @@ Global
 		{90176F3E-02B4-424C-A654-D91B1D1D378F}.Release|x64.Build.0 = Release|Any CPU
 		{90176F3E-02B4-424C-A654-D91B1D1D378F}.Release|x86.ActiveCfg = Release|Any CPU
 		{90176F3E-02B4-424C-A654-D91B1D1D378F}.Release|x86.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|x64.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Debug|x86.Build.0 = Debug|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|Any CPU.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|ARM.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|ARM.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|ARM64.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|ARM64.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|iPhone.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|iPhone.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|x64.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|x64.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|x86.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Nuget_Release|x86.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|ARM.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|ARM64.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|iPhone.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|x64.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|x64.Build.0 = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|x86.ActiveCfg = Release|Any CPU
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1346,14 +1393,15 @@ Global
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02} = {E0839402-4D82-4FF2-8778-A2E538ABCEAB}
 		{1CC97E27-71F3-4DB2-BB09-55F9919A4644} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{90176F3E-02B4-424C-A654-D91B1D1D378F} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{969D99E5-9576-4E1D-8E9E-08E6495C963C} = {E0839402-4D82-4FF2-8778-A2E538ABCEAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
 		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
 	EndGlobalSection
 EndGlobal

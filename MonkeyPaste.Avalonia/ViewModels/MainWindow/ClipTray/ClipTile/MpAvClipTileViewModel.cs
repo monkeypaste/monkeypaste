@@ -1747,9 +1747,15 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     if (IsSubSelectionEnabled) {
                         MpAvPersistentClipTilePropertiesHelper.AddPersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
+
+                        //show most recent img transactions
+                        TransactionCollectionViewModel.ShowMostRecentRuntimeTransactionCommand.Execute(null);
                     } else {
                         MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
+
+                        //show most recent img transactions
+                        TransactionCollectionViewModel.HideTransactionsCommand.Execute(null);
                     }
                     OnPropertyChanged(nameof(MinWidth));
 

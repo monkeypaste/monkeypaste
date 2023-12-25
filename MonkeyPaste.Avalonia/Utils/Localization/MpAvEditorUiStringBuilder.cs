@@ -142,7 +142,7 @@ namespace MonkeyPaste.Avalonia {
             }
             MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...", true);
             // create/update uistrings.js file
-            string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content, false);
+            string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content);
             bool success = result == EditorUiStrPath;
             MpConsole.WriteLine($"Localizer: {EditorUiStrPath} create {(success ? "SUCCESS" : "FAIL")}", level: MpLogLevel.Debug);
             if (success) {
@@ -189,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
             //merge parts
             string updated_index_html_text = string.Format(@"{0}{1}{2}{1}{3}", pre, Environment.NewLine, script_line, updated_post);
             // write it!
-            MpFileIo.WriteTextToFile(EditorIndexHtmlPath, updated_index_html_text, false);
+            MpFileIo.WriteTextToFile(EditorIndexHtmlPath, updated_index_html_text);
 
             MpConsole.WriteLine($"Localizer script tag '{script_line}' swapped into Index.html at '{EditorIndexHtmlPath}' success");
             return true;

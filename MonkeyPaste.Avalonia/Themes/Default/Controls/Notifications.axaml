@@ -43,7 +43,7 @@
     </Style>
 
     <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
-    <Style Selector=":is(Window).notificationWindow.params">
+    <Style Selector=":is(Window).notificationWindow.params:not(.welcome)">
         <Setter Property="Width"
                 Value="{StaticResource NaN}" />
         <Setter Property="SizeToContent"

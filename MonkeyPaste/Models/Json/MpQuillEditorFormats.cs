@@ -340,6 +340,7 @@ namespace MonkeyPaste {
 
     public class MpQuillAnnotationSelectedMessage : MpJsonObject {
         public string annotationGuid { get; set; }
+        public bool isDblClick { get; set; }
     }
 
     public class MpQuillShowDebuggerNotification : MpJsonObject {

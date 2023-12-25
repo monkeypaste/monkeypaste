@@ -107,6 +107,7 @@
         <!--  YES BUTTON  -->
 
         <Button x:Name="YesButton"
+                IsDefault="true"
                 Classes="dialog"
                 TabIndex="0"
                 Grid.Row="3"

@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Data Object
-        public static bool IsDataNotEqual(this MpPortableDataObject dbo1, MpPortableDataObject dbo2) {
+        public static bool IsDataNotEqual(this MpPortableDataObject dbo1, MpPortableDataObject dbo2, bool fast_check = false) {
             if (dbo1 == null && dbo2 != null) {
                 return true;
             }
@@ -33,7 +33,12 @@ namespace MonkeyPaste.Avalonia {
                     if (nce.Value is byte[] newBytes &&
                         dbo1.DataFormatLookup[nce.Key] is byte[] oldBytes) {
                         // compare byte arrays
-                        if (!newBytes.SequenceEqual(oldBytes)) {
+                        if (fast_check) {
+                            // NOTE big byte arrays (like images) will make this really slow
+                            if (newBytes.Length != oldBytes.Length) {
+                                return true;
+                            }
+                        } else if (!newBytes.SequenceEqual(oldBytes)) {
                             return true;
                         }
                     } else if (nce.Value is IEnumerable<object> ol &&
@@ -58,7 +63,14 @@ namespace MonkeyPaste.Avalonia {
                         } else {
                             MpDebug.Break($"No list comparision found for format '{nce.Key}'");
                         }
-                    } else {
+                    }
+                    // NOTE below maybe along lines of a better fast check for text but ommitting cause more likely to get wrong output
+                    //else if (fast_check && nce.Value is string new_str && dbo1.DataFormatLookup[nce.Key] is string old_str) {
+                    //    if(new_str.Length != old_str.Length) {
+                    //        return true;
+                    //    }
+                    //} 
+                    else {
                         if (!dbo1.DataFormatLookup[nce.Key].Equals(nce.Value)) {
                             return true;
                         }

@@ -1,11 +1,11 @@
 {
-  "title": "Core Clipboard Handler",
-  "description": "Handles default clipboard formats",
+  "title": "%PluginName%",
+  "description": "%PluginDescription%",
   "version": "1.0",
   "author": "Thomas Kefauver",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "/Resources/Images/icon.png",
-  "tags": "Core,Clipboard,Drag and Drop,Text,Rtf,Rich Text,Html,Csv,Image,Png,Jpg,Jpeg,Link,Avalonia",
+  "tags": "%PluginTags%",
   "packageType": "Dll"
 }

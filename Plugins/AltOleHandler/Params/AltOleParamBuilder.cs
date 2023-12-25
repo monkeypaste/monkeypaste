@@ -12,7 +12,7 @@ namespace AltOleHandler {
                 ("Dat funky format","SUPeR FUNkY FoRmATZZz",DEF_MAX_TEXT,"funky.png"),
                 ("Text","FUnky Text",DEF_MAX_TEXT,"funky.png"),
         };
-        public MpClipboardHandlerFormats GetFormats() {
+        public MpClipboardHandlerFormats GetFormats(MpHeadlessClipboardComponentFormatRequest req) {
             return new MpClipboardHandlerFormats() {
                 readers = _formats.Select(x => GetFormat(x.Item1, true)).ToList(),
                 writers = _formats.Select(x => GetFormat(x.Item1, false)).ToList()

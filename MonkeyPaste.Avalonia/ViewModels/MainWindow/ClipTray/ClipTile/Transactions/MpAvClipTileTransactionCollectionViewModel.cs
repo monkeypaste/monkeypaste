@@ -287,6 +287,8 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
         }
+
+
         #endregion
 
         #endregion
@@ -350,7 +352,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModel tivm) {
+        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModel tivm, bool isDefaultShow = false) {
             if (tivm == null) {
                 return;
             }
@@ -362,16 +364,18 @@ namespace MonkeyPaste.Avalonia {
             }
             Transactions.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
 
-            if (tivm.HasTransactionBeenApplied) {
-                return;
-            }
+            if (!isDefaultShow) {
+                if (tivm.HasTransactionBeenApplied) {
+                    return;
+                }
 
-            if (tivm.IsRunTimeAppliableTransaction &&
-                !IsTransactionPaneOpen &&
-                !is_new) {
-                // immediately open and select new ann
-                //IsTransactionPaneOpen = true;'
-                return;
+                if (tivm.IsRunTimeAppliableTransaction &&
+                    !IsTransactionPaneOpen &&
+                    !is_new) {
+                    // immediately open and select new ann
+                    //IsTransactionPaneOpen = true;'
+                    return;
+                }
             }
 
             while (!Parent.IsEditorLoaded) {
@@ -614,6 +618,15 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> SelectChildCommand => new MpAsyncCommand<object>(
             async (args) => {
                 MpAvITransactionNodeViewModel to_select_tnvm = null;
+                bool isDblClick = false;
+                string to_sel_ann_guid = null;
+                if (args is object[] argParts &&
+                    argParts[0] is string guidArg &&
+                    argParts[1] is bool dblClickArg) {
+                    isDblClick = dblClickArg;
+                    args = guidArg;
+                    to_sel_ann_guid = guidArg;
+                }
 
                 if (args is string argStr) {
                     if (argStr.IsStringGuid()) {
@@ -627,7 +640,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (args is MpAvITransactionNodeViewModel) {
                     to_select_tnvm = args as MpAvITransactionNodeViewModel;
                 } else {
-                    MpDebug.Assert(args == null, $"Unhandled transaction.select child arg of type '{args?.GetType()}' What type is it??");
+                    MpDebug.Assert(args == null, $"Unhandled transaction.select child arg of type '{args?.GetType()}' What type is it??", silent: true);
                 }
 
                 if (to_select_tnvm == null) {
@@ -642,32 +655,77 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                await OpenTransactionPaneCommand.ExecuteAsync(null);
-
-                if (to_select_tnvm is MpAvViewModelBase to_select_vmb) {
-                    // walk up dc tree and select self and all ancestors up to this collection
-                    var cur_to_select = to_select_vmb;
-                    while (true) {
-                        if (cur_to_select == null) {
-                            MpDebug.Break("HUH?");
-                        }
-                        if (cur_to_select == this) {
-                            break;
-                        }
-                        if (cur_to_select is MpISelectableViewModel svm) {
-                            svm.IsSelected = true;
-
-                            MpDebug.Assert(svm.IsSelected, $"{svm} can't be selected directly, fix property set/change handlers");
-                        } else {
-                            MpDebug.Break("what kinda node is it?");
-                        }
-                        cur_to_select = cur_to_select.ParentObj as MpAvViewModelBase;
-                    }
+                if (!string.IsNullOrEmpty(to_sel_ann_guid) &&
+                    isDblClick && !OpenTransactionPaneCommand.CanExecute(null)) {
+                    // trans panel not open and user dbl clicked an ann
+                    MpAvClipTrayViewModel.Instance.SelectClipTileTransactionNodeCommand.Execute(
+                        new object[] { Parent.CopyItemId, to_sel_ann_guid });
+                    return;
                 }
 
-            }) {
 
-        };
+                await OpenTransactionPaneCommand.ExecuteAsync(null);
+
+                if (to_select_tnvm is not MpAvViewModelBase to_select_vmb) {
+                    return;
+                }
+                // walk up dc tree and select self and all ancestors up to this collection
+                var cur_to_select = to_select_vmb;
+                while (true) {
+                    if (cur_to_select == null) {
+                        MpDebug.Break("HUH?");
+                    }
+                    if (cur_to_select == this) {
+                        break;
+                    }
+                    if (cur_to_select is MpISelectableViewModel svm) {
+                        svm.IsSelected = true;
+
+                        MpDebug.Assert(svm.IsSelected, $"{svm} can't be selected directly, fix property set/change handlers");
+                    } else {
+                        MpDebug.Break("what kinda node is it?");
+                    }
+                    if (cur_to_select is MpAvTransactionItemViewModel to_select_tivm) {
+                        SelectedTransaction = to_select_tivm;
+                    }
+                    cur_to_select = cur_to_select.ParentObj as MpAvViewModelBase;
+                }
+                if (string.IsNullOrEmpty(to_sel_ann_guid) ||
+                    Parent == null ||
+                    Parent.CopyItemType != MpCopyItemType.Image ||
+                    Parent.GetContentView() is not MpAvContentWebView wv) {
+                    return;
+                }
+                while (!Parent.IsEditorLoaded) {
+                    await Task.Delay(100);
+                }
+                var req = new MpQuillAnnotationSelectedMessage() {
+                    annotationGuid = to_sel_ann_guid
+                };
+                wv.ExecuteJavascript($"annotationSelected_ext('{req.SerializeJsonObjectToBase64()}')");
+            });
+
+        public MpIAsyncCommand ShowMostRecentRuntimeTransactionCommand => new MpAsyncCommand(
+            async () => {
+                if (Parent == null || Parent.CopyItemType != MpCopyItemType.Image ||
+                    SortedMessages.OfType<MpAvParameterRequestMessageViewModel>().FirstOrDefault() is not { } prmvm) {
+                    return;
+                }
+                await ApplyTransactionAsync(prmvm.Parent, true);
+            });
+
+        public MpIAsyncCommand HideTransactionsCommand => new MpAsyncCommand(
+            async () => {
+                if (Parent == null ||
+                    Parent.CopyItemType != MpCopyItemType.Image ||
+                    Parent.GetContentView() is not MpAvContentWebView wv) {
+                    return;
+                }
+                while (!Parent.IsEditorLoaded) {
+                    await Task.Delay(100);
+                }
+                wv.ExecuteJavascript($"hideAnnotations_ext()");
+            });
         #endregion
     }
 }

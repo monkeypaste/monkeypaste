@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CoreOleHandler {
     public static class CoreParamProcessor {
@@ -10,7 +11,7 @@ namespace CoreOleHandler {
             string format,
             object data,
             IEnumerable<string> all_formats,
-            List<MpParameterRequestItemFormat> all_params,
+            MpOlePluginRequest req,
             out Dictionary<string, object> convData,
             out Exception ex,
             out List<MpPluginUserNotificationFormat> ntfl) {
@@ -32,18 +33,7 @@ namespace CoreOleHandler {
                         switch (paramType) {
                             case CoreOleParamType.RICHTEXTFORMAT_R_MAXCHARCOUNT: {
                                     if (data is string rtf) {
-                                        int max_length = int.Parse(paramVal);
-                                        if (rtf.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"{format} limit is '{max_length}' and data was '{rtf.Length}'",
-                                                "CoreClipboardWriter")};
-                                            data = rtf.Substring(0, max_length);
-
-                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{rtf.Length}'");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, rtf, format, paramVal.ParseOrConvertToInt());
                                     }
                                 }
 
@@ -75,17 +65,7 @@ namespace CoreOleHandler {
                         switch (paramType) {
                             case CoreOleParamType.HTMLFORMAT_R_MAXCHARCOUNT: {
                                     if (data is string html_str) {
-                                        int max_length = int.Parse(paramVal);
-                                        if (html_str.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"{format} limit is '{max_length}' and data was '{html_str.Length}'",
-                                                "CoreClipboardWriter")};
-                                            data = html_str.Substring(0, max_length);
-                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{html_str.Length}'");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, html_str, format, paramVal.ParseOrConvertToInt());
                                     }
                                 }
 
@@ -117,17 +97,7 @@ namespace CoreOleHandler {
                         switch (paramType) {
                             case CoreOleParamType.TEXTHTML_R_MAXCHARCOUNT: {
                                     if (data is string html_str) {
-                                        int max_length = int.Parse(paramVal);
-                                        if (html_str.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"{format} limit is '{max_length}' and data was '{html_str.Length}'",
-                                                "CoreClipboardWriter")};
-                                            data = html_str.Substring(0, max_length);
-                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{html_str.Length}'");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, html_str, format, paramVal.ParseOrConvertToInt());
                                     }
                                 }
 
@@ -159,18 +129,7 @@ namespace CoreOleHandler {
                         switch (paramType) {
                             case CoreOleParamType.TEXT_R_MAXCHARCOUNT: {
                                     if (data is string text) {
-                                        int max_length = int.Parse(paramVal);
-                                        if (text.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                    "Max Char Count Reached",
-                                                    $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                                    "CoreClipboardWriter")
-                                            };
-                                            data = text.Substring(0, max_length);
-                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{text.Length}'");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, text, format, paramVal.ParseOrConvertToInt());
                                     }
                                 }
 
@@ -196,19 +155,7 @@ namespace CoreOleHandler {
                                 break;
                             case CoreOleParamType.TEXT_W_MAXCHARCOUNT: {
                                     if (data is string text) {
-                                        int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
-                                        if (text.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
-                                            data = text.Substring(0, max_length);
-
-                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{text.Length}'");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, text, format, paramVal.ParseOrConvertToInt(), false);
                                     }
                                 }
 
@@ -216,6 +163,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.TEXT_W_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool textImg &&
                                     textImg) {
+                                        AddIgnoreNotification(ref ntfl, format, false);
                                         data = null;
                                     }
                                 }
@@ -234,26 +182,13 @@ namespace CoreOleHandler {
                         switch (paramType) {
                             case CoreOleParamType.TEXTPLAIN_R_MAXCHARCOUNT: {
                                     if (data is string text) {
-                                        int max_length = int.Parse(paramVal);
-                                        if (text.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"{format} limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
-                                            data = text.Substring(0, max_length);
-
-                                            throw new CoreOleMaxLengthException("Max Length");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, text, format, paramVal.ParseOrConvertToInt());
                                     }
                                 }
 
                                 break;
                             case CoreOleParamType.TEXTPLAIN_R_IGNORE: {
-                                    if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
-                                    ignText) {
+                                    if (paramVal.ParseOrConvertToBool(false) is bool ignText && ignText) {
                                         data = null;
                                         AddIgnoreNotification(ref ntfl, format);
 
@@ -265,19 +200,7 @@ namespace CoreOleHandler {
                                 break;
                             case CoreOleParamType.TEXTPLAIN_W_MAXCHARCOUNT: {
                                     if (data is string text) {
-                                        int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
-                                        if (text.Length > max_length) {
-                                            ntfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"{format} limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
-                                            data = text.Substring(0, max_length);
-
-                                            throw new CoreOleMaxLengthException("Max Length");
-                                        }
+                                        HandleMaxNotification(ref data, ref ntfl, text, format, paramVal.ParseOrConvertToInt());
                                     }
                                 }
 
@@ -300,16 +223,12 @@ namespace CoreOleHandler {
                                         break;
                                     }
                                     bool do_scale = paramVal.ParseOrConvertToBool(false);
-                                    double max_w = all_params.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.PNG_R_MAXW).ParseOrConvertToDouble(-1);
-                                    double max_h = all_params.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.PNG_R_MAXH).ParseOrConvertToDouble(-1);
+                                    double max_w = req.GetRequestParamDoubleValue(CoreOleParamType.PNG_R_MAXW);
+                                    double max_h = req.GetRequestParamDoubleValue(CoreOleParamType.PNG_R_MAXH);
 
                                     MpSize bmp_size = bmp.Size.ToPortableSize();
                                     MpSize adj_size = bmp_size.ResizeKeepAspect(max_w, max_h);
                                     bool needs_scale = !bmp_size.IsValueEqual(adj_size);
-                                    MpConsole.WriteLine($"Image size: {bmp_size}", true);
-                                    MpConsole.WriteLine($"Scaled size: {adj_size}");
-                                    MpConsole.WriteLine($"Max size: {new MpSize(max_w, max_h)}");
-                                    MpConsole.WriteLine($"Scaled: {needs_scale}");
                                     if (!needs_scale) {
                                         // no resize needed
                                         break;
@@ -320,6 +239,13 @@ namespace CoreOleHandler {
                                         AddIgnoreNotification(ref ntfl, format);
                                     }
                                     data = bmp.Resize(adj_size).ToBase64String();
+
+                                    if (adj_size.Width < bmp_size.Width) {
+                                        AddMaxNotification(ref ntfl, format, (int)max_w, (int)bmp_size.Width);
+                                    }
+                                    if (adj_size.Height < bmp_size.Height) {
+                                        AddMaxNotification(ref ntfl, format, (int)max_w, (int)bmp_size.Height);
+                                    }
                                 }
                                 break;
                             case CoreOleParamType.PNG_R_IGNORE: {
@@ -414,19 +340,43 @@ namespace CoreOleHandler {
             return data;
         }
 
-        private static void AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format) {
+
+        private static string AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format, bool isReader = true) {
+            string msg = string.Format(Resources.NtfFormatIgnoredText, format);
 #if DEBUG
             if (nfl == null) {
                 nfl = new List<MpPluginUserNotificationFormat>();
             }
             nfl.Add(Util.CreateNotification(
                 MpPluginNotificationType.PluginResponseWarning,
-                "Format Ignored",
-                $"{format} Format is flagged as 'ignored'",
-                "CoreClipboardWriter"));
-#else
-            return;
+                Resources.NtfFormatIgnoredTitle,
+                msg,
+                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail));
 #endif
+            return msg;
+        }
+
+        private static void HandleMaxNotification(ref object data, ref List<MpPluginUserNotificationFormat> nfl, string text, string format, int max, bool isReader = true) {
+            if (text.Length < max) {
+                return;
+            }
+            string msg = AddMaxNotification(ref nfl, format, max, text.Length);
+            data = text.Substring(0, max);
+            throw new CoreOleMaxLengthException(msg);
+        }
+        private static string AddMaxNotification(ref List<MpPluginUserNotificationFormat> nfl, string format, int max, int actual, bool isReader = true) {
+            string msg = string.Format(Resources.NtfMaxCharText, format, max, actual);
+#if DEBUG
+            if (nfl == null) {
+                nfl = new List<MpPluginUserNotificationFormat>();
+            }
+            nfl.Add(Util.CreateNotification(
+                MpPluginNotificationType.PluginResponseWarning,
+                Resources.NtfMaxCharTitle,
+                msg,
+                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail));
+#endif
+            return msg;
         }
     }
 }

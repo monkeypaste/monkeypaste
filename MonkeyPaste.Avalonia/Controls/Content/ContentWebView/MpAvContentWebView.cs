@@ -566,7 +566,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillAnnotationSelectedMessage annSelectedMsg) {
                         BindingContext
                             .TransactionCollectionViewModel
-                            .SelectChildCommand.Execute(annSelectedMsg.annotationGuid);
+                            .SelectChildCommand.Execute(new object[] { annSelectedMsg.annotationGuid, annSelectedMsg.isDblClick });
                     }
                     break;
                 #endregion

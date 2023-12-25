@@ -1,4 +1,8 @@
-﻿namespace MonkeyPaste.Common.Plugin {
+﻿using System;
+using System.Collections.Generic;
+using System.Resources;
+
+namespace MonkeyPaste.Common.Plugin {
     public static class Util {
 
         //public static async Task WaitForClipboard() {

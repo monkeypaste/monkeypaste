@@ -471,7 +471,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // show exec params if present and validate them
-            bool can_begin = await PrepareAnalysisAsync(targetAnalyzer, CanExecuteAnalysis(args));
+            bool can_begin = await PrepareAnalysisAsync(targetAnalyzer, args);
             if (!can_begin) {
                 FinishAnalysis(targetAnalyzer);
                 return null;

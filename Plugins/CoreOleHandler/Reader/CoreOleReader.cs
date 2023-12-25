@@ -23,6 +23,8 @@ namespace CoreOleHandler {
 
         #region Private Methods
         private async Task<MpOlePluginResponse> ProcessReadRequestAsync_internal(MpOlePluginRequest request, int retryCount = 10) {
+            CoreOleHelpers.SetCulture(request);
+
             if (!Dispatcher.UIThread.CheckAccess()) {
                 return await Dispatcher.UIThread.InvokeAsync(async () => {
                     return await ProcessReadRequestAsync_internal(request, retryCount);
@@ -34,10 +36,8 @@ namespace CoreOleHandler {
             // only actually read formats found for data
             if (request.dataObjectLookup == null) {
                 // clipboard read
-                //await Util.WaitForClipboard();
                 avdo = await CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray());
                 availableFormats = avdo.GetAllDataFormats();
-                //Util.CloseClipboard();
             } else {
                 avdo = request.dataObjectLookup.ToDataObject();
 
@@ -89,7 +89,7 @@ namespace CoreOleHandler {
                                 format: read_format,
                                 data: dataStr,
                                 all_formats: readFormats,
-                                all_params: request.items,
+                                req: request,
                                 convData: out Dictionary<string, object> conv_result,
                                 ex: out var ex,
                                 ntfl: out var param_nfl);

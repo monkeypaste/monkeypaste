@@ -236,12 +236,12 @@ namespace MonkeyPaste {
                 string table_name = it.TableType.Name;
                 string table_import_file_name = $"{table_name}_{content_count.ToCommaSeperatedIntString()}.csv";
                 string table_import_file_path = Path.Combine(import_dir_path, table_import_file_name);
-                MpFileIo.WriteTextToFile(table_import_file_path, it.OutputCsv.Replace(Environment.NewLine, eol), false);
+                MpFileIo.WriteTextToFile(table_import_file_path, it.OutputCsv.Replace(Environment.NewLine, eol));
                 string batch_stmt = $".import {table_import_file_name} {table_name}";
                 imports_sb.AppendLine(batch_stmt);
             }
             string imports_file_name = "imports.sql";
-            string imports_file_path = MpFileIo.WriteTextToFile(Path.Combine(import_dir_path, imports_file_name), imports_sb.ToString(), false);
+            string imports_file_path = MpFileIo.WriteTextToFile(Path.Combine(import_dir_path, imports_file_name), imports_sb.ToString());
 
             var batch_script_sb = new StringBuilder();
             batch_script_sb.AppendLine("@echo off");
@@ -249,7 +249,7 @@ namespace MonkeyPaste {
             batch_script_sb.AppendLine("echo done");
 
             string batch_file_name = "batch_import.bat";
-            string batch_file_path = MpFileIo.WriteTextToFile(Path.Combine(import_dir_path, batch_file_name), batch_script_sb.ToString(), false);
+            string batch_file_path = MpFileIo.WriteTextToFile(Path.Combine(import_dir_path, batch_file_name), batch_script_sb.ToString());
 
             return batch_file_path;
         }

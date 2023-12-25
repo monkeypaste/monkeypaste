@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common.Plugin.Localizer;
 using MonoMac.CoreImage;
 using Newtonsoft.Json;
 using System;
@@ -125,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 try {
-                    MpFileIo.CopyDirectory(dir_to_backup, backup_path, true, true);
+                    MpFileIo.CopyDirectory(dir_to_backup, backup_path);
                 }
                 catch (Exception ex) {
                     Mp.Services.NotificationBuilder.ShowNotificationAsync(
@@ -152,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
                 var package_bytes = await MpFileIo.ReadBytesFromUriAsync(packageUrl, string.Empty, 10 * 60_000);
 
                 // write zip to temp
-                string temp_package_zip = MpFileIo.WriteByteArrayToFile(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()), package_bytes, true);
+                string temp_package_zip = MpFileIo.WriteByteArrayToFile(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()), package_bytes);
 
                 // 
                 string temp_package_dir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -524,10 +525,10 @@ namespace MonkeyPaste.Avalonia {
             }
             try {
                 if (pluginAssembly.FindSubTypes<MpISupportHeadlessAnalyzerComponentFormat>() is { } acl && acl.Any()) {
-                    plugin.analyzer = acl.FirstOrDefault().GetFormat();
+                    plugin.analyzer = acl.FirstOrDefault().GetFormat(new MpHeadlessAnalyzerComponentFormatRequest());
                 }
                 if (pluginAssembly.FindSubTypes<MpISupportHeadlessClipboardComponentFormat>() is { } cbhcl && cbhcl.Any()) {
-                    plugin.oleHandler = cbhcl.FirstOrDefault().GetFormats();
+                    plugin.oleHandler = cbhcl.FirstOrDefault().GetFormats(new MpHeadlessClipboardComponentFormatRequest());
                 }
             }
             catch (Exception ex) {
@@ -656,7 +657,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // no backup or it is corrupt
-            MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
+            MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str);
 
             return MpJsonConverter.DeserializeObject<MpPluginWrapper>(plugin_json_str);
         }
@@ -673,7 +674,7 @@ namespace MonkeyPaste.Avalonia {
             string backup_manifest_path = Path.Combine(PluginCacheDir, backup_manifest_fn);
             // no backup or it is corrupt
             string plugin_json_str = plugin.SerializeJsonObject();
-            MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
+            MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str);
 
             return MpJsonConverter.DeserializeObject<MpPluginWrapper>(plugin_json_str);
         }
@@ -684,9 +685,12 @@ namespace MonkeyPaste.Avalonia {
 
         private static string ResolveManifestPath(string inv_manifest_path) {
             // find closest manifest culture matching users culture
+            if (inv_manifest_path.ToLower().Contains("core")) {
+
+            }
             string manifest_dir = Path.GetDirectoryName(inv_manifest_path);
-            string man_culture_code = MpAvLocalizationHelpers.ResolveMissingCulture(
-                culture_code: MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
+            string man_culture_code = MpLocalizationHelpers.ResolveMissingCulture(
+                culture_code: Mp.Services.UserCultureInfo.CultureCode,
                 dir: manifest_dir,
                 file_name_prefix: MANIFEST_FILE_NAME_PREFIX);
 

@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
         Groups,
         Filters,
         Trash,
-        PluginOverview
+        Plugins
     }
 
     public class MpAvHelpViewModel :
@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
 
         Dictionary<MpHelpLinkType, string> OnlineHelpUriLookup => new() {
             {MpHelpLinkType.None, $"{MpServerConstants.DOCS_BASE_URL}/welcome" },
-            {MpHelpLinkType.PluginOverview, $"{MpServerConstants.DOCS_BASE_URL}/welcome" },
+            {MpHelpLinkType.Plugins, $"{MpServerConstants.DOCS_BASE_URL}/plugins" },
             {MpHelpLinkType.ContentLimits, $"{MpServerConstants.DOCS_BASE_URL}/account/#content-limits" },
             {MpHelpLinkType.Collections, $"{MpServerConstants.DOCS_BASE_URL}/collections/" },
             {MpHelpLinkType.Tags, $"{MpServerConstants.DOCS_BASE_URL}/collections/tags" },

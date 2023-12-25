@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpPluginUserNotificationFormat : MpJsonObject, MpINotificationFormat {
-
+        public int MaxShowTimeMs { get; set; } = 3_000; // < 0 means indefinite
         public MpPluginNotificationType NotificationType { get; set; }
         public object Body { get; set; }
         public string Detail { get; set; }

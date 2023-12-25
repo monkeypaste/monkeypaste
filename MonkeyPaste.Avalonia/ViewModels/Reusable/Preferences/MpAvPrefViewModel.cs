@@ -352,7 +352,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Language
 
-        public string CurrentCultureCode { get; set; } = CultureInfo.InstalledUICulture.Name;
+        private string _currentCultureCode;
+        public string CurrentCultureCode {
+            get {
+                if (string.IsNullOrWhiteSpace(_currentCultureCode)) {
+                    return CultureInfo.InstalledUICulture.Name;
+                }
+                return _currentCultureCode;
+            }
+            set {
+                if (_currentCultureCode != value) {
+                    _currentCultureCode = value;
+                    OnPropertyChanged(nameof(CurrentCultureCode));
+                }
+            }
+        }
         public bool IsTextRightToLeft { get; set; }
 
         #endregion
@@ -705,9 +719,9 @@ namespace MonkeyPaste.Avalonia {
                 backupStr = MpEncryption.SimpleEncryptWithPassword(backupStr, arg3);
             }
 
-            MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
+            MpFileIo.WriteTextToFile(PreferencesPath, prefStr);
             // write backup after succesful save
-            MpFileIo.WriteTextToFile(PreferencesPathBackup, backupStr, false);
+            MpFileIo.WriteTextToFile(PreferencesPathBackup, backupStr);
 
             //MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
         }

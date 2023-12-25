@@ -27,7 +27,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="manifest.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -41,37 +41,59 @@
     
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.ja-JP.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>CoreAnnotator</CustomToolNamespace>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Resources.zh-CN.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="manifest.en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="manifest.ja-JP.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="manifest.zh-CN.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) != 'MAC' Or $(BuildOs) != 'WINDOWS'">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>
     <!-- update working plugin in storage dir-->
-    <Copy SourceFiles="@(BuildOutputFiles)" 
-          DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" 
-          OverwriteReadOnlyFiles="true" 
-          SkipUnchangedFiles="true" 
-          ContinueOnError="true" />
+    <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
 
     <!-- remove tmp dir to ensure its new -->
-    <RemoveDir ContinueOnError="true" 
-               Directories="$(TargetDatTempDir)" />
+    <RemoveDir ContinueOnError="true" Directories="$(TargetDatTempDir)" />
 
     <!-- create tmp dir and copy plugin so its the only sub folder-->
-    <Copy SourceFiles="@(BuildOutputFiles)" 
-          DestinationFiles="@(BuildOutputFiles->'$(TargetDatTempDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" 
-          OverwriteReadOnlyFiles="true" 
-          SkipUnchangedFiles="true" 
-          ContinueOnError="true" />
+    <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(TargetDatTempDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
 
     <!-- compress tmp dir to retain outer folder and ouput plugin to exec dat dir (for initial load)-->
-    <ZipDirectory Overwrite="true" 
-                  ContinueOnError="true" 
-                  SourceDirectory="$(TargetDatTempDir)" 
-                  DestinationFile="$(TargetDatDir)\$(CoreAnnGuid).zip" />
+    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(TargetDatTempDir)" DestinationFile="$(TargetDatDir)\$(CoreAnnGuid).zip" />
 
     <!-- remove tmp dir -->
-    <RemoveDir ContinueOnError="true" 
-               Directories="$(TargetDatTempDir)" />
+    <RemoveDir ContinueOnError="true" Directories="$(TargetDatTempDir)" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'WINDOWS'">
     <Exec Command="$(BuildScriptsDir)\bundle_plugin.bat CoreAnnotator $(TargetDir) $(TargetDatDir) $(CoreAnnGuid)" />

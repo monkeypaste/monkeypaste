@@ -5,10 +5,11 @@ function onContentLoaded_ntf(conentMsg) {
 	sendMessage('notifyLoadComplete', msgStr);
 }
 
-function onAnnotationSelected_ntf(ann_guid) {
+function onAnnotationSelected_ntf(ann_guid, dblClick) {
 	// output 'MpQuillAnnotationSelectedMessage'
 	let msg = {
-		annotationGuid: ann_guid
+		annotationGuid: ann_guid,
+		isDblClick: dblClick
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyAnnotationSelected', msgStr);
@@ -308,4 +309,8 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyAppendStateChanged', msgStr);
+}
+
+function onAnnDblClick_ntf(annGuid) {
+
 }

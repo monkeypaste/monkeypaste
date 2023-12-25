@@ -238,9 +238,9 @@
                 <Button x:Name="ShowPluginHelpButton"
                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                         Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
-                        CommandParameter="PluginOverview">
+                        CommandParameter="Plugins">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{Binding ., ConverterParameter=PluginOverview, Converter={x:Static local:MpAvEnumKeyToUiStringConverter.Instance}}" />
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.PluginsHelpTooltip}" />
                     </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                 </Button>
@@ -401,7 +401,7 @@
                                 Grid.Row="1"
                                 Spacing="20">
 
-                    <!--  TOGGLE INSTALL BUTTON  -->
+                        <!--  TOGGLE INSTALL BUTTON  -->
                         <Button x:Name="ToggleInstallSelectedPluginButton"
                                 Classes="defaultButton textOnlyButton manageButton"
                                 Command="{Binding ToggleIsPluginInstalledCommand}">
@@ -417,7 +417,7 @@
                             </Grid>
                         </Button>
 
-                    <!--  DONATE BUTTON  -->
+                        <!--  DONATE BUTTON  -->
                         <Button x:Name="DonateToPluginButton"
                                 Classes="defaultButton textOnlyButton manageButton"
                                 Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"

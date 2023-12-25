@@ -3984,6 +3984,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn about plugins.
+        /// </summary>
+        public static string PluginsHelpTooltip {
+            get {
+                return ResourceManager.GetString("PluginsHelpTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plugin Updated.
         /// </summary>
         public static string PluginUpdatedNtfTitle {

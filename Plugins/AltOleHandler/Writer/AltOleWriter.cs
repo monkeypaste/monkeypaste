@@ -181,8 +181,7 @@ namespace AltOleHandler {
             }
             string output_path = data_to_write.ToFile(
                                 forceNamePrefix: fn,
-                                forceExt: fe,
-                                isTemporary: true);
+                                forceExt: fe);
             return new[] { output_path };
         }
         private int GetWriterPriority(string format) {

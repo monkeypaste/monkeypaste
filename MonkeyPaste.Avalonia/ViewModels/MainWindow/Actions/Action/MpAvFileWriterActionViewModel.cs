@@ -143,8 +143,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 string ci_fp = actionInput.CopyItem.ItemData.ToFile(
                                 forceNamePrefix: actionInput.CopyItem.Title,
-                                forceExt: actionInput.CopyItem.ItemType == MpCopyItemType.Image ? "png" : "txt",
-                                isTemporary: true);
+                                forceExt: actionInput.CopyItem.ItemType == MpCopyItemType.Image ? "png" : "txt");
 
                 fl = new List<string>() { ci_fp };
             }

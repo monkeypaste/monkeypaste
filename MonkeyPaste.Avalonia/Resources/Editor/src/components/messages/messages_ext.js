@@ -222,6 +222,9 @@ function annotationSelected_ext(reqMsgBase64Str) {
 	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
 	selectAnnotation(req.annotationGuid, true);
 }
+function hideAnnotations_ext() {
+	hideAnnotations();
+}
 
 function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 	// input 'MpQuillDragDropEventMessage'

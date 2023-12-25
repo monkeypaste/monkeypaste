@@ -162,13 +162,11 @@
                                Classes.over="{Binding IsHovering}"
                                local:MpAvIsHoveringExtension.IsEnabled="True"
                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
-                        </ToolTip.Tip>
                         <Grid DockPanel.Dock="Left"
-                              ColumnDefinitions="15,*">
+                              ColumnDefinitions="15,*,Auto">
 
                             <Image Grid.Column="0"
+                                   Width="20"
                                    Classes="square"
                                    Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}}" />
                             <StackPanel Grid.Column="1"
@@ -180,13 +178,24 @@
                                            HorizontalAlignment="Left"
                                            TextAlignment="Left"
                                            Text="{Binding LabelText}" />
-                                <TextBlock Foreground="{DynamicResource ThemeGrayAccent1Color}"
+                                <TextBlock Foreground="{DynamicResource ThemeGrayAccent3Color}"
                                            FontSize="12"
                                            VerticalAlignment="Top"
                                            HorizontalAlignment="Left"
                                            TextAlignment="Left"
-                                           Text="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+                                           Text="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}, ConverterParameter=dateandtime}" />
                             </StackPanel>
+                            <Button x:Name="DeleteTransButton"
+                                    Width="20"
+                                    Grid.Column="2"
+                                    Classes="noBg noHoverBg outlineOver squareByWidth"
+                                    Command="{Binding DeleteThisTransactionCommand}"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}">
+                                <ToolTip.Tip>
+                                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                                </ToolTip.Tip>
+                                <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            </Button>
 
 
                         </Grid>

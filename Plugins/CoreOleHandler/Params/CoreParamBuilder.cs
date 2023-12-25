@@ -21,7 +21,9 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.Files,"Files",-1,"files.png"),
                 //("x-special/gnome-copied-files","Files (Linux)"),
         };
-        public MpClipboardHandlerFormats GetFormats() {
+        public MpClipboardHandlerFormats GetFormats(MpHeadlessClipboardComponentFormatRequest request) {
+            CoreOleHelpers.SetCulture(request);
+
             return new MpClipboardHandlerFormats() {
                 readers = _formats.Select(x => GetFormat(x.Item1, true)).ToList(),
                 writers = _formats.Select(x => GetFormat(x.Item1, false)).ToList()
@@ -30,7 +32,7 @@ namespace CoreOleHandler {
 
         private MpClipboardHandlerFormat GetFormat(string format, bool isReader) {
             var hf = new MpClipboardHandlerFormat() {
-                formatGuid = $"{PluginGuid}-{format}-{(isReader ? "READ" : "WRITE")}",
+                formatGuid = $"{PluginGuid}-{format}-{(isReader ? Resources.CommonReadLabel.ToUpper() : Resources.CommonWriteLabel.ToUpper())}",
                 iconUri = Path.Combine(IconDir, $"{_formats.FirstOrDefault(x => x.Item1 == format).Item4}"),
                 formatName = format,
                 displayName = _formats.FirstOrDefault(x => x.Item1 == format).Item2,
@@ -46,17 +48,18 @@ namespace CoreOleHandler {
             // DEFAULT PARAMS
 
             pfl.Add(new MpParameterFormat() {
-                label = "Ignore",
-                description = $"When checked {format} format will not be {(isReader ? "read from" : "written to")} the clipboard or drag-and-drop data.",
+                label = Resources.CommonIgnoreLabel,
+                //description = $"When checked {format} format will not be {(isReader ? "read from" : "written to")} the clipboard or drag-and-drop data.",
+                description = string.Format(isReader ? Resources.CommonIgnoreReaderHint : Resources.CommonIgnoreWriterHint, format),
                 controlType = MpParameterControlType.CheckBox,
                 unitType = MpParameterValueUnitType.Bool,
                 value = new MpPluginParameterValueFormat(false.ToString()),
-                paramId = GetParamId(format, isReader, "ignore")
+                paramId = GetParamId(format, isReader, Resources.CommonIgnoreLabel)
             });
             if (tup.Item3 >= 0) {
                 pfl.Add(new MpParameterFormat() {
-                    label = "Max Characters",
-                    description = $"For performance concerns, a maximum amount characters is needed :(",
+                    label = Resources.MaxCharsLabel,
+                    description = Resources.MaxCharsHint,
                     controlType = MpParameterControlType.Slider,
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 1,
@@ -70,16 +73,16 @@ namespace CoreOleHandler {
                 case MpPortableDataFormats.Files:
                     if (isReader) {
                         pfl.Add(new MpParameterFormat() {
-                            label = "Ignored Directories",
-                            description = $"These directories will not be read from clipboard or drag-and-drop data.",
+                            label = Resources.IgnoredDirsLabel,
+                            description = Resources.IgnoredDirsHint,
                             controlType = MpParameterControlType.EditableList,
                             unitType = MpParameterValueUnitType.PlainText,
                             paramId = GetParamId(format, isReader, "ignoredirs")
                         });
                     }
                     pfl.Add(new MpParameterFormat() {
-                        label = "Ignored File Extensions",
-                        description = $"These file types will not be {(isReader ? "read from" : "written to")} the clipboard or drag-and-drop data.",
+                        label = Resources.IgnoredFileExtLabel,
+                        description = isReader ? Resources.IgnoredFileExtReaderHint : Resources.IgnoredFileExtWriterHint,
                         controlType = MpParameterControlType.EditableList,
                         unitType = MpParameterValueUnitType.PlainText,
                         paramId = GetParamId(format, isReader, "ignoreexts")
@@ -87,8 +90,8 @@ namespace CoreOleHandler {
                     break;
                 case MpPortableDataFormats.Rtf:
                     pfl.Add(new MpParameterFormat() {
-                        label = "Convert to Html",
-                        description = $"When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (requires Html format to be enabled and is only for supported platforms)",
+                        label = Resources.Rtf2HtmlLabel,
+                        description = Resources.Rtf2HtmlHint,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         value = new MpPluginParameterValueFormat(true.ToString(), true),
@@ -98,8 +101,8 @@ namespace CoreOleHandler {
                 case MpPortableDataFormats.Html:
                 case MpPortableDataFormats.Xhtml:
                     pfl.Add(new MpParameterFormat() {
-                        label = "Convert to Rtf",
-                        description = $"When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (requires Rtf format to be enabled and is only for supported platforms)",
+                        label = Resources.Html2RtfLabel,
+                        description = Resources.Html2RtfHint,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         value = new MpPluginParameterValueFormat(true.ToString(), true),
@@ -109,8 +112,8 @@ namespace CoreOleHandler {
                 case MpPortableDataFormats.Image:
                     if (isReader) {
                         pfl.Add(new MpParameterFormat() {
-                            label = "Max Width",
-                            description = "Images can be very large sometimes and can create serious performance issues. Try to keep this value low.",
+                            label = Resources.ImgMaxWLabel,
+                            description = Resources.ImgMaxWHint,
                             controlType = MpParameterControlType.Slider,
                             unitType = MpParameterValueUnitType.Integer,
                             paramId = GetParamId(format, isReader, "maxw"),
@@ -119,8 +122,8 @@ namespace CoreOleHandler {
                             value = new MpPluginParameterValueFormat(3000.ToString(), true)
                         });
                         pfl.Add(new MpParameterFormat() {
-                            label = "Max Height",
-                            description = "Images can be very large sometimes and can create serious performance issues. Try to keep this value low.",
+                            label = Resources.ImgMaxHLabel,
+                            description = Resources.ImgMaxHHint,
                             controlType = MpParameterControlType.Slider,
                             unitType = MpParameterValueUnitType.Integer,
                             paramId = GetParamId(format, isReader, "maxh"),
@@ -129,17 +132,17 @@ namespace CoreOleHandler {
                             value = new MpPluginParameterValueFormat(3000.ToString(), true)
                         });
                         pfl.Add(new MpParameterFormat() {
-                            label = "Scale Oversized",
+                            label = Resources.ImgDoScaleLabel,
+                            description = Resources.ImgDoScaleHint,
                             controlType = MpParameterControlType.CheckBox,
                             unitType = MpParameterValueUnitType.Bool,
-                            description = "When checked, images larger than max dimension will be scaled while retaining aspect ratio. This does not affect the image on the clipboard.",
                             paramId = GetParamId(format, isReader, "scaleoversized"),
                             value = new MpPluginParameterValueFormat(true.ToString(), true)
                         });
                     } else {
                         pfl.Add(new MpParameterFormat() {
-                            label = "Default Export Type",
-                            description = $"When pasting or dropping a bitmap this will be the default file type",
+                            label = Resources.ImgExportTypeLabel,
+                            description = Resources.ImgExportTypeHint,
                             controlType = MpParameterControlType.ComboBox,
                             unitType = MpParameterValueUnitType.PlainText,
                             paramId = GetParamId(format, isReader, "exporttype"),
@@ -154,7 +157,7 @@ namespace CoreOleHandler {
 
             return pfl;
         }
-        private string GetParamId(string format, bool isReader, string detail) {
+        public static string GetParamId(string format, bool isReader, string detail) {
             format =
                 format
                 .Replace(" ", string.Empty)

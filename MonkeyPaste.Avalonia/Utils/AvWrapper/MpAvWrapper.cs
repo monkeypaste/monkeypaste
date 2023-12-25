@@ -34,6 +34,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpICultureInfo UserCultureInfo { get; set; }
         public MpIUiStringToEnumConverter UiStrEnumConverter { get; set; }
         public MpIDebugBreakHelper DebugBreakHelper { get; set; }
         public MpIDefaultDataCreator DefaultDataCreator { get; set; }
@@ -193,6 +194,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
             MpAvCommonTools.Init(this);
             MpAvCurrentCultureViewModel.Instance.Init();
+            UserCultureInfo = MpAvCurrentCultureViewModel.Instance;
         }
 
 

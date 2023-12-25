@@ -1,6 +1,7 @@
 ﻿using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common.Plugin.Localizer;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvCurrentCultureViewModel : MpAvViewModelBase {
+    public class MpAvCurrentCultureViewModel : MpAvViewModelBase, MpICultureInfo {
         #region Private Variable
         private IEnumerable<Type> _localizableTypes = new Type[] {
             typeof(UiStrings),
@@ -41,6 +42,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        #region MpICultureInfo Implementation
+        string MpICultureInfo.CultureCode =>
+            CurrentCulture.Name;
+
+        #endregion
         #endregion
 
         #region Properties
@@ -51,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, string> LangLookup {
             get {
                 if (_langLookup == null) {
-                    var cl = MpAvLocalizationHelpers.GetAvailableCultures(UiStringDir);
+                    var cl = MpLocalizationHelpers.GetAvailableCultures(UiStringDir);
                     _langLookup = cl.ToDictionary(x => x.Name, x => GetCultureDisplayValue(x));
                 }
                 return _langLookup;
@@ -113,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!LangLookup.ContainsKey(culture_code)) {
                     // exact culture not available (can occur on initial startup using system default)
                     // fallback to parent or default
-                    culture_code = MpAvLocalizationHelpers.ResolveMissingCulture(culture_code, UiStringDir);
+                    culture_code = MpLocalizationHelpers.ResolveMissingCulture(culture_code, UiStringDir);
                 }
                 CurrentCulture = new CultureInfo(culture_code);
                 MpConsole.WriteLine($"Culture set to: {CurrentCulture}");

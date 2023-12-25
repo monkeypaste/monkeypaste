@@ -70,7 +70,7 @@ namespace WpfTextToSpeech {
             return resp;
         }
 
-        public MpAnalyzerPluginFormat GetFormat() {
+        public MpAnalyzerPluginFormat GetFormat(MpHeadlessAnalyzerComponentFormatRequest request) {
             return new MpAnalyzerPluginFormat() {
                 inputType = new MpPluginInputFormat() {
                     text = true

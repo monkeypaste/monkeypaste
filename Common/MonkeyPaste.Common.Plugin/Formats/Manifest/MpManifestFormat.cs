@@ -1,12 +1,13 @@
 ﻿
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpManifestFormat :
-        MpJsonObject {
+        MpOmitNullJsonObject {
         #region Statics
 
         #endregion
@@ -16,30 +17,31 @@ namespace MonkeyPaste.Common.Plugin {
         #endregion
 
         #region Properties
-        public string title { get; set; } = string.Empty;
-        public string description { get; set; } = string.Empty;
-        public string languageCode { get; set; } = string.Empty;
-        public string version { get; set; } = string.Empty;
-        public string author { get; set; } = string.Empty;
-        public string licenseUrl { get; set; } = string.Empty;
+        public string title { get; set; }
+        public string description { get; set; }
+        public string languageCode { get; set; }
+        public string version { get; set; }
+        public string author { get; set; }
+        public string licenseUrl { get; set; }
         public bool requireLicenseAcceptance { get; set; } = false;
-        public string donateUrl { get; set; } = string.Empty;
-        public string readmeUrl { get; set; } = string.Empty;
+        public string donateUrl { get; set; }
+        public string readmeUrl { get; set; }
 
         public string projectUrl { get; set; }
-        public string packageUrl { get; set; } = string.Empty;
-        public string reportAbuseUrl { get; set; } = string.Empty;
+        public string packageUrl { get; set; }
+        public string reportAbuseUrl { get; set; }
 
-        public string tags { get; set; } = string.Empty;
+        public string tags { get; set; }
 
 
-        public string guid { get; set; } = string.Empty;
+        public string guid { get; set; }
 
-        public string iconUri { get; set; } = string.Empty;
+        public string iconUri { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public MpPluginPackageType packageType { get; set; }
         public List<MpPluginDependency> dependencies { get; set; }
-        [JsonIgnore]
+
         public DateTime? datePublished { get; set; }
         #endregion
 

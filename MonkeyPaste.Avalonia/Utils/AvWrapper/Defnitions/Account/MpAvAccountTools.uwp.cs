@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             StoreProductQueryResult spqr =
                 await context.GetAssociatedStoreProductsAsync(new string[] { "Durable" });
 
-            if (spqr.ExtendedError != null) {
+            if (spqr.ExtendedError != null && !string.IsNullOrEmpty(spqr.ExtendedError.Message)) {
                 MpConsole.WriteLine($"AddOn Error: {spqr.ExtendedError}");
                 return false;
             }

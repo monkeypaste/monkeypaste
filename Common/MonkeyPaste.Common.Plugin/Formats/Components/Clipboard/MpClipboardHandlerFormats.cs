@@ -3,10 +3,16 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Plugin {
-    public interface MpISupportHeadlessClipboardComponentFormat : MpIHeadlessComponentFormatBase {
-        MpClipboardHandlerFormats GetFormats();
+    public interface MpIHeadlessComponentFormatBase : MpIPluginComponentBase { }
+    public interface MpISupportHeadlessAnalyzerComponentFormat : MpIHeadlessComponentFormatBase {
+        MpAnalyzerPluginFormat GetFormat(MpHeadlessAnalyzerComponentFormatRequest request);
     }
-
+    public interface MpISupportHeadlessClipboardComponentFormat : MpIHeadlessComponentFormatBase {
+        MpClipboardHandlerFormats GetFormats(MpHeadlessClipboardComponentFormatRequest request);
+    }
+    public abstract class MpHeadlessComponentFormatRequest : MpPluginRequestFormatBase { }
+    public class MpHeadlessClipboardComponentFormatRequest : MpHeadlessComponentFormatRequest { }
+    public class MpHeadlessAnalyzerComponentFormatRequest : MpHeadlessComponentFormatRequest { }
     public interface MpIOlePluginComponent : MpIPluginComponentBase {
     }
 

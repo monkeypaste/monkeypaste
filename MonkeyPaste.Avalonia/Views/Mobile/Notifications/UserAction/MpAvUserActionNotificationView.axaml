@@ -50,6 +50,43 @@
             <Setter Property="BorderThickness"
                     Value="0,0,0,0" />
         </Style>
+
+        <Style Selector="Button.iconBtn">
+            <Setter Property="MaxWidth"
+                    Value="{StaticResource PosInf}" />
+        </Style>
+        <Style Selector="StackPanel.buttonsContainer Button">
+            <Setter Property="CornerRadius"
+                    Value="7" />
+        </Style>
+        <Style Selector="Border.innerBtnBorder">
+            <Setter Property="CornerRadius"
+                    Value="{Binding $parent[Button].CornerRadius}" />
+            <Setter Property="Padding"
+                    Value="10,5" />
+        </Style>
+        <Style Selector="Border.innerBtnBorder > StackPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="Spacing"
+                    Value="5" />
+        </Style>
+        <Style Selector="Border.innerBtnBorder Image">
+            <Setter Property="Width"
+                    Value="25" />
+            <Setter Property="Height"
+                    Value="25" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style Selector="Border.innerBtnBorder TextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -260,69 +297,59 @@
 
             <!--  BUTTONS ROW  -->
 
-            <StackPanel Grid.Row="3"
+            <StackPanel Classes="butttonsContainer"
+                        Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Margin="0,10,0,0"
+                        Margin="0,5,0,0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <!--  RATE APP  -->
-                <Button Padding="0"
+                <Button Classes="iconBtn"
+                        Padding="0"
                         IsDefault="True"
                         MaxWidth="{StaticResource PosInf}"
                         IsVisible="{Binding ShowRateButton}"
                         Command="{Binding RateAppCommand}">
-                    <local:MpAvClipBorder Background="Blue"
-                                          Padding="10,5">
-                        <StackPanel Orientation="Horizontal"
-                                    Spacing="7">
-                            <Image Width="25"
-                                   Height="25"
-                                   Margin="0,5"
-                                   VerticalAlignment="Center"
-                                   Source="{Binding Source={StaticResource StarYellowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
-                            <TextBlock Text="{x:Static local:UiStrings.SysTrayRateAppLabel}"
-                                       VerticalAlignment="Center"
-                                       Foreground="White"
-                                       FontWeight="SemiBold" />
+                    <Border Classes="innerBtnBorder"
+                            Background="Blue">
+                        <StackPanel>
+                            <Image Source="{Binding Source={StaticResource StarYellowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
+                            <TextBlock Text="{x:Static local:UiStrings.SysTrayRateAppLabel}" />
                         </StackPanel>
-                    </local:MpAvClipBorder>
+                    </Border>
                 </Button>
                 <!--  Upgrade, LearnMore  -->
-                <Button Padding="0"
+                <Button Classes="iconBtn"
+                        Padding="0"
                         IsDefault="True"
+                        MaxWidth="{StaticResource PosInf}"
                         IsVisible="{Binding ShowUpgradeButton}"
                         Command="{Binding UpgradeCommand}">
-                    <Border Background="Green"
-                            Padding="10,5">
-                        <StackPanel Orientation="Horizontal"
-                                    Spacing="7">
-                            <Image Width="25"
-                                   Height="25"
-                                   Margin="0,5"
-                                   VerticalAlignment="Center"
-                                   Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
-                            <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
-                                       VerticalAlignment="Center"
-                                       Foreground="White"
-                                       FontWeight="SemiBold" />
+                    <Border Classes="innerBtnBorder"
+                            Background="Green">
+                        <StackPanel>
+                            <Image Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
+                            <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}" />
                         </StackPanel>
                     </Border>
                 </Button>
                 <Border x:Name="HiddenSeperator"
                         IsVisible="{Binding ShowUpgradeButton}"
                         Opacity="0"
-                        Width="100" />
-                <Button Padding="0"
+                        Width="10" />
+                <Button Classes="iconBtn"
+                        Padding="0"
+                        MaxWidth="{StaticResource PosInf}"
                         VerticalAlignment="Center"
                         IsVisible="{Binding ShowLearnMoreButton}"
                         Command="{Binding LearnMoreCommand}">
-                    <Border Background="Blue"
-                            Padding="7,5">
-                        <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}"
-                                   VerticalAlignment="Center"
-                                   Foreground="White"
-                                   FontWeight="SemiBold" />
+                    <Border Classes="innerBtnBorder"
+                            Background="Blue">
+                        <StackPanel>
+                            <Image Source="{Binding Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
+                            <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}" />
+                        </StackPanel>
                     </Border>
                 </Button>
                 <!--  Ignore, Retry, Fix, Shutdown states  -->

@@ -44,7 +44,11 @@ namespace MonkeyPaste.Avalonia {
             Items;
         public string Body => $"{LabelText} on {TransactionDateTime}";
         public string LabelText =>
-            Transaction == null ? TransactionIdx.ToString() : Transaction.TransactionLabel;
+            Sources.Any() ?
+                Sources.FirstOrDefault().LabelText :
+                Transaction == null ?
+                    TransactionIdx.ToString() :
+                    Transaction.TransactionLabel;
         public object ComparableSortValue => TransactionDateTime;
         public object IconSourceObj {
             get {
@@ -571,6 +575,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
+        public MpIAsyncCommand DeleteThisTransactionCommand => new MpAsyncCommand(
+            async () => {
+                await Transaction.DeleteFromDatabaseAsync();
+                await Parent.InitializeAsync(Parent.Parent.CopyItemId);
+            });
         #endregion
     }
 

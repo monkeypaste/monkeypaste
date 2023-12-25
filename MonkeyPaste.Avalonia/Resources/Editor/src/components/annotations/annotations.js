@@ -353,7 +353,7 @@ function findAnnotationUnderWindowPoint(wp) {
 	return hits_by_area[0];
 }
 
-function selectAnnotation(ann_or_annGuid, fromHost = false) {
+function selectAnnotation(ann_or_annGuid, fromHost = false, isDblClick = false) {
 	let ann_guid = null;
 	if (isString(ann_or_annGuid)) {
 		ann_guid = ann_or_annGuid;
@@ -365,7 +365,7 @@ function selectAnnotation(ann_or_annGuid, fromHost = false) {
 	globals.SelectedAnnotationGuid = ann_guid;
 	drawOverlay();
 	if (!fromHost) {
-		onAnnotationSelected_ntf(globals.SelectedAnnotationGuid);
+		onAnnotationSelected_ntf(globals.SelectedAnnotationGuid, isDblClick);
 	}
 }
 
@@ -425,7 +425,7 @@ function onAnnotationWindowPointerClick(e) {
 	if (isNullOrUndefined(hit_ann)) {
 		return;
 	}
-	selectAnnotation(hit_ann);
+	selectAnnotation(hit_ann, false, e.detail == 2);
 }
 
 function onAnnotationWindowPointerMove(e) {

@@ -196,6 +196,7 @@ namespace MonkeyPaste.Avalonia {
                 nw.WindowStartupLocation = WindowStartupLocation.Manual;
             }
 
+
             void OnWindowOpened(object sender, EventArgs e) {
                 nw.Opened -= OnWindowOpened;
                 if (anchor == null) {

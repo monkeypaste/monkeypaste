@@ -2391,4 +2391,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
   <data name="LoaderTaskbarLabel" xml:space="preserve">
     <value>Taskbar</value>
   </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Learn about plugins</value>
+  </data>
 </root>

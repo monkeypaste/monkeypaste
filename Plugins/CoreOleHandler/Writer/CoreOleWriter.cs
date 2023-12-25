@@ -26,7 +26,9 @@ namespace CoreOleHandler {
                 request.dataObjectLookup is not Dictionary<string, object> ido_dict) {
                 return null;
             }
+
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
+            CoreOleHelpers.SetCulture(request);
             List<Exception> exl = new List<Exception>();
             IDataObject write_output = ido_dict == null ? new MpAvDataObject() : ido_dict.ToDataObject();
             var writeFormats =
@@ -39,7 +41,7 @@ namespace CoreOleHandler {
                 source_type = source_type_obj as string;
             }
             bool needs_pseudo_file = false;
-            if (source_type != "FileList" &&
+            if (source_type != "FileList" && // NOTE using 'FileList' to avoid moving MpCopyItemType into common
                 request.items.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.FILES_W_IGNORE) is MpParameterRequestItemFormat prif &&
                 !bool.Parse(prif.value)) {
                 // when file type is enabled but source is not a file,
@@ -66,7 +68,7 @@ namespace CoreOleHandler {
                         format: write_format,
                         data: data,
                         all_formats: writeFormats,
-                        all_params: request.items,
+                        req: request,
                         convData: out _,
                         ex: out var ex,
                         ntfl: out var param_nfl);
@@ -163,8 +165,7 @@ namespace CoreOleHandler {
             }
             string output_path = data_to_write.ToFile(
                                 forceNamePrefix: fn,
-                                forceExt: fe,
-                                isTemporary: true);
+                                forceExt: fe);
             return new[] { output_path };
         }
         private int GetWriterPriority(string format) {

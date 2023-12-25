@@ -58,8 +58,7 @@ namespace MonkeyPaste.Common {
             string forceDir = "",
             string forceNamePrefix = "",
             string forceExt = "",
-            bool overwrite = false,
-            bool isTemporary = true) {
+            bool overwrite = false) {
             if (!string.IsNullOrEmpty(forcePath)) {
                 // parse full path and override parts
                 forceDir = Path.GetDirectoryName(forcePath);
@@ -94,9 +93,9 @@ namespace MonkeyPaste.Common {
                            forceExt.ToLower().Equals("jpg") ||
                            forceExt.ToLower().Equals("jpeg")) {
                     string tmp_fp = Path.GetTempFileName().Replace(@".tmp", forceExt);
-                    tfp = WriteByteArrayToFile(tmp_fp, fileData.ToBytesFromBase64String(), isTemporary);
+                    tfp = WriteByteArrayToFile(tmp_fp, fileData.ToBytesFromBase64String());
                 } else {
-                    tfp = WriteTextToFile(Path.GetTempFileName(), fileData, isTemporary);
+                    tfp = WriteTextToFile(Path.GetTempFileName(), fileData);
                 }
                 string ofp = tfp;
 
@@ -147,7 +146,7 @@ namespace MonkeyPaste.Common {
                     // move temporary file to processed output file path and delete temporary
                     try {
                         // TODO figure out how to handle recrusive directory copy for this case for now don't do it
-                        ofp = MpFileIo.CopyFileOrDirectory(tfp, ofp, false, isTemporary, overwrite);
+                        ofp = MpFileIo.CopyFileOrDirectory(tfp, ofp, false, overwrite);
                     }
                     catch (Exception ex) {
                         MpConsole.WriteTraceLine($"Error copying temp file '{tfp}' to '{ofp}', returning temporary. Exception: " + ex);
@@ -318,7 +317,7 @@ namespace MonkeyPaste.Common {
             return -1;
         }
 
-        public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true, bool isTemporary = false, bool forceOverwrite = false) {
+        public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true, bool forceOverwrite = false) {
             bool overwrite = forceOverwrite;
             if (!overwrite && targetPath.IsFileOrDirectory()) {
                 return null;
@@ -328,14 +327,14 @@ namespace MonkeyPaste.Common {
                 return targetPath;
             }
             if (Directory.Exists(sourcePath)) {
-                CopyDirectory(sourcePath, targetPath, recursive, isTemporary);
+                CopyDirectory(sourcePath, targetPath, recursive);
                 return targetPath;
             }
             MpConsole.WriteTraceLine($"Source directory not found '{sourcePath}'");
             return null;
         }
 
-        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive, bool isTemporary = false) {
+        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true) {
             // Get information about the source directory
             var dir = new DirectoryInfo(sourceDir);
 
@@ -359,7 +358,7 @@ namespace MonkeyPaste.Common {
             if (recursive) {
                 foreach (DirectoryInfo subDir in dirs) {
                     string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                    CopyDirectory(subDir.FullName, newDestinationDir, true, isTemporary);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true);
                 }
             }
         }
@@ -645,7 +644,7 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static string WriteTextToFile(string filePath, string text, bool isTemporary) {
+        public static string WriteTextToFile(string filePath, string text) {
             try {
                 if (filePath.ToLower().EndsWith(@".tmp")) {
                     string extension = MpCommonTools.Services.StringTools.DetectStringFileExt(text);
@@ -662,7 +661,7 @@ namespace MonkeyPaste.Common {
             return filePath;
         }
 
-        public static string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary) {
+        public static string WriteByteArrayToFile(string filePath, byte[] byteArray) {
             try {
                 locker.AcquireWriterLock(Timeout.Infinite);
                 File.WriteAllBytes(filePath, byteArray);
