@@ -237,18 +237,6 @@ namespace MonkeyPaste.Avalonia {
                             MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand
                         },
                         {
-                            MpShortcutType.PasteSelectedItems,
-                            MpAvClipTrayViewModel.Instance.PasteSelectedClipTileFromShortcutCommand
-                        },
-                        {
-                            MpShortcutType.PasteHere,
-                            MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand
-                        },
-                        {
-                            MpShortcutType.DeleteSelectedItems,
-                            MpAvClipTrayViewModel.Instance.TrashOrDeleteSelectedClipFromShortcutCommand
-                        },
-                        {
                             MpShortcutType.SelectNextColumnItem,
                             MpAvClipTrayViewModel.Instance.SelectNextColumnItemCommand
                         },
@@ -295,7 +283,23 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.CopySelection,
-                            MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand
+                            MpAvApplicationCommand.Instance.CopySelectionCommand
+                        },
+                        {
+                            MpShortcutType.CutSelection,
+                            MpAvApplicationCommand.Instance.CutSelectionCommand
+                        },
+                        {
+                            MpShortcutType.PasteSelection,
+                            MpAvApplicationCommand.Instance.PasteSelectionCommand
+                        },
+                        {
+                            MpShortcutType.PasteToExternal,
+                            MpAvClipTrayViewModel.Instance.PasteSelectedClipTileFromShortcutCommand
+                        },
+                        {
+                            MpShortcutType.DeleteSelectedItems,
+                            MpAvClipTrayViewModel.Instance.TrashOrDeleteSelectedClipFromShortcutCommand
                         },
                         {
                             MpShortcutType.ScrollToHome,

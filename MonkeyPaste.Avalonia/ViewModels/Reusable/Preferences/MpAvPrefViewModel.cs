@@ -309,7 +309,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public string AccountBillingCycleTypeStr { get; set; } = MpBillingCycleType.None.ToString();
+        public string AccountBillingCycleTypeStr { get; set; } = MpBillingCycleType.Never.ToString();
 
         public DateTime AccountNextPaymentDateTime { get; set; }
 

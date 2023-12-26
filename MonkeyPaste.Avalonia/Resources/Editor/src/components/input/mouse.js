@@ -68,14 +68,14 @@ function getScreenMousePos(e) {
 
 function updateWindowMouseState(e, eventType) {
 	// NOTE this is called from both mouse and dnd events so state is 'always' accurate
-	if (!e) {
-		return;
+	if (!isNullOrUndefined(e)) {
+		globals.WindowMouseLoc = getClientMousePos(e);
+		if (globals.WindowMouseDownLoc == null &&
+			(eventType == 'down' || eventType == 'dragStart')) {
+			globals.WindowMouseDownLoc = globals.WindowMouseLoc;
+		}
 	}
-	globals.WindowMouseLoc = getClientMousePos(e);
-	if (globals.WindowMouseDownLoc == null &&
-		(eventType == 'down' || eventType == 'dragStart')) {
-		globals.WindowMouseDownLoc = globals.WindowMouseLoc;
-	}
+	
 	if (globals.WindowMouseDownLoc &&
 		(eventType == 'up' || eventType == 'dragEnd' || eventType == 'dragLeave' || eventType == 'drop')) {
 		globals.WindowMouseDownLoc = null;

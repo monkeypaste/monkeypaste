@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -692,10 +693,18 @@ namespace MonkeyPaste.Common {
             }
 
             Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-            object safeValue = newValue;
+            object safeValue;
             try {
                 //if (t.IsEnum && newValue is string newEnumKey) {
-                //    newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newEnumKey, t);
+                //    // from https://stackoverflow.com/a/15855966/105028
+                //    //newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newEnumKey, t);
+                //    try {
+                //        object enumVal = Enum.Parse(t, newEnumKey, true);
+                //        newValue = enumVal;
+                //    }
+                //    catch (Exception ex) {
+                //        MpConsole.WriteTraceLine($"Error converting string '{newEnumKey}' to enum type '{t}'");
+                //    }
                 //}
                 safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
             }

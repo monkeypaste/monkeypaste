@@ -1,12 +1,10 @@
 ﻿using Avalonia.Threading;
-
 using MonkeyPaste.Common;
-
+using Plugin.InAppBilling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Windows.Services.Store;
 
 namespace MonkeyPaste.Avalonia {
@@ -70,6 +68,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<bool> RefreshAddOnInfoAsync() {
+
             AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();
 
@@ -106,11 +105,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return true;
         }
-        public async Task<bool> CanConnectToStoreAsync() {
-            var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault();
-            StoreProduct sp = await GetAddOnByStoreIdAsync(storeid_kvp.Key);
-            return sp != null;
-        }
+
         public async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
             // get users current ms store state
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();

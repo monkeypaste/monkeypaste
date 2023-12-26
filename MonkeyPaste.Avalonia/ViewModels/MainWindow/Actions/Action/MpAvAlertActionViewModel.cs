@@ -32,18 +32,48 @@ namespace MonkeyPaste.Avalonia {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
-                             new MpParameterFormat() {
-                                label = UiStrings.ActionAlertSoundLabel,
+                            new MpParameterFormat() {
+                                label = UiStrings.ActionAlertShowLabel,
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = true,
-                                paramId = IS_AUDIBLE_ALERT_PARAM_ID,
+                                paramId = IS_TOAST_ALERT_PARAM_ID,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
                                         value ="True"
                                     }
                                 }
+                            },
+                            new MpParameterFormat() {
+                                label = UiStrings.ActionAlertMessageLabel,
+                                controlType = MpParameterControlType.TextBox,
+                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
+                                paramId = TOAST_MSG_PARAM_ID
+                            },
+
+                            new MpParameterFormat() {
+                                label = UiStrings.ActionAlertShowTimeLabel,
+                                controlType = MpParameterControlType.Slider,
+                                unitType = MpParameterValueUnitType.Integer,
+                                minimum = 0,
+                                maximum = 10,
+                                paramId = TOAST_SHOW_TIME_SECONDS_PARAM_ID,
+                                description = UiStrings.ActionAlertShowTimeHint,
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value ="3"
+                                    }
+                                }
+                            },
+                             new MpParameterFormat() {
+                                label = UiStrings.ActionAlertSoundLabel,
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                isRequired = true,
+                                paramId = IS_AUDIBLE_ALERT_PARAM_ID,
+                                value = new MpPluginParameterValueFormat(false.ToString(),true)
                             },
                             new MpParameterFormat() {
                                 label = UiStrings.ActionAlertSoundTypeLabel,
@@ -89,40 +119,6 @@ namespace MonkeyPaste.Avalonia {
                                         value ="1.0"
                                     }
                                 }
-                            },
-                            new MpParameterFormat() {
-                                label = UiStrings.ActionAlertShowLabel,
-                                controlType = MpParameterControlType.CheckBox,
-                                unitType = MpParameterValueUnitType.Bool,
-                                isRequired = true,
-                                paramId = IS_TOAST_ALERT_PARAM_ID,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
-                                        isDefault = true,
-                                        value ="True"
-                                    }
-                                }
-                            },
-                            new MpParameterFormat() {
-                                label = UiStrings.ActionAlertShowTimeLabel,
-                                controlType = MpParameterControlType.Slider,
-                                unitType = MpParameterValueUnitType.Integer,
-                                minimum = 0,
-                                maximum = 10,
-                                paramId = TOAST_SHOW_TIME_SECONDS_PARAM_ID,
-                                description = UiStrings.ActionAlertShowTimeHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
-                                        isDefault = true,
-                                        value ="3"
-                                    }
-                                }
-                            },
-                            new MpParameterFormat() {
-                                label = UiStrings.ActionAlertMessageLabel,
-                                controlType = MpParameterControlType.TextBox,
-                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                                paramId = TOAST_MSG_PARAM_ID
                             },
                             new MpParameterFormat() {
                                 label = UiStrings.ActionAlertPreviewLabel,

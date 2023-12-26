@@ -274,8 +274,8 @@ namespace MonkeyPaste.Avalonia {
                                             isReadOnly = true,
                                             label = UiStrings.AccountNextPaymentLabel,
                                             value = new MpPluginParameterValueFormat(
-                                                MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.None ?
-                                                    MpBillingCycleType.None.EnumToUiString() :
+                                                MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.Never ?
+                                                    MpBillingCycleType.Never.EnumToUiString() :
                                                     MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString(UiStrings.CommonDateFormat))
                                         },
                                         new MpParameterFormat() {

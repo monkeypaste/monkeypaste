@@ -503,11 +503,12 @@ namespace MonkeyPaste.Avalonia {
             if (result.ResponseContent is MpCopyItem rci) {
                 rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
                 await MpAvClipTrayViewModel.Instance.AddUpdateOrAppendCopyItemAsync(rci);
-            } else if (result.Response != null &&
-                        result.Response.dataObjectLookup != null &&
-                        new MpAvDataObject(result.Response.dataObjectLookup) is MpAvDataObject avdo) {
-                result.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
             }
+            //else if (result.Response != null &&
+            //            result.Response.dataObjectLookup != null &&
+            //            new MpAvDataObject(result.Response.dataObjectLookup) is MpAvDataObject avdo) {
+            //    result.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
+            //}
             LastTransaction = result;
 
             FinishAnalysis(targetAnalyzer);

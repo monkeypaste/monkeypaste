@@ -94,7 +94,8 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
             if (is_drop_valid) {
-                e.DragEffects = DragDropEffects.Copy;// is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+                //e.DragEffects = DragDropEffects.Copy;
+                e.DragEffects = e.ToValidDropEffect();
                 MpLine dropLine = CreateDropLine(drop_idx, is_copy);
                 DrawAdorner(dropLine);
             } else {

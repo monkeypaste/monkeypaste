@@ -109,7 +109,9 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
             // NOTE dragend isn't called on drag cancel (from escape key)
             onDragEnd();
         }
-        enableSubSelection();
+        if (!globals.WasNoSelectBeforeDragStart) {
+            enableSubSelection();
+        }        
     }
 
     log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? ' | WAS LEAVE' : ' | WAS DROP'));

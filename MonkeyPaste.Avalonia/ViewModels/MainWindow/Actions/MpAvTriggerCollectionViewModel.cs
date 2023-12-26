@@ -80,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
                                 typeof(MpTriggerType)
                                 .EnumerateEnum<MpTriggerType>()
                                 .Where(x => x != MpTriggerType.None)
+                                .OrderBy(x => x.EnumToUiString())
                                 .Select(x =>
                                     new MpAvMenuItemViewModel() {
                                         Header = x.EnumToUiString(),
@@ -658,7 +659,7 @@ namespace MonkeyPaste.Avalonia {
             // WINDOW
 
             var dw = new MpAvWindow() {
-                Width = 800,
+                Width = 1000,
                 Height = 500,
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,

@@ -138,6 +138,86 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             });
 
+        public ICommand CopySelectionCommand => new MpCommand(
+             () => {
+                 var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                     MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand.Execute(null);
+                     return;
+                 }
+
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                     avm.CopyActionCommand.Execute(null);
+                     return;
+                 }
+             },
+            () => {
+
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return false;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                    return MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand.CanExecute(null);
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                    return avm.CopyActionCommand.CanExecute(null);
+                }
+                return false;
+            });
+
+        public ICommand CutSelectionCommand => new MpCommand(
+             () => {
+                 var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                     MpAvClipTrayViewModel.Instance.CutSelectionFromContextMenuCommand.Execute(null);
+                     return;
+                 }
+
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                     avm.CutActionCommand.Execute(null);
+                     return;
+                 }
+             },
+            () => {
+
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return false;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                    return MpAvClipTrayViewModel.Instance.CutSelectionFromContextMenuCommand.CanExecute(null);
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                    return avm.CutActionCommand.CanExecute(null);
+                }
+                return false;
+            });
+        public ICommand PasteSelectionCommand => new MpCommand(
+             () => {
+                 var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                     MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.Execute(null);
+                     return;
+                 }
+
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                     avm.PasteActionCommand.Execute(null);
+                     return;
+                 }
+             },
+            () => {
+
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return false;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                    return MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.CanExecute(null);
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                    return avm.PasteActionCommand.CanExecute(null);
+                }
+                return false;
+            });
+
         public ICommand DecreaseFocusCommand => new MpCommand(
             () => {
                 if (MpAvFocusManager.Instance.FocusElement is not Control fc) {

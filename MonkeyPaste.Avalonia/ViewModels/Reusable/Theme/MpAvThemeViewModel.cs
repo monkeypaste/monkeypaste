@@ -46,6 +46,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _colorImageFileNames = new string[] {
             "add_green.png",
             "appstore.png",
+            "bell.png",
             "banana.png",
             "butterfly.png",
             "clipboard.png",

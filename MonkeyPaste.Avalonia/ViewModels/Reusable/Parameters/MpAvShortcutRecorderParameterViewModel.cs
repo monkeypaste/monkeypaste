@@ -33,7 +33,8 @@ namespace MonkeyPaste.Avalonia {
                 return MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
             }
             set {
-                if (KeyString != value) {
+                //if (KeyString != value) {
+                if (_keyStr != value) {
                     _keyStr = value;
                     if (UnitType == MpParameterValueUnitType.PlainText &&
                         CurrentValue != _keyStr) {

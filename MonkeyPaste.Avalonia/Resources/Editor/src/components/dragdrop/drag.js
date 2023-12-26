@@ -32,22 +32,23 @@ function isDragging() {
 
 // #region Actions
 
-function enableDragOverlay() {
-    //getDragOverlayElement().classList.remove('no-hit-test');
-    //getDragOverlayElement().classList.add('hit-testable');
-    //getDragOverlayElement().setAttribute('draggable', true);
+function resetDrag(e) {
+    let from_host = isNullOrUndefined(e);
+    log('drag reset. from_host: ' + from_host);
+    updateWindowMouseState(e, 'dragEnd');
 
-    //getEditorContainerElement().setAttribute('draggable', false);
+    globals.CurDragTargetElm = null;
+    globals.ModKeys.IsShiftDown = false;
+    globals.ModKeys.IsCtrlDown = false;
+    globals.ModKeys.IsAltDown = false;
+
+    if (globals.WasNoSelectBeforeDragStart) {
+        resetSelection();
+        disableSubSelection();
+        globals.WasNoSelectBeforeDragStart = false;
+    }
+    drawOverlay();
 }
-
-function disableDragOverlay() {
-    //getDragOverlayElement().classList.add('no-hit-test');
-    //getDragOverlayElement().classList.remove('hit-testable');
-    //getDragOverlayElement().setAttribute('draggable', false);
-
-    //getEditorContainerElement().setAttribute('draggable', true);
-}
-
 // #endregion Actions
 
 // #region Event Handlersconsidered 
@@ -106,25 +107,6 @@ function onDragStart(e) {
 }
 
 function onDragEnd(e) {
-    //if (isRunningOnHost() && e.fromHost != true) {
-    //    // drag end handled from host control
-    //    log('drag end reject not from host');
-    //    e.preventDefault();
-    //    e.stopPropagation();
-    //    return false;
-    //}
-    log('drag end');
-    updateWindowMouseState(e,'dragEnd');
-    globals.CurDragTargetElm = null;
-    globals.ModKeys.IsShiftDown = false;
-    globals.ModKeys.IsCtrlDown = false;
-    globals.ModKeys.IsAltDown = false;
-    
-    if (globals.WasNoSelectBeforeDragStart) {
-        resetSelection();
-        disableSubSelection();
-        globals.WasNoSelectBeforeDragStart = false;
-    }
-    drawOverlay();
+    resetDrag(e);
 }
 // #endregion Event Handlers

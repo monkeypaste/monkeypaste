@@ -15,8 +15,8 @@
         // APPLICATION
         HideMainWindow,
         ExitApplication,
-        PasteSelectedItems,
-        PasteHere,
+        PasteToExternal,
+        PasteSelection,
         CopySelection,
         CutSelection,
         DeleteSelectedItems,

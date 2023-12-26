@@ -177,7 +177,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var ext_refs = await GatherExternalSourceRefsAsync(avdo);
-            List<MpISourceRef> refs = ext_refs == null ?
+            List<MpISourceRef> refs =
+                ext_refs == null ?
                     new List<MpISourceRef>() :
                     ext_refs.ToList();
 
@@ -200,7 +201,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpAvDataObject avdo) {
+            if (avdo.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_ID_FORMAT, out object ciidObj) &&
+                int.TryParse(ciidObj.ToString(), out int ciid)) {
+                // when full/partial content ref present use refs sources INSTEAD of external
+                var srl = await MpDataModelProvider.GetCopyItemSourceRefsByCopyItemIdAsync(ciid);
+                return srl;
+            }
             MpPortableProcessInfo last_pinfo = null;
+
             if (avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var pi)) {
                 last_pinfo = pi;
             }

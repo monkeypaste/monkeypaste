@@ -297,7 +297,6 @@ function enableSubSelection(fromHost = false, paste_button_info = null) {
 	getEditorContainerElement().classList.add('underline-content');
 
 	showAllScrollbars();
-	disableDragOverlay();
 	enableTemplateSubSelection();
 	showPasteToolbar();
 	showAnnotations();
@@ -333,7 +332,6 @@ function disableSubSelection(fromHost = false) {
 
 	scrollToHome();
 	hideAllScrollbars();
-	enableDragOverlay();
 	hideAnnotations();
 	hidePasteToolbar();
 	clearTableSelectionStates();

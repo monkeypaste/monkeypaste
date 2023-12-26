@@ -40,7 +40,7 @@
                                     Width="30"
                                     Height="30"
                                     Classes="defaultButton noBg noHoverBg outline outlineOver square"
-                                    Command="{Binding ShowPluginBrowserCommand}">
+                                    Command="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}">
                                 <ToolTip.Tip>
                                     <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
                                 </ToolTip.Tip>

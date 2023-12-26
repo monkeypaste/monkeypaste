@@ -90,6 +90,10 @@
                     Value="Round" />
             <Setter Property="Margin"
                     Value="12.5" />
+            <Setter Property="RadiusX"
+                    Value="7" />
+            <Setter Property="RadiusY"
+                    Value="7" />
         </Style>
 
         <!--  DESIGNER ITEM ICON BORDER CONTENT  -->
@@ -182,7 +186,7 @@
                         <!--  Trigger Circle  -->
 
                         <DataTemplate x:Key="TriggerDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Ellipse />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -191,7 +195,7 @@
                         <!--  Conditional Diamond  -->
 
                         <DataTemplate x:Key="ConditionalDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -200,7 +204,7 @@
                         <!--  AddFromClipboard Diamond  -->
 
                         <DataTemplate x:Key="SetClipboardDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -209,7 +213,7 @@
                         <!--  Delay Diamond  -->
 
                         <DataTemplate x:Key="DelayDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -217,7 +221,7 @@
                         <!--  Alert Diamond  -->
 
                         <DataTemplate x:Key="AlertDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -226,7 +230,7 @@
                         <!--  Analyze Box  -->
 
                         <DataTemplate x:Key="AnalyzeDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Rectangle />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -235,7 +239,7 @@
                         <!--  Macro Box  -->
 
                         <DataTemplate x:Key="MacroDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Rectangle />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
@@ -244,7 +248,7 @@
                         <!--  File Writer Box  -->
 
                         <DataTemplate x:Key="FileWriterDesignerTemplate">
-                            <Grid>
+                            <Grid Classes="designCont">
                                 <Rectangle />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>

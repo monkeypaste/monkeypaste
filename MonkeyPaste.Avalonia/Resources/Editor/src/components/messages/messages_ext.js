@@ -226,6 +226,11 @@ function hideAnnotations_ext() {
 	hideAnnotations();
 }
 
+function resetDragAndDrop_ext() {
+	resetDrag(null);
+	resetDrop(true, true, false);
+}
+
 function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 	// input 'MpQuillDragDropEventMessage'
 	let req = toJsonObjFromBase64Str(dragEnterMsgBase64Str);

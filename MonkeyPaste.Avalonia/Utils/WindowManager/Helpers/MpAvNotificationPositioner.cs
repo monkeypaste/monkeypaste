@@ -15,8 +15,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static PixelPoint GetSystemTrayWindowPosition(Window w, double pad = 10) {
-            Size s = GetWindowSize(w);
+        public static PixelPoint GetSystemTrayWindowPosition(MpAvWindow w, double pad = 10) {
+            Size s = w.Bounds.Size;
             // NOTE this should account for mw show behavior (i think) show 'system tray' is BR of active monitor
             // TODO test when other window behaviors are implemented
             var primaryScreen = MpAvMainWindowViewModel.Instance.MainWindowScreen;
@@ -31,15 +31,27 @@ namespace MonkeyPaste.Avalonia {
 #else
             double y = primaryScreen.WorkArea.Bottom - s.Height - pad;
 #endif
+
             x *= primaryScreen.Scaling;
             y *= primaryScreen.Scaling;
+
+            var time_for_this = w.OpenDateTime ?? DateTime.Now;
+            double offsetY =
+                MpAvWindowManager.AllWindows
+                .Where(x => x.Classes.Contains("toast") && x.OpenDateTime < time_for_this)
+                .Sum(x => (x.Bounds.Height + pad) * primaryScreen.Scaling);
+#if MAC
+            y += offsetY;
+#else
+            y -= offsetY;
+#endif
 
             // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
             y = Math.Max(0, y);
             return new PixelPoint((int)x, (int)y);
         }
 
-        public static PixelPoint GetWindowPositionByVisual(Window nw, Visual owner_c) {
+        public static PixelPoint GetWindowPositionByAnchorVisual(Window nw, Visual owner_c) {
             var anchor_s_origin = owner_c.PointToScreen(new Point());
             var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
             var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
@@ -119,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
             MpNotificationPlacementType placement = nvmb.PlacementType;
             switch (placement) {
                 case MpNotificationPlacementType.SystemTray:
-                    PositionWindowToSystemTray(w);
+                    //PositionWindowToSystemTray(w);
                     return;
                 case MpNotificationPlacementType.ModalAnchor:
                     //PositionWindowToAnchor(w, nvmb.AnchorTarget);
@@ -171,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
             return window_position.ToAvPixelPoint(anchor_pd);
         }
 
-        private void PositionWindowToSystemTray(Window w) {
+        private void PositionWindowToSystemTray(MpAvWindow w) {
             // TODO this should somehow know where system tray is on device, it just assumes its bottom right (windows)
             var primaryScreen = MpAvMainWindowViewModel.Instance.MainWindowScreen;
             if (primaryScreen == null) {

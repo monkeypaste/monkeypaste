@@ -3,6 +3,7 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -58,21 +59,17 @@ namespace MonkeyPaste.Avalonia {
                                 paramId = SELECTED_COMPARE_PATH_PARAM_ID,
                                 description = UiStrings.ActionCondInPropHint,
                                 value = new MpPluginParameterValueFormat(MpContentQueryPropertyPathType.ItemData.ToQueryFragmentString(),true)
-                            },new MpParameterFormat() {
-                                label = UiStrings.ActionCondInFilterLabel,
-                                controlType = MpParameterControlType.TextBox,
-                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                                isRequired = false,
-                                paramId = COMPARE_FILTER_TEXT_PARAM_ID,
-                                description = UiStrings.ActionCondInFilterHint
-                            },new MpParameterFormat() {
+                            },
+                            new MpParameterFormat() {
                                 label = UiStrings.ActionCondNotLabel,
                                 description = UiStrings.ActionCondNotHint,
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = false,
                                 paramId = IS_NOT_COND_PARAM_ID
-                            },new MpParameterFormat() {
+                            },
+
+                            new MpParameterFormat() {
                                 label = UiStrings.ActionCondOpLabel,
                                 controlType = MpParameterControlType.ComboBox,
                                 unitType = MpParameterValueUnitType.PlainText,
@@ -88,20 +85,30 @@ namespace MonkeyPaste.Avalonia {
                                             value = x // NOTE!! 
                                         }
                                     ).ToList()
-                            },new MpParameterFormat() {
-                                label = UiStrings.ActionCondCaseLabel,
-                                controlType = MpParameterControlType.CheckBox,
-                                unitType = MpParameterValueUnitType.Bool,
-                                isRequired = false,
-                                paramId = IS_CASE_SENSITIVE_PARAM_ID
-                            },new MpParameterFormat() {
+                            },
+                            new MpParameterFormat() {
                                 label = UiStrings.ActionCondDataLabel,
                                 controlType = MpParameterControlType.TextBox,
                                 unitType = MpParameterValueUnitType.PlainTextContentQuery,
                                 isRequired = false,
                                 paramId = COMPARE_TEXT_PARAM_ID,
                                 description = UiStrings.ActionCondDataHint
-                            }
+                            },
+                            new MpParameterFormat() {
+                                label = UiStrings.ActionCondCaseLabel,
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                isRequired = false,
+                                paramId = IS_CASE_SENSITIVE_PARAM_ID
+                            },
+                            new MpParameterFormat() {
+                                label = UiStrings.ActionCondInFilterLabel,
+                                controlType = MpParameterControlType.TextBox,
+                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
+                                isRequired = false,
+                                paramId = COMPARE_FILTER_TEXT_PARAM_ID,
+                                description = UiStrings.ActionCondInFilterHint
+                            },
                         }
                     };
                 }
@@ -292,14 +299,14 @@ namespace MonkeyPaste.Avalonia {
             MpAvActionOutput ao = GetInput(arg);
 
             string compareStr = await GetCompareStr(ao);
-            var compareOutput = new MpAvCompareOutput() {
+            var compareOutput = new MpAvConditionalOutput() {
                 Flip = IsNotCond,
                 Previous = ao,
                 CopyItem = ao.CopyItem,
                 Matches = GetMatches(compareStr)
             };
 
-            MpConsole.WriteLine($"Comprarer '{Label}' match result:"); ;
+            MpConsole.WriteLine($"Comprarer '{Label}' match result: {compareOutput.WasConditionMet}");
             MpConsole.WriteLine($"Is Not: '{IsNotCond}'");
             MpConsole.WriteLine($"Op: '{ComparisonOperatorType}'");
             MpConsole.WriteLine($"compare string: '{CompareData}'");
@@ -330,6 +337,18 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!IsValid) {
                 ShowValidationNotification(focus_arg_num);
+            }
+        }
+
+        protected override void Param_vm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.Param_vm_PropertyChanged(sender, e);
+            if (sender is not MpAvComponentPickerParameterViewModel cppvm) {
+                return;
+            }
+            switch (e.PropertyName) {
+                case nameof(cppvm.ComponentId):
+                    ComparePropertyPathType = (MpContentQueryPropertyPathType)cppvm.ComponentId;
+                    break;
             }
         }
         #endregion

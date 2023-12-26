@@ -198,7 +198,7 @@ namespace MonkeyPaste.Avalonia {
                             IconResourceKey = "PasteImage",
                             Command = PasteHereFromContextMenuCommand,
                             IsVisible = false,
-                            ShortcutArgs = new object[] { MpShortcutType.PasteHere },
+                            ShortcutArgs = new object[] { MpShortcutType.PasteSelection },
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = CurPasteInfoMessage.infoId != null,
@@ -206,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
                             //AltNavIdx = 0,
                             IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.PasteSelectedItems },
+                            ShortcutArgs = new object[] { MpShortcutType.PasteToExternal },
                         },
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,

@@ -38,7 +38,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private bool _isShowingValidationMsg = false;
-        private List<int> _currentInputItemIds = new List<int>();
         private bool _isSettingChildRestorePoint = false;
         #endregion
         #region Constants
@@ -349,6 +348,7 @@ namespace MonkeyPaste.Avalonia {
                         typeof(MpActionType)
                         .EnumerateEnum<MpActionType>()
                         .Where(x => x != MpActionType.None && x != MpActionType.Trigger)
+                        .OrderBy(x => x.EnumToUiString())
                         .Select(x =>
                             new MpAvMenuItemViewModel() {
                                 Header = x.EnumToUiString(),
@@ -397,7 +397,7 @@ namespace MonkeyPaste.Avalonia {
                              IsVisible = CanPaste,
                             Header = UiStrings.CommonPasteOpLabel,
                             IconResourceKey = "PasteImage",
-                            ShortcutArgs = new object[] { MpShortcutType.PasteHere },
+                            ShortcutArgs = new object[] { MpShortcutType.PasteSelection },
                             Command = PasteActionCommand,
                         },
                         new MpAvMenuItemViewModel() {
@@ -945,6 +945,7 @@ namespace MonkeyPaste.Avalonia {
                     MpParameterHostType.Action, ActionId, this);
                 foreach (var param_format in param_values) {
                     var param_vm = await CreateActionParameterViewModel(param_format);
+                    param_vm.PropertyChanged += Param_vm_PropertyChanged;
                     ActionArgs.Add(param_vm);
                 }
                 OnPropertyChanged(nameof(ActionArgs));
@@ -970,6 +971,9 @@ namespace MonkeyPaste.Avalonia {
 
 
             IsBusy = false;
+        }
+
+        protected virtual void Param_vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
         }
 
         private void ActionArg_OnValidate(object sender, EventArgs e) {
@@ -1052,40 +1056,18 @@ namespace MonkeyPaste.Avalonia {
                 await Dispatcher.UIThread.InvokeAsync(() => FinishActionAsync(arg));
                 return;
             }
-            object output_arg = arg;
-            if (arg is MpAvCompareOutput co && !co.WasConditionMet) {
-                // prevent conditional children from executing 
-                // but finish processing to keep id's in sync for batch processing
-                output_arg = null;
-            }
             // trigger children so current item added BEFORE removing from here
             // to avoid a gap for blocking threads (tag drop progress spinner)
 
-            OnActionComplete?.Invoke(this, output_arg);
+            OnActionComplete?.Invoke(this, arg);
             // wait briefly for children to start before flagging as done
             await Task.Delay(50);
 
             IsPerformingAction = false;
 
-            await Task.Delay(5);
             MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed ", true);
-
-            int ciid = 0;
-            if (arg is MpCopyItem ci) {
-                ciid = ci.Id;
-            } else if (arg is MpAvActionOutput ao) {
+            if (arg is MpAvActionOutput ao) {
                 MpConsole.WriteLine(ao.ActionDescription, false, true);
-                if (ao.CopyItem != null) {
-                    ciid = ao.CopyItem.Id;
-                }
-            }
-            if (ciid == 0) {
-                return;
-            }
-            if (_currentInputItemIds.Remove(ciid)) {
-                MpConsole.WriteLine($"Action '{Label}' processing ciid {ciid} COMPLETED");
-            } else {
-                MpConsole.WriteLine($"Action '{Label}' processed ciid {ciid} NOT FOUND");
             }
         }
 
@@ -1095,12 +1077,6 @@ namespace MonkeyPaste.Avalonia {
             await Task.WhenAll(Children.Select(x => x.Action.WriteToDatabaseAsync()));
         }
 
-        public bool IsSelfOrDescendentProcessingItemById(int ciid) {
-            if (_currentInputItemIds.Contains(ciid)) {
-                return true;
-            }
-            return Children.Any(x => x.IsSelfOrDescendentProcessingItemById(ciid));
-        }
         public async Task SetChildRestoreStateAsync() {
             _isSettingChildRestorePoint = true;
             var action_clone = await Action.CloneDbModelAsync(true, true);
@@ -1173,13 +1149,6 @@ namespace MonkeyPaste.Avalonia {
                     CopyItem = ci
                 };
             } else if (arg is MpAvActionOutput ao) {
-                //if (ArgLookup.TryGetValue(INPUT_TYPE_PARAM_ID, out var input_type_pvm) &&
-                //    input_type_pvm.CurrentValue == MpAnalyzerChildInputType.LastOutput.ToString() &&
-                //    ao is MpAvAnalyzeOutput anao &&
-                //    anao.NewCopyItem is MpCopyItem output_item) {
-                //    anao.CopyItem = output_item;
-                //    return anao;
-                //}
                 return ao;
             }
             throw new Exception("Unknown action input: " + arg.ToString());
@@ -1224,19 +1193,14 @@ namespace MonkeyPaste.Avalonia {
             if (!IsValid || !IsTriggerEnabled) {
                 can_start = false;
             }
+
             if (is_starting) {
+                if (arg is MpAvConditionalOutput co && !co.WasConditionMet) {
+                    MpConsole.WriteLine($"Condition for '{ParentActionViewModel}' not met. '{this}' will not execute");
+                    can_start = false;
+                }
                 IsPerformingAction = can_start;
             }
-
-            if (can_start &&
-                is_starting &&
-                GetInput(arg) is MpAvActionOutput ao &&
-                ao.CopyItem != null &&
-                !_currentInputItemIds.Contains(ao.CopyItem.Id)) {
-                MpConsole.WriteLine($"Action '{Label}' processing ciid {ao.CopyItem.Id} STARTED");
-                _currentInputItemIds.Add(ao.CopyItem.Id);
-            }
-
             return can_start;
         }
 

@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -18,12 +19,17 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvActionDesignerItemView : MpAvUserControl<MpAvActionViewModelBase> {
         public MpAvActionDesignerItemView() {
             InitializeComponent();
-
-            var dicc = this.FindControl<ContentControl>("DesignerItemContentControl");
-            dicc.AddHandler(ContentControl.KeyDownEvent, Dicc_KeyDown, RoutingStrategies.Tunnel);
+            InitShortcuts();
             InitDnd();
         }
-        private void Dicc_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
+
+        private void InitShortcuts() {
+
+            var dicc = this.FindControl<ContentControl>("DesignerItemContentControl");
+            dicc.AddHandler(ContentControl.KeyUpEvent, Dicc_KeyUp, RoutingStrategies.Tunnel);
+        }
+
+        private void Dicc_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
             if (e.Key == Key.Delete) {
                 if (BindingContext.IsSelected) {
                     e.Handled = true;
@@ -82,8 +88,9 @@ namespace MonkeyPaste.Avalonia {
                 // tag drop
                 drop_cil = await MpDataModelProvider.GetCopyItemsByTagIdAsync(
                     tid: ttvm.TagId,
+                    tagType: ttvm.TagType,
+                    ciids_to_omit: Mp.Services.ContentQueryTools.GetOmittedContentIds(),
                     ignore_descendants: false);
-                ttvm.TotalAnalysisCount = drop_cil.Count;
                 drag_ttvm = ttvm;
             } else {
                 // external drop
@@ -101,64 +108,53 @@ namespace MonkeyPaste.Avalonia {
 
 
             ResetDrop();
-            if (drag_ttvm == null) {
-                return;
-            }
             Dispatcher.UIThread.Post(async () => {
                 var sw = Stopwatch.StartNew();
-                // BUG parallel throws a com exception running img ann for an access violation
-                // not sure if thats a me bug or not but probably best to avoid since that can be problematic
-                // TODO? if decide to use parallel maybe do parallel w/ ctrl mod key down or something i dunno
-                // if it works you probably always want to do it
 
-                bool invoke_sequential = !e.KeyModifiers.HasFlag(KeyModifiers.Control);
-                MpConsole.WriteLine($"Batch drop started. Mode: {(invoke_sequential ? "SEQUENTIAL" : "PARALLEL")}");
-                // Run drop w/ background priority since it may be long running
-                if (invoke_sequential) {
-                    foreach (var ci in drop_cil) {
-                        BindingContext.InvokeThisActionCommand.Execute(ci);
-                        // slight delay for state change
-                        await Task.Delay(20);
-                        //while (BindingContext.IsSelfOrAnyDescendantPerformingAction) {
-                        while (BindingContext.IsSelfOrDescendentProcessingItemById(ci.Id)) {
+                int pre_completed_count = 0, pre_total_count = 0, goal_completed_count = 0;
+                if (drag_ttvm != null) {
+                    pre_completed_count = drag_ttvm.CompletedAnalysisCount;
+                    pre_total_count = drag_ttvm.TotalAnalysisCount;
+
+                    drag_ttvm.TotalAnalysisCount += drop_cil.Count;
+                    goal_completed_count = drag_ttvm.TotalAnalysisCount;
+                }
+                while (pre_completed_count < pre_total_count) {
+                    // waiting for earlier drop
+                    await Task.Delay(100);
+                }
+
+                async void OnActionComplete(object sender, object e) {
+                    if (drag_ttvm == null) {
+                        return;
+                    }
+                    // TODO maybe overkill but may need to verify the completed output is part of the drop
+                    drag_ttvm.CompletedAnalysisCount = drag_ttvm.CompletedAnalysisCount + 1;
+                    drag_ttvm.OnPropertyChanged(nameof(drag_ttvm.PercentLoaded));
+
+                    if (drag_ttvm.CompletedAnalysisCount == goal_completed_count) {
+                        // this drop is done
+                        BindingContext.OnActionComplete -= OnActionComplete;
+                    }
+                    if (drag_ttvm.CompletedAnalysisCount == drag_ttvm.TotalAnalysisCount) {
+                        // all drops are done, reset
+                        MpConsole.WriteLine($"Batch process complete of {drag_ttvm.TotalAnalysisCount} items in {sw.ElapsedMilliseconds}ms");
+                        drag_ttvm.TotalAnalysisCount = 0;
+                        drag_ttvm.CompletedAnalysisCount = 0;
+                        drag_ttvm.OnPropertyChanged(nameof(drag_ttvm.TotalAnalysisCount));
+
+                        drag_ttvm.IsBusy = true;
+                        while (BindingContext.IsSelfOrAnyDescendantPerformingAction) {
                             await Task.Delay(100);
                         }
-                        drag_ttvm.CompletedAnalysisCount++;
-                        drag_ttvm.OnPropertyChanged(nameof(drag_ttvm.PercentLoaded));
-                    }
-                } else {
-                    // invoke in parallel
-                    drop_cil.ForEach(x => BindingContext.InvokeThisActionCommand.Execute(x));
-
-                    // create list of all ciid's for tag to be processed (to avoid using remaininCount == 0 as terminator)
-                    var remaining_item_ids = drop_cil.Select(x => x.Id).ToList();
-                    while (true) {
-                        if (remaining_item_ids.Count == 0) {
-                            break;
-                        }
-                        var to_remove = new List<int>();
-                        for (int i = 0; i < remaining_item_ids.Count; i++) {
-                            if (BindingContext.IsSelfOrDescendentProcessingItemById(remaining_item_ids[i])) {
-                                continue;
-                            }
-                            to_remove.Add(remaining_item_ids[i]);
-                        }
-                        drag_ttvm.CompletedAnalysisCount += to_remove.Count;
-                        drag_ttvm.OnPropertyChanged(nameof(drag_ttvm.PercentLoaded));
-                        MpDebug.Assert(drag_ttvm.CompletedAnalysisCount >= 0, $"Analyze count mismatch for tag '{drag_ttvm}' droppe onto action '{BindingContext}'");
-                        for (int i = 0; i < to_remove.Count; i++) {
-                            remaining_item_ids.Remove(to_remove[i]);
-                        }
-                        await Task.Delay(500);
+                        drag_ttvm.IsBusy = false;
                     }
                 }
-                MpConsole.WriteLine($"Batch process complete of {drag_ttvm.TotalAnalysisCount} items in {sw.ElapsedMilliseconds}ms");
-                // reset progress
-                drag_ttvm.TotalAnalysisCount = 0;
-                drag_ttvm.CompletedAnalysisCount = 0;
 
-                drag_ttvm.OnPropertyChanged(nameof(drag_ttvm.TotalAnalysisCount));
-
+                BindingContext.OnActionComplete += OnActionComplete;
+                foreach (var drop_ci in drop_cil) {
+                    BindingContext.InvokeThisActionCommand.Execute(drop_ci);
+                }
             }, DispatcherPriority.Render);
         }
 
@@ -167,9 +163,7 @@ namespace MonkeyPaste.Avalonia {
         #region Drop Helpers
 
         private bool IsDropValid(IDataObject avdo) {
-            if (BindingContext == null //||
-                                       //!BindingContext.RootTriggerActionViewModel.IsEnabled.IsTrue()
-                ) {
+            if (BindingContext == null) {
                 return false;
             }
             return true;

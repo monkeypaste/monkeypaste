@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
             { typeof(MpDateBeforeUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpDateAfterUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpTimeSpanWithinUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
-            { typeof(MpBillingCycleType), UiStrings.AccountBillingCycleNoneLabel },
+           // { typeof(MpBillingCycleType), UiStrings.AccountBillingCycleNoneLabel },
         };
 
         static string EnumUiResxFileName =>
@@ -124,9 +124,9 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE! EnumUiStrings should NOT have designer.cs after shutdown.
             // Add empty row and save to generate, then clean and rebuild before re-running
-            MpDebug.Break($"CAUTION! Enum uistrings changed. If not planned terminate but note diffs before and fix because its about to be overwriten...", true);
+            MpDebug.Break($"CAUTION! Enum uistrings changed. If not planned terminate but note diffs before and fix because its about to be overwriten...");
 
-            //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.ResourceUpdate, $"Enum UI strings updated at path '{target_path}'");
+            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.ResourceUpdate, $"Enum UI strings updated at path '{target_path}'");
             return true;
 #else
             return false;

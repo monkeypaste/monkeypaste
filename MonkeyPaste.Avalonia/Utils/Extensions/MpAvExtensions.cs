@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
                 return default;
             }
             while (cur_vm != null) {
-                if (cur_vm.GetType() == typeof(T)) {
+                if (cur_vm is T) {
                     return cur_vm as T;
                 }
                 if (cur_vm.ParentObj is MpAvViewModelBase par_vm) {

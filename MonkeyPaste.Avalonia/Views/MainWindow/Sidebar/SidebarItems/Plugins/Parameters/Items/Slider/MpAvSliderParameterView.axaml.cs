@@ -126,21 +126,20 @@ namespace MonkeyPaste.Avalonia {
 
         private void StyleTextBox() {
             var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-            IBrush fg = FlipTheme ?
-                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveBgColor") :
-                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor");
+            IBrush fg = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor");
 
-            IBrush bg = FlipTheme ?
-                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor") :
-                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveBgColor");
+            IBrush bg = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveBgColor");
 
             if (svtb.IsFocused || svtb.IsKeyboardFocusWithin) {
-                svtb.Background = fg;
-                svtb.Foreground = bg;
+                // BUG background doesn't turn white, can't find whats making it black, just using white for fg (dark mode)
+                //svtb.Background = fg;
+                //svtb.Foreground = bg;
+                //svtb.Background = FlipTheme ? fg : bg;
+                svtb.Foreground = FlipTheme ? fg : bg;
                 return;
             }
             svtb.Background = Brushes.Transparent;
-            svtb.Foreground = fg;
+            svtb.Foreground = FlipTheme ? bg : fg;
             if (svtb.IsPointerOver) {
                 svtb.Foreground = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeAccent1Color");
             }

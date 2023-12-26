@@ -4,6 +4,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -212,6 +213,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        protected override void Param_vm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.Param_vm_PropertyChanged(sender, e);
+            if (sender is not MpAvComponentPickerParameterViewModel cppvm) {
+                return;
+            }
+            switch (e.PropertyName) {
+                case nameof(cppvm.ComponentId):
+                    AnalyticItemPresetId = cppvm.ComponentId;
+                    break;
+            }
+        }
         #endregion
 
         #region Private Methods

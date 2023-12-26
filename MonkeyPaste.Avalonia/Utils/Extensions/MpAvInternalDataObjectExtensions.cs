@@ -225,9 +225,11 @@ namespace MonkeyPaste.Avalonia {
             string ci_uri = Mp.Services.SourceRefTools.ConvertToInternalUrl(ci);
             ido.AddOrUpdateUri(ci_uri);
 
+
             if (!isFullContentReference) {
                 ido.Set(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT, ci.PublicHandle);
             }
+            ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_ID_FORMAT, ci.Id);
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, ci.ItemType.ToString());
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
 
@@ -262,7 +264,6 @@ namespace MonkeyPaste.Avalonia {
 
         public static async Task<MpCopyItem> ToCopyItemAsync(
             this IDataObject avdo,
-            //bool addAsNewItem = false,
             bool is_copy = false) {
             var result = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, is_copy);
             return result;

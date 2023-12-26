@@ -31,11 +31,11 @@ namespace MonkeyPaste.Avalonia {
                             new string[] {"746b41c6-4155-4281-808c-f8b8a278ce54", "Control+Shift+F9", MpShortcutType.ManuallyAddFromClipboard.ToString(), globalRouting.ToString(),"False","False"},
 
                             // APPLICATION
-                            new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, MpShortcutType.PasteHere.ToString(), MpRoutingType.Internal.ToString(),"True"},
+                            new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, MpShortcutType.PasteSelection.ToString(), MpRoutingType.Internal.ToString(),"True"},
                             new string[] {"ee74dd92-d18b-46cf-91b7-3946ab55427c",ps.CopyKeys, MpShortcutType.CopySelection.ToString(), MpRoutingType.Internal.ToString(),"True"},
                             new string[] {"2acde1cc-c8e4-4675-8895-81712a6f0a36",ps.CutKeys, MpShortcutType.CutSelection.ToString(), MpRoutingType.Internal.ToString(),"True"},
                             new string[] {"cb807500-9121-4e41-80d3-8c3682ce90d9","Escape", MpShortcutType.HideMainWindow.ToString(), MpRoutingType.Internal.ToString(),"True"},
-                            new string[] {"1d212ca5-fb2a-4962-8f58-24ed9a5d007d","Control+Enter", MpShortcutType.PasteSelectedItems.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] {"1d212ca5-fb2a-4962-8f58-24ed9a5d007d","Control+Enter", MpShortcutType.PasteToExternal.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"e94ca4f3-4c6e-40dc-8941-c476a81543c7","Delete", MpShortcutType.DeleteSelectedItems.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"7fe24929-6c9e-49c0-a880-2f49780dfb3a","Right", MpShortcutType.SelectNextColumnItem.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"ee657845-f1dc-40cf-848d-6768c0081670","Left", MpShortcutType.SelectPreviousColumnItem.ToString(), MpRoutingType.Internal.ToString()},

@@ -50,7 +50,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public DateTime? OpenDateTime { get; set; }
         public object DialogResult { get; set; }
 
         private MpWindowType _windowType = MpWindowType.None;
@@ -80,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public DateTime? OpenDateTime { get; set; }
         public DateTime LastActiveDateTime { get; set; }
 
         #endregion

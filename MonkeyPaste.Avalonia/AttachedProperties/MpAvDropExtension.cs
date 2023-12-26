@@ -334,5 +334,11 @@ namespace MonkeyPaste.Avalonia {
             return c.GetVisualDescendant<TextBox>();
         }
         #endregion
+
+        #region Drop Extensions
+        public static DragDropEffects ToValidDropEffect(this DragEventArgs e) {
+            return e.DragEffects & (e.KeyModifiers.HasFlag(KeyModifiers.Control) ? DragDropEffects.Copy : e.KeyModifiers.HasFlag(KeyModifiers.Alt) ? DragDropEffects.Link : DragDropEffects.Move);
+        }
+        #endregion
     }
 }

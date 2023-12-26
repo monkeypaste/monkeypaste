@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
     }
-    public class MpAvCompareOutput : MpAvActionOutput {
+    public class MpAvConditionalOutput : MpAvActionOutput {
         public override object OutputData => Matches;
         public List<MpAvConditionalMatch> Matches { get; set; }
         public bool WasConditionMet {

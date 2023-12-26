@@ -21,8 +21,6 @@ namespace MonkeyPaste.Avalonia {
         MpISidebarItemViewModel,
         MpIPopupMenuPicker {
         #region Private Variables
-
-        private MpAvPluginBrowserViewModel _pluginBrowser;
         #endregion
 
         #region Interfaces
@@ -379,13 +377,6 @@ namespace MonkeyPaste.Avalonia {
                 core_aipvm.Parent.PerformAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
             });
 
-        public ICommand ShowPluginBrowserCommand => new MpCommand(
-            () => {
-                if (_pluginBrowser == null) {
-                    _pluginBrowser = new MpAvPluginBrowserViewModel();
-                }
-                _pluginBrowser.OpenPluginBrowserWindow(SelectedItem == null ? null : SelectedItem.PluginGuid);
-            });
         public MpIAsyncCommand<object> InstallAnalyzerCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args is not object[] argParts ||

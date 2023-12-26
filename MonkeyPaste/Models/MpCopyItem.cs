@@ -27,7 +27,9 @@ namespace MonkeyPaste {
         }
 
         public static string GetContentCheckSum(string content) {
-            return content.CheckSum();
+            // NOTE unedited content has env line breaks for text format
+            // webview always returns plain text w/ \n line breaks which will break the checksum
+            return content.StripLineBreaks().CheckSum();
         }
         #endregion
 
@@ -85,6 +87,7 @@ namespace MonkeyPaste {
         [Indexed]
         public DateTime CopyDateTime { get; set; }
 
+        [Indexed]
         public DateTime LastCapRelatedDateTime { get; set; }
 
         [Indexed]
@@ -192,12 +195,14 @@ namespace MonkeyPaste {
             if (isItemDataChanged) {
                 // NOTE this is a workaround for initial loading and edge cases when search text is missing,
                 // just fallback and use slower method
-                MpDebug.Assert(searchAndChecksumText != null, $"Content change write w/o search text specified", true);
                 if (ItemType == MpCopyItemType.Text) {
-                    searchAndChecksumText = ItemData.ToPlainText();
+                    if (string.IsNullOrWhiteSpace(searchAndChecksumText)) {
+                        searchAndChecksumText = ItemData.ToPlainText();
+                    }
                 } else {
                     searchAndChecksumText = ItemData;
                 }
+                MpDebug.Assert(searchAndChecksumText != null, $"Content change write w/o search text specified");
             }
             await WriteToDb_internal(searchAndChecksumText);
         }

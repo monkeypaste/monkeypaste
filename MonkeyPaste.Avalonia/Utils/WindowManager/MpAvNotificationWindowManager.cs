@@ -189,8 +189,12 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 owner = null;
                 anchor = null;
+                if (!nw.Classes.Contains("toast")) {
+                    nw.Classes.Add("toast");
+                }
                 nw.WindowStartupLocation = WindowStartupLocation.Manual;
                 nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
+
             }
             if (anchor != null) {
                 nw.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -200,9 +204,12 @@ namespace MonkeyPaste.Avalonia {
             void OnWindowOpened(object sender, EventArgs e) {
                 nw.Opened -= OnWindowOpened;
                 if (anchor == null) {
+                    if (!nvmb.IsModal) {
+                        nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
+                    }
                     return;
                 }
-                nw.Position = MpAvNotificationPositioner.GetWindowPositionByVisual(nw, anchor);
+                nw.Position = MpAvNotificationPositioner.GetWindowPositionByAnchorVisual(nw, anchor);
             }
             nw.Opened += OnWindowOpened;
             nvmb.Owner = owner;
@@ -220,16 +227,6 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error showing window '{nvmb}', window likely closed. ", ex);
-            }
-            if (nw is MpAvLoaderNotificationWindow &&
-                MpAvWindowManager
-                .AllWindows
-                .FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel) is MpAvWindow wwv &&
-                    wwv.DataContext is MpAvWelcomeNotificationViewModel wwvm) {
-                //desktop.MainWindow = nw;
-                // wait for loader to get set to mw before closing welcome
-                wwvm.HideNotification();
-                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
             }
             return;
         }

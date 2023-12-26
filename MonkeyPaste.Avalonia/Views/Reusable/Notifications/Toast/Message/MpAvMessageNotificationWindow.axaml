@@ -13,6 +13,6 @@
         x:DataType="local:MpAvMessageNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationWindow"
-        Classes="notificationWindow msg slideIn resizable fadeIn fadeOut">
+        Classes="notificationWindow msg resizable">
     <local:MpAvMessageNotificationView />
 </Window>

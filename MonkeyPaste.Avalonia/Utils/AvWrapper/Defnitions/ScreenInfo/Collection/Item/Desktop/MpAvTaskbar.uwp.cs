@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
             this.AutoHide = (state & ABS.Autohide) == ABS.Autohide;
             this.IsVisible = IsTaskbarVisible();
 
-            MpConsole.WriteLine(this.ToString());
+            //MpConsole.WriteLine(this.ToString());
         }
         public override string ToString() {
             return $"TaskBar Position: '{Position}' Bounds: '{Bounds}' AlwaysOnTop: {AlwaysOnTop} AutoHide: {AutoHide} IsVisible: {IsVisible}";

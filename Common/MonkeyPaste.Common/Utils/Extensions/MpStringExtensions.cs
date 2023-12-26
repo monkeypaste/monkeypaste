@@ -26,6 +26,9 @@ namespace MonkeyPaste.Common {
             ("K",1000),
         };
 
+        // NOTE use these in this order to avoid matching \n when its \r\n
+        public static string[] LineBreakTypes = new[] { "\r\n", "\n" };
+
         #endregion
 
         #region Encoding Extensions
@@ -300,11 +303,32 @@ namespace MonkeyPaste.Common {
             return string.IsNullOrWhiteSpace(str);
         }
 
-        public static string RemoveLastLineEnding(this string str) {
-            if (str.EndsWith(Environment.NewLine)) {
-                return str.Substring(0, str.Length - Environment.NewLine.Length);
+        public static string StripLineBreaks(this string str) {
+            if (str == null) {
+                return str;
             }
+            return str.Replace(LineBreakTypes[0], string.Empty).Replace(LineBreakTypes[1], string.Empty);
+        }
+
+        public static string RemoveLastLineEnding(this string str) {
+            foreach (var lb in LineBreakTypes) {
+                if (str.EndsWith(lb)) {
+                    return str.Substring(0, str.Length - lb.Length);
+                }
+            }
+
             return str;
+        }
+        public static string[] SplitByLineBreak(this string str) {
+            if (str == null) {
+                return new string[] { };
+            }
+            foreach (var lb in LineBreakTypes) {
+                if (str.Contains(lb)) {
+                    return str.SplitNoEmpty(lb);
+                }
+            }
+            return new[] { str };
         }
 
         public static string[] SplitNoEmpty(this string str, string separator) {
@@ -320,30 +344,6 @@ namespace MonkeyPaste.Common {
             return str.Split(new string[] { separator }, StringSplitOptions.None);
         }
 
-        public static string[] SplitByLineBreak(this string str) {
-            if (str == null) {
-                return new string[] { };
-            }
-            string[] split_types = new string[] { "\r\n", "\n" };
-            foreach (var st in split_types) {
-                if (str.Contains(st)) {
-                    return str.SplitNoEmpty(st);
-                }
-            }
-            return new[] { str };
-        }
-
-        public static string TrimTrailingLineEnding(this string str) {
-            if (str == null) {
-                return string.Empty;
-            }
-            if (str.EndsWith(Environment.NewLine)) {
-                return str.Substring(0, str.Length - Environment.NewLine.Length);
-            } else if (str.EndsWith(@"\n")) {
-                return str.Substring(0, str.Length - @"\n".Length);
-            }
-            return str;
-        }
 
         public static bool IsStringResourcePath(this string text) {
             if (string.IsNullOrEmpty(text)) {

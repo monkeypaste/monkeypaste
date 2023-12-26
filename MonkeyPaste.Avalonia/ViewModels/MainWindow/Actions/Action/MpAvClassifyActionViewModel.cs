@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -135,7 +136,17 @@ namespace MonkeyPaste.Avalonia {
                 ShowValidationNotification();
             }
         }
-
+        protected override void Param_vm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.Param_vm_PropertyChanged(sender, e);
+            if (sender is not MpAvComponentPickerParameterViewModel cppvm) {
+                return;
+            }
+            switch (e.PropertyName) {
+                case nameof(cppvm.ComponentId):
+                    TagId = cppvm.ComponentId;
+                    break;
+            }
+        }
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {

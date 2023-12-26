@@ -506,6 +506,11 @@ namespace MonkeyPaste {
             }
             return result;
         }
+        public static async Task<List<MpISourceRef>> GetCopyItemSourceRefsByCopyItemIdAsync(int ciid) {
+            var ci_trans = await GetCopyItemTransactionsByCopyItemIdAsync(ciid);
+            var all_refs = await Task.WhenAll(ci_trans.Select(x => GetSourceRefsByCopyItemTransactionIdAsync(x.Id)));
+            return all_refs.SelectMany(x => x).ToList();
+        }
 
         #endregion
 
@@ -536,20 +541,28 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByTagIdAsync(
             int tid,
-            bool ignore_descendants = true,
-            IEnumerable<int> tids_to_omit = null,
+            bool ignore_descendants = true, // no effect for query tags
+            IEnumerable<int> tids_to_omit = null, // no effect for query tags
             IEnumerable<int> ciids_to_omit = null,
-            bool ignore_trash_if_not_tid = true) {
-            var result = await GetCopyItemTagDataAsync_internal(false, tid, ignore_descendants, tids_to_omit, ciids_to_omit, ignore_trash_if_not_tid);
-            return result as List<MpCopyItem>;
+            bool ignore_trash_if_not_tid = true, // no effect for query tags
+            MpTagType tagType = MpTagType.Link) {
+            if (tagType == MpTagType.Link) {
+                var result = await GetCopyItemTagDataAsync_internal(false, tid, ignore_descendants, tids_to_omit, ciids_to_omit, ignore_trash_if_not_tid);
+                return result as List<MpCopyItem>;
+            }
+            if (tagType == MpTagType.Query) {
+                var result = await GetCopyItemsByQueryTagIdAsync(tid, ciids_to_omit);
+                return result as List<MpCopyItem>;
+            }
+            return new();
         }
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByQueryTagIdAsync(
             int qtid,
-            MpIQueryInfo simple_qi,
-            bool desc,
-            MpContentSortType sort,
-            IEnumerable<int> trash_ciids) {
+            IEnumerable<int> trash_ciids,
+            MpIQueryInfo simple_qi = default,
+            bool desc = true,
+            MpContentSortType sort = MpContentSortType.CopyDateTime) {
             var qi = await MpSearchCriteriaItem.CreateQueryCriteriaAsync(qtid, desc, sort);
             // NOTE need to use simple to work right so take current simple
             //simple_qi.SetNext(qi);

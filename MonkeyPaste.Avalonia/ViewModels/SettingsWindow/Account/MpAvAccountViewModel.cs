@@ -632,7 +632,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ResetAccountTypeToFree() {
             MpAvPrefViewModel.Instance.AccountType = MpUserAccountType.Free;
-            MpAvPrefViewModel.Instance.AccountBillingCycleType = MpBillingCycleType.None;
+            MpAvPrefViewModel.Instance.AccountBillingCycleType = MpBillingCycleType.Never;
             MpAvPrefViewModel.Instance.AccountNextPaymentDateTime = DateTime.MaxValue;
         }
         private void StartExpirationTimer() {
@@ -711,7 +711,7 @@ namespace MonkeyPaste.Avalonia {
                     expires;
             BillingCycleType =
                 AccountType == MpUserAccountType.Free ?
-                    MpBillingCycleType.None :
+                    MpBillingCycleType.Never :
                     monthly ?
                         MpBillingCycleType.Monthly : MpBillingCycleType.Yearly;
             AccountState = acct_state;

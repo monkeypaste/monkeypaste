@@ -640,7 +640,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (args is MpAvITransactionNodeViewModel) {
                     to_select_tnvm = args as MpAvITransactionNodeViewModel;
                 } else {
-                    MpDebug.Assert(args == null, $"Unhandled transaction.select child arg of type '{args?.GetType()}' What type is it??", silent: true);
+                    MpDebug.Assert(to_select_tnvm != null, $"Unhandled transaction.select child arg of type '{args?.GetType()}' What type is it??", silent: true);
                 }
 
                 if (to_select_tnvm == null) {

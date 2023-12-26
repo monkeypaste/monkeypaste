@@ -78,25 +78,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        protected override MpAvMenuItemViewModel GetAddContextMenuItem() {
-            return new MpAvMenuItemViewModel() {
-                Header = UiStrings.CommonAddLabel,
-                IconResourceKey = "AddGreenImage",
-                SubItems =
-                        typeof(MpActionType)
-                        .EnumerateEnum<MpActionType>()
-                        .Where(x => x != MpActionType.None && x != MpActionType.Trigger)
-                        .Select(x =>
-                            new MpAvMenuItemViewModel() {
-                                Header = x.EnumToUiString(),
-                                IconResourceKey = GetDefaultActionIconResourceKey(x),
-                                IconTintHexStr = GetActionHexColor(x),
-                                Command = AddChildActionCommand,
-                                CommandParameter = x
-                            }).ToList()
-            };
-        }
-
         #endregion
 
         #region Appearance

@@ -23,9 +23,8 @@ namespace CoreOleHandler {
 
         #region Private Methods
         private async Task<MpOlePluginResponse> ProcessReadRequestAsync_internal(MpOlePluginRequest request, int retryCount = 10) {
-            CoreOleHelpers.SetCulture(request);
 
-            if (!Dispatcher.UIThread.CheckAccess()) {
+            if (request.isDnd && !Dispatcher.UIThread.CheckAccess()) {
                 return await Dispatcher.UIThread.InvokeAsync(async () => {
                     return await ProcessReadRequestAsync_internal(request, retryCount);
                 });
@@ -36,7 +35,7 @@ namespace CoreOleHandler {
             // only actually read formats found for data
             if (request.dataObjectLookup == null) {
                 // clipboard read
-                avdo = await CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray());
+                avdo = await Dispatcher.UIThread.InvokeAsync(() => CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray()));
                 availableFormats = avdo.GetAllDataFormats();
             } else {
                 avdo = request.dataObjectLookup.ToDataObject();
@@ -58,6 +57,7 @@ namespace CoreOleHandler {
                 }
 
             }
+            CoreOleHelpers.SetCulture(request);
 
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
             List<Exception> exl = new List<Exception>();

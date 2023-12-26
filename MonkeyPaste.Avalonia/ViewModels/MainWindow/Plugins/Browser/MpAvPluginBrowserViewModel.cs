@@ -34,7 +34,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
+        private static MpAvPluginBrowserViewModel _instance;
+        public static MpAvPluginBrowserViewModel Instance => _instance ?? (_instance = new MpAvPluginBrowserViewModel());
         #endregion
 
         #region Interfaces
@@ -279,6 +280,11 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ClearFilterTextCommand => new MpCommand(
             () => {
                 FilterText = string.Empty;
+            });
+
+        public ICommand ShowPluginBrowserCommand => new MpCommand(
+            () => {
+                OpenPluginBrowserWindow(null);
             });
         #endregion
     }
