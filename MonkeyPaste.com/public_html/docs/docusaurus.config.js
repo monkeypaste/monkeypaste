@@ -60,6 +60,7 @@ const config = {
             [
               require.resolve('./src/css/custom.css'),
               require.resolve('./src/css/help-style.css'),
+              require.resolve('./src/css/app-update-style.css'),
             ]
         },
       }),
@@ -71,6 +72,9 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      prism: {
+        additionalLanguages: ['csharp'],
+      },
       navbar: {
         title: 'MonkeyPaste',
         logo: {

@@ -218,6 +218,43 @@ namespace MonkeyPaste.Common.Avalonia {
             //order the list from most used to least used before returning
             return countDictionary.OrderByDescending(o => o.Value).ToList();
         }
+
+        public static bool IsEmptyOrTransprent(this Bitmap bmp, byte min_alpha = 0) {
+            return bmp.IsEmpty() || bmp.IsTransparent(min_alpha);
+        }
+        public static bool IsEmpty(this Bitmap bmp) {
+            // NOTE this returns true for individual dimensions since if either are 0 it won't be visible
+            if (bmp == null) {
+                return true;
+            }
+            return bmp.PixelSize.Width == 0 || bmp.PixelSize.Height == 0;
+        }
+        public static unsafe bool IsTransparent(this Bitmap bmp, byte min_alpha = 0) {
+            if (bmp == null) {
+                return true;
+            }
+            var pixels = GetPixels(bmp);
+            using (var memoryStream = new MemoryStream()) {
+                bmp.Save(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                using (var lockedBitmap = writeableBitmap.Lock()) {
+                    byte* bmpPtr = (byte*)lockedBitmap.Address;
+                    int width = writeableBitmap.PixelSize.Width;
+                    int height = writeableBitmap.PixelSize.Height;
+
+                    for (int row = 0; row < height; row++) {
+                        for (int col = 0; col < width; col++) {
+                            PixelColor c = pixels[col, row];
+                            if (c.Alpha > min_alpha) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        }
         #endregion
 
         #region Read/Write

@@ -1,25 +1,18 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Platform.Storage;
-using Avalonia.Rendering;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonoMac.AppKit;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Speech.Synthesis;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Speech.Synthesis;
-using System.IO;
-using System;
 
 
 
 #if CEFNET_WV
-using CefNet.Avalonia;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -429,7 +422,9 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
 
+                MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand.Execute(MpHelpLinkType.VersionInfo);
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {

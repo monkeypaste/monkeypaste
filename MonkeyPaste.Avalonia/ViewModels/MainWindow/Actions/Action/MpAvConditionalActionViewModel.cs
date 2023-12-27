@@ -130,6 +130,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public override MpActionDesignerShapeType DesignerShapeType =>
+            MpActionDesignerShapeType.Diamond;
+
         public override string ActionHintText =>
             UiStrings.ActionConditionalHint;
 

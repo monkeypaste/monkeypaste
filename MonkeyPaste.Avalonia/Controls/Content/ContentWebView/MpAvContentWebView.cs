@@ -483,10 +483,10 @@ namespace MonkeyPaste.Avalonia {
                         if (showToolTipNtf.isVisible && !IsDragging) {
                             AvToolTip.SetTip(this, null);
                             var tt = new MpAvToolTipView();
-                            tt.ToolTipText = showToolTipNtf.tooltipText;
-                            tt.ToolTipHtml = showToolTipNtf.tooltipHtml;
+                            tt.IsHtml = !string.IsNullOrEmpty(showToolTipNtf.tooltipHtml);
+                            tt.ToolTipText = tt.IsHtml ? showToolTipNtf.tooltipHtml : showToolTipNtf.tooltipText;
                             tt.InputGestureText = showToolTipNtf.gestureText;
-                            if (!tt.HasText) {
+                            if (string.IsNullOrEmpty(tt.ToolTipText)) {
                                 return;
                             }
 

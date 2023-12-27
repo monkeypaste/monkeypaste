@@ -73,7 +73,8 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropFormatsHeaderTitle}" />
 
-                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
+                    <local:MpAvToolTipInfoHintView IsHtml="True"
+                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
 
@@ -295,7 +296,8 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropShortcutsHeaderTitle}" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"
-                                                   ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                                   IsHtml="True"
+                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -355,7 +357,8 @@
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
                                                     <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
-                                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
+                                                    <local:MpAvToolTipInfoHintView IsHtml="True"
+                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -376,7 +379,8 @@
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
                                                     <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
-                                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                                    <local:MpAvToolTipInfoHintView IsHtml="True"
+                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -440,7 +444,8 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropRejectedHeaderTitle}" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"
-                                                   ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
+                                                   IsHtml="True"
+                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>

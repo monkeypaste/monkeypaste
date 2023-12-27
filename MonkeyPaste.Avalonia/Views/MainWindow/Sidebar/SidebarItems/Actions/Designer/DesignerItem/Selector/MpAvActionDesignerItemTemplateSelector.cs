@@ -11,15 +11,10 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-            if (param == null) {
+            if (param is not MpAvActionViewModelBase avm) {
                 return null;
             }
-
-            var avmb = param as MpAvActionViewModelBase;
-            if (avmb == null) {
-                return null;
-            }
-            string keyStr = string.Format(@"{0}DesignerTemplate", avmb.ActionType.ToString());
+            string keyStr = $"{avm.DesignerShapeType}Template";
             return AvailableTemplates[keyStr].Build(param);
         }
 

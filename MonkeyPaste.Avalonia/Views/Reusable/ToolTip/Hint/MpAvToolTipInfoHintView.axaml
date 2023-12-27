@@ -39,7 +39,7 @@
     </UserControl.Styles>
     <ToolTip.Tip>
         <local:MpAvToolTipView ToolTipText="{Binding ToolTipText, ElementName=InfoHintView}"
-                               ToolTipHtml="{Binding ToolTipHtml, ElementName=InfoHintView}" />
+                               IsHtml="{Binding IsHtml, ElementName=InfoHintView}" />
     </ToolTip.Tip>
     <Grid x:Name="HintContainerGrid"
           IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}"

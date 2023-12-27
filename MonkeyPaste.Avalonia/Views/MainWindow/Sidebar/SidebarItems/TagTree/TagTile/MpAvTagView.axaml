@@ -279,8 +279,8 @@
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch"
                                                    ArcWidth="2.5"
-                                                   PercentBrush="{DynamicResource ThemeAccent3Color}"
-                                                   RingBrush="{DynamicResource ThemeAccent2Color}"
+                                                   RingBrush="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                                   PercentBrush="{Binding $parent[Border].Background, ConverterParameter=compliment, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                    LabelBrush="Transparent"
                                                    IsVisible="{Binding TotalAnalysisCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                    Percent="{Binding PercentLoaded}" />

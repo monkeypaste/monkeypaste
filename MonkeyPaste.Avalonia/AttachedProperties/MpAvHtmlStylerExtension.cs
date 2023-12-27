@@ -212,7 +212,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpHtmlStyleType.Tooltip:
                 default:
                     return string.Format(
-@"body {{ color: {0}; font: {1}px {2}; }}
+@"* {{ margin: 0; padding: 0;}}
+body {{ color: {0}; font: {1}px {2}; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",

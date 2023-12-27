@@ -1,23 +1,23 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
-        xmlns:local="using:MonkeyPaste.Avalonia">
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!--  DEFAULT  -->
 
     <Style Selector="local|MpAvToolTipView Border#TooltipOuterContainer">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeInteractiveBgBrush}" />
+                Value="{DynamicResource ThemeAccent5BgBrush}" />
         <Setter Property="Background"
-                Value="{DynamicResource ThemeInteractiveBrush}" />
-        <Setter Property="BoxShadow"
-                Value="inset 0 0 2 2 #46000000" />
+                Value="{DynamicResource ThemeAccent5Brush}" />
+        <!--<Setter Property="BoxShadow"
+                Value="inset 0 0 2 2 #46000000" />-->
     </Style>
 
     <Style Selector="local|MpAvToolTipView TextBlock#ToolTipTextBlock">
         <Setter Property="Foreground"
-                Value="{DynamicResource ThemeInteractiveBgBrush}" />
+                Value="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
     </Style>
 
     <!--  WARNING  -->
@@ -28,10 +28,10 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeAccent1Brush}" />
     </Style>
-    <Style Selector="local|MpAvToolTipView.warning TextBlock#ToolTipTextBlock">
+    <!--<Style Selector="local|MpAvToolTipView.warning TextBlock#ToolTipTextBlock">
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeBlackBrush}" />
-    </Style>
+    </Style>-->
     <!--  ERROR  -->
 
     <Style Selector="local|MpAvToolTipView.error Border">
@@ -40,7 +40,10 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeAccent2Brush}" />
     </Style>
-
+    <!--<Style Selector="local|MpAvToolTipView.error TextBlock#ToolTipTextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeWhiteBrush}" />
+    </Style>-->
     <!--  HINTS  -->
 
     <!--  INFO  -->

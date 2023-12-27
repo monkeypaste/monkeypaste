@@ -27,10 +27,6 @@ namespace MonkeyPaste.Common {
 #if DEBUG
             bool can_handle = MpCommonTools.Services != null && MpCommonTools.Services.DebugBreakHelper != null;
 
-            MpCommonTools.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                title: "Assert failure",
-                message: msg.ToStringOrEmpty()).FireAndForgetSafeAsync();
-
             if (Debugger.IsAttached) {
                 if (pre && can_handle) {
                     MpCommonTools.Services.DebugBreakHelper.HandlePreBreak();

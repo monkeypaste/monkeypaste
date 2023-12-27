@@ -17,7 +17,8 @@ namespace MonkeyPaste.Avalonia {
         Groups,
         Filters,
         Trash,
-        Plugins
+        Plugins,
+        VersionInfo
     }
 
     public class MpAvHelpViewModel :
@@ -62,11 +63,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public IEnumerable<MpHelpLinkType> HiddenSidebarLinkTypes => new MpHelpLinkType[] {
+            MpHelpLinkType.VersionInfo
+        };
         public bool IsHelpSettingsTabVisible =>
             false;
 
         public string CurrentUrl =>
-            MpAvDocusaurusHelpers.GetCustomUrl(OnlineHelpUriLookup[LastLinkType], true, MpAvPrefViewModel.Instance.IsThemeDark);
+            MpAvDocusaurusHelpers.GetCustomUrl(
+                url: OnlineHelpUriLookup[LastLinkType],
+                hideNav: true,
+                hideSidebar: HiddenSidebarLinkTypes.Contains(LastLinkType),
+                isDark: MpAvPrefViewModel.Instance.IsThemeDark);
 
         public MpHelpLinkType LastLinkType { get; private set; } = MpHelpLinkType.None;
 
@@ -83,6 +91,7 @@ namespace MonkeyPaste.Avalonia {
             {MpHelpLinkType.Groups, $"{MpServerConstants.DOCS_BASE_URL}/collections/groups" },
             {MpHelpLinkType.Filters, $"{MpServerConstants.DOCS_BASE_URL}/collections/filters" },
             {MpHelpLinkType.Trash, $"{MpServerConstants.DOCS_BASE_URL}/collections/trash" },
+            {MpHelpLinkType.VersionInfo, $"{MpServerConstants.DOCS_BASE_URL}/versions/{Mp.Services.ThisAppInfo.ThisAppProductVersion}" },
         };
 
         #endregion
@@ -168,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 OnPropertyChanged(nameof(CurrentUrl));
 
-                MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{OnlineHelpUriLookup[hlt]}'");
+                MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{CurrentUrl}'");
             });
 
         public MpIAsyncCommand NavigateToContextualHelpCommand => new MpAsyncCommand(

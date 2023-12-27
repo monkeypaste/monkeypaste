@@ -18,7 +18,7 @@
 
         #region MpAvIWebPageViewModel Implementatiosn
         public string CurrentUrl =>
-            MpAvDocusaurusHelpers.GetCustomUrl(WHATS_NEW_URL, true, MpAvPrefViewModel.Instance.IsThemeDark);
+            MpAvDocusaurusHelpers.GetCustomUrl(WHATS_NEW_URL, true, true, MpAvPrefViewModel.Instance.IsThemeDark);
 
         #endregion
         #endregion

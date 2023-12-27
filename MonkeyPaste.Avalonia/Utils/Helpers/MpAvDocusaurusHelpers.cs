@@ -1,10 +1,9 @@
 ﻿using MonkeyPaste.Common;
-using System;
 using System.Collections.Specialized;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDocusaurusHelpers {
-        public static string GetCustomUrl(string url, bool hideNav, bool isDark) {
+        public static string GetCustomUrl(string url, bool hideNav, bool hideSidebar, bool isDark) {
             string anchor_suffix = string.Empty;
             if (url.SplitNoEmpty("/#") is { } urlParts &&
                 urlParts.Length > 1) {
@@ -16,6 +15,9 @@ namespace MonkeyPaste.Avalonia {
             NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
             if (hideNav) {
                 queryString.Add(null, "docusaurus-data-help-view");
+            }
+            if (hideSidebar) {
+                queryString.Add(null, "docusaurus-data-app-update-view");
             }
             if (isDark) {
                 queryString.Add("docusaurus-theme", "dark");

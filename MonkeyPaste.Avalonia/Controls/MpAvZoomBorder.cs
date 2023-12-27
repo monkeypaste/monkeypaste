@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
-using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -10,8 +9,6 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -28,6 +25,10 @@ namespace MonkeyPaste.Avalonia {
         private double? _lastScale;
         private Point? _lastScaleOrigin;
 
+        #endregion
+
+        #region Constants
+        const double WHEEL_ZOOM_DELTA = 0.1d;
         #endregion
 
         #region Statics
@@ -350,7 +351,7 @@ namespace MonkeyPaste.Avalonia {
             if (Child == null || DesignerItem == null) {
                 return;
             }
-            double zoom = e.Delta.Y > 0 ? .2 : -.2;
+            double zoom = e.Delta.Y > 0 ? WHEEL_ZOOM_DELTA : -WHEEL_ZOOM_DELTA;
             Zoom(zoom, e.GetPosition(Child));
         }
 

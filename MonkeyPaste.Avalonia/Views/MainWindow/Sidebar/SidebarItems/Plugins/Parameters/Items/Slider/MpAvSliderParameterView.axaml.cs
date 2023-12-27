@@ -3,9 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -84,6 +81,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
         #endregion
 
         public MpAvSliderParameterView() {
@@ -98,52 +96,12 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvSliderParameterView.HasTextInputProperty).Subscribe(value => OnHasTextInputChanged());
 
             var tb = this.FindControl<TextBox>("SliderValueTextBox");
-
-            tb.PointerEntered += Tb_PointerEntered;
-            tb.PointerExited += Tb_PointerExited;
-            tb.GotFocus += Tb_GotFocus;
             tb.LostFocus += Tb_LostFocus;
-
-            this.GetObservable(MpAvSliderParameterView.FlipThemeProperty).Subscribe(value => StyleTextBox());
-            StyleTextBox();
         }
 
         private void Tb_LostFocus(object sender, RoutedEventArgs e) {
-            StyleTextBox();
         }
 
-        private void Tb_GotFocus(object sender, GotFocusEventArgs e) {
-            StyleTextBox();
-        }
-
-        private void Tb_PointerExited(object sender, PointerEventArgs e) {
-            StyleTextBox();
-        }
-
-        private void Tb_PointerEntered(object sender, PointerEventArgs e) {
-            StyleTextBox();
-        }
-
-        private void StyleTextBox() {
-            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-            IBrush fg = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor");
-
-            IBrush bg = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveBgColor");
-
-            if (svtb.IsFocused || svtb.IsKeyboardFocusWithin) {
-                // BUG background doesn't turn white, can't find whats making it black, just using white for fg (dark mode)
-                //svtb.Background = fg;
-                //svtb.Foreground = bg;
-                //svtb.Background = FlipTheme ? fg : bg;
-                svtb.Foreground = FlipTheme ? fg : bg;
-                return;
-            }
-            svtb.Background = Brushes.Transparent;
-            svtb.Foreground = FlipTheme ? bg : fg;
-            if (svtb.IsPointerOver) {
-                svtb.Foreground = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeAccent1Color");
-            }
-        }
 
         private void OnHasTextInputChanged() {
             if (HasTextInput) {
@@ -170,44 +128,44 @@ namespace MonkeyPaste.Avalonia {
             UpdateRectWidth();
         }
 
-        private void Sb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+        private async void Sb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+            if (!IsEnabled) {
+                return;
+            }
+            var sb = sender as Control;
+            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+            if (svtb.IsKeyboardFocusWithin) {
+                return;
+            }
 
-            Dispatcher.UIThread.Post((Action)(async () => {
-                if (!IsEnabled) {
-                    return;
-                }
-                var sb = sender as Control;
-                var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-                var tbl = svtb.TranslatePoint(new Point(), sb).Value;
-                var tbr = new Rect(tbl, new Size(svtb.Bounds.Width, svtb.Bounds.Height));
+            var tbl = svtb.TranslatePoint(new Point(), sb).Value;
+            var tbr = new Rect(tbl, new Size(svtb.Bounds.Width, svtb.Bounds.Height));
 
-                var mp = e.GetPosition(sb);
+            var mp = e.GetPosition(sb);
 
-                if (tbr.Contains(mp) && HasTextInput) {
-                    return;
-                }
+            if (tbr.Contains(mp) && HasTextInput) {
+                return;
+            }
 
-                await svtb.TryKillFocusAsync();
+            await svtb.TryKillFocusAsync();
 
-                e.Pointer.Capture(sb);
-                IsSliding = e.Pointer.Captured != null;
-                if (IsSliding) {
-                    _lastMousePosition = new MpPoint(mp.X, mp.Y); // mp.ToPortablePoint();
+            e.Pointer.Capture(sb);
+            IsSliding = e.Pointer.Captured != null;
+            if (IsSliding) {
+                _lastMousePosition = new MpPoint(mp.X, mp.Y); // mp.ToPortablePoint();
 
-                    e.Handled = true;
-                    var sbr = new Rect(new Point(), sb.Bounds.Size);
-                    if (sbr.Contains(mp)) {
-                        double newWidth = mp.X;
-                        double widthPercent = newWidth / sb.Bounds.Width;
-                        if (BindingContext != null) {
-                            double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
-                            BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
-                        }
+                e.Handled = true;
+                var sbr = new Rect(new Point(), sb.Bounds.Size);
+                if (sbr.Contains(mp)) {
+                    double newWidth = mp.X;
+                    double widthPercent = newWidth / sb.Bounds.Width;
+                    if (BindingContext != null) {
+                        double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
+                        BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
                     }
-                    UpdateRectWidth();
                 }
-            }));
-
+                UpdateRectWidth();
+            }
         }
 
 
@@ -224,21 +182,7 @@ namespace MonkeyPaste.Avalonia {
             double newWidth;
 
             var mp = e.GetPosition(sb);
-            var sbr = new Rect(new Point(), sb.Bounds.Size);
             newWidth = Math.Clamp(mp.X, 0, sb.Bounds.Width);
-            //if (sbr.Contains(mp)) {
-            //    newWidth = mp.X;
-            //} else {
-            //    double deltaX = mp.X - _lastMousePosition.X;
-
-            //    var svr = this.FindControl<Rectangle>("SliderValueRectangle");
-            //    newWidth = svr.Bounds.Width + deltaX;
-            //    newWidth = Math.Min(Math.Max(0, newWidth), sb.Bounds.Width);
-            //    if(mp.X > sb.Bounds.Width) {
-            //        // BUG slider doesn't 
-            //    }
-            //}
-
             double widthPercent = newWidth / sb.Bounds.Width;
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
             BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
@@ -270,20 +214,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Svtb_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            Dispatcher.UIThread.Post(() => {
-                var svtb = sender as TextBox;
-                if (e.Key == Key.Enter) {
-                    // trigger lost focus
-                    e.Handled = true;
-                    svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
-                    return;
-                }
-                if (e.Key == Key.Escape) {
-                    svtb.Text = _oldVal.ToString();
-                    svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
-                }
-            });
-
+            if (sender is not TextBox svtb) {
+                return;
+            }
+            if (e.Key == Key.Enter) {
+                // trigger lost focus
+                e.Handled = true;
+                svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
+                return;
+            }
+            if (e.Key == Key.Escape) {
+                svtb.Text = _oldVal.ToString();
+                svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
+            }
         }
 
         private void OnSliderValueTextBoxValueChanged() {

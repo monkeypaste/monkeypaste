@@ -147,7 +147,8 @@
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
                 <local:MpAvToolTipInfoHintView Classes="info"
-                                               ToolTipHtml="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
+                                               IsHtml="true"
+                                               ToolTipText="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
             </StackPanel>
             <!--  ROUTING COMBOBOX  -->
             <ComboBox x:Name="RoutingSelectorComboBox"

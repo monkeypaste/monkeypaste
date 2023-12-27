@@ -23,7 +23,7 @@ Javascript and python plugin wrappers are currently in an alpha-stage of develop
 
 #### Code
 
-```c#
+```csharp
 using MonkeyPaste.Common.Plugin;
 
 namespace MinimalExample {
@@ -40,7 +40,7 @@ namespace MinimalExample {
 ```
 #### Manifest.json
 Every plugin must have a `manifest.json` file included in its bundle. At a minimum it provides basic meta and package information. But will also include rules for the types of content and parameters it can handle.
-```json
+```jsx
 {
     "title": "Hello World",
     "description": "Outputs 'Hello World' as a new text clip",

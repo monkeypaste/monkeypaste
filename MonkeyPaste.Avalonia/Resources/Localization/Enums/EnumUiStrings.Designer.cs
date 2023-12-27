@@ -243,9 +243,9 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Never.
         /// </summary>
-        public static string MpBillingCycleType_None {
+        public static string MpBillingCycleType_Never {
             get {
-                return ResourceManager.GetString("MpBillingCycleType_None", resourceCulture);
+                return ResourceManager.GetString("MpBillingCycleType_Never", resourceCulture);
             }
         }
         
@@ -2464,20 +2464,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paste Here.
+        ///   Looks up a localized string similar to Paste Selection.
         /// </summary>
-        public static string MpShortcutType_PasteHere {
+        public static string MpShortcutType_PasteSelection {
             get {
-                return ResourceManager.GetString("MpShortcutType_PasteHere", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_PasteSelection", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paste Selected Items.
+        ///   Looks up a localized string similar to Paste To External.
         /// </summary>
-        public static string MpShortcutType_PasteSelectedItems {
+        public static string MpShortcutType_PasteToExternal {
             get {
-                return ResourceManager.GetString("MpShortcutType_PasteSelectedItems", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_PasteToExternal", resourceCulture);
             }
         }
         

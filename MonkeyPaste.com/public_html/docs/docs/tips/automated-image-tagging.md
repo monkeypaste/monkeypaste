@@ -1,5 +1,5 @@
-# Automated Image Tagging
-Do you want a way to automatically classify the things you copy into organized groups so you can use them later?
+# Automated Tagging with Triggers and Plugins
+Do you want a way to automatically tag the things you copy into organized groups so you can use them later?
 Well this tip is for you then!
 
 <p align="center">
@@ -8,10 +8,10 @@ Well this tip is for you then!
   </video>
 </p>
 
-This tip will show you how to create triggers, actions and use the [Image Annotator](https://www.github.com/monkeypaste/ImageAnnotator) available for download from the *Plugin Browser* to add a 'Monkey' tag to any image we copy with a monkey in it!
+We'll use the [ImageAnnotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) available for download from the *Plugin Browser* to detect cats or dogs in images we copy and automatically tag them to cooresponding 'Cats' and 'Dogs' collections!
 
 :::info
-The [Image Annotator](https://www.github.com/monkeypaste/ImageAnnotator) plugin detects common objects in images and provides a name, box and score (between 0 and 1 of how sure it is about the name) for each object it detects. 
+The [ImageAnnotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) detects common objects in images and provides a name, box and score (between 0 and 1 of how sure it is about the name) for each object it detects. 
 :::
 
 Here's how:
@@ -20,19 +20,27 @@ Here's how:
 2. Type 'Image Annotator' into the search box then select the *Browse* tab
 3. Select 'Image Annotator' in the left pane and click the *Install* button from the right pane.
 4. After a moment the plugin will be installed and ready for use.
-## Creating the Monkeys tag
+## Tags
 1. Open the *Collections* sidebar and select the top-level *Tags* collection.
 2. You'll now see a ➕ button in the top-left of the sidebar. Click the ➕ button to add a new tag.
-3. A new tag named 'Untitled' will be added to the bottom of the list, right-click it and select *Rename* and change its name to 'Monkeys'
-## Setup the Clip Added Trigger
+3. A new tag named 'Untitled' will be added to the bottom of the list, right-click it and select *Rename* and change its name to 'Cats'.
+4. Repeat steps #2-3 but make a 'Dogs' tag.
+:::tip
+Tags can be nested. You can drag-and-drop the 'Cats' and 'Dogs' tags we just made into a 'Pets' tag so any of the clips that get classified will automatically appear in 'Pets'.
+:::
+## Trigger
 1. Now open the *Triggers* sidebar click the ➕ button on the top-right of the sidebar to show the *Create Trigger* menu
 2. Select the *Clip Added* trigger to create the new trigger
 3. If its not automatically selected, select the 'Clip Added Trigger' from the *Trigger Selector* below the ➕ button
-4. Scroll down to show the *Action Properties* view and click the 'Clip Added Trigger' label and rename it 'Monkey Tag Trigger'.
-5. Then below in the properties, select 'Image' for the *Trigger* parameter since for this example we want to tag pictures of monkeys.
+4. Scroll down to show the *Action Properties* view and click the 'Clip Added Trigger' label and rename it 'Image Copied Trigger'.
+5. Then below in the properties, select 'Image' for the *Trigger* parameter since for this example we want to tag pictures of cats and dogs.
+
+:::tip
+Hover over the hints (little blue ℹ️ icons) to better understand.
+:::
 ## Add the ImageAnnotator Action
-1. We need a way to run the 'Image Annotator' plugin we just installed. To do this we add an *Analyze* action to the 'Monkey Tag Trigger' by right-clicking the green circle on right in the *Action Designer* view and selecting *Add->Analyze* from the *Add Action* pop-menu.
-2. The new 'Analyze1' action will become selected and shown with an arrow pointing to it from the 'Monkey Tag Trigger'
+1. We need a way to run the 'Image Annotator' plugin we just installed. To do this we add an *Analyze* action to the 'Image Copied Trigger' by right-clicking the green circle on right in the *Action Designer* view and selecting *Add->Analyze* from the *Add Action* pop-menu.
+2. The new 'Analyze1' action will become selected and shown with an arrow pointing to it from the 'Image Copied Trigger'
 3. Let's rename it to 'Detect Image Objects' back in *Action Properties*
 4. Now to use the Image Annotator, click the *Component Selector* for the *Analyzer* parameter and select *Image Annotator->Default Annotator*.
 

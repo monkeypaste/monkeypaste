@@ -1,19 +1,19 @@
 ﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerItemView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        x:CompileBindings="True"
-                       x:TypeArguments="local:MpAvActionViewModelBase"
                        x:DataType="local:MpAvActionViewModelBase"
+                       x:TypeArguments="local:MpAvActionViewModelBase"
                        mc:Ignorable="d">
     <local:MpAvUserControl.Styles>
         <!--  DESIGNER ITEM BORDER  -->
 
-        <Style Selector="Border#DesignerIconContainer"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector="Border#DesignerIconContainer">
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
@@ -33,8 +33,8 @@
         <!--  DESIGNER ITEM SHAPE  -->
 
 
-        <Style Selector="Border#OuterContainer ContentControl#DesignerItemContentControl :is(Shape)"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector="Border#OuterContainer ContentControl#DesignerItemContentControl :is(Shape)">
             <Setter Property="Stroke"
                     Value="White" />
             <Setter Property="Width"
@@ -97,31 +97,27 @@
         </Style>
 
         <!--  DESIGNER ITEM ICON BORDER CONTENT  -->
-        <Style Selector="Border#DesignerIconContainer"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector="Border#DesignerIconContainer">
             <Setter Property="Child">
                 <Setter.Value>
                     <Template>
                         <Grid>
                             <Image IsVisible="{Binding !IsPerformingAction}" />
-                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                            <local:MpAvBusySpinnerView Width="20"
+                                                       Height="20"
+                                                       HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
-                                                       IsVisible="{Binding IsPerformingAction}"
-                                                       Width="20"
-                                                       Height="20" />
+                                                       IsVisible="{Binding IsPerformingAction}" />
                         </Grid>
                     </Template>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style Selector="Border#DesignerIconContainer.shiftY">
-            <Setter Property="RenderTransform"
-                    Value="translateY(10px)" />
-        </Style>
         <!--  DESIGNER ITEM IMAGE  -->
 
-        <Style Selector="ContentControl#DesignerItemContentControl Image"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector="ContentControl#DesignerItemContentControl Image">
             <Setter Property="Stretch"
                     Value="UniformToFill" />
             <Setter Property="IsHitTestVisible"
@@ -131,13 +127,13 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
         </Style>
-        <Style Selector="ContentControl#DesignerItemContentControl:not(.valid) Image"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector="ContentControl#DesignerItemContentControl:not(.valid) Image">
             <Setter Property="Source"
                     Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
-        <Style Selector="ContentControl#DesignerItemContentControl.valid Image"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector="ContentControl#DesignerItemContentControl.valid Image">
             <Setter Property="Stretch"
                     Value="UniformToFill" />
             <Setter Property="Source">
@@ -153,153 +149,82 @@
     <Border x:Name="OuterContainer"
             HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
-            Classes.dragOver="{Binding IsDragOver}"
+            local:MpAvBoundsObserverExtension.IsEnabled="True"
+            local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}"
             local:MpAvPointerCommandExtension.IsEnabled="True"
-            local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
             local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowAddChildContextMenuCommand}"
             local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
-            local:MpAvBoundsObserverExtension.IsEnabled="True"
-            local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}">
-        <StackPanel Orientation="Vertical"
-                    HorizontalAlignment="Center">
+            local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+            Classes.dragOver="{Binding IsDragOver}">
+        <StackPanel HorizontalAlignment="Center"
+                    Orientation="Vertical">
             <ContentControl x:Name="DesignerItemContentControl"
-                            Cursor="SizeAll"
-                            Classes.selected="{Binding IsSelected}"
-                            Classes.valid="{Binding IsValid}"
                             Width="{Binding Width}"
                             Height="{Binding Height}"
-                            Focusable="True"
                             local:MpAvIsHoveringExtension.IsEnabled="True"
                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                            local:MpAvMoveExtension.IsEnabled="True"
-                            local:MpAvMoveExtension.CanMove="{Binding CanMove, Mode=TwoWay}"
-                            local:MpAvMoveExtension.IsMoving="{Binding IsMoving, Mode=TwoWay}"
                             local:MpAvMoveExtension.BeginMoveCommand="{Binding Parent.SelectActionCommand}"
                             local:MpAvMoveExtension.BeginMoveCommandParameter="{Binding .}"
+                            local:MpAvMoveExtension.CanMove="{Binding CanMove, Mode=TwoWay}"
                             local:MpAvMoveExtension.FinishMoveCommand="{Binding FinishMoveCommand}"
+                            local:MpAvMoveExtension.IsEnabled="True"
+                            local:MpAvMoveExtension.IsMoving="{Binding IsMoving, Mode=TwoWay}"
                             local:MpAvMoveExtension.RelativeTo="{Binding $parent[local:MpAvZoomBorder]}"
-                            ClipToBounds="False"
                             Background="Transparent"
-                            Content="{Binding}">
+                            Classes.selected="{Binding IsSelected}"
+                            Classes.valid="{Binding IsValid}"
+                            ClipToBounds="False"
+                            Content="{Binding}"
+                            Cursor="SizeAll"
+                            Focusable="True">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView Classes="error"
+                                           ToolTipText="{Binding ValidationText}" />
+                </ToolTip.Tip>
                 <ContentControl.DataTemplates>
                     <local:MpAvActionDesignerItemTemplateSelector>
-                        <!--  Trigger Circle  -->
+                        <!--  CIRCLE  -->
 
-                        <DataTemplate x:Key="TriggerDesignerTemplate">
+                        <DataTemplate x:Key="CircleTemplate">
                             <Grid Classes="designCont">
                                 <Ellipse />
                                 <Border x:Name="DesignerIconContainer" />
                             </Grid>
                         </DataTemplate>
 
-                        <!--  Conditional Diamond  -->
+                        <!--  DIAMOND  -->
 
-                        <DataTemplate x:Key="ConditionalDesignerTemplate">
+                        <DataTemplate x:Key="DiamondTemplate">
                             <Grid Classes="designCont">
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer" />
+                                <Border x:Name="DesignerIconContainer"/>
                             </Grid>
                         </DataTemplate>
 
-                        <!--  AddFromClipboard Diamond  -->
+                        <!--  BOX  -->
 
-                        <DataTemplate x:Key="SetClipboardDesignerTemplate">
-                            <Grid Classes="designCont">
-                                <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer" />
-                            </Grid>
-                        </DataTemplate>
-
-                        <!--  Delay Diamond  -->
-
-                        <DataTemplate x:Key="DelayDesignerTemplate">
-                            <Grid Classes="designCont">
-                                <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer" />
-                            </Grid>
-                        </DataTemplate>
-                        <!--  Alert Diamond  -->
-
-                        <DataTemplate x:Key="AlertDesignerTemplate">
-                            <Grid Classes="designCont">
-                                <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Border x:Name="DesignerIconContainer" />
-                            </Grid>
-                        </DataTemplate>
-
-                        <!--  Analyze Box  -->
-
-                        <DataTemplate x:Key="AnalyzeDesignerTemplate">
+                        <DataTemplate x:Key="BoxTemplate">
                             <Grid Classes="designCont">
                                 <Rectangle />
                                 <Border x:Name="DesignerIconContainer" />
-                            </Grid>
-                        </DataTemplate>
-
-                        <!--  Macro Box  -->
-
-                        <DataTemplate x:Key="MacroDesignerTemplate">
-                            <Grid Classes="designCont">
-                                <Rectangle />
-                                <Border x:Name="DesignerIconContainer" />
-                            </Grid>
-                        </DataTemplate>
-
-                        <!--  File Writer Box  -->
-
-                        <DataTemplate x:Key="FileWriterDesignerTemplate">
-                            <Grid Classes="designCont">
-                                <Rectangle />
-                                <Border x:Name="DesignerIconContainer" />
-                            </Grid>
-                        </DataTemplate>
-
-
-                        <!--  Classify Triangle  -->
-
-                        <DataTemplate x:Key="ClassifyDesignerTemplate">
-                            <Grid ClipToBounds="False">
-                                <Polygon Points="25,0 50,50 0,50" />
-                                <Border x:Name="DesignerIconContainer"
-                                        Classes="shiftY" />
-                            </Grid>
-                        </DataTemplate>
-
-                        <!--  KeySimulator Triangle  -->
-
-                        <DataTemplate x:Key="KeySimulatorDesignerTemplate">
-                            <Grid ClipToBounds="False">
-                                <Polygon Points="25,0 50,50 0,50" />
-                                <Border x:Name="DesignerIconContainer"
-                                        Classes="shiftY" />
-                            </Grid>
-                        </DataTemplate>
-
-                        <!--  Repeater Triangle  -->
-
-                        <DataTemplate x:Key="RepeaterDesignerTemplate">
-                            <Grid ClipToBounds="False">
-                                <Polygon Points="25,0 50,50 0,50" />
-                                <Border x:Name="DesignerIconContainer"
-                                        Classes="shiftY" />
                             </Grid>
                         </DataTemplate>
                     </local:MpAvActionDesignerItemTemplateSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
-            <TextBlock Classes.actionLabel="True"
-                       Classes.visible="{Binding IsSelected}"
-                       MaxWidth="125"
-                       HorizontalAlignment="Center"
-                       ClipToBounds="False"
+            <TextBlock MaxWidth="125"
                        Padding="3"
+                       HorizontalAlignment="Center"
+                       Background="Transparent"
+                       Classes.actionLabel="True"
+                       Classes.visible="{Binding IsSelected}"
+                       ClipToBounds="False"
                        FontSize="12"
                        FontWeight="SemiBold"
                        Foreground="{DynamicResource ThemeInteractiveColor}"
-                       Background="Transparent"
+                       Text="{Binding Label}"
                        TextAlignment="Center"
-                       TextWrapping="WrapWithOverflow"
-                       Text="{Binding Label}" />
+                       TextWrapping="WrapWithOverflow" />
         </StackPanel>
     </Border>
 </local:MpAvUserControl>

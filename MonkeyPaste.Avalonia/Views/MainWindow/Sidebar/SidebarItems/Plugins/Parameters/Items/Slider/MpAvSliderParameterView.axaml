@@ -17,6 +17,28 @@
             <Setter Property="MinWidth"
                     Value="15" />
         </Style>
+        <Style Selector="TextBox#SliderValueTextBox[IsVisible=true]:not(.flip):not(:focus-within)">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="TextBox#SliderValueTextBox">
+            <Style.Resources>
+                <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
+                <SolidColorBrush x:Key="TextControlForeground" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{DynamicResource ThemeInteractiveBgColor}" />
+            </Style.Resources>
+        </Style>
+        <Style Selector="TextBox#SliderValueTextBox.flip">
+            <Style.Resources>
+                <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
+                <SolidColorBrush x:Key="TextControlForeground" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{DynamicResource ThemeInteractiveColor}" />
+            </Style.Resources>
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="SliderBorder"
             Classes.paramBorder="True"
@@ -63,13 +85,17 @@
                 </Rectangle.Width>
             </Rectangle>
             <TextBox x:Name="SliderValueTextBox"
-                     Classes="sliderTextBox param"
+                     CornerRadius="0"
+                     Classes="sliderTextBox param custom"
+                     Classes.flip="{Binding FlipTheme, ElementName=SliderView}"
+                     Classes.halfflip="{Binding HalfFlipTheme, ElementName=SliderView}"
                      Cursor="Ibeam"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      local:MpAvLostFocusUpdateBindingExtension.IsEnabled="True"
                      local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=TwoWay}"
                      BorderThickness="0"
                      IsReadOnly="False"
+                     TextAlignment="Center"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center" />
         </Grid>

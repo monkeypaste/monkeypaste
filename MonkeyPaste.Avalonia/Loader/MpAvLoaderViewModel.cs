@@ -1,6 +1,5 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -115,6 +114,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsInitialStartup = !MpAvPrefViewModel.Instance.IsWelcomeComplete;
             MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
+
             MpAvThemeViewModel.Instance.UpdateThemeResources();
         }
 
@@ -146,9 +146,12 @@ namespace MonkeyPaste.Avalonia {
 
                 LoadedDateTime = DateTime.Now;
 
-                //if (Mp.Services.PlatformInfo.IsDesktop) {
-                //App.MainView.Show();
-                //}
+                if (MpAvPrefViewModel.Instance.LastLoadedVersion != Mp.Services.ThisAppInfo.ThisAppProductVersion) {
+                    // app updated, show change log
+                    MpAvPrefViewModel.Instance.LastLoadedVersion = Mp.Services.ThisAppInfo.ThisAppProductVersion;
+                    MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand.Execute(MpHelpLinkType.VersionInfo);
+                }
+
                 IsPlatformLoaded = true;
             }, DispatcherPriority.Background);
         }

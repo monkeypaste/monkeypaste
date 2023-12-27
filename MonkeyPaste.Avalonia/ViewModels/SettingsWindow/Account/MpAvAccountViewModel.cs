@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -132,10 +131,16 @@ namespace MonkeyPaste.Avalonia {
                 // or
                 // (5 total | 5 capacity | 0 remaining) Free/Standard
 
+                var sb = new StringBuilder();
+                string line_0 = $"{Mp.Services.ThisAppInfo.ThisAppProductName} {Mp.Services.ThisAppInfo.ThisAppProductVersion}";
+#if DEBUG
+                line_0 += " [DEBUG]";
+#endif
+                sb.AppendLine(line_0);
                 string offline = IsServerAvailable ? string.Empty : $"{UiStrings.AccountOfflineLabel} ";
                 string acct_name = IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
                 string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, WorkingAccountType.EnumToUiString());
-
+                sb.AppendLine(line_1);
 
                 int content_count = MpAvAccountTools.Instance.LastContentCount;
                 int cap_count = MpAvAccountTools.Instance.GetContentCapacity(WorkingAccountType);
@@ -152,8 +157,9 @@ namespace MonkeyPaste.Avalonia {
                         (Math.Max(0, cap_count - content_count)),
                         UiStrings.AccountInfoRemainingText);
                 }
+                sb.AppendLine(line_2);
 
-                return line_1 + Environment.NewLine + line_2;
+                return sb.ToString();
             }
         }
 

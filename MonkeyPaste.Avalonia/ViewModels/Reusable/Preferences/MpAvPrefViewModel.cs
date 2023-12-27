@@ -1,5 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using Newtonsoft.Json.Converters;
 using PropertyChanged;
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Converters;
@@ -387,6 +386,7 @@ namespace MonkeyPaste.Avalonia {
         #region System
 
         public bool LoadOnLogin { get; set; } = false;
+        public string LastLoadedVersion { get; set; }
 
         #endregion
 

@@ -135,7 +135,7 @@
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
     <value>Top Left Corner</value>
   </data>
-  <data name="MpBillingCycleType_None" xml:space="preserve">
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
     <value>Never</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
@@ -321,11 +321,11 @@
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
     <value>Exit Application</value>
   </data>
-  <data name="MpShortcutType_PasteSelectedItems" xml:space="preserve">
-    <value>Paste Selected Items</value>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>Paste To External</value>
   </data>
-  <data name="MpShortcutType_PasteHere" xml:space="preserve">
-    <value>Paste Here</value>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>Paste Selection</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
     <value>Copy Selection</value>

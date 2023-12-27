@@ -1,40 +1,21 @@
-<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvToolTipView"
+                       xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
-                       xmlns:local="using:MonkeyPaste.Avalonia"
                        x:Name="ToolTipView"
-                       IsHitTestVisible="False"
-                       mc:Ignorable="d"
-                       d:DesignWidth="800"
                        d:DesignHeight="450"
-                       x:Class="MonkeyPaste.Avalonia.MpAvToolTipView"
-                       Background="Transparent">
+                       d:DesignWidth="800"
+                       Background="Transparent"
+                       IsHitTestVisible="False"
+                       mc:Ignorable="d">
     <local:MpAvUserControl.RenderTransform>
         <RotateTransform />
     </local:MpAvUserControl.RenderTransform>
     <local:MpAvUserControl.Styles>
-        <!--  TEXT/HTML VISIBILITY  -->
-        <Style Selector="Border#TooltipOuterContainer.text av|HtmlLabel#ToolTipHtmlPanel">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Border#TooltipOuterContainer.html TextBlock#ToolTipTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <!--  TEXT HINT  -->
-        <Style Selector="Border#TooltipOuterContainer.text:not(.gesture)">
-            <Setter Property="MaxWidth"
-                    Value="300" />
-        </Style>
-        <Style Selector="Border#TooltipOuterContainer.text TextBlock#ToolTipTextBlock">
-            <Setter Property="TextWrapping"
-                    Value="WrapWithOverflow" />
-        </Style>
 
         <!--  SHORTCUT TOOLTIP  -->
         <Style Selector="Border#TooltipOuterContainer.text.gesture TextBlock#ToolTipTextBlock">
@@ -48,33 +29,36 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TooltipOuterContainer"
-            CornerRadius="10"
-            BorderThickness="1.5"
+            IsVisible="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Padding="10"
+            BorderThickness="1.5"
             Classes.gesture="{Binding InputGestureText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-            Classes.text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-            Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+            Classes.html="{Binding IsHtml, ElementName=ToolTipView}"
+            Classes.text="{Binding !IsHtml, ElementName=ToolTipView}"
+            CornerRadius="10">
         <DockPanel x:Name="ToolTipTextContainer">
-            <local:MpAvShortcutLabel Classes="menuItemGesture"
-                                     KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}"
-                                     DockPanel.Dock="Right"
-                                     Margin="5,0,0,0"
+            <local:MpAvShortcutLabel Margin="5,0,0,0"
                                      HorizontalAlignment="Right"
-                                     VerticalAlignment="Center" />
+                                     VerticalAlignment="Center"
+                                     Classes="menuItemGesture"
+                                     DockPanel.Dock="Right"
+                                     KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}" />
             <Grid>
                 <TextBlock x:Name="ToolTipTextBlock"
-                           FontSize="14"
+                           MaxWidth="300"
                            Margin="0"
-                           MaxWidth="250"
                            VerticalAlignment="Center"
-                           TextWrapping="WrapWithOverflow"
-                           Text="{Binding ToolTipText, ElementName=ToolTipView}" />
+                           FontSize="14"
+                           IsVisible="{Binding !IsHtml, ElementName=ToolTipView}"
+                           Text="{Binding ToolTipText, ElementName=ToolTipView}"
+                           TextWrapping="WrapWithOverflow" />
                 <av:HtmlLabel x:Name="ToolTipHtmlPanel"
                               MaxWidth="600"
-                              local:MpAvHtmlStylerExtension.IsEnabled="True"
+                              IsVisible="{Binding IsHtml, ElementName=ToolTipView}"
                               local:MpAvHtmlStylerExtension.DefaultFontSize="14"
-                              IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                              Text="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
+                              local:MpAvHtmlStylerExtension.DefaultColor="{Binding Foreground, ElementName=ToolTipTextBlock}"
+                              local:MpAvHtmlStylerExtension.IsEnabled="True"
+                              Text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
             </Grid>
         </DockPanel>
     </Border>

@@ -379,7 +379,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-
+        public bool HasShown { get; set; }
         public string[] DefaultActionGuids => new string[] {
             DEFAULT_ANNOTATOR_ANALYZE_GUID,
             DEFAULT_ANNOTATOR_TRIGGER_GUID
@@ -551,9 +551,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
-
-
         #endregion
 
         #region Private Methods

@@ -232,9 +232,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (_defaultInfo.IsDefault()) {
                     var def_ref = MpAvDefaultDataCreator.DefaultShortcutDefinitions.FirstOrDefault(x => x[2] == ShortcutType.ToString());
-                    MpDebug.Assert(def_ref != null, $"Shortcut error, cannot find default def for '{ShortcutType}'");
-                    _defaultInfo.Item1 = def_ref[1];
-                    _defaultInfo.Item2 = def_ref[3].ToEnum<MpRoutingType>();
+                    if (def_ref != null) {
+                        _defaultInfo.Item1 = def_ref[1];
+                        _defaultInfo.Item2 = def_ref[3].ToEnum<MpRoutingType>();
+                    } else {
+                        MpDebug.Break($"Shortcut error, cannot find default def for '{ShortcutType}'");
+                    }
                 }
                 return _defaultInfo;
             }

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvIMenuItemViewModel dc,
             bool showByPointer =
 #if DESKTOP
-            true, 
+            true,
 #else
             false,
 #endif

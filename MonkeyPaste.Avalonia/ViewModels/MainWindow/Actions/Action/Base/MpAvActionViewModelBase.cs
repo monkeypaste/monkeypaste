@@ -18,6 +18,13 @@ namespace MonkeyPaste.Avalonia {
         SourceClip
     }
 
+    public enum MpActionDesignerShapeType {
+        None = 0,
+        Circle,
+        Box,
+        Diamond
+    }
+
     public abstract class MpAvActionViewModelBase :
         MpAvViewModelBase<MpAvTriggerCollectionViewModel>,
         MpIActionPluginComponent,
@@ -509,6 +516,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public virtual MpActionDesignerShapeType DesignerShapeType =>
+            MpActionDesignerShapeType.Box;
         public virtual string ActionBackgroundHexColor =>
             GetActionHexColor(ActionType);
 
@@ -1676,6 +1685,8 @@ namespace MonkeyPaste.Avalonia {
                     MpJsonConverter.DeserializeObject<MpAction>(action_json) is not MpAction child_to_assign) {
                     return;
                 }
+                MpConsole.WriteLine("Pasting action avdo: ");
+                MpConsole.WriteLine(action_json);
                 await SetChildRestoreStateAsync();
                 await AssignCloneAsChildAsync(child_to_assign, ActionId, Children.Count());
 

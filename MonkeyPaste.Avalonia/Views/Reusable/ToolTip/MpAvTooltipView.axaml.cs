@@ -1,14 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.Media;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+using Avalonia.Interactivity;
 using PropertyChanged;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -29,98 +23,65 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region InputGestureText Property
-
-        private string _InputGestureText = string.Empty;
-
-        public static readonly DirectProperty<MpAvToolTipView, string> InputGestureTextProperty =
-            AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
-            (
-                nameof(InputGestureText),
-                o => o.InputGestureText,
-                (o, v) => o.InputGestureText = v,
-                string.Empty
-            );
-
         public string InputGestureText {
-            get => _InputGestureText;
-            set {
-                SetAndRaise(InputGestureTextProperty, ref _InputGestureText, value);
-            }
+            get { return GetValue(InputGestureTextProperty); }
+            set { SetValue(InputGestureTextProperty, value); }
         }
+
+        public static readonly StyledProperty<string> InputGestureTextProperty =
+            AvaloniaProperty.Register<MpAvToolTipView, string>(
+                name: nameof(InputGestureText),
+                defaultValue: string.Empty);
 
         #endregion
 
         #region ToolTipText Property
-
-        private string _ToolTipText = string.Empty;
-
-        public static readonly DirectProperty<MpAvToolTipView, string> ToolTipTextProperty =
-            AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
-            (
-                nameof(ToolTipText),
-                o => o.ToolTipText,
-                (o, v) => o.ToolTipText = v,
-                string.Empty
-            );
-
         public string ToolTipText {
-            get => _ToolTipText;
-            set {
-                SetAndRaise(ToolTipTextProperty, ref _ToolTipText, value);
-            }
+            get { return GetValue(ToolTipTextProperty); }
+            set { SetValue(ToolTipTextProperty, value); }
         }
+
+        public static readonly StyledProperty<string> ToolTipTextProperty =
+            AvaloniaProperty.Register<MpAvToolTipView, string>(
+                name: nameof(ToolTipText),
+                defaultValue: string.Empty);
 
         #endregion
 
-        #region ToolTipHtml Property
-
-        private string _ToolTipHtml = string.Empty;
-
-        public static readonly DirectProperty<MpAvToolTipView, string> ToolTipHtmlProperty =
-            AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
-            (
-                nameof(ToolTipHtml),
-                o => o.ToolTipHtml,
-                (o, v) => o.ToolTipHtml = v,
-                string.Empty
-            );
-
-        public string ToolTipHtml {
-            get => _ToolTipHtml;
-            set {
-                SetAndRaise(ToolTipHtmlProperty, ref _ToolTipHtml, value);
-            }
+        #region IsHtml Property
+        public bool IsHtml {
+            get { return GetValue(IsHtmlProperty); }
+            set { SetValue(IsHtmlProperty, value); }
         }
+
+        public static readonly StyledProperty<bool> IsHtmlProperty =
+            AvaloniaProperty.Register<MpAvToolTipView, bool>(
+                name: nameof(IsHtml),
+                defaultValue: false);
 
         #endregion 
 
-        public bool HasText =>
-            !string.IsNullOrEmpty(ToolTipText) ||
-                !string.IsNullOrEmpty(ToolTipHtml);
 
         #endregion
 
         public MpAvToolTipView() {
             InitializeComponent();
-            this.GetObservable(IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
         }
-        private void OnIsVisibleChanged() {
-            if (!IsVisible || TopLevel.GetTopLevel(this) is not PopupRoot pur) {
+        protected override void OnLoaded(RoutedEventArgs e) {
+            base.OnLoaded(e);
+            if (TopLevel.GetTopLevel(this) is not PopupRoot pur) {
                 return;
             }
             pur.Classes.Add("tooltip");
-            IsVisible = HasText;
-            if (!IsVisible) {
-                pur.IsVisible = false;
-                return;
-            }
         }
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
+
             if (!MpAvPrefViewModel.Instance.ShowTooltips) {
                 IsVisible = false;
                 return;
             }
+
         }
 
         //protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {

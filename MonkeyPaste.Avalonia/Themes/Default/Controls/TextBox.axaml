@@ -19,13 +19,13 @@
         <Setter Property="FontFamily"
                 Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
-    <Style Selector=":is(TextBox), :is(TextBox):focus">
+    <Style Selector=":is(TextBox):not(.custom), :is(TextBox):not(.custom):focus">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeInteractiveBgBrush}" />
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeInteractiveBrush}" />
     </Style>
-    <Style Selector="TextBox,TextBox:focus">
+    <Style Selector="TextBox:not(.custom),TextBox:not(.custom):focus">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeInteractiveBgBrush}" />
         <Setter Property="Foreground"

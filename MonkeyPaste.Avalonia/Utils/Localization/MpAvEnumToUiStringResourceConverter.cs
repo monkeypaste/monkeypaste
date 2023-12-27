@@ -105,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
         public static bool CheckEnumUiStrings() {
             // returns true if needs restart
 #if DEBUG && WINDOWS
-            if (!string.IsNullOrWhiteSpace(EnumUiStrings.Culture.Name)) {
+            if (EnumUiStrings.Culture.Name != "en-US") {
                 // non-invariant don't update
                 MpConsole.WriteLine($"Enum UI Strings ignoring culture '{EnumUiStrings.Culture}' its non-invariant '{EnumUiStrings.Culture.Name}'");
                 return false;

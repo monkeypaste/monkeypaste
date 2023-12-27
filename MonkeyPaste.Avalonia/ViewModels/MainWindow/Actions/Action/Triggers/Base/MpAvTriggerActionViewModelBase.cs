@@ -81,7 +81,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
+        public override MpActionDesignerShapeType DesignerShapeType =>
+            MpActionDesignerShapeType.Circle;
         public override string ActionBackgroundHexColor =>
             GetActionHexColor(ActionType, TriggerType);
         public string EnabledHexColor =>

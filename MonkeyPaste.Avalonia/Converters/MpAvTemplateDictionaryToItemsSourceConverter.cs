@@ -1,11 +1,14 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data.Converters;
+using Avalonia.Layout;
+using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 namespace MonkeyPaste.Avalonia {
     public class MpAvTemplateDictionaryToItemsSourceConverter : Dictionary<string, IDataTemplate>, IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
@@ -17,7 +20,6 @@ namespace MonkeyPaste.Avalonia {
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotSupportedException();
-
         private Control GetMenuItem(MpAvIMenuItemViewModel mivm) {
             string key = mivm.MenuItemType.ToString();
             if (mivm is MpAvMenuItemViewModel mivm_obj &&
@@ -34,6 +36,7 @@ namespace MonkeyPaste.Avalonia {
                 return c;
             }
             mi.ItemsSource = GetMenuItems(mivm.SubItems);
+            InitChildMenuFix(mi);
             return mi;
         }
         private List<Control> GetMenuItems(IEnumerable<MpAvIMenuItemViewModel> mivml) {
@@ -61,6 +64,58 @@ namespace MonkeyPaste.Avalonia {
             }
             return mil;
         }
+
+
+        #region Child Menu Fix
+        private void InitChildMenuFix(MenuItem mi) {
+            mi.SubmenuOpened += Mi_SubmenuOpened;
+            mi.Unloaded += Mi_Unloaded;
+        }
+        private void Mi_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (sender is not MenuItem mi) {
+                return;
+            }
+            mi.SubmenuOpened -= Mi_SubmenuOpened;
+            mi.Unloaded -= Mi_Unloaded;
+        }
+
+        private void Mi_SubmenuOpened(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (e.Source is not MenuItem mi) {
+                return;
+            }
+            if (mi.Items.FirstOrDefault() is Control child_mi) {
+                child_mi.Tag = mi;
+                child_mi.EffectiveViewportChanged += Child_mi_EffectiveViewportChanged;
+                child_mi.DetachedFromVisualTree += Child_mi_DetachedFromVisualTree;
+            }
+        }
+
+        private void Child_mi_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            if (sender is not MenuItem child_mi ||
+                child_mi.Tag is not MenuItem mi ||
+                TopLevel.GetTopLevel(mi) is not PopupRoot pr ||
+                TopLevel.GetTopLevel(child_mi) is not PopupRoot child_pr) {
+                return;
+            }
+            var parent_tl = pr.PointToScreen(pr.Bounds.TopLeft);
+            var child_tr = child_pr.PointToScreen(child_pr.Bounds.TopRight);
+            double x_diff = parent_tl.X - child_tr.X;
+            if (x_diff > 0 &&
+                child_pr.RenderTransform is TransformGroup tg &&
+                tg.Children.OfType<TranslateTransform>().FirstOrDefault() is { } tt) {
+                tt.X = x_diff + 5;
+                child_pr.ClipToBounds = false;
+            }
+        }
+        private void Child_mi_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if (sender is not MenuItem child_mi) {
+                return;
+            }
+
+            child_mi.EffectiveViewportChanged -= Child_mi_EffectiveViewportChanged;
+            child_mi.DetachedFromVisualTree -= Child_mi_DetachedFromVisualTree;
+        }
+        #endregion
 
     }
 }
