@@ -406,6 +406,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                         OnPropertyChanged(nameof(FocusNode));
+                        if (Parent.LastTabIdx >= 0) {
+                            SelectedTabIndex = Parent.LastTabIdx;
+                        }
                     }
                     break;
                 case nameof(FocusNode):
@@ -434,6 +437,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedSource):
                     Sources.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     OnPropertyChanged(nameof(FocusNode));
+                    break;
+                case nameof(SelectedTabIndex):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    Parent.LastTabIdx = SelectedTabIndex;
                     break;
             }
         }

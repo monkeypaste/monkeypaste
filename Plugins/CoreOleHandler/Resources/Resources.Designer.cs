@@ -205,11 +205,29 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Images can be very large sometimes and can create serious performance issues. Try to keep this value low..
+        ///   Looks up a localized string similar to Sometimes fully transparent images will show up on the clipboard, its confusing..
         /// </summary>
-        public static string ImgMaxHHint {
+        public static string ImgIgnoreTransparentImgHint {
             get {
-                return ResourceManager.GetString("ImgMaxHHint", resourceCulture);
+                return ResourceManager.GetString("ImgIgnoreTransparentImgHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore Empty Images.
+        /// </summary>
+        public static string ImgIgnoreTransparentImgLabel {
+            get {
+                return ResourceManager.GetString("ImgIgnoreTransparentImgLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Large images (more than a few MBs) can make drag-and-drop and overall performance somewhat sluggish unfortunately. Try to keep this value low..
+        /// </summary>
+        public static string ImgMaxHint {
+            get {
+                return ResourceManager.GetString("ImgMaxHint", resourceCulture);
             }
         }
         
@@ -219,15 +237,6 @@ namespace CoreOleHandler {
         public static string ImgMaxHLabel {
             get {
                 return ResourceManager.GetString("ImgMaxHLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Images can be very large sometimes and can create serious performance issues. Try to keep this value low..
-        /// </summary>
-        public static string ImgMaxWHint {
-            get {
-                return ResourceManager.GetString("ImgMaxWHint", resourceCulture);
             }
         }
         

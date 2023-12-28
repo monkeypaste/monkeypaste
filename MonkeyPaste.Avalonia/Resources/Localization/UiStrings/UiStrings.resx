@@ -2394,4 +2394,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
   <data name="PluginsHelpTooltip" xml:space="preserve">
     <value>Learn about plugins</value>
   </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Restore THIS analysis settings</value>
+  </data>
 </root>

@@ -2023,6 +2023,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Always.
+        /// </summary>
+        public static string MpScrollToOpenAndLockType_Always {
+            get {
+                return ResourceManager.GetString("MpScrollToOpenAndLockType_Always", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holding Shift.
         /// </summary>
         public static string MpScrollToOpenAndLockType_HoldingShift {

@@ -90,13 +90,8 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             this.GetObservable(RecordCommandProperty).Subscribe(value => OnRecordChanged());
             this.GetObservable(RecordCommandParameterProperty).Subscribe(value => OnRecordChanged());
-
-            //this.PointerExited += MpAvShortcutView_PointerExited;
-            //ShortcutLabel.PointerEntered += MpAvShortcutView_PointerEntered;
-            //RecordButton.PointerExited += MpAvShortcutView_PointerExited;
-
-            //rb.AddHandler(PointerReleasedEvent, Rb_PointerPressed, RoutingStrategies.Tunnel);
         }
+
         private void OnRecordChanged() {
             if (this.Content is not Control c) {
                 return;
@@ -106,33 +101,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 c.Classes.Remove("recordable");
             }
-        }
-
-        private void Rb_PointerPressed(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            if (!CanRecord) {
-                return;
-            }
-            RecordCommand.Execute(RecordCommandParameter);
-
-            sclb.IsVisible = true;
-            rb.IsVisible = false;
-        }
-
-        private void MpAvShortcutView_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if (!CanRecord) {
-                return;
-            }
-            sclb.IsVisible = true;
-            rb.IsVisible = false;
-        }
-
-        private void MpAvShortcutView_PointerEntered(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if (!CanRecord) {
-                return;
-            }
-
-            sclb.IsVisible = false;
-            rb.IsVisible = true;
         }
     }
 }

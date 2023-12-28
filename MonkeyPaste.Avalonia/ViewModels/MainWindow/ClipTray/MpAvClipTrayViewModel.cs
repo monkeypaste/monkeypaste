@@ -12,7 +12,6 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -517,7 +516,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsThumbDragging => IsThumbDraggingX || IsThumbDraggingY;
 
         public bool IsForcingScroll { get; set; }
-
         private void SetTotalTileSize() {
             MpSize totalTileSize;
             int tc = Mp.Services.Query.TotalAvailableItemsInQuery;
@@ -725,7 +723,7 @@ namespace MonkeyPaste.Avalonia {
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
                 // when there's multiple query rows shorten height a bit to 
                 // hint theres more there (if not multiple rows, don't shorten looks funny
-                h *= 0.7;
+                //h *= 0.7;
             }
 
             _defaultQueryItemWidth = w;
@@ -3741,6 +3739,10 @@ namespace MonkeyPaste.Avalonia {
 
             if (!vis_lbil.Any()) {
                 // no visible items, in place requery
+                if (Mp.Services.Query.TotalAvailableItemsInQuery < DefaultLoadCount && LayoutType == MpClipTrayLayoutType.Grid) {
+                    // HACK when items less than 1 page requery will clear the tray for some reason, this prevents
+                    return false;
+                }
                 int new_head_idx = FindJumpTileIdx(ScrollOffsetX, ScrollOffsetY, out _);
                 if (new_head_idx < 0) {
                     return false;

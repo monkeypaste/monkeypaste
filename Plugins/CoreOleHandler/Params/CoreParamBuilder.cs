@@ -112,8 +112,16 @@ namespace CoreOleHandler {
                 case MpPortableDataFormats.Image:
                     if (isReader) {
                         pfl.Add(new MpParameterFormat() {
+                            label = Resources.ImgIgnoreTransparentImgLabel,
+                            description = Resources.ImgIgnoreTransparentImgHint,
+                            controlType = MpParameterControlType.CheckBox,
+                            unitType = MpParameterValueUnitType.Bool,
+                            value = new MpPluginParameterValueFormat(true.ToString(), true),
+                            paramId = GetParamId(format, isReader, "ignore_empty")
+                        });
+                        pfl.Add(new MpParameterFormat() {
                             label = Resources.ImgMaxWLabel,
-                            description = Resources.ImgMaxWHint,
+                            description = Resources.ImgMaxHint,
                             controlType = MpParameterControlType.Slider,
                             unitType = MpParameterValueUnitType.Integer,
                             paramId = GetParamId(format, isReader, "maxw"),
@@ -123,7 +131,7 @@ namespace CoreOleHandler {
                         });
                         pfl.Add(new MpParameterFormat() {
                             label = Resources.ImgMaxHLabel,
-                            description = Resources.ImgMaxHHint,
+                            description = Resources.ImgMaxHint,
                             controlType = MpParameterControlType.Slider,
                             unitType = MpParameterValueUnitType.Integer,
                             paramId = GetParamId(format, isReader, "maxh"),

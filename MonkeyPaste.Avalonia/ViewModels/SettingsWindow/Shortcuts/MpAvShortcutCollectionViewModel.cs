@@ -1354,6 +1354,10 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 if (args is MpIShortcutCommandViewModel scvm) {
                     _ = await CreateOrUpdateViewModelShortcutAsync(scvm);
+                    if (scvm is MpAvShortcutRecorderParameterViewModel srvm) {
+                        srvm.OnPropertyChanged(nameof(srvm.KeyGroups));
+                        srvm.OnPropertyChanged(nameof(srvm.KeyString));
+                    }
                 }
                 UpdateFilteredItems();
                 MpAvDataGridRefreshExtension.RefreshDataGrid(this);

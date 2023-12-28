@@ -135,6 +135,9 @@
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
     <value>Top Left Corner</value>
   </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>Always</value>
+  </data>
   <data name="MpBillingCycleType_Never" xml:space="preserve">
     <value>Never</value>
   </data>

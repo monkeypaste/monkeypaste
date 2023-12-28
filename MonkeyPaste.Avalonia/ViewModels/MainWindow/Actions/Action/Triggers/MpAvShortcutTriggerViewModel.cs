@@ -2,10 +2,7 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -169,6 +166,17 @@ namespace MonkeyPaste.Avalonia {
             // NOTE nothing to enable
             // invoke is handled by shortcut listener and invokeCmd.CanExec
         }
+
+        //protected override void Param_vm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+        //    base.Param_vm_PropertyChanged(sender, e);
+        //    if (sender is MpAvShortcutRecorderParameterViewModel scrpvm) {
+        //        switch (e.PropertyName) {
+        //            case nameof(scrpvm.KeyString):
+        //                scrpvm.InitializeAsync(scrpvm.PresetValueModel).FireAndForgetSafeAsync();
+        //                break;
+        //        }
+        //    }
+        //}
 
         #endregion
 

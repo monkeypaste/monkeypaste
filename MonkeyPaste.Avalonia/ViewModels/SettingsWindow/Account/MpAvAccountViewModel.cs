@@ -378,9 +378,9 @@ namespace MonkeyPaste.Avalonia {
                     icon = "MonkeyWinkImage";
                     break;
                 case MpAccountNtfType.SubscriptionUpgraded:
-                    if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
-                        return;
-                    }
+                    //if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
+                    //    return;
+                    //}
                     ntf_type = MpNotificationType.AccountChanged;
                     title = UiStrings.NtfCapAccountChangedTitle;
                     msg = string.Format(
@@ -411,13 +411,13 @@ namespace MonkeyPaste.Avalonia {
                          iconResourceObj: icon);
             } else {
 
-                while (true) {
-                    // BUG ntf will come up behind loader so wait for loader to init and complete before showing these
-                    if (Mp.Services == null || Mp.Services.StartupState == null || !Mp.Services.StartupState.IsReady) {
-                        await Task.Delay(100);
-                    }
-                    break;
-                }
+                //while (true) {
+                //    // BUG ntf will come up behind loader so wait for loader to init and complete before showing these
+                //    if (Mp.Services == null || Mp.Services.StartupState == null || !Mp.Services.StartupState.IsReady) {
+                //        await Task.Delay(100);
+                //    }
+                //    break;
+                //}
 
                 await Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: title,

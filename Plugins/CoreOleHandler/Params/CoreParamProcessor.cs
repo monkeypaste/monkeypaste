@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CoreOleHandler {
     public static class CoreParamProcessor {
@@ -218,8 +217,14 @@ namespace CoreOleHandler {
                     case MpPortableDataFormats.Image:
                         switch (paramType) {
                             case CoreOleParamType.PNG_R_SCALEOVERSIZED: {
-                                    // NOTE this also handles maxw,maxh since they are dependant
+                                    // NOTE this also handles maxw,maxh,scale,empty since they are dependant and for perf
                                     if (data is not string base64 || base64.ToAvBitmap() is not { } bmp) {
+                                        break;
+                                    }
+                                    bool ignore_empty = req.GetRequestParamBoolValue(CoreOleParamType.PNG_R_IGNORE_EMPTY);
+                                    if (ignore_empty && bmp.IsEmptyOrTransprent()) {
+                                        data = null;
+                                        AddIgnoreNotification(ref ntfl, format);
                                         break;
                                     }
                                     bool do_scale = paramVal.ParseOrConvertToBool(false);
@@ -237,6 +242,7 @@ namespace CoreOleHandler {
                                         // too big ignore
                                         data = null;
                                         AddIgnoreNotification(ref ntfl, format);
+                                        break;
                                     }
                                     data = bmp.Resize(adj_size).ToBase64String();
 

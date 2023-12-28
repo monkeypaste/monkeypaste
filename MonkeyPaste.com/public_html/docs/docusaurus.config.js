@@ -73,7 +73,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       prism: {
-        additionalLanguages: ['csharp'],
+        additionalLanguages: ['csharp', 'java'],
       },
       navbar: {
         title: 'MonkeyPaste',

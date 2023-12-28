@@ -513,6 +513,7 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         public event EventHandler OnValidate;
+        public event EventHandler OnValueChanged;
 
         #endregion
 
@@ -594,6 +595,9 @@ namespace MonkeyPaste.Avalonia {
                     if (socvm != null) {
 
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
+                    }
+                    if (e.PropertyName == nameof(CurrentValue)) {
+                        OnValueChanged?.Invoke(this, EventArgs.Empty);
                     }
                     Validate();
                     break;

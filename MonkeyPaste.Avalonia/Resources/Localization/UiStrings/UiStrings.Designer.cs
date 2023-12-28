@@ -2028,6 +2028,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restore THIS analysis settings.
+        /// </summary>
+        public static string ClipTransResetParamsByTransTooltip {
+            get {
+                return ResourceManager.GetString("ClipTransResetParamsByTransTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you SURE you want to delete ALL your clips?!
         ///*This operation CANNOT be undone!.
         /// </summary>

@@ -3,6 +3,7 @@
         None = 0,
         HoldingShift,
         TopRightCorner,
-        TopLeftCorner
+        TopLeftCorner,
+        Always
     }
 }

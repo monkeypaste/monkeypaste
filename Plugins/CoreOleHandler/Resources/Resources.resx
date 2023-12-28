@@ -167,14 +167,17 @@
   <data name="ImgExportTypeLabel" xml:space="preserve">
     <value>Default Export Type</value>
   </data>
-  <data name="ImgMaxHHint" xml:space="preserve">
-    <value>Images can be very large sometimes and can create serious performance issues. Try to keep this value low.</value>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Sometimes fully transparent images will show up on the clipboard, its confusing.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignore Empty Images</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Large images (more than a few MBs) can make drag-and-drop and overall performance somewhat sluggish unfortunately. Try to keep this value low.</value>
   </data>
   <data name="ImgMaxHLabel" xml:space="preserve">
     <value>Max Height</value>
-  </data>
-  <data name="ImgMaxWHint" xml:space="preserve">
-    <value>Images can be very large sometimes and can create serious performance issues. Try to keep this value low.</value>
   </data>
   <data name="ImgMaxWLabel" xml:space="preserve">
     <value>Max Width</value>

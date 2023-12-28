@@ -53,10 +53,6 @@ namespace MonkeyPaste.Avalonia {
             _disposables.Dispose();
         }
 
-        protected override void OnDataContextChanged(EventArgs e) {
-            base.OnDataContextChanged(e);
-
-        }
         private void Init() {
             var sclb = this.FindControl<ItemsControl>("ShortcutListBox");
             string keys = null;

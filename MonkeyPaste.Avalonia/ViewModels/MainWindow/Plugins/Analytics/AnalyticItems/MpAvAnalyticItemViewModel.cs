@@ -1,6 +1,4 @@
-﻿using Avalonia.Controls.Shapes;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+﻿using MonkeyPaste.Common;
 
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -480,8 +478,7 @@ namespace MonkeyPaste.Avalonia {
             // rollup target params and cont
             MpAnalyzerTransaction result = await MpPluginTransactor.PerformTransactionAsync(
                                        PluginFormat,
-                                       targetAnalyzer.ParamLookup
-                                           .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
+                                       targetAnalyzer.ParamLookup,
                                        sourceCopyItem,
                                        targetAnalyzer.Preset,
                                        suppressWrite) as MpAnalyzerTransaction;

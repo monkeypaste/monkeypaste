@@ -12,6 +12,11 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvTransactionItemView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="local|MpAvParameterCollectionView">
+
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:DataType="local:MpAvTransactionMessageViewModelBase">
         <ContentControl Content="{Binding}">
             <ContentControl.DataTemplates>
@@ -32,27 +37,45 @@
                         <Border IsVisible="{Binding PresetViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                             <Grid x:Name="TransAnalyzerReqContainer"
                                   RowDefinitions="Auto,*">
+
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="10">
-                                    <!--  EXECUTE ANALYSIS BUTTON  -->
+                                    <Grid>
+                                        <!--  EXECUTE ANALYSIS BUTTON  -->
 
-                                    <Button Classes="defaultButton iconTextButton"
-                                            Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
-                                        <DockPanel>
-                                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
-                                            <TextBlock Text="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
-                                        </DockPanel>
-                                    </Button>
+                                        <Button IsVisible="{Binding !PresetViewModel.Parent.IsBusy}"
+                                                Classes="defaultButton iconTextButton"
+                                                Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
+                                            <DockPanel>
+                                                <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand, Source={StaticResource ExecuteImage}}" />
+                                                <TextBlock Text="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
+                                            </DockPanel>
+                                        </Button>
+
+                                        <!--  EXECUTE BUSY SPINNER  -->
+
+                                        <local:MpAvBusySpinnerView Grid.Row="0"
+                                                                   IsVisible="{Binding PresetViewModel.Parent.IsBusy}"
+                                                                   HorizontalAlignment="Stretch"
+                                                                   VerticalAlignment="Stretch" />
+                                    </Grid>
 
                                     <!--  RESET PARAM BUTTON  -->
                                     <Button Classes="defaultButton outline outlineOver"
-                                            Command="{Binding PresetViewModel.ResetOrDeleteThisPresetCommand}"
-                                            CommandParameter="{Binding ParameterReqFormat}">
-                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
+                                            IsVisible="{Binding CanRestore}"
+                                            Command="{Binding RestoreRequestPresetValuesCommand}">
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.ClipTransResetParamsByTransTooltip}" />
+                                        </ToolTip.Tip>
+                                        <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand, Source={StaticResource ResetImage}}" />
 
                                     </Button>
                                 </StackPanel>
+
+                                <!--  PARAM COLLECTION  -->
                                 <local:MpAvParameterCollectionView Grid.Row="1"
+                                                                   Margin="0,5,0,0"
+                                                                   IsSaveCancelHidden="True"
                                                                    DataContext="{Binding PresetViewModel}"
                                                                    HorizontalAlignment="Stretch"
                                                                    VerticalAlignment="Stretch" />

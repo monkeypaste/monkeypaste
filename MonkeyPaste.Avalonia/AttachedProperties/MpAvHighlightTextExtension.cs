@@ -257,6 +257,7 @@ namespace MonkeyPaste.Avalonia {
 
             }
             string text = tb.Text;
+            tb.Text = string.Empty;
             tb.Inlines.Clear();
             if (gl == null || !hrivm.HighlightRanges.Any()) {
                 // reset inlines

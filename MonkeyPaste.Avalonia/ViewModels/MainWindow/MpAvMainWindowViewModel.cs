@@ -1108,6 +1108,9 @@ namespace MonkeyPaste.Avalonia {
                     var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
                     bool lock_on_open = false;
                     switch (MpAvPrefViewModel.Instance.ScrollToOpenAndLockType) {
+                        case MpScrollToOpenAndLockType.Always:
+                            lock_on_open = true;
+                            break;
                         case MpScrollToOpenAndLockType.TopLeftCorner:
                             lock_on_open = gmp.X <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_DIST;
                             break;

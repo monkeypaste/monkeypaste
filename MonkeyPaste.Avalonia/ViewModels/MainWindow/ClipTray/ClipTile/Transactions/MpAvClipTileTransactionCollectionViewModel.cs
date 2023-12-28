@@ -193,6 +193,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyAnalysisTransaction =>
             Transactions.Any(x => x.IsAnalysisTransaction);
 
+        public int LastTabIdx { get; set; } = -1;
 
         #endregion
 
@@ -547,25 +548,11 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand CloseTransactionPaneCommand => new MpAsyncCommand(
             async () => {
                 Dispatcher.UIThread.VerifyAccess();
-                IsTransactionPaneOpen = false;
-                SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
                 await Task.Delay(1);
-                //SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
-                //IsTransactionPaneAnimating = true;
-                //double nw = Parent.Parent.DefaultQueryItemWidth;
-                //double nh = Parent.Parent.DefaultQueryItemHeight;
 
-                //MpAvResizeExtension.ResizeAnimated(
-                //        Parent.GetContentView() as Control,
-                //        nw, nh,
-                //        () => {
-                //            IsTransactionPaneAnimating = false;
-                //        });
-                //while (IsTransactionPaneAnimating) {
-                //    await Task.Delay(100);
-                //}
-                //// only wait if executed async for timing
-                //return;
+                IsTransactionPaneOpen = false;
+                Parent.IsSubSelectionEnabled = false;
+                SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
             }, () => {
                 return Parent != null && IsTransactionPaneOpen;
             });
@@ -577,36 +564,6 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(1);
                 IsTransactionPaneOpen = true;
                 SetTransactionViewGridLength(new GridLength(0.6, GridUnitType.Star));
-                return;
-
-                //OnPropertyChanged(nameof(MaxWidth));
-                ////BoundWidth = DefaultTransactionPanelLength;
-                ////BoundHeight = Parent.BoundHeight;
-                //if(Parent.GetContentView() is not Control cv ||
-                //    cv.GetVisualAncestor<MpAvClipTileView>() is not MpAvClipTileView ctv ||
-                //    ctv.FindControl<MpAvClipTileTransactionPaneView>("TransactionPanelColumn") is not MpAvClipTileTransactionPaneView cttpv) {
-                //    return;
-                //}
-
-                //SetTransactionViewGridLength(new GridLength(DefaultTransactionPanelWidth, GridUnitType.Auto));
-
-                //IsTransactionPaneAnimating = true;
-                //double nw = Parent.BoundWidth + DefaultTransactionPanelWidth;
-                //double nh = Parent.BoundHeight;
-
-                //MpAvResizeExtension.ResizeAnimated(
-                //        cttpv,
-                //        nw, nh,
-                //        () => {
-                //            IsTransactionPaneAnimating = false;
-                //        });
-
-                //while (IsTransactionPaneAnimating) {
-                //    await Task.Delay(100);
-                //}
-
-                //// only wait for executeAsync calls
-                //return;
             }, (args) => {
                 return
                     Parent != null &&
@@ -624,29 +581,39 @@ namespace MonkeyPaste.Avalonia {
                     argParts[0] is string guidArg &&
                     argParts[1] is bool dblClickArg) {
                     isDblClick = dblClickArg;
-                    args = guidArg;
                     to_sel_ann_guid = guidArg;
+
+                    if (!string.IsNullOrEmpty(to_sel_ann_guid) &&
+                    isDblClick && !OpenTransactionPaneCommand.CanExecute(null)) {
+                        // trans panel not open and user dbl clicked an ann
+                        MpAvClipTrayViewModel.Instance.SelectClipTileTransactionNodeCommand.Execute(
+                            new object[] { Parent.CopyItemId, to_sel_ann_guid });
+                        return;
+                    }
                 }
 
-                if (args is string argStr) {
-                    if (argStr.IsStringGuid()) {
+                if (args is string argStr && argStr.IsStringGuid()) {
+                    to_sel_ann_guid = argStr;
+                } else if (args is MpAvITransactionNodeViewModel tnvm) {
+                    to_select_tnvm = tnvm;
+                } else {
+                    //MpDebug.Assert(to_select_tnvm != null, $"Unhandled transaction.select child arg of type '{args?.GetType()}' What type is it??", silent: true);
+                }
+
+
+                if (to_select_tnvm == null) {
+                    if (!string.IsNullOrEmpty(to_sel_ann_guid)) {
                         // this only comes from editor for ann atm
                         to_select_tnvm =
                             Messages
                                 .OfType<MpAvAnnotationMessageViewModel>()
                                 .SelectMany(x => x.RootAnnotationViewModel.SelfAndAllDescendants().Cast<MpAvAnnotationItemViewModel>())
-                                .FirstOrDefault(x => x.AnnotationGuid == argStr);
+                                .FirstOrDefault(x => x.AnnotationGuid == to_sel_ann_guid);
                     }
-                } else if (args is MpAvITransactionNodeViewModel) {
-                    to_select_tnvm = args as MpAvITransactionNodeViewModel;
-                } else {
-                    //MpDebug.Assert(to_select_tnvm != null, $"Unhandled transaction.select child arg of type '{args?.GetType()}' What type is it??", silent: true);
-                }
 
-                if (to_select_tnvm == null) {
                     if (SelectedTransaction == null) {
                         // only fallback to default select if nothing already selected
-                        to_select_tnvm = CreateTransaction;
+                        to_select_tnvm = MostRecentTransaction;
                     }
                 }
                 if (to_select_tnvm == null) {
@@ -654,13 +621,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"No child trans node to select with arg '{args}'");
                     return;
                 }
-
-                if (!string.IsNullOrEmpty(to_sel_ann_guid) &&
-                    isDblClick && !OpenTransactionPaneCommand.CanExecute(null)) {
-                    // trans panel not open and user dbl clicked an ann
-                    MpAvClipTrayViewModel.Instance.SelectClipTileTransactionNodeCommand.Execute(
-                        new object[] { Parent.CopyItemId, to_sel_ann_guid });
-                    return;
+                if (string.IsNullOrEmpty(to_sel_ann_guid)) {
                 }
 
 
@@ -678,13 +639,13 @@ namespace MonkeyPaste.Avalonia {
                     if (cur_to_select == this) {
                         break;
                     }
-                    if (cur_to_select is MpISelectableViewModel svm) {
-                        svm.IsSelected = true;
+                    //if (cur_to_select is MpISelectableViewModel svm) {
+                    //    svm.IsSelected = true;
 
-                        MpDebug.Assert(svm.IsSelected, $"{svm} can't be selected directly, fix property set/change handlers");
-                    } else {
-                        MpDebug.Break("what kinda node is it?");
-                    }
+                    //    MpDebug.Assert(svm.IsSelected, $"{svm} can't be selected directly, fix property set/change handlers");
+                    //} else {
+                    //    MpDebug.Break("what kinda node is it?");
+                    //}
                     if (cur_to_select is MpAvTransactionItemViewModel to_select_tivm) {
                         SelectedTransaction = to_select_tivm;
                     }

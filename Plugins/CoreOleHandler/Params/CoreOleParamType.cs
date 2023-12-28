@@ -40,6 +40,7 @@
         PNG_R_MAXW,
         PNG_R_MAXH,
         PNG_R_SCALEOVERSIZED,
+        PNG_R_IGNORE_EMPTY,
         PNG_W_IGNORE,
         PNG_W_EXPORTTYPE,
 

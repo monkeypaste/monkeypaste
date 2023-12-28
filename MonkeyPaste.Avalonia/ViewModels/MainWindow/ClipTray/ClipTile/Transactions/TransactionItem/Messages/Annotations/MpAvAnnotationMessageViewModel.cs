@@ -102,7 +102,6 @@ namespace MonkeyPaste.Avalonia {
                             .SelfAndAllDescendants();
                         all_anns
                             .Cast<MpAvAnnotationItemViewModel>()
-                            //.ForEach(x => x.IsSelected = x.AnnotationGuid == SelectedItemGuid);
                             .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     }
                     if (Parent != null) {
@@ -112,12 +111,8 @@ namespace MonkeyPaste.Avalonia {
                     if (HostClipTileViewModel == null) {
                         break;
                     }
-                    var ctvm = HostClipTileViewModel;
-                    if (ctvm.GetContentView() is MpIContentView cv) {
-                        var msg = new MpQuillAnnotationSelectedMessage() {
-                            annotationGuid = SelectedItemGuid
-                        };
-                        cv.SendMessage($"annotationSelected_ext('{msg.SerializeJsonObjectToBase64()}')");
+                    if (!string.IsNullOrEmpty(SelectedItemGuid)) {
+                        HostClipTileViewModel.TransactionCollectionViewModel.SelectChildCommand.Execute(SelectedItemGuid);
                     }
                     break;
             }

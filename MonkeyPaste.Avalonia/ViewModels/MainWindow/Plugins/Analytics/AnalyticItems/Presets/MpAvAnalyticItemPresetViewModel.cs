@@ -189,8 +189,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<object, MpAvParameterViewModelBase> ParamLookup =>
-            Items.ToDictionary(x => x.ParamId, x => x);
+        public Dictionary<object, string> ParamLookup =>
+            Items.ToDictionary(x => x.ParamId, x => x.CurrentValue);
         public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpAvMenuItemViewModel() {
@@ -414,6 +414,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+        public event EventHandler<MpAvParameterViewModelBase> OnParameterValuesChanged;
+        #endregion
+
         #region Constructors
 
         public MpAvAnalyticItemPresetViewModel() : base(null) { }
@@ -482,6 +486,9 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpAvParameterViewModelBase> CreateParameterViewModel(MpParameterValue aipv) {
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, this);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
+            naipvm.OnValueChanged += (s, e) => {
+                OnParameterValuesChanged?.Invoke(this, naipvm);
+            };
             return naipvm;
         }
 
@@ -601,9 +608,9 @@ namespace MonkeyPaste.Avalonia {
                 IsQuickAction = !IsQuickAction;
             });
 
-        public ICommand ExecutePresetAnalysisOnSelectedContentCommand => new MpCommand(
-            () => {
-                Parent.PerformAnalysisCommand.Execute(this);
+        public MpIAsyncCommand ExecutePresetAnalysisOnSelectedContentCommand => new MpAsyncCommand(
+            async () => {
+                await Parent.PerformAnalysisCommand.ExecuteAsync(this);
 
             }, () => {
                 if (Parent == null) {
@@ -639,10 +646,11 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ResetOrDeleteThisPresetCommand => new MpCommand<object>(
             (args) => {
                 if (args == null) {
-                    // called from sidebar preset grid
+                    // called from sidebar preset grid and trans unselect
                     Parent.ResetOrDeletePresetCommand.Execute(this);
                     return;
                 }
+                // called from trans select
                 Parent.ResetOrDeletePresetCommand.Execute(new object[] { this, args });
             });
 

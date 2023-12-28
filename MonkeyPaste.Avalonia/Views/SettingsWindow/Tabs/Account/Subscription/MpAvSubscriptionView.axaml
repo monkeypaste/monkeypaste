@@ -131,6 +131,10 @@
             <Setter Property="Foreground"
                     Value="White" />
         </Style>
+        <Style Selector="Border.badge.trial TextBlock">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+        </Style>
         <Style Selector="Border.badge.expired TextBlock">
             <Setter Property="Foreground"
                     Value="Black" />
@@ -263,7 +267,7 @@
                                                                Text="{Binding RateText}" />
                                                     <!--  TRIAL BADGE  -->
                                                     <Border Grid.Row="1"
-                                                            Classes="badge"
+                                                            Classes="badge trial"
                                                             HorizontalAlignment="Right"
                                                             Padding="5,0"
                                                             IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"

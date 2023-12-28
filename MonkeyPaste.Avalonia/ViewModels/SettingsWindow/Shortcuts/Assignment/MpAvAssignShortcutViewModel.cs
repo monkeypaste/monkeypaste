@@ -188,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                         MpShortcutAssignmentClearButtonType.Clear;
 
         public string ClearButtonLabel =>
-            ClearButtonType == MpShortcutAssignmentClearButtonType.None ?
+            IsEmpty || ClearButtonType == MpShortcutAssignmentClearButtonType.None ?
                 string.Empty :
                 ClearButtonType.EnumToUiString();
 

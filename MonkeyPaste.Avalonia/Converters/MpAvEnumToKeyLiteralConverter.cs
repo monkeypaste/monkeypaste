@@ -1,10 +1,10 @@
 ﻿using Avalonia.Data.Converters;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumToKeyLiteralConverter : IValueConverter {
@@ -22,6 +22,10 @@ namespace MonkeyPaste.Avalonia {
                     kl2.FirstOrDefault() is string kl3) {
                     if (parameter is string paramStr && paramStr == "label") {
                         kl3 = kl3.ToProperCase();
+                    }
+                    if (Regex.IsMatch(kl3, "D[0-9]")) {
+                        // hide D on digits
+                        return kl3.Substring(1);
                     }
                     return kl3;
                 }

@@ -253,12 +253,13 @@ namespace MonkeyPaste.Avalonia {
             }
             var sb = this.FindControl<Border>("SliderBorder");
             var svr = this.FindControl<Rectangle>("SliderValueRectangle");
-
+            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
             double percentFilled = BindingContext.SliderValue / (BindingContext.MaxValue - BindingContext.MinValue);
             svr.Width = sb.Bounds.Width * percentFilled;
 
-            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-            FlipTheme = svr.Bounds.Right > svtb.Bounds.Left;
+            // BUG if width is changed outside ui, bounds
+            // won't update immediatly, so using width since its left aligned (left is 0)
+            FlipTheme = (svr.Bounds.Left + svr.Width) > svtb.Bounds.Left;
         }
     }
 }
