@@ -23,6 +23,9 @@
 
         Welcome,
 
+        UpdateAvailable,
+        NoUpdateAvailable,
+
         AppendModeChanged,
         TriggerEnabled,
         AlertAction,

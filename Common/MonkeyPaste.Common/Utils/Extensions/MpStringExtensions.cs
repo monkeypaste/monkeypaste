@@ -144,6 +144,16 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static Version ToVersion(this string ver_str) {
+            try {
+                return new Version(ver_str);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error creating version from string '{ver_str}':", ex);
+                return new Version();
+            }
+        }
+
         public static string RemoveGuidFormat(this string guid) {
             if (guid == null) {
                 return string.Empty;

@@ -1986,10 +1986,10 @@ Clipboard listening is: {0}</value>
     <value>Input content is linked to the selected collection</value>
   </data>
   <data name="ActionClassifyHint" xml:space="preserve">
-    <value>Classifier - Automatically adds triggered content to the selected collection.</value>
+    <value>Classifier - Adds input content to the selected tag.</value>
   </data>
   <data name="ActionClassifyLabel" xml:space="preserve">
-    <value>Collection</value>
+    <value>Tag</value>
   </data>
   <data name="ActionCondCaseLabel" xml:space="preserve">
     <value>Case Sensitive?</value>
@@ -2354,11 +2354,11 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
-    <value>No Collection selected for Classifier '{0}'</value>
+    <value>No tag selected for Classifier '{0}'</value>
     <comment>Collection Name</comment>
   </data>
   <data name="ActionClassifyValidation2" xml:space="preserve">
-    <value>Collection for Classifier '{0}' not found</value>
+    <value>Tag for Classifier '{0}' not found</value>
     <comment>Collection Name</comment>
   </data>
   <data name="ActionConditionalValidation1" xml:space="preserve">
@@ -2396,5 +2396,42 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
   </data>
   <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
     <value>Restore THIS analysis settings</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Change Log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Please connect to the Internet and try again later.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Help</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} is the latest version</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>You are all up-to-date!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Check For Update...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>New version available!
+
+Click here to update to '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Click below to update to '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Update Available! 
+🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Update Now</value>
   </data>
 </root>

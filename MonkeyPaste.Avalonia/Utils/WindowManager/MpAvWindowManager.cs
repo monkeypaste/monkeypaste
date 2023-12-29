@@ -267,7 +267,8 @@ namespace MonkeyPaste.Avalonia {
                     _waitingToClose.Add(w);
                     return;
                 }
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
+                if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked &&
+                     MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                     MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
                     e.Cancel = true;
                     object dresult = null;

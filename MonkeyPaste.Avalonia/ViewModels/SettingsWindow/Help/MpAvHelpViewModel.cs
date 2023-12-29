@@ -17,8 +17,7 @@ namespace MonkeyPaste.Avalonia {
         Groups,
         Filters,
         Trash,
-        Plugins,
-        VersionInfo
+        Plugins
     }
 
     public class MpAvHelpViewModel :
@@ -28,6 +27,10 @@ namespace MonkeyPaste.Avalonia {
         MpIWantsTopmostWindowViewModel {
         #region Private Variables
 
+        #endregion
+
+        #region Constants
+        public const string HELP_ICON_KEY = "ReadImage";
         #endregion
 
         #region Statics
@@ -61,11 +64,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Appearance
+
+        public string WindowTitle {
+            get {
+                return string.Format(UiStrings.HelpWindowTitle, WebViewTitle).ToWindowTitleText();
+            }
+        }
+
+        public string WebViewTitle { get; set; }
+
+        #endregion
+
         #region State
 
-        public IEnumerable<MpHelpLinkType> HiddenSidebarLinkTypes => new MpHelpLinkType[] {
-            MpHelpLinkType.VersionInfo
-        };
         public bool IsHelpSettingsTabVisible =>
             false;
 
@@ -73,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvDocusaurusHelpers.GetCustomUrl(
                 url: OnlineHelpUriLookup[LastLinkType],
                 hideNav: true,
-                hideSidebar: HiddenSidebarLinkTypes.Contains(LastLinkType),
+                hideSidebars: false,
                 isDark: MpAvPrefViewModel.Instance.IsThemeDark);
 
         public MpHelpLinkType LastLinkType { get; private set; } = MpHelpLinkType.None;
@@ -90,8 +102,7 @@ namespace MonkeyPaste.Avalonia {
             {MpHelpLinkType.Tags, $"{MpServerConstants.DOCS_BASE_URL}/collections/tags" },
             {MpHelpLinkType.Groups, $"{MpServerConstants.DOCS_BASE_URL}/collections/groups" },
             {MpHelpLinkType.Filters, $"{MpServerConstants.DOCS_BASE_URL}/collections/filters" },
-            {MpHelpLinkType.Trash, $"{MpServerConstants.DOCS_BASE_URL}/collections/trash" },
-            {MpHelpLinkType.VersionInfo, $"{MpServerConstants.DOCS_BASE_URL}/versions/{Mp.Services.ThisAppInfo.ThisAppProductVersion}" },
+            {MpHelpLinkType.Trash, $"{MpServerConstants.DOCS_BASE_URL}/collections/trash" }
         };
 
         #endregion
@@ -101,6 +112,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvHelpViewModel() : base(null) {
             PropertyChanged += MpAvHelpViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         #endregion
@@ -129,12 +141,19 @@ namespace MonkeyPaste.Avalonia {
                 Height = 620,
                 ShowActivated = true,
                 Title = UiStrings.SettingsHelpTabLabel.ToWindowTitleText(),
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("QuestionMarkImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(HELP_ICON_KEY, typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 DataContext = this,
                 Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString()),
                 Content = new MpAvWebPageView()
             };
+            w.Bind(
+                Window.TitleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(WindowTitle)
+                });
+
             if (w.Content is MpAvWebPageView wpv) {
                 wpv.Bind(
                         MpAvWebPageView.AddressProperty,
@@ -142,6 +161,14 @@ namespace MonkeyPaste.Avalonia {
                             Source = this,
                             Path = nameof(CurrentUrl)
                         });
+                if (wpv.FindControl<MpAvWebView>("WebView") is { } wv) {
+                    wv.Bind(
+                        MpAvWebView.DocumentTitleProperty,
+                        new Binding() {
+                            Source = this,
+                            Path = nameof(WebViewTitle)
+                        });
+                }
             }
 
             w.Classes.Add("fadeIn");

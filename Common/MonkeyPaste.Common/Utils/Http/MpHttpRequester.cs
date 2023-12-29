@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpHttpRequester {
+        const string SUCCESS_PREFIX = "[SUCCESS]";
+        const string ERROR_PREFIX = "[ERROR]";
+
         public static async Task<string> SubmitPostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000, bool add_debug = MpServerConstants.IS_SERVER_LOCAL) {
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
@@ -60,6 +63,32 @@ namespace MonkeyPaste.Common {
             }
             string result = await MpFileIo.ReadTextFromUriAsync(url + sb.ToString(), timeoutMs: timeout_ms);
             return result;
+        }
+
+        public static bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
+            response = response.ToStringOrEmpty();
+            MpConsole.WriteLine($"Server response: '{response}'");
+            string msg_suffix;
+            bool success = false;
+
+            if (response.StartsWith(SUCCESS_PREFIX) &&
+                response.SplitNoEmpty(SUCCESS_PREFIX) is string[] success_parts) {
+                msg_suffix = string.Join(string.Empty, success_parts);
+                success = true;
+            } else if (response.StartsWith(ERROR_PREFIX) &&
+                response.SplitNoEmpty(ERROR_PREFIX) is string[] error_parts) {
+                msg_suffix = string.Join(string.Empty, error_parts);
+            } else {
+                msg_suffix = response;
+            }
+
+            args = MpJsonConverter.DeserializeObject<Dictionary<string, string>>(msg_suffix);
+            if (!string.IsNullOrWhiteSpace(msg_suffix) && args.Count == 0) {
+                // shouldnon-input error, add it to empty key
+                MpDebug.Assert(!success, $"Should only have non-lookup result for error");
+                args = new() { { string.Empty, msg_suffix } };
+            }
+            return success;
         }
     }
 }

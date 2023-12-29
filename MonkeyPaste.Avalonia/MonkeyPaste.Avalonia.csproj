@@ -372,6 +372,7 @@
     <None Remove="Assets\Images\chain.png" />
     <None Remove="Assets\Images\check.png" />
     <None Remove="Assets\Images\checkgray.png" />
+    <None Remove="Assets\Images\checkround.png" />
     <None Remove="Assets\Images\check_partial.png" />
     <None Remove="Assets\Images\cleargrid.png" />
     <None Remove="Assets\Images\clipboard.png" />
@@ -405,6 +406,7 @@
     <None Remove="Assets\Images\dots_3x1.png" />
     <None Remove="Assets\Images\doubleSidedArrow.png" />
     <None Remove="Assets\Images\doubleSidedArrow2.png" />
+    <None Remove="Assets\Images\downcloud.png" />
     <None Remove="Assets\Images\down_black.png" />
     <None Remove="Assets\Images\drag.png" />
     <None Remove="Assets\Images\draganddrop.png" />
@@ -459,6 +461,7 @@
     <None Remove="Assets\Images\joystickactive.png" />
     <None Remove="Assets\Images\joystickactive2.png" />
     <None Remove="Assets\Images\keyboard.png" />
+    <None Remove="Assets\Images\lifepreserver.png" />
     <None Remove="Assets\Images\lines_x2_horiz %282%29.png" />
     <None Remove="Assets\Images\lines_x2_horiz.png" />
     <None Remove="Assets\Images\lines_x2_horiz_vert_arrows.png" />
@@ -466,11 +469,13 @@
     <None Remove="Assets\Images\lock.png" />
     <None Remove="Assets\Images\login.png" />
     <None Remove="Assets\Images\manual.png" />
+    <None Remove="Assets\Images\megaphone.png" />
     <None Remove="Assets\Images\merge.png" />
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\minus2.png" />
     <None Remove="Assets\Images\missingfile.png" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\monkeyupdate.png" />
     <None Remove="Assets\Images\monkeywink.png" />
     <None Remove="Assets\Images\mousebothclick.png" />
     <None Remove="Assets\Images\mousefilledbase.png" />
@@ -494,7 +499,9 @@
     <None Remove="Assets\Images\questionmark.png" />
     <None Remove="Assets\Images\questionmarkbw.png" />
     <None Remove="Assets\Images\quilldelta.png" />
+    <None Remove="Assets\Images\radar.png" />
     <None Remove="Assets\Images\rate.png" />
+    <None Remove="Assets\Images\read.png" />
     <None Remove="Assets\Images\recyclebin.png" />
     <None Remove="Assets\Images\Remove.png" />
     <None Remove="Assets\Images\rename.png" />
@@ -770,6 +777,9 @@
     <AvaloniaResource Include="Assets\Images\cef.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\checkround.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\clipboardbw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -786,6 +796,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\dots_1x3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\downcloud.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\draganddrop.png">
@@ -824,13 +837,22 @@
     <AvaloniaResource Include="Assets\Images\infobw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\lifepreserver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\login.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\manual.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\megaphone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\missingfile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\monkeyupdate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\monkeywink.png">
@@ -858,6 +880,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\rate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\read.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\recyclebin.png">
@@ -1635,6 +1660,11 @@
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
     <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\Images\radar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
 
 
 
@@ -1676,6 +1706,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\Editor\src\components\editor\NewFolder\" />
+    <Folder Include="ViewModels\SystemTray\Version\" />
   </ItemGroup>
 
   <ItemGroup>

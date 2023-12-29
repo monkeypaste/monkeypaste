@@ -1,8 +1,43 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using MonkeyPaste.Common;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpIPlatformMessageBox {
+        public void ShowWebViewWindow(
+            string title,
+            string address,
+            double width = 500,
+            double height = 500,
+            object owner = null,
+            object dataContext = null,
+            bool canResize = true,
+            object iconResourceObj = null,
+            MpThemeResourceKey background = MpThemeResourceKey.ThemeInteractiveBgColor,
+            MpWindowType windowType = MpWindowType.Modal) {
+            var w = new MpAvWindow() {
+                Width = width,
+                Height = height,
+                CanResize = canResize,
+                WindowType = windowType,
+                DataContext = dataContext,
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(background.ToString()),
+                Title = title.ToWindowTitleText(),
+                WindowStartupLocation =
+                    owner == null ?
+                        WindowStartupLocation.CenterScreen :
+                        WindowStartupLocation.CenterOwner,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(
+                    iconResourceObj == null ? "AppIcon" : iconResourceObj,
+                    typeof(WindowIcon), null, null) as WindowIcon,
+                Content = new MpAvWebPageView() {
+                    Address = address
+                },
+            };
+            w.Classes.Add("fadeIn");
+            w.ShowChild(owner as Window);
+        }
         public async Task<bool> ShowProgressMessageBoxAsync(
             string title,
             string message,

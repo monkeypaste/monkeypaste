@@ -60,11 +60,9 @@
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-            <TabControl.Resources>
-                <!--<sys:Double x:Key="TabItemHeaderFontSize">14</sys:Double>
-                <sys:Double x:Key="TabStripItemMinHeight">20</sys:Double>-->
-            </TabControl.Resources>
+          
             <!--  WHATS NEW TAB  -->
+          
             <TabItem>
                 <TabItem.Header>
                     <Grid Classes="tab"
@@ -80,11 +78,12 @@
                 <local:MpAvWebPageView HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
                                        Background="{DynamicResource ThemeInteractiveBgColor}"
-                                       DataContext="{x:Static local:MpAvWhatsNewViewModel.Instance}" />
+                                       Address="{x:Static local:MpServerConstants.BLOG_BASE_URL}" />
 
             </TabItem>
 
-            <!--  SUBSCRIPTION TAB  -->
+            <!--  SUBSCRIPTION TAB  -->          
+          
             <TabItem IsSelected="True">
                 <TabItem.Header>
                     <Grid Classes="tab"

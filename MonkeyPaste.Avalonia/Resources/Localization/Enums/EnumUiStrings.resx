@@ -195,6 +195,12 @@
   <data name="MpNotificationType_Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>No Update Available</value>
+  </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
     <value>Append Mode Changed</value>
   </data>

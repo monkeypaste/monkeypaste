@@ -1582,6 +1582,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Update Available.
+        /// </summary>
+        public static string MpNotificationType_NoUpdateAvailable {
+            get {
+                return ResourceManager.GetString("MpNotificationType_NoUpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plugin Response Error.
         /// </summary>
         public static string MpNotificationType_PluginResponseError {
@@ -1686,6 +1695,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpNotificationType_UnloadPluginError {
             get {
                 return ResourceManager.GetString("MpNotificationType_UnloadPluginError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Available.
+        /// </summary>
+        public static string MpNotificationType_UpdateAvailable {
+            get {
+                return ResourceManager.GetString("MpNotificationType_UpdateAvailable", resourceCulture);
             }
         }
         

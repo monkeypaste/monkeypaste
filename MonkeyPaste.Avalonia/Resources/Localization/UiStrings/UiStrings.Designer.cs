@@ -818,7 +818,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classifier - Automatically adds triggered content to the selected collection..
+        ///   Looks up a localized string similar to Classifier - Adds input content to the selected tag..
         /// </summary>
         public static string ActionClassifyHint {
             get {
@@ -827,7 +827,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection.
+        ///   Looks up a localized string similar to Tag.
         /// </summary>
         public static string ActionClassifyLabel {
             get {
@@ -836,7 +836,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Collection selected for Classifier &apos;{0}&apos;.
+        ///   Looks up a localized string similar to No tag selected for Classifier &apos;{0}&apos;.
         /// </summary>
         public static string ActionClassifyValidation1 {
             get {
@@ -845,7 +845,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection for Classifier &apos;{0}&apos; not found.
+        ///   Looks up a localized string similar to Tag for Classifier &apos;{0}&apos; not found.
         /// </summary>
         public static string ActionClassifyValidation2 {
             get {
@@ -1677,6 +1677,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} Change Log.
+        /// </summary>
+        public static string ChangeLogWindowTitle {
+            get {
+                return ResourceManager.GetString("ChangeLogWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Formats.
         /// </summary>
         public static string ClipboardPluginFormatsHeader {
@@ -2169,6 +2178,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonConnectionFailedCaption {
             get {
                 return ResourceManager.GetString("CommonConnectionFailedCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please connect to the Internet and try again later..
+        /// </summary>
+        public static string CommonConnectionFailedText {
+            get {
+                return ResourceManager.GetString("CommonConnectionFailedText", resourceCulture);
             }
         }
         
@@ -3127,6 +3145,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} - Help.
+        /// </summary>
+        public static string HelpWindowTitle {
+            get {
+                return ResourceManager.GetString("HelpWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Control + Click to follow....
         /// </summary>
         public static string LinkNavigateToolTipText {
@@ -3683,6 +3710,52 @@ namespace MonkeyPaste.Avalonia {
         public static string NtfRejectRemoveClipsTitle {
             get {
                 return ResourceManager.GetString("NtfRejectRemoveClipsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click below to update to &apos;{0}&apos;.
+        /// </summary>
+        public static string NtfUpdateAvailableText {
+            get {
+                return ResourceManager.GetString("NtfUpdateAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Available! 
+        ///🎉🍾🥳.
+        /// </summary>
+        public static string NtfUpdateAvailableTitle {
+            get {
+                return ResourceManager.GetString("NtfUpdateAvailableTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Now.
+        /// </summary>
+        public static string NtfUpdateButtonLabel {
+            get {
+                return ResourceManager.GetString("NtfUpdateButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is the latest version.
+        /// </summary>
+        public static string NtfUpToDateText {
+            get {
+                return ResourceManager.GetString("NtfUpToDateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are all up-to-date!.
+        /// </summary>
+        public static string NtfUpToDateTitle {
+            get {
+                return ResourceManager.GetString("NtfUpToDateTitle", resourceCulture);
             }
         }
         
@@ -5727,6 +5800,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check For Update....
+        /// </summary>
+        public static string SysTrayCheckForUpdateLabel {
+            get {
+                return ResourceManager.GetString("SysTrayCheckForUpdateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mode.
         /// </summary>
         public static string SysTrayModeHeader {
@@ -5768,6 +5850,17 @@ namespace MonkeyPaste.Avalonia {
         public static string SysTrayRightClickPasteHeader {
             get {
                 return ResourceManager.GetString("SysTrayRightClickPasteHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version available!
+        ///
+        ///Click here to update to &apos;{0}&apos; 🎉🍾🥳.
+        /// </summary>
+        public static string SysTrayUpdateTooltip {
+            get {
+                return ResourceManager.GetString("SysTrayUpdateTooltip", resourceCulture);
             }
         }
         

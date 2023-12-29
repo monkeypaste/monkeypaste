@@ -30,7 +30,7 @@
                     Margin="0,0,10,0">
                 <Image Width="50"
                        Height="50"
-                       Classes="applogo shakeOnce shakeOnceOver"
+                       Classes="applogo wink shakeOnce shakeOnceOver"
                        HorizontalAlignment="Center" />
             </Border>
             <StackPanel Orientation="Vertical"

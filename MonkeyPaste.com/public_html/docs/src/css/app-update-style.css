@@ -1,3 +1,7 @@
 html[data-app-update-view] aside.theme-doc-sidebar-container {
     display: none;
 }
+
+html[data-app-update-view] div.theme-doc-toc-desktop {
+    display: none;
+}

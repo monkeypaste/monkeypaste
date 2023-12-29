@@ -2,12 +2,12 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Threading.Tasks;
+using CefNet;
+
 
 
 #if CEFNET_WV
@@ -171,6 +171,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region DocumentTitle
+
+        private string _DocumentTitle;
+        public string DocumentTitle {
+            get { return _DocumentTitle; }
+            private set { SetAndRaise(DocumentTitleProperty, ref _DocumentTitle, value); }
+        }
+
+        public static readonly DirectProperty<MpAvWebView, string> DocumentTitleProperty =
+            AvaloniaProperty.RegisterDirect<MpAvWebView, string>(
+                nameof(DocumentTitle),
+                x => x.DocumentTitle,
+                (x, o) => x.DocumentTitle = o,
+                defaultBindingMode: BindingMode.OneWay);
+
+
+        #endregion
+
         #region LoadErrorInfo
 
         private string _LoadErrorInfo;
@@ -232,6 +250,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+
+        protected override void OnDocumentTitleChanged(DocumentTitleChangedEventArgs e) {
+            base.OnDocumentTitleChanged(e);
+            DocumentTitle = e.Title;
+        }
 
 #if CEFNET_WV
         protected override WebViewGlue CreateWebViewGlue() {

@@ -1,6 +1,5 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
-using Plugin.InAppBilling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,8 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvAccountTools {
         #region Private Variables
         private bool _isContextWindowInitialized = false;
+        private string _WindowsStoreId = "9MZRBMH3JT75";
+
         //StoreProduct subscriptionStoreProduct;
 
         // Assign this variable to the Store ID of your subscription add-on.
@@ -49,6 +50,12 @@ namespace MonkeyPaste.Avalonia {
         public string RateAppUri {
             get {
                 return $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
+            }
+        }
+
+        public string ThisProductUri {
+            get {
+                return $"ms-windows-store://pdp/?productid={_WindowsStoreId}";
             }
         }
 

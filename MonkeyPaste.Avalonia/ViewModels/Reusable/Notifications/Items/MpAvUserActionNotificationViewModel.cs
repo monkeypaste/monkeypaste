@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -51,6 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override bool ShowOptionsButton =>
             //NotificationType == MpNotificationType.RateApp ||
+            NotificationType == MpNotificationType.UpdateAvailable ||
             NotificationType == MpNotificationType.ContentCapReached ||
             NotificationType == MpNotificationType.TrashCapReached ||
             NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
@@ -62,6 +62,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanFix => FixCommand != null && FixCommand.CanExecute(FixCommandArgs);
 
+        public bool ShowUpdateButton { get; set; }
         public bool ShowIgnoreButton { get; set; }
         public bool ShowFixButton => CanFix && !IsFixing;
         public bool ShowSubmitButton { get; set; }
@@ -88,6 +89,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsInputValid => string.IsNullOrEmpty(ValidationText);
 
         public bool CanSubmit { get; set; } = true;
+        #endregion
+
+        #region Appearance
+
         #endregion
 
         #region Model
@@ -170,6 +175,9 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(nf);
             switch (ButtonsType) {
+                case MpNotificationButtonsType.Update:
+                    ShowUpdateButton = true;
+                    break;
                 case MpNotificationButtonsType.YesNo:
                     ShowYesButton = true;
                     ShowNoButton = true;
@@ -270,6 +278,9 @@ namespace MonkeyPaste.Avalonia {
                             if (DoNotShowAgain) {
                                 // DoNotShow clicked
                                 return MpNotificationDialogResultType.DoNotShow;
+                            }
+                            if (DialogResult != MpNotificationDialogResultType.None) {
+                                break;
                             }
                         }
                     } else {

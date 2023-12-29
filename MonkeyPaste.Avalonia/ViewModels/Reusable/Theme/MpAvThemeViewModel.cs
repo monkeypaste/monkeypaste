@@ -1,8 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Media;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -68,14 +64,19 @@ namespace MonkeyPaste.Avalonia {
             //"jigsaw.png",
             "joystickative.png",
             "joystickative2.png",
+            "lifepreserver.png",
+            "megaphone.png",
             "monkey.png",
             "monkeywink.png",
+            "monkeyupdate.png",
             "noentry.png",
             "private.png",
             "pindown.png",
             "pindownover.png",
             "pinover.png",
             "questionmark.png",
+            "radar.png",
+            "read.png",
             "remove.png",
             "select.png",
             "sheep.png",

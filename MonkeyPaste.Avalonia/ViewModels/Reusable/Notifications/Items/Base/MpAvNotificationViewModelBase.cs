@@ -1,14 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Media;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -48,6 +42,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ContentAddBlockedByAccount:
                 case MpNotificationType.ContentRestoreBlockedByAccount:
                 case MpNotificationType.DbPasswordInput:
+                case MpNotificationType.UpdateAvailable:
                     return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
@@ -76,6 +71,8 @@ namespace MonkeyPaste.Avalonia {
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
             switch (ndt) {
+                case MpNotificationType.UpdateAvailable:
+                    return MpNotificationButtonsType.Update;
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                     return MpNotificationButtonsType.YesNoCancel;
                 case MpNotificationType.ModalYesNoMessageBox:

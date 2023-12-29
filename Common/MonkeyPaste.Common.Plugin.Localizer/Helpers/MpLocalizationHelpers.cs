@@ -1,7 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 
 namespace MonkeyPaste.Common.Plugin.Localizer {
     public static class MpLocalizationHelpers {
@@ -21,7 +19,7 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
                     try {
                         to_add = new CultureInfo(fn_parts[1]);
                     }
-                    catch (CultureNotFoundException ex) {
+                    catch (CultureNotFoundException) {
                         continue;
                     }
 

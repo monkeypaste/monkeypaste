@@ -3,7 +3,7 @@
 require('dotenv').config();
 
 const { themes } = require('prism-react-renderer');
-const lightTheme = themes.github;
+const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
@@ -17,7 +17,6 @@ const config = {
   url: "https://localhost",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  //baseUrl: `C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.com/build/`,
   baseUrl: "/docs/build",
 
   // GitHub pages deployment config.
@@ -73,7 +72,9 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       prism: {
-        additionalLanguages: ['csharp', 'java'],
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        additionalLanguages: ['csharp'],
       },
       navbar: {
         title: 'MonkeyPaste',
@@ -142,10 +143,6 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Monkey LLC, Built with Docusaurus.`,
-      },
-      prism: {
-        theme: lightTheme,
-        darkTheme: darkTheme,
       },
     }),
   markdown: {

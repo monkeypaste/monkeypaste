@@ -319,7 +319,7 @@
                         </StackPanel>
                     </Border>
                 </Button>
-                <!--  Upgrade, LearnMore  -->
+                <!--  UPGRADE  -->
                 <Button Classes="iconBtn"
                         Padding="0"
                         IsDefault="True"
@@ -338,6 +338,7 @@
                         IsVisible="{Binding ShowUpgradeButton}"
                         Opacity="0"
                         Width="10" />
+                <!--  LEARN MORE  -->
                 <Button Classes="iconBtn"
                         Padding="0"
                         MaxWidth="{StaticResource PosInf}"
@@ -349,6 +350,22 @@
                         <StackPanel>
                             <Image Source="{Binding Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
                             <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}" />
+                        </StackPanel>
+                    </Border>
+                </Button>
+
+                <!--  UPDATE  -->
+                <Button Classes="iconBtn"
+                        Padding="0"
+                        MaxWidth="{StaticResource PosInf}"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding ShowUpdateButton}"
+                        Command="{Binding OkCommand}">
+                    <Border Classes="innerBtnBorder"
+                            Background="Blue">
+                        <StackPanel>
+                            <Image Source="{Binding Source={StaticResource DownCloudImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
+                            <TextBlock Text="{x:Static local:UiStrings.NtfUpdateButtonLabel}" />
                         </StackPanel>
                     </Border>
                 </Button>

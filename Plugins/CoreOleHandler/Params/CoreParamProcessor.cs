@@ -222,12 +222,8 @@ namespace CoreOleHandler {
                                         break;
                                     }
                                     bool ignore_empty = req.GetRequestParamBoolValue(CoreOleParamType.PNG_R_IGNORE_EMPTY);
-                                    if (ignore_empty && bmp.IsEmptyOrTransprent()) {
-                                        data = null;
-                                        AddIgnoreNotification(ref ntfl, format);
-                                        break;
-                                    }
                                     bool do_scale = paramVal.ParseOrConvertToBool(false);
+
                                     double max_w = req.GetRequestParamDoubleValue(CoreOleParamType.PNG_R_MAXW);
                                     double max_h = req.GetRequestParamDoubleValue(CoreOleParamType.PNG_R_MAXH);
 
@@ -236,6 +232,10 @@ namespace CoreOleHandler {
                                     bool needs_scale = !bmp_size.IsValueEqual(adj_size);
                                     if (!needs_scale) {
                                         // no resize needed
+                                        if (ignore_empty && bmp.IsEmptyOrTransprent()) {
+                                            data = null;
+                                            AddIgnoreNotification(ref ntfl, format);
+                                        }
                                         break;
                                     }
                                     if (!do_scale) {
@@ -245,6 +245,12 @@ namespace CoreOleHandler {
                                         break;
                                     }
                                     data = bmp.Resize(adj_size).ToBase64String();
+
+                                    if (ignore_empty && bmp.IsEmptyOrTransprent()) {
+                                        data = null;
+                                        AddIgnoreNotification(ref ntfl, format);
+                                        break;
+                                    }
 
                                     if (adj_size.Width < bmp_size.Width) {
                                         AddMaxNotification(ref ntfl, format, (int)max_w, (int)bmp_size.Width);

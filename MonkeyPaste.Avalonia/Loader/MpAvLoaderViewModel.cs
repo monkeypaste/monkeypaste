@@ -146,11 +146,6 @@ namespace MonkeyPaste.Avalonia {
 
                 LoadedDateTime = DateTime.Now;
 
-                if (MpAvPrefViewModel.Instance.LastLoadedVersion != Mp.Services.ThisAppInfo.ThisAppProductVersion) {
-                    // app updated, show change log
-                    MpAvPrefViewModel.Instance.LastLoadedVersion = Mp.Services.ThisAppInfo.ThisAppProductVersion;
-                    MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand.Execute(MpHelpLinkType.VersionInfo);
-                }
 
                 IsPlatformLoaded = true;
             }, DispatcherPriority.Background);

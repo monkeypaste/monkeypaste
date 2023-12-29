@@ -23,6 +23,18 @@ namespace MonkeyPaste.Common {
             object iconResourceObj = null,
             object owner = null,
             object cancel_token_arg = default);
+
+        void ShowWebViewWindow(
+            string window_title_prefix,
+            string address,
+            double width = 500,
+            double height = 500,
+            object owner = null,
+            object dataContext = null,
+            bool canResize = true,
+            object iconResourceObj = null,
+            MpThemeResourceKey background = MpThemeResourceKey.ThemeInteractiveBgColor,
+            MpWindowType windowType = MpWindowType.Modal);
         Task<bool> ShowOkCancelMessageBoxAsync(
             string title,
             string message,

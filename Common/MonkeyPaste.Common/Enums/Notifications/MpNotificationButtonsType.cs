@@ -13,6 +13,7 @@
         UpgradeLearnMore,
         Progress,
         Busy,
-        Rate
+        Rate,
+        Update
     }
 }

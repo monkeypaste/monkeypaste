@@ -1,16 +1,15 @@
-﻿namespace MonkeyPaste {
+﻿namespace MonkeyPaste.Common {
     public enum MpWindowType {
         None = 0,
         Main,
         Settings,
         Help,
-        Log,
-        Login,
+        ChangeLog,
         PopOut,
         Append,
         Toast,
         Modal,
-        Modal2,
-        Modal3
+        Modal2, // pointer gesture
+        Modal3, // fake mw
     }
 }

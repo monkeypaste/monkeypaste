@@ -1,12 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Layout;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Speech.Synthesis;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,14 +15,17 @@ using System.Windows.Input;
 #endif
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvSystemTrayViewModel :
-        MpAvViewModelBase,
-        MpICloseWindowViewModel {
+        MpAvViewModelBase {
 
         #region Private Variables
         #endregion
 
         #region Statics
+
+        static string VERSION_CHECK_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/version.php";
+        static string CHANGE_LOG_BASE_URL = $"{MpServerConstants.DOCS_BASE_URL}/versions";
 
         private static MpAvSystemTrayViewModel _instance;
         public static MpAvSystemTrayViewModel Instance => _instance ?? (_instance = new MpAvSystemTrayViewModel());
@@ -31,16 +33,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpIChildWindowViewModel Implementation
-
-        public MpWindowType WindowType =>
-            MpWindowType.PopOut;
-
-        public bool IsWindowOpen { get; set; }
-
-        #endregion
-
         #endregion
 
         #region Properties
@@ -54,9 +46,12 @@ namespace MonkeyPaste.Avalonia {
                     TooltipPropPath = nameof(SystemTrayTooltip),
                     IconSrcBindingObj = this,
                     IconPropPath = nameof(SystemTrayIconResourceObj),
-                    CommandPath = nameof(MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand),
-                    CommandSrcObj = MpAvMainWindowViewModel.Instance,
+                    CommandPath = nameof(TrayIconClickCommand),
+                    CommandSrcObj = this,
                     SubItems = new List<MpAvMenuItemViewModel>() {
+
+                        // SHOW/HIDE MW
+
                         new MpAvMenuItemViewModel() {
                             HeaderSrcObj = MpAvMainWindowViewModel.Instance,
                             HeaderPropPath = nameof(MpAvMainWindowViewModel.Instance.ShowOrHideLabel),
@@ -69,6 +64,9 @@ namespace MonkeyPaste.Avalonia {
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
 
                         },
+
+                        // PAUSE/RESUME CB
+
                         new MpAvMenuItemViewModel() {
                             HeaderSrcObj = MpAvClipTrayViewModel.Instance,
                             HeaderPropPath = nameof(MpAvClipTrayViewModel.Instance.PlayOrPauseLabel),
@@ -80,10 +78,16 @@ namespace MonkeyPaste.Avalonia {
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleListenToClipboard),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
+
+                        // MODE SUB-MENU
+
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayModeHeader,
                             IconResourceKey = "RobotClawImage",
                             SubItems = new List<MpAvMenuItemViewModel>() {
+
+                                // APPEND INLINE 
+
                                 new MpAvMenuItemViewModel() {
                                     Header = UiStrings.SysTrayAppenInlineHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
@@ -98,6 +102,9 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendInsertMode),
                                     InputGesturePropPath = nameof(MpAvShortcutViewModel.KeyString)
                                 },
+
+                                // APPEND LINE
+
                                 new MpAvMenuItemViewModel() {
                                     Header = UiStrings.SysTrayAppendLineHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
@@ -112,6 +119,9 @@ namespace MonkeyPaste.Avalonia {
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
                                 new MpAvMenuItemViewModel() {IsSeparator = true},
+
+                                // AUTO-COPY
+
                                 new MpAvMenuItemViewModel() {
                                     Header = UiStrings.SysTrayAutoCopyHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
@@ -125,6 +135,9 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAutoCopyMode),
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
+
+                                // RIGHT-CLICK PASTE
+
                                 new MpAvMenuItemViewModel() {
                                     Header = UiStrings.SysTrayRightClickPasteHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
@@ -140,6 +153,9 @@ namespace MonkeyPaste.Avalonia {
                                 },
                             }
                         },
+
+                        // SETTINGS
+
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonSettingsTitle,
                             IconResourceKey = "CogImage",
@@ -149,26 +165,46 @@ namespace MonkeyPaste.Avalonia {
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ShowSettings),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
+
+                        // HELP
+
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SettingsHelpTabLabel,
-                            IconResourceKey = "QuestionMarkImage",
+                            IconResourceKey = MpAvHelpViewModel.HELP_ICON_KEY,
                             CommandSrcObj = MpAvHelpViewModel.Instance,
                             CommandPath = nameof(MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand),
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.OpenHelp),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
+
+                        // RATE APP
+
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayRateAppLabel,
                             IconResourceKey = "StarYellowImage",
                             CommandSrcObj = MpAvAccountViewModel.Instance,
                             CommandPath = nameof(MpAvAccountViewModel.Instance.RateAppCommand)
                         },
+                        
+                        // CHECK FOR UPDATE
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayCheckForUpdateLabel,
+                            IconResourceKey = "RadarImage",
+                            Command = CheckForUpdateCommand,
+                            CommandParameter = "Click"
+                        },
+
+                        // ABOUT
+
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayAboutHeader,
-                            //IconResourceKey = "InfoImage",
+                            IconResourceKey = "InfoImage",
                             Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand
                         },
+#region DEBUG STUFF
 #if DEBUG && DESKTOP
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
                         new MpAvMenuItemViewModel() {
                             Header = "Show Converter DevTools",
                             Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,
@@ -212,7 +248,11 @@ namespace MonkeyPaste.Avalonia {
                         //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
                         //},
 #endif
+#endregion
                         new MpAvMenuItemViewModel() {IsSeparator = true},
+
+                        // QUIT
+
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayQuitHeader,
                             IconResourceKey = "SignOutImage",
@@ -224,18 +264,16 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 };
-
-                //tmivm.AllDescendants
-                //    .ForEach(x => {
-                //        x.IsEnabledSrcObj = this;
-                //        x.IsEnabledPropPath = nameof(IsSystemTrayItemsEnabled);
-                //    });
                 return tmivm;
             }
         }
         #endregion
 
         #region State
+
+        public bool IsUpdateAvailable =>
+            UpToDateAppVersion != null &&
+            ThisAppVersion < UpToDateAppVersion;
 
         public bool IsSystemTrayItemsEnabled =>
             Mp.Services.StartupState.IsReady;
@@ -250,6 +288,9 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return UiStrings.SysTrayPleaseWaitTooltip;
                 }
+                if (IsUpdateAvailable) {
+                    return string.Format(UiStrings.SysTrayUpdateTooltip, UpToDateAppVersion.ToString());
+                }
                 return MpAvAccountViewModel.Instance.AccountStateInfo;
             }
         }
@@ -261,9 +302,37 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return "HourGlassImage";
                 }
+                if (IsUpdateAvailable) {
+                    return "MonkeyUpdateImage";
+                }
                 return "AppImage";
             }
         }
+        #endregion
+
+        #region Model
+        public string ChangeLogUrl =>
+            MpAvDocusaurusHelpers.GetCustomUrl(
+                url: $"{CHANGE_LOG_BASE_URL}/{Mp.Services.ThisAppInfo.ThisAppProductVersion}",
+                hideNav: true,
+                hideSidebars: true,
+                isDark: MpAvPrefViewModel.Instance.IsThemeDark);
+
+        public Version LastLoadedVersion {
+            get => MpAvPrefViewModel.Instance.LastLoadedVersion.ToVersion();
+            set {
+                if (LastLoadedVersion.CompareTo(value) != 0) {
+                    MpAvPrefViewModel.Instance.LastLoadedVersion = value.ToString();
+                    OnPropertyChanged(nameof(LastLoadedVersion));
+                }
+            }
+        }
+        public Version ThisAppVersion =>
+            Mp.Services.ThisAppInfo.ThisAppProductVersion.ToVersion();
+
+        public Version UpToDateAppVersion { get; private set; }
+
+        public Version LastNotfiedVersion { get; set; }
         #endregion
 
         #endregion
@@ -280,11 +349,23 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             await Task.Delay(1);
+            StartUpdateCheckTimer();
         }
 
         #endregion
 
         #region Private Methods
+
+        private void StartUpdateCheckTimer() {
+            var update_check_timer = new DispatcherTimer() {
+                Interval = TimeSpan.FromMinutes(5)
+            };
+            void CheckForUpdate_tick(object sender, EventArgs e) {
+                CheckForUpdateCommand.Execute("timer");
+            }
+            update_check_timer.Tick += CheckForUpdate_tick;
+            update_check_timer.Start();
+        }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -295,12 +376,100 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SystemTrayIconResourceObj));
                     OnPropertyChanged(nameof(SystemTrayTooltip));
                     OnPropertyChanged(nameof(IsSystemTrayItemsEnabled));
+                    if (LastLoadedVersion < ThisAppVersion) {
+                        LastLoadedVersion = ThisAppVersion;
+                        ShowChangeLogWindowCommand.Execute(null);
+                    }
                     break;
             }
         }
         #endregion
 
         #region Commands
+        public ICommand TrayIconClickCommand => new MpCommand(
+            () => {
+                // left click only
+                if (IsUpdateAvailable) {
+                    MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpAvAccountTools.Instance.ThisProductUri);
+                    return;
+                }
+                MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand.Execute(null);
+            });
+
+        public ICommand ShowChangeLogWindowCommand => new MpCommand(
+            () => {
+                Mp.Services.PlatformMessageBox.ShowWebViewWindow(
+                    window_title_prefix: string.Format(UiStrings.ChangeLogWindowTitle, ThisAppVersion.ToString()),
+                    address: ChangeLogUrl,
+                    iconResourceObj: "MegaPhoneImage");
+            });
+
+        public MpIAsyncCommand<object> CheckForUpdateCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                string source = args.ToStringOrEmpty();
+                bool from_user = source == "Click";
+
+                CancellationTokenSource cts = null;
+                if (from_user) {
+                    cts = new CancellationTokenSource();
+                    Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
+                        title: UiStrings.CommonBusyLabel,
+                        iconResourceObj: "HourGlassImage",
+                        cancel_token_arg: cts.Token).FireAndForgetSafeAsync();
+                }
+                var req_args = new Dictionary<string, string>() {
+                    {"device_type",Mp.Services.PlatformInfo.OsType.ToString() }
+                };
+                // send device type and receive most recent version by device
+                var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(VERSION_CHECK_URL, req_args);
+                bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
+                if (cts != null) {
+                    cts.Cancel();
+                }
+                if (!success) {
+                    // couldn't connect
+                    if (from_user) {
+                        Mp.Services.NotificationBuilder.ShowMessageAsync(
+                            msgType: MpNotificationType.BadHttpRequest,
+                            title: UiStrings.CommonConnectionFailedCaption,
+                            body: UiStrings.CommonConnectionFailedText,
+                            iconSourceObj: "NoEntryImage").FireAndForgetSafeAsync();
+                    }
+                    return;
+                }
+                UpToDateAppVersion = resp_args["device_version"].ToVersion();
+                OnPropertyChanged(nameof(SystemTrayIconResourceObj));
+
+                if (!IsUpdateAvailable) {
+                    // this is most recent version
+                    if (from_user) {
+                        Mp.Services.NotificationBuilder.ShowMessageAsync(
+                            msgType: MpNotificationType.NoUpdateAvailable,
+                            title: UiStrings.NtfUpToDateTitle,
+                            body: string.Format(UiStrings.NtfUpToDateText, ThisAppVersion.ToString()),
+                            iconSourceObj: new object[] { MpSystemColors.forestgreen, "CheckRoundImage" }).FireAndForgetSafeAsync();
+                    }
+                    return;
+                }
+                // update available
+                if ((source != "Click" && LastNotfiedVersion != null) ||
+                    (LastNotfiedVersion != null &&
+                        UpToDateAppVersion.CompareTo(LastNotfiedVersion) == 0)) {
+                    // non-user check, already notified
+                    return;
+                }
+                LastNotfiedVersion = UpToDateAppVersion;
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                            notificationType: MpNotificationType.UpdateAvailable,
+                            title: UiStrings.NtfUpdateAvailableTitle,
+                            maxShowTimeMs: from_user ? -1 : MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
+                            body: string.Format(UiStrings.NtfUpdateAvailableText, UpToDateAppVersion.ToString()),
+                            iconSourceObj: "MegaPhoneImage");
+                if (result == MpNotificationDialogResultType.Ok) {
+                    MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpAvAccountTools.Instance.ThisProductUri);
+                }
+            });
+
         public ICommand ExitApplicationCommand => new MpCommand<object>(
             (args) => {
                 if (args is string argStr &&
@@ -315,6 +484,8 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.UserTrayCmd, $"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
 
+
+        #region Test Commands
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(
             async () => {
                 var result = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
@@ -327,32 +498,9 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                var w = new MpAvWindow() {
-                    Width = 500,
-                    Height = 500,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    Title = result.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon,
-                    Content = new MpAvWebView() {
-                        Address = result,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment = VerticalAlignment.Stretch
-                    },
-                };
-
-                void W_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-                    if (!e.IsRightPress(w)) {
-                        return;
-                    }
-                    e.Handled = true;
-                    if (w.Content is MpAvWebView wv) {
-                        //wv.GoBack();
-                    }
-                }
-
-                w.AddHandler(Window.PointerPressedEvent, W_PointerPressed, RoutingStrategies.Tunnel);
-
-                w.ShowChild();
+                Mp.Services.PlatformMessageBox.ShowWebViewWindow(
+                    window_title_prefix: result,
+                    address: result);
             });
         public ICommand CreateLocalStorageCopyCommand => new MpCommand(
             () => {
@@ -423,8 +571,6 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-
-                MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand.Execute(MpHelpLinkType.VersionInfo);
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
@@ -449,6 +595,9 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
             });
+
+        #endregion
+
         #endregion
     }
 }

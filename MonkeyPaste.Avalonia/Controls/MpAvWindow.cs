@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Platform;
 using Avalonia.Diagnostics;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 using System.Threading.Tasks;

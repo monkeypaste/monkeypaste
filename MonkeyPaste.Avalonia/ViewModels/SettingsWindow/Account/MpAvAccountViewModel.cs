@@ -62,8 +62,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         const int EXPIRATION_TIMER_CHECK_M = 5;
         const int LOGIN_TIMER_CHECK_M = 5;
-        const string SUCCESS_PREFIX = "[SUCCESS]";
-        const string ERROR_PREFIX = "[ERROR]";
         const string PING_RESPONSE = "Hello";
 
         #endregion
@@ -496,29 +494,8 @@ namespace MonkeyPaste.Avalonia {
             rate_timer.Start();
         }
         private bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
-            response = response.ToStringOrEmpty();
-            MpConsole.WriteLine($"Server response: '{response}'");
-            string msg_suffix;
-            bool success = false;
             ClearErrors();
-
-            if (response.StartsWith(SUCCESS_PREFIX) &&
-                response.SplitNoEmpty(SUCCESS_PREFIX) is string[] success_parts) {
-                msg_suffix = string.Join(string.Empty, success_parts);
-                success = true;
-            } else if (response.StartsWith(ERROR_PREFIX) &&
-                response.SplitNoEmpty(ERROR_PREFIX) is string[] error_parts) {
-                msg_suffix = string.Join(string.Empty, error_parts);
-            } else {
-                msg_suffix = response;
-            }
-
-            args = MpJsonConverter.DeserializeObject<Dictionary<string, string>>(msg_suffix);
-            if (!string.IsNullOrWhiteSpace(msg_suffix) && args.Count == 0) {
-                // shouldnon-input error, add it to empty key
-                MpDebug.Assert(!success, $"Should only have non-lookup result for error");
-                args = new() { { string.Empty, msg_suffix } };
-            }
+            bool success = MpHttpRequester.ProcessServerResponse(response, out args);
             return success;
         }
 
@@ -837,11 +814,9 @@ namespace MonkeyPaste.Avalonia {
                     {"machine_name",(null,Environment.MachineName) },
                     {"detail1", (null,MpAvPrefViewModel.arg1)},
                     {"detail2", (null,MpAvPrefViewModel.arg2)},
-                    {"detail3", (null,MpAvPrefViewModel.arg3)},
-                    //{"sub_type",(null, acct_type.ToString())},
-                    //{"monthly", (null, monthly ? "1" : "0")},
-                    //{"expires_utc_dt", (null, expires.ToString())},
+                    {"detail3", (null,MpAvPrefViewModel.arg3)}
                 };
+
                 if (is_sub_device) {
                     req_args.Add("sub_type", (null, acct_type.ToString()));
                     req_args.Add("monthly", (null, monthly ? "1" : "0"));
