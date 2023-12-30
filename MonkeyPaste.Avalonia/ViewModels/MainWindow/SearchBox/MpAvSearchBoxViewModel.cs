@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSearchValid {
             get {
-                if (IsSearching) {
+                if (IsSearching || !IsExpanded || !HasText) {
                     return true;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {

@@ -1,13 +1,13 @@
 # Plugin Development
 
-## Overview poopies
+## Overview
 
 MonkeyPaste plugins use a very simple client/server style request and response convention for all plugin interaction. Where MonkeyPaste is the *client* and the plugin acts as a *server*. Plugins for MonkeyPaste's concerns are *stateless* in nature which keeps the interface as simple and lightweight as possible.
 
 ## Getting Started
 
 :::note
-For simplicity this assumes you are on Windows (10 or higher) and have an instance of [Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/) already installed. But plugins can be created on Mac or Linux with [VS Code](https://code.visualstudio.com/download) and [OmniSharp](http://www.omnisharp.net/) for free.
+This assumes you are on Windows (10 or higher) and have an instance of [Visual Studio](https://visualstudio.microsoft.com/vs/community/) already installed. But plugins can also be created on Mac or Linux with [VS Code](https://code.visualstudio.com/download) and [OmniSharp](http://www.omnisharp.net/) for free.
 :::
 
 Add the MonkeyPaste.Common.Plugin dll from nuget or the cli:
@@ -73,7 +73,7 @@ MinimalExample/
 The only requirements are that the `manifest.json` and plugin assembly (whichever references `MpIAnalyzeComponent` or `MpIAnalyzeComponentAsync`) must be in the root folder and the root folder name must match the plugin assembly name.
 
 #### Testing
-Your plugin will be added loaded automatically on startup once the plugin folder (`MinimalExample/`) is in MonkeyPaste's root plugin folder found at `C:\Users\<username>\AppData\Local\MonkeyPaste_DEBUG\Plugins` or by clicking the 📁 button in the Plugin Browser and then restarting the application.
+Your plugin will be added loaded automatically on startup once the plugin folder (`MinimalExample/`) is in MonkeyPaste's root plugin folder found at `C:\Users\<username>\AppData\Local\MonkeyPaste\Plugins` or by clicking the 📁 button in the Plugin Browser and then restarting the application.
 
 You will get toast notifications of any issues initializing the plugin and some will allow you to fix and retry the errors. 
 

@@ -773,7 +773,7 @@ namespace MonkeyPaste.Avalonia {
                          label: GetUniqueTriggerName(string.Format(UiStrings.ActionTriggerDefaultLabel, tt.EnumToUiString())),
                          actionType: MpActionType.Trigger,
                          sortOrderIdx: Items.Count,
-                         arg2: true.ToString(),
+                         arg2: false.ToString(),
                          arg3: ((int)tt).ToString(),
                          location: DefaultDesignerItemLocationLocation);
 
@@ -786,6 +786,7 @@ namespace MonkeyPaste.Avalonia {
                  await Task.Delay(300);
 
                  OnPropertyChanged(nameof(Items));
+                 new_trigger_vm.EnableTriggerCommand.Execute(null);
 
                  bool was_empty = SelectedTrigger == null;
                  SelectedTrigger = new_trigger_vm;

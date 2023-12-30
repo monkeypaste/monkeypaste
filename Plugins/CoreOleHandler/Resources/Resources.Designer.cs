@@ -268,6 +268,24 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Format &apos;{0}&apos; had empty or transparent data and was blocked.
+        /// </summary>
+        public static string NtfEmptyImgText {
+            get {
+                return ResourceManager.GetString("NtfEmptyImgText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty Data Blocked.
+        /// </summary>
+        public static string NtfEmptyImgTitle {
+            get {
+                return ResourceManager.GetString("NtfEmptyImgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; format is flagged as &apos;ignored&apos;.
         /// </summary>
         public static string NtfFormatIgnoredText {
@@ -288,18 +306,18 @@ namespace CoreOleHandler {
         /// <summary>
         ///   Looks up a localized string similar to {0} limit is {1} and data was {2}.
         /// </summary>
-        public static string NtfMaxCharText {
+        public static string NtfMaxSizeText {
             get {
-                return ResourceManager.GetString("NtfMaxCharText", resourceCulture);
+                return ResourceManager.GetString("NtfMaxSizeText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max Count Reached.
+        ///   Looks up a localized string similar to Max Size Detected.
         /// </summary>
-        public static string NtfMaxCharTitle {
+        public static string NtfMaxSizeTitle {
             get {
-                return ResourceManager.GetString("NtfMaxCharTitle", resourceCulture);
+                return ResourceManager.GetString("NtfMaxSizeTitle", resourceCulture);
             }
         }
         

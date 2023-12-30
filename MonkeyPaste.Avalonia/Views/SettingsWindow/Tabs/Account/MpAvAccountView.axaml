@@ -60,9 +60,9 @@
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-          
+
             <!--  WHATS NEW TAB  -->
-          
+
             <TabItem>
                 <TabItem.Header>
                     <Grid Classes="tab"
@@ -78,12 +78,12 @@
                 <local:MpAvWebPageView HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
                                        Background="{DynamicResource ThemeInteractiveBgColor}"
-                                       Address="{x:Static local:MpServerConstants.BLOG_BASE_URL}" />
+                                       Address="{Binding CurrentUrl, Source={x:Static local:MpAvWhatsNewViewModel.Instance}}" />
 
             </TabItem>
 
-            <!--  SUBSCRIPTION TAB  -->          
-          
+            <!--  SUBSCRIPTION TAB  -->
+
             <TabItem IsSelected="True">
                 <TabItem.Header>
                     <Grid Classes="tab"

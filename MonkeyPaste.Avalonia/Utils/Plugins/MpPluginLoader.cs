@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Plugin.Localizer;
-using MonoMac.CoreImage;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,8 +8,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +25,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static bool USE_ASSEMBLY_LOAD_CONTEXT => true;
         static string MANIFEST_INVARIANT_FILE_NAME =>
             $"{MANIFEST_FILE_NAME_PREFIX}.{MANIFEST_FILE_EXT}";
 
@@ -66,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         public static async Task InitAsync() {
             IsLoaded = false;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            MpPluginUnloader.UnloadAll();
+            MpStartupCleaner.UnloadAll();
 
             await LoadPluginsAsync();
 
@@ -411,60 +407,41 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Plugin not found to remove for manifest path '{manifest_path}'");
                 return true;
             }
-            Plugins.Remove(manifest_path);
+            bool success = Plugins.Remove(manifest_path);
             plugin.Unload();
             plugin = null;
-            return true;
+            return success;
         }
         //[MethodImpl(MethodImplOptions.NoInlining)]
         private static async Task<bool> DeletePluginAsync(MpPluginWrapper plugin, bool delete_cache) {
             // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
+            await Task.Delay(1);
+
             bool success = true;
-            string fix_path = null;
+
             string manifest_path = plugin.ManifestPath;
             string title = plugin.title;
             string root_dir = plugin.RootDirectory;
             string cache_path = plugin.CachePath;
+
             // clear ref to plugin
             plugin = null;
-            Func<object, object> retryFunc = (args) => {
-                //needsFixing = false;
-                return null;
-            };
-            try {
-                success = RemovePlugin(manifest_path);
-                if (USE_ASSEMBLY_LOAD_CONTEXT) {
-                    // delete actual plugin on demand
-                    if (!MpFileIo.DeleteDirectory(root_dir)) {
-                        fix_path = root_dir;
-                        throw new MpUserNotifiedException($"Error unloading '{title}'. Try shutting down MonkeyPaste and deleting the following folder manually: '{fix_path}'");
-                    }
-                    if (delete_cache && cache_path.IsFile()) {
-                        if (!MpFileIo.DeleteFile(cache_path)) {
-                            fix_path = cache_path;
-                            throw new MpUserNotifiedException($"Error unloading cache for '{title}'. Try shutting down MonkeyPaste and deleting the following file manually: '{fix_path}'");
-                        }
-                    }
+            success = RemovePlugin(manifest_path);
+            List<string> failed_paths = new List<string>();
+            // delete actual plugin on demand
+            if (!MpFileIo.DeleteDirectory(root_dir)) {
+                failed_paths.Add(root_dir);
+            }
+            if (delete_cache && cache_path.IsFile()) {
+                if (!MpFileIo.DeleteFile(cache_path)) {
+                    failed_paths.Add(cache_path);
                 }
             }
-            catch (Exception ex) {
-                success = false;
-                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                            notificationType: MpNotificationType.UnloadPluginError,
-                            body: ex.ToString(),
-                            retryAction: retryFunc,
-                            fixCommand: fix_path == null ? null : new MpCommand(() => MpFileIo.OpenFileBrowser(fix_path)),
-                            iconSourceObj: "ErrorImage");
-                if (result == MpNotificationDialogResultType.Ignore) {
-                    return false;
-                }
-                // TODO need to make inner method that doesn't rely on plugin and call that here
-                //bool retry_success = await DeletePluginAsync(plugin, delete_cache);
-                return false;
-            }
+            failed_paths.ForEach(x => MpStartupCleaner.AddPathToDelete(x));
 
-            return success;
+            // NOTE ignoring success, used only for diagnostics
+            return true;
         }
 
         #region Component

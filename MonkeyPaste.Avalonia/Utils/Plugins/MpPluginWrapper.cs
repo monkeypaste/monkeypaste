@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpPluginWrapper : MpPluginFormat {
-        //[JsonIgnore]
-        //public AssemblyLoadContext LoadContext { get; set; }
         [JsonIgnore]
         public IEnumerable<MpIPluginComponentBase> Components { private get; set; } = null;
         [JsonIgnore]
@@ -21,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Unload() {
-            if (MpPluginLoader.USE_ASSEMBLY_LOAD_CONTEXT) {
+            if (Components.OfType<MpIUnloadPluginComponent>().Any()) {
                 try {
 
                     IssueRequestAsync(nameof(MpIUnloadPluginComponent.Unload), typeof(MpIUnloadPluginComponent).FullName, null, sync_only: true).FireAndForgetSafeAsync();
@@ -34,25 +32,24 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteTraceLine($"Error unloading {this}", ex);
                     }
                 }
-                Components = null;
-
-                analyzer = null;
-                oleHandler = null;
-                headless = null;
-                contactFetcher = null;
-                backupCheckPluginFormat = null;
-
-                WeakReference wr = new WeakReference(LoadContext);
-                // from https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability#use-a-custom-collectible-assemblyloadcontext
-                LoadContext.Unload();
-                for (int i = 0; wr.IsAlive && (i < 50); i++) {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
-                LoadContext = null;
-                return;
             }
-            MpPluginUnloader.AddPluginToUnload(this);
+
+            Components = null;
+
+            analyzer = null;
+            oleHandler = null;
+            headless = null;
+            contactFetcher = null;
+            backupCheckPluginFormat = null;
+
+            WeakReference wr = new WeakReference(LoadContext);
+            // from https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability#use-a-custom-collectible-assemblyloadcontext
+            LoadContext.Unload();
+            for (int i = 0; wr.IsAlive && (i < 50); i++) {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            LoadContext = null;
         }
         public bool ValidatePluginComponents() {
             foreach (var component in Components) {
@@ -81,12 +78,16 @@ namespace MonkeyPaste.Avalonia {
                      comp.GetType().GetMethod(methodName) is not { } mi) {
                     continue;
                 }
+                // NOTE this prevents exception since unload has NO args
+                // NOTE2 this presumes all other components have ONE req arg
+
+                object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
                 if (methodName.EndsWith("Async")) {
-                    dynamic task = mi.Invoke(comp, new[] { req });
+                    dynamic task = mi.Invoke(comp, args);
                     object result = await task;
                     return result;
                 } else {
-                    object result = mi.Invoke(comp, new[] { req });
+                    object result = mi.Invoke(comp, args);
                     return result;
                 }
             }

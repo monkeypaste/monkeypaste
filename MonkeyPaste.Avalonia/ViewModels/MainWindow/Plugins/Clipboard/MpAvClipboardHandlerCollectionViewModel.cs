@@ -6,7 +6,6 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -139,9 +138,6 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
         async Task<object> MpIPlatformDataObjectTools.WriteDragDropDataObjectAsync(object idoObj) {
-            //MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-            //var result = await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, false, false);
-            //return result;
             if (idoObj is not IDataObject ido) {
                 MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
                 return null;
@@ -206,6 +202,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public IEnumerable<MpAvClipboardHandlerItemViewModel> SortedItems =>
+            Items.OrderBy(x => x.HandlerName);
 
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllPresets =>
             Items.SelectMany(x => x.Items.SelectMany(y => y.Items));
@@ -302,9 +300,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipboardHandlerCollectionViewModel() : base(null) {
             PropertyChanged += MpClipboardHandlerCollectionViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
-
 
         #endregion
 
@@ -381,6 +379,9 @@ namespace MonkeyPaste.Avalonia {
             MpAvClipboardHandlerItemViewModel aivm = new MpAvClipboardHandlerItemViewModel(this);
             await aivm.InitializeAsync(ole_guid);
             return aivm;
+        }
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(SortedItems));
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
@@ -678,6 +679,10 @@ namespace MonkeyPaste.Avalonia {
 
                 Mp.Services.ClipboardMonitor.StartMonitor(true);
                 IsOleProcessingBlocked = false;
+
+                if (SelectedItem == null) {
+                    SelectedItem = SortedItems.FirstOrDefault();
+                }
 
             }) {
 

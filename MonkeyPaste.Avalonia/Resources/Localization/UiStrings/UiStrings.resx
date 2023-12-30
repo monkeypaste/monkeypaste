@@ -2434,4 +2434,14 @@ Click here to update to '{0}' 🎉🍾🥳</value>
   <data name="NtfUpdateButtonLabel" xml:space="preserve">
     <value>Update Now</value>
   </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' contains shared values. Would you like to reset those as well?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Clear Recent Searches</value>
+  </data>
 </root>

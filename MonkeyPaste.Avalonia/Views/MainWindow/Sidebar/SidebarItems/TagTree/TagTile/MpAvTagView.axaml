@@ -16,13 +16,12 @@
         <Style Selector="Border#TagNameBorder">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileBgColor}" />
+        </Style>
+        <Style Selector="Border#TagNameBorder:not(.contextfocus)">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileBorderColor}" />
-            <!--<Setter Property="BorderDashArray"
-                    Value="{x:Null}" />
-            <Setter Property="BorderDashOffset"
-                    Value="0" />-->
         </Style>
+
         <Style Selector="Border#TagCountContainer">
             <Setter Property="BoxShadow"
                     Value="0 0 black" />
@@ -36,7 +35,11 @@
             <Setter Property="Background"
                     Value="{DynamicResource TagTileHoverBgColor}" />
         </Style>
-        <Style Selector="Border#TagNameBorder.contextfocus, Border#TagNameBorder:not(.isselected).activeTag">
+        <Style Selector="Border#TagNameBorder.contextfocus">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource TagTileContextFocusBorderColor}" />
+        </Style>
+        <Style Selector="Border#TagNameBorder:not(.isselected).activeTag">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileContextFocusBorderColor}" />
         </Style>
@@ -49,12 +52,6 @@
         <Style Selector="Border#TagNameBorder.dragover">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource DragIntoBrush}" />
-        </Style>
-        <Style Selector="Border#TagNameBorder.dragover,Border#TagNameBorder.drag">
-            <!--<Setter Property="BorderDashArray"
-                    Value="2,2" />
-            <Setter Property="BorderDashOffset"
-                    Value="2" />-->
         </Style>
         <Style Selector="Border#TagNameBorder.dragover.dragover_invalid">
             <Setter Property="BorderBrush"
@@ -122,16 +119,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!--<Style Selector="Grid#TagViewContainerGrid:pointerover TextBlock.istrash, Border#TagNameBorder.isselected TextBlock.istrash">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-
-        <Style Selector="TextBlock.istrash">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>-->
 
         <!--  HELP ANCHOR  -->
         <Style Selector="Border#TagNameBorder.linkTag">

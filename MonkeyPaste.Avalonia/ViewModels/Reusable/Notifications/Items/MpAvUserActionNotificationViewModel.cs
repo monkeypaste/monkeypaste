@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -330,6 +331,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<string> ShowInputResultNotificationAsync() {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                string result = await Dispatcher.UIThread.InvokeAsync(async () => {
+                    return await ShowInputResultNotificationAsync();
+                });
+                return result;
+            }
             DialogResult = BeginShow();
 
             while (DialogResult == MpNotificationDialogResultType.None) {

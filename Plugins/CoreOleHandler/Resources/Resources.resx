@@ -188,6 +188,13 @@
   <data name="MaxCharsLabel" xml:space="preserve">
     <value>Max Characters</value>
   </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format '{0}' had empty or transparent data and was blocked</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Empty Data Blocked</value>
+  </data>
   <data name="NtfFormatIgnoredText" xml:space="preserve">
     <value>'{0}' format is flagged as 'ignored'</value>
     <comment>Clipboard Format Name</comment>
@@ -195,12 +202,12 @@
   <data name="NtfFormatIgnoredTitle" xml:space="preserve">
     <value>Format Ignored</value>
   </data>
-  <data name="NtfMaxCharText" xml:space="preserve">
+  <data name="NtfMaxSizeText" xml:space="preserve">
     <value>{0} limit is {1} and data was {2}</value>
     <comment>Clipboard Format Name, Number, Number</comment>
   </data>
-  <data name="NtfMaxCharTitle" xml:space="preserve">
-    <value>Max Count Reached</value>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Max Size Detected</value>
   </data>
   <data name="NtfReaderDetail" xml:space="preserve">
     <value>Core Clipboard Reader</value>

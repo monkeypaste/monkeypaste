@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Threading.Tasks;
@@ -173,6 +174,12 @@ namespace MonkeyPaste.Avalonia {
             return (result, uanvm.RememberInputText);
         }
         public async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                MpNotificationDialogResultType result2 = await Dispatcher.UIThread.InvokeAsync(async () => {
+                    return await ShowNotificationAsync(inf);
+                });
+                return result2;
+            }
             var nf = inf as MpNotificationFormat;
             if (nf == null && inf is MpPluginUserNotificationFormat pnf) {
                 // convert plugin notification to core nf

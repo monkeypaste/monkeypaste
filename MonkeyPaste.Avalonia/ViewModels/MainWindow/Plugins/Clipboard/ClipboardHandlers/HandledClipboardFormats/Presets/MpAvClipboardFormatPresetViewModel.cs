@@ -410,6 +410,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+                    }
+                    break;
                 case nameof(IsEnabled): {
                         // this msg is used by dnd helper to update current drag dataobject if dnd in progress
                         MpMessenger.SendGlobal(MpMessageType.ClipboardPresetsChanged);

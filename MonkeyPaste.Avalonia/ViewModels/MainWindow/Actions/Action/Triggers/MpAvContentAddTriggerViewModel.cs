@@ -1,8 +1,6 @@
-﻿using Avalonia.Threading;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIContentTypeDependant {
@@ -155,22 +153,22 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override bool ValidateStartAction(object arg, bool is_starting = true) {
-            if (!base.ValidateStartAction(arg)) {
-                return false;
-            }
-            if (AddedContentType == MpCopyItemType.None) {
-                // NOTE Default is treated as all types
-                return true;
-            }
-            if (arg is MpCopyItem ci) {
+            bool can_start = base.ValidateStartAction(arg, is_starting);
+            if (can_start &&
+                AddedContentType != MpCopyItemType.None &&
+                arg is MpCopyItem ci) {
+                // NOTE None is treated as all types
                 if (ci.ItemType != AddedContentType) {
-                    return false;
+                    can_start = false;
                 }
                 if (ci.WasDupOnCreate && IgnoreDupContent) {
-                    return false;
+                    can_start = false;
                 }
             }
-            return true;
+            if (!can_start && is_starting) {
+                IsPerformingAction = false;
+            }
+            return can_start;
         }
 
         #endregion

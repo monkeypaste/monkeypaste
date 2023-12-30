@@ -314,8 +314,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvMenuItemViewModel AddChildPopupMenuItemViewModel {
             get {
-                if (!IsGroupTag ||
-                    IsCollectionsTag) {
+                if (!HasAddChildPopupMenu) {
                     return null;
                 }
                 return new MpAvMenuItemViewModel() {
@@ -340,6 +339,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool HasAddChildPopupMenu =>
+            IsGroupTag && !IsCollectionsTag;
         public bool IsActiveTag {
             get {
                 if (IsGroupTag || Parent == null) {
@@ -1420,13 +1421,13 @@ namespace MonkeyPaste.Avalonia {
                  MpTag t = null;
                  MpTagType childTagType = TagType;
 
-                 if (args is Control control && AddChildPopupMenuItemViewModel != null) {
+                 if (args is Control control && HasAddChildPopupMenu) {
                      // show popup menu calling this command w/ tag type as parameter 
-
                      MpAvMenuView.ShowMenu(
-                         target: control,
-                         dc: AddChildPopupMenuItemViewModel);
+                             target: control,
+                             dc: AddChildPopupMenuItemViewModel);
                      return;
+
                  } else if (args is MpTagType) {
                      // coming from plus button or plus popup menu
                      childTagType = (MpTagType)args;
@@ -1444,6 +1445,9 @@ namespace MonkeyPaste.Avalonia {
                  } else if (IsCollectionsTag) {
                      // special case for collection tag from add btn view cmd..
                      childTagType = MpTagType.Link;
+                     if (args is Control) {
+                         isNew = true;
+                     }
                  } else if (TagType == MpTagType.Group) {
                      // need to make sure type is passed cause child type isn't clear
                      MpDebug.Break();
@@ -1482,7 +1486,7 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(SortedItems));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
                  if (isNew) {
-                     await Task.Delay(300);
+                     //await Task.Delay(300);
                      ttvm.RenameTagCommand.Execute(null);
                  }
 

@@ -3714,6 +3714,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains shared values. Would you like to reset those as well?.
+        /// </summary>
+        public static string NtfResetSharedValueText {
+            get {
+                return ResourceManager.GetString("NtfResetSharedValueText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click below to update to &apos;{0}&apos;.
         /// </summary>
         public static string NtfUpdateAvailableText {
@@ -4143,6 +4152,24 @@ namespace MonkeyPaste.Avalonia {
         public static string PrefClearPasswordLabel {
             get {
                 return ResourceManager.GetString("PrefClearPasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string PrefClearSearchesButtonText {
+            get {
+                return ResourceManager.GetString("PrefClearSearchesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Recent Searches.
+        /// </summary>
+        public static string PrefClearSearchesLabel {
+            get {
+                return ResourceManager.GetString("PrefClearSearchesLabel", resourceCulture);
             }
         }
         

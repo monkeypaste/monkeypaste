@@ -723,23 +723,25 @@ namespace MonkeyPaste.Avalonia {
         private void OnIsReadOnlyChanged() {
             Dispatcher.UIThread.Post(async () => {
                 SetTextBoxIsVisible(!IsReadOnly);
-                await Task.Delay(300);
+                //await Task.Delay(300);
 
                 if (IsReadOnly) {
                     await this.TryKillFocusAsync();
                 } else {
                     _orgText = Text;
-                    if (FocusOnDisableReadOnly) {
-                        bool success = await this.TrySetFocusAsync();
+                    if (FocusOnDisableReadOnly && !IsKeyboardFocusWithin) {
+                        bool success = await this.TrySetFocusAsync(focusMethod: NavigationMethod.Pointer);
                         if (!success) {
                             //MpDebug.Break("Focus error");
                         }
                     }
-                    await Task.Delay(300);
+                    //await Task.Delay(300);
                     SelectAll();
+                    if (!IsFocused) {
+                        Focus(NavigationMethod.Pointer);
+                    }
                 }
                 Init();
-                this.InvalidateAll();
             });
         }
 

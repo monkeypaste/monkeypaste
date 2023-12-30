@@ -241,7 +241,7 @@ namespace CoreOleHandler {
                                     if (!do_scale) {
                                         // too big ignore
                                         data = null;
-                                        AddIgnoreNotification(ref ntfl, format);
+                                        AddEmptyOrTransparentNotification(ref ntfl, format);
                                         break;
                                     }
                                     data = bmp.Resize(adj_size).ToBase64String();
@@ -354,18 +354,27 @@ namespace CoreOleHandler {
 
 
         private static string AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format, bool isReader = true) {
-            string msg = string.Format(Resources.NtfFormatIgnoredText, format);
+            return AddNotification(
+                ref nfl,
+                Resources.NtfFormatIgnoredTitle,
+                string.Format(Resources.NtfFormatIgnoredText, format),
+                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail);
+        }
+
+        private static string AddNotification(ref List<MpPluginUserNotificationFormat> nfl, string title, string msg = default, string detail = default, MpPluginNotificationType ntfType = MpPluginNotificationType.PluginResponseWarning) {
 #if DEBUG
             if (nfl == null) {
                 nfl = new List<MpPluginUserNotificationFormat>();
             }
             nfl.Add(Util.CreateNotification(
-                MpPluginNotificationType.PluginResponseWarning,
-                Resources.NtfFormatIgnoredTitle,
+                ntfType,
+                title,
                 msg,
-                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail));
-#endif
+                detail));
             return msg;
+#else
+            return string.Empty;
+#endif
         }
 
         private static void HandleMaxNotification(ref object data, ref List<MpPluginUserNotificationFormat> nfl, string text, string format, int max, bool isReader = true) {
@@ -377,18 +386,20 @@ namespace CoreOleHandler {
             throw new CoreOleMaxLengthException(msg);
         }
         private static string AddMaxNotification(ref List<MpPluginUserNotificationFormat> nfl, string format, int max, int actual, bool isReader = true) {
-            string msg = string.Format(Resources.NtfMaxCharText, format, max, actual);
-#if DEBUG
-            if (nfl == null) {
-                nfl = new List<MpPluginUserNotificationFormat>();
-            }
-            nfl.Add(Util.CreateNotification(
-                MpPluginNotificationType.PluginResponseWarning,
-                Resources.NtfMaxCharTitle,
-                msg,
-                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail));
-#endif
-            return msg;
+            return AddNotification(
+                ref nfl,
+                Resources.NtfMaxSizeTitle,
+                string.Format(Resources.NtfMaxSizeText, format, max, actual),
+                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail);
+
+        }
+        private static string AddEmptyOrTransparentNotification(ref List<MpPluginUserNotificationFormat> nfl, string format, bool isReader = true) {
+            return AddNotification(
+                ref nfl,
+                Resources.NtfEmptyImgTitle,
+                string.Format(Resources.NtfEmptyImgText, format),
+                isReader ? Resources.NtfReaderDetail : Resources.NtfWriterDetail);
+
         }
     }
 }

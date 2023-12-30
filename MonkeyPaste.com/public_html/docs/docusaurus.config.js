@@ -57,6 +57,7 @@ const config = {
         theme: {
           customCss: //require.resolve('./src/css/custom.css'),
             [
+              require.resolve('./src/css/content-styles.css'),
               require.resolve('./src/css/custom.css'),
               require.resolve('./src/css/help-style.css'),
               require.resolve('./src/css/app-update-style.css'),

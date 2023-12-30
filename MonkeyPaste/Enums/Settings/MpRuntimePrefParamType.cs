@@ -16,6 +16,7 @@
         ChangeDbPassword,
         ClearDbPassword,
         ForgetDbPassword,
-        DeleteAllContent
+        DeleteAllContent,
+        ClearRecentSearches
     }
 }

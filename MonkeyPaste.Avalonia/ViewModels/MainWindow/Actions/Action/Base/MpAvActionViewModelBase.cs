@@ -1195,11 +1195,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         protected virtual bool ValidateStartAction(object arg, bool is_starting = true) {
-            if (arg == null && !AllowNullArg) {
-                return false;
-            }
             bool can_start = true;
-            if (!IsValid || !IsTriggerEnabled) {
+            if (arg == null && !AllowNullArg) {
+                can_start = false;
+            } else if (!IsValid || !IsTriggerEnabled) {
                 can_start = false;
             }
 
@@ -1235,6 +1234,8 @@ namespace MonkeyPaste.Avalonia {
                 Arg5 = null;
             }
         }
+
+
 
         #endregion
 
@@ -1343,7 +1344,8 @@ namespace MonkeyPaste.Avalonia {
             int maxAttempts = 10;
             int count = 4;
             double dtheta = (2 * Math.PI) / count;
-            double r = Parent.DesignerItemDiameter * 2;
+            double delta_r = Parent.DesignerItemDiameter * 3;
+            double r = delta_r;
             while (attempts <= maxAttempts) {
                 double theta = 0;
                 for (int i = 0; i < count; i++) {
@@ -1355,7 +1357,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     theta += dtheta;
                 }
-                r += Parent.DesignerItemDiameter * 2;
+                r += delta_r;
 
                 attempts++;
             }

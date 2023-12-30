@@ -618,9 +618,10 @@ namespace MonkeyPaste.Avalonia {
             // returns false if exec params invalid on submit
             targetAnalyzer.IsExecuting = true;
             if (targetAnalyzer.ExecuteItems.Any()) {
+                targetAnalyzer.ExecuteItems.ForEach(x => x.Validate());
                 // always show if has non-required params or missing req'd
                 bool needs_to_show =
-                    targetAnalyzer.ExecuteItems.Any(x => x.IsVisible && !x.IsRequired) ||
+                    targetAnalyzer.ExecuteItems.Any(x => !x.IsValid) ||
                     !CanExecuteAnalysis(args);
 
                 while (needs_to_show) {
@@ -824,7 +825,7 @@ namespace MonkeyPaste.Avalonia {
                     // ntf w/ yes/no/cancel to reset shared values
                     var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: UiStrings.CommonConfirmLabel,
-                        message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
+                        message: string.Format(UiStrings.NtfResetSharedValueText, aipvm.Label),
                         iconResourceObj: "QuestionMarkImage");
                     if (result.IsNull()) {
                         // cancel

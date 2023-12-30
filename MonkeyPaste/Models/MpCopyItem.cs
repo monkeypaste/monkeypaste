@@ -174,6 +174,10 @@ namespace MonkeyPaste {
                 IconId = iconId
             };
             if (!suppressWrite) {
+                if (itemType != MpCopyItemType.Text) {
+                    // ignore text, it gets its 
+                    newCopyItem.ContentCheckSum = GetContentCheckSum(data);
+                }
                 await newCopyItem.WriteToDatabaseAsync(true);
                 if (newCopyItem.Id == 0) {
                     // didn't write, must be empty data

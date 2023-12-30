@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste.Common {
     public enum MpColorComplimentType {
@@ -86,8 +84,12 @@ namespace MonkeyPaste.Common {
             return new byte[] { a, r, g, b };
         }
 
-        public static string GetRandomHexColor(bool includeAlpha = true) {
-            int idx = MpRandom.Rand.Next(0, MpSystemColors.ContentColors.Length);
+        public static string GetRandomHexColor(bool includeAlpha = true, bool exclude_grays = true) {
+            int total_cols = exclude_grays ? MpSystemColors.COLOR_PALETTE_COLS - 1 : MpSystemColors.COLOR_PALETTE_COLS;
+            int rand_col = MpRandom.Rand.Next(0, total_cols);
+            int rand_row = MpRandom.Rand.Next(0, MpSystemColors.COLOR_PALETTE_ROWS);
+
+            int idx = (rand_row * MpSystemColors.COLOR_PALETTE_COLS) + rand_col;
             string hex = MpSystemColors.ContentColors[idx];
             if (includeAlpha) {
                 return hex;

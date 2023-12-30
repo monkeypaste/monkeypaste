@@ -1561,7 +1561,13 @@ namespace MonkeyPaste.Avalonia {
             }
             if (skips.Any()) {
                 MpDebug.Break($"Query validation failed. Skipped idxs: {string.Join(",", skips)}", level: MpLogLevel.Debug, silent: true);
-                QueryCommand.Execute(new List<List<int>> { skips.ToList() });
+
+                if (HasScrollVelocity) {
+                    // BUG fixing skips sometimes gets caught in a cycle thats hard to detect, trying to limit its use
+                    QueryCommand.Execute(new List<List<int>> { skips.ToList() });
+                } else {
+                    QueryCommand.Execute(null);
+                }
             }
         }
         public override string ToString() {
@@ -1575,7 +1581,7 @@ namespace MonkeyPaste.Avalonia {
             fromItem = fromItem == null ? HeadItem : fromItem;
             QueryItems.ForEach(x => UpdateTileLocationCommand.Execute(x));
 
-            OnPropertyChanged(nameof(DefaultQueryItemWidth));
+            OnPropertyChanged(nameof(DefaultQueryItemWidth)); https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/290px-Huskiesatrest.jpg
             OnPropertyChanged(nameof(DefaultQueryItemHeight));
 
             OnPropertyChanged(nameof(QueryTrayTotalHeight));
@@ -4680,6 +4686,18 @@ namespace MonkeyPaste.Avalonia {
                     await ctvm.PinToPopoutWindowCommand.ExecuteAsync();
                     // get new dc
                     ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
+                }
+                if (ctvm == null) {
+                    // timing problems,
+                    if (PinnedItems.FirstOrDefault(x => x.IsWindowOpen && x.IsAnyPlaceholder) is { }
+                        bad_ctvm) {
+                        //  find placeholder popout and re-init
+                        var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
+                        await bad_ctvm.InitializeAsync(ci);
+                        ctvm = bad_ctvm;
+                    } else {
+                        return;
+                    }
                 }
                 ctvm.TransactionCollectionViewModel.SelectChildCommand.Execute(anguid);
             }, (args) => {

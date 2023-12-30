@@ -1090,6 +1090,18 @@ namespace MonkeyPaste.Avalonia {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ClearRecentSearches.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = UiStrings.PrefClearSearchesLabel,
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = UiStrings.PrefClearSearchesButtonText,
+                                                    value = MpRuntimePrefParamType.ClearRecentSearches.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetNtf.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefRestorNtfLabel,
@@ -1877,6 +1889,16 @@ namespace MonkeyPaste.Avalonia {
 
                             break;
                         }
+                    case MpRuntimePrefParamType.ClearRecentSearches:
+                        MpAvSearchBoxViewModel.Instance.RecentSearchTexts.Clear();
+                        MpAvPrefViewModel.Instance.RecentSearchTexts = string.Empty;
+
+                        MpAvPluginBrowserViewModel.Instance.RecentPluginSearches.Clear();
+                        MpAvPrefViewModel.Instance.RecentPluginSearchTexts = string.Empty;
+
+                        RecentSettingsSearches.Clear();
+                        MpAvPrefViewModel.Instance.RecentSettingsSearchTexts = string.Empty;
+                        break;
                     case MpRuntimePrefParamType.ResetShortcuts:
                         MpAvShortcutCollectionViewModel.Instance.ResetAllShortcutsCommand.Execute(null);
                         break;

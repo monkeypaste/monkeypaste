@@ -26,7 +26,7 @@ namespace ImageAnnotator {
                         var result = await _scorer.DetectAsync(img);
                         // filter and convert predictions to annotations
                         var rootNode = new MpAnnotationNodeFormat() {
-                            label = $"Yolo Analysis",
+                            label = $"Image Annotations",
                             children = result.Boxes
                                 .Where(x => x.Confidence >= confidence)
                                 .Select(x => new MpImageAnnotationNodeFormat() {

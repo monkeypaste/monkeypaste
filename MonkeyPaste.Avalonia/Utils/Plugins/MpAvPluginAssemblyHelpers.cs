@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 
 namespace MonkeyPaste.Avalonia {
@@ -47,11 +46,8 @@ namespace MonkeyPaste.Avalonia {
         private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
             alc = null;
             try {
-                if (MpPluginLoader.USE_ASSEMBLY_LOAD_CONTEXT) {
-                    alc = new MpPluginAssemblyLoadContext(dllPath);
-                    return alc.LoadFromAssemblyPath(dllPath);
-                }
-                return Assembly.LoadFrom(dllPath);
+                alc = new MpPluginAssemblyLoadContext(dllPath);
+                return alc.LoadFromAssemblyPath(dllPath);
             }
             catch (Exception ex) {
                 throw new MpUserNotifiedException($"Plugin Linking error '{dllPath}':{Environment.NewLine}{ex}");

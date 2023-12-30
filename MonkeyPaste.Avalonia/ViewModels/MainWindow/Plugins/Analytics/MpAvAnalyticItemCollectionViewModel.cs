@@ -1,7 +1,6 @@
 ﻿using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -411,6 +410,9 @@ namespace MonkeyPaste.Avalonia {
                 bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
 
                 IsBusy = false;
+                if (SelectedItem == null) {
+                    SelectedItem = SortedItems.FirstOrDefault();
+                }
             });
 
         public MpIAsyncCommand<object> UpdatePluginCommand => new MpAsyncCommand<object>(
