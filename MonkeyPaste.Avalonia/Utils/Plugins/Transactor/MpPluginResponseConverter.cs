@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,17 +13,6 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool suppressWrite) {
-            MpCopyItem target_ci = await ProcessDataObjectAsync(pluginFormat, trans, paramValues, sourceCopyItem, sourceHandler, suppressWrite);
-            return target_ci;
-        }
-
-        private static async Task<MpCopyItem> ProcessDataObjectAsync(
-            MpPluginWrapper pluginFormat,
-            MpAnalyzerTransaction trans,
-            Dictionary<object, string> paramValues,
-            MpCopyItem sourceCopyItem,
-            object sourceHandler,
-            bool suppressWrite = false) {
 
             if (trans != null &&
                 trans.Response != null &&

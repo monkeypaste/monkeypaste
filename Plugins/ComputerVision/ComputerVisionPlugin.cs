@@ -1,55 +1,72 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using Newtonsoft.Json;
+﻿using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ComputerVision {
-    public class ComputerVisionPlugin : MpIAnalyzeComponentAsync {
+    public class ComputerVisionPlugin : MpIAnalyzeComponentAsync, MpISupportHeadlessAnalyzerComponentFormat {
+        const string PARAM_ID_VISUAL_FEATURES = "features";
+        const string PARAM_ID_DETAILS = "details";
+        const string PARAM_ID_CONTENT = "content";
+        const string PARAM_ID_API_KEY = "apikey";
+        const string PARAM_ID_API_REGION_URL = "region";
+        const string PARAM_ID_SIGNUP = "signup";
+
+        const string SIGNUP_URL = "https://azure.microsoft.com/en-us/free/";
+
+        ComputerVisionAnnotator _annotator = new ComputerVisionAnnotator();
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
-            string subscriptionKey = req.GetRequestParamStringValue(5);
-            string endpoint = req.GetRequestParamStringValue(6);
+            NameValueCollection query = HttpUtility.ParseQueryString(string.Empty);
 
-            string url_query = string.Empty;
-            var features = req.GetRequestParamStringListValue(2);
-            if (features.Count > 0) {
-                url_query = $"visualFeatures={string.Join(",", features)}";
+            if (req.GetRequestParamStringListValue(PARAM_ID_VISUAL_FEATURES) is { } features &&
+                features.Count > 0) {
+                query.Add("visualFeatures", string.Join(",", features));
+            }
+            if (req.GetRequestParamStringListValue(PARAM_ID_DETAILS) is { } details &&
+                details.Count > 0) {
+                query.Add("details", string.Join(",", details));
             }
 
-            var details = req.GetRequestParamStringListValue(3);
-            if (details.Count > 0) {
-                if (!string.IsNullOrEmpty(url_query)) {
-                    url_query += "&";
-                }
-                url_query += $"details={string.Join(",", details)}";
-            }
-
-            string base64ImgStr = req.GetRequestParamStringValue(4);
-
-            if (string.IsNullOrEmpty(url_query) || string.IsNullOrEmpty(base64ImgStr)) {
+            if (query.Count == 0 ||
+                Convert.FromBase64String(req.GetRequestParamStringValue(PARAM_ID_CONTENT)) is not byte[] imgBytes) {
                 // no options specified 
                 return null;
             }
 
             var resp = new MpAnalyzerPluginResponseFormat();
-            string endpoint_url = $"{endpoint}vision/v3.2/analyze?{url_query}";
+            if (req.GetRequestParamStringValue(PARAM_ID_API_REGION_URL) is not string region_url ||
+                !Uri.IsWellFormedUriString(region_url, UriKind.Absolute)) {
+                resp.invalidParams.Add(PARAM_ID_API_REGION_URL, "Please provide a valid Region Url");
+                return resp;
+            }
+            string subscriptionKey = req.GetRequestParamStringValue(PARAM_ID_API_KEY);
+            string endpoint_url = $"{region_url}vision/v3.2/analyze?{query}";
             using (var httpClient = new HttpClient()) {
                 using (var request = new HttpRequestMessage(
                     new HttpMethod("POST"), endpoint_url)) {
                     request.Headers.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", subscriptionKey);
 
-                    request.Content = new ByteArrayContent(Convert.FromBase64String(base64ImgStr));
+                    request.Content = new ByteArrayContent(imgBytes);
                     request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
                     try {
                         var http_response = await httpClient.SendAsync(request);
                         string http_response_str = await http_response.Content.ReadAsStringAsync();
-                        resp = CreateAnnotations(resp, http_response_str);
-
+                        if (http_response.IsSuccessStatusCode) {
+                            resp = _annotator.CreateAnnotations(resp, http_response_str);
+                        } else {
+                            if ((int)http_response.StatusCode == 401) {
+                                // invalidate creds
+                                resp.invalidParams.Add(PARAM_ID_API_KEY, http_response_str);
+                            } else {
+                                resp.errorMessage = http_response_str;
+                            }
+                        }
                     }
                     catch (Exception ex) {
                         resp.errorMessage = ex.Message;
@@ -59,385 +76,78 @@ namespace ComputerVision {
             }
             return resp;
         }
-
-        MpAnalyzerPluginResponseFormat CreateAnnotations(MpAnalyzerPluginResponseFormat resp, string respJsonStr) {
-            Root root = JsonConvert.DeserializeObject<Root>(respJsonStr);
-            List<MpAnnotationNodeFormat> annotations = new List<MpAnnotationNodeFormat>();
-
-            if (ProcessCategories(root.categories) is MpAnnotationNodeFormat cat_an) {
-                annotations.Add(cat_an);
-            }
-            if (ProcessTags(root.tags) is MpAnnotationNodeFormat tags_an) {
-                annotations.Add(tags_an);
-            }
-            if (ProcessObjects(root.objects) is MpAnnotationNodeFormat obj_an) {
-                annotations.Add(obj_an);
-            }
-            if (ProcessAdult(root.adult) is MpAnnotationNodeFormat ad_an) {
-                annotations.Add(ad_an);
-            }
-            if (ProcessDescription(root.description) is MpAnnotationNodeFormat description_anf) {
-                annotations.Add(description_anf);
-            }
-            if (ProcessMetaData(root.metadata) is MpAnnotationNodeFormat metadata_anf) {
-                annotations.Add(metadata_anf);
-            }
-            if (ProcessFaces(root.faces) is MpAnnotationNodeFormat faces_an) {
-                annotations.Add(faces_an);
-            }
-            if (ProcessColor(root.color) is MpAnnotationNodeFormat color_an) {
-                annotations.Add(color_an);
-            }
-            if (ProcessImageType(root.imageType) is MpAnnotationNodeFormat it_an) {
-                annotations.Add(it_an);
-            }
-            if (ProcessRequestInfo(root) is MpAnnotationNodeFormat ri_an) {
-                annotations.Add(ri_an);
-            }
-
-            if (annotations.Count > 0) {
-                var root_annotation = new MpAnnotationNodeFormat() {
-                    label = "Azure Image Analysis",
-                    children = annotations
-                };
-                resp.dataObjectLookup = new Dictionary<string, object>() {
-                    { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, root_annotation.SerializeJsonObject()} };
-            }
-
-
-
-            return resp;
-        }
-
-        MpAnnotationNodeFormat ProcessObjects(List<VisionObject> vobjects) {
-            if (vobjects == null || vobjects.Count == 0) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Objects",
-                label = "Objects",
-                children = vobjects.Select(x => new MpImageAnnotationNodeFormat() {
-                    type = "Object",
-                    label = x.@object,
-                    score = x.confidence,
-                    left = x.rectangle.x,
-                    top = x.rectangle.y,
-                    right = x.rectangle.x + x.rectangle.w,
-                    bottom = x.rectangle.y + x.rectangle.h
-
-                    //children = ProcessRectangle(x.rectangle, "Object") is MpAnnotationNodeFormat da ? new List<MpAnnotationNodeFormat>() { da } : null
-                }).Cast<MpAnnotationNodeFormat>().ToList()
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessTags(List<Tag> tags) {
-            if (tags == null || tags.Count == 0) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Tags",
-                label = "Tags",
-                children = tags.Select(x => new MpAnnotationNodeFormat() {
-                    type = "Tag",
-                    label = x.name,
-                    score = x.confidence
-                }).ToList()
-            };
-        }
-        MpAnnotationNodeFormat ProcessCategories(List<Category> categories) {
-            if (categories == null || categories.Count == 0) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Categories",
-                label = "Categories",
-                children = categories.Select(x => new MpAnnotationNodeFormat() {
-                    type = "Category",
-                    label = x.name,
-                    score = x.score,
-                    children = ProcessDetail(x.detail)
-                }).ToList()
-            };
-        }
-        List<MpAnnotationNodeFormat> ProcessDetail(Detail detail) {
-            if (detail == null) {
-                return null;
-            }
-            List<MpAnnotationNodeFormat> children = new List<MpAnnotationNodeFormat>();
-            if (detail.celebrities != null &&
-                detail.celebrities.Count > 0) {
-                if (detail.celebrities.Select(x => ProcessCelebrity(x)) is IEnumerable<MpAnnotationNodeFormat> al &&
-                    al.Where(x => x != null).Count() > 0) {
-                    children.AddRange(al.Where(x => x != null));
-                }
-            }
-            if (detail.landmarks != null &&
-                detail.landmarks.Count > 0) {
-                if (detail.landmarks.Select(x => ProcessLandmark(x)) is IEnumerable<MpAnnotationNodeFormat> al &&
-                    al.Where(x => x != null).Count() > 0) {
-                    children.AddRange(al.Where(x => x != null));
-                }
-            }
-            if (children.Count == 0) {
-                return null;
-            }
-
-            //return new MpAnnotationNodeFormat() {
-            //    type = "Detail",
-            //    children = children
-            //};
-            return children;
-        }
-
-        MpAnnotationNodeFormat ProcessCelebrity(Celebrity celeb) {
-            if (celeb == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Celebrity",
-                label = celeb.name,
-                score = celeb.confidence,
-                children = celeb.faceRectangle == null ? null : new List<MpAnnotationNodeFormat>() { ProcessFaceRectangle(celeb.faceRectangle) }
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessLandmark(Landmark landmark) {
-            if (landmark == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Landmark",
-                label = landmark.name,
-                score = landmark.confidence
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessFaceRectangle(FaceRectangle fr) {
-            if (fr == null) {
-                return null;
-            }
-            return new MpImageAnnotationNodeFormat() {
-                type = "FaceRectangle",
-                left = fr.left,
-                top = fr.top,
-                right = fr.left + fr.width,
-                bottom = fr.top + fr.height
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessRectangle(Rectangle rect, string rectType) {
-            if (rect == null) {
-                return null;
-            }
-            return new MpImageAnnotationNodeFormat() {
-                type = rectType,
-                left = rect.x,
-                top = rect.y,
-                right = rect.x + rect.w,
-                bottom = rect.y + rect.h
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessAdult(Adult adult) {
-            if (adult == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Adult",
-                label = "Adult Classifications",
-                children = new List<MpAnnotationNodeFormat>() {
-                    new MpAnnotationNodeFormat() {
-                        type = "Adult",
-                        label = "Adult Content?",
-                        body = adult.isAdultContent.ToString(),
-                        score = adult.adultScore
+        public MpAnalyzerPluginFormat GetFormat(MpHeadlessAnalyzerComponentFormatRequest request) {
+            return new MpAnalyzerPluginFormat() {
+                inputType = new MpPluginInputFormat() {
+                    image = true
+                },
+                outputType = new MpPluginOutputFormat() {
+                    imageAnnotation = true
+                },
+                parameters = new List<MpParameterFormat>() {
+                    new MpParameterFormat() {
+                        label = "Visual Features",
+                        controlType = MpParameterControlType.MultiSelectList,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        values =
+                            typeof(ComputerVisionFeatureType)
+                            .GetEnumNames()
+                            .Select(x=>new MpPluginParameterValueFormat() {
+                                label = x,
+                                value = x.ToLower(),
+                                isDefault = true
+                            }).ToList(),
+                        paramId = PARAM_ID_VISUAL_FEATURES,
                     },
-                    new MpAnnotationNodeFormat() {
-                        type = "Adult",
-                        label = "Racy Content?",
-                        body = adult.isRacyContent.ToString(),
-                        score = adult.racyScore
+                    new MpParameterFormat() {
+                        label = "Details",
+                        controlType = MpParameterControlType.MultiSelectList,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        values =
+                            typeof(ComputerDetailType)
+                            .GetEnumNames()
+                            .Select(x=>new MpPluginParameterValueFormat() {
+                                label = x,
+                                value = x.ToLower(),
+                                isDefault = true
+                            }).ToList(),
+                        paramId = PARAM_ID_DETAILS,
                     },
-                    new MpAnnotationNodeFormat() {
-                        type = "Adult",
-                        label = "Gory Content?",
-                        body = adult.isGoryContent.ToString(),
-                        score = adult.goreScore
-                    }
-                }
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessDescription(Description d) {
-            if (d == null) {
-                return null;
-            }
-            var danf = new MpAnnotationNodeFormat() {
-                type = "Description",
-                label = "Descriptions",
-                children = new List<MpAnnotationNodeFormat>()
-            };
-            if (d.tags != null && d.tags.Count > 0) {
-                danf.children.Add(
-                    new MpAnnotationNodeFormat() {
-                        type = "Tags",
-                        label = "Tags",
-                        children =
-                            d.tags.Select(x => new MpAnnotationNodeFormat() {
-                                type = "Tag",
-                                label = x
-                            }).ToList()
-                    });
-            }
-            if (d.captions != null && d.captions.Count > 0) {
-                danf.children.Add(
-                    new MpAnnotationNodeFormat() {
-                        type = "Captions",
-                        label = "Captions",
-                        children =
-                        d.captions.Select(x => new MpAnnotationNodeFormat() {
-                            type = "Caption",
-                            label = x.text,
-                            score = x.confidence
-                        }).ToList()
-                    });
-            }
-            if (danf.children.Count == 0) {
-                return null;
-            }
-            return danf;
-        }
-
-        MpAnnotationNodeFormat ProcessMetaData(Metadata md) {
-            if (md == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "MetaData",
-                label = "MetaData",
-                children = new List<MpAnnotationNodeFormat>() {
-                    new MpAnnotationNodeFormat() {
-                        type = "ImageDimension",
-                        label = "Width",
-                        body = md.width.ToString()
+                    new MpParameterFormat() {
+                        isExecuteParameter = true,
+                        isSharedValue = true,
+                        isRequired = true,
+                        label = "Region",
+                        description = "The region associated with your Azure Computer Vision account.",
+                        controlType = MpParameterControlType.TextBox,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        paramId = PARAM_ID_API_REGION_URL,
                     },
-                    new MpAnnotationNodeFormat() {
-                        type = "ImageDimension",
-                        label = "Height",
-                        body = md.height.ToString()
+                    new MpParameterFormat() {
+                        isExecuteParameter = true,
+                        isSharedValue = true,
+                        isRequired = true,
+                        label = "Subscription Key",
+                        description = "Your Azure Computer Vision API Key.",
+                        controlType = MpParameterControlType.TextBox,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        paramId = PARAM_ID_API_KEY,
                     },
-                    new MpAnnotationNodeFormat() {
-                        type = "ImageFormat",
-                        label = "Format",
-                        body = md.format
+                    new MpParameterFormat() {
+                        isExecuteParameter = true,
+                        controlType = MpParameterControlType.Hyperlink,
+                        value = new MpPluginParameterValueFormat(SIGNUP_URL,"Sign Up",true),
+                        paramId = PARAM_ID_SIGNUP,
                     },
-                }
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessFaces(List<Face> faces) {
-            if (faces == null || faces.Count == 0) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Faces",
-                label = "Faces",
-                children = faces.Select(x => new MpAnnotationNodeFormat() {
-                    type = "Face",
-                    label = "Faces",
-                    children = new List<MpAnnotationNodeFormat>() {
-                        new MpAnnotationNodeFormat() {
-                            type = "Age",
-                            label = "Age",
-                            body = x.age.ToString()
-                        },
-                        new MpAnnotationNodeFormat() {
-                            type = "Gender",
-                            label = "Gender",
-                            body = x.gender
-                        },
-                        ProcessFaceRectangle(x.faceRectangle)
-                    }.ToList()
-                }).ToList()
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessColor(Color color) {
-            if (color == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "Colors",
-                label = "Colors",
-                children = new[] {
-                    new MpAnnotationNodeFormat() {
-                        type = "Color",
-                        label = "Dominant Foreground Color",
-                        body = color.dominantColorForeground
+                    new MpParameterFormat() {
+                        isVisible = false,
+                        isRequired = true,
+                        label = "Source Content",
+                        controlType = MpParameterControlType.TextBox,
+                        unitType = MpParameterValueUnitType.PlainTextContentQuery,
+                        value = new MpPluginParameterValueFormat("{ItemData}",true),
+                        paramId = PARAM_ID_CONTENT,
                     },
-                    new MpAnnotationNodeFormat() {
-                        type = "Color",
-                        label = "Dominant Background Color",
-                        body = color.dominantColorBackground
-                    },
-                    new MpAnnotationNodeFormat() {
-                        type = "Color",
-                        label = "Accent Color",
-                        body = color.accentColor
-                    },
-                    new MpAnnotationNodeFormat() {
-                        type = "Color",
-                        label = "Black and White?",
-                        body = color.isBWImg.ToString()
-                    }
-                }.Union(color.dominantColors.Select(x => new MpAnnotationNodeFormat() {
-                    type = "Color",
-                    label = "Dominant Color",
-                    body = x
-                })).ToList()
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessImageType(ImageType it) {
-            if (it == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "ImageType",
-                label = "Image Type",
-                children = new List<MpAnnotationNodeFormat>() {
-                    new MpAnnotationNodeFormat() {
-                        type = "ImageType",
-                        label = "Clip Art Type",
-                        body = ((ImageClipArtType)it.clipArtType).EnumToProperCase()
-                    },
-                    new MpAnnotationNodeFormat() {
-                        type = "ImageType",
-                        label = "Line Drawing?",
-                        body = it.lineDrawingType > 0 ? "True":"False"
-                    }
-                }
-            };
-        }
-
-        MpAnnotationNodeFormat ProcessRequestInfo(Root r) {
-            if (r == null) {
-                return null;
-            }
-            return new MpAnnotationNodeFormat() {
-                type = "RequestInfo",
-                label = "Azure Request Info",
-                children = new List<MpAnnotationNodeFormat>() {
-                    new MpAnnotationNodeFormat() {
-                        type = "RequestId",
-                        label = "RequestId",
-                        body = r.requestId.ToString()
-                    },
-                    new MpAnnotationNodeFormat() {
-                        type = "ModelVersion",
-                        label = "Model Version",
-                        body = r.modelVersion
-                    }
                 }
             };
         }

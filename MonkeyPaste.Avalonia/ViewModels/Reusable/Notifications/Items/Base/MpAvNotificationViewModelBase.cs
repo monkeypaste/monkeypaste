@@ -30,6 +30,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalYesNoMessageBox:
+                case MpNotificationType.ModalResetSharedValuePreset:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
@@ -71,6 +72,8 @@ namespace MonkeyPaste.Avalonia {
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
             switch (ndt) {
+                case MpNotificationType.ModalResetSharedValuePreset:
+                    return MpNotificationButtonsType.ResetAllResetSharedResetUnsharedCancel;
                 case MpNotificationType.UpdateAvailable:
                     return MpNotificationButtonsType.Update;
                 case MpNotificationType.ModalYesNoCancelMessageBox:
@@ -118,6 +121,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpNotificationPlacementType GetNotificationPlacementType(MpNotificationType ndt) {
             switch (ndt) {
+                case MpNotificationType.ModalResetSharedValuePreset:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalYesNoMessageBox:
                 case MpNotificationType.ConfirmEndAppend:
@@ -136,22 +140,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static bool IsNotificationTypeModal(MpNotificationType ndt) {
-            switch (ndt) {
-                case MpNotificationType.ModalYesNoMessageBox:
-                case MpNotificationType.ModalYesNoCancelMessageBox:
-                case MpNotificationType.ConfirmEndAppend:
-                case MpNotificationType.ModalOkCancelMessageBox:
-                case MpNotificationType.ModalOkMessageBox:
-                case MpNotificationType.ModalContentFormatDegradation:
-                case MpNotificationType.ModalTextBoxOkCancelMessageBox:
-                case MpNotificationType.ModalProgressCancelMessageBox:
-                case MpNotificationType.ModalBusyMessageBox:
-                case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
-                case MpNotificationType.Welcome:
-                    return true;
-                default:
-                    return false;
-            }
+            return GetNotificationPlacementType(ndt) == MpNotificationPlacementType.ModalAnchor;
         }
 
         public static bool GetIsErrorNotification(MpNotificationFormat nf) {

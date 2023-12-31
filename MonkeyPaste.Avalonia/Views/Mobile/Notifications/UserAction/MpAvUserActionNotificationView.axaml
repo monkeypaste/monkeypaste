@@ -14,10 +14,6 @@
     <local:MpAvUserControl.Styles>
         <!--  PROGRESS SPINNER  -->
 
-        <Style Selector="local|MpAvProgressSpinnerView#UserActionProgressSpinner local|MpAvProgressSpinner">
-            <!--<Setter Property="ArcWidth"
-                    Value="5" />-->
-        </Style>
         <!--  PARAM LISTBOXITEM  -->
         <Style Selector="ListBox#ExecuteParameterListBox > ListBoxItem"
                x:DataType="local:MpAvParameterViewModelBase">
@@ -115,7 +111,7 @@
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Margin="0,0,5,0" />
+                   Margin="0,0,10,0" />
 
             <!--  TITLE  -->
 
@@ -206,9 +202,9 @@
                                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <VirtualizingStackPanel Orientation="Vertical"
-                                                                    HorizontalAlignment="Stretch"
-                                                                    VerticalAlignment="Stretch" />
+                                            <StackPanel Orientation="Vertical"
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Stretch" />
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
@@ -369,6 +365,19 @@
                         </StackPanel>
                     </Border>
                 </Button>
+                <!--  Reset Shared, Reset Unshared, Reset All  -->
+                <Button Content="{x:Static local:UiStrings.NtfResetPresetSharedButtonLabel}"
+                        IsVisible="{Binding ShowResetPresetButtons}"
+                        Command="{Binding ResetPresetCommand}"
+                        CommandParameter="shared" />
+                <Button Content="{x:Static local:UiStrings.NtfResetPresetUnsharedButtonLabel}"
+                        IsVisible="{Binding ShowResetPresetButtons}"
+                        Command="{Binding ResetPresetCommand}"
+                        CommandParameter="unshared" />
+                <Button Content="{x:Static local:UiStrings.NtfResetPresetAllButtonLabel}"
+                        IsVisible="{Binding ShowResetPresetButtons}"
+                        Command="{Binding ResetPresetCommand}"
+                        CommandParameter="all" />
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
                 <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"
                         IsVisible="{Binding ShowIgnoreButton}"

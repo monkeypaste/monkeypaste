@@ -10,7 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="logo.png" />
+    <None Remove="manifest.json" />
+    <None Remove="manifest_declarative.json" />
     <None Remove="manifest_declaritive.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

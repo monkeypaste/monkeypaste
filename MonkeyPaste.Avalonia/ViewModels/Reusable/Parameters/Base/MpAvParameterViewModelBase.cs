@@ -512,8 +512,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler OnValidate;
-        public event EventHandler OnValueChanged;
+        public event EventHandler OnParamValidate;
+        public event EventHandler OnParamValueChanged;
 
         #endregion
 
@@ -549,7 +549,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsExecuteParameter));
             OnPropertyChanged(nameof(Description));
 
-            OnValidate += MpAnalyticItemParameterViewModel_OnValidate;
+            OnParamValidate += MpAnalyticItemParameterViewModel_OnValidate;
 
             await Task.Delay(1);
 
@@ -558,13 +558,17 @@ namespace MonkeyPaste.Avalonia {
 
         public bool Validate() {
             bool was_valid = IsValid;
-            OnValidate?.Invoke(this, new EventArgs());
+            OnParamValidate?.Invoke(this, new EventArgs());
             if (was_valid != IsValid &&
                 Parent is MpAvAnalyticItemPresetViewModel aipvm) {
                 aipvm.Parent.UpdateCanExecute();
             }
             OnPropertyChanged(nameof(IsValid));
             return IsValid;
+        }
+        public void ClearValidation() {
+            ValidationMessage = string.Empty;
+            OnPropertyChanged(nameof(IsValid));
         }
 
         public virtual string GetValidationMessage(bool isExecuting) {
@@ -597,7 +601,7 @@ namespace MonkeyPaste.Avalonia {
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     }
                     if (e.PropertyName == nameof(CurrentValue)) {
-                        OnValueChanged?.Invoke(this, EventArgs.Empty);
+                        OnParamValueChanged?.Invoke(this, EventArgs.Empty);
                     }
                     Validate();
                     break;
@@ -684,7 +688,7 @@ namespace MonkeyPaste.Avalonia {
             if (!is_core_loaded) {
                 return;
             }
-            OnValidate?.Invoke(this, new EventArgs());
+            OnParamValidate?.Invoke(this, new EventArgs());
         }
 
         #endregion

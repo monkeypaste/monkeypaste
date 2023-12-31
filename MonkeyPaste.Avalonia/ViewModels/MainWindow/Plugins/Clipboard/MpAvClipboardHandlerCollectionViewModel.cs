@@ -567,9 +567,8 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 Func<Task<MpOlePluginResponse>> retryHandlerFunc = async () => {
-                    // this is mainly just testing retry from plugin
-                    // like if format is > max length, change and retry..
-                    //var result = await component.ProcessOleRequestAsync(req);
+                    // NOTE this isn't really implemented since clipboard handlers are passive
+                    // but just stubbed out here...
                     var result = await hcfvm.IssueOleRequestAsync(req);
                     return result;
                 };
@@ -579,6 +578,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // process response for any ntf or retry requests
                 resp = await MpPluginTransactor.ValidatePluginResponseAsync(
+                    hcfvm.Title,
                     req,
                     resp,
                     retryHandlerFunc);

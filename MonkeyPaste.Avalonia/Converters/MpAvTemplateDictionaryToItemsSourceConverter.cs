@@ -4,7 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
-using Avalonia.Media;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -71,6 +71,11 @@ namespace MonkeyPaste.Avalonia {
             mi.SubmenuOpened += Mi_SubmenuOpened;
             mi.Unloaded += Mi_Unloaded;
         }
+
+        private void Mi_PointerEntered(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            throw new NotImplementedException();
+        }
+
         private void Mi_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (sender is not MenuItem mi) {
                 return;
@@ -100,11 +105,8 @@ namespace MonkeyPaste.Avalonia {
             var parent_tl = pr.PointToScreen(pr.Bounds.TopLeft);
             var child_tr = child_pr.PointToScreen(child_pr.Bounds.TopRight);
             double x_diff = parent_tl.X - child_tr.X;
-            if (x_diff > 0 &&
-                child_pr.RenderTransform is TransformGroup tg &&
-                tg.Children.OfType<TranslateTransform>().FirstOrDefault() is { } tt) {
-                tt.X = x_diff + 5;
-                child_pr.ClipToBounds = false;
+            if (x_diff > 0 && mi.GetVisualDescendant<Popup>() is { } pu) {
+                pu.HorizontalOffset = x_diff + 4;
             }
         }
         private void Child_mi_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

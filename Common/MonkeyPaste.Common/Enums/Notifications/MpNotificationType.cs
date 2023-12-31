@@ -47,6 +47,7 @@
 
         // User Action (Modal) 
 
+        ModalResetSharedValuePreset,
         ModalContentFormatDegradation,
         ModalYesNoCancelMessageBox,
         ModalYesNoMessageBox,

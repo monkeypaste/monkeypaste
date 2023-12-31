@@ -13,6 +13,9 @@
         DoNotShow,
         Loading,
         Text,
-        Dismiss
+        Dismiss,
+        ResetShared,
+        ResetUnshared,
+        ResetAll,
     }
 }

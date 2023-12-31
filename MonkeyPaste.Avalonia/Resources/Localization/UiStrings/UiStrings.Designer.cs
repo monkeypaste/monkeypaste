@@ -3714,7 +3714,34 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains shared values. Would you like to reset those as well?.
+        ///   Looks up a localized string similar to Reset All.
+        /// </summary>
+        public static string NtfResetPresetAllButtonLabel {
+            get {
+                return ResourceManager.GetString("NtfResetPresetAllButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Shared.
+        /// </summary>
+        public static string NtfResetPresetSharedButtonLabel {
+            get {
+                return ResourceManager.GetString("NtfResetPresetSharedButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Unshared.
+        /// </summary>
+        public static string NtfResetPresetUnsharedButtonLabel {
+            get {
+                return ResourceManager.GetString("NtfResetPresetUnsharedButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains shared values. What would you like to reset?.
         /// </summary>
         public static string NtfResetSharedValueText {
             get {

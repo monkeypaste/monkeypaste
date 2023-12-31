@@ -43,7 +43,9 @@
     </Style>
 
     <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
-    <Style Selector=":is(Window).notificationWindow.params:not(.welcome)">
+    <Style Selector=":is(Window).notificationWindow.userAction">
+        <Setter Property="MinWidth"
+                Value="350" />
         <Setter Property="Width"
                 Value="{StaticResource NaN}" />
         <Setter Property="SizeToContent"
@@ -64,7 +66,14 @@
                 Value="5" />
     </Style>
 
-    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton)">
+    <Style Selector=":is(Window).notificationWindow.userAction.reset">
+        <Setter Property="Width"
+                Value="450" />
+        <Setter Property="SizeToContent"
+                Value="Height" />
+    </Style>
+
+    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn)">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
@@ -91,15 +100,13 @@
                 Value="SemiBold" />
         <Setter Property="MinWidth"
                 Value="50" />
-        <Setter Property="MaxWidth"
-                Value="100" />
     </Style>
 
-    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
+    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn):pointerover /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeGrayAccent1Color}" />
     </Style>
-    <Style Selector=":is(Window).userAction Button:not(.optionsButton):pointerover">
+    <Style Selector=":is(Window).userAction Button:not(.optionsButton):not(.link):not(.iconBtn):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"

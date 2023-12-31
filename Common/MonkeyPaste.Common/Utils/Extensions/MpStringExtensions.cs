@@ -145,6 +145,9 @@ namespace MonkeyPaste.Common {
         #endregion
 
         public static Version ToVersion(this string ver_str) {
+            if (string.IsNullOrEmpty(ver_str)) {
+                return new Version();
+            }
             try {
                 return new Version(ver_str);
             }

@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
             Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
+            bool is_retry,
             bool suppressWrite = false) {
 
             // This method:
@@ -53,7 +54,6 @@ namespace MonkeyPaste.Avalonia {
             try {
                 trans.Response = await IssueRequestAsync(plugin, trans.Request as MpAnalyzerPluginRequestFormat);
                 trans.ResponseTime = DateTime.Now;
-
             }
             catch (Exception ex) {
                 return await HandleErrorAsync(ex, plugin, trans, sourceCopyItem, sourceHandler, suppressWrite);
@@ -84,21 +84,33 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static async Task<T> ValidatePluginResponseAsync<T>(
+            string pluginLabel,
             MpPluginParameterRequestFormat request,
             MpPluginResponseFormatBase response,
-            Func<Task<T>> retryFunc = null) where T : MpPluginResponseFormatBase {
+            Func<Task<T>> retryFunc) where T : MpPluginResponseFormatBase {
             if (response == null) {
                 //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
                 MpConsole.WriteLine($"Plugin response null");
                 return null;
             }
             if (!string.IsNullOrWhiteSpace(response.errorMessage)) {
-                MpConsole.WriteTraceLine($"Plugin error (ignoring new clipboard data): " + response.errorMessage);
+                MpConsole.WriteTraceLine($"Plugin error for '{pluginLabel}': {response.errorMessage}");
+
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                    msgType: MpNotificationType.PluginResponseError,
+                    title: string.Format(UiStrings.PluginErrNtfTitle, pluginLabel),
+                    body: response.errorMessage).FireAndForgetSafeAsync();
                 return null;
             }
             if (response.otherMessage != null) {
-                MpConsole.WriteLine(response.otherMessage);
+                MpConsole.WriteLine($"Plugin message for '{pluginLabel}': {response.otherMessage}");
+
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                    msgType: MpNotificationType.PluginResponseOther,
+                    title: pluginLabel,
+                    body: response.otherMessage).FireAndForgetSafeAsync();
             }
+
             response = await HandlePluginNotifcationsAsync<T>(request, response, retryFunc);
 
             return response as T;
@@ -107,7 +119,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
         private static async Task<MpPluginResponseFormatBase> HandlePluginNotifcationsAsync<T>(
             MpPluginParameterRequestFormat request,
             MpPluginResponseFormatBase response,
@@ -119,9 +130,6 @@ namespace MonkeyPaste.Avalonia {
 
             for (int i = cur_idx; i < response.userNotifications.Count; i++) {
                 var nf = response.userNotifications[i];
-                nf.FixCommand = new MpCommand(() => {
-                    Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync("test", "Fix me");
-                });
 
                 var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(nf);
                 if (result == MpNotificationDialogResultType.Ignore) {

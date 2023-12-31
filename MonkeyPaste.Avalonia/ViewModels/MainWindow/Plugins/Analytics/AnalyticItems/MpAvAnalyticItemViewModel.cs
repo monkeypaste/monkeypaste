@@ -476,13 +476,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // rollup target params and cont
-            MpAnalyzerTransaction result = await MpPluginTransactor.PerformTransactionAsync(
+            MpAnalyzerTransaction this_transaction = await MpPluginTransactor.PerformTransactionAsync(
                                        PluginFormat,
                                        targetAnalyzer.ParamLookup,
                                        sourceCopyItem,
                                        targetAnalyzer.Preset,
                                        suppressWrite) as MpAnalyzerTransaction;
-            if (result == null) {
+            if (this_transaction == null) {
                 FinishAnalysis(targetAnalyzer);
                 return null; ;
             }
@@ -492,24 +492,35 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             };
 
-            result.Response = await MpPluginTransactor.ValidatePluginResponseAsync(
-                result.Request,
-                result.Response,
+            this_transaction.Response = await MpPluginTransactor.ValidatePluginResponseAsync(
+                targetAnalyzer.Label,
+                this_transaction.Request,
+                this_transaction.Response,
                 retryAnalyzerFunc);
 
-            if (result.ResponseContent is MpCopyItem rci) {
+            if (this_transaction.Response != null &&
+                this_transaction.Response.invalidParams != null &&
+                this_transaction.Response.invalidParams.Any()) {
+                // retry and return that output
+                foreach (var inv_kvp in this_transaction.Response.invalidParams) {
+                    if (targetAnalyzer.Items.FirstOrDefault(x => x.ParamId.Equals(inv_kvp.Key)) is not { } aipvm) {
+                        continue;
+                    }
+                    // flag invalid params w/ plugin provided invalid text
+                    aipvm.ValidationMessage = inv_kvp.Value;
+                }
+                var retry_result = await PerformAnalysisAsync(args);
+                return retry_result;
+            }
+
+            if (this_transaction.ResponseContent is MpCopyItem rci) {
                 rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
                 await MpAvClipTrayViewModel.Instance.AddUpdateOrAppendCopyItemAsync(rci);
             }
-            //else if (result.Response != null &&
-            //            result.Response.dataObjectLookup != null &&
-            //            new MpAvDataObject(result.Response.dataObjectLookup) is MpAvDataObject avdo) {
-            //    result.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
-            //}
-            LastTransaction = result;
+            LastTransaction = this_transaction;
 
             FinishAnalysis(targetAnalyzer);
-            return result;
+            return this_transaction;
         }
         #endregion
 
@@ -616,43 +627,52 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<bool> PrepareAnalysisAsync(MpAvAnalyticItemPresetViewModel targetAnalyzer, object args) {
             // returns false if exec params invalid on submit
+            bool is_retry = targetAnalyzer.IsExecuting;
             targetAnalyzer.IsExecuting = true;
-            if (targetAnalyzer.ExecuteItems.Any()) {
-                targetAnalyzer.ExecuteItems.ForEach(x => x.Validate());
-                // always show if has non-required params or missing req'd
-                bool needs_to_show =
-                    targetAnalyzer.ExecuteItems.Any(x => !x.IsValid) ||
-                    !CanExecuteAnalysis(args);
+            if (!targetAnalyzer.ExecuteItems.Any()) {
+                return targetAnalyzer.IsAllValid;
+            }
+            if (is_retry) {
+                // retain any validation msgs from plugin
+            } else {
+                targetAnalyzer.Validate();
+            }
 
-                while (needs_to_show) {
-                    // show execute params
-                    var exec_ntf_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.ExecuteParametersRequest,
-                        title: UiStrings.AnalyzerExecuteParamNtfTitle,
-                        body: targetAnalyzer,
-                        iconSourceObj: targetAnalyzer.IconId);
+            // always show if has non-required params or missing req'd
+            bool needs_to_show =
+                targetAnalyzer.ExecuteItems.Any(x => !x.IsValid) ||
+                !CanExecuteAnalysis(args);
 
-                    if (exec_ntf_result == MpNotificationDialogResultType.Cancel) {
-                        // halt analysis
-                        CurrentExecuteArgs = null;
-                        targetAnalyzer.IsExecuting = false;
-                        //IsBusy = false;
-                        return false;
-                    }
+            while (needs_to_show) {
+                // show execute params
+                var exec_ntf_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.ExecuteParametersRequest,
+                    title: UiStrings.AnalyzerExecuteParamNtfTitle,
+                    body: targetAnalyzer,
+                    iconSourceObj: targetAnalyzer.IconId);
 
-                    needs_to_show = !CanExecuteAnalysis(args);
-                    if (!needs_to_show) {
-                        targetAnalyzer.SaveCommand.Execute(null);
-                    }
+                if (exec_ntf_result == MpNotificationDialogResultType.Cancel) {
+                    // halt analysis
+                    CurrentExecuteArgs = null;
+                    targetAnalyzer.IsExecuting = false;
+                    //IsBusy = false;
+                    return false;
+                }
+
+                needs_to_show = !CanExecuteAnalysis(args);
+                if (!needs_to_show) {
+                    targetAnalyzer.SaveCommand.Execute(null);
                 }
             }
             return true;
         }
         private void FinishAnalysis(MpAvAnalyticItemPresetViewModel targetAnalyzer, MpAnalyzerTransaction result = null) {
             CurrentExecuteArgs = null;
-            if (targetAnalyzer != null) {
-                targetAnalyzer.IsExecuting = false;
+            if (targetAnalyzer == null) {
+                return;
             }
+            // clear any overrriden validations and revalidate
+            targetAnalyzer.ResetExecutionState();
         }
         private bool CanExecuteAnalysis(object args) {
             CurrentExecuteArgs = args;
@@ -823,19 +843,29 @@ namespace MonkeyPaste.Avalonia {
 
                 if (shared_params_to_clear_or_restore.Any()) {
                     // ntf w/ yes/no/cancel to reset shared values
-                    var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
+                    var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.ModalResetSharedValuePreset,
                         title: UiStrings.CommonConfirmLabel,
-                        message: string.Format(UiStrings.NtfResetSharedValueText, aipvm.Label),
-                        iconResourceObj: "QuestionMarkImage");
-                    if (result.IsNull()) {
-                        // cancel
+                        body: string.Format(UiStrings.NtfResetSharedValueText, aipvm.Label),
+                        iconSourceObj: "QuestionMarkImage");
+                    if (result == MpNotificationDialogResultType.Cancel) {
                         IsBusy = false;
                         return;
                     }
-                    if (result.IsTrue()) {
+                    if (result == MpNotificationDialogResultType.ResetAll ||
+                        result == MpNotificationDialogResultType.ResetShared) {
                         // clear shared values
                         foreach (var kvp in shared_params_to_clear_or_restore) {
                             shared_params_to_clear_or_restore[kvp.Key] = string.Empty;
+                        }
+
+                        if (result == MpNotificationDialogResultType.ResetShared) {
+                            // leave unshared alone
+
+                            Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == aipvm.AnalyticItemPresetId);
+                            OnPropertyChanged(nameof(SelectedItem));
+                            IsBusy = false;
+                            return;
                         }
                     }
                 }

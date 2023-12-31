@@ -14,6 +14,7 @@
         Progress,
         Busy,
         Rate,
-        Update
+        Update,
+        ResetAllResetSharedResetUnsharedCancel
     }
 }

@@ -74,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowYesButton { get; set; }
         public bool ShowNoButton { get; set; }
         public bool ShowCancelButton { get; set; }
+        public bool ShowResetPresetButtons { get; set; }
         public bool ShowProgressSpinner { get; set; }
         public bool ShowBusySpinner { get; set; }
         public bool ShowOkButton { get; set; }
@@ -176,6 +177,10 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(nf);
             switch (ButtonsType) {
+                case MpNotificationButtonsType.ResetAllResetSharedResetUnsharedCancel:
+                    ShowResetPresetButtons = true;
+                    ShowCancelButton = true;
+                    break;
                 case MpNotificationButtonsType.Update:
                     ShowUpdateButton = true;
                     break;
@@ -426,6 +431,29 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand ResetPresetCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not string resetType) {
+                    return;
+                }
+                switch (resetType) {
+                    case "shared":
+                        DialogResult = MpNotificationDialogResultType.ResetShared;
+                        break;
+                    case "unshared":
+                        DialogResult = MpNotificationDialogResultType.ResetUnshared;
+                        break;
+                    case "all":
+                        DialogResult = MpNotificationDialogResultType.ResetAll;
+                        break;
+                    default:
+                        MpDebug.Break($"unhandled reset type '{resetType}'");
+                        DialogResult = MpNotificationDialogResultType.Cancel;
+                        break;
+                }
+            });
+
         public ICommand IgnoreCommand => new MpCommand(
             () => {
                 IsFixing = false;

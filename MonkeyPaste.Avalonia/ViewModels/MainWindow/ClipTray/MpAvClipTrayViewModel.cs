@@ -1581,7 +1581,7 @@ namespace MonkeyPaste.Avalonia {
             fromItem = fromItem == null ? HeadItem : fromItem;
             QueryItems.ForEach(x => UpdateTileLocationCommand.Execute(x));
 
-            OnPropertyChanged(nameof(DefaultQueryItemWidth)); https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/290px-Huskiesatrest.jpg
+            OnPropertyChanged(nameof(DefaultQueryItemWidth));
             OnPropertyChanged(nameof(DefaultQueryItemHeight));
 
             OnPropertyChanged(nameof(QueryTrayTotalHeight));
@@ -3007,6 +3007,7 @@ namespace MonkeyPaste.Avalonia {
                         bool is_waiting =
                             IsAddingClipboardItem ||
                             MpAvPlainHtmlConverter.Instance.IsBusy ||
+                            !MpAvPlainHtmlConverter.Instance.IsLoaded ||
                             !Mp.Services.StartupState.IsCoreLoaded;
                         if (is_waiting) {
                             MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");

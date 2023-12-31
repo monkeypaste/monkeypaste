@@ -8,7 +8,7 @@ namespace MonkeyPaste {
     public class MpNotificationFormat : MpJsonObject, MpINotificationFormat {
         #region Constants
 
-        public const int MAX_MESSAGE_DISPLAY_MS = 5_000;
+        public const int MAX_MESSAGE_DISPLAY_MS = 3_000;
 
         #endregion
 

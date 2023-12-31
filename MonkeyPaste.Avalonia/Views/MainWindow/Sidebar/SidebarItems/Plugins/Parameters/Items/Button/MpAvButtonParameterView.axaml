@@ -16,6 +16,12 @@
                x:DataType="local:MpAvButtonParameterViewModel">
             <Setter Property="Command"
                     Value="{Binding ClickCommand}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding ClickCommandParameter}" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
         </Style>
         <Style Selector="Button.param.link.trynav"
                x:DataType="local:MpAvButtonParameterViewModel">
@@ -25,27 +31,34 @@
     </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
         <!--  NOTE when control is hyperlink and cmd is not set it'll use CurrentValue as Nav uri  -->
-        <Button Classes="defaultButton param"
-                Classes.link="{Binding IsLink}"
-                MinWidth="100"
-                Classes.trynav="{Binding ClickCommand, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                CommandParameter="{Binding ClickCommandParameter}">
-            <Grid>
-                <TextBlock IsVisible="{Binding !IsBusy}"
-                           Margin="0"
-                           Text="{Binding Title}" />
-                <StackPanel IsVisible="{Binding IsBusy}"
-                            Orientation="Horizontal"
-                            Spacing="5">
-                    <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Width="20"
-                                               Height="20" />
-                    <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}" />
-                </StackPanel>
-            </Grid>
-        </Button>
+        <Grid>
+            <Button Classes="param link"
+                    IsVisible="{Binding IsLink}"
+                    Classes.trynav="{Binding ClickCommand, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding CurrentValue}" />
+                </ToolTip.Tip>
+                <TextBlock Text="{Binding Title}" />
+            </Button>
+            <Button Classes="param defaultButton"
+                    IsVisible="{Binding !IsLink}"
+                    MinWidth="100">
+                <Grid>
+                    <TextBlock IsVisible="{Binding !IsBusy}"
+                               Margin="0"
+                               Text="{Binding Title}" />
+                    <StackPanel IsVisible="{Binding IsBusy}"
+                                Orientation="Horizontal"
+                                Spacing="5">
+                        <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Width="20"
+                                                   Height="20" />
+                        <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}" />
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </Grid>
+
     </Border>
 </local:MpAvUserControl>

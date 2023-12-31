@@ -19,6 +19,7 @@
             <Setter Property="Padding"
                     Value="10,5,15,5" />
         </Style>
+      
         <Style Selector="MenuItem.hasGesture">
             <Setter Property="Padding"
                     Value="10,5,5,5" />

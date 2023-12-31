@@ -373,7 +373,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(MpParameterValue aipv) {
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent);
-            naipvm.OnValidate += ParameterViewModel_OnValidate;
+            naipvm.OnParamValidate += ParameterViewModel_OnValidate;
 
             return naipvm;
         }

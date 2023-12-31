@@ -365,6 +365,8 @@ namespace MonkeyPaste.Avalonia {
             }
             update_check_timer.Tick += CheckForUpdate_tick;
             update_check_timer.Start();
+            // initial check
+            CheckForUpdate_tick(update_check_timer, EventArgs.Empty);
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
@@ -452,9 +454,14 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 // update available
-                if ((source != "Click" && LastNotfiedVersion != null) ||
-                    (LastNotfiedVersion != null &&
-                        UpToDateAppVersion.CompareTo(LastNotfiedVersion) == 0)) {
+                bool show_ntf = source == "Click";
+                if (!show_ntf) {
+                    if (LastNotfiedVersion == null ||
+                        UpToDateAppVersion.CompareTo(LastNotfiedVersion) != 0) {
+                        show_ntf = true;
+                    }
+                }
+                if (!show_ntf) {
                     // non-user check, already notified
                     return;
                 }

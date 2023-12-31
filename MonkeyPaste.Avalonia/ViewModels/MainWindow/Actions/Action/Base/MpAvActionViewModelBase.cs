@@ -961,7 +961,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // attach validation handlers
-            ActionArgs.ForEach(x => x.OnValidate += ActionArg_OnValidate);
+            ActionArgs.ForEach(x => x.OnParamValidate += ActionArg_OnValidate);
 
             var cal = await MpDataModelProvider.GetChildActionsAsync(ActionId);
             foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {

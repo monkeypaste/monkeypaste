@@ -158,20 +158,23 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return PluginVersion;
                 }
-                return
-                    Parent.Items
-                    .Where(x => x.PluginGuid == PluginGuid)
-                    .OrderByDescending(x => x.PluginVersion)
-                    .FirstOrDefault()
-                    .PluginVersion;
+                var versions = Parent.Items.Where(x => x.PluginGuid == PluginGuid);
+                if (versions.Any()) {
+                    return
+                        versions
+                        .OrderByDescending(x => x.PluginVersion)
+                        .FirstOrDefault()
+                        .PluginVersion;
+                }
+                return PluginVersion;
             }
         }
         private Version _pluginVersion;
         public Version PluginVersion {
             get {
                 if (_pluginVersion == null ||
-                    new Version(PluginVersionText).CompareTo(_pluginVersion) != 0) {
-                    _pluginVersion = new Version(PluginVersionText);
+                    PluginVersionText.ToVersion().CompareTo(_pluginVersion) != 0) {
+                    _pluginVersion = PluginVersionText.ToVersion();
                 }
                 return _pluginVersion;
             }

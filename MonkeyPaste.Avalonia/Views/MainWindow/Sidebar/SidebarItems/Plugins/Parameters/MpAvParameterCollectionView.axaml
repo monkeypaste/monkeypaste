@@ -206,13 +206,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
-                                                       Classes.invalid="{Binding !IsValid}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView Classes.error="True"
-                                                   IsVisible="{Binding !IsValid}"
-                                                   ToolTipText="{Binding ValidationMessage}" />
-                        </ToolTip.Tip>
-                    </local:MpAvPluginParameterItemView>
+                                                       Classes.invalid="{Binding !IsValid}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

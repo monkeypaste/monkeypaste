@@ -73,6 +73,18 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             pur.Classes.Add("tooltip");
+
+            if (pur.DataContext is MpAvNotificationViewModelBase nvmb &&
+                !nvmb.IsModal &&
+                GetHostControl() is Control host_control) {
+                // BUG avalonia won't show tooltips if they open under pointer so scooching
+                host_control.Classes.Add("tt_near_right");
+#if MAC
+                host_control.Classes.Add("tt_near_top")
+#else
+                host_control.Classes.Add("tt_near_bottom");
+#endif
+            }
         }
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
@@ -83,7 +95,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
-
+        private Control GetHostControl() {
+            if (TopLevel.GetTopLevel(this) is not TopLevel tl ||
+                tl.Parent is not Control host_control) {
+                return null;
+            }
+            return host_control;
+        }
         //protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
         //    base.OnAttachedToVisualTree(e);
         //    IsHitTestVisible = false;
@@ -219,13 +237,7 @@ namespace MonkeyPaste.Avalonia {
 
         //#region Helpers
 
-        //private Control GetHostControl() {
-        //    if (TopLevel.GetTopLevel(this) is not TopLevel tl ||
-        //        tl.Parent is not Control host_control) {
-        //        return null;
-        //    }
-        //    return host_control;
-        //}
+
 
         //private void SetToolTipOffset(Control hc, MpPoint diff, MpPoint scr_mp) {
         //    if (hc == null ||

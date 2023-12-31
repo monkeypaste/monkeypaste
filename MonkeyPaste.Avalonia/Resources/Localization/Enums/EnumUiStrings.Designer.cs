@@ -1546,6 +1546,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Reset Shared Value Preset.
+        /// </summary>
+        public static string MpNotificationType_ModalResetSharedValuePreset {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalResetSharedValuePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Text Box Ok Cancel Message Box.
         /// </summary>
         public static string MpNotificationType_ModalTextBoxOkCancelMessageBox {

@@ -485,13 +485,31 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvParameterViewModelBase> CreateParameterViewModel(MpParameterValue aipv) {
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, this);
-            naipvm.OnValidate += ParameterViewModel_OnValidate;
-            naipvm.OnValueChanged += (s, e) => {
+            naipvm.OnParamValidate += ParameterViewModel_OnValidate;
+            naipvm.OnParamValueChanged += (s, e) => {
                 OnParameterValuesChanged?.Invoke(this, naipvm);
             };
             return naipvm;
         }
 
+        public bool Validate() {
+            foreach (var pvm in Items) {
+                pvm.Validate();
+            }
+            OnPropertyChanged(nameof(IsAllValid));
+            return IsAllValid;
+        }
+        public void ResetExecutionState() {
+            IsExecuting = false;
+            ClearAllValidations();
+            Validate();
+        }
+        public void ClearAllValidations() {
+            foreach (var pvm in Items) {
+                pvm.ClearValidation();
+            }
+            OnPropertyChanged(nameof(IsAllValid));
+        }
         public bool CanDelete(object args) {
             if (args == null) {
                 return !IsManifestPreset && !IsGeneratedDefaultPreset;
@@ -503,15 +521,9 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-            var aipvm = sender as MpAvParameterViewModelBase;
-            //if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
-            //    if ((IsExecuting && aipvm.IsExecuteParameter) || !aipvm.IsExecuteParameter) { 
-            //        aipvm.ValidationMessage = $"{aipvm.LabelText} is required";
-            //    }
-            //} else {
-            //    aipvm.ValidationMessage = string.Empty;
-            //}
-            aipvm.ValidationMessage = aipvm.GetValidationMessage(IsExecuting);
+            if (sender is MpAvParameterViewModelBase aipvm) {
+                aipvm.ValidationMessage = aipvm.GetValidationMessage(IsExecuting);
+            }
             Parent.Validate();
         }
 

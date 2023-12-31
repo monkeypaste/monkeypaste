@@ -1,9 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ComputerVision {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public enum ComputerVisionFeatureType {
+        Adult,
+        Brands,
+        Categories,
+        Color,
+        Description,
+        Faces,
+        Objects,
+        Tags
+    }
+    public enum ComputerDetailType {
+        Celebrities,
+        Landmarks
+    }
     public class Root {
         public List<Category> categories { get; set; }
         public List<Tag> tags { get; set; }

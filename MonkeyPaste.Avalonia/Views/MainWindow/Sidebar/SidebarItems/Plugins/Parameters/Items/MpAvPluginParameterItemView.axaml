@@ -15,11 +15,23 @@
     <local:MpAvUserControl.Resources>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <Style Selector="Border#OuterParameterItemBorder.invalid">
+            <Setter Property="ToolTip.Tip">
+                <Template>
+                    <local:MpAvToolTipView Classes.error="True"
+                                           ToolTipText="{Binding ValidationMessage}" />
+
+                </Template>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="OuterParameterItemBorder"
+            Classes.invalid="{Binding !IsValid}"
             Classes.pulse="{Binding DoFocusPulse}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
+        <ToolTip.Tip>
+        </ToolTip.Tip>
         <Grid>
             <Grid.ColumnDefinitions>
                 <!--  LABEL  -->

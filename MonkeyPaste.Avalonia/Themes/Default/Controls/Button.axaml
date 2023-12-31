@@ -5,8 +5,6 @@
     <Styles.Resources>
     </Styles.Resources>
     <Style Selector="Button.link">
-        <Setter Property="Foreground"
-                Value="DodgerBlue" />
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Cursor"
@@ -15,21 +13,24 @@
                 Value="0" />
         <Setter Property="Background"
                 Value="Transparent" />
-        <Setter Property="Template">
-            <ControlTemplate>
-                <ContentPresenter Content="{TemplateBinding Content}">
-                    <ContentPresenter.Styles>
-                        <Style Selector="TextBlock">
-                            <Setter Property="Foreground"
-                                    Value="{TemplateBinding Foreground}" />
-                            <Setter Property="FontSize"
-                                    Value="{TemplateBinding FontSize}" />
-                            <Setter Property="TextDecorations"
-                                    Value="Underline" />
-                        </Style>
-                    </ContentPresenter.Styles>
-                </ContentPresenter>
-            </ControlTemplate>
-        </Setter>
+    </Style>
+    <Style Selector="Button.link:pointerover">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <Style Selector="Button.link:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <!--  LINK TEXT  -->
+    <Style Selector="Button.link TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeAccent5BgColor}" />
+        <Setter Property="TextDecorations"
+                Value="Underline" />
+    </Style>
+    <Style Selector="Button.link:pointerover TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeAccent5Color}" />
     </Style>
 </Styles>

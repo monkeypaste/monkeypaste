@@ -75,7 +75,7 @@
                                         VerticalAlignment="Center"
                                         Margin="{DynamicResource MenuInputGestureTextMargin}">
                                     <local:MpAvShortcutLabel Classes="menuItemGesture"
-                                                              KeyGesture="{TemplateBinding InputGesture}"
+                                                             KeyGesture="{TemplateBinding InputGesture}"
                                                              HorizontalAlignment="Right"
                                                              VerticalAlignment="Center" />
                                 </Border>
@@ -315,5 +315,16 @@
     <Style Selector="MenuItem.gestureLabel">
         <Setter Property="Theme"
                 Value="{StaticResource GestureLabelMenuItem}" />
+    </Style>
+
+    <Style Selector=":is(Popup)">
+        <Style.Resources>
+            <x:Double x:Key="MenuFlyoutSubItemPopupHorizontalOffset">-4</x:Double>
+        </Style.Resources>
+    </Style>
+    <Style Selector=":is(Popup).leftOfParent">
+        <Style.Resources>
+            <x:Double x:Key="MenuFlyoutSubItemPopupHorizontalOffset">4</x:Double>
+        </Style.Resources>
     </Style>
 </Styles>

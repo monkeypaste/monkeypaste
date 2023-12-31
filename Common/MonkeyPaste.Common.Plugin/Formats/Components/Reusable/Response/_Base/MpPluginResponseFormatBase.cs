@@ -7,7 +7,8 @@ namespace MonkeyPaste.Common.Plugin {
 
         public string otherMessage { get; set; }
 
-        public List<MpPluginUserNotificationFormat> userNotifications { get; set; } = new List<MpPluginUserNotificationFormat>();
+        public Dictionary<object, string> invalidParams { get; set; } = new();
+        public List<MpPluginUserNotificationFormat> userNotifications { get; set; } = new();
 
     }
 
