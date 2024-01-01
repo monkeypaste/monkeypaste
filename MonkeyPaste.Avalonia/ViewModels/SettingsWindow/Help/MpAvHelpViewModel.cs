@@ -198,7 +198,7 @@ namespace MonkeyPaste.Avalonia {
                         IsWindowActive = true;
                     } else if (Mp.Services.PlatformInfo.IsDesktop) {
                         var sw = CreateHelpWindow();
-                        sw.ShowChild();
+                        sw.Show();
                         MpMessenger.SendGlobal(MpMessageType.HelpWindowOpened);
                     }
                 }

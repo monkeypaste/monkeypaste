@@ -385,6 +385,7 @@
     <None Remove="Assets\Images\cog.png" />
     <None Remove="Assets\Images\cogcolor.png" />
     <None Remove="Assets\Images\colors.png" />
+    <None Remove="Assets\Images\command.png" />
     <None Remove="Assets\Images\contact.png" />
     <None Remove="Assets\Images\copy.png" />
     <None Remove="Assets\Images\csv.png" />
@@ -787,6 +788,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\closewindow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\command.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\curlys.png">
@@ -1640,7 +1644,7 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\**" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
-    <Compile Include="Utils\WindowManager\Helpers\MpAvNotificationPositioner.cs" />
+    <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
   
   <ItemGroup>

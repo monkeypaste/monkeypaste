@@ -809,6 +809,69 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Performs the selected command..
+        /// </summary>
+        public static string ActionAppCommandActionHint {
+            get {
+                return ResourceManager.GetString("ActionAppCommandActionHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When unchecked and the command cannot fire, the chain of execution will halt. A lot of commands will require some specific application state in order to execute..
+        /// </summary>
+        public static string ActionAppCommandAlwaysContinueHint {
+            get {
+                return ResourceManager.GetString("ActionAppCommandAlwaysContinueHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always Continue?.
+        /// </summary>
+        public static string ActionAppCommandAlwaysContinueLabel {
+            get {
+                return ResourceManager.GetString("ActionAppCommandAlwaysContinueLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The command to perform..
+        /// </summary>
+        public static string ActionAppCommandHint {
+            get {
+                return ResourceManager.GetString("ActionAppCommandHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command.
+        /// </summary>
+        public static string ActionAppCommandLabel {
+            get {
+                return ResourceManager.GetString("ActionAppCommandLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No command selected for Application Command &apos;{0}&apos;.
+        /// </summary>
+        public static string ActionAppCommandValidation1 {
+            get {
+                return ResourceManager.GetString("ActionAppCommandValidation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command for Application Command &apos;{0}&apos; not found.
+        /// </summary>
+        public static string ActionAppCommandValidation2 {
+            get {
+                return ResourceManager.GetString("ActionAppCommandValidation2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input content is linked to the selected collection.
         /// </summary>
         public static string ActionClassifyActionHint {
@@ -2529,6 +2592,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonSearchWatermark {
             get {
                 return ResourceManager.GetString("CommonSearchWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected.
+        /// </summary>
+        public static string CommonSelectedText {
+            get {
+                return ResourceManager.GetString("CommonSelectedText", resourceCulture);
             }
         }
         

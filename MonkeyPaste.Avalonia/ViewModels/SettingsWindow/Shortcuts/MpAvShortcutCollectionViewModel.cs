@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<object, MpAvShortcutViewModel>,
         MpIGlobalInputListener,
         MpIDownKeyHelper,
+        MpIPopupMenuPicker,
         MpIShortcutGestureLocator,
         MpIDndUserCancelNotifier {
 
@@ -75,6 +76,22 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIPopupMenuPicker Implementation
+
+        MpAvMenuItemViewModel MpIPopupMenuPicker.GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedShortcutIds, bool recursive) {
+            // used for component parameter picker
+            return new MpAvMenuItemViewModel() {
+                SubItems =
+                    Items
+                        .OrderBy(x => x.ShortcutDisplayName)
+                        .Cast<MpIPopupMenuPicker>()
+                        .Select(x => x.GetMenu(cmd, cmdArg, selectedShortcutIds, recursive))
+                        .Cast<MpAvIMenuItemViewModel>().ToList()
+            };
+        }
+
+        #endregion
 
         #region MpIDownKeyHelper Implementation
 
@@ -710,7 +727,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             MpAvShortcutViewModel scvmToRemove = null;
             if (e is MpShortcut sc) {
                 UpdateRoutingProfileCommand.Execute(null);
@@ -724,11 +741,18 @@ namespace MonkeyPaste.Avalonia {
             } else if (e is MpAction a) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == a.Id.ToString() && x.ShortcutType == MpShortcutType.InvokeTrigger);
             }
-            if (scvmToRemove != null) {
-                Dispatcher.UIThread.Post(() => {
-                    Items.Remove(scvmToRemove);
-                });
+            if (scvmToRemove == null) {
+                return;
             }
+
+            if (e is not MpShortcut && scvmToRemove.Shortcut != null) {
+                await scvmToRemove.Shortcut.DeleteFromDatabaseAsync();
+                // remove after sc delete
+                return;
+            }
+            Dispatcher.UIThread.Post(() => {
+                Items.Remove(scvmToRemove);
+            });
         }
 
         #endregion
@@ -1174,7 +1198,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (_exact_match.RoutingType == MpRoutingType.Override) {
+            if (_exact_match.RoutingType == MpRoutingType.ExclusiveOverride) {
                 // since overrides exclusive, clear other downs
                 _keyboardGestureHelper.ClearCurrentGesture();
             }

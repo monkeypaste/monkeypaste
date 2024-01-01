@@ -359,7 +359,7 @@ namespace MonkeyPaste.Avalonia {
                     });
             MpAvIsHoveringExtension.SetIsEnabled(_dropWidgetWindow, true);
 
-            _dropWidgetWindow.ShowChild();
+            _dropWidgetWindow.Show();
             OnPropertyChanged(nameof(IsShowingDropWindow));
         }
 
@@ -390,7 +390,7 @@ namespace MonkeyPaste.Avalonia {
                     });
             MpAvIsHoveringExtension.SetIsEnabled(_dropCompleteWindow, true);
 
-            _dropCompleteWindow.ShowChild();
+            _dropCompleteWindow.Show();
             OnPropertyChanged(nameof(IsShowingFinishMenu));
         }
 

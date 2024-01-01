@@ -4808,9 +4808,15 @@ namespace MonkeyPaste.Avalonia {
                 var most_recent_ci = PendingNewModels[PendingNewModels.Count - 1];
                 PendingNewModels.RemoveAt(0);
                 append_ctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_ci);
-            } else if (SelectedItem != null) {
-                append_ctvm = SelectedItem;
+            } else if (Mp.Services.ClipboardMonitor.LastClipboardDataObject != null) {
+                var processed_avdo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject);
+                var cb_ci = await BuildFromDataObjectAsync(processed_avdo, false);
+                if (cb_ci != null) {
+                    // one case this happens is activating append right after startup w/o altering clipboard
+                    append_ctvm = await CreateOrRetrieveClipTileViewModelAsync(cb_ci);
+                }
             } else {
+                // TODO see maybes about better way
                 // activate w/o item and wait (show AppMode change msg)
             }
 
@@ -4960,7 +4966,7 @@ namespace MonkeyPaste.Avalonia {
                            title: UiStrings.AppendDeactivatedTitle,
                            body: UiStrings.AppendDeactivatedText,
                            msgType: MpNotificationType.AppendModeChanged,
-                           iconSourceObj: "ClipboardImage").FireAndForgetSafeAsync();
+                           iconSourceObj: "NoEntryImage").FireAndForgetSafeAsync();
             } else {
                 var deactivate_append_ctvm = AppendClipTileViewModel;
                 deactivate_append_ctvm.IsAppendNotifier = false;

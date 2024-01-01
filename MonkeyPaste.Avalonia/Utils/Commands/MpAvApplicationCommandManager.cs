@@ -1,10 +1,33 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpAvApplicationCommandType {
+        None = 0,
+        ToggleAppendLineMode,
+        CopySelection,
+        CutSelection,
+        PasteSelection,
+    }
+
     public class MpAvApplicationCommandManager : MpIApplicationCommandManager {
 
+        private Dictionary<MpAvApplicationCommandType, ICommand> _commands;
+        public Dictionary<MpAvApplicationCommandType, ICommand> Commands {
+            get {
+                if (_commands == null) {
+                    _commands = new Dictionary<MpAvApplicationCommandType, ICommand>() {
+                        {
+                            MpAvApplicationCommandType.ToggleAppendLineMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand
+                        }
+                    };
+                }
+                return _commands;
+            }
+        }
         public ICommand PerformApplicationCommand => new MpCommand<object>(
             (args) => {
                 string appUri = null;

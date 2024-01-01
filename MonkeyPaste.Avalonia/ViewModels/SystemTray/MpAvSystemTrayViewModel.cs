@@ -578,6 +578,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
+                MpAppendModeFlags test = MpAppendModeFlags.AppendLine | MpAppendModeFlags.AppendInsert | MpAppendModeFlags.Pre;
+                test.RemoveFlag(MpAppendModeFlags.AppendInsert);
+                test.RemoveFlag(MpAppendModeFlags.AppendLine);
+                test.RemoveFlag(MpAppendModeFlags.Pre);
+                test.AddFlag(MpAppendModeFlags.Manual);
+                test.RemoveFlag(MpAppendModeFlags.AppendInsert);
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {

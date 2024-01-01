@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvWelcomeWindow : MpAvWindow<MpAvWelcomeNotificationViewModel> {
+    public partial class MpAvWelcomeWindow : MpAvNotificationWindow {
         public MpAvWelcomeWindow() : this(null) { }
         public MpAvWelcomeWindow(Window owner = default) : base(owner) {
             InitializeComponent();

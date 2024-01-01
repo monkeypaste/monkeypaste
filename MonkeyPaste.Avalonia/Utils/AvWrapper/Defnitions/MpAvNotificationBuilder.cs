@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
-                AnchorTarget = anchor,
+                AnchorObj = anchor,
                 MaxShowTimeMs = maxShowTimeMs,
                 NotificationType = notificationType,
                 IconSourceObj = iconSourceObj,
@@ -101,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
                 RetryAction = retryAction,
                 RetryActionObj = retryActionObj,
                 OtherArgs = loader == null ? otherArgs : loader,
-                Owner = owner
+                OwnerObj = owner
             };
 
             MpConsole.WriteLine($"Notification balloon set to:", true);
@@ -127,11 +127,11 @@ namespace MonkeyPaste.Avalonia {
                 Body = body,
                 OtherArgs = currentInput,
                 Detail = placeholderText,
-                AnchorTarget = anchor,
+                AnchorObj = anchor,
                 NotificationType = ntfType,
                 PasswordChar = passwordChar,
                 IconSourceObj = iconResourceObj,
-                Owner = owner
+                OwnerObj = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
             if (nvm is MpAvUserActionNotificationViewModel uanvm) {
@@ -155,12 +155,12 @@ namespace MonkeyPaste.Avalonia {
                 Body = body,
                 OtherArgs = currentInput,
                 Detail = placeholderText,
-                AnchorTarget = anchor,
+                AnchorObj = anchor,
                 NotificationType = ntfType,
                 PasswordChar = passwordChar,
                 IconSourceObj = iconResourceObj,
                 CanRemember = true,
-                Owner = owner
+                OwnerObj = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
             if (nvm is not MpAvUserActionNotificationViewModel uanvm) {

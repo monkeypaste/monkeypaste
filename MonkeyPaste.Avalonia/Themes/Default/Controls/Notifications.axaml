@@ -44,12 +44,14 @@
 
     <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
     <Style Selector=":is(Window).notificationWindow.userAction">
-        <Setter Property="MinWidth"
-                Value="350" />
         <Setter Property="Width"
-                Value="{StaticResource NaN}" />
+                Value="350" />
         <Setter Property="SizeToContent"
-                Value="WidthAndHeight" />
+                Value="Height" />
+    </Style>
+    <Style Selector=":is(Window).notificationWindow.userAction.reset">
+        <Setter Property="Width"
+                Value="450" />
     </Style>
 
     <Style Selector=":is(Window).notificationWindow.loader"
@@ -66,12 +68,6 @@
                 Value="5" />
     </Style>
 
-    <Style Selector=":is(Window).notificationWindow.userAction.reset">
-        <Setter Property="Width"
-                Value="450" />
-        <Setter Property="SizeToContent"
-                Value="Height" />
-    </Style>
 
     <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn)">
         <Setter Property="HorizontalAlignment"

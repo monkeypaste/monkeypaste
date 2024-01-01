@@ -22,26 +22,17 @@ namespace MonkeyPaste.Common.Plugin {
         }
         public static bool GetRequestParamBoolValue(this MpPluginParameterRequestFormat req, object paramId) {
             var kvp = ValidateGet(req, paramId);
-            if (bool.TryParse(kvp.value, out bool boolVal)) {
-                return boolVal;
-            }
-            throw new FormatException($"Error parsing bool for param '{paramId}'. Value was: '{kvp.value}'");
+            return kvp.value.ParseOrConvertToBool();
         }
 
         public static int GetRequestParamIntValue(this MpPluginParameterRequestFormat req, object paramId) {
             var kvp = ValidateGet(req, paramId);
-            if (int.TryParse(kvp.value, out int intVal)) {
-                return intVal;
-            }
-            throw new FormatException($"Error parsing int for param '{paramId}'. Value was: '{kvp.value}'");
+            return kvp.value.ParseOrConvertToInt();
         }
 
         public static double GetRequestParamDoubleValue(this MpPluginParameterRequestFormat req, object paramId) {
             var kvp = ValidateGet(req, paramId);
-            if (double.TryParse(kvp.value, out double val)) {
-                return val;
-            }
-            throw new FormatException($"Error parsing double for param '{paramId}'. Value was: '{kvp.value}'");
+            return kvp.value.ParseOrConvertToDouble();
         }
 
         public static string GetRequestParamStringValue(this MpPluginParameterRequestFormat req, object paramId) {

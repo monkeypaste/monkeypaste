@@ -1,12 +1,6 @@
-﻿using Avalonia.Threading;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using MonkeyPaste.Common;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -81,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
                 if (sw.ElapsedMilliseconds > 10_000) {
                     // nothing added
-                    MpDebug.Break($"MonkeyCopy trigger timeout");
+                    MpDebug.Break($"MonkeyCopy trigger timeout", silent: true);
                     break;
                 }
             }

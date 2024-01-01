@@ -386,6 +386,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public string WindowTitle {
+            get {
+                string wt = CopyItemTitle.ToWindowTitleText();
+                if (IsSelected) {
+                    wt = $"[{UiStrings.CommonSelectedText}] {wt}";
+                }
+                return wt;
+            }
+        }
+
         #endregion
 
         #region Layout
@@ -1427,15 +1437,16 @@ namespace MonkeyPaste.Avalonia {
                 var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
                 pow.Width = ws.Width;
                 pow.Height = ws.Height;
+                pow.InvalidateMeasure();
                 if (amt == MpAppendModeType.None) {
                     pow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 } else {
                     pow.WindowStartupLocation = WindowStartupLocation.Manual;
-                    pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(pow);
+                    pow.Position = MpAvWindowPositioner.GetSystemTrayWindowPosition(pow);
                 }
                 // NOTE only silent lock for pop out
                 // when appending user likely wants external app fully visible
-                pow.ShowChild(silentLock: false);
+                pow.Show(silentLock: false);
             }
 
             OnPropertyChanged(nameof(IsWindowOpen));
@@ -2013,8 +2024,7 @@ namespace MonkeyPaste.Avalonia {
                 Window.TitleProperty,
                 new Binding() {
                     Source = this,
-                    Path = nameof(CopyItemTitle),
-                    Converter = MpAvStringToWindowTitleConverter.Instance
+                    Path = nameof(WindowTitle)
                 });
 
             if (pow.Content is Control c) {
@@ -2028,6 +2038,7 @@ namespace MonkeyPaste.Avalonia {
                     });
                 MpAvIsHoveringExtension.SetIsEnabled(c, true);
             }
+
             #endregion
 
             pow.Activated += activate_handler;

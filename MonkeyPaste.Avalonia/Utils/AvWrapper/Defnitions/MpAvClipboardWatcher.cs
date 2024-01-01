@@ -1,9 +1,6 @@
-﻿using Avalonia.Platform.Storage;
-using Avalonia.Threading;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 

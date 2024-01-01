@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Media;
 using MonkeyPaste.Common;
@@ -254,6 +255,7 @@ namespace MonkeyPaste.Avalonia {
         public MpNotificationPlacementType PlacementType => GetNotificationPlacementType(NotificationType);
 
         public bool IsModal => IsNotificationTypeModal(NotificationType);
+        public bool IsToast => !IsModal;
 
         #endregion
 
@@ -338,32 +340,34 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public object Owner {
+        public MpAvWindow Owner {
             get {
-                if (NotificationFormat == null) {
+                if (NotificationFormat == null ||
+                    NotificationFormat.OwnerObj is not MpAvWindow ownerWin) {
                     return null;
                 }
-                return NotificationFormat.Owner;
+                return ownerWin;
             }
             set {
                 if (Owner != value) {
-                    NotificationFormat.Owner = value;
+                    NotificationFormat.OwnerObj = value;
                     OnPropertyChanged(nameof(Owner));
                 }
             }
         }
-        public object AnchorTarget {
+        public Visual AnchorTarget {
             get {
                 if (NotificationFormat == null ||
-                    !IsModal) {
+                    !IsModal ||
+                    NotificationFormat.AnchorObj is not Visual anchorVis) {
                     return null;
                 }
                 // when null default is center of active screen
-                return NotificationFormat.AnchorTarget;
+                return anchorVis;
             }
             set {
                 if (AnchorTarget != value) {
-                    NotificationFormat.AnchorTarget = value;
+                    NotificationFormat.AnchorObj = value;
                     OnPropertyChanged(nameof(AnchorTarget));
                 }
             }

@@ -94,6 +94,8 @@ namespace MonkeyPaste.Avalonia {
                         return "AlarmClockImage";
                     case MpActionType.Alert:
                         return "BellImage";
+                    case MpActionType.ApplicationCommand:
+                        return "CommandImage";
                 }
             }
             // whats params?
@@ -136,6 +138,8 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.gray53;
                 case MpActionType.Alert:
                     return MpSystemColors.royalblue2;
+                case MpActionType.ApplicationCommand:
+                    return MpSystemColors.deeppink4;
                 default:
                     throw new Exception($"Unknow action type: '{actionType}'");
             }
@@ -1021,6 +1025,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Alert:
                     avm = new MpAvAlertActionViewModel(Parent);
                     break;
+                case MpActionType.ApplicationCommand:
+                    avm = new MpAvAppCommandActionViewModel(Parent);
+                    break;
                 default:
                     MpDebug.Break($"Unhandled action type '{a.ActionType}'");
                     return null;
@@ -1203,8 +1210,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (is_starting) {
-                if (arg is MpAvConditionalOutput co && !co.WasConditionMet) {
-                    MpConsole.WriteLine($"Condition for '{ParentActionViewModel}' not met. '{this}' will not execute");
+                if (arg is MpAvActionOutput co && !co.CanExecutionContinue) {
+                    MpConsole.WriteLine($"Action for '{ParentActionViewModel}' says children cannot execute. '{this}' will not execute");
                     can_start = false;
                 }
                 IsPerformingAction = can_start;

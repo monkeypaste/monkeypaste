@@ -937,7 +937,7 @@ namespace MonkeyPaste.Avalonia {
             DispatcherPriority show_priority =
                 IsMainWindowInHiddenLoadState ?
                     DispatcherPriority.Background : DispatcherPriority.Normal;
-            Dispatcher.UIThread.Post(MpAvWindowManager.MainWindow.Show, show_priority);
+            Dispatcher.UIThread.Post(() => MpAvWindowManager.MainWindow.Show(null, false), show_priority);
 #endif
 
             IsMainWindowVisible = true;

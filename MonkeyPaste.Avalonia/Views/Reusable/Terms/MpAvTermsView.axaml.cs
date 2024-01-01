@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                 tw.Closed -= Tw_Closed;
             }
             tw.Closed += Tw_Closed;
-            tw.ShowChild();
+            tw.Show();
             while (is_open) {
                 await Task.Delay(100);
             }

@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 var aw = CreateAboutWindow();
-                aw.ShowChild();
+                aw.Show();
             });
 
 

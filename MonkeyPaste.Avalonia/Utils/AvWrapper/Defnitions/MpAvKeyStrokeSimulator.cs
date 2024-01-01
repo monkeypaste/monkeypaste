@@ -67,23 +67,31 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 // NOTE this is simplifying gesture to non-sequence since seq currently invalid
-                KeyCode[] already_downs = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToArray();
-                var gesture_keys = filtered_gesture.SelectMany(x => x).Distinct();
+                // ex. monkey copy from ctrl+shift+c
+
+                // downs will ctrl+shift
+                KeyCode[] already_downs = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().Select(x => x.GetUnifiedKey()).Distinct().ToArray();
+                // gesture will be ctrl+c
+                var gesture_keys = filtered_gesture.SelectMany(x => x).Select(x => x.GetUnifiedKey()).Distinct();
+                // to release will be shift
+                KeyCode[] to_release = already_downs.Where(x => !gesture_keys.Contains(x)).ToArray();
+                // to press will be c
                 KeyCode[] to_press = gesture_keys.Where(x => !already_downs.Contains(x)).ToArray();
-                KeyCode[] to_hide = already_downs.Where(x => !gesture_keys.Contains(x)).ToArray();
+                // to clear will be ctrl+shift+c
+                KeyCode[] to_clear = gesture_keys.Union(gesture_keys).Distinct().ToArray();
                 bool success = true;
                 try {
                     // temporarily release cur downs (Hide) not in this gesture
-                    SimulateKeys(to_hide, false);
+                    SimulateKeys(to_release, false);
 
                     // press needed downs for this gesture
                     SimulateKeys(to_press, true);
 
                     // release needed downs for this gesture
-                    SimulateKeys(to_press, false);
+                    SimulateKeys(to_clear, false);
 
                     // restore downs
-                    SimulateKeys(to_hide, true);
+                    //SimulateKeys(to_release, true);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine(string.Empty, ex);
@@ -92,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
                 _simualtedDowns.Clear();
                 string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
-                MpConsole.WriteLine($"Key Gesture '{gesture_label}' {(success ? "was successful" : "failed")}. ");
+                MpConsole.WriteLine($"Key Gesture '{gesture_label}' {(success ? "was successful" : "failed")}. Sim Downs: {string.Join(",", _simualtedDowns)} ");
                 return success;
             }
 

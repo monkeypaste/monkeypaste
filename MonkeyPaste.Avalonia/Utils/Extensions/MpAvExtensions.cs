@@ -33,6 +33,9 @@ namespace MonkeyPaste.Avalonia {
         public static Screen ScreenFromPoint_WORKS(this Screens screens, PixelPoint pp) {
             return screens.All.FirstOrDefault(x => x.Bounds.Contains(pp));
         }
+        public static MpIPlatformScreenInfo ToScreenInfo(this Screen screen) {
+            return new MpAvDesktopScreenInfo(screen);
+        }
         #endregion
 
         #region Controls

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -430,15 +429,39 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static void AddFlag<T>(ref this T value, T flag) where T : struct, Enum {
+            //string result = $"{value}, {flag}".Trim(new[] { ' ', ',' }); ;
+            //value = (T)Enum.Parse(typeof(T), result);
+            string resultStr =
+                string.Join(
+                    ", ",
+                    value.ToString()
+                    .SplitNoEmpty(",")
+                    .Select(x => x.Trim())
+                    .Where(x => x != flag.ToString())
+                    .Union(new[] { flag.ToString() }));
+
+            if (Enum.TryParse(resultStr, out T result)) {
+                value = result;
+            } else {
+                value = (T)(object)0;
+            }
+        }
         public static void RemoveFlag<T>(ref this T value, T flag) where T : struct, Enum {
             // remove flag from string of value and any leading/trailing commas 
-            string result = value.ToString().Replace(flag.ToString(), string.Empty).Trim(new[] { ' ', ',' });
-            if (result.Length == 0) {
-                // parse doesn't assoc empty string w/ empty enum so cast manually
+            string resultStr =
+                string.Join(
+                    ", ",
+                    value.ToString()
+                    .SplitNoEmpty(",")
+                    .Select(x => x.Trim())
+                    .Where(x => x != flag.ToString()));
+
+            if (Enum.TryParse(resultStr, out T result)) {
+                value = result;
+            } else {
                 value = (T)(object)0;
-                return;
             }
-            value = (T)Enum.Parse(typeof(T), result);
         }
 
         public static IEnumerable<T> All<T>(this T value) where T : struct, Enum {
@@ -446,10 +469,6 @@ namespace MonkeyPaste.Common {
             return value.ToString().SplitNoEmpty(",").Select(x => x.ToEnum<T>());
         }
 
-        public static void AddFlag<T>(ref this T value, T flag) where T : struct, Enum {
-            string result = $"{value}, {flag}".Trim(new[] { ' ', ',' }); ;
-            value = (T)Enum.Parse(typeof(T), result);
-        }
         #endregion
 
         #region EventHandler

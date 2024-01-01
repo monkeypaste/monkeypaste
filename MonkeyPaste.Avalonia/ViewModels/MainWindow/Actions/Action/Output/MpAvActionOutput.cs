@@ -6,6 +6,7 @@ using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvActionOutput : MpIActionOutputNode {
+        public virtual bool CanExecutionContinue { get; set; } = true;
         public MpAvActionOutput Previous { get; set; }
         public abstract object OutputData { get; }
         public abstract string ActionDescription { get; }
@@ -66,8 +67,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
     }
+
+    public class MpAvAppCommandOutput : MpAvActionOutput {
+        public override object OutputData => ShortcutId;
+        public int ShortcutId { get; set; }
+        public override string ActionDescription {
+            get {
+                if (CopyItem == null) {
+                    return "Nothing to classify";
+                }
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) Classified to Tag({ShortcutId})";
+            }
+        }
+    }
     public class MpAvConditionalOutput : MpAvActionOutput {
         public override object OutputData => Matches;
+        public override bool CanExecutionContinue => WasConditionMet;
         public List<MpAvConditionalMatch> Matches { get; set; }
         public bool WasConditionMet {
             get {

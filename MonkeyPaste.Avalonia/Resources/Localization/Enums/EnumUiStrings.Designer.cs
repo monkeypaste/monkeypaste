@@ -79,6 +79,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Command.
+        /// </summary>
+        public static string MpActionType_ApplicationCommand {
+            get {
+                return ResourceManager.GetString("MpActionType_ApplicationCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Classify.
         /// </summary>
         public static string MpActionType_Classify {

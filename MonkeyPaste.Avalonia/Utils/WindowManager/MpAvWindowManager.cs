@@ -43,8 +43,8 @@ namespace MonkeyPaste.Avalonia {
             .OrderByDescending(x => x.LastActiveDateTime)
             .FirstOrDefault();
 
-        public static IReadOnlyList<MpAvWindow> Notifications =>
-            AllWindows.Where(x => x.DataContext is MpAvNotificationViewModelBase).ToList();
+        public static IReadOnlyList<MpAvNotificationWindow> Notifications =>
+            AllWindows.OfType<MpAvNotificationWindow>().ToList();
 
         public static IReadOnlyList<MpAvWindow> ToastNotifications =>
             Notifications.Where(x => x.Classes.Contains("toast")).ToList();
@@ -70,7 +70,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Events
-        public static event EventHandler NotificationWindowsChanged;
         #endregion
 
         static MpAvWindowManager() {
@@ -330,10 +329,6 @@ namespace MonkeyPaste.Avalonia {
                 _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3, dsp4 });
             }
             AttachWindowViewModelHandlers(nw);
-
-            if (nw != null && nw.DataContext is MpAvNotificationViewModelBase) {
-                NotificationWindowsChanged?.Invoke(nameof(MpAvWindowManager), EventArgs.Empty);
-            }
         }
 
         private static void DetachAllHandlers(Window nw) {
@@ -348,10 +343,6 @@ namespace MonkeyPaste.Avalonia {
                 _dispLookup.Remove(nw);
             }
             DetachWindowViewModelHandlers(nw);
-
-            if (nw != null && nw.DataContext is MpAvNotificationViewModelBase) {
-                NotificationWindowsChanged?.Invoke(nameof(MpAvWindowManager), EventArgs.Empty);
-            }
         }
         private static void AttachWindowViewModelHandlers(Window w) {
             if (w.DataContext is MpAvViewModelBase vmb) {

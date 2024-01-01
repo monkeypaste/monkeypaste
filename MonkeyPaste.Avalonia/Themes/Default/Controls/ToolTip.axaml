@@ -15,7 +15,7 @@
 
     <Style Selector=":is(Control)">
         <Setter Property="ToolTip.Placement"
-                Value="Pointer" />
+                Value="AnchorAndGravity" />
         <Setter Property="ToolTip.ShowDelay"
                 Value="700" />
     </Style>

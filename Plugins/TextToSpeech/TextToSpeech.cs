@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Speech.Synthesis;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfTextToSpeech {
-    public class WpfTextToSpeechPlugin :
+namespace TextToSpeech {
+    public class TextToSpeechPlugin :
         MpIAnalyzeComponent,
         MpISupportHeadlessAnalyzerComponentFormat,
         MpISupportDeferredValue {
@@ -16,8 +15,12 @@ namespace WpfTextToSpeech {
         const int VOLUME_PARAM_ID = 3;
 
         SpeechSynthesizer speechSynthesizer;
+
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
             _ = Task.Run(() => {
+                if (!OperatingSystem.IsWindows()) {
+                    return;
+                }
                 string text = req.GetRequestParamStringValue(TEXT_PARAM_ID) ?? string.Empty;
                 string voice_name = req.GetRequestParamStringValue(VOICE_PARAM_ID);
                 int volume = req.GetRequestParamIntValue(VOLUME_PARAM_ID);
@@ -32,23 +35,30 @@ namespace WpfTextToSpeech {
                 }
                 speechSynthesizer.SetOutputToDefaultAudioDevice();
                 speechSynthesizer.Volume = volume;
-                speechSynthesizer.Rate = 0;
+                //speechSynthesizer.Rate = 0;
+                //speechSynthesizer.Speak(text);
 
-                //PromptBuilder promptBuilder = new PromptBuilder();
-                //promptBuilder.AppendText(text);
-                //speechSynthesizer.SpeakAsync(promptBuilder);
-                speechSynthesizer.Speak(text);
+                PromptBuilder promptBuilder = new PromptBuilder();
+                promptBuilder.AppendText(text);
+                speechSynthesizer.SpeakAsync(promptBuilder);
             });
 
             return null;
         }
 
         private void SpeechSynthesizer_SpeakCompleted(object sender, SpeakCompletedEventArgs e) {
+            if (!OperatingSystem.IsWindows()) {
+                return;
+            }
             speechSynthesizer.Dispose();
             speechSynthesizer = null;
         }
 
         public MpPluginDeferredParameterValueResponseFormat RequestParameterValue(MpPluginDeferredParameterValueRequestFormat req) {
+
+            if (!OperatingSystem.IsWindows()) {
+                return null;
+            }
             if (req.paramId != VOICE_PARAM_ID.ToString()) {
                 return new MpPluginDeferredParameterValueResponseFormat() {
                     errorMessage = $"Unknown deferred parameter id '{req.paramId}'"
@@ -62,8 +72,8 @@ namespace WpfTextToSpeech {
             var resp = new MpPluginDeferredParameterValueResponseFormat() {
                 Values = voices.Select((x, idx) => new MpPluginParameterValueFormat() {
                     isDefault = idx == 0,
-                    value = x.VoiceInfo.Name,
-                    label = x.VoiceInfo.Name.Replace(@"Microsoft ", string.Empty).Replace(@" Desktop", string.Empty)
+                    value = OperatingSystem.IsWindows() ? x.VoiceInfo.Name : null,
+                    label = OperatingSystem.IsWindows() ? x.VoiceInfo.Name.Replace(@"Microsoft ", string.Empty).Replace(@" Desktop", string.Empty) : null
                 }).ToList()
             };
 

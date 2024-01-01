@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE pre-closing context menu cause it'll make funny activation behavior
 
 
-                var result = await cw.ShowChildDialogWithResultAsync(MpAvWindowManager.CurrentOwningWindow);
+                var result = await cw.ShowDialogWithResultAsync(MpAvWindowManager.CurrentOwningWindow);
                 MpConsole.WriteLine($"Custom color result: '{result.ToStringOrEmpty("NULL")}'");
                 //await Task.Delay(200);
                 MpAvMenuView.CloseMenu();

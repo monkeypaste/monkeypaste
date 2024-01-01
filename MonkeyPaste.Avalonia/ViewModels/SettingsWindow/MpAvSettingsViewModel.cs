@@ -1732,7 +1732,7 @@ namespace MonkeyPaste.Avalonia {
                     IsWindowActive = true;
                 } else if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = CreateSettingsWindow();
-                    sw.ShowChild();
+                    sw.Show();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
 #else
@@ -1774,7 +1774,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             };
 
-                            var result = await cpw.ShowChildDialogWithResultAsync(MpAvWindowManager.LocateWindow(this));
+                            var result = await cpw.ShowDialogWithResultAsync(MpAvWindowManager.LocateWindow(this));
                             if (result is not string new_pwd || new_pwd == null ||
                                 cpw.Content is not MpAvSetPasswordView spv) {
                                 // user cancel or closed window

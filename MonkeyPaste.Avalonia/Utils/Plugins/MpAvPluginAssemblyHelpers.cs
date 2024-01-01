@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (plugin.packageType != MpPluginPackageType.Http && !bundle_path.IsFile()) {
                 // not found
-                throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{plugin.title}.{bundle_ext}' in its folder.");
+                throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{bundle_file_name}.{bundle_ext}' in its folder.");
             }
             return bundle_path;
         }

@@ -20,11 +20,11 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         public object FixCommandArgs { get; set; }
         [JsonIgnore]
-        public object AnchorTarget { get; set; }
+        public object AnchorObj { get; set; }
         [JsonIgnore]
         public object OtherArgs { get; set; }
         [JsonIgnore]
-        public object Owner { get; set; }
+        public object OwnerObj { get; set; }
 
     }
 }

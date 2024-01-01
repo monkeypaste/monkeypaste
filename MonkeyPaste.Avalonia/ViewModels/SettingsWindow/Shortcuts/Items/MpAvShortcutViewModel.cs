@@ -15,11 +15,25 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutViewModel : MpAvViewModelBase<MpAvShortcutCollectionViewModel>,
         MpIActionComponent,
         MpIFilterMatch,
+        MpIPopupMenuPicker,
         MpIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
 
         #region Interfaces
+
+        #region MpIPopupMenuPicker Implementation
+
+        MpAvMenuItemViewModel MpIPopupMenuPicker.GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedShortcutIds, bool recursive) {
+            // used for component parameter picker
+            return new MpAvMenuItemViewModel() {
+                Header = ShortcutDisplayName,
+                Command = cmd,
+                CommandParameter = ShortcutId,
+                IsChecked = selectedShortcutIds.Contains(ShortcutId),
+            };
+        }
+        #endregion
 
         #region MpIActionComponent Implementation
         List<MpIInvokableAction> _registeredActions = new List<MpIInvokableAction>();
@@ -520,7 +534,8 @@ namespace MonkeyPaste.Avalonia {
                     //        OnShortcutExecuted?.Invoke(this, aipvm.Parent.LastTransaction == null ? null : aipvm.Parent.LastTransaction.ResponseContent);
                     //    });
                     //}
-                } else if (ShortcutType == MpShortcutType.PasteCopyItem || ShortcutType == MpShortcutType.PasteToExternal) {
+                } else if (ShortcutType == MpShortcutType.PasteCopyItem ||
+                            ShortcutType == MpShortcutType.PasteToExternal) {
                     OnShortcutExecuted?.Invoke(this, MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem);
                 }
             },
@@ -532,11 +547,11 @@ namespace MonkeyPaste.Avalonia {
                     canPerformShortcut = false;
                 }
 
-                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}", true);
+                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}", true, canPerformShortcut);
 
                 if (!canPerformShortcut) {
                     MpConsole.WriteLine($"IsGlobal: " + IsGlobal);
-                    MpConsole.WriteLine($"IsAnyAppWindowActive: " + MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive);
+                    MpConsole.WriteLine($"IsAnyAppWindowActive: " + MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive, false, true);
                 }
                 return canPerformShortcut;
             });

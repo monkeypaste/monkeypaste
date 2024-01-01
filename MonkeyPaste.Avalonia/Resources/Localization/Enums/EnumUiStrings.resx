@@ -525,6 +525,9 @@
   <data name="MpActionType_Alert" xml:space="preserve">
     <value>Alert</value>
   </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>Application Command</value>
+  </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>

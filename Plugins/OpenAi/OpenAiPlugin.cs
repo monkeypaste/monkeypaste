@@ -57,8 +57,12 @@ namespace OpenAi {
                                 };
                             }
                         } else {
-                            // invalidate creds
-                            resp.invalidParams.Add(PARAM_ID_API_KEY, http_response_str);
+                            if ((int)http_response.StatusCode == 401) {
+                                // invalidate creds
+                                resp.invalidParams.Add(PARAM_ID_API_KEY, http_response_str);
+                            } else {
+                                resp.errorMessage = http_response_str;
+                            }
                         }
                     }
 

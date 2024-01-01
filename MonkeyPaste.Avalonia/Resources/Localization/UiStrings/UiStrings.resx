@@ -2453,4 +2453,30 @@ Click here to update to '{0}' 🎉🍾🥳</value>
   <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
     <value>Reset Unshared</value>
   </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Performs the selected command.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>When unchecked and the command cannot fire, the chain of execution will halt. A lot of commands will require some specific application state in order to execute.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Always Continue?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>The command to perform.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>No command selected for Application Command '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Command for Application Command '{0}' not found</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Selected</value>
+  </data>
 </root>

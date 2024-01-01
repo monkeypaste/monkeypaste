@@ -1,30 +1,22 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvNotificationWindowManager {
         #region Private Variables
-        private List<MpAvMessageNotificationWindow> _pendingMessages = new List<MpAvMessageNotificationWindow>();
-        private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
-        private MpAvNotificationPositioner _positioner;
         #endregion
 
         #region Statics
 
         private static MpAvNotificationWindowManager _instance;
         public static MpAvNotificationWindowManager Instance => _instance ?? (_instance = new MpAvNotificationWindowManager());
-
 
         #endregion
 
@@ -44,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public void HideNotification(object dc) {
-            if (_windows.FirstOrDefault(x => x.DataContext == dc) is not MpAvWindow w) {
+            if (MpAvWindowManager.LocateWindow(dc) is not MpAvWindow w) {
                 return;
             }
             w.Close();
@@ -60,8 +52,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         private MpAvNotificationWindowManager() {
-            _positioner = new MpAvNotificationPositioner();
         }
+
+
         #endregion
 
         #region Public Methods
@@ -70,10 +63,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void ShowMobileNotification(MpAvNotificationViewModelBase nvmb) {
-            //if (!Dispatcher.UIThread.CheckAccess()) {
-            //    Dispatcher.UIThread.Post(() => ShowMobileNotification(nvmb));
-            //    return;
-            //}
             Control nw = null;
             var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
             switch (layoutType) {
@@ -129,10 +118,7 @@ namespace MonkeyPaste.Avalonia {
                         ShowActivated = true
                     };
 
-                    //#if WINDOWS
                     App.Current.SetMainWindow(nw);
-                    //#endif
-
                     break;
                 case MpAvUserActionNotificationViewModel:
                     nw = new MpAvUserActionNotificationWindow() {
@@ -157,67 +143,54 @@ namespace MonkeyPaste.Avalonia {
                 MpAvToolWindow_Win32.SetAsToolWindow(nw.TryGetPlatformHandle().Handle);
             }
 #endif
-            nw.Closed += Nw_Closed;
-
             BeginOpen(nw);
         }
         private void BeginOpen(MpAvWindow nw) {
             var nvmb = nw.DataContext as MpAvNotificationViewModelBase;
-            //nvmb.IsClosing = false;
 
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
-                desktop.MainWindow is not MpAvMainWindow) {
-                desktop.MainWindow = nw;
-            }
             if (nvmb.CanMoveWindow) {
                 MpAvMoveWindowExtension.SetIsEnabled(nw, true);
             }
 
-            MpAvWindow owner = MpAvWindowManager.CurrentOwningWindow;
-            Visual anchor = nvmb.AnchorTarget as Visual;
-            if (anchor == null && MpAvFocusManager.Instance.FocusElement is Visual v) {
-                anchor = v;
+            nvmb.Owner = MpAvWindowManager.CurrentOwningWindow;
+            if (nvmb.AnchorTarget == null && MpAvFocusManager.Instance.FocusElement is Visual v) {
+                nvmb.AnchorTarget = v;
             }
 
             if (nvmb.IsModal) {
-                if (owner == null) {
+                if (nvmb.Owner == null) {
                     nw.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                    anchor = null;
+                    nvmb.AnchorTarget = null;
                 } else {
                     nw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 }
             } else {
-                owner = null;
-                anchor = null;
+                nvmb.Owner = null;
+                nvmb.AnchorTarget = null;
                 if (!nw.Classes.Contains("toast")) {
                     nw.Classes.Add("toast");
                 }
                 nw.WindowStartupLocation = WindowStartupLocation.Manual;
-                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
-
+                nw.Position = MpAvWindowPositioner.GetSystemTrayWindowPosition(nw);
             }
-            if (anchor != null) {
+            if (nvmb.AnchorTarget != null) {
                 nw.WindowStartupLocation = WindowStartupLocation.Manual;
             }
 
+            var disp = nw.GetObservable(Control.BoundsProperty).Subscribe(value => PositionAllNtfs());
 
-            void OnWindowOpened(object sender, EventArgs e) {
-                nw.Opened -= OnWindowOpened;
-                if (anchor == null) {
-                    if (!nvmb.IsModal) {
-                        nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
-                    }
-                    return;
-                }
-                nw.Position = MpAvNotificationPositioner.GetWindowPositionByAnchorVisual(nw, anchor);
+            void Nw_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+                PositionAllNtfs();
             }
-            nw.Opened += OnWindowOpened;
-            nvmb.Owner = owner;
 
-            if (!_windows.Contains(nw)) {
-                _windows.Add(nw);
-                _positioner.AddWindow(nw);
+            void OnWindowClosed(object sender, EventArgs e) {
+                nw.Closed -= OnWindowClosed;
+                nw.EffectiveViewportChanged -= Nw_EffectiveViewportChanged;
+                disp.Dispose();
+                PositionAllNtfs();
             }
+            nw.Closed += OnWindowClosed;
+            nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
             try {
                 if (nvmb.Owner is Window ow) {
                     nw.Show(ow);
@@ -230,38 +203,19 @@ namespace MonkeyPaste.Avalonia {
             }
             return;
         }
-
-        private void FinishClose(MpAvWindow w) {
-            if (w is MpAvLoaderNotificationWindow) {
-                // ignore, in mainview ctor mainwindow is swapped and loader is closed
-            }
-            //else if (w == MpAvAppendNotificationWindow.Instance) {
-            //    w.Hide();
-            //} 
-            else {
-                try {
-                    w.Close();
+        private void PositionAllNtfs() {
+            foreach (var nw in MpAvWindowManager.Notifications) {
+                if (nw.WindowStartupLocation != WindowStartupLocation.Manual ||
+                    nw.DataContext is not MpAvNotificationViewModelBase nvmb) {
+                    continue;
                 }
-                catch (NullReferenceException nex) {
-                    MpConsole.WriteTraceLine($"Close window exception ({w.DataContext})", nex);
+                if (nvmb.IsToast) {
+                    nw.Position = MpAvWindowPositioner.GetSystemTrayWindowPosition(nw);
+                } else {
+                    nw.Position = MpAvWindowPositioner.GetWindowPositionByAnchorVisual(nw, nvmb.AnchorTarget);
                 }
             }
-            _windows.Remove(w);
-            _positioner.RemoveWindow(w);
         }
-
-        #region Window Events
-
-
-        private void Nw_Closed(object sender, EventArgs e) {
-            //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
-
-            var w = sender as MpAvWindow;
-            FinishClose(w);
-        }
-
-
-        #endregion
 
         #endregion
 

@@ -283,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 if (!IsWindowOpen) {
                     var fw = CreateFakeMainWindow();
-                    fw.ShowChild();
+                    fw.Show();
                     IsFakeWindowVisible = false;
                     return;
                 }

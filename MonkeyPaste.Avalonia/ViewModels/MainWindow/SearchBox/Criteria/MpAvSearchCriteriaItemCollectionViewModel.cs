@@ -579,7 +579,7 @@ namespace MonkeyPaste.Avalonia {
                             FallbackValue = "Search Criteria 'Untitled'",
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });
-                    _criteriaWindow.ShowChild();
+                    _criteriaWindow.Show();
                 } else {
                     // Some kinda view nav here
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818

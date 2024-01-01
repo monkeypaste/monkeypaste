@@ -979,7 +979,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     var dw = CreateDesignerWindow();
-                    dw.ShowChild();
+                    dw.Show();
 
                     OnPropertyChanged(nameof(SidebarOrientation));
                 } else {

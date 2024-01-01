@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
 
-            var result = await ascw.ShowChildDialogWithResultAsync(owner);
+            var result = await ascw.ShowDialogWithResultAsync(owner);
 
             if (result is bool assignResult && assignResult) {
                 return new Tuple<string, MpRoutingType>(scavm.KeyString, scavm.SelectedRoutingType);

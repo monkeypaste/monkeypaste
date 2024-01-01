@@ -236,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 };
             }
-            pbw.ShowChild();
+            pbw.Show();
             OnPropertyChanged(nameof(IsWindowOpen));
         }
         private async Task CreateAllItemsAsync() {

@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
                 },
             };
             w.Classes.Add("fadeIn");
-            w.ShowChild(owner as Window);
+            w.Show(owner as Window);
         }
         public async Task<bool> ShowProgressMessageBoxAsync(
             string title,

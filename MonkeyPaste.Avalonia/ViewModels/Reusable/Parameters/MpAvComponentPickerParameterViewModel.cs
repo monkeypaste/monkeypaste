@@ -14,7 +14,8 @@ namespace MonkeyPaste.Avalonia {
         Collection,
         Action,
         Analyzer,
-        ContentPropertyPath
+        ContentPropertyPath,
+        ApplicationCommand
     };
 
     public class MpAvComponentPickerParameterViewModel :
@@ -90,59 +91,87 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
-        public object DefaultIconResourceObj =>
-            ComponentType switch {
-                MpSelectableComponentType.Collection =>
-                    "PinToCollectionImage",
-                MpSelectableComponentType.Action =>
-                    "BoltImage",
-                MpSelectableComponentType.Analyzer =>
-                    "BrainImage",
-                MpSelectableComponentType.ContentPropertyPath =>
-                    "GraphImage",
-                _ =>
-                    "QuestionMarkImage",
-            };
+        public object DefaultIconResourceObj {
+            get {
+                switch (ComponentType) {
+                    case MpSelectableComponentType.Collection:
+                        return "PinToCollectionImage";
+                    case MpSelectableComponentType.Action:
+                        return "BoltImage";
+                    case MpSelectableComponentType.Analyzer:
+                        return "BrainImage";
+                    case MpSelectableComponentType.ContentPropertyPath:
+                        return "GraphImage";
+                    case MpSelectableComponentType.ApplicationCommand:
+                        return "CommandImage";
+                    default:
+                        return "QuestionMarkImage";
+                }
+            }
+        }
         #endregion
 
         #region State
+        public MpIPopupMenuPicker SelectedComponentPicker {
+            get {
+                if (ComponentId == 0) {
+                    return null;
+                }
+                switch (ComponentType) {
+                    case MpSelectableComponentType.Collection:
+                        return MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == ComponentId);
+                    case MpSelectableComponentType.Action:
+                        if (Parent is MpAvActionViewModelBase avm) {
+                            return avm.RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x => x.ActionId == ComponentId);
+                        }
+                        return null;
+                    case MpSelectableComponentType.Analyzer:
+                        return MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == ComponentId);
+                    case MpSelectableComponentType.ApplicationCommand:
+                        return MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ComponentId);
+                    default:
+                        return null;
+                }
+            }
+        }
+        public MpIPopupMenuPicker ComponentPicker {
+            get {
+                switch (ComponentType) {
+                    case MpSelectableComponentType.Collection:
+                        return MpAvTagTrayViewModel.Instance;
+                    case MpSelectableComponentType.Action:
+                        if (Parent is MpAvActionViewModelBase avm) {
+                            return avm.RootTriggerActionViewModel;
+                        }
+                        return null;
+                    case MpSelectableComponentType.Analyzer:
+                        return MpAvAnalyticItemCollectionViewModel.Instance;
+                    case MpSelectableComponentType.ApplicationCommand:
+                        return MpAvShortcutCollectionViewModel.Instance;
+                    default:
+                        return null;
+                }
+            }
+        }
 
-        public MpIPopupMenuPicker SelectedComponentPicker =>
-            ComponentId == 0 ? null :
-            ComponentType switch {
-                MpSelectableComponentType.Collection =>
-                    MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == ComponentId),
-                MpSelectableComponentType.Action =>
-                    (Parent as MpAvActionViewModelBase).RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x => x.ActionId == ComponentId),
-                MpSelectableComponentType.Analyzer =>
-                    MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == ComponentId),
-                _ => null
-            };
-
-        public MpIPopupMenuPicker ComponentPicker =>
-            ComponentType switch {
-                MpSelectableComponentType.Collection =>
-                    MpAvTagTrayViewModel.Instance,
-                MpSelectableComponentType.Action =>
-                    (Parent as MpAvActionViewModelBase).RootTriggerActionViewModel,
-                MpSelectableComponentType.Analyzer =>
-                    MpAvAnalyticItemCollectionViewModel.Instance,
-                _ => null
-            };
-
-        public MpSelectableComponentType ComponentType =>
-           UnitType switch {
-               MpParameterValueUnitType.CollectionComponentId =>
-                        MpSelectableComponentType.Collection,
-               MpParameterValueUnitType.ActionComponentId =>
-                   MpSelectableComponentType.Action,
-               MpParameterValueUnitType.AnalyzerComponentId =>
-                   MpSelectableComponentType.Analyzer,
-               MpParameterValueUnitType.ContentPropertyPathTypeComponentId =>
-                   MpSelectableComponentType.ContentPropertyPath,
-               _ => MpSelectableComponentType.None
-           };
+        public MpSelectableComponentType ComponentType {
+            get {
+                switch (UnitType) {
+                    case MpParameterValueUnitType.CollectionComponentId:
+                        return MpSelectableComponentType.Collection;
+                    case MpParameterValueUnitType.ActionComponentId:
+                        return MpSelectableComponentType.Action;
+                    case MpParameterValueUnitType.AnalyzerComponentId:
+                        return MpSelectableComponentType.Analyzer;
+                    case MpParameterValueUnitType.ContentPropertyPathTypeComponentId:
+                        return MpSelectableComponentType.ContentPropertyPath;
+                    case MpParameterValueUnitType.ApplicationCommandComponentId:
+                        return MpSelectableComponentType.ApplicationCommand;
+                    default:
+                        return MpSelectableComponentType.None;
+                }
+            }
+        }
 
 
         #endregion

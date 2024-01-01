@@ -1,7 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Platform;
 using Avalonia.Diagnostics;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using PropertyChanged;
@@ -83,6 +85,15 @@ namespace MonkeyPaste.Avalonia {
         public DateTime? OpenDateTime { get; set; }
         public DateTime LastActiveDateTime { get; set; }
 
+        public MpIPlatformScreenInfo ScreenInfo {
+            get {
+                if (this.Screens.ScreenFromWindow(this) is not Screen scr) {
+                    return this.Screens.Primary.ToScreenInfo();
+                }
+                return scr.ToScreenInfo();
+            }
+        }
+
         #endregion
 
 
@@ -98,54 +109,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void ShowChild(Window owner = null, bool silentLock = true) {
+        public void Show(Window owner = null, bool silentLock = true) {
             if (silentLock) {
                 SilentLockMainWindowCheck(owner);
             }
 
-            if (owner == null) {
-                Show();
-            } else {
-                Show(owner);
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+                desktop.MainWindow is not MpAvMainWindow) {
+                desktop.MainWindow = this;
             }
-        }
-        public async Task<object> ShowChildWithResultAsync(Window owner = null) {
-            SilentLockMainWindowCheck(owner);
-
-            object result = NO_RESULT_OBJ;
-
-            EventHandler close_handler = null;
-            close_handler = (s, e) => {
-                if (s is MpAvWindow w) {
-                    result = w.DialogResult;
-                    return;
-                }
-                result = null;
-            };
 
             if (owner == null) {
-                Show();
+                base.Show();
             } else {
-                Show(owner);
+                base.Show(owner);
             }
-            while (true) {
-                if (result is string resultStr &&
-                    resultStr == NO_RESULT_OBJ) {
-                    await Task.Delay(100);
-                }
-                break;
-            }
-            return result;
         }
-        public async Task ShowChildDialogAsync(Window owner = null) {
-            SilentLockMainWindowCheck(owner);
-            await ShowDialog(owner ?? MpAvWindowManager.MainWindow);
-        }
-
-        public async Task<object> ShowChildDialogWithResultAsync(Window owner = null) {
+        public async Task<object> ShowDialogWithResultAsync(Window owner = null) {
             SilentLockMainWindowCheck(owner);
 
-            var result = await ShowDialog<object>(owner ?? MpAvWindowManager.MainWindow);
+            var result = await ShowDialog<object>(owner ?? MpAvWindowManager.LastActiveWindow);
 
             if (owner is Window w) {
                 if (!w.ShowActivated) {
@@ -218,18 +201,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 
-
     [DoNotNotify]
-    public class MpAvWindow<TViewModel> : MpAvWindow/*, IViewFor<TViewModel>*/ where TViewModel : class {
-        public new TViewModel BindingContext {
-            get => GetValue(DataContextProperty) as TViewModel;
-            set => SetValue(DataContextProperty, value);
-        }
-
-        public TViewModel ViewModel {
-            get => BindingContext;
-            set => BindingContext = value;
-        }
-        public MpAvWindow(Window owner = default) : base(owner) { }
+    public class MpAvNotificationWindow : MpAvWindow {
+        public MpAvNotificationWindow(Window owner = default) : base(owner) { }
     }
 }
