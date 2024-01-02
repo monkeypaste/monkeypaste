@@ -141,6 +141,8 @@ namespace MonkeyPaste.Avalonia {
             !IsRemote && HasLocalInstall;
 
         public bool CanUninstall =>
+            Parent != null &&
+            Parent.SelectedTabType == MpPluginBrowserTabType.Installed &&
             PluginFormat != null && !MpPluginLoader.CorePluginGuids.Contains(PluginGuid);
         public bool IsRemote =>
             PluginFormat is not MpPluginFormat;
@@ -369,7 +371,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     RefreshState();
-                    LoadReadMeAsync().FireAndForgetSafeAsync(this);
+                    //LoadReadMeAsync().FireAndForgetSafeAsync(this);
                     OnPropertyChanged(nameof(RootDependencyCollection));
                     break;
                 case nameof(IsAnyBusy):

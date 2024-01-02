@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,16 +15,29 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
+    <Version>$(VersionPrefix)1.0.1</Version>
     <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
+    <Compile Remove="Formats\Components\Content\Action\Trigger\**" />
     <Compile Remove="Formats\Components\Reusable\Response\Annotations\**" />
     <Compile Remove="Formats\Components\Reusable\Response\NewContent\**" />
     <Compile Remove="Formats\Google\**" />
+    <EmbeddedResource Remove="Formats\Components\Content\Action\Trigger\**" />
     <EmbeddedResource Remove="Formats\Components\Reusable\Response\Annotations\**" />
     <EmbeddedResource Remove="Formats\Components\Reusable\Response\NewContent\**" />
     <EmbeddedResource Remove="Formats\Google\**" />
+    <None Remove="Formats\Components\Content\Action\Trigger\**" />
     <None Remove="Formats\Components\Reusable\Response\Annotations\**" />
     <None Remove="Formats\Components\Reusable\Response\NewContent\**" />
     <None Remove="Formats\Google\**" />
@@ -36,7 +49,6 @@
 
   <ItemGroup>
     <Folder Include="Formats\Components\Contact\" />
-    <Folder Include="Formats\Components\Content\Action\Trigger\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,12 +59,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"  PrivateAssets="All"/>
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+    <ProjectReference PrivateAssets="All" Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

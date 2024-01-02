@@ -15,8 +15,9 @@ The [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) 
 :::
 
 :::tip Annotation Viewer
-To see detailed information about *image annotations* **double-click** the analyzed image and then **double-click** the annotation to bring up the *annotation viewer* 
+To see detailed information about *image annotations* **double-click** the analyzed image to **see** its annotations and then **double-click** an annotation to bring up the *annotation viewer* 
 <p><img class="figure" src="/docs/build/img/auto_tag_annotations_view.png" /></p>
+You can Check out the [Computer Vision](https://www.github.com/monkeypaste/ComputerVision) plugin to get much more detailed annotations.
 :::
 
 
@@ -89,7 +90,7 @@ The last piece of this puzzle is using the **Classify** action which *automates*
 
 You should something like below in the *Action Designer*:
 
-<p><img class="figure" src="/docs/build/img/auto_tag_complete_designer.png" /></p>
+<p><img class="figure" src="/docs/build/img/auto_tag_complete_designer.png" onclick="window.open(this.src)" style={{cursor: "pointer"}} /></p>
 
 
 ## Let's try it out!

@@ -520,9 +520,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand PerformShortcutCommand => new MpCommand(
-            () => {
-                ShortcutCommand?.Execute(CommandParameter);
+        public MpIAsyncCommand PerformShortcutCommand => new MpAsyncCommand(
+            async () => {
+                if (ShortcutCommand is MpIAsyncCommand ac) {
+                    await ac.ExecuteAsync();
+                } else if (ShortcutCommand is MpIAsyncCommand<object> ac2) {
+                    await ac2.ExecuteAsync(CommandParameter);
+                } else {
+                    ShortcutCommand?.Execute(CommandParameter);
+                }
+
 
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                     //var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);

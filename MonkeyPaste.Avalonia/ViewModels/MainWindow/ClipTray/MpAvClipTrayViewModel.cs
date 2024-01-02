@@ -2529,7 +2529,7 @@ namespace MonkeyPaste.Avalonia {
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
             OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
 
-            bool is_startup_ido = !Mp.Services.StartupState.IsReady;
+            bool is_startup_ido = Mp.Services.ClipboardMonitor.IsStartupClipboard;
 
             bool is_ext_change = !MpAvWindowManager.IsAnyActive || is_startup_ido;
 

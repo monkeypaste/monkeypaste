@@ -7,6 +7,7 @@ namespace MonkeyPaste.Common {
         MpPortableDataObject LastClipboardDataObject { get; }
 
         bool IsMonitoring { get; }
+        bool IsStartupClipboard { get; }
         void StartMonitor(bool ignoreCurrentState);
         void StopMonitor();
         void ForceChange(MpPortableDataObject mpdo);

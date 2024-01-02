@@ -26,26 +26,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem">
-            <Setter Property="Margin"
-                    Value="0,2.5" />
-            <Setter Property="Padding"
-                    Value="0" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeGrayAccent2Color}" />
-        </Style>
-
-        <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem">
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,1" />
-        </Style>
-
-        <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem:nth-last-child()">
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,0" />
-        </Style>
 
         <Style Selector="Button.iconBtn">
             <Setter Property="MaxWidth"
@@ -189,6 +169,7 @@
                                     MinWidth="250"
                                     x:DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <ListBox x:Name="ExecuteParameterListBox"
+                                         Classes="paramHost"
                                          Grid.Row="1"
                                          Padding="0"
                                          HorizontalAlignment="Stretch"
@@ -378,6 +359,10 @@
                         IsVisible="{Binding ShowResetPresetButtons}"
                         Command="{Binding ResetPresetCommand}"
                         CommandParameter="all" />
+                <!--  RESTART BUTTON  -->
+                <Button Content="{x:Static local:UiStrings.NtfUserActionRestartButtonLabel}"
+                        IsVisible="{Binding ShowRestartButton}"
+                        Command="{Binding RestartCommand}" />
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
                 <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"
                         IsVisible="{Binding ShowIgnoreButton}"

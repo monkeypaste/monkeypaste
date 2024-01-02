@@ -565,7 +565,7 @@
                     </TreeView>
 
                     <!--  README VIEW  -->
-                    <SelectableTextBlock Grid.Row="14"
+                    <!--<SelectableTextBlock Grid.Row="14"
                                          Grid.Column="0"
                                          Classes="detailLabel"
                                          IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -573,7 +573,7 @@
                     <av:HtmlPanel Grid.Row="15"
                                   Grid.Column="0"
                                   Grid.ColumnSpan="3"
-                                  Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
+                                  Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />-->
 
                 </Grid>
             </ScrollViewer>

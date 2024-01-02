@@ -87,10 +87,16 @@ namespace MonkeyPaste.Avalonia {
                     // press needed downs for this gesture
                     SimulateKeys(to_press, true);
 
-                    // release needed downs for this gesture
+                    // release ALL keys involved, empty keyboard so nothing gets stuck
                     SimulateKeys(to_clear, false);
 
                     // restore downs
+                    // NOTE!!! restoring physical downs DOES NOT WORK, don't try it!
+                    // i think under the hood it doesn't associate the sim down w/
+                    // the eventual physical up, the physical up is just a dead event 
+                    // like a timestamp mismatch where it knows when the physical down
+                    // happened and since that doesn't match (or is older) the simulated
+                    // press it just ignores it
                     //SimulateKeys(to_release, true);
                 }
                 catch (Exception ex) {

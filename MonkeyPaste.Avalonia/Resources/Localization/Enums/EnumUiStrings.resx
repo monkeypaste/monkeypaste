@@ -279,6 +279,9 @@
   <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
     <value>Modal Busy Message Box</value>
   </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>Modal Restart Ignore</value>
+  </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
     <value>Confirm End Append</value>
   </data>
@@ -293,9 +296,6 @@
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
     <value>Plugin Response Warning With Option</value>
-  </data>
-  <data name="MpNotificationType_PluginResponseOther" xml:space="preserve">
-    <value>Plugin Response Other</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />

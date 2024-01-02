@@ -9,6 +9,7 @@
     <None Remove="icon.png" />
     <None Remove="image.png" />
     <None Remove="manifest.json" />
+    <None Remove="README.md" />
     <None Remove="text.png" />
   </ItemGroup>
 
@@ -18,6 +19,9 @@
     </Content>
     <Content Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="text.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

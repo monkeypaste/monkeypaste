@@ -9,6 +9,6 @@ html[data-app-update-view] div.theme-doc-toc-desktop {
 }
 
 html[data-app-update-view] div.navbar__inner {
-    /* hide search BOX (can't get to div) */
+    /* hide search BOX (can't get to container) */
     display: none;
 }

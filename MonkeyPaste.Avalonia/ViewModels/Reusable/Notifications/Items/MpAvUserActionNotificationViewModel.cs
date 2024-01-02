@@ -69,6 +69,7 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowSubmitButton { get; set; }
         public bool ShowRetryButton => IsFixing && RetryAction != null;
 
+        public bool ShowRestartButton { get; set; }
         public bool ShowShutdownButton { get; set; }
 
         public bool ShowYesButton { get; set; }
@@ -177,6 +178,11 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(nf);
             switch (ButtonsType) {
+                case MpNotificationButtonsType.RestartIgnoreCancel:
+                    ShowRestartButton = true;
+                    ShowIgnoreButton = true;
+                    ShowCancelButton = true;
+                    break;
                 case MpNotificationButtonsType.ResetAllResetSharedResetUnsharedCancel:
                     ShowResetPresetButtons = true;
                     ShowCancelButton = true;
@@ -492,6 +498,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 InputResult = null;
                 DialogResult = MpNotificationDialogResultType.Cancel;
+            });
+
+        public ICommand RestartCommand => new MpCommand(
+            () => {
+                InputResult = null;
+                MpAvAppRestarter.ShutdownWithRestartTask("By ntf");
             });
 
         public ICommand OkCommand => new MpCommand(

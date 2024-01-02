@@ -5,6 +5,23 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpIPlatformMessageBox {
+        public async Task<bool> ShowRestartIgnoreCancelMessageBoxAsync(
+            string title,
+            string message = default,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null) {
+            // NOTE only returns if its ignored or canceled
+            // returns true if ignored
+            var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalRestartIgnore,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor,
+                                    owner: owner);
+            return result == MpNotificationDialogResultType.Cancel;
+        }
         public void ShowWebViewWindow(
             string title,
             string address,

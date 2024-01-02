@@ -440,7 +440,6 @@ namespace MonkeyPaste.Avalonia {
                 aivm = null;
 
                 bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid, false);
-
                 if (success) {
                     try {
                         success = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);

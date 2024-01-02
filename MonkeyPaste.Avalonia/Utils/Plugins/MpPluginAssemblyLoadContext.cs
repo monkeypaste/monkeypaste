@@ -14,18 +14,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override Assembly? Load(AssemblyName assemblyName) {
-            //if (_resolver == null) {
-            //    return Default.Assemblies.FirstOrDefault(x => x.FullName == name.FullName);
-            //}
-
-            //string? assemblyPath = _resolver.ResolveAssemblyToPath(name);
-            //if (assemblyPath != null) {
-            //    return LoadFromAssemblyPath(assemblyPath);
-            //}
-
-            //return null;
-            // This will fallback to loading the assembly from default context.
             if (Default.Assemblies.Any(a => a.FullName == assemblyName.FullName))
+                // This will fallback to loading the assembly from default context.
                 return null;
 
             string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);

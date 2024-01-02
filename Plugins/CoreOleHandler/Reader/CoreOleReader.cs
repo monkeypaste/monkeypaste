@@ -1,5 +1,4 @@
 ﻿using Avalonia.Input;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -59,10 +58,10 @@ namespace CoreOleHandler {
             }
             CoreOleHelpers.SetCulture(request);
 
-            List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
-            List<Exception> exl = new List<Exception>();
-            Dictionary<string, object> conversion_results = new();
-            var read_output = new MpAvDataObject();
+            List<MpPluginUserNotificationFormat> nfl = [];
+            List<Exception> exl = [];
+            Dictionary<string, object> conversion_results = [];
+            MpAvDataObject read_output = new();
             var readFormats = request.formats.Where(x => availableFormats.Contains(x));
 
             foreach (var read_format in readFormats) {

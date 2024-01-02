@@ -2,7 +2,7 @@
   "title": "テキストアノテーター",
   "description": "テキストベースのコンテンツに対する基本的なハイパーリンクのサポートを提供します",
   "version": "1.0",
-  "author": "Thomas Kefauver",
+  "author": "MonkeyPaste LLC",
   "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "コア、注釈、テキスト、リンク、色、解析、住所、電話、電子メール、通貨、財務",

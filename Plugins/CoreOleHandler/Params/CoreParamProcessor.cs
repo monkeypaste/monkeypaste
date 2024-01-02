@@ -366,11 +366,12 @@ namespace CoreOleHandler {
             if (nfl == null) {
                 nfl = new List<MpPluginUserNotificationFormat>();
             }
-            nfl.Add(Util.CreateNotification(
-                ntfType,
-                title,
-                msg,
-                detail));
+            nfl.Add(new MpPluginUserNotificationFormat() {
+                NotificationType = ntfType,
+                Title = title,
+                Body = msg,
+                Detail = detail
+            });
             return msg;
 #else
             return string.Empty;

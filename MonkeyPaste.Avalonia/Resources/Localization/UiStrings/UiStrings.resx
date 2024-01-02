@@ -2479,4 +2479,16 @@ Click here to update to '{0}' 🎉🍾🥳</value>
   <data name="CommonSelectedText" xml:space="preserve">
     <value>Selected</value>
   </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>There was an issue updating '{0}'. In order to complete the update you will need to restart and install '{0}' again (don't worry all of your settings will be restored). 
+
+You can restart now and complete the update by re-installing, ignore this and update it later or cancel the update all together and continue using version '{1}'?</value>
+    <comment>Plugin Name, Plugin Version</comment>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Update Error</value>
+  </data>
 </root>

@@ -2,6 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -85,6 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 host_control.Classes.Add("tt_near_bottom");
 #endif
             }
+            MoveToolTip(MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation);
         }
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
@@ -93,8 +97,14 @@ namespace MonkeyPaste.Avalonia {
                 IsVisible = false;
                 return;
             }
+            this.EffectiveViewportChanged += MpAvToolTipView_EffectiveViewportChanged;
+        }
+
+        private void MpAvToolTipView_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
+            MoveToolTip(MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation);
 
         }
+
         private Control GetHostControl() {
             if (TopLevel.GetTopLevel(this) is not TopLevel tl ||
                 tl.Parent is not Control host_control) {
@@ -102,6 +112,58 @@ namespace MonkeyPaste.Avalonia {
             }
             return host_control;
         }
+
+        private void MoveToolTip(MpPoint scr_mp) {
+            if (TopLevel.GetTopLevel(this) is not PopupRoot pr ||
+                pr.Screens.ScreenFromWindow(pr) is not Screen pr_screen ||
+                GetHostControl() is not Control host) {
+                return;
+            }
+            var scr_center = pr_screen.Bounds.Center.ToPortablePoint(pr_screen.Scaling);
+            var delta = (scr_center - scr_mp).Normalized;
+            while (true) {
+                Point pr_mp = pr.PointToClient(scr_mp.ToAvPixelPoint(pr_screen.Scaling));
+                if (pr.Bounds.Size.Width > 0 && pr.Bounds.Size.Height > 0 && !pr.Bounds.Contains(pr_mp)) {
+                    // will show
+                    break;
+                }
+                double new_offset_x = ToolTip.GetHorizontalOffset(host) + delta.X;
+                double new_offset_y = ToolTip.GetVerticalOffset(host) + delta.Y;
+                ToolTip.SetHorizontalOffset(host, new_offset_x);
+                ToolTip.SetVerticalOffset(host, new_offset_y);
+            }
+        }
+        //private void SetToolTipOffset(Control hc, MpPoint diff, MpPoint scr_mp) {
+        //    if (hc == null ||
+        //        TopLevel.GetTopLevel(this) is not PopupRoot pur) {
+        //        return;
+        //    }
+
+        //    double pd = 1;// w.PlatformImpl.DesktopScaling;
+        //    MpRect mw_screen_rect = pur.Screens.ScreenFromBounds(pur.Bounds.ToPortableRect().ToAvPixelRect(pd)).Bounds.ToPortableRect(pd);
+
+        //    var screen_centroid = mw_screen_rect.Centroid();
+        //    var hc_centroid = hc.PointToScreen(hc.Bounds.ToPortableRect().Centroid().ToAvPoint()).ToPortablePoint(pd);
+
+        //    var hc_vector = hc_centroid - screen_centroid;
+        //    double hc_dist = hc_vector.Length;
+
+        //    double scale = 10;// (this.Bounds.Width + this.Bounds.Height) / 2.0d;
+        //    double tt_dist = hc_dist - scale;
+
+        //    var new_vector = (hc_vector.Normalized * tt_dist) + diff;
+        //    var newOffset = new_vector - hc_vector;
+
+        //    var pur_scr_bounds = pur.Bounds.ToPortableRect();
+        //    pur_scr_bounds.TranslateOrigin(null, true);
+        //    if (pur_scr_bounds.Contains(scr_mp)) {
+
+        //    } else {
+        //        ToolTip.SetHorizontalOffset(hc, newOffset.X);
+        //        ToolTip.SetVerticalOffset(hc, newOffset.Y);
+        //    }
+
+        //}
         //protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
         //    base.OnAttachedToVisualTree(e);
         //    IsHitTestVisible = false;
@@ -239,37 +301,7 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        //private void SetToolTipOffset(Control hc, MpPoint diff, MpPoint scr_mp) {
-        //    if (hc == null ||
-        //        TopLevel.GetTopLevel(this) is not PopupRoot pur) {
-        //        return;
-        //    }
 
-        //    double pd = 1;// w.PlatformImpl.DesktopScaling;
-        //    MpRect mw_screen_rect = pur.Screens.ScreenFromBounds(pur.Bounds.ToPortableRect().ToAvPixelRect(pd)).Bounds.ToPortableRect(pd);
-
-        //    var screen_centroid = mw_screen_rect.Centroid();
-        //    var hc_centroid = hc.PointToScreen(hc.Bounds.ToPortableRect().Centroid().ToAvPoint()).ToPortablePoint(pd);
-
-        //    var hc_vector = hc_centroid - screen_centroid;
-        //    double hc_dist = hc_vector.Length;
-
-        //    double scale = 10;// (this.Bounds.Width + this.Bounds.Height) / 2.0d;
-        //    double tt_dist = hc_dist - scale;
-
-        //    var new_vector = (hc_vector.Normalized * tt_dist) + diff;
-        //    var newOffset = new_vector - hc_vector;
-
-        //    var pur_scr_bounds = pur.Bounds.ToPortableRect();
-        //    pur_scr_bounds.TranslateOrigin(null, true);
-        //    if (pur_scr_bounds.Contains(scr_mp)) {
-
-        //    } else {
-        //        ToolTip.SetHorizontalOffset(hc, newOffset.X);
-        //        ToolTip.SetVerticalOffset(hc, newOffset.Y);
-        //    }
-
-        //}
 
         //private bool HasInputControl() {
         //    if (ToolTipHtml == null) {

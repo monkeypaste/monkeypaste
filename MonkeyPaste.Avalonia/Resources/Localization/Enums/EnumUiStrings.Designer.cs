@@ -1564,6 +1564,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Restart Ignore.
+        /// </summary>
+        public static string MpNotificationType_ModalRestartIgnore {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalRestartIgnore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Text Box Ok Cancel Message Box.
         /// </summary>
         public static string MpNotificationType_ModalTextBoxOkCancelMessageBox {
@@ -1623,15 +1632,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpNotificationType_PluginResponseMessage {
             get {
                 return ResourceManager.GetString("MpNotificationType_PluginResponseMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Plugin Response Other.
-        /// </summary>
-        public static string MpNotificationType_PluginResponseOther {
-            get {
-                return ResourceManager.GetString("MpNotificationType_PluginResponseOther", resourceCulture);
             }
         }
         

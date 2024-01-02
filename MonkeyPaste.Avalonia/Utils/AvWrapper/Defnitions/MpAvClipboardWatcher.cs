@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -11,16 +10,9 @@ namespace MonkeyPaste.Avalonia {
         MpIPlatformDataObjectRegistrar {
         #region Private Variables
 
-        //private bool _isInitialStart = false;
         private MpPortableDataObject _lastCbo = null;
         //private DispatcherTimer _timer = null;
         private Timer _timer = null;
-
-
-        private List<string> _rejectedFormats = new List<string>() {
-            "FileContents",
-            "EnterpriseDataProtectionId"
-        };
 
         #endregion
 
@@ -54,6 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpPortableDataObject LastClipboardDataObject =>
             _lastCbo;
+        public bool IsStartupClipboard { get; private set; }
         #endregion
 
         #region Events
@@ -109,10 +102,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ForceChange(MpPortableDataObject mpdo) {
-            //Task.Run(async () => {
-            //var process_cbo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(mpdo) as MpPortableDataObject;
             OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), mpdo);
-            //});
         }
         #endregion
 
@@ -133,7 +123,8 @@ namespace MonkeyPaste.Avalonia {
             var cbo = await ConvertManagedFormats();
 
             if (cbo.IsDataNotEqual(_lastCbo, fast_check: true)) {
-                MpConsole.WriteLine("Clipboard changed");
+                IsStartupClipboard = _lastCbo == null;
+                MpConsole.WriteLine($"Clipboard changed. Startup clipboard: {IsStartupClipboard}");
                 _lastCbo = cbo;
                 var process_cbo = await Mp.Services.DataObjectTools.ReadClipboardAsync(false) as MpPortableDataObject;
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), process_cbo);

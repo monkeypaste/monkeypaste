@@ -102,14 +102,6 @@ namespace MonkeyPaste.Avalonia {
                     body: response.errorMessage).FireAndForgetSafeAsync();
                 return null;
             }
-            if (response.otherMessage != null) {
-                MpConsole.WriteLine($"Plugin message for '{pluginLabel}': {response.otherMessage}");
-
-                Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    msgType: MpNotificationType.PluginResponseOther,
-                    title: pluginLabel,
-                    body: response.otherMessage).FireAndForgetSafeAsync();
-            }
 
             response = await HandlePluginNotifcationsAsync<T>(request, response, retryFunc);
 
@@ -166,19 +158,13 @@ namespace MonkeyPaste.Avalonia {
                         },
                         transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 
-            var userAction = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+            _ = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                 notificationType: MpNotificationType.InvalidRequest,
                 body: ex.Message,
                 maxShowTimeMs: 5000);
 
             if (trans.Response == null) {
                 trans.Response = new MpAnalyzerPluginResponseFormat();
-            }
-            if (userAction == MpNotificationDialogResultType.Retry) {
-
-                trans.Response.retryMessage = "Retry";
-            } else {
-                trans.Response.errorMessage = "Error";
             }
 
             return trans;

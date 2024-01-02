@@ -4,8 +4,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
@@ -18,21 +16,23 @@ namespace MonkeyPaste.Avalonia {
         public AssemblyLoadContext LoadContext { private get; set; }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public void Unload() {
-            if (Components.OfType<MpIUnloadPluginComponent>().Any()) {
-                try {
+        public async Task UnloadAsync() {
+            // BUG plugin unload doesn't work don't know why 
+            //if (Components.OfType<MpIUnloadPluginComponent>().Any()) {
+            //    try {
 
-                    IssueRequestAsync(nameof(MpIUnloadPluginComponent.Unload), typeof(MpIUnloadPluginComponent).FullName, null, sync_only: true).FireAndForgetSafeAsync();
-                }
-                catch (Exception ex) {
-                    if (ex is TargetParameterCountException) {
-                        // expected when no unload implemented
-                    } else {
+            //        await IssueRequestAsync(nameof(MpIUnloadPluginComponent.Unload), typeof(MpIUnloadPluginComponent).FullName, null);
+            //    }
+            //    catch (Exception ex) {
+            //        if (ex is TargetParameterCountException) {
+            //            // expected when no unload implemented
+            //        } else {
 
-                        MpConsole.WriteTraceLine($"Error unloading {this}", ex);
-                    }
-                }
-            }
+            //            MpConsole.WriteTraceLine($"Error unloading {this}", ex);
+            //        }
+            //    }
+            //}
+            await Task.Delay(1);
 
             Components = null;
 
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        //[MethodImpl(MethodImplOptions.NoInlining)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public async Task<object> IssueRequestAsync(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false) {
             Type onType = typeof(MpPluginFormat).Assembly.GetType(typeName);
             if (onType == null) {

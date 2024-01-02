@@ -3868,6 +3868,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restart.
+        /// </summary>
+        public static string NtfUserActionRestartButtonLabel {
+            get {
+                return ResourceManager.GetString("NtfUserActionRestartButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick a {0}....
         /// </summary>
         public static string ParamComponentPickerDefaultLabel {
@@ -4188,6 +4197,26 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginUpdatedNtfTitle {
             get {
                 return ResourceManager.GetString("PluginUpdatedNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an issue updating &apos;{0}&apos;. In order to complete the update you will need to restart and install &apos;{0}&apos; again (don&apos;t worry all of your settings will be restored). 
+        ///
+        ///You can restart now and complete the update by re-installing, ignore this and update it later or cancel the update all together and continue using version &apos;{1}&apos;?.
+        /// </summary>
+        public static string PluginUpdateErrorText {
+            get {
+                return ResourceManager.GetString("PluginUpdateErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Error.
+        /// </summary>
+        public static string PluginUpdateErrorTitle {
+            get {
+                return ResourceManager.GetString("PluginUpdateErrorTitle", resourceCulture);
             }
         }
         

@@ -469,7 +469,7 @@ namespace MonkeyPaste.Avalonia {
                 var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.UpdateAvailable,
                             title: UiStrings.NtfUpdateAvailableTitle,
-                            maxShowTimeMs: from_user ? -1 : MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
+                            maxShowTimeMs: from_user ? -1 : 5_000,
                             body: string.Format(UiStrings.NtfUpdateAvailableText, UpToDateAppVersion.ToString()),
                             iconSourceObj: "MegaPhoneImage");
                 if (result == MpNotificationDialogResultType.Ok) {

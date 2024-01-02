@@ -15,19 +15,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvParameterCollectionView">
     <local:MpAvUserControl.Resources>
 
-        <LinearGradientBrush x:Key="HorizEdgeFade_white" StartPoint="0%,0%" EndPoint="100%,0%">
-            <GradientStop Offset="0" Color="Transparent" />
-            <GradientStop Offset="0.3" Color="{DynamicResource ThemeWhiteColor}" />
-            <GradientStop Offset="0.7" Color="{DynamicResource ThemeWhiteColor}" />
-            <GradientStop Offset="1" Color="Transparent" />
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="HorizEdgeFade_black" StartPoint="0%,0%" EndPoint="100%,0%">
-            <GradientStop Offset="0" Color="Transparent" />
-            <GradientStop Offset="0.3" Color="{DynamicResource ThemeBlackColor}" />
-            <GradientStop Offset="0.7" Color="{DynamicResource ThemeBlackColor}" />
-            <GradientStop Offset="1" Color="Transparent" />
-        </LinearGradientBrush>
 
         <sys:TimeSpan x:Key="FadeTimeSpan">
             0:0:0.2
@@ -81,8 +68,6 @@
             <Setter Property="Opacity"
                     Value="0" />
         </Style>
-
-        <!--  SAVE/CANCEL BUTTONS  -->
         <Style Selector="Grid#ParameterContainerGrid:not(.showSaveCancel) Button.saveOrCancelButton">
             <Setter Property="IsVisible"
                     Value="False" />
@@ -102,30 +87,6 @@
             <Setter Property="TextAlignment"
                     Value="Center" />
         </Style>
-
-        <!--  PARAM LISTBOXITEM  -->
-
-        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem">
-            <Setter Property="Padding"
-                    Value="0,7" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <!--<Setter Property="BorderBrush"
-                    Value="{Binding $parent[local:MpAvParameterCollectionView].Foreground}" />-->
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource HorizEdgeFade_white}" />
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,2" />
-            <!--<Setter Property="MaxWidth"
-                    Value="300" />-->
-        </Style>
-
-        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-last-child()">
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,0" />
-        </Style>
-
-
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"
@@ -185,7 +146,7 @@
         <ListBox x:Name="PluginParameterListBox"
                  Grid.Row="1"
                  Padding="0"
-                 Classes="tabcontinue"
+                 Classes="tabcontinue paramHost"
                  AutoScrollToSelectedItem="False"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"

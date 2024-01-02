@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Welcome
 
-Welcome to the documentation for MonkeyPaste, a cross-platform clipboard automation and productivity tool. With MonkeyPaste, the clipboard becomes an enriched and organized asset in your workflow.
+Welcome to the documentation for MonkeyPaste, a clipboard automation and productivity tool. With MonkeyPaste, the clipboard becomes an enriched and organized asset in your workflow.
 
 ## Supported Platforms
 - Windows 10 (version 1809) and higher

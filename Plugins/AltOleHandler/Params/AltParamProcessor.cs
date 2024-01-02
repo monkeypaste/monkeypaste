@@ -29,15 +29,8 @@ namespace AltOleHandler {
                                     if (data is string rtf) {
                                         int max_length = int.Parse(paramVal);
                                         if (rtf.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"{format} limit is '{max_length}' and data was '{rtf.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
                                             data = rtf.Substring(0, max_length);
-                                        }
+                                        };
                                     }
                                 }
 
@@ -45,7 +38,6 @@ namespace AltOleHandler {
                             case AltOleParamType.RICHTEXTFORMAT_R_IGNORE:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
                                     ignoreRtf) {
-                                    AddIgnoreNotification(ref nfl, format);
                                     data = null;
 
                                 } else {
@@ -73,13 +65,6 @@ namespace AltOleHandler {
                                     if (data is string text) {
                                         int max_length = int.Parse(paramVal);
                                         if (text.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
                                             data = text.Substring(0, max_length);
                                         }
                                     }
@@ -90,7 +75,6 @@ namespace AltOleHandler {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
                                     ignText) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
 
                                     } else {
                                         //nfl = new List<MpPluginUserNotificationFormat>() {
@@ -109,13 +93,6 @@ namespace AltOleHandler {
                                     if (data is string text) {
                                         int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
                                         if (text.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
                                             data = text.Substring(0, max_length);
                                         }
                                     }
@@ -139,7 +116,6 @@ namespace AltOleHandler {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
                                     ignImg) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
                                     }
                                 }
 
@@ -170,7 +146,6 @@ namespace AltOleHandler {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&
                                         ignore_fd) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
                                     }
                                 }
 
@@ -223,21 +198,6 @@ namespace AltOleHandler {
                 ex = e;
             }
             return data;
-        }
-
-        private static void AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format) {
-#if DEBUG
-            if (nfl == null) {
-                nfl = new List<MpPluginUserNotificationFormat>();
-            }
-            nfl.Add(Util.CreateNotification(
-                MpPluginNotificationType.PluginResponseWarning,
-                "Format Ignored",
-                $"{format} Format is flagged as 'ignored'",
-                "CoreClipboardWriter"));
-#else
-            return;
-#endif
         }
     }
 }

@@ -2,7 +2,7 @@
 
 ## Overview
 
-MonkeyPaste plugins use a very simple client/server style request and response convention for all plugin interaction. Where MonkeyPaste is the *client* and the plugin acts as a *server*. Plugins for MonkeyPaste's concerns are *stateless* in nature which keeps the interface as simple and lightweight as possible.
+MonkeyPaste plugins use a simple client/server style request and response convention for all plugin interaction. Where MonkeyPaste is the *client* and the plugin acts as a *server*. Plugins for MonkeyPaste's concerns are *stateless* in nature which keeps the interface as simple and lightweight as possible.
 
 ## Getting Started
 
@@ -82,8 +82,9 @@ Beyond loading, debugging can be crudely handled using `errorMessage` or `userNo
 #### Publishing
 For the time being you can fork https://github.com/monkeypaste/mp-plugin-list and do a PR on it by adding your `manifest.json` to the array in `ledger.json`. 
 
-## Samples
-(Table of sample plugins)
+## Sample Plugins
+|||
+|---|---|
 
 ## Feedback
 Feel free to raise an issue at (plugin repo link)

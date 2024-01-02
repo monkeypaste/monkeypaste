@@ -57,6 +57,7 @@
         ModalRememberableTextBoxOkCancelMessageBox,
         ModalProgressCancelMessageBox,
         ModalBusyMessageBox,
+        ModalRestartIgnore,
 
         ConfirmEndAppend,
 
@@ -65,6 +66,5 @@
         PluginResponseError,
         PluginResponseWarning,
         PluginResponseWarningWithOption,
-        PluginResponseOther
     }
 }

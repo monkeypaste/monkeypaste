@@ -18,10 +18,12 @@
   </Target>
   
   <ItemGroup>
+    <None Remove="export_to_onnx.py" />
     <None Remove="icon.png" />
     <None Remove="manifest.json" />
     <None Remove="yolov8m.onnx" />
     <None Remove="yolov8n.onnx" />
+    <None Remove="yolov8n.pt" />
     <None Remove="yolov8x.onnx" />
   </ItemGroup>
   
@@ -30,9 +32,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="manifest.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="yolov8n.onnx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

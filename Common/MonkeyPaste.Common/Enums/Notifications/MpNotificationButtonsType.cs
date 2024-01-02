@@ -15,6 +15,7 @@
         Busy,
         Rate,
         Update,
-        ResetAllResetSharedResetUnsharedCancel
+        ResetAllResetSharedResetUnsharedCancel,
+        RestartIgnoreCancel
     }
 }

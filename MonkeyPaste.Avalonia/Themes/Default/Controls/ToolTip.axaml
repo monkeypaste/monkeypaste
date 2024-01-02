@@ -11,13 +11,13 @@
                 Value="0" />
         <Setter Property="Background"
                 Value="Transparent" />
+        <!--<Setter Property="IsHitTestVisible"
+                Value="False" />-->
     </Style>
 
     <Style Selector=":is(Control)">
-        <Setter Property="ToolTip.Placement"
-                Value="AnchorAndGravity" />
         <Setter Property="ToolTip.ShowDelay"
-                Value="700" />
+                Value="300" />
     </Style>
     <Style Selector=":is(Control).tt_near_bottom">
         <Setter Property="ToolTip.VerticalOffset"
@@ -44,7 +44,7 @@
                 Value="Left" />
     </Style>
     <Style Selector=":is(PopupRoot).tooltip">
-        <Setter Property="IsHitTestVisible"
-                Value="False" />
+        <!--<Setter Property="IsHitTestVisible"
+                Value="False" />-->
     </Style>
 </Styles>

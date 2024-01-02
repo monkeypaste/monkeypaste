@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
             $"{MANIFEST_FILE_NAME_PREFIX}.{MANIFEST_FILE_EXT}";
 
         public static string PLUG_FOLDER_NAME => "Plugins";
-        public static string MANIFEST_BACKUP_FOLDER_NAME => ".cache";
+        public static string PLUGIN_CACHE_FOLDER_NAME => ".cache";
+        public static string PLUGIN_BACKUP_FOLDER_NAME => ".backup";
         public static string DAT_FOLDER_NAME => "dat";
 
         public static string CoreClipboardHandlerGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
@@ -45,7 +46,9 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginRootFolderPath =>
             Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginCacheDir =>
-            Path.Combine(PluginRootFolderPath, MANIFEST_BACKUP_FOLDER_NAME);
+            Path.Combine(PluginRootFolderPath, PLUGIN_CACHE_FOLDER_NAME);
+        public static string PluginBackupDir =>
+            Path.Combine(PluginCacheDir, PLUGIN_BACKUP_FOLDER_NAME);
         public static string CoreDatDir =>
             Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, DAT_FOLDER_NAME);
 
@@ -115,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
             if (original_dir.IsFile()) {
                 // delete plugin folder
                 string dir_to_backup = Path.GetDirectoryName(original_dir);
-                backup_path = Path.Combine(MpFileIo.GetThisAppTempDir(), Path.GetFileName(dir_to_backup));
+                backup_path = Path.Combine(PluginBackupDir, Path.GetFileName(dir_to_backup));
                 if (backup_path.IsFileOrDirectory()) {
                     if (!MpFileIo.DeleteFileOrDirectory(backup_path)) {
                         throw new Exception($"Error deleting existing backup dir '{backup_path}'");
@@ -134,13 +137,25 @@ namespace MonkeyPaste.Avalonia {
             return backup_path;
         }
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        public static async Task<bool> DeletePluginByGuidAsync(string guid, bool delete_cache = true) {
-            var kvp = Plugins.FirstOrDefault(x => x.Value.guid == guid);
-            if (kvp.IsDefault()) {
-                // not found
-                return false;
+        public static async Task<bool> DeletePluginByGuidAsync(string guid, bool is_uninstall = true) {
+            if (!Plugins.Any(x => x.Value.guid == guid)) {
+                return true;
             }
-            bool success = await DeletePluginAsync(kvp.Value, delete_cache);
+            MpPluginWrapper plugin = Plugins.FirstOrDefault(x => x.Value.guid == guid).Value;
+            string plugin_guid = plugin.guid;
+            string plugin_name = plugin.title;
+            string plugin_version = plugin.version;
+            plugin = null;
+            bool success = await DeletePlugin_internal_Async(plugin_guid, is_uninstall);
+            if (!success && !is_uninstall) {
+                // NOTE this won't return if they choose restart
+                // cases:
+                // 1. restart: plugin is deleted before loading next restart, man
+                success = await Mp.Services.PlatformMessageBox.ShowRestartIgnoreCancelMessageBoxAsync(
+                    title: UiStrings.PluginUpdateErrorTitle,
+                    message: string.Format(UiStrings.PluginUpdateErrorText, plugin_name, plugin_version),
+                    iconResourceObj: "WarningImage");
+            }
             return success;
         }
         public static async Task<bool> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall = false) {
@@ -388,9 +403,10 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!agreed) {
                     // uninstall here
-                    bool success = await DeletePluginAsync(plugin, true);
+                    string plugin_guid = plugin.guid;
+                    plugin = null;
+                    bool success = await DeletePlugin_internal_Async(plugin_guid, true);
                     MpDebug.Assert(success, $"Error deleting unaccepted plugin '{plugin}'");
-                    Plugins.Remove(manifestPath);
                     return false;
                 }
             }
@@ -401,23 +417,25 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        private static bool RemovePlugin(string manifest_path) {
+        private static async Task<bool> UnloadAndRemovePluginAsync(string manifest_path) {
             if (!Plugins.TryGetValue(manifest_path, out MpPluginWrapper plugin) ||
                 plugin == null) {
                 MpConsole.WriteLine($"Plugin not found to remove for manifest path '{manifest_path}'");
                 return true;
             }
             bool success = Plugins.Remove(manifest_path);
-            plugin.Unload();
+            await plugin.UnloadAsync();
             plugin = null;
             return success;
         }
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        private static async Task<bool> DeletePluginAsync(MpPluginWrapper plugin, bool delete_cache) {
+        private static async Task<bool> DeletePlugin_internal_Async(string plugin_guid, bool delete_cache) {
             // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
-            await Task.Delay(1);
-
+            if (!Plugins.Any(x => x.Value.guid == plugin_guid)) {
+                return true;
+            }
+            MpPluginWrapper plugin = Plugins.FirstOrDefault(x => x.Value.guid == plugin_guid).Value;
             bool success = true;
 
             string manifest_path = plugin.ManifestPath;
@@ -427,7 +445,7 @@ namespace MonkeyPaste.Avalonia {
 
             // clear ref to plugin
             plugin = null;
-            success = RemovePlugin(manifest_path);
+            success = await UnloadAndRemovePluginAsync(manifest_path);
             List<string> failed_paths = new List<string>();
             // delete actual plugin on demand
             if (!MpFileIo.DeleteDirectory(root_dir)) {
@@ -441,7 +459,8 @@ namespace MonkeyPaste.Avalonia {
             failed_paths.ForEach(x => MpStartupCleaner.AddPathToDelete(x));
 
             // NOTE ignoring success, used only for diagnostics
-            return true;
+            success = success && !failed_paths.Any();
+            return success;
         }
 
         #region Component
@@ -553,9 +572,6 @@ namespace MonkeyPaste.Avalonia {
 
                 foreach (var ig in invalidGuids) {
                     var toRemove = Plugins.Where(x => x.Value.guid == ig).ToList();
-                    foreach (var tr in toRemove) {
-                        RemovePlugin(tr.Key);
-                    }
 
                     // Show list of duplicate plugins, fix just opens plugin folder, retry will re-initialize
                     var sb = new StringBuilder();
@@ -564,11 +580,17 @@ namespace MonkeyPaste.Avalonia {
                     sb.AppendLine();
                     sb.AppendLine($"Fix by changing plugin guid or removing duplicates. Otherwise all will be ignored.");
 
+                    var to_remove_min_refs = toRemove.Select(x => (x.Key, x.Value.RootDirectory)).ToList();
+                    toRemove = null;
+
+                    foreach (var tr in to_remove_min_refs) {
+                        await UnloadAndRemovePluginAsync(tr.Key);
+                    }
                     var dup_guids_detected_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,
                             body: sb.ToString(),
                             retryAction: retryFunc,
-                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(PluginRootFolderPath, toRemove.Select(x => Path.GetFileName(x.Value.RootDirectory)))));
+                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(PluginRootFolderPath, to_remove_min_refs.Select(x => Path.GetFileName(x.RootDirectory)))));
                     if (dup_guids_detected_result == MpNotificationDialogResultType.Ignore) {
                         continue;
                     }

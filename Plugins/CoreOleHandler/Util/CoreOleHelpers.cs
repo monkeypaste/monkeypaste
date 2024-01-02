@@ -32,10 +32,14 @@ namespace CoreOleHandler {
             catch (Exception ex) {
 
                 if (ntfl != default) {
-                    ntfl.Add(Util.CreateNotification(
-                    MpPluginNotificationType.PluginResponseWarning,
-                    Resources.NtfFormatIgnoredTitle,
-                    ex.ToString(), req.cultureCode));
+                    ntfl.Add(
+                        new MpPluginUserNotificationFormat() {
+                            NotificationType = MpPluginNotificationType.PluginResponseWarning,
+                            Title = Resources.NtfFormatIgnoredTitle,
+                            Body = ex.ToString(),
+                            Detail = req.cultureCode,
+                            IconSourceObj = MpBase64Images.ClipboardIcon
+                        });
                 }
                 MpConsole.WriteTraceLine($"Error settings culture code to '{req.cultureCode}'");
             }

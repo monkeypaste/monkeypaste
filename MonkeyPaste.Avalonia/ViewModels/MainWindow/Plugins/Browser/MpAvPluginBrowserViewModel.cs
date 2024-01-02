@@ -1,16 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Selection;
 using Avalonia.Data;
-using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.RightsManagement;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -29,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const string LEDGER_URL = @"https://github.com/monkeypaste/mp-plugin-list/raw/main/ledger.json";
+        public const string LEDGER_URL = @"https://raw.githubusercontent.com/monkeypaste/ledger/master/ledger.json";
 
         #endregion
 
@@ -145,6 +142,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedTabIdx):
                     PerformFilterCommand.Execute(null);
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanUninstall)));
                     break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
