@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpAnnotationNodeFormat :
-        MpOmitNullJsonObject,
-        MpILabelText,
+    public class MpAnnotationNodeFormat : MpILabelText,
         MpIIconResource,
         MpIClampedValue,
         MpIAnnotationNode,

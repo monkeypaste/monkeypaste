@@ -1,9 +1,39 @@
-﻿using Newtonsoft.Json;
+﻿using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpJsonConverter {
+        public static string SerializeJsonObject(this object obj, JsonSerializerSettings settings = default) {
+            return SerializeObject(obj, settings);
+        }
+        public static string SerializeJsonObjectToBase64(this object obj, JsonSerializerSettings settings = default, Encoding enc = default) {
+            return SerializeObjectToBase64JsonStr(obj, settings, enc);
+        }
+
+        public static MpPluginParameterRequestFormat ParseParamRequest(string json) {
+            var req_lookup = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            if (req_lookup != null &&
+                req_lookup.TryGetValue("items", out var itemsObj) && itemsObj is JArray items_jarray) {
+                Dictionary<object, string> param_lookup = new Dictionary<object, string>();
+                foreach (var kvp_jtoken in items_jarray) {
+                    if (kvp_jtoken.SelectToken("paramId", false) is JToken param_token &&
+                        kvp_jtoken.SelectToken("value", false) is JToken val_token) {
+
+                        param_lookup.Add(param_token.Value<string>(), val_token.Value<string>());
+                    }
+                }
+                return new MpPluginParameterRequestFormat() {
+                    items = param_lookup.Select(x => new MpParameterRequestItemFormat(x.Key, x.Value)).ToList()
+                };
+            }
+            return null;
+        }
+
         public static T DeserializeObject<T>(object obj) where T : new() {
             if (obj is string objStr) {
                 try {

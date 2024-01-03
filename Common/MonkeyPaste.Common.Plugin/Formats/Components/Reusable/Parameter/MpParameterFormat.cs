@@ -55,7 +55,7 @@ namespace MonkeyPaste.Common.Plugin {
         string Value { get; }
     }
 
-    public class MpParameterFormat : MpJsonObject, MpIParamterValueProvider {
+    public class MpParameterFormat : MpIParamterValueProvider {
         #region Interfaces
 
         #region MpIParameterValueProvider Implementation
@@ -188,7 +188,7 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
 
-    public class MpPluginParameterValueFormat : MpJsonObject {
+    public class MpPluginParameterValueFormat {
         public string value { get; set; } = string.Empty;
         public string label { get; set; } = string.Empty;
         public bool isDefault { get; set; } = false;

@@ -48,46 +48,12 @@
 
         <!--  EXPANDERS  -->
         <Style Selector="Expander.header">
-            <Style.Resources>
-                <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
-                <!--<SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
-                <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="White" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <SolidColorBrush x:Key="ExpanderContentBackground" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="0.3" />
-
-                <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPointerOver}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
-                <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPressed" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPressed}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
-
-                <SolidColorBrush x:Key="ExpanderChevronForeground" Color="White" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <SolidColorBrush x:Key="ExpanderChevronForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <SolidColorBrush x:Key="ExpanderChevronBackgroundPointerOver" Color="Transparent" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
-                <!--<SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
-
-                <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="White" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <!--<SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
-
-            </Style.Resources>
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Stretch" />
-            <Setter Property="ExpandDirection"
-                    Value="Down" />
-            <Setter Property="CornerRadius"
-                    Value="10" />
             <Setter Property="Margin"
                     Value="10,0,20,0" />
         </Style>
 
 
         <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left" />
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
             <Setter Property="FontSize"
                     Value="20" />
         </Style>

@@ -3,12 +3,10 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-
-
-    public class MpQuillDelta : MpOmitNullJsonObject {
+    public class MpQuillDelta {
         public static MpQuillDelta Parse(string json) {
-            var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
+            var req_lookup = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            //var req_lookup = MJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
             if (req_lookup != null &&
                 req_lookup.TryGetValue("ops", out var itemsObj) && itemsObj is JArray items_jarray) {
                 Dictionary<object, string> param_lookup = new Dictionary<object, string>();
@@ -27,7 +25,7 @@ namespace MonkeyPaste.Common.Plugin {
         public List<Op> ops { get; set; }
     }
 
-    public class Op : MpOmitNullJsonObject {
+    public class Op {
         public object insert { get; set; }
         public Attributes attributes { get; set; }
 
@@ -37,7 +35,7 @@ namespace MonkeyPaste.Common.Plugin {
 
     }
 
-    public class DeltaRange : MpOmitNullJsonObject, MpITextRange {
+    public class DeltaRange : MpITextRange {
         public int index { get; set; }
         public int length { get; set; }
 
@@ -49,7 +47,7 @@ namespace MonkeyPaste.Common.Plugin {
         int MpITextRange.Length =>
             length;
     }
-    public class Attributes : MpOmitNullJsonObject {
+    public class Attributes {
         public string align { get; set; }
         public int? indent { get; set; }
         public string templateGuid { get; set; }
@@ -88,19 +86,19 @@ namespace MonkeyPaste.Common.Plugin {
 
 
 
-    public class ImageInsert : MpOmitNullJsonObject {
+    public class ImageInsert {
         public string image { get; set; }
     }
 
 
-    public class TableCellLine : MpOmitNullJsonObject {
+    public class TableCellLine {
         public string rowspan { get; set; }
         public string colspan { get; set; }
         public string row { get; set; }
         public string cell { get; set; }
     }
 
-    public class TableCol : MpOmitNullJsonObject {
+    public class TableCol {
         public string width { get; set; }
     }
 

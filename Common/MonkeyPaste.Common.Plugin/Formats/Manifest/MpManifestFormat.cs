@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpManifestFormat : MpOmitNullJsonObject {
+    public class MpManifestFormat {
         #region Statics
 
         #endregion

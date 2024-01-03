@@ -1,14 +1,9 @@
 ﻿using Avalonia.Input;
-using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
-using MonoMac.AppKit;
-using MonoMac.CoreText;
-using MonoMac.Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static partial class MpAvPlatformDataObjectExtensions {
@@ -23,24 +18,30 @@ namespace MonkeyPaste.Common.Avalonia {
             return ido.GetAllDataFormats().ToDictionary(x => x, x => ido.Get(x));
         }
         public static IEnumerable<string> GetAllDataFormats(this IDataObject ido) {
-            if (ido == null ||
+            try {
+                if (ido == null ||
                 ido.GetDataFormats() is not IEnumerable<string> dfl) {
-                return new string[] { };
-            }
-            List<string> formats = dfl.ToList();
-            if (ido.GetFiles() is IEnumerable<object> fps) {
-                // only inlcude file names if present
-                if (fps.Count() > 0) {
-                    if (!formats.Contains(MpPortableDataFormats.Files)) {
-                        formats.Add(MpPortableDataFormats.Files);
-                    }
-                } else {
-                    formats.Remove(MpPortableDataFormats.Files);
+                    return new string[] { };
                 }
+                List<string> formats = dfl.ToList();
+                if (ido.GetFiles() is IEnumerable<object> fps) {
+                    // only inlcude file names if present
+                    if (fps.Count() > 0) {
+                        if (!formats.Contains(MpPortableDataFormats.Files)) {
+                            formats.Add(MpPortableDataFormats.Files);
+                        }
+                    } else {
+                        formats.Remove(MpPortableDataFormats.Files);
+                    }
 
+                }
+                // return non-null (workaround since sysdo can't remove)
+                return formats.Where(x => ido.Get(x) != null);
             }
-            // return non-null (workaround since sysdo can't remove)
-            return formats.Where(x => ido.Get(x) != null);
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading data formats. ", ex);
+                return new List<string>();
+            }
         }
 
         public static IEnumerable<string> GetFilesAsPaths(this IDataObject dataObject) {

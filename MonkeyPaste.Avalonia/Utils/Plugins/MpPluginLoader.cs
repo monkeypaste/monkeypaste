@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
             try {
                 string install_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginRootDir);
                 if (FindInvariantManifestPaths(install_dir) is not { } inv_manifests ||
-                    inv_manifests.FirstOrDefault() is not string manifest_path) {
+                    ResolveManifestPath(inv_manifests.FirstOrDefault()) is not string manifest_path) {
                     return false;
                 }
                 bool success = await LoadPluginAsync(manifest_path, true);
@@ -493,6 +493,10 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
             }
+            if (!MpFileIo.CreateDirectory(target_dir)) {
+                // shouldn't really happen
+                return null;
+            }
             // write zip to target dir
             string temp_package_zip_path = MpFileIo.WriteByteArrayToFile(Path.Combine(target_dir, Path.GetRandomFileName()), package_bytes);
 
@@ -706,8 +710,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private static string ResolveManifestPath(string inv_manifest_path) {
             // find closest manifest culture matching users culture
-            if (inv_manifest_path.ToLower().Contains("core")) {
-
+            if (!inv_manifest_path.IsFile()) {
+                return null;
             }
             string manifest_dir = Path.GetDirectoryName(inv_manifest_path);
             string man_culture_code = MpLocalizationHelpers.ResolveMissingCulture(

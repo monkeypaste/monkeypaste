@@ -145,7 +145,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedTabIdx):
                     PerformFilterCommand.Execute(null);
                     RefreshItemsState();
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanUninstall)));
                     break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));

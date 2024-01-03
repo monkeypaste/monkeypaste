@@ -282,6 +282,9 @@
   <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
     <value>Modal Restart Ignore</value>
   </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>Modal Restart Now Or Later</value>
+  </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
     <value>Confirm End Append</value>
   </data>

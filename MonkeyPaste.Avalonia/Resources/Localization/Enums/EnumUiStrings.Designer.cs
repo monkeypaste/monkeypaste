@@ -1573,6 +1573,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Restart Now Or Later.
+        /// </summary>
+        public static string MpNotificationType_ModalRestartNowOrLater {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalRestartNowOrLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Text Box Ok Cancel Message Box.
         /// </summary>
         public static string MpNotificationType_ModalTextBoxOkCancelMessageBox {

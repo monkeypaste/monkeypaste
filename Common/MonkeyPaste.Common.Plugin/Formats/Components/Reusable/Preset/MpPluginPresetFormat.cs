@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpPluginPresetFormat : MpJsonObject {
+    public class MpPluginPresetFormat  {
         public string guid { get; set; }
 
         public bool isDefault { get; set; } = false;
@@ -13,7 +13,7 @@ namespace MonkeyPaste.Common.Plugin {
         public List<MpPluginPresetValueFormat> values { get; set; } = new List<MpPluginPresetValueFormat>();
     }
 
-    public class MpPluginPresetValueFormat : MpJsonObject {
+    public class MpPluginPresetValueFormat  {
         public string paramId { get; set; } = string.Empty;
         public string value { get; set; } = string.Empty;
         public MpPluginPresetValueFormat() { }

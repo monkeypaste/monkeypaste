@@ -33,10 +33,10 @@ namespace MonkeyPaste.Avalonia {
                     component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
                     components = new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
                     break;
-                case MpPluginPackageType.Http:
-                    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
-                    components = new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
-                    break;
+                //case MpPluginPackageType.Http:
+                //    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
+                //    components = new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
+                //    break;
                 default:
                     throw new MpUserNotifiedException($"Unhandled plugin bundle type for '{plugin.title}' defined at '{manifestPath}' with type '{plugin.packageType}'");
             }

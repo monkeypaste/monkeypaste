@@ -47,7 +47,7 @@ namespace MonkeyPaste {
         bool IsSubSelectable { get; }
         Task LoadContentAsync(bool isSearchEnabled = true);
         Task ReloadAsync();
-        Task<bool> UpdateContentAsync(MpJsonObject contentJsonObj);
+        Task<bool> UpdateContentAsync(object contentJsonObj);
 
     }
 }

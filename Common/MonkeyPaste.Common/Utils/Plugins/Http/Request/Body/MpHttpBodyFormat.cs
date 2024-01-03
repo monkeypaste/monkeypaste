@@ -1,7 +1,7 @@
-﻿namespace MonkeyPaste.Common.Plugin {
+﻿namespace MonkeyPaste.Common{
     #region Request
 
-    public class MpHttpBodyFormat : MpJsonObject {
+    public class MpHttpBodyFormat  {
         public string mode { get; set; }
         public string raw { get; set; }
         public string encoding { get; set; } = "UTF8";

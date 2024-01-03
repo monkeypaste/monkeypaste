@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
             IsContentSubSelectable;
 
 
-        Task<bool> MpIContentView.UpdateContentAsync(MpJsonObject contentJsonObj) =>
+        Task<bool> MpIContentView.UpdateContentAsync(object contentJsonObj) =>
             PerformUpdateContentRequestAsync(contentJsonObj);
 
 
@@ -1273,7 +1273,7 @@ namespace MonkeyPaste.Avalonia {
             LoadContentAsync().FireAndForgetSafeAsync();
         }
 
-        public async Task<bool> PerformUpdateContentRequestAsync(MpJsonObject jsonObj) {
+        public async Task<bool> PerformUpdateContentRequestAsync(object jsonObj) {
             Dispatcher.UIThread.VerifyAccess();
             while (!IsEditorInitialized || !IsEditorLoaded) {
                 // likely to happen for new content that's been annotated

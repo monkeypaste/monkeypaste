@@ -263,6 +263,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DataGrid.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Expander.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Image.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Label.axaml" />
@@ -1297,6 +1298,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Gradients.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\SlideWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Expander.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\DataGrid.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ContextMenu.axaml" />

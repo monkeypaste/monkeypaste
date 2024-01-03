@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,13 @@ namespace CoreAnnotator {
             resp.dataObjectLookup = new Dictionary<string, object>();
             if (delta.ops.Count > 0) {
                 // content was annotated, return it as dataobjectitem
-                resp.dataObjectLookup.Add(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject());
+                resp.dataObjectLookup.Add(
+                    MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT,
+                    JsonConvert.SerializeObject(
+                        delta,
+                        new JsonSerializerSettings() {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }));
 
             }
             return resp;

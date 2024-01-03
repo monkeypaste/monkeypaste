@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
             await LoadContentAsync();
         }
 
-        public async Task<bool> UpdateContentAsync(MpJsonObject contentJsonObj) {
+        public async Task<bool> UpdateContentAsync(object contentJsonObj) {
             // annotations not supported, so return false to not confuse transaction history
 
             await Task.Delay(1);

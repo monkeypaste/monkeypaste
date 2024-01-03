@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using HtmlAgilityPack;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -101,9 +102,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public string IconBase64 { get; set; }
+        private string _iconBase64;
+        public string IconBase64 {
+            get {
+                if (_iconBase64 == null) {
+                    return MpBase64Images.JigsawPiece;
+                }
+                return _iconBase64;
+            }
+            set {
+                if (_iconBase64 != value) {
+                    _iconBase64 = value;
+                    OnPropertyChanged(nameof(IconBase64));
+                }
+            }
+        }
 
-        public string ReadMeMarkDownText { get; set; } = string.Empty;
+        public string ReadMeHtml { get; set; } = string.Empty;
 
         #endregion
 
@@ -388,16 +403,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             PluginGuid = plugin_guid;
 
-            if (string.IsNullOrEmpty(PluginIconUri)) {
-                IconBase64 = MpBase64Images.JigsawPiece;
-            } else {
-                var icon_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginIconUri, PluginManifestDirectory);
-                if (icon_bytes == null || icon_bytes.Length == 0) {
-                    IconBase64 = MpBase64Images.JigsawPiece;
-                } else {
-                    IconBase64 = icon_bytes.ToBase64String();
-                }
-            }
+            await LoadReadMeAsync();
             RefreshState();
 
             await CreateRootDependencyViewModelAsync();
@@ -409,6 +415,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CanUninstall));
             OnPropertyChanged(nameof(CanUpdate));
             OnPropertyChanged(nameof(IsUpdatePending));
+            OnPropertyChanged(nameof(IconBase64));
         }
 
         public override string ToString() {
@@ -424,6 +431,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvPluginItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(PluginFormat):
+                    LoadIconAsync().FireAndForgetSafeAsync();
+                    break;
                 case nameof(IsSelected):
                     if (!IsSelected) {
                         break;
@@ -445,8 +455,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private async Task LoadIconAsync() {
+            if (string.IsNullOrEmpty(PluginIconUri) ||
+                _iconBase64 != null) {
+                return;
+            }
+            var icon_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginIconUri, PluginManifestDirectory);
+            if (icon_bytes == null || icon_bytes.Length == 0) {
+                // assign plugin jigsaw so it only tries to find icon once
+                IconBase64 = MpBase64Images.JigsawPiece;
+            } else {
+                IconBase64 = icon_bytes.ToBase64String();
+            }
+        }
         private async Task LoadReadMeAsync() {
-            if (!string.IsNullOrEmpty(ReadMeMarkDownText)) {
+            if (!string.IsNullOrEmpty(ReadMeHtml)) {
                 // already loaded
                 return;
             }
@@ -457,7 +480,33 @@ namespace MonkeyPaste.Avalonia {
             IsReadmeLoading = true;
 
             var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginManifestDirectory);
-            ReadMeMarkDownText = read_me_bytes.ToDecodedString();
+            string read_me_html = MpAvStringMarkDownToHtmlConverter.Instance.Convert(read_me_bytes.ToDecodedString(), null, null, null) as string;
+            var html_doc = new HtmlDocument();
+            html_doc.LoadHtml(read_me_html);
+
+            if (PluginReadMeUri.ToLower().SplitNoEmpty("readme.md") is { } uri_parts &&
+                uri_parts.Any() &&
+                uri_parts.FirstOrDefault() is string read_me_base_uri &&
+                Uri.IsWellFormedUriString(read_me_base_uri, UriKind.Absolute)) {
+
+                var img_nodes = html_doc.DocumentNode.SelectNodes("//img");
+                if (img_nodes != null) {
+                    foreach (var img_node in img_nodes) {
+                        if (img_node.GetAttributeValue("src", string.Empty) is not string src ||
+                            Uri.IsWellFormedUriString(src, UriKind.Absolute)) {
+                            // no src or already absolute
+                            continue;
+                        }
+                        string new_src = read_me_base_uri + src;
+                        if (Uri.IsWellFormedUriString(new_src, UriKind.Absolute)) {
+                            // adjust relative uri to readmes base path
+                            img_node.SetAttributeValue("src", new_src);
+                        }
+                    }
+                }
+                read_me_html = html_doc.DocumentNode.OuterHtml;
+            }
+            ReadMeHtml = read_me_html;
             IsReadmeLoading = false;
         }
         private async Task CreateRootDependencyViewModelAsync() {

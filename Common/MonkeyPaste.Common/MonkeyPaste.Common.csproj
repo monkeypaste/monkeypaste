@@ -9,8 +9,11 @@
 
   <ItemGroup>
     <Compile Remove="Formats\**" />
+    <Compile Remove="Utils\Json\Converter\**" />
     <EmbeddedResource Remove="Formats\**" />
+    <EmbeddedResource Remove="Utils\Json\Converter\**" />
     <None Remove="Formats\**" />
+    <None Remove="Utils\Json\Converter\**" />
     <None Remove="Microsoft.CSharp" />
   </ItemGroup>
 
@@ -29,8 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utils\Json\Converter\" />
     <Folder Include="Utils\Command\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
   </ItemGroup>
 
   <Target Name="CommonReqsDone" AfterTargets="PostBuildEvent"></Target>

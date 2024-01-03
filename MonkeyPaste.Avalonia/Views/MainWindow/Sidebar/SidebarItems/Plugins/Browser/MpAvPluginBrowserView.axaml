@@ -67,7 +67,7 @@
 
         <Style Selector=":is(TextBlock).detailLabel">
             <Setter Property="FontWeight"
-                    Value="SemiBold" />
+                    Value="ExtraBold" />
             <Setter Property="TextWrapping"
                     Value="NoWrap" />
             <Setter Property="HorizontalAlignment"
@@ -472,6 +472,7 @@
 
                     <!--  DESCRIPTION  -->
                     <SelectableTextBlock Grid.Row="3"
+                                         FontStyle="Italic"
                                          Text="{x:Static local:UiStrings.PluginBrowserDescriptionLabel}"
                                          Classes="detailLabel" />
                     <SelectableTextBlock Grid.Row="4"
@@ -592,9 +593,15 @@
                     <Expander Grid.Row="14"
                               Grid.Column="0"
                               Grid.ColumnSpan="3"
+                              Classes="header"
+                              
+                              HorizontalAlignment="Stretch"
                               Margin="0,10,0,0"
                               IsVisible="{Binding PluginReadMeUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                               IsExpanded="{Binding IsReadmeExpanded, Mode=TwoWay}">
+                        <Expander.Resources>
+                            <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Left</HorizontalAlignment>
+                        </Expander.Resources>
                         <Expander.Header>
                             <SelectableTextBlock Classes="detailLabel"
                                                  Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
@@ -613,7 +620,7 @@
                                               VerticalAlignment="Stretch"
                                               MinHeight="150"
                                               Opacity="{Binding IsVisible, ConverterParameter=0|1, ElementName=ReadmeBusyContainer, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
-                                              Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
+                                              Text="{Binding ReadMeHtml}" />
                             </Grid>
 
                         </Expander.Content>

@@ -1,8 +1,6 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
-//using Newtonsoft.Json;
-//using Newtonsoft.Json.Converters;
-//using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

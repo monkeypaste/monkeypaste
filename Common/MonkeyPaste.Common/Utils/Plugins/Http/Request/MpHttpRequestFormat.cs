@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace MonkeyPaste.Common.Plugin {
-    public class MpHttpRequestFormat : MpJsonObject {
+namespace MonkeyPaste.Common{
+    public class MpHttpRequestFormat  {
         public string method { get; set; }
         public List<MpHttpHeaderItemFormat> header { get; set; } = new List<MpHttpHeaderItemFormat>();
         public MpHttpUrlFormat url { get; set; }

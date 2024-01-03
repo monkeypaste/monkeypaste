@@ -386,7 +386,7 @@ namespace MonkeyPaste.Avalonia {
             if (Parent.GetContentView() is not MpIContentView cv) {
                 return;
             }
-            if (tivm.GetTransactionDelta() is not MpJsonObject updateObj) {
+            if (tivm.GetTransactionDelta() is not object updateObj) {
                 updateObj = tivm.GetTransactionAnnotation();
             }
             if (updateObj == null) {

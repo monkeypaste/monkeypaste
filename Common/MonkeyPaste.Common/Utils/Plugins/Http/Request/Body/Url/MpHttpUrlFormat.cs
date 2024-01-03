@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace MonkeyPaste.Common.Plugin {
+namespace MonkeyPaste.Common{
     #region Request
 
-    public class MpHttpUrlFormat : MpJsonObject {
+    public class MpHttpUrlFormat  {
         public string raw { get; set; }
         public string protocol { get; set; }
 

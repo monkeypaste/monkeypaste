@@ -18,4 +18,8 @@
     }
     public interface MpIAnnotationNode : MpITreeNode, MpIAnnotation {
     }
+    public interface MpITextRange {
+        int Offset { get; }
+        int Length { get; }
+    }
 }

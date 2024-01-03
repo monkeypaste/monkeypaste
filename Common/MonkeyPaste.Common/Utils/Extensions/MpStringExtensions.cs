@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

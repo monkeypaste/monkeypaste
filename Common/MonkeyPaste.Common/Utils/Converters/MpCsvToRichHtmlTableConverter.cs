@@ -1,47 +1,12 @@
 ﻿using HtmlAgilityPack;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common {
-    public class MpCsvFormatProperties {
-        public static string EXCEL_EOF_MARKER = "\0"; // tested in excel 365 on windows csv terminates with \0 on a trailing line
-        public static string CSV_DEFAULT_COLUMN_SEPARATOR = ",";
-        public static string CSV_DEFAULT_ROW_SEPARATOR = Environment.NewLine;
 
-        public static double CSV_DEFAULT_FORMATTED_FONT_SIZE = 14.0d;
-        public static string CSV_DEFAULT_FORMATTED_FONT_FAMILY = "Consolas";
-
-        public static MpCsvFormatProperties Default => new MpCsvFormatProperties();
-        public static MpCsvFormatProperties DefaultBase64Value => new MpCsvFormatProperties() { IsValueBase64 = true };
-
-        public string EocSeparator { get; set; } = CSV_DEFAULT_COLUMN_SEPARATOR;
-        public string EorSeparator { get; set; } = CSV_DEFAULT_ROW_SEPARATOR;
-
-        public double FormattedFontSize { get; set; } = CSV_DEFAULT_FORMATTED_FONT_SIZE;
-        public string FormattedFontFamily { get; set; } = CSV_DEFAULT_FORMATTED_FONT_FAMILY;
-
-        public bool IsValueBase64 { get; set; } = false;
-
-        public Encoding ValueEncoding { get; set; } = null; // default/null resolves to UTF-8 (or tentatively based on locale)
-
-        public string EncodeValue(string value) {
-            return IsValueBase64 ? value.ToBase64String(ValueEncoding) : value;
-        }
-
-        public string DecodeValue(string value) {
-            if (IsValueBase64) {
-                if (!value.IsStringBase64()) {
-                    // predefined values may not be encoded..
-                    return value;
-                }
-                return value.ToStringFromBase64(ValueEncoding);
-            }
-            return value;
-        }
-
-    }
     public static class MpCsvToRichHtmlTableConverter {
         public const string RICH_HTML_TABLE_PREFIX = "<div class='quill-better-table-wrapper'>";
         public static string RichHtmlTableToCsv(string richHtmlTableStr, MpCsvFormatProperties csvProps = null) {

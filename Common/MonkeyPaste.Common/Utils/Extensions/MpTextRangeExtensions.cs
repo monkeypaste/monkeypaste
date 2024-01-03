@@ -1,4 +1,8 @@
-﻿namespace MonkeyPaste.Common {
+﻿
+
+using MonkeyPaste.Common.Plugin;
+
+namespace MonkeyPaste.Common {
     public static class MpTextRangeExtensions {
 
 

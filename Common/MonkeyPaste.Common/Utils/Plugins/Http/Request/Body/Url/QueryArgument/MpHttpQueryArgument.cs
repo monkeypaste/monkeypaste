@@ -1,5 +1,5 @@
-﻿namespace MonkeyPaste.Common.Plugin {
-    public class MpHttpQueryArgument : MpJsonObject {
+﻿namespace MonkeyPaste.Common {
+    public class MpHttpQueryArgument {
         public string key { get; set; }
         public string value { get; set; }
         public bool isEnumId { get; set; }

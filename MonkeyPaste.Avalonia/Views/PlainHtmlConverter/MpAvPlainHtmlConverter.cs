@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;

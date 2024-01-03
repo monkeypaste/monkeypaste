@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Globalization;
 using System.Resources.NetStandard;
 
@@ -92,7 +93,13 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
                 output_dir,
                 string.Join(".", output_name_parts));
 
-            MpFileIo.WriteTextToFile(output_path, localized_manifest.SerializeJsonObject().ToPrettyPrintJson());
+            MpFileIo.WriteTextToFile(
+                output_path,
+                JsonConvert.SerializeObject(
+                        localized_manifest,
+                        new JsonSerializerSettings() {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }).ToPrettyPrintJson());
             Console.WriteLine(output_path);
             return output_path;
         }

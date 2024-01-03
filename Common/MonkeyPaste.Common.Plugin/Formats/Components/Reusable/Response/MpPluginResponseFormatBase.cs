@@ -11,5 +11,6 @@ namespace MonkeyPaste.Common.Plugin {
         public List<MpPluginUserNotificationFormat> userNotifications { get; set; } = new();
 
     }
-
+    public class MpAnalyzerPluginResponseFormat : MpPluginResponseFormatBase {
+    }
 }

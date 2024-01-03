@@ -1,5 +1,5 @@
-﻿namespace MonkeyPaste.Common {
-    public class MpParameterRequestItemFormat : MpJsonObject {
+﻿namespace MonkeyPaste.Common.Plugin {
+    public class MpParameterRequestItemFormat {
         public object paramId { get; set; }
         public string value { get; set; } = string.Empty;
         public MpParameterRequestItemFormat() { }

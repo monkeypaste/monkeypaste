@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Plugin {
@@ -9,6 +9,9 @@ namespace MonkeyPaste.Common.Plugin {
     }
     public interface MpISupportHeadlessClipboardComponentFormat : MpIHeadlessComponentFormatBase {
         MpClipboardHandlerFormats GetFormats(MpHeadlessClipboardComponentFormatRequest request);
+    }
+    public class MpAnalyzerPluginFormat : MpPluginContentComponentBaseFormat {
+        //public new MpHttpAnalyzerTransactionFormat http { get; set; }
     }
     public abstract class MpHeadlessComponentFormatRequest : MpPluginRequestFormatBase { }
     public class MpHeadlessClipboardComponentFormatRequest : MpHeadlessComponentFormatRequest { }
@@ -24,7 +27,7 @@ namespace MonkeyPaste.Common.Plugin {
         Task<MpOlePluginResponse> ProcessOleWriteRequestAsync(MpOlePluginRequest request);
     }
 
-    public class MpClipboardHandlerFormats : MpJsonObject {
+    public class MpClipboardHandlerFormats {
         public List<MpClipboardHandlerFormat> readers { get; set; } = new List<MpClipboardHandlerFormat>();
         public List<MpClipboardHandlerFormat> writers { get; set; } = new List<MpClipboardHandlerFormat>();
     }

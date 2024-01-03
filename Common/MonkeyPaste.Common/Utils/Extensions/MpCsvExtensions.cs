@@ -1,54 +1,9 @@
 ﻿
-using System.Collections.Generic;
-using System.Linq;
+using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Common {
     public static class MpCsvExtensions {
-        public static string ToCsv(this IEnumerable<string> strList, MpICustomCsvFormat csvObj) {
-            return ToCsv(strList, csvObj.CsvFormat);
-        }
-        public static string ToCsv(this IEnumerable<string> strList, MpCsvFormatProperties csvProps = null) {
-            if (strList == null || !strList.Any()) {
-                return string.Empty;
-            }
-            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            return
-                string.Join(
-                    csvProps.EocSeparator,
-                    strList.Select(x => csvProps.EncodeValue(x)));
-        }
-        public static List<string> ToListFromCsv(this string csvStr, MpICustomCsvFormat csvObj) {
-            return ToListFromCsv(csvStr, csvObj.CsvFormat);
-        }
-        public static List<string> ToListFromCsv(this string csvStr, MpCsvFormatProperties csvProps = null) {
-            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            return
-                csvStr.SplitNoEmpty(csvProps.EocSeparator)
-                .Select(x => csvProps.DecodeValue(x))
-                .ToList();
-        }
 
-        public static string AddCsvItem(this string csvStr, string item, bool allowDup = true, MpCsvFormatProperties csvProps = null) {
-            csvProps = csvProps ?? MpCsvFormatProperties.Default;
-            var items = csvStr.ToListFromCsv(csvProps);
-            if (allowDup || !items.Contains(item)) {
-                items.Add(item);
-            }
-            return items.ToCsv(csvProps);
-        }
-
-        public static string RemoveCsvItem(this string csvStr, string item, bool removeAll = true, MpCsvFormatProperties csvProps = null) {
-            csvProps = csvProps ?? MpCsvFormatProperties.Default;
-            var items = csvStr.ToListFromCsv(csvProps);
-            List<string> to_remove = new();
-            foreach (var curitem in items) {
-                if (curitem == item && (removeAll || !to_remove.Any())) {
-                    to_remove.Add(curitem);
-                }
-            }
-            to_remove.ForEach(x => items.Remove(x));
-            return items.ToCsv(csvProps);
-        }
 
         public static string CsvStrToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {
             return MpCsvToRichHtmlTableConverter.CreateRichHtmlTableFromCsv(csvStr, csvProps);

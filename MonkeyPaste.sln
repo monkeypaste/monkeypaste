@@ -22,12 +22,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common", "Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj", "{E641A0B5-0461-47F3-91BB-340BE880A545}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1672D6A5-2A5F-49BF-BF89-787167B155F6} = {1672D6A5-2A5F-49BF-BF89-787167B155F6}
+		{400473EB-9A5B-4E8D-816D-5BC5B315C542} = {400473EB-9A5B-4E8D-816D-5BC5B315C542}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Plugin", "Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj", "{400473EB-9A5B-4E8D-816D-5BC5B315C542}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E641A0B5-0461-47F3-91BB-340BE880A545} = {E641A0B5-0461-47F3-91BB-340BE880A545}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Avalonia", "Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj", "{42B33C51-4F2A-4877-A98D-44033E7719EB}"
 EndProject
@@ -87,7 +85,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Plugin.L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextToSpeech", "Plugins\TextToSpeech\TextToSpeech.csproj", "{3DAB2B62-FDFA-4CE9-AA1F-21272214FEE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Common.Plugin.Ledgerizer", "Common\MonkeyPaste.Common.Plugin.Ledgerizer\MonkeyPaste.Common.Plugin.Ledgerizer.csproj", "{FAD6E9CC-5AD5-41E3-B18C-CEACBBD71CFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Plugin.Ledgerizer", "Common\MonkeyPaste.Common.Plugin.Ledgerizer\MonkeyPaste.Common.Plugin.Ledgerizer.csproj", "{FAD6E9CC-5AD5-41E3-B18C-CEACBBD71CFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ledger", "Common\Ledger\Ledger.csproj", "{2130A973-3591-4D13-BF61-A5B5B48D5B9F}"
 EndProject
@@ -1531,12 +1529,12 @@ Global
 		{B1FF1AE0-D75F-468E-B69E-035578D78F49} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
 		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
 	EndGlobalSection
 EndGlobal
