@@ -4,6 +4,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,26 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvExtensions {
+        #region Plugins
+
+        public static MpIManagePluginComponents GetComponentManager(this MpManifestFormat mf) {
+            if (mf == null) {
+                return new MpPluginFallbackComponentManager();
+            }
+            switch (mf.pluginType) {
+                case MpPluginType.Clipboard:
+                    return MpAvClipboardHandlerCollectionViewModel.Instance;
+                case MpPluginType.Analyzer:
+                case MpPluginType.Fetcher:
+                    return MpAvAnalyticItemCollectionViewModel.Instance;
+                default:
+                    return new MpPluginFallbackComponentManager();
+
+            }
+        }
+        #endregion
+
+
         #region Adorners        
         public static async Task<IEnumerable<MpAvAdornerBase>> GetControlAdornersAsync(this Control control, int timeout_ms = 1000) {
             Dispatcher.UIThread.VerifyAccess();

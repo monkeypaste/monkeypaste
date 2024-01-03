@@ -363,6 +363,13 @@
                 <Button Content="{x:Static local:UiStrings.NtfUserActionRestartButtonLabel}"
                         IsVisible="{Binding ShowRestartButton}"
                         Command="{Binding RestartCommand}" />
+                <!--  RESTART NOW, LATER  -->
+                <Button Content="{x:Static local:UiStrings.NtfRestartNowButtonText}"
+                        IsVisible="{Binding ShowRestartNowButton}"
+                        Command="{Binding RestartCommand}" />
+                <Button Content="{x:Static local:UiStrings.NtfRestartLaterButtonText}"
+                        IsVisible="{Binding ShowCancelButton}"
+                        Command="{Binding CancelCommand}" />
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
                 <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"
                         IsVisible="{Binding ShowIgnoreButton}"

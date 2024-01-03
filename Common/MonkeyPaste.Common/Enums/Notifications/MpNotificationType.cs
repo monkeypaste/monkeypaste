@@ -58,6 +58,7 @@
         ModalProgressCancelMessageBox,
         ModalBusyMessageBox,
         ModalRestartIgnore,
+        ModalRestartNowOrLater,
 
         ConfirmEndAppend,
 

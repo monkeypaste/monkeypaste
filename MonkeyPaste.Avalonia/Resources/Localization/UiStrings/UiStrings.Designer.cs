@@ -3750,6 +3750,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Something went wrong. To restore this plugin you will need to restart. Would you like to restart now or later?.
+        /// </summary>
+        public static string NtfPluginUpdateFailedText {
+            get {
+                return ResourceManager.GetString("NtfPluginUpdateFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Failed.
+        /// </summary>
+        public static string NtfPluginUpdateFailedTitle {
+            get {
+                return ResourceManager.GetString("NtfPluginUpdateFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To complete update you will need to restart. Would you like to restart now or later?.
+        /// </summary>
+        public static string NtfPluginUpdateReadyText {
+            get {
+                return ResourceManager.GetString("NtfPluginUpdateReadyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Ready.
+        /// </summary>
+        public static string NtfPluginUpdateReadyTitle {
+            get {
+                return ResourceManager.GetString("NtfPluginUpdateReadyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I&apos;m an indy dev please show some support!.
         /// </summary>
         public static string NtfRateAppText {
@@ -3818,6 +3854,24 @@ namespace MonkeyPaste.Avalonia {
         public static string NtfResetSharedValueText {
             get {
                 return ResourceManager.GetString("NtfResetSharedValueText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Later.
+        /// </summary>
+        public static string NtfRestartLaterButtonText {
+            get {
+                return ResourceManager.GetString("NtfRestartLaterButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Now.
+        /// </summary>
+        public static string NtfRestartNowButtonText {
+            get {
+                return ResourceManager.GetString("NtfRestartNowButtonText", resourceCulture);
             }
         }
         
@@ -4183,11 +4237,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pending Restart.
+        /// </summary>
+        public static string PluginPendingUpdateButton {
+            get {
+                return ResourceManager.GetString("PluginPendingUpdateButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn about plugins.
         /// </summary>
         public static string PluginsHelpTooltip {
             get {
                 return ResourceManager.GetString("PluginsHelpTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} was successfully updated.
+        /// </summary>
+        public static string PluginUpdatedNtfText {
+            get {
+                return ResourceManager.GetString("PluginUpdatedNtfText", resourceCulture);
             }
         }
         

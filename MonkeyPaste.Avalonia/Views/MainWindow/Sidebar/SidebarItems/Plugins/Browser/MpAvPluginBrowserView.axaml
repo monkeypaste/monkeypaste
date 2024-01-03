@@ -117,6 +117,30 @@
                     Value="Center" />
 
         </Style>
+
+        <!--  INSTALL/UNINSTALL BUTTON TEXT  -->
+        <Style Selector="Button#ToggleInstallSelectedPluginButton TextBlock">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.PluginBrowserInstallLabel}" />
+
+        </Style>
+        <Style Selector="Button#ToggleInstallSelectedPluginButton.installed TextBlock">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.PluginBrowserUninstallLabel}" />
+
+        </Style>
+
+        <!--  UPDATE/PENDING BUTTON TEXT  -->
+        <Style Selector="Button#UpdateSelectedPluginButton TextBlock">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.PluginBrowserUpdateLabel}" />
+
+        </Style>
+        <Style Selector="Button#UpdateSelectedPluginButton.pending TextBlock">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.PluginPendingUpdateButton}" />
+
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="PluginRootContainer"
           RowDefinitions="Auto,*"
@@ -403,12 +427,12 @@
 
                         <!--  TOGGLE INSTALL BUTTON  -->
                         <Button x:Name="ToggleInstallSelectedPluginButton"
+                                Classes.installed="{Binding HasInstallation}"
                                 Classes="defaultButton textOnlyButton manageButton"
                                 Command="{Binding ToggleIsPluginInstalledCommand}">
                             <Grid>
 
-                                <TextBlock IsVisible="{Binding !IsBusy}"
-                                           Text="{Binding ToggleInstallText}" />
+                                <TextBlock IsVisible="{Binding !IsBusy}" />
                                 <local:MpAvBusySpinnerView Width="15"
                                                            Height="15"
                                                            IsVisible="{Binding IsBusy}"
@@ -431,13 +455,13 @@
                     <Button x:Name="UpdateSelectedPluginButton"
                             Grid.Row="2"
                             Margin="0,10,0,0"
+                            Classes.pending="{Binding IsUpdatePending}"
                             Classes="defaultButton textOnlyButton manageButton"
-                            IsVisible="{Binding IsInstalled}"
+                            IsVisible="{Binding HasInstallation}"
                             Command="{Binding UpdatePluginCommand}">
                         <Grid>
 
-                            <TextBlock IsVisible="{Binding !IsBusy}"
-                                       Text="{x:Static local:UiStrings.PluginBrowserUpdateLabel}" />
+                            <TextBlock IsVisible="{Binding !IsBusy}" />
                             <local:MpAvBusySpinnerView Width="15"
                                                        Height="15"
                                                        IsVisible="{Binding IsBusy}"
@@ -565,16 +589,35 @@
                     </TreeView>
 
                     <!--  README VIEW  -->
-                    <!--<SelectableTextBlock Grid.Row="14"
-                                         Grid.Column="0"
-                                         Classes="detailLabel"
-                                         IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                         Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
-                    <av:HtmlPanel Grid.Row="15"
-                                  Grid.Column="0"
-                                  Grid.ColumnSpan="3"
-                                  Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />-->
+                    <Expander Grid.Row="14"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Margin="0,10,0,0"
+                              IsVisible="{Binding PluginReadMeUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                              IsExpanded="{Binding IsReadmeExpanded, Mode=TwoWay}">
+                        <Expander.Header>
+                            <SelectableTextBlock Classes="detailLabel"
+                                                 Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
+                        </Expander.Header>
+                        <Expander.Content>
+                            <Grid>
+                                <local:MpAvBusySpinnerView x:Name="ReadmeBusyContainer"
+                                                           Grid.Row="1"
+                                                           Grid.Column="2"
+                                                           Width="30"
+                                                           Height="30"
+                                                           IsVisible="{Binding IsReadmeLoading}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center" />
+                                <av:HtmlPanel HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
+                                              MinHeight="150"
+                                              Opacity="{Binding IsVisible, ConverterParameter=0|1, ElementName=ReadmeBusyContainer, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                                              Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
+                            </Grid>
 
+                        </Expander.Content>
+                    </Expander>
                 </Grid>
             </ScrollViewer>
         </Border>

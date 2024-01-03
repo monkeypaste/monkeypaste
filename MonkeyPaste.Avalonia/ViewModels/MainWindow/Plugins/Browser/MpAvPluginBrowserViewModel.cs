@@ -65,6 +65,7 @@ namespace MonkeyPaste.Avalonia {
                 return _tabs;
             }
         }
+        public ObservableCollection<MpManifestFormat> AllManifests { get; set; } = [];
         public IList<string> RecentPluginSearches { get; private set; }
 
         public ObservableCollection<MpAvPluginItemViewModel> Items { get; private set; } = new ObservableCollection<MpAvPluginItemViewModel>();
@@ -124,6 +125,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void RefreshItemsState() {
+            Items.ForEach(x => x.RefreshState());
             OnPropertyChanged(nameof(CanUpdateCount));
             OnPropertyChanged(nameof(FilteredItems));
             SelectedItem = FilteredItems.FirstOrDefault();
@@ -142,6 +144,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedTabIdx):
                     PerformFilterCommand.Execute(null);
+                    RefreshItemsState();
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanUninstall)));
                     break;
                 case nameof(SelectedItem):
@@ -164,9 +167,9 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(FilteredItems));
         }
-        private async Task<MpAvPluginItemViewModel> CreatePluginItemViewModelAsync(MpManifestFormat pf) {
+        private async Task<MpAvPluginItemViewModel> CreatePluginItemViewModelAsync(string plugin_guid) {
             var pivm = new MpAvPluginItemViewModel(this);
-            await pivm.InitializeAsync(pf);
+            await pivm.InitializeAsync(plugin_guid);
             return pivm;
         }
 
@@ -239,11 +242,12 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task CreateAllItemsAsync() {
             Items.Clear();
-            var all_manifests = new List<MpManifestFormat>();
-            all_manifests.AddRange(await GetRemoteManifests());
-            all_manifests.AddRange(MpPluginLoader.Plugins.Select(x => x.Value));
-            foreach (var mf in all_manifests.OrderBy(x => x.title)) {
-                var pivm = await CreatePluginItemViewModelAsync(mf);
+            AllManifests.Clear();
+            AllManifests.AddRange(await GetRemoteManifests());
+            AllManifests.AddRange(MpPluginLoader.Plugins.Select(x => x.Value));
+
+            foreach (var mf in AllManifests.OrderBy(x => x.title).GroupBy(x => x.guid)) {
+                var pivm = await CreatePluginItemViewModelAsync(mf.Key);
                 Items.Add(pivm);
             }
             RefreshItemsState();
@@ -272,7 +276,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenPluginFolderCommand => new MpCommand(
             () => {
-                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpPluginLoader.PluginRootFolderPath);
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpPluginLoader.PluginRootDir);
             });
 
         public ICommand ClearFilterTextCommand => new MpCommand(

@@ -1,24 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 
-    public abstract class MpOmitNullJsonObject : MpJsonObject {
-        public override string SerializeJsonObject() {
 
-            return base.SerializeJsonObject(new JsonSerializerSettings() {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-        }
-        public override string SerializeJsonObjectToBase64(Encoding enc = null) {
-            return base.SerializeJsonObjectToBase64(new JsonSerializerSettings() {
-                NullValueHandling = NullValueHandling.Ignore
-            }, enc);
-        }
-    }
     public class MpQuillDelta : MpOmitNullJsonObject {
         public static MpQuillDelta Parse(string json) {
             var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);

@@ -4,7 +4,6 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +11,17 @@ using System.Windows.Input;
 
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIManagePluginComponents {
+        Task<bool> InstallAsync(string pluginGuid, string packageUrl);
+        Task<bool> BeginUpdateAsync(string pluginGuid, string packageUrl);
+        Task<bool> UninstallAsync(string pluginGuid);
+    }
+
     public class MpAvAnalyticItemCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncCollectionObject,
+        MpIManagePluginComponents,
         MpIAsyncComboBoxViewModel,
         MpISidebarItemViewModel,
         MpIPopupMenuPicker {
@@ -23,6 +29,59 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIManagePluginComponents Implementation
+
+        async Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl) {
+            bool success = await MpPluginLoader.InstallPluginAsync(pluginGuid, packageUrl);
+            if (!success) {
+                return false;
+            }
+            IsBusy = true;
+
+            var aivm = await CreateAnalyticItemViewModelAsync(pluginGuid);
+            Items.Add(aivm);
+
+            IsBusy = false;
+
+            return true;
+        }
+        async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
+            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } aivm) {
+                MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
+                return false;
+            }
+            IsBusy = true;
+            // NOTE assume confirm handled in calling command (plugin browser)
+            await RemoveAnalyzerReferencesAsync(aivm, true);
+            // clear local ref
+            aivm = null;
+
+            // remove from plugin dir
+            bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
+
+            IsBusy = false;
+            if (SelectedItem == null) {
+                SelectedItem = SortedItems.FirstOrDefault();
+            }
+            return success;
+        }
+
+        async Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string plugin_guid, string package_url) {
+            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } aivm) {
+                MpDebug.Break($"Error updating plugin guid '{plugin_guid}' can't find analyer");
+                return false;
+            }
+            IsBusy = true;
+
+            await RemoveAnalyzerReferencesAsync(aivm, false);
+            bool success = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url);
+
+            IsBusy = false;
+            return success;
+        }
+
+        #endregion
 
         #region MpIPopupMenuPicker Implementation
 
@@ -257,6 +316,7 @@ namespace MonkeyPaste.Avalonia {
                 SubItems = sub_items
             };
         }
+
         #endregion
 
         #region Private Methods
@@ -374,117 +434,6 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 core_aipvm.Parent.PerformAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
-            });
-
-        public MpIAsyncCommand<object> InstallAnalyzerCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (args is not object[] argParts ||
-                    argParts[0] is not string plugin_guid ||
-                    argParts[1] is not string package_url) {
-                    return;
-                }
-                bool success = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
-                if (!success) {
-                    return;
-                }
-                var aivm = await CreateAnalyticItemViewModelAsync(plugin_guid);
-                Items.Add(aivm);
-            });
-        public MpIAsyncCommand<object> UninstallAnalyzerCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                IsBusy = true;
-
-                string plugin_guid = args as string;
-
-                var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
-                if (aivm == null) {
-                    MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
-                    return;
-                }
-                // NOTE assume confirm handled in calling command (plugin browser)
-                await RemoveAnalyzerReferencesAsync(aivm, true);
-                // clear local ref
-                aivm = null;
-
-                // remove from plugin dir
-                bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
-
-                IsBusy = false;
-                if (SelectedItem == null) {
-                    SelectedItem = SortedItems.FirstOrDefault();
-                }
-            });
-
-        public MpIAsyncCommand<object> UpdatePluginCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (args is not object[] argParts ||
-                    argParts[0] is not string plugin_guid ||
-                    argParts[1] is not string package_url) {
-                    return;
-                }
-                IsBusy = true;
-                var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
-                MpDebug.Assert(aivm != null, $"Error upgrading plugin guid '{plugin_guid}' can't find analyer");
-
-                // backup original plugin dir
-                string backup_dir = MpPluginLoader.CreatePluginBackup(plugin_guid, out string org_dir);
-
-                if (backup_dir == null) {
-                    // somthing went wrong backing up
-                    IsBusy = false;
-                    return;
-                }
-
-                await RemoveAnalyzerReferencesAsync(aivm, false);
-                // remove local ref
-                aivm = null;
-
-                bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid, false);
-                if (success) {
-                    try {
-                        success = await MpPluginLoader.InstallPluginAsync(plugin_guid, package_url);
-                        if (!success) {
-                            throw new Exception("Plugin install error");
-                        }
-                        aivm = await CreateAnalyticItemViewModelAsync(plugin_guid);
-                        if (aivm.PluginGuid == null) {
-                            throw new Exception("Plugin init error");
-                        }
-                        Items.Add(aivm);
-                    }
-                    catch (Exception ex) {
-                        // if something goes wrong 
-                        MpConsole.WriteTraceLine($"Error updating plugin. ", ex);
-                        success = false;
-                    }
-                }
-
-                if (!success) {
-                    bool revert_success = false;
-                    // attempt to put backup back in plugin folder
-                    if (backup_dir.IsDirectory() &&
-                        Directory.GetFiles(backup_dir) is string[] bfl && bfl.Length > 0) {
-                        if (org_dir.IsDirectory()) {
-                            // delete orginal, maybe corrupt
-                            MpFileIo.DeleteDirectory(org_dir);
-                        }
-                        if (!org_dir.IsDirectory()) {
-                            // only continue if dir was deleted
-
-                            string backup_plugin_dir = bfl[0];
-                            MpFileIo.CopyDirectory(backup_plugin_dir, MpPluginLoader.PluginRootFolderPath, true);
-                            revert_success = org_dir.IsDirectory();
-                        }
-                    }
-                    if (!revert_success) {
-                        Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                            notificationType: MpNotificationType.FileIoWarning,
-                            body: UiStrings.CommonUnknownErrorText).FireAndForgetSafeAsync();
-                    }
-                }
-                MpFileIo.DeleteDirectory(backup_dir);
-
-                IsBusy = false;
             });
 
         #endregion

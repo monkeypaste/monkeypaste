@@ -128,6 +128,15 @@ namespace MonkeyPaste.Avalonia {
                     $"{guid}.{MpPluginLoader.MANIFEST_FILE_EXT}");
             }
         }
+
+        [JsonIgnore]
+        public string UpdateDir {
+            get {
+                return Path.Combine(
+                    MpPluginLoader.PluginUpdatesDir,
+                    guid);
+            }
+        }
         [JsonIgnore]
         public DateTime manifestLastModifiedDateTime { get; set; }
 

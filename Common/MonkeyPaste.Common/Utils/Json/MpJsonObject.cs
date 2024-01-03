@@ -21,4 +21,17 @@ namespace MonkeyPaste.Common {
             return SerializeJsonObject();
         }
     }
+    public abstract class MpOmitNullJsonObject : MpJsonObject {
+        public override string SerializeJsonObject() {
+
+            return base.SerializeJsonObject(new JsonSerializerSettings() {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+        }
+        public override string SerializeJsonObjectToBase64(Encoding enc = null) {
+            return base.SerializeJsonObjectToBase64(new JsonSerializerSettings() {
+                NullValueHandling = NullValueHandling.Ignore
+            }, enc);
+        }
+    }
 }

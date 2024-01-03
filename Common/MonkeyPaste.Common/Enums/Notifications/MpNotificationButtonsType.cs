@@ -16,6 +16,7 @@
         Rate,
         Update,
         ResetAllResetSharedResetUnsharedCancel,
-        RestartIgnoreCancel
+        RestartIgnoreCancel,
+        RestartNowLater,
     }
 }

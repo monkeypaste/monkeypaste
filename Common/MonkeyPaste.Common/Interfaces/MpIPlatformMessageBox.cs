@@ -16,6 +16,13 @@ namespace MonkeyPaste.Common {
             object owner = null,
             object iprog_and_or_cancel_token_arg = default);
 
+        Task ShowRestartNowOrLaterMessageBoxAsync(
+            string title,
+            string message = default,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null);
+
         Task<bool> ShowRestartIgnoreCancelMessageBoxAsync(
             string title,
             string message = default,

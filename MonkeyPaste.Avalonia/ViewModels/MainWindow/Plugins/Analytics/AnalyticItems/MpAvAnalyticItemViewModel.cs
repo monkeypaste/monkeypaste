@@ -339,6 +339,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAnalyticItemViewModel() : base(null) { }
 
         public MpAvAnalyticItemViewModel(MpAvAnalyticItemCollectionViewModel parent) : base(parent) {
+            MpMessenger.RegisterGlobal(ReceivedClipTrayMessage);
             PropertyChanged += MpAnalyticItemViewModel_PropertyChanged;
             Items.CollectionChanged += PresetViewModels_CollectionChanged;
         }
@@ -387,7 +388,16 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            MpMessenger.Register<MpMessageType>(MpAvClipTrayViewModel.Instance, ReceivedClipTrayMessage);
+            if (MpPluginLoader.UpdatedPluginGuids.Contains(PluginGuid)) {
+                // show plugin updated ntf
+                Mp.Services.NotificationBuilder
+                    .ShowMessageAsync(
+                        msgType: MpNotificationType.PluginUpdated,
+                        title: UiStrings.PluginUpdatedNtfTitle,
+                        body: string.Format(UiStrings.PluginUpdatedNtfText, Title),
+                        iconSourceObj: IconId).FireAndForgetSafeAsync();
+            }
+
 
             IsBusy = false;
         }

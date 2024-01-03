@@ -1,17 +1,4 @@
-﻿
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-
-namespace MonkeyPaste.Common.Plugin {
-    public enum MpPluginType {
-        None = 0,
-        Clipboard,
-        Input,
-        Restful,
-        Gui,
-        Composite
-    }
+﻿namespace MonkeyPaste.Common.Plugin {
     public class MpPluginFormat : MpManifestFormat {
         public MpHeadlessPluginFormat headless { get; set; } = null;
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;

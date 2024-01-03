@@ -5,6 +5,21 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpIPlatformMessageBox {
+        public async Task ShowRestartNowOrLaterMessageBoxAsync(
+            string title,
+            string message = default,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null) {
+            // NOTE only returns if later is chosen
+            _ = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalRestartNowOrLater,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor,
+                                    owner: owner);
+        }
         public async Task<bool> ShowRestartIgnoreCancelMessageBoxAsync(
             string title,
             string message = default,

@@ -71,6 +71,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool ShowRestartButton { get; set; }
         public bool ShowShutdownButton { get; set; }
+        public bool ShowRestartNowButton { get; set; }
+        public bool ShowLaterButton { get; set; }
 
         public bool ShowYesButton { get; set; }
         public bool ShowNoButton { get; set; }
@@ -178,6 +180,10 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(nf);
             switch (ButtonsType) {
+                case MpNotificationButtonsType.RestartNowLater:
+                    ShowRestartNowButton = true;
+                    ShowLaterButton = true;
+                    break;
                 case MpNotificationButtonsType.RestartIgnoreCancel:
                     ShowRestartButton = true;
                     ShowIgnoreButton = true;

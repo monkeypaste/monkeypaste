@@ -29,7 +29,7 @@
   <!-- SYSTEM PROPERTIES -->
 
   <PropertyGroup>
-    <DefaultLangVersion>11.0</DefaultLangVersion>
+    <DefaultLangVersion>Latest</DefaultLangVersion>
     <Nullable>disable</Nullable>
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>

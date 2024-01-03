@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -104,14 +105,20 @@ namespace MonkeyPaste.Avalonia {
 
         public string ReadMeMarkDownText { get; set; } = string.Empty;
 
-        public string ToggleInstallText =>
-            IsInstalled ||
-            (IsRemote && HasLocalInstall) ?
-                UiStrings.PluginBrowserUninstallLabel :
-                UiStrings.PluginBrowserInstallLabel;
         #endregion
 
         #region State
+        public bool IsReadmeExpanded { get; set; }
+        public bool IsReadmeLoading { get; set; }
+        public bool IsUpdatePending {
+            get {
+                if (InstalledFormat is not MpPluginWrapper pw) {
+                    return false;
+                }
+                return pw.UpdateDir.IsDirectory();
+            }
+        }
+
         public bool IsVisible {
             get {
                 if (Parent == null ||
@@ -120,9 +127,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 switch (Parent.SelectedTabType) {
                     case MpPluginBrowserTabType.Browse:
-                        return IsRemote;
+                        return HasRemotes;
                     case MpPluginBrowserTabType.Installed:
-                        return IsInstalled;
+                        return HasInstallation;
                     case MpPluginBrowserTabType.Updates:
                         return CanUpdate;
                     default:
@@ -137,50 +144,107 @@ namespace MonkeyPaste.Avalonia {
             .Cast<MpIAsyncObject>()
             .Any(x => x.IsBusy);
 
-        public bool IsInstalled =>
-            !IsRemote && HasLocalInstall;
-
+        public bool HasInstallation =>
+            InstalledFormat != null;
+        public bool HasRemotes =>
+            RemoteFormats.Any();
         public bool CanUninstall =>
             Parent != null &&
             Parent.SelectedTabType == MpPluginBrowserTabType.Installed &&
-            PluginFormat != null && !MpPluginLoader.CorePluginGuids.Contains(PluginGuid);
-        public bool IsRemote =>
-            PluginFormat is not MpPluginFormat;
-        public bool HasLocalInstall =>
-            MpPluginLoader.Plugins.Any(x => x.Value != null && x.Value.guid == PluginGuid);
+            PluginFormat != null &&
+            !IsUpdatePending &&
+            !MpPluginLoader.CorePluginGuids.Contains(PluginGuid);
 
         public bool CanUpdate {
             get {
-                return PluginVersion.CompareTo(MaxKnownVersion) != 0;
+                if (InstalledFormat == null ||
+                   SortedRemoteFormats.FirstOrDefault() is not { } max_remote) {
+                    return false;
+                }
+                return InstalledFormat.version.ToVersion() < max_remote.version.ToVersion();
             }
         }
 
-        public Version MaxKnownVersion {
+
+        // NOTE SelectedRemoteFormatIdx is a placeholder if multiple versions get supported
+        public int SelectedRemoteFormatIdx { get; set; } = 0;
+
+        #region Format props
+
+
+        private MpManifestFormat _pluginFormat;
+        public MpManifestFormat PluginFormat {
+            get {
+                MpManifestFormat result = null;
+                if (Parent == null) {
+                    result = AllFormats.FirstOrDefault();
+                } else {
+                    switch (Parent.SelectedTabType) {
+                        case MpPluginBrowserTabType.Installed:
+                            result = InstalledFormat;
+                            break;
+                        case MpPluginBrowserTabType.Browse:
+                            result = SelectedRemoteFormat;
+                            break;
+                        case MpPluginBrowserTabType.Updates:
+                            if (InstalledFormat != null &&
+                                SelectedRemoteFormat != null &&
+                                InstalledFormat.version.ToVersion() != SelectedRemoteFormat.version.ToVersion()) {
+                                result = SelectedRemoteFormat;
+                            } else {
+                                result = null;
+                            }
+                            break;
+
+                    }
+                }
+                bool changed = result != _pluginFormat;
+                _pluginFormat = result;
+                if (changed) {
+                    OnPropertyChanged(nameof(PluginFormat));
+                }
+                return _pluginFormat;
+            }
+        }
+
+        IEnumerable<MpManifestFormat> AllFormats {
             get {
                 if (Parent == null) {
-                    return PluginVersion;
+                    yield break;
                 }
-                var versions = Parent.Items.Where(x => x.PluginGuid == PluginGuid);
-                if (versions.Any()) {
-                    return
-                        versions
-                        .OrderByDescending(x => x.PluginVersion)
-                        .FirstOrDefault()
-                        .PluginVersion;
+                foreach (var mf in Parent.AllManifests) {
+                    if (mf.guid == PluginGuid) {
+                        yield return mf;
+                    }
                 }
-                return PluginVersion;
             }
         }
-        private Version _pluginVersion;
-        public Version PluginVersion {
+        IList<MpManifestFormat> RemoteFormats =>
+            AllFormats
+            .Where(x => x is not MpPluginFormat)
+            .ToList();
+        MpPluginFormat InstalledFormat =>
+            AllFormats
+            .OfType<MpPluginFormat>()
+            .FirstOrDefault();
+
+        MpManifestFormat[] SortedRemoteFormats =>
+            RemoteFormats
+            .OrderByDescending(x => x.version.ToVersion())
+            .ToArray();
+
+        MpManifestFormat SelectedRemoteFormat {
             get {
-                if (_pluginVersion == null ||
-                    PluginVersionText.ToVersion().CompareTo(_pluginVersion) != 0) {
-                    _pluginVersion = PluginVersionText.ToVersion();
+                if (SelectedRemoteFormatIdx >= RemoteFormats.Count) {
+                    return null;
                 }
-                return _pluginVersion;
+                return SortedRemoteFormats[SelectedRemoteFormatIdx];
             }
         }
+
+
+        #endregion
+
         #endregion
 
         #region Model
@@ -305,16 +369,8 @@ namespace MonkeyPaste.Avalonia {
 
             }
         }
-        public string PluginGuid {
-            get {
-                if (PluginFormat == null) {
-                    return string.Empty;
-                }
-                return PluginFormat.guid;
 
-            }
-        }
-        public MpManifestFormat PluginFormat { get; set; }
+        public string PluginGuid { get; private set; }
         #endregion
 
         #endregion
@@ -328,9 +384,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync(MpManifestFormat pf) {
+        public async Task InitializeAsync(string plugin_guid) {
             IsBusy = true;
-            PluginFormat = pf;
+            PluginGuid = plugin_guid;
 
             if (string.IsNullOrEmpty(PluginIconUri)) {
                 IconBase64 = MpBase64Images.JigsawPiece;
@@ -348,13 +404,15 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
         public void RefreshState() {
-            OnPropertyChanged(nameof(IsInstalled));
+            OnPropertyChanged(nameof(PluginFormat));
+            OnPropertyChanged(nameof(HasInstallation));
             OnPropertyChanged(nameof(CanUninstall));
             OnPropertyChanged(nameof(CanUpdate));
+            OnPropertyChanged(nameof(IsUpdatePending));
         }
 
         public override string ToString() {
-            return $"{PluginFormat} {(IsInstalled ? "LOCAL" : "REMOTE")}";
+            return $"{PluginFormat} {(HasInstallation ? "LOCAL" : "REMOTE")}";
         }
 
         #endregion
@@ -371,7 +429,6 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     RefreshState();
-                    //LoadReadMeAsync().FireAndForgetSafeAsync(this);
                     OnPropertyChanged(nameof(RootDependencyCollection));
                     break;
                 case nameof(IsAnyBusy):
@@ -379,6 +436,11 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    break;
+                case nameof(IsReadmeExpanded):
+                    if (IsReadmeExpanded) {
+                        LoadReadMeAsync().FireAndForgetSafeAsync();
+                    }
                     break;
             }
         }
@@ -392,15 +454,11 @@ namespace MonkeyPaste.Avalonia {
                 // no readme
                 return;
             }
-            bool was_busy = IsBusy;
-            IsBusy = true;
-
-            // temp test delay
-            await Task.Delay(1000);
+            IsReadmeLoading = true;
 
             var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginManifestDirectory);
             ReadMeMarkDownText = read_me_bytes.ToDecodedString();
-            IsBusy = was_busy;
+            IsReadmeLoading = false;
         }
         private async Task CreateRootDependencyViewModelAsync() {
             RootDependencyViewModel.Items.Clear();
@@ -446,18 +504,15 @@ namespace MonkeyPaste.Avalonia {
         public ICommand InstallPluginCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-
-                await MpAvAnalyticItemCollectionViewModel.Instance
-                    .InstallAnalyzerCommand.ExecuteAsync(new object[] { PluginGuid, PackageUrl });
+                if (PluginFormat.GetComponentManager() is { } cm) {
+                    await cm.InstallAsync(PluginGuid, PackageUrl);
+                }
 
                 Parent.PerformFilterCommand.Execute("refresh");
                 IsBusy = false;
-                OnPropertyChanged(nameof(IsInstalled));
-                OnPropertyChanged(nameof(CanUpdate));
-                OnPropertyChanged(nameof(ToggleInstallText));
 
             }, () => {
-                return !IsInstalled;
+                return !HasInstallation;
             });
 
         public ICommand UninstallPluginCommand => new MpAsyncCommand(
@@ -472,61 +527,40 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = true;
-                if (MpAvAnalyticItemCollectionViewModel.Instance.Items.Any(x => x.PluginGuid == PluginGuid)) {
-
-                    await MpAvAnalyticItemCollectionViewModel.Instance
-                        .UninstallAnalyzerCommand.ExecuteAsync(PluginGuid);
-                } else if (MpAvClipboardHandlerCollectionViewModel.Instance.Items.Any(x => x.PluginGuid == PluginGuid)) {
-                    await MpAvClipboardHandlerCollectionViewModel.Instance
-                        .UninstallHandlerCommand.ExecuteAsync(PluginGuid);
-                } else {
-                    //MpDebug.Break($"Plugin not found '{PluginGuid}' trying to delete");
-                    await MpPluginLoader.DeletePluginByGuidAsync(PluginGuid);
+                if (PluginFormat.GetComponentManager() is { } cm) {
+                    await cm.UninstallAsync(PluginGuid);
                 }
 
                 // refresh list to remove this plugin
                 Parent.PerformFilterCommand.Execute("refresh");
-
                 IsBusy = false;
             }, () => {
-                return IsInstalled && CanUninstall;
+                return HasInstallation && CanUninstall;
             });
 
         public ICommand UpdatePluginCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-                string url = PackageUrl;
-                if (IsInstalled &&
-                    Parent.Items.FirstOrDefault(x => x.PluginGuid == PluginGuid && x.PluginVersion.CompareTo(MaxKnownVersion) == 0) is { } remote_vm) {
-                    // workaround since update list shows local packages, use the package url from the remote manifest
-                    url = remote_vm.PackageUrl;
+                if (PluginFormat.GetComponentManager() is { } cm) {
+                    await cm.BeginUpdateAsync(PluginGuid, PackageUrl);
                 }
-
-                await MpAvAnalyticItemCollectionViewModel.Instance
-                        .UpdatePluginCommand.ExecuteAsync(new object[] { PluginGuid, url });
 
                 IsBusy = false;
 
-                if (MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid) is { } kvp && kvp.Value != null) {
-                    // reload w/ updated manifest
-                    await InitializeAsync(kvp.Value);
-                }
-                OnPropertyChanged(nameof(CanUpdate));
-
-                Parent.RefreshItemsState();
+                RefreshState();
             }, () => {
-                return CanUpdate;
+                return CanUpdate && !IsUpdatePending;
             });
 
         public ICommand ToggleIsPluginInstalledCommand => new MpCommand(
             () => {
-                if (IsInstalled) {
+                if (HasInstallation) {
                     UninstallPluginCommand.Execute(null);
                 } else {
                     InstallPluginCommand.Execute(null);
                 }
             }, () => {
-                if (IsInstalled) {
+                if (HasInstallation) {
                     return UninstallPluginCommand.CanExecute(null);
                 } else {
                     return InstallPluginCommand.CanExecute(null);

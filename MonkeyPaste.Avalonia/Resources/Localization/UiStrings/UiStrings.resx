@@ -2491,4 +2491,29 @@ You can restart now and complete the update by re-installing, ignore this and up
   <data name="PluginUpdateErrorTitle" xml:space="preserve">
     <value>Update Error</value>
   </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Something went wrong. To restore this plugin you will need to restart. Would you like to restart now or later?</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Update Failed</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>To complete update you will need to restart. Would you like to restart now or later?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Update Ready</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Restart Now</value>
+  </data>
+  <data name="PluginPendingUpdateButton" xml:space="preserve">
+    <value>Pending Restart</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} was successfully updated</value>
+    <comment>Plugin Title</comment>
+  </data>
 </root>

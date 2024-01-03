@@ -3,11 +3,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpManifestFormat :
-        MpOmitNullJsonObject {
+    public class MpManifestFormat : MpOmitNullJsonObject {
         #region Statics
 
         #endregion
@@ -40,6 +38,9 @@ namespace MonkeyPaste.Common.Plugin {
 
         [JsonConverter(typeof(StringEnumConverter))]
         public MpPluginPackageType packageType { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public virtual MpPluginType pluginType { get; set; } = MpPluginType.Analyzer;
         public List<MpPluginDependency> dependencies { get; set; }
 
         public DateTime? datePublished { get; set; }

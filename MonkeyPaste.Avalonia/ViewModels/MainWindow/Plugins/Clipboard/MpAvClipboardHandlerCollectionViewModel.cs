@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpIMenuItemViewModel,
+        MpIManagePluginComponents,
         MpISidebarItemViewModel,
         MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
@@ -29,12 +30,62 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
-        private static List<string> _oleReqGuids = new List<string>();
-
         #endregion
 
         #region Interfaces
+
+        #region MpIManagePluginComponents Implementation (unimplemented)
+
+        Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl) {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string pluginGuid, string packageUrl) {
+            throw new NotImplementedException();
+        }
+
+        async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
+            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } aivm) {
+                MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find handler");
+                return false;
+            }
+            // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
+
+            IsOleProcessingBlocked = true;
+            while (IsProcessingOleRequest) {
+                await Task.Delay(100);
+            }
+            while (aivm.IsBusy) {
+                // wait if executing
+                await Task.Delay(100);
+            }
+            IsBusy = true;
+
+            Mp.Services.ClipboardMonitor.StopMonitor();
+
+            await Task.WhenAll(
+                aivm.Items
+                .SelectMany(x => x.Items)
+                .Select(x => x.Preset.DeleteFromDatabaseAsync()));
+
+            // remove from plugin dir
+            bool success = await MpPluginLoader.DeletePluginByGuidAsync(aivm.PluginGuid);
+
+            // remove from collection
+            Items.Remove(aivm);
+            OnPropertyChanged(nameof(Items));
+
+            IsBusy = false;
+
+            Mp.Services.ClipboardMonitor.StartMonitor(true);
+            IsOleProcessingBlocked = false;
+
+            if (SelectedItem == null) {
+                SelectedItem = SortedItems.FirstOrDefault();
+            }
+            return success;
+        }
+        #endregion
 
         #region MpITreeItemViewModel Implementation
 
@@ -638,56 +689,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand<object> UninstallHandlerCommand => new MpAsyncCommand<object>(
-            async (args) => {
-
-                string plugin_guid = args as string;
-
-                var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
-                if (aivm == null) {
-                    MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
-                    return;
-                }
-                // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
-
-                IsOleProcessingBlocked = true;
-                while (IsProcessingOleRequest) {
-                    await Task.Delay(100);
-                }
-                while (aivm.IsBusy) {
-                    // wait if executing
-                    await Task.Delay(100);
-                }
-                IsBusy = true;
-
-                Mp.Services.ClipboardMonitor.StopMonitor();
-
-
-                await Task.WhenAll(
-                    aivm.Items
-                    .SelectMany(x => x.Items)
-                    .Select(x => x.Preset.DeleteFromDatabaseAsync()));
-
-                // remove from plugin dir
-                await MpPluginLoader.DeletePluginByGuidAsync(aivm.PluginGuid);
-
-                // remove from collection
-                Items.Remove(aivm);
-                OnPropertyChanged(nameof(Items));
-
-                IsBusy = false;
-
-                Mp.Services.ClipboardMonitor.StartMonitor(true);
-                IsOleProcessingBlocked = false;
-
-                if (SelectedItem == null) {
-                    SelectedItem = SortedItems.FirstOrDefault();
-                }
-
-            }) {
-
-
-        };
         #endregion
     }
 }
