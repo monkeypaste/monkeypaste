@@ -379,7 +379,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string GetPresetParamJson() {
-            return MpJsonConverter.SerializeObject(Items.Select(x => new[] { x.ParamId, x.CurrentValue }).ToList());
+            return MpJsonExtensions.SerializeObject(Items.Select(x => new[] { x.ParamId, x.CurrentValue }).ToList());
         }
 
         public bool CanDelete(object args) {

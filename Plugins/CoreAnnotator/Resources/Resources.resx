@@ -142,7 +142,7 @@
     <value>Core, Annotate, Text, Link, Color, Parsing, Address, Phone, Email, Currency,Finance</value>
   </data>
   <data name="PluginTitle" xml:space="preserve">
-    <value>Text Annotator</value>
+    <value>Core Text Annotator</value>
   </data>
   <data name="UrlLabel" xml:space="preserve">
     <value>Url</value>

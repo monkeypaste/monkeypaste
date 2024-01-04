@@ -30,13 +30,15 @@ namespace MonkeyPaste.Common.Plugin {
         }
 
         private static MpAnnotationNodeFormat ToNode(JObject jobj) {
+            jobj = jobj == null ? new JObject() : jobj;
             MpAnnotationNodeFormat anf = null;
             if (jobj.SelectToken("left") == null) {
                 anf = JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(jobj.ToString());
             } else {
                 anf = JsonConvert.DeserializeObject<MpImageAnnotationNodeFormat>(jobj.ToString());
             }
-            if (jobj.SelectToken("children") is JToken jtoken) {
+            if (jobj.SelectToken("children") is JToken jtoken &&
+                jtoken != null) {
                 JArray children = JArray.Parse(jtoken.ToString());
 
                 anf.children = children.Select(x => Parse(x.ToString())).ToList();

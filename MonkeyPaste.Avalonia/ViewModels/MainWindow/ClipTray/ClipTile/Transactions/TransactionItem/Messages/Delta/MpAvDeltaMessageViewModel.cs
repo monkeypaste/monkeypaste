@@ -42,12 +42,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await Task.Delay(1);
 
-            Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
+            Json = jsonOrParsedFragment.ToStringOrEmpty();
             if (Items != null) {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
-            QuillDelta = MpJsonConverter.DeserializeObject<MpQuillDelta>(jsonOrParsedFragment);
+            QuillDelta = MpJsonExtensions.DeserializeObject<MpQuillDelta>(Json);
             if (QuillDelta != null) {
 
             }

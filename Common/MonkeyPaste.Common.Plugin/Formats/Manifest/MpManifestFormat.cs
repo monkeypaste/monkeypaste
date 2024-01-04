@@ -1,7 +1,6 @@
 ﻿
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
@@ -43,7 +42,6 @@ namespace MonkeyPaste.Common.Plugin {
         public virtual MpPluginType pluginType { get; set; } = MpPluginType.Analyzer;
         public List<MpPluginDependency> dependencies { get; set; }
 
-        public DateTime? datePublished { get; set; }
         #endregion
 
         public override string ToString() {

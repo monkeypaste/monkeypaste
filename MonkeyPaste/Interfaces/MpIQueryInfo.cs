@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -10,7 +9,7 @@ namespace MonkeyPaste {
         Advanced
     }
 
-    public interface MpIQueryResultProvider : MpIJsonObject {
+    public interface MpIQueryResultProvider {
         bool IsQuerying { get; }
         bool CanRequery { get; }
         public int TotalAvailableItemsInQuery { get; }

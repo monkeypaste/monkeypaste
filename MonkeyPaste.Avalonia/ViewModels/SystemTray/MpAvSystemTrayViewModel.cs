@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        static string VERSION_CHECK_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/version.php";
+        static string VERSION_CHECK_URL = $"{MpServerConstants.VERSION_BASE_URL}/version.php";
         static string CHANGE_LOG_BASE_URL = $"{MpServerConstants.DOCS_BASE_URL}/versions";
 
         private static MpAvSystemTrayViewModel _instance;

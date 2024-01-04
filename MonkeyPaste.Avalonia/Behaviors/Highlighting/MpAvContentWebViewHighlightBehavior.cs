@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                     isAbsoluteOffset = true,
                     curIdxOffset = SelectedIdx
                 };
-                wv.SendMessage($"activateFindReplace_ext('{msg.SerializeJsonObjectToBase64()}')");
+                wv.SendMessage($"activateFindReplace_ext('{msg.SerializeObjectToBase64()}')");
             }
         }
         public override void ClearHighlighting() {

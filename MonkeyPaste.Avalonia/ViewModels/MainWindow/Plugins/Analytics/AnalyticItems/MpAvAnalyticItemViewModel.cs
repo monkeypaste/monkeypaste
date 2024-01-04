@@ -394,7 +394,7 @@ namespace MonkeyPaste.Avalonia {
                     .ShowMessageAsync(
                         msgType: MpNotificationType.PluginUpdated,
                         title: UiStrings.PluginUpdatedNtfTitle,
-                        body: string.Format(UiStrings.PluginUpdatedNtfText, Title),
+                        body: string.Format(UiStrings.PluginUpdatedNtfText, Title, PluginFormat.version),
                         iconSourceObj: IconId).FireAndForgetSafeAsync();
             }
 

@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         protected virtual MpAnalyzerPluginResponseFormat DecodeResponseOutput(string output) {
-            return MpJsonConverter.DeserializeBase64Object<MpAnalyzerPluginResponseFormat>(output);
+            return MpJsonExtensions.DeserializeBase64Object<MpAnalyzerPluginResponseFormat>(output);
             // if (MpJsonConverter.DeserializeBase64Object<MpAnalyzerPluginResponseFormat>(output) is MpAnalyzerPluginResponseFormat aprf {
             //object result = JsonConvert.DeserializeObject(jsonStr);
             //if (result is JObject jobj) {

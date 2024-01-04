@@ -195,7 +195,7 @@ xcopy /s /D /Y "$(TargetDir)\*" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(Proj
 copy "$(ProjectDir)*" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
 </PostBuildEvent>
   </PropertyGroup>-->
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(PushPlugins)' == 'True'">
     <!--<ItemGroup>
         <MySourceFiles Include="$(TargetDir)\*.*"/>
     </ItemGroup>

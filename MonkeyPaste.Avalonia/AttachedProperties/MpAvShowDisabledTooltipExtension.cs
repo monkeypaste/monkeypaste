@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using System.Linq;
@@ -80,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
                     .FirstOrDefault(x =>
                         x.Bounds.Contains(e.GetPosition(x.Parent as Visual)) &&
                         x.IsEffectivelyVisible &&
-                        !x.IsEnabled);
+                        (!x.IsEnabled || !x.IsEffectivelyEnabled));
             if (disabled_child_under_pointer != null) {
                 // manually show tooltip
                 ToolTip.SetIsOpen(disabled_child_under_pointer, true);
@@ -90,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
                         .Where(x =>
                             ToolTip.GetIsOpen(x) &&
                             x != disabled_child_under_pointer &&
-                            !x.IsEnabled);
+                            (!x.IsEnabled || !x.IsEffectivelyEnabled));
             foreach (var dcst in disabled_tooltips_to_hide) {
                 ToolTip.SetIsOpen(dcst, false);
             }

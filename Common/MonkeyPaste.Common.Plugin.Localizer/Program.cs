@@ -36,7 +36,7 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
             invariant_resource_path = invariant_resource_path.Replace("\"", string.Empty);
 
             string templated_manifest_json = MpFileIo.ReadTextFromFile(templated_manifest_path);
-            MpPluginFormat templated_manifest = MpJsonConverter.DeserializeObject<MpPluginFormat>(templated_manifest_json);
+            MpPluginFormat templated_manifest = MpJsonExtensions.DeserializeObject<MpPluginFormat>(templated_manifest_json);
             var lang_codes = string.IsNullOrWhiteSpace(target_lang_code) ?
                 MpLocalizationHelpers.GetAvailableCultures(
                     Path.GetDirectoryName(invariant_resource_path),

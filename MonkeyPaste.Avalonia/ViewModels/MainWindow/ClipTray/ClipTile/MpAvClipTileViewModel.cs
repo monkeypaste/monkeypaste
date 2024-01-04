@@ -999,7 +999,7 @@ namespace MonkeyPaste.Avalonia {
                                 fileIconBase64 = x.IconBase64
                             }).ToList()
                         };
-                        var itemData = fl_frag.SerializeJsonObjectToBase64();
+                        var itemData = fl_frag.SerializeObjectToBase64();
                         return itemData;
                     default:
                         return CopyItemData;

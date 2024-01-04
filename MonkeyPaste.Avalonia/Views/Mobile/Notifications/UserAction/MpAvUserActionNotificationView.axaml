@@ -368,7 +368,7 @@
                         IsVisible="{Binding ShowRestartNowButton}"
                         Command="{Binding RestartCommand}" />
                 <Button Content="{x:Static local:UiStrings.NtfRestartLaterButtonText}"
-                        IsVisible="{Binding ShowCancelButton}"
+                        IsVisible="{Binding ShowLaterButton}"
                         Command="{Binding CancelCommand}" />
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
                 <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"

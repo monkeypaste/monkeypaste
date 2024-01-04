@@ -315,7 +315,7 @@
     <value>Tags:</value>
   </data>
   <data name="PluginBrowserUpdateLabel" xml:space="preserve">
-    <value>Update:</value>
+    <value>Update</value>
   </data>
   <data name="PluginBrowserVersionLabel" xml:space="preserve">
     <value>Version:</value>
@@ -2509,11 +2509,32 @@ You can restart now and complete the update by re-installing, ignore this and up
   <data name="NtfRestartNowButtonText" xml:space="preserve">
     <value>Restart Now</value>
   </data>
-  <data name="PluginPendingUpdateButton" xml:space="preserve">
-    <value>Pending Restart</value>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Pending</value>
   </data>
   <data name="PluginUpdatedNtfText" xml:space="preserve">
-    <value>{0} was successfully updated</value>
-    <comment>Plugin Title</comment>
+    <value>{0} was successfully updated to {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Core plugins are required and cannot be removed.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Installs</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Update is pending. Restart to complete.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>An uninstallation is pending. Please restart if you would like to re-install.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>To complete uninstall you will need to restart. Would you like to restart now or later?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Finish Uninstall?</value>
   </data>
 </root>

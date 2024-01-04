@@ -1,8 +1,8 @@
 {
   "title": "Google Contacts Fetcher",
   "description": "Once authorized, will gatcher your contacts for template automation.",
-  "version": "1.0",
-  "author": "MonkeyPaste LLC",
+  "version": "1.0.0",
+  "author": "Monkey LLC",
   "iconUri": "contacts_icon.png",
   "guid": "0eae9826-b6fe-4b88-80b6-85a4ea35911f",
   "packageType": "Dll",

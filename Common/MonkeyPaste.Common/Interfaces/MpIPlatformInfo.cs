@@ -6,6 +6,7 @@ namespace MonkeyPaste.Common {
         string OsMachineName { get; }
         string OsVersionInfo { get; }
         string OsFileManagerPath { get; }
+        string RuntimeShortName { get; }
 
         string ExecutableName { get; }
         string ExecutingDir { get; }

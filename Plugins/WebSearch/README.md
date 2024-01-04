@@ -11,3 +11,4 @@ This project can be used as a reference for anyone interested in [MonkeyPaste](h
 Here's some highlights of what it demonstrates:
 - URI-encoded content query
 - Error handling with the host application
+- Default Preset definitions

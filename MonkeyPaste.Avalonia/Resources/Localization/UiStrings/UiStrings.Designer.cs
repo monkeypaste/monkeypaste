@@ -3750,6 +3750,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To complete uninstall you will need to restart. Would you like to restart now or later?.
+        /// </summary>
+        public static string NtfPluginUninstallPendingText {
+            get {
+                return ResourceManager.GetString("NtfPluginUninstallPendingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish Uninstall?.
+        /// </summary>
+        public static string NtfPluginUninstallPendingTitle {
+            get {
+                return ResourceManager.GetString("NtfPluginUninstallPendingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Something went wrong. To restore this plugin you will need to restart. Would you like to restart now or later?.
         /// </summary>
         public static string NtfPluginUpdateFailedText {
@@ -4003,6 +4021,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Core plugins are required and cannot be removed..
+        /// </summary>
+        public static string PluginBrowserCoreInstallBtnTooltip {
+            get {
+                return ResourceManager.GetString("PluginBrowserCoreInstallBtnTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credits:.
         /// </summary>
         public static string PluginBrowserCreditsLabel {
@@ -4044,6 +4071,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginBrowserInstallLabel {
             get {
                 return ResourceManager.GetString("PluginBrowserInstallLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installs.
+        /// </summary>
+        public static string PluginBrowserInstallsLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserInstallsLabel", resourceCulture);
             }
         }
         
@@ -4147,7 +4183,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update:.
+        ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string PluginBrowserUpdateLabel {
             get {
@@ -4237,11 +4273,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pending Restart.
+        ///   Looks up a localized string similar to Pending.
         /// </summary>
-        public static string PluginPendingUpdateButton {
+        public static string PluginPendingUninstallButtonText {
             get {
-                return ResourceManager.GetString("PluginPendingUpdateButton", resourceCulture);
+                return ResourceManager.GetString("PluginPendingUninstallButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update is pending. Restart to complete..
+        /// </summary>
+        public static string PluginPendingUpdateBtnTooltip {
+            get {
+                return ResourceManager.GetString("PluginPendingUpdateBtnTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending.
+        /// </summary>
+        public static string PluginPendingUpdateButtonText {
+            get {
+                return ResourceManager.GetString("PluginPendingUpdateButtonText", resourceCulture);
             }
         }
         
@@ -4255,7 +4309,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} was successfully updated.
+        ///   Looks up a localized string similar to An uninstallation is pending. Please restart if you would like to re-install..
+        /// </summary>
+        public static string PluginUninstallPendingTooltip {
+            get {
+                return ResourceManager.GetString("PluginUninstallPendingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} was successfully updated to {1}.
         /// </summary>
         public static string PluginUpdatedNtfText {
             get {

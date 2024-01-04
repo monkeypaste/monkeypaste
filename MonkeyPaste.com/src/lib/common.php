@@ -30,8 +30,12 @@ function getMaxDateTimeStr()
     return $dt->format(SYS_DATETIME_FORMAT); // 2999-01-02 00:00:00
 }
 
-function getFormattedDateTimeStr(string $dtStr)
+function getFormattedDateTimeStr($dtStr)
 {
+    if ($dtStr == null) {
+        // use now
+        $dtStr = date('Y-m-d H:i:s', time());
+    }
     $dt = new DateTime($dtStr);
     return $dt->format(SYS_DATETIME_FORMAT);
 }

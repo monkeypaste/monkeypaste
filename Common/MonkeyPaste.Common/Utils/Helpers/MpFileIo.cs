@@ -303,7 +303,17 @@ namespace MonkeyPaste.Common {
         public static double ConvertMegaBytesToBytes(long megabytes, int precision = 2) {
             return Math.Round((megabytes * 1024f) * 1024f, precision);
         }
+        public static void Copy(this DirectoryInfo self, DirectoryInfo destination, bool recursively) {
+            foreach (var file in self.GetFiles()) {
+                file.CopyTo(Path.Combine(destination.FullName, file.Name));
+            }
 
+            if (recursively) {
+                foreach (var directory in self.GetDirectories()) {
+                    directory.Copy(destination.CreateSubdirectory(directory.Name), recursively);
+                }
+            }
+        }
         public static double GetFileSizeInBytes(string filePath) {
             try {
                 if (File.Exists(filePath)) {

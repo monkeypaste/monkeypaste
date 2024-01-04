@@ -57,14 +57,14 @@ namespace MonkeyPaste.Avalonia {
             if (active_template_ctvms.Any()) {
                 // ntf OTHER active shared templates of changed guid
                 var shared_template_changed_msg = new MpQuillSharedTemplateDataChangedMessage() {
-                    changedTemplateFragmentStr = isDelete ? null : tt.SerializeJsonObjectToBase64(),
+                    changedTemplateFragmentStr = isDelete ? null : tt.SerializeObjectToBase64(),
                     deletedTemplateGuid = isDelete ? tt.Guid : null
                 };
                 active_template_ctvms
                     .Select(x => x.GetContentView() as MpAvContentWebView)
                     .Where(x => x != null)
                     .ForEach(x =>
-                        x.SendMessage($"sharedTemplateChanged_ext('{shared_template_changed_msg.SerializeJsonObjectToBase64()}')"));
+                        x.SendMessage($"sharedTemplateChanged_ext('{shared_template_changed_msg.SerializeObjectToBase64()}')"));
 
                 active_template_ctvms
                     .ForEach(x => MpConsole.WriteLine($"Active Template Tile '{x}' was notified of {label} template '{tt.TemplateName}'"));

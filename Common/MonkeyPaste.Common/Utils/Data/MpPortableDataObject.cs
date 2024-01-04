@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common {
-    public class MpPortableDataObject : MpJsonObject, MpIPortableDataObject {
+    public class MpPortableDataObject : MpIPortableDataObject {
         #region Statics
 
 
@@ -116,7 +115,7 @@ namespace MonkeyPaste.Common {
 
 
         public string SerializeData() {
-            return MpJsonConverter.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
+            return MpJsonExtensions.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
         }
 
         public override string ToString() {

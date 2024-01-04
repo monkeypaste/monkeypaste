@@ -16,7 +16,17 @@ namespace MonkeyPaste.Avalonia {
                         allowDup: false,
                         csvProps: MpAvPrefViewModel.Instance.CsvFormat);
             MpConsole.WriteLine($"StartupCleaner path added: '{path}'");
+        }
 
+        public static void RemovePathToDelete(string path) {
+            if (!path.IsFileOrDirectory()) {
+                return;
+            }
+            MpAvPrefViewModel.Instance.PluginDirsToUnloadCsvStr =
+                    MpAvPrefViewModel.Instance.PluginDirsToUnloadCsvStr.RemoveCsvItem(
+                        item: path,
+                        csvProps: MpAvPrefViewModel.Instance.CsvFormat);
+            MpConsole.WriteLine($"StartupCleaner path removed: '{path}'");
         }
         public static void UnloadAll() {
             // delete all existing paths to unload, noting ones it can't delete

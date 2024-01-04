@@ -38,6 +38,7 @@ CREATE TABLE device (
   FOREIGN KEY (fk_account_id) REFERENCES account(id)
 );
 
+
 CREATE TABLE subscription (
   id int(11) NOT NULL AUTO_INCREMENT,
   device_guid varchar(50) NOT NULL,
@@ -50,4 +51,16 @@ CREATE TABLE subscription (
   PRIMARY KEY (id),
   UNIQUE KEY device_guid (device_guid),
   FOREIGN KEY (fk_account_id) REFERENCES account(id)
+);
+
+CREATE TABLE plugin (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  plugin_guid varchar(50) NOT NULL,
+  ver varchar(20) NOT NULL,
+  install_count int(11) NOT NULL DEFAULT 0,
+  publish_dt datetime DEFAULT current_timestamp(),
+  created_dt datetime DEFAULT current_timestamp(),
+  updated_dt datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (id),
+  UNIQUE KEY plugin_guid (plugin_guid)
 );

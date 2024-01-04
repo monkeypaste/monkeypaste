@@ -19,9 +19,7 @@ namespace MonkeyPaste {
 
     public class MpTextTemplate :
         MpDbModelBase,
-        MpIClonableDbModel<MpTextTemplate>,
-        MpIJsonObject,
-        MpIJsonBase64Object {
+        MpIClonableDbModel<MpTextTemplate> {
         #region Constants
         public const string TextTemplateOpenToken = @"{t{";
         public const string TextTemplateCloseToken = @"}t}";
@@ -84,14 +82,14 @@ namespace MonkeyPaste {
         #region MpIJsonObject Implementation
 
         public string SerializeJsonObject() {
-            return MpJsonConverter.SerializeObject(this);
+            return MpJsonExtensions.SerializeObject(this);
         }
         #endregion
 
         #region MpIJsonBase64Object Implementation
 
-        public string SerializeJsonObjectToBase64(Encoding enc = null) {
-            return MpJsonConverter.SerializeObjectToBase64JsonStr(this, null, enc);
+        public string SerializeObjectToBase64(Encoding enc = null) {
+            return MpJsonExtensions.SerializeObjectToBase64(this, null, enc);
         }
 
         #endregion
@@ -178,7 +176,7 @@ namespace MonkeyPaste {
                 TemplateType = templateType,
                 TemplateData = templateTypeData,
                 RichTextFormatJson = string.IsNullOrWhiteSpace(rtfFormatJson) ?
-                                        DefaultRichTextFormat.SerializeJsonObject() : rtfFormatJson,
+                                        DefaultRichTextFormat.SerializeObject() : rtfFormatJson,
                 TemplateDeltaFormat = deltaFormatJson
             };
 

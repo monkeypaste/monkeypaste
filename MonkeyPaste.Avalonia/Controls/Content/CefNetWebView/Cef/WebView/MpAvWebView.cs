@@ -77,10 +77,10 @@ namespace MonkeyPaste.Avalonia {
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
 
 #if DEBUG
-            MpJsonObject ntf = null;
+            object ntf = null;
             switch (notificationType) {
                 case MpEditorBindingFunctionType.notifyShowDebugger:
-                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillShowDebuggerNotification showDebugNtf) {
                         MpConsole.WriteLine($"WebView ShowDebugger Request Received [{DataContext}] {showDebugNtf.reason}");
                         OpenDevTools();
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpEditorBindingFunctionType.notifyException:
                     OpenDevTools();
-                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
                         MpConsole.WriteLine($"WebView Exception ntf Received [{DataContext}] {exceptionMsgObj}");
 

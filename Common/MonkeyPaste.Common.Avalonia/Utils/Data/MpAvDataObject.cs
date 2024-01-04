@@ -21,7 +21,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static MpAvDataObject Parse(string json) {
             var mpdo = new MpAvDataObject();
-            var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
+            var req_lookup = MpJsonExtensions.DeserializeObject<Dictionary<string, object>>(json);
             foreach (var kvp in req_lookup) {
                 try {
                     mpdo.SetData(kvp.Key, kvp.Value);

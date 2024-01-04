@@ -1,7 +1,7 @@
 {
   "title": "Yolo Local Command Line Plugin Example",
   "description": "local image analysis",
-  "version": "1.0",
+  "version": "1.0.0",
   "credits": "Somebody else",
   "guid": "2df9c1a6-5b20-4ca8-8eb2-511b3b0e22c7",
   "iconUrl": "https://cdn.analyticsvidhya.com/wp-content/uploads/2018/12/yologo_2.png",

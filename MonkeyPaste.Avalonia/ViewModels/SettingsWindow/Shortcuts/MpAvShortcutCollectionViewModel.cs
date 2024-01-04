@@ -841,7 +841,7 @@ namespace MonkeyPaste.Avalonia {
                                 shortcutType = x.ShortcutType.ToString(),
                                 keys = x.KeyString
                             }).ToList()
-                }.SerializeJsonObjectToBase64();
+                }.SerializeObjectToBase64();
         }
 
         private void UpdateFilteredItems() {

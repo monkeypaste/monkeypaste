@@ -10,7 +10,6 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvQueryViewModel :
         MpAvViewModelBase,
         MpIQueryResultProvider,
-        MpIJsonObject,
         MpIQueryInfo {
         #region Private Variables
         [JsonIgnore]
@@ -243,7 +242,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIJsonObject Implementation
 
         public string SerializeJsonObject() {
-            return MpJsonConverter.SerializeObject(this);
+            return MpJsonExtensions.SerializeObject(this);
         }
 
         #endregion

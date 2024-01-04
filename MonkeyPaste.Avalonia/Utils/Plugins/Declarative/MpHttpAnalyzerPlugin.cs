@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
             _reqParams = req.items;
             if (_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
-                Console.WriteLine($"With args: {req.SerializeJsonObject()}");
+                Console.WriteLine($"With args: {req.SerializeObject()}");
                 _reqParams = new List<MpParameterRequestItemFormat>();
             }
 

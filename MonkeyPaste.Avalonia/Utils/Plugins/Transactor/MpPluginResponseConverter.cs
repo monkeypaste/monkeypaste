@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
             var plugin_source_ref = sourceHandler as MpISourceRef;
             string plugin_param_req_ref_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(
-                plugin_source_ref);//, trans.Request.SerializeJsonObjectToBase64());
+                plugin_source_ref);//, trans.Request.SerializeObjectToBase64());
 
 
             // add reference to plugin
@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
             await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
-                        req: unevaluated_req.SerializeJsonObject(),
+                        req: unevaluated_req.SerializeObject(),
                         respType: MpJsonMessageFormatType.DataObject,
                         resp: mpdo.SerializeData(),
                         ref_uris: ref_urls,

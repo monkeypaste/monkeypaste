@@ -1,15 +1,9 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -53,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
         protected override string RunDeclarativeAnalyzer(MpAnalyzerPluginRequestFormat req) {
             Process process = new Process();
             process.StartInfo.FileName = CommandPath;
-            process.StartInfo.Arguments = BundlePath + " " + req.SerializeJsonObjectToBase64();
+            process.StartInfo.Arguments = BundlePath + " " + req.SerializeObjectToBase64();
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;

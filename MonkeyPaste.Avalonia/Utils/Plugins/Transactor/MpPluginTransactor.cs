@@ -150,11 +150,11 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
-                        req: trans.Request.SerializeJsonObject(),
+                        req: trans.Request.SerializeObject(),
                         respType: MpJsonMessageFormatType.Error,
                         resp: ex.Message,
                         ref_uris: new[] {
-                            Mp.Services.SourceRefTools.ConvertToInternalUrl(pp)//, trans.Request.SerializeJsonObjectToBase64())
+                            Mp.Services.SourceRefTools.ConvertToInternalUrl(pp)//, trans.Request.SerializeObjectToBase64())
                         },
                         transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 

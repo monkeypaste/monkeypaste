@@ -82,7 +82,7 @@ namespace MonkeyPaste.Common {
                 msg_suffix = response;
             }
 
-            args = MpJsonConverter.DeserializeObject<Dictionary<string, string>>(msg_suffix);
+            args = MpJsonExtensions.DeserializeObject<Dictionary<string, string>>(msg_suffix);
             if (!string.IsNullOrWhiteSpace(msg_suffix) && args.Count == 0) {
                 // shouldnon-input error, add it to empty key
                 MpDebug.Assert(!success, $"Should only have non-lookup result for error");

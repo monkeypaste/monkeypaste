@@ -1,8 +1,8 @@
 {
   "title": "文本注释器",
   "description": "为基于文本的内容提供基本的超链接支持",
-  "version": "1.0",
-  "author": "MonkeyPaste LLC",
+  "version": "1.0.0",
+  "author": "Monkey LLC",
   "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "核心、注释、文本、链接、颜色、解析、地址、电话、电子邮件、货币、财务",

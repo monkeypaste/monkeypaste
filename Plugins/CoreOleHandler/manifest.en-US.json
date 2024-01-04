@@ -1,8 +1,8 @@
 {
   "title": "Core Clipboard Handler",
   "description": "Handles default clipboard formats",
-  "version": "1.0",
-  "author": "MonkeyPaste LLC",
+  "version": "1.0.0",
+  "author": "Monkey LLC",
   "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "Core, Clipboard, Drag and Drop, Text, Rtf, Rich Text, Html, Csv, Image, Png, Jpg, Jpeg, Link",

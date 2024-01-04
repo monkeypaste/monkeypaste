@@ -1,8 +1,8 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (e is DragEventArgs dea) {
                 //e.Handled = true;
-                frag = dea.Data.ToQuillDataItemsMessage(dde: DragDropEffects.Copy).SerializeJsonObjectToBase64();
+                frag = dea.Data.ToQuillDataItemsMessage(dde: DragDropEffects.Copy).SerializeObjectToBase64();
                 mp = dea.GetPosition(wv);
             } else if (e is PointerEventArgs pea) {
                 mp = pea.GetPosition(wv);
@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 metaKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsMetaDown,
                 escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown,
             };
-            wv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
+            wv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeObjectToBase64()}')");
         }
         #endregion
 

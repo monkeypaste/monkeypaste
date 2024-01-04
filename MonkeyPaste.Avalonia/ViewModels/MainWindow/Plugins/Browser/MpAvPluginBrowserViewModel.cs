@@ -24,9 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
 
-        #region Constants
-
-        public const string LEDGER_URL = @"https://raw.githubusercontent.com/monkeypaste/ledger/master/ledger.json";
+        #region Constants      
 
         #endregion
 
@@ -180,8 +178,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<IEnumerable<MpManifestFormat>> GetRemoteManifests() {
-            string ledger_json = await MpFileIo.ReadTextFromUriAsync(LEDGER_URL);
-            var ledger = MpJsonConverter.DeserializeObject<MpManifestLedger>(ledger_json);
+            string ledger_json = await MpFileIo.ReadTextFromUriAsync(MpLedgerConstants.LEDGER_URI);
+            var ledger = MpJsonExtensions.DeserializeObject<MpManifestLedger>(ledger_json);
             if (ledger == null || ledger.manifests == null) {
                 return Array.Empty<MpManifestFormat>();
             }

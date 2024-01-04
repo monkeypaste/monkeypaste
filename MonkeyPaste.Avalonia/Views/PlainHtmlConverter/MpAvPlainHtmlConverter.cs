@@ -233,7 +233,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
             ConverterWebView.LastPlainHtmlResp = null;
-            ConverterWebView.SendMessage($"convertPlainHtml_ext_ntf('{req.SerializeJsonObjectToBase64()}')");
+            ConverterWebView.SendMessage($"convertPlainHtml_ext_ntf('{req.SerializeObjectToBase64()}')");
             var sw = Stopwatch.StartNew();
             while (ConverterWebView.LastPlainHtmlResp == null) {
                 await Task.Delay(100);

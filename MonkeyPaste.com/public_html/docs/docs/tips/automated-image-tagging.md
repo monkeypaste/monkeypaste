@@ -90,7 +90,7 @@ The last piece of this puzzle is using the **Classify** action which *automates*
 
 You should something like below in the *Action Designer*:
 
-<p><img class="figure" src="/docs/build/img/auto_tag_complete_designer.png" onclick="window.open(this.src)" style={{cursor: "pointer"}} /></p>
+<p><img class="figure" src="/docs/build/img/auto_tag_complete_designer.png" onclick="window.open('../../this.src')" style={{cursor: "pointer"}} /></p>
 
 
 ## Let's try it out!

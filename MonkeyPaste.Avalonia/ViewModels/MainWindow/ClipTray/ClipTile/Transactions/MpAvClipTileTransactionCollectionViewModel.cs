@@ -663,7 +663,7 @@ namespace MonkeyPaste.Avalonia {
                 var req = new MpQuillAnnotationSelectedMessage() {
                     annotationGuid = to_sel_ann_guid
                 };
-                wv.ExecuteJavascript($"annotationSelected_ext('{req.SerializeJsonObjectToBase64()}')");
+                wv.ExecuteJavascript($"annotationSelected_ext('{req.SerializeObjectToBase64()}')");
             });
 
         public MpIAsyncCommand ShowMostRecentRuntimeTransactionCommand => new MpAsyncCommand(

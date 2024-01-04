@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvPlatformInfoBase : MpIPlatformInfo {
@@ -54,6 +55,65 @@ namespace MonkeyPaste.Avalonia {
                     return "browser";
                 }
                 throw new Exception("Unknown os");
+            }
+        }
+
+        public virtual string RuntimeShortName {
+            get {
+                var arch = RuntimeInformation.ProcessArchitecture;
+
+                if (OperatingSystem.IsWindows()) {
+                    if (arch == Architecture.Arm64) {
+                        return "win-arm64";
+                    }
+                    if (arch == Architecture.Arm) {
+                        return "win-arm";
+                    }
+                    if (arch == Architecture.X64) {
+                        return "win-x64";
+                    }
+                    if (arch == Architecture.X86) {
+                        return "win-x86";
+                    }
+                }
+                if (OperatingSystem.IsLinux()) {
+                    if (arch == Architecture.Arm64) {
+                        return "linux-arm64";
+                    }
+                    if (arch == Architecture.Arm) {
+                        return "linux-arm";
+                    }
+                    if (arch == Architecture.X64) {
+                        return "linux-x64";
+                    }
+                    if (arch == Architecture.X86) {
+                        return "linux-x86";
+                    }
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    if (arch == Architecture.Arm64) {
+                        return "osx-arm64";
+                    }
+                    if (arch == Architecture.Arm) {
+                        return "osx-arm";
+                    }
+                    if (arch == Architecture.X64) {
+                        return "osx-x64";
+                    }
+                    if (arch == Architecture.X86) {
+                        return "osx-x86";
+                    }
+                }
+                if (OperatingSystem.IsAndroid()) {
+                    return "android";
+                }
+                if (OperatingSystem.IsIOS()) {
+                    return "ios";
+                }
+                if (OperatingSystem.IsBrowser()) {
+                    return "browser";
+                }
+                return string.Empty;
             }
         }
 

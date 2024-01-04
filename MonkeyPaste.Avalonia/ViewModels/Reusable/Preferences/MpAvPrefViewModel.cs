@@ -21,8 +21,7 @@ namespace MonkeyPaste.Avalonia {
         MpICustomCsvFormat,
         MpIUserProvidedFileExts,
         MpIWelcomeSetupInfo,
-        MpIUserDeviceInfo,
-        MpIJsonObject {
+        MpIUserDeviceInfo {
         #region Private
         [JsonIgnore]
         private object _lock = new object();
@@ -138,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIJsonObject Implementation
         public string SerializeJsonObject() {
-            return MpJsonConverter.SerializeObject(this);
+            return MpJsonExtensions.SerializeObject(this);
         }
 
         #endregion
@@ -660,7 +659,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel prefVm = null;
             if (ValidatePrefData(prefsStr)) {
                 try {
-                    prefVm = MpJsonConverter.DeserializeObject<MpAvPrefViewModel>(prefsStr);
+                    prefVm = MpJsonExtensions.DeserializeObject<MpAvPrefViewModel>(prefsStr);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error loading pref file from '{PreferencesPath}' ", ex);

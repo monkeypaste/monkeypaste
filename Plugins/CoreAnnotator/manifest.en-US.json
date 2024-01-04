@@ -1,8 +1,8 @@
 {
   "title": "Text Annotator",
   "description": "Provides basic hyperlink support for text based content",
-  "version": "1.0",
-  "author": "MonkeyPaste LLC",
+  "version": "1.0.0",
+  "author": "Monkey LLC",
   "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "Core, Annotate, Text, Link, Color, Parsing, Address, Phone, Email, Currency,Finance",

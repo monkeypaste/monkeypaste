@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json.Converters;
 using System;
 using System.Text.Json.Serialization;
 
@@ -9,7 +8,7 @@ namespace MonkeyPaste {
         Monthly,
         Yearly
     }
-    public class MpSubscriptionFormat : MpJsonObject {
+    public class MpSubscriptionFormat {
         #region Private Variables
         #endregion
 

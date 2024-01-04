@@ -50,7 +50,7 @@ Every plugin must have a `manifest.json` file included in its bundle. At a minim
     "title": "Hello World",
     "description": "Outputs 'Hello World' as a new text clip",
     "version": "1.0",
-    "author": "MonkeyPaste LLC",
+    "author": "Monkey LLC",
     "guid": "aa4ceef6-e050-4ed5-b308-7c99942436c3",
     "projectUrl": "https://github.com/codebude/QRCoder/",
     "iconUri": "icon.png",

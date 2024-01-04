@@ -108,6 +108,12 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
+        public static void CloseAll() {
+            var wc = AllWindows.Count;
+            for (int i = 0; i < wc; i++) {
+                AllWindows[0].Close();
+            }
+        }
         public static MpAvWindow LocateWindow(MpPoint gmp) {
             return AllWindows.FirstOrDefault(x => x.ScaledScreenRect().Contains(gmp));
         }

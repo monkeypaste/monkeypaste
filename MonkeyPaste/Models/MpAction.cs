@@ -59,14 +59,13 @@ namespace MonkeyPaste {
         MpDbModelBase,
         MpIClonableDbModel<MpAction>,
         MpITreeNode<MpAction>,
-        MpIParameterHostModel,
-        MpIJsonObject {
+        MpIParameterHostModel {
 
         #region Interfaces
 
         #region MpIJsonObject Implementation
         public string SerializeJsonObject() {
-            return MpJsonConverter.SerializeObject(this);
+            return MpJsonExtensions.SerializeObject(this);
         }
 
         #endregion

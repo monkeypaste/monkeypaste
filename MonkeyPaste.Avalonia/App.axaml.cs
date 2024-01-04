@@ -80,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"App shutdown called ({(int)code}). Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
             //MpConsole.ShutdownLog();
             if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
+                MpAvWindowManager.CloseAll();
                 lifetime.Shutdown();
                 bool success = true;// lifetime.TryShutdown();
                 MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");
@@ -122,9 +123,7 @@ namespace MonkeyPaste.Avalonia {
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
-            if (HasStartupArg(RESTART_ARG)) {
-                MpAvAppRestarter.RemoveRestartTask();
-            }
+            MpAvAppRestarter.RemoveRestartTask();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 #if CEFNET_WV

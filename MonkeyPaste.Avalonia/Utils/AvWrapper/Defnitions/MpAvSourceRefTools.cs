@@ -215,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
             if (last_pinfo == null &&
                 avdo.TryGetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out string pi_str) &&
                 !string.IsNullOrWhiteSpace(pi_str)) {
-                last_pinfo = MpJsonConverter.DeserializeObject<MpPortableProcessInfo>(pi_str);
+                last_pinfo = MpJsonExtensions.DeserializeObject<MpPortableProcessInfo>(pi_str);
             }
 
 

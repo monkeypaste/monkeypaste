@@ -1,7 +1,7 @@
 ﻿{
   "title": "OpenAi",
   "description": "General Ai stuff",
-  "version": "1.0",
+  "version": "1.0.0",
   "author": "OpenAi",
   "guid": "0f6d1b4a-7aa5-41c5-b34f-85941b9a500d",
   "iconUri": "logo.png",

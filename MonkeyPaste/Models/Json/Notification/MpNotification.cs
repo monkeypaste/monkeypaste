@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste {
 
-    public class MpNotificationFormat : MpJsonObject, MpINotificationFormat {
+    public class MpNotificationFormat : MpINotificationFormat {
         #region Constants
 
         public const int MAX_MESSAGE_DISPLAY_MS = 3_000;

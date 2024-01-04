@@ -1,13 +1,12 @@
-﻿using MonkeyPaste.Common;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace MonkeyPaste {
-    public class MpRichTextFormatInfoFormat : MpJsonObject {
+    public class MpRichTextFormatInfoFormat {
         public MpBlockTextFormatInfoFormat blockFormat { get; set; }
         public MpInlineTextFormatInfoFormat inlineFormat { get; set; }
         public MpEmbedTextFormatInfoFormat embedFormat { get; set; }
     }
-    public class MpInlineTextFormatInfoFormat : MpJsonObject {
+    public class MpInlineTextFormatInfoFormat {
         public string background { get; set; } //hex(6)
         public string color { get; set; } //hex(6)
         public bool bold { get; set; }
@@ -23,7 +22,7 @@ namespace MonkeyPaste {
         public string link { get; set; } //uri
     }
 
-    public class MpBlockTextFormatInfoFormat : MpJsonObject {
+    public class MpBlockTextFormatInfoFormat {
         public bool blockquote { get; set; }
         public int header { get; set; } // 1-N 
         public int indent { get; set; } // 1-N
@@ -34,7 +33,7 @@ namespace MonkeyPaste {
         public bool codeBlock { get; set; }
     }
 
-    public class MpEmbedTextFormatInfoFormat : MpJsonObject {
+    public class MpEmbedTextFormatInfoFormat {
         public string video { get; set; } //url
         public string image { get; set; } // img.src
         public string formula { get; set; } // katex string (see https://katex.org )

@@ -24,6 +24,7 @@
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
+    <PushPlugins>false</PushPlugins>
   </PropertyGroup>
 
   <!-- SYSTEM PROPERTIES -->

@@ -133,7 +133,7 @@ namespace CoreAnnotator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text Annotator.
+        ///   Looks up a localized string similar to Core Text Annotator.
         /// </summary>
         public static string PluginTitle {
             get {

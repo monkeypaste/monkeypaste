@@ -2509,7 +2509,7 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
 
-            string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
+            string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeObjectToBase64()}')";
 
             var to_notify_ctvml =
                 AllActiveItems

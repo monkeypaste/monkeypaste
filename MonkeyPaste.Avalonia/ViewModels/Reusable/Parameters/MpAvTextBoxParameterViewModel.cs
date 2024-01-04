@@ -51,6 +51,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFieldButtonVisible =>
             UnitType == MpParameterValueUnitType.PlainTextContentQuery ||
             UnitType == MpParameterValueUnitType.RawDataContentQuery ||
+            UnitType == MpParameterValueUnitType.UriEscapedPlainTextContentQuery ||
             UnitType == MpParameterValueUnitType.DelimitedPlainTextContentQuery;
         public string ContentQuery {
             get => CurrentValue;

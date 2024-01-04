@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common {
-    public class MpJsonRect : MpJsonObject {
+    public class MpJsonRect {
         //public double x { get; set; }
         //public double y { get; set; }
         public double left { get; set; }

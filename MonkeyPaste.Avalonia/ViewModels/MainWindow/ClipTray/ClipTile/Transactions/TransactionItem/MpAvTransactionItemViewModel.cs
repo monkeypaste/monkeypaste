@@ -376,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
             MpQuillDelta delta = null;
             if (Response is MpAvDataObjectMessageViewModel domvm) {
                 if (domvm.DataObject.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, out string deltaJson) &&
-                    MpJsonConverter.DeserializeObject<MpQuillDelta>(deltaJson) is MpQuillDelta resp_delta) {
+                    MpJsonExtensions.DeserializeObject<MpQuillDelta>(deltaJson) is MpQuillDelta resp_delta) {
                     delta = resp_delta;
                 }
             }

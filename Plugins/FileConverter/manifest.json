@@ -1,9 +1,8 @@
 {
   "title": "File Converter",
   "description": "Allows files to be translated into images or text content types",
-  "version": "1.0",
-  "datePublished": "2024-01-02T00:00:00",
-  "author": "MonkeyPaste LLC",
+  "version": "1.0.0",
+  "author": "Monkey LLC",
   "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
   "projectUrl": "https://github.com/monkeypaste/FileConverter",

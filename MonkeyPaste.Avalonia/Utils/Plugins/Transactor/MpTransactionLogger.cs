@@ -32,12 +32,12 @@ namespace MonkeyPaste.Avalonia {
             string respStr = trans.TransactionErrorMessage;
             if (string.IsNullOrEmpty(respStr)) {
                 respType = MpJsonMessageFormatType.DataObject;
-                respStr = trans.Response.SerializeJsonObject();
+                respStr = trans.Response.SerializeObject();
             }
             var cit = await MpCopyItemTransaction.CreateAsync(
                                     copyItemId: sourceContent.Id,
                                     reqMsgType: MpJsonMessageFormatType.ParameterRequest,
-                                    reqMsgJsonStr: trans.Request.SerializeJsonObject(),
+                                    reqMsgJsonStr: trans.Request.SerializeObject(),
                                     respMsgType: respType,
                                     respMsgJsonStr: respStr,
                                     suppressWrite: suppressWrite);

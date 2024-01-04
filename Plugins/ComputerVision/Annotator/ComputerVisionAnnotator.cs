@@ -50,11 +50,7 @@ namespace ComputerVision {
                 resp.dataObjectLookup = new Dictionary<string, object>() {
                     {
                         MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT,
-                        JsonConvert.SerializeObject(
-                            root_annotation,
-                            new JsonSerializerSettings() {
-                                NullValueHandling = NullValueHandling.Ignore
-                            })
+                        root_annotation.SerializeObjectOmitNulls()
                     } };
             }
 

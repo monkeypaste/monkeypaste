@@ -43,7 +43,7 @@ namespace ImageAnnotator {
 
                         return new MpAnalyzerPluginResponseFormat() {
                             dataObjectLookup = new Dictionary<string, object> {
-                                { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, rootNode.SerializeJsonObject() }
+                                { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, rootNode.SerializeObjectOmitNulls() }
                             }
                         };
                     }

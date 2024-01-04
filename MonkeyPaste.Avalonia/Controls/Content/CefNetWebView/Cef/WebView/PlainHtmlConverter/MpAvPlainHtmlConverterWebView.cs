@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
         public override void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
             switch (notificationType) {
                 case MpEditorBindingFunctionType.notifyPlainHtmlConverted: {
-                        var ntf = MpJsonConverter.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(msgJsonBase64Str);
+                        var ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(msgJsonBase64Str);
                         if (ntf is MpQuillConvertPlainHtmlToQuillHtmlResponseMessage plainHtmlResp) {
                             _lastPlainHtmlConvertedResp = plainHtmlResp;
                         }
@@ -65,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                         base.HandleBindingNotification(notificationType, msgJsonBase64Str, contentHandle);
 
                         if (notificationType == MpEditorBindingFunctionType.notifyInitComplete) {
-                            var ntf = MpJsonConverter.DeserializeBase64Object<MpQuillInitMainResponseMessage>(msgJsonBase64Str);
+                            var ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillInitMainResponseMessage>(msgJsonBase64Str);
                             if (ntf is MpQuillInitMainResponseMessage initResp) {
                                 UserAgent = initResp.userAgent;
                             }

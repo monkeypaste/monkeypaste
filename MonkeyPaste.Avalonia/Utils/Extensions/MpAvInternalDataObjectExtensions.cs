@@ -158,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
                 uris = uri_coll.ToList();
             } else if (uri_list_obj is string uril_str) {
                 if (uril_str.StartsWith("[") &&
-                    MpJsonConverter.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
+                    MpJsonExtensions.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
                     // uri's maybe a json array if from editor
                     uril_str = string.Join(Environment.NewLine, urilist);
                 }
