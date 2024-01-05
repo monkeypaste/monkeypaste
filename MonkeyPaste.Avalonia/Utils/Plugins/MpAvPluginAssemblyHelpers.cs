@@ -19,8 +19,7 @@ namespace MonkeyPaste.Avalonia {
             string bundle_path = GetBundlePath(manifestPath, plugin);
             IEnumerable<MpIPluginComponentBase> components = null;
             switch (plugin.packageType) {
-                case MpPluginPackageType.None:
-                    throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' defined in '{manifestPath}' must specify a bundle type.");
+                default:
                 case MpPluginPackageType.Dll:
                     component_assembly = LoadDll(bundle_path, out alc);
                     components = component_assembly.FindSubTypes<MpIPluginComponentBase>();
@@ -33,12 +32,10 @@ namespace MonkeyPaste.Avalonia {
                     component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
                     components = new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
                     break;
-                //case MpPluginPackageType.Http:
-                //    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
-                //    components = new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
-                //    break;
-                default:
-                    throw new MpUserNotifiedException($"Unhandled plugin bundle type for '{plugin.title}' defined at '{manifestPath}' with type '{plugin.packageType}'");
+                    //case MpPluginPackageType.Http:
+                    //    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
+                    //    components = new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
+                    //    break;
             }
             plugin.LoadContext = alc;
             plugin.Components = components.ToArray();
@@ -88,14 +85,13 @@ namespace MonkeyPaste.Avalonia {
             switch (bt) {
                 case MpPluginPackageType.Nuget:
                     return $".{version}.nupkg";
-                case MpPluginPackageType.Dll:
-                    return "dll";
                 case MpPluginPackageType.Python:
                     return "py";
                 case MpPluginPackageType.Javascript:
                     return "js";
                 default:
-                    return string.Empty;
+                case MpPluginPackageType.Dll:
+                    return "dll";
             }
         }
         #region Extensions

@@ -1,5 +1,6 @@
 ﻿
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -121,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
             Environment.MachineName;
 
         // TODO Add per env info here
-        public virtual string OsVersionInfo =>
+        public virtual string OsVersion =>
             Environment.OSVersion.VersionString;
 
         public MpUserDeviceType OsType {
@@ -269,7 +270,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvPlatformInfoBase() {
 #if RELEASE
-            IsTraceEnabled = App.HasStartupArg(App.TRACE_ARG); 
+            IsTraceEnabled = App.HasStartupArg(App.TRACE_ARG);
 #endif
         }
         #endregion

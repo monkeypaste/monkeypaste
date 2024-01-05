@@ -521,43 +521,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
-                //Mp.Services.DebugBreakHelper.ToggleBreak();
-                await MpTestDataBuilder.CreateTestDataAsync();
-                //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true);
-                //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
-                //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
-
-                //var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
-                //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
-
-
-                //await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
-
-
-                //var cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(
-                //        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsTextFormatTag).TagId,
-                //        MpAvQueryViewModel.Instance,
-                //        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
-                //        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
-                //        MpAvTagTrayViewModel.Instance.TrashedCopyItemIds);
-
-                //MpAvProcessWatcher.Instance.BreakNextTick = true;
-
-                //if (TopLevel.GetTopLevel(MpAvWindowManager.MainWindow) is not { } tl ||
-                //    tl.Clipboard is not { } cb) {
-                //    return;
-                //}
-                //await cb.LogClipboardAsync();
-
-                //MpDebug.BreakAll();
-
-                string log = MpAvStringHexToBitmapTintConverter.GetTintCacheLog();
-                await Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    msgType: MpNotificationType.Debug,
-                    title: "Tint Log",
-                    body: log,
-                    maxShowTimeMs: -1);
+                await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true);
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

@@ -269,7 +269,7 @@ namespace MonkeyPaste.Avalonia {
                 // existing subscription detected, toggle monthly to show it
                 IsAccountMonthlyChecked = is_active_monthly;
                 AccountViewModel.SelectedItem = AccountViewModel.Items[active_idx];
-                IsExistingSubscriptionDetected = true;
+                //IsExistingSubscriptionDetected = true;
             }
             #endregion
 

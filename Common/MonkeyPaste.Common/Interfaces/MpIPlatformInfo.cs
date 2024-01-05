@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
 
     public interface MpIPlatformInfo {
         string OsMachineName { get; }
-        string OsVersionInfo { get; }
+        string OsVersion { get; }
         string OsFileManagerPath { get; }
         string RuntimeShortName { get; }
 

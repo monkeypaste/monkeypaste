@@ -34,6 +34,7 @@ Like triggers, actions have **inputs** and **outputs** which will always contain
 |---|---|
 |Alert|Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring 'Conditional' actions. Alerts have no affect on their input.|
 |Analyzer|Processes triggered content or previous action output using a selected plugin.|
+|Application Command|Invokes an Application Action.|
 |Classify|Input content is linked to the selected collection|
 |Conditional|Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.|
 |Delay|Priarily used in conjunction with the 'Repeat' Action for polling remote sources or aid with long running operations.|

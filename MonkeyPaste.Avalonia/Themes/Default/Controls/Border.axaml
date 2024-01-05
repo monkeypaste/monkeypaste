@@ -56,14 +56,14 @@
 
     <!--  BADGE  -->
     <Style Selector="Border.badge">
-      <!-- NOTE set alignment in actual border -->
+        <!--  NOTE set alignment in actual border  -->
         <Setter Property="Background"
                 Value="Red" />
         <Setter Property="ClipToBounds"
                 Value="False" />
         <Setter Property="MinWidth"
                 Value="15" />
-        <Setter Property="Height"
+        <Setter Property="MinHeight"
                 Value="15" />
         <Setter Property="CornerRadius"
                 Value="7.5" />
@@ -80,7 +80,7 @@
                 Value="10" />
         <Setter Property="MinWidth"
                 Value="15" />
-        <Setter Property="Height"
+        <Setter Property="MinHeight"
                 Value="15" />
         <Setter Property="TextAlignment"
                 Value="Center" />

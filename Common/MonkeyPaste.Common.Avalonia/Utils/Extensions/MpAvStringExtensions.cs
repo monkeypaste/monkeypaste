@@ -2,7 +2,6 @@
 #if WINDOWS
 
 using MonkeyPaste.Common.Wpf;
-using TheArtOfDev.HtmlRenderer.Avalonia;
 
 #endif
 namespace MonkeyPaste.Common.Avalonia {
@@ -15,6 +14,12 @@ namespace MonkeyPaste.Common.Avalonia {
                 return false;
             }
             return str.ToLower().StartsWith("avares://");
+        }
+        public static bool IsValidUrl(this string str, UriKind kind = UriKind.Absolute) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            return Uri.IsWellFormedUriString(str, kind);
         }
         public static bool IsRichHtmlMixedMedia(this string qhtml) {
             string imgTagStartStr = @"<img src='";

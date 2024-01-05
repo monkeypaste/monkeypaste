@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -90,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 MpWelcomePageType.Account) {
                 Title = UiStrings.WelcomeAccountTitle,
                 Caption = UiStrings.WelcomeAccountCaption,
-                NeedsSkip = !IsStoreAvailable || MpAvAccountViewModel.Instance.AccountType.IsPaidType()
+                //NeedsSkip = !IsStoreAvailable || MpAvAccountViewModel.Instance.AccountType.IsPaidType()
             };
             wogvm.Items = new List<MpAvWelcomeOptionItemViewModel>();
             foreach (var item in Items) {

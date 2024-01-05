@@ -91,6 +91,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ledger", "Common\Ledger\Led
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGpt", "Plugins\ChatGpt\ChatGpt.csproj", "{B1FF1AE0-D75F-468E-B69E-035578D78F49}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTranslator", "Plugins\TextTranslator\TextTranslator.csproj", "{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1501,6 +1503,48 @@ Global
 		{B1FF1AE0-D75F-468E-B69E-035578D78F49}.Release|x64.Build.0 = Release|x64
 		{B1FF1AE0-D75F-468E-B69E-035578D78F49}.Release|x86.ActiveCfg = Release|x86
 		{B1FF1AE0-D75F-468E-B69E-035578D78F49}.Release|x86.Build.0 = Release|x86
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|ARM.Build.0 = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|x64.ActiveCfg = Debug|x64
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|x64.Build.0 = Debug|x64
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|x86.ActiveCfg = Debug|x86
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Debug|x86.Build.0 = Debug|x86
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|ARM.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|ARM.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|ARM64.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|ARM64.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|iPhone.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|iPhone.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|x64.ActiveCfg = Release|x64
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|x64.Build.0 = Release|x64
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|x86.ActiveCfg = Release|x86
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Nuget_Release|x86.Build.0 = Release|x86
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|ARM.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|ARM64.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|iPhone.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x64.ActiveCfg = Release|x64
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x64.Build.0 = Release|x64
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x86.ActiveCfg = Release|x86
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1527,14 +1571,15 @@ Global
 		{FAD6E9CC-5AD5-41E3-B18C-CEACBBD71CFB} = {E0839402-4D82-4FF2-8778-A2E538ABCEAB}
 		{2130A973-3591-4D13-BF61-A5B5B48D5B9F} = {E0839402-4D82-4FF2-8778-A2E538ABCEAB}
 		{B1FF1AE0-D75F-468E-B69E-035578D78F49} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
 		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
 	EndGlobalSection
 EndGlobal

@@ -90,7 +90,7 @@ namespace MonkeyPaste {
                 userId: new_user.Id,
                 deviceType: Mp.Services.PlatformInfo.OsType,
                 machineName: Mp.Services.PlatformInfo.OsMachineName,
-                versionInfo: Mp.Services.PlatformInfo.OsVersionInfo);
+                versionInfo: Mp.Services.PlatformInfo.OsVersion);
 
             await thisDevice.WriteToDatabaseAsync();
 

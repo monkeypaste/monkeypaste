@@ -239,7 +239,7 @@
             </Grid>
 
             <!--  BUSY / PROGRESS (Optional)  -->
-            <Border Grid.Row="1"
+            <Border Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"

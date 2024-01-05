@@ -42,6 +42,17 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
         }
+        bool? OtherBoolArg {
+            get {
+                if (OtherArgs is bool boolArg) {
+                    return boolArg;
+                }
+                if (OtherArgs is not object[] argParts) {
+                    return default;
+                }
+                return argParts.OfType<bool>().FirstOrDefault();
+            }
+        }
         #endregion
 
         #region State
@@ -210,20 +221,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpNotificationButtonsType.Progress: {
                         ShowProgressSpinner = true;
-                        ShowCancelButton =
-                            OtherArgs is CancellationToken ||
-                            (OtherArgs is object[] argParts &&
-                             argParts.Any(x => x is CancellationToken));
+                        ShowCancelButton = OtherBoolArg.IsTrue();
                         break;
                     }
 
                 case MpNotificationButtonsType.Busy: {
                         ShowBusySpinner = true;
-
-                        ShowCancelButton =
-                            OtherArgs is CancellationToken ||
-                            (OtherArgs is object[] argParts &&
-                             argParts.Any(x => x is CancellationToken));
+                        ShowCancelButton = OtherBoolArg.IsTrue();
                         break;
                     }
 
@@ -325,6 +329,10 @@ namespace MonkeyPaste.Avalonia {
                                 DialogResult = MpNotificationDialogResultType.Dismiss;
                                 return DialogResult;
                             }
+                        }
+                        if (DialogResult == MpNotificationDialogResultType.Cancel) {
+                            // user canceled
+                            return DialogResult;
                         }
                         await Task.Delay(100);
                     }

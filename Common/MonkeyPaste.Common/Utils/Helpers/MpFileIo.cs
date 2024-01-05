@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,19 +13,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Common {
     public static class MpFileIo {
         public const int MAX_WIN_PATH_LENGTH = 32_767;
-
-        private static string _tempDirPath;
-        public static string TempDirPath {
-            get {
-                if (_tempDirPath == null) {
-                    _tempDirPath = Path.Combine(Path.GetTempPath(), MpCommonTools.Services.ThisAppInfo.ThisAppProductName);
-                    if (!_tempDirPath.IsDirectory()) {
-                        MpDebug.Assert(CreateDirectory(_tempDirPath), $"Error creating temp dir at path '{_tempDirPath}'");
-                    }
-                }
-                return _tempDirPath;
-            }
-        }
 
         public static ReaderWriterLock locker = new ReaderWriterLock();
 
@@ -303,15 +291,18 @@ namespace MonkeyPaste.Common {
         public static double ConvertMegaBytesToBytes(long megabytes, int precision = 2) {
             return Math.Round((megabytes * 1024f) * 1024f, precision);
         }
-        public static void Copy(this DirectoryInfo self, DirectoryInfo destination, bool recursively) {
-            foreach (var file in self.GetFiles()) {
-                file.CopyTo(Path.Combine(destination.FullName, file.Name));
-            }
-
-            if (recursively) {
-                foreach (var directory in self.GetDirectories()) {
-                    directory.Copy(destination.CreateSubdirectory(directory.Name), recursively);
+        public static void CopyContents(this DirectoryInfo sourceDir, DirectoryInfo targetDir, bool recursive, bool overwrite) {
+            foreach (var file in sourceDir.GetFiles()) {
+                string fp = Path.Combine(targetDir.FullName, file.Name);
+                if (overwrite || !fp.IsFileOrDirectory()) {
+                    file.CopyTo(fp);
                 }
+            }
+            if (!recursive) {
+                return;
+            }
+            foreach (var directory in sourceDir.GetDirectories()) {
+                directory.CopyContents(targetDir.CreateSubdirectory(directory.Name), recursive, overwrite);
             }
         }
         public static double GetFileSizeInBytes(string filePath) {

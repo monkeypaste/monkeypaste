@@ -30,12 +30,13 @@ namespace MonkeyPaste.Common {
             object iconResourceObj = null,
             object owner = null);
 
-        Task ShowBusyMessageBoxAsync(
+        Task<bool> ShowBusyMessageBoxAsync(
             string title,
             string message = default,
             object anchor = null,
             object iconResourceObj = null,
             object owner = null,
+            bool can_user_cancel = false,
             object cancel_token_arg = default);
 
         void ShowWebViewWindow(

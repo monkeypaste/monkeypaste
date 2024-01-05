@@ -89,7 +89,10 @@ namespace MonkeyPaste.Avalonia {
 
             foreach (var at in AccountTypeAddOnStoreIdLookup) {
                 var spkvp = spqr.Products.FirstOrDefault(x => x.Value.StoreId == at.Key);
-                MpDebug.Assert(!spkvp.IsDefault(), $"AddOn not found StoreId: '{at.Key}'");
+                if (spkvp.IsDefault()) {
+                    MpDebug.Break($"AddOn not found StoreId: '{at.Key}'", silent: true);
+                    continue;
+                }
 
                 StoreProduct sp = spkvp.Value;
                 AccountTypePriceLookup.AddOrReplace(at.Value, sp.Price.FormattedRecurrencePrice);

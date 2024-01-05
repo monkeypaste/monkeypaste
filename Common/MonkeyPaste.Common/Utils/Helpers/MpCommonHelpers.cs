@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 
 namespace MonkeyPaste.Common {
     public static class MpCommonHelpers {

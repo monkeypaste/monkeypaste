@@ -10,6 +10,7 @@ An image annotator plugin using [Azure AI Vision](https://azure.microsoft.com/en
 This project can be used as a reference for anyone interested in [MonkeyPaste](https://www.monkeypaste.com) plugin development.
 
 Here's some highlights of what it demonstrates:
+- Headless parameter definitions
 - Execution Parameters
 - Shared Value Parameters
 - Reading images from MonkeyPaste

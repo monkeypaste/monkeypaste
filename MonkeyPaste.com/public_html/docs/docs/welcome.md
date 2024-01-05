@@ -24,4 +24,4 @@ Global shortcut support on Linux is limited to [Passive-mode](shortcuts/index.md
 
 ## Getting Help
 
-If you encounter any issues or bugs with MonkeyPaste, please open a new issue on [GitHub](https://github.com/monkeypaste/mp-plugin-list). 
+If you encounter any issues or bugs with MonkeyPaste, please open a new issue on [GitHub](https://github.com/monkeypaste/ledger). 

@@ -93,14 +93,16 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-        public async Task ShowBusyMessageBoxAsync(
+        public async Task<bool> ShowBusyMessageBoxAsync(
             string title,
             string message,
             object anchor = null,
             object iconResourceObj = null,
             object owner = null,
+            bool can_user_cancel = false,
             object cancel_token_arg = null) {
-            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+            // returns true if user cancels or ct is canceled
+            var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalBusyMessageBox,
                                     title: title,
                                     body: message,
@@ -108,7 +110,8 @@ namespace MonkeyPaste.Avalonia {
                                     anchor: anchor,
                                     owner: owner,
                                     maxShowTimeMs: -1,
-                                    otherArgs: cancel_token_arg);
+                                    otherArgs: new object[] { cancel_token_arg, can_user_cancel });
+            return result == MpNotificationDialogResultType.Cancel;
         }
         public async Task ShowOkMessageBoxAsync(
             string title,

@@ -463,6 +463,7 @@
     <None Remove="Assets\Images\joystickactive.png" />
     <None Remove="Assets\Images\joystickactive2.png" />
     <None Remove="Assets\Images\keyboard.png" />
+    <None Remove="Assets\Images\ladybug.png" />
     <None Remove="Assets\Images\lifepreserver.png" />
     <None Remove="Assets\Images\lines_x2_horiz %282%29.png" />
     <None Remove="Assets\Images\lines_x2_horiz.png" />
@@ -840,6 +841,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\infobw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\ladybug.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\lifepreserver.png">

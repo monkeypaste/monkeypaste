@@ -1,15 +1,19 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Plugin.Localizer;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,6 +24,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+
+        const int MAX_TITLE_LENGTH = 32;
+        const int MAX_DESCRIPTION_LENGTH = 1024;
+        const int MAX_TAGS_LENGTH = 1024;
 
         const string MANIFEST_FILE_NAME_PREFIX = "manifest";
         public const string MANIFEST_FILE_EXT = "json";
@@ -97,18 +105,27 @@ namespace MonkeyPaste.Avalonia {
             if (plugin.dependencies == null) {
                 return true;
             }
+            var this_os_dep = new MpPluginDependency() {
+                type = MpPluginDependencyType.os,
+                name = Mp.Services.PlatformInfo.OsType.ToString(),
+                version = Mp.Services.PlatformInfo.OsVersion
+            };
 
             foreach (var dep in plugin.dependencies) {
                 switch (dep.type) {
                     case MpPluginDependencyType.os:
                         MpUserDeviceType dep_os = dep.name.ToEnum<MpUserDeviceType>();
-                        MpUserDeviceType actual_os = Mp.Services.PlatformInfo.OsType;
+                        MpUserDeviceType actual_os = this_os_dep.name.ToEnum<MpUserDeviceType>();
                         if (actual_os != dep_os) {
-                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. Requires {dep.type}:{dep.name}. Actual {dep.type}:{actual_os}");
+                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. OS not supported Requires {dep}. Actual {this_os_dep}");
                             return false;
                         }
                         // TODO compare version here
                         // see https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges
+                        if (!string.IsNullOrWhiteSpace(dep.version) && dep.version.ToVersion() < Mp.Services.PlatformInfo.OsVersion.ToVersion()) {
+                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. Version not supported Requires {dep}. Actual {this_os_dep}");
+                            return false;
+                        }
                         break;
                 }
             }
@@ -306,6 +323,37 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!needsFixing) {
                     try {
+                        MpConsole.WriteLine($"Plugin {plugin} debug mode: {plugin.debugMode} isAttached: {Debugger.IsAttached}");
+
+                        if (plugin.debugMode != MpPluginDebugMode.None && !Debugger.IsAttached) {
+                            var cts = new CancellationTokenSource();
+                            bool? cancel_debug_result = null;
+                            Dispatcher.UIThread.Post(async () => {
+                                cancel_debug_result = await Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
+                                    title: "Waiting for debugger",
+                                    message: $"Attach debugger to '{Path.GetFileName(Mp.Services.PlatformInfo.ExecutingPath)}' or cancel to continue",
+                                    iconResourceObj: "LadyBugImage",
+                                    cancel_token_arg: cts.Token,
+                                    can_user_cancel: true);
+                            });
+
+                            while (true) {
+                                if (Debugger.IsAttached) {
+                                    MpConsole.WriteLine("plugin debugger now attached.");
+                                    cts.Cancel();
+                                    break;
+                                }
+                                if (cancel_debug_result.HasValue) {
+                                    //user canceled
+                                    MpConsole.WriteLine("canceled. result: " + cancel_debug_result);
+                                    break;
+                                }
+                                await Task.Delay(100);
+                            }
+                            if (Debugger.IsAttached && plugin.debugMode == MpPluginDebugMode.DebugLocalInputOnly) {
+                                MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand.Execute(false);
+                            }
+                        }
                         MpAvPluginAssemblyHelpers.Load(manifestPath, plugin, out Assembly component_assembly);
                         LoadAnyHeadlessFormats(plugin, component_assembly);
                         plugin.ValidatePluginComponents();
@@ -335,8 +383,8 @@ namespace MonkeyPaste.Avalonia {
             // valid after here
 
             if (isLoadFromInstall &&
-                Uri.IsWellFormedUriString(plugin.licenseUrl, UriKind.Absolute) &&
-                plugin.requireLicenseAcceptance) {
+                plugin.licenseUrl.IsValidUrl() &&
+                plugin.requireLicenseAcceptance.IsTrue()) {
                 // show terms
                 bool agreed = await MpAvTermsView.ShowTermsAgreementWindowAsync(
                     new MpAvTermsAgreementCollectionViewModel() {
@@ -383,18 +431,23 @@ namespace MonkeyPaste.Avalonia {
             if (plugin == null) {
                 throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
             }
-
-            if (string.IsNullOrWhiteSpace(plugin.title)) {
-                throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property. Ignoring plugin");
+            // validate TITLE
+            if (string.IsNullOrWhiteSpace(plugin.title) || plugin.title.Length > MAX_TITLE_LENGTH) {
+                throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property with no more than {MAX_TITLE_LENGTH} characters. Ignoring plugin");
             }
+            // validate GUID
             if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(plugin.guid)) {
-                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID) with only alphanumeric characters ie. no hyphens curly braces or quotes etc.. Ignoring plugin");
+                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens.. Ignoring plugin");
+            }
+            // validate DESCRIPTION
+            if (!string.IsNullOrEmpty(plugin.description) && plugin.description.Length > MAX_DESCRIPTION_LENGTH) {
+                throw new MpUserNotifiedException($"Plugin description error, at path '{manifestPath}' description must be no more than {MAX_DESCRIPTION_LENGTH} characters. Ignoring plugin");
+            }
+            // validate TAGS
+            if (!string.IsNullOrEmpty(plugin.tags) && plugin.tags.Length > MAX_TAGS_LENGTH) {
+                throw new MpUserNotifiedException($"Plugin tags error, at path '{manifestPath}' tags must be no more than {MAX_TAGS_LENGTH} characters. Ignoring plugin");
             }
 
-            //bool is_icon_valid = await MpFileIo.IsAccessibleUriAsync(plugin.iconUri, plugin.RootDirectory);
-            //if (!is_icon_valid) {
-            //    throw new MpUserNotifiedException($"Plugin icon error, at path '{inv_manifest_path}' with iconUri '{plugin.iconUri}' must have an 'iconUri' property which is a relative file path or valid url to an image");
-            //}
             bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
             return are_all_components_valid;
         }
@@ -537,7 +590,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void MoveExtraRuntimeModules(string plugin_outer_dir, bool recursive = true) {
+        private static void MoveExtraRuntimeModules(string plugin_outer_dir) {
             // some assemblies end up in a sub folder /runtimes and won't load right, this moves those where 
             // they need to be so plugins (mine at least) can just be 1 package for all platforms
 
@@ -553,7 +606,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!runtime_dir.IsDirectory()) {
                     return;
                 }
-                new DirectoryInfo(runtime_dir).Copy(new DirectoryInfo(plugin_dir), recursive);
+                new DirectoryInfo(runtime_dir).CopyContents(new DirectoryInfo(plugin_dir), recursive: true, overwrite: false);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"error moving extra runtimes.", ex);
