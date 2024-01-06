@@ -43,7 +43,7 @@ namespace CoreOleHandler {
             bool needs_pseudo_file = false;
             if (source_type != "FileList" && // NOTE using 'FileList' to avoid moving MpCopyItemType into common
                 request.items.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.FILES_W_IGNORE) is MpParameterRequestItemFormat prif &&
-                !bool.Parse(prif.value)) {
+                !bool.Parse(prif.paramValue)) {
                 // when file type is enabled but source is not a file,
                 // add file as a format and flag that it needs to be created
                 // AFTER all runtime formats have been processed so best format is written

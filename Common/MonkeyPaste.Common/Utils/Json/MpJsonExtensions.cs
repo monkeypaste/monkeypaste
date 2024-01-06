@@ -49,10 +49,10 @@ namespace MonkeyPaste.Common {
             var req_lookup = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
             if (req_lookup != null &&
                 req_lookup.TryGetValue("items", out var itemsObj) && itemsObj is JArray items_jarray) {
-                Dictionary<object, string> param_lookup = new Dictionary<object, string>();
+                var param_lookup = new Dictionary<string, string>();
                 foreach (var kvp_jtoken in items_jarray) {
                     if (kvp_jtoken.SelectToken("paramId", false) is JToken param_token &&
-                        kvp_jtoken.SelectToken("value", false) is JToken val_token) {
+                        kvp_jtoken.SelectToken("paramValue", false) is JToken val_token) {
 
                         param_lookup.Add(param_token.Value<string>(), val_token.Value<string>());
                     }

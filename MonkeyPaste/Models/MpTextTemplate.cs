@@ -106,7 +106,7 @@ namespace MonkeyPaste {
         //[Ignore]
         //public MpQuillEditorFormats TemplateFormatInfo {
         //    get => JsonConvert.DeserializeObject<MpQuillEditorFormats>(TemplateDeltaFormat);
-        //    set => TemplateDeltaFormat = JsonConvert.SerializeObject(value);
+        //    set => TemplateDeltaFormat = JsonConvert.SerializeObject(paramValue);
         //}
 
         [Ignore]

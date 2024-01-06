@@ -21,7 +21,7 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.Files,"Files",-1,"files.png"),
                 //("x-special/gnome-copied-files","Files (Linux)"),
         };
-        public MpClipboardHandlerFormats GetFormats(MpHeadlessClipboardComponentFormatRequest request) {
+        public MpClipboardHandlerFormats GetFormats(MpHeadlessComponentFormatRequest request) {
             CoreOleHelpers.SetCulture(request);
 
             return new MpClipboardHandlerFormats() {

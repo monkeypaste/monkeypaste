@@ -11,8 +11,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeWindow() : this(null) { }
         public MpAvWelcomeWindow(Window owner = default) : base(owner) {
             InitializeComponent();
-            //this.GetObservable(Window.WidthProperty).Subscribe(value => OnWindowSizeChanged());
-            //this.GetObservable(Window.HeightProperty).Subscribe(value => OnWindowSizeChanged());
+            //this.GetObservable(Window.WidthProperty).Subscribe(paramValue => OnWindowSizeChanged());
+            //this.GetObservable(Window.HeightProperty).Subscribe(paramValue => OnWindowSizeChanged());
             this.GetObservable(Window.BoundsProperty).Subscribe(value => OnWindowSizeChanged());
             this.GetObservable(Window.WindowStateProperty).Subscribe(value => OnWindowStateChanged());
 

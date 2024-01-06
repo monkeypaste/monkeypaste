@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static async Task<MpPluginTransactionBase> PerformTransactionAsync(
             MpPluginWrapper plugin,
-            Dictionary<object, string> paramValues,
+            Dictionary<string, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool is_retry,
@@ -145,7 +145,7 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
             MpConsole.WriteTraceLine(ex);
 
-            var pp = sourceHandler as MpPluginPreset;
+            var pp = sourceHandler as MpPreset;
 
             Mp.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,

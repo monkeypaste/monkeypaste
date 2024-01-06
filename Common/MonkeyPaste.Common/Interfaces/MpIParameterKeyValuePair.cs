@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste.Common {
     //public interface MpIParameterKeyValuePair : MpIJsonObject {
     //    object paramId { get; }
-    //    string value { get; }
+    //    string paramValue { get; }
     //}
 }

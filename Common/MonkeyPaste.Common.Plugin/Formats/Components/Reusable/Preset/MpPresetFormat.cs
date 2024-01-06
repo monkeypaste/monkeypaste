@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpPluginPresetFormat  {
+    public class MpPresetFormat  {
         public string guid { get; set; }
 
         public bool isDefault { get; set; } = false;

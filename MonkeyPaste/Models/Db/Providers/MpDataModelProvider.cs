@@ -216,7 +216,7 @@ namespace MonkeyPaste {
         #region MpAppOleFormatInfo 
 
         public static async Task<List<MpAppOlePreset>> GetAppOlePresetsByPresetIdAsync(int presetId) {
-            string query = $"select * from MpAppOlePreset where fk_MpPluginPresetId=?";
+            string query = $"select * from MpAppOlePreset where fk_MpPresetId=?";
             var result = await MpDb.QueryAsync<MpAppOlePreset>(query, presetId);
             return result;
         }
@@ -227,7 +227,7 @@ namespace MonkeyPaste {
             return result;
         }
         public static async Task<MpAppOlePreset> GetAppOlePresetByMembersAsync(int appId, int presetId) {
-            string query = $"select * from MpAppOlePreset where fk_MpAppId=? and fk_MpPluginPresetId=?";
+            string query = $"select * from MpAppOlePreset where fk_MpAppId=? and fk_MpPresetId=?";
             var result = await MpDb.QueryAsync<MpAppOlePreset>(query, appId, presetId);
             if (result == null || result.Count == 0) {
                 return null;
@@ -485,7 +485,7 @@ namespace MonkeyPaste {
                     source_ref = await MpDataModelProvider.GetItemAsync<MpUrl>(sourceId);
                     break;
                 case MpTransactionSourceType.AnalyzerPreset:
-                    source_ref = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(sourceId);
+                    source_ref = await MpDataModelProvider.GetItemAsync<MpPreset>(sourceId);
                     break;
                 case MpTransactionSourceType.CopyItem:
                     source_ref = await MpDataModelProvider.GetItemAsync<MpCopyItem>(sourceId);
@@ -757,22 +757,22 @@ namespace MonkeyPaste {
 
         #region MpAnalytic Item
         public static async Task<int> GetPluginPresetCountByPluginGuidAsync(string aguid) {
-            string query = $"select count(*) from MpPluginPreset where PluginGuid=?";
+            string query = $"select count(*) from MpPreset where PluginGuid=?";
             var result = await MpDb.QueryScalarAsync<int>(query, aguid);
             return result;
         }
 
-        public static async Task<MpPluginPreset> GetPluginPresetByPresetGuidAsync(string preset_guid) {
-            string query = $"select * from MpPluginPreset where MpPluginPresetGuid=?";
-            var result = await MpDb.QueryAsync<MpPluginPreset>(query, preset_guid);
+        public static async Task<MpPreset> GetPluginPresetByPresetGuidAsync(string preset_guid) {
+            string query = $"select * from MpPreset where MpPresetGuid=?";
+            var result = await MpDb.QueryAsync<MpPreset>(query, preset_guid);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
-        public static async Task<List<MpPluginPreset>> GetPluginPresetsByPluginGuidAsync(string aguid) {
-            string query = $"select * from MpPluginPreset where PluginGuid=?";
-            var result = await MpDb.QueryAsync<MpPluginPreset>(query, aguid);
+        public static async Task<List<MpPreset>> GetPluginPresetsByPluginGuidAsync(string aguid) {
+            string query = $"select * from MpPreset where PluginGuid=?";
+            var result = await MpDb.QueryAsync<MpPreset>(query, aguid);
             return result;
         }
 
@@ -783,7 +783,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpParameterValue>> GetAllParameterValueInstancesForPluginAsync(string paramId, string pluginGuid) {
-            string query = $"select * from MpParameterValue where e_MpParameterHostType='Preset' and ParamId=? and fk_ParameterHostId in (select pk_MpPluginPresetId from MpPluginPreset where PluginGuid=?)";
+            string query = $"select * from MpParameterValue where e_MpParameterHostType='Preset' and ParamId=? and fk_ParameterHostId in (select pk_MpPresetId from MpPreset where PluginGuid=?)";
             var result = await MpDb.QueryAsync<MpParameterValue>(query, paramId, pluginGuid);
             return result;
         }

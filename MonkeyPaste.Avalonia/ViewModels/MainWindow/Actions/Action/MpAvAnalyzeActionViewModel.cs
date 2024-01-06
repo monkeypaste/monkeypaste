@@ -167,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
+            if (e is MpPreset aip && aip.Id == AnalyticItemPresetId) {
                 Task.Run(ValidateActionAsync);
             }
         }

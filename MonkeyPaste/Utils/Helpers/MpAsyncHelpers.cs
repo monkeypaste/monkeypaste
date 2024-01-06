@@ -8,7 +8,7 @@ namespace MonkeyPaste {
         // from https://stackoverflow.com/a/5097066/105028
 
         /// <summary>
-        /// Execute's an async Task<T> method which has a void return value synchronously
+        /// Execute's an async Task<T> method which has a void return paramValue synchronously
         /// </summary>
         /// <param name="task">Task<T> method to execute</param>
         public static void RunSync(Func<Task> task) {

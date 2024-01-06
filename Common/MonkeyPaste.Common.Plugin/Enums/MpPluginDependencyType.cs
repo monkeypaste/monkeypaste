@@ -2,7 +2,7 @@
     public enum MpPluginDependencyType {
         None = 0,
         /// <summary>
-        /// The string value of <see cref="MpUserDeviceType"/>. The only supported type is <see cref="MpUserDeviceType.Windows"/>
+        /// The string paramValue of <see cref="MpUserDeviceType"/>. The only supported type is <see cref="MpUserDeviceType.Windows"/>
         /// </summary>
         os,
         /// <summary>

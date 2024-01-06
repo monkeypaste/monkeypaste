@@ -1,86 +1,65 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Speech.Synthesis;
-using System.Threading.Tasks;
 
 namespace TextToSpeech {
     public class TextToSpeechPlugin :
         MpIAnalyzeComponent,
-        MpISupportHeadlessAnalyzerComponentFormat,
-        MpISupportDeferredValue {
-        const int TEXT_PARAM_ID = 1;
-        const int VOICE_PARAM_ID = 2;
-        const int VOLUME_PARAM_ID = 3;
-
-        SpeechSynthesizer speechSynthesizer;
+        MpISupportHeadlessAnalyzerFormat {
+        const string TEXT_PARAM_ID = "1";
 
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
-            _ = Task.Run(() => {
-                if (!OperatingSystem.IsWindows()) {
-                    return;
-                }
-                string text = req.GetRequestParamStringValue(TEXT_PARAM_ID) ?? string.Empty;
-                string voice_name = req.GetRequestParamStringValue(VOICE_PARAM_ID);
-                int volume = req.GetRequestParamIntValue(VOLUME_PARAM_ID);
-
-                if (speechSynthesizer == null) {
-                    speechSynthesizer = new SpeechSynthesizer();
-                    speechSynthesizer.SpeakCompleted += SpeechSynthesizer_SpeakCompleted;
-                }
-                if (!string.IsNullOrEmpty(voice_name)) {
-                    // when no voice provided, use default
-                    speechSynthesizer.SelectVoice(voice_name);
-                }
-                speechSynthesizer.SetOutputToDefaultAudioDevice();
-                speechSynthesizer.Volume = volume;
-                //speechSynthesizer.Rate = 0;
-                //speechSynthesizer.Speak(text);
-
-                PromptBuilder promptBuilder = new PromptBuilder();
-                promptBuilder.AppendText(text);
-                speechSynthesizer.SpeakAsync(promptBuilder);
-            });
-
-            return null;
-        }
-
-        private void SpeechSynthesizer_SpeakCompleted(object sender, SpeakCompletedEventArgs e) {
-            if (!OperatingSystem.IsWindows()) {
-                return;
-            }
-            speechSynthesizer.Dispose();
-            speechSynthesizer = null;
-        }
-
-        public MpPluginDeferredParameterValueResponseFormat RequestParameterValue(MpPluginDeferredParameterValueRequestFormat req) {
-
-            if (!OperatingSystem.IsWindows()) {
+            if (req == null ||
+                req.GetParamValue<string>(TEXT_PARAM_ID) is not string text) {
                 return null;
             }
-            if (req.paramId != VOICE_PARAM_ID.ToString()) {
-                return new MpPluginDeferredParameterValueResponseFormat() {
-                    errorMessage = $"Unknown deferred parameter id '{req.paramId}'"
+            try {
+                // from https://stackoverflow.com/a/39647762/105028
+
+                string ps_path = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+                    "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+                if (!ps_path.IsFile()) {
+                    throw new Exception("cannot speak");
+                }
+                var proc = new Process();
+                proc.StartInfo.FileName = ps_path;
+                proc.StartInfo.Arguments = $"-Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');";
+                proc.StartInfo.WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.Start();
+                string proc_output = proc.StandardOutput.ReadToEnd();
+
+                proc.WaitForExit();
+                int exit_code = proc.ExitCode;
+                proc.Close();
+
+                if (exit_code != 0) {
+                    throw new Exception($"Cannot speak.{Environment.NewLine}Error #{exit_code}{Environment.NewLine}{proc_output}");
+                }
+
+            }
+            catch (Exception ex) {
+                return new MpAnalyzerPluginResponseFormat() {
+                    userNotifications = new[] {
+                            new MpPluginUserNotificationFormat() {
+                                NotificationType = MpPluginNotificationType.PluginResponseError,
+                                Title = "Web Search Error",
+                                Body = ex.Message,
+                                IconSourceObj = MpBase64Images.Error
+                            }
+                        }.ToList()
                 };
             }
-
-            var speechSynthesizer = new SpeechSynthesizer();
-            speechSynthesizer.SetOutputToDefaultAudioDevice();
-            var voices = speechSynthesizer.GetInstalledVoices();
-
-            var resp = new MpPluginDeferredParameterValueResponseFormat() {
-                Values = voices.Select((x, idx) => new MpPluginParameterValueFormat() {
-                    isDefault = idx == 0,
-                    value = OperatingSystem.IsWindows() ? x.VoiceInfo.Name : null,
-                    label = OperatingSystem.IsWindows() ? x.VoiceInfo.Name.Replace(@"Microsoft ", string.Empty).Replace(@" Desktop", string.Empty) : null
-                }).ToList()
-            };
-
-            return resp;
+            return null;
         }
-
-        public MpAnalyzerPluginFormat GetFormat(MpHeadlessAnalyzerComponentFormatRequest request) {
+        public MpAnalyzerPluginFormat GetFormat(MpHeadlessComponentFormatRequest request) {
             return new MpAnalyzerPluginFormat() {
                 inputType = new MpPluginInputFormat() {
                     text = true
@@ -88,35 +67,15 @@ namespace TextToSpeech {
                 parameters = new List<MpParameterFormat>() {
                     new MpParameterFormat() {
                         label = "Text to say",
-                        description = "Will speak text with selected voice",
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                        paramId = "1",
+                        paramId = TEXT_PARAM_ID,
                         values = new List<MpPluginParameterValueFormat>() {
                             new MpPluginParameterValueFormat() {
                                 value = "{ItemData}"
                             }
                         }
                     },
-                    new MpParameterFormat() {
-                        label = "Voice",
-                        description = "One of the available voices in windows",
-                        controlType = MpParameterControlType.ComboBox,
-                        unitType = MpParameterValueUnitType.PlainText,
-                        isVisible = true,
-                        paramId = "2",
-                        isValueDeferred = true
-                    },
-                    new MpParameterFormat() {
-                        label = "Volume",
-                        controlType = MpParameterControlType.Slider,
-                        unitType = MpParameterValueUnitType.Integer,
-                        isVisible = true,
-                        paramId = "3",
-                        minimum = 0,
-                        maximum = 100,
-                        value = new MpPluginParameterValueFormat("50",true)
-                    }
                 }
             };
         }

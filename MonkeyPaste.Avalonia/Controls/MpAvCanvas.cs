@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Gets the value of the Left attached property for a control.
+        /// Gets the paramValue of the Left attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
         /// <returns>The control's left coordinate.</returns>
@@ -221,16 +221,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Sets the value of the Left attached property for a control.
+        /// Sets the paramValue of the Left attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
-        /// <param name="value">The left value.</param>
+        /// <param name="value">The left paramValue.</param>
         public static void SetLeft(AvaloniaObject element, double value) {
             element.SetValue(LeftProperty, value);
         }
 
         /// <summary>
-        /// Gets the value of the Top attached property for a control.
+        /// Gets the paramValue of the Top attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
         /// <returns>The control's top coordinate.</returns>
@@ -239,16 +239,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Sets the value of the Top attached property for a control.
+        /// Sets the paramValue of the Top attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
-        /// <param name="value">The top value.</param>
+        /// <param name="value">The top paramValue.</param>
         public static void SetTop(AvaloniaObject element, double value) {
             element.SetValue(TopProperty, value);
         }
 
         /// <summary>
-        /// Gets the value of the Right attached property for a control.
+        /// Gets the paramValue of the Right attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
         /// <returns>The control's right coordinate.</returns>
@@ -257,16 +257,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Sets the value of the Right attached property for a control.
+        /// Sets the paramValue of the Right attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
-        /// <param name="value">The right value.</param>
+        /// <param name="value">The right paramValue.</param>
         public static void SetRight(AvaloniaObject element, double value) {
             element.SetValue(RightProperty, value);
         }
 
         /// <summary>
-        /// Gets the value of the Bottom attached property for a control.
+        /// Gets the paramValue of the Bottom attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
         /// <returns>The control's bottom coordinate.</returns>
@@ -275,10 +275,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Sets the value of the Bottom attached property for a control.
+        /// Sets the paramValue of the Bottom attached property for a control.
         /// </summary>
         /// <param name="element">The control.</param>
-        /// <param name="value">The bottom value.</param>
+        /// <param name="value">The bottom paramValue.</param>
         public static void SetBottom(AvaloniaObject element, double value) {
             element.SetValue(BottomProperty, value);
         }

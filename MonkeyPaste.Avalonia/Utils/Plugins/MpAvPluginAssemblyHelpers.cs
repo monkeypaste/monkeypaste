@@ -43,6 +43,9 @@ namespace MonkeyPaste.Avalonia {
         private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
             alc = null;
             try {
+                if (dllPath.ToLower().Contains("synth")) {
+                    return Assembly.LoadFrom(dllPath);
+                }
                 alc = new MpPluginAssemblyLoadContext(dllPath);
                 return alc.LoadFromAssemblyPath(dllPath);
             }
@@ -129,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine("Exported types exception: ", ex);
-                    throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex.Message}");
+                    throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex}");
                 }
             }
             return objs;

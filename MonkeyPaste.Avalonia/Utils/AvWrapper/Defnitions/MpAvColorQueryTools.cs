@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             if (string.IsNullOrEmpty(colorStr)) {
-                // return true when no match value provided
+                // return true when no match paramValue provided
                 return true;
             }
             var field_color = new MpColor(hexFieldStr).ToPixelColor();

@@ -37,7 +37,6 @@ namespace MonkeyPaste {
         public bool ForceShow { get; set; }
 
         public char PasswordChar { get; set; }
-        //public MpTextContentFormat BodyFormat { get; set; } = MpTextContentFormat.PlainText;
 
         #endregion
 
@@ -55,12 +54,6 @@ namespace MonkeyPaste {
             Body = pluginNotfication.Body;
             Detail = pluginNotfication.Detail;
             IconSourceObj = pluginNotfication.IconSourceObj;
-            RetryAction = pluginNotfication.RetryAction;
-            RetryActionObj = pluginNotfication.RetryActionObj;
-            FixCommand = pluginNotfication.FixCommand;
-            FixCommandArgs = pluginNotfication.FixCommandArgs;
-            OtherArgs = pluginNotfication.OtherArgs;
-            OwnerObj = pluginNotfication.OwnerObj;
         }
         #endregion
 

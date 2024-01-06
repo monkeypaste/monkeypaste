@@ -10,7 +10,7 @@ namespace MonkeyPaste.Common {
     public enum MpJsonDataTokenType {
         None = 0,
         RequestParamValueRef, // @<paramId>
-        Subsititution, // value: '...{0}...' where valuePath={0}
+        Subsititution, // paramValue: '...{0}...' where valuePath={0}
         PathIndex, // [#] where # is swapped for * and Property is list
         Eof, // <EOF> used to denoted contentEnd for text range annotation
     }
@@ -146,7 +146,7 @@ namespace MonkeyPaste.Common {
             outputValue = string.IsNullOrWhiteSpace(outputValue) ? "{0}" : outputValue;
 
             //if (!string.IsNullOrWhiteSpace(outputValue) && !string.IsNullOrWhiteSpace(result) && !outputValue.Contains("{0}")) {
-            //    throw new Exception($"if path exists, value must be formatted to subsititue it (value: '{outputValue}' path: '{pathExpression}' pathResult: '{result}')");
+            //    throw new Exception($"if path exists, paramValue must be formatted to subsititue it (paramValue: '{outputValue}' path: '{pathExpression}' pathResult: '{result}')");
             //}
             outputValue = outputValue.Replace("{0}", result);
             MatchCollection mc = _inputParamRegex.Matches(outputValue);
@@ -175,12 +175,12 @@ namespace MonkeyPaste.Common {
                 MpConsole.WriteLine(JsonConvert.SerializeObject(reqParams));
                 return null;
             }
-            return param_kvp.value;
+            return param_kvp.paramValue;
         }
 
         private string GetParamId(string queryParamValueStr) {
             if (string.IsNullOrEmpty(queryParamValueStr)) {
-                throw new Exception("Error creating http uri, dynamic query item has undefined value");
+                throw new Exception("Error creating http uri, dynamic query item has undefined paramValue");
             }
             if (!queryParamValueStr.StartsWith("@")) {
                 throw new Exception("Parameterized values must start with '@'");

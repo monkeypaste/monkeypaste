@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
             if (!resx_path.IsFile()) {
                 return elu;
             }
-            // NOTE using reflection not .ResourceManager returns invariant value only but this 
+            // NOTE using reflection not .ResourceManager returns invariant paramValue only but this 
             // should only run with default culture
             foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
                 if (pi.GetValue(null) is string val) {
@@ -195,7 +195,7 @@ namespace MonkeyPaste.Avalonia {
                 using ResXResourceWriter oWriter = new ResXResourceWriter(resx_path);
 
                 // NOTES
-                // 1. param enums to labels need to KEEP enum as value NOT label
+                // 1. param enums to labels need to KEEP enum as paramValue NOT label
 
                 var code_elu = GetCodeEnumsAsLookup();
                 code_elu.ForEach(x => oWriter.AddResource(x.Key, x.Value));

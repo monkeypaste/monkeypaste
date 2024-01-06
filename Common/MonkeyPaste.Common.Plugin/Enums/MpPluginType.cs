@@ -13,7 +13,7 @@
         /// </summary>
         Analyzer,
         /// <summary>
-        /// (Experimental) Fetches a set of key/value pairs (currently as <see cref="MpIContact"/> objects) for use with the 'Contact' type text templates available from the 🏷️ text editor toolbar button
+        /// (Experimental) Fetches a set of key/paramValue pairs (currently as <see cref="MpIContact"/> objects) for use with the 'Contact' type text templates available from the 🏷️ text editor toolbar button
         /// </summary>
         Fetcher
     }

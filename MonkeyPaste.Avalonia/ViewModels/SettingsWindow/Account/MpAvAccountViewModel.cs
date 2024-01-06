@@ -260,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!HasBillingCycle) {
                     return false;
                 }
-                MpDebug.Assert(NextPaymentUtc != DateTime.MaxValue, $"Account error, has billing cycle next payment date should have real value");
+                MpDebug.Assert(NextPaymentUtc != DateTime.MaxValue, $"Account error, has billing cycle next payment date should have real paramValue");
                 try {
                     return DateTime.UtcNow > NextPaymentUtc + TimeSpan.FromDays(1);
                 }
@@ -526,7 +526,7 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine($"Cannot find settings param '{param_id}'");
                     }
                 } else {
-                    MpConsole.WriteLine($"Non-req server resp error found. key '{error_kvp.Key.ToStringOrEmpty()}' value '{error_kvp.Value.ToStringOrEmpty()}'");
+                    MpConsole.WriteLine($"Non-req server resp error found. key '{error_kvp.Key.ToStringOrEmpty()}' paramValue '{error_kvp.Value.ToStringOrEmpty()}'");
                     err_sb.AppendLine(error_kvp.Value);
                 }
             }

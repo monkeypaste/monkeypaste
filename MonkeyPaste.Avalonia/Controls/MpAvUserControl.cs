@@ -28,17 +28,17 @@ namespace MonkeyPaste.Avalonia {
     //public abstract class MpAvUserControl<TViewModel> : MpAvUserControl, IViewFor<TViewModel> where TViewModel : class {
     //    public TViewModel BindingContext {
     //        get => GetValue(DataContextProperty) as TViewModel;
-    //        set => SetValue(DataContextProperty, value);
+    //        set => SetValue(DataContextProperty, paramValue);
     //    }
 
     //    public TViewModel ViewModel {
     //        get => BindingContext;
-    //        set => BindingContext = value;
+    //        set => BindingContext = paramValue;
     //    }
 
     //    object? IViewFor.ViewModel {
     //        get => ViewModel;
-    //        set => ViewModel = (TViewModel)value;
+    //        set => ViewModel = (TViewModel)paramValue;
     //    }
 
     //    public MpAvUserControl() : base() { }

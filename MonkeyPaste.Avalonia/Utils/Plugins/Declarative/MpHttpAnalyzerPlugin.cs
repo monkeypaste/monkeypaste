@@ -153,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         request.Headers.Add(kvp.key, kvp.value);
                     }
-                    Console.WriteLine($"Header Item: key: '{kvp.key}' value: '{(kvp.valuePath != null ? kvp.valuePath.value : kvp.value)}'");
+                    Console.WriteLine($"Header Item: key: '{kvp.key}' paramValue: '{(kvp.valuePath != null ? kvp.valuePath.value : kvp.value)}'");
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
                             string escapedParamVal = HttpUtility.JavaScriptStringEncode(paramVal);
 
                             raw = raw.Replace(c.Value, escapedParamVal);
-                            // JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
+                            // JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.paramValue));
                             //raw = JsonConvert.SerializeObject(raw);
 
                             //System.Object[] body = new System.Object[] { new { Text = paramVal } };
@@ -266,12 +266,12 @@ namespace MonkeyPaste.Avalonia {
                 Console.WriteLine(JsonConvert.SerializeObject(_reqParams));
                 return null;
             }
-            return enumParam.value;
+            return enumParam.paramValue;
         }
 
         private string GetParamIdStr(string queryParamValueStr) {
             if (string.IsNullOrEmpty(queryParamValueStr)) {
-                throw new Exception("Error creating http uri, dynamic query item has undefined value");
+                throw new Exception("Error creating http uri, dynamic query item has undefined paramValue");
             }
             if (!queryParamValueStr.StartsWith("@")) {
                 throw new Exception("Parameterized values must start with '@'");
@@ -309,8 +309,8 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            // dataObjectLookup format should have a json path as its value to be used as query for result
-            // when format value empty return whole result
+            // dataObjectLookup format should have a json path as its paramValue to be used as query for result
+            // when format paramValue empty return whole result
             Dictionary<string, object> result = new Dictionary<string, object>();
             foreach (var do_format in data_object_format) {
                 JToken query_token = curToken.SelectToken(do_format.Value.ToStringOrDefault());
@@ -387,11 +387,11 @@ namespace MonkeyPaste.Avalonia {
         //            //}
         //            if (a.label != null) {
         //                a.label.SetValue(curToken, _reqParams, idx);
-        //                a.label = a.label.omitIfPathNotFound && a.label.value == null ? null : a.label;
+        //                a.label = a.label.omitIfPathNotFound && a.label.paramValue == null ? null : a.label;
         //            }
         //            if (a.score != null) {
         //                a.score.SetValue(curToken, _reqParams, idx);
-        //                a.score = a.score.omitIfPathNotFound && a.score.value == default ? null : a.score;
+        //                a.score = a.score.omitIfPathNotFound && a.score.paramValue == default ? null : a.score;
         //            }
         //            a.children = CreateAnnotations(a.children, curToken, 0);
 

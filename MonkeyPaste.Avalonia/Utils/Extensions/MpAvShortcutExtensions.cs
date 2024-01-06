@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpShortcutType.AnalyzeCopyItemWithPreset:
                     template = UiStrings.ShortcutRunAnalyzerTitle;
-                    var pp = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(id);
+                    var pp = await MpDataModelProvider.GetItemAsync<MpPreset>(id);
                     if (pp != null) {
                         title_arg = pp.Label;
                     }

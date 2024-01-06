@@ -127,7 +127,7 @@ namespace MonkeyPaste {
                 //implies this an add so all syncable columns are returned
                 other = new MpDbImage();
             }
-            //returns db column name and string value of dr that is diff
+            //returns db column name and string paramValue of dr that is diff
             var diffLookup = new Dictionary<string, string>();
             diffLookup = CheckValue(DbImageGuid, other.DbImageGuid,
                 "MpDbImageGuid",

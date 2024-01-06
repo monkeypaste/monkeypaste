@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
         public int SelectedItemIdx {
             get => Items.IndexOf(SelectedItem);
             set {
-                //if(value < -1) {
+                //if(paramValue < -1) {
                 //    return;
                 //}
                 SelectedItem = value < 0 || value >= Items.Count ? null : Items[value];

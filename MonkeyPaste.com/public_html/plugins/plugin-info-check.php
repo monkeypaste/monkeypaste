@@ -13,23 +13,25 @@ function exit_w_info_resp(string $plugin_guid, string $version, bool $is_install
     $statement = db()->prepare($sql);
 
     $statement->bindValue(':plugin_guid', $plugin_guid);
-    $statement->execute();
+    $success = $statement->execute();
 
     $plugin = $statement->fetch(PDO::FETCH_ASSOC);
 
     $install_count = 0;
     $publish_dt = getFormattedDateTimeStr(null);
+    $cur_ver = '1.0.0';
 
     if ($plugin) {
         $install_count = $plugin['install_count'];
         $publish_dt = $plugin['publish_dt'];
+        $cur_ver = $plugin['ver'];
     } else {
         // add new plugin
         if (!add_plugin($plugin_guid, $version, $publish_dt)) {
             exit_w_error('error adding plugin ' . $plugin_guid . $version);
         }
     }
-    $ver_comp_result = version_compare($version, $plugin['ver']);
+    $ver_comp_result = version_compare($version, $cur_ver);
     if ($ver_comp_result > 0) {
         // new version detected, update publish date
         $publish_dt = getFormattedDateTimeStr(null);
@@ -93,8 +95,8 @@ function add_plugin(string $plugin_guid, string $ver, string $publish_dt): bool
 
 $testdata = [
     'plugin_guid' => '4950',
-    'version' => '1.0.1',
-    'is_install' => '1',
+    'version' => '1.0.0',
+    'is_install' => '0',
 ];
 
 $fields = [

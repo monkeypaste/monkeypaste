@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpPluginRequestItemFormat Implementation
 
         //object MpIParameterKeyValuePair.paramId => ParamId;
-        //string MpIParameterKeyValuePair.value => CurrentValue;
+        //string MpIParameterKeyValuePair.paramValue => CurrentValue;
 
 
         #endregion
@@ -415,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Plugin (MpPluginParameterFormat)
 
-        public object ParamId {
+        public string ParamId {
             get {
                 if (ParameterFormat == null) {
                     return null;
@@ -639,7 +639,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsRememberChecked) {
                     return true;
                 }
-                // when marked as not remember but model has value need to clear it for uncheck to persist
+                // when marked as not remember but model has paramValue need to clear it for uncheck to persist
                 return
                     PresetValueModel != null &&
                     !string.IsNullOrEmpty(PresetValueModel.Value);
@@ -719,7 +719,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     //IsBusy = true;
                     if (IsSharedValue && Parent is MpIParameterHostViewModel phvm) {
-                        // update all references to persistent param with this new value 
+                        // update all references to persistent param with this new paramValue 
                         var all_param_refs =
                             await MpDataModelProvider.GetAllParameterValueInstancesForPluginAsync(ParamId.ToString(), phvm.PluginGuid);
 

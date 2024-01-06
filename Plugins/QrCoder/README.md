@@ -10,6 +10,7 @@ This project can be used as a reference for anyone interested in [MonkeyPaste](h
 
 Here's some highlights of what it demonstrates:
 - Content generation
+- Clip meta-information usage
 
 ## Special Thanks
 

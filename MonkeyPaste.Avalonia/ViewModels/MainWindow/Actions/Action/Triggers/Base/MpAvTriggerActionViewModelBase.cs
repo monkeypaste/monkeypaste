@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsEnabled {
             get => Arg2.ParseOrConvertToBool(false); //string.IsNullOrEmpty(Arg2) ? null : bool.Parse(Arg2);
             set {
-                var newVal = value.ToString(); //value == null ? null : value.ToString();
+                var newVal = value.ToString(); //paramValue == null ? null : paramValue.ToString();
                 if (Arg2 != newVal) {
                     Arg2 = newVal;
                     HasModelChanged = true;

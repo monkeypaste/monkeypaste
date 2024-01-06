@@ -23,12 +23,12 @@ namespace MonkeyPaste.Avalonia {
             return Enum.Parse(typeof(MpDb).Assembly.GetType(paramStr), intVal.ToString());
 
             //string enumTypeStr = parameter as string;
-            //if(string.IsNullOrEmpty(enumTypeStr) || (int)value < 0) {
-            //    return (int)value;
+            //if(string.IsNullOrEmpty(enumTypeStr) || (int)paramValue < 0) {
+            //    return (int)paramValue;
             //}
             //var enumType = Assembly.GetAssembly(typeof(MpDb)).GetType(enumTypeStr);
 
-            //var result = Enum.ToObject(enumType, (int)value);
+            //var result = Enum.ToObject(enumType, (int)paramValue);
             //return result;
         }
     }

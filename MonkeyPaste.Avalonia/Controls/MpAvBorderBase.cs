@@ -132,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Gets or sets a value that specifies the distance within the dash pattern where a dash begins.
+        /// Gets or sets a paramValue that specifies the distance within the dash pattern where a dash begins.
         /// </summary>
         public double BorderDashOffset {
             get { return GetValue(BorderDashOffsetProperty); }
@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Gets or sets a <see cref="PenLineCap"/> enumeration value that describes the shape at the ends of a line.
+        /// Gets or sets a <see cref="PenLineCap"/> enumeration paramValue that describes the shape at the ends of a line.
         /// </summary>
         public PenLineCap BorderLineCap {
             get { return GetValue(BorderLineCapProperty); }
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         /// <summary>
-        /// Gets or sets a <see cref="PenLineJoin"/> enumeration value that specifies the type of join that is used at the vertices of a Shape.
+        /// Gets or sets a <see cref="PenLineJoin"/> enumeration paramValue that specifies the type of join that is used at the vertices of a Shape.
         /// </summary>
         public PenLineJoin BorderLineJoin {
             get { return GetValue(BorderLineJoinProperty); }

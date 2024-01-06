@@ -489,7 +489,7 @@ namespace MonkeyPaste.Avalonia {
             get => (int)RoutingProfileType;
             set {
                 if (value < 0 || value >= typeof(MpShortcutRoutingProfileType).Length()) {
-                    // bad ui value set
+                    // bad ui paramValue set
                     return;
                 }
                 if (value != (int)RoutingProfileType) {
@@ -736,7 +736,7 @@ namespace MonkeyPaste.Avalonia {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == ci.Id.ToString() && x.ShortcutType == MpShortcutType.PasteCopyItem);
             } else if (e is MpTag t) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == t.Id.ToString() && x.ShortcutType == MpShortcutType.SelectTag);
-            } else if (e is MpPluginPreset aip) {
+            } else if (e is MpPreset aip) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == aip.Id.ToString() && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
             } else if (e is MpAction a) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == a.Id.ToString() && x.ShortcutType == MpShortcutType.InvokeTrigger);

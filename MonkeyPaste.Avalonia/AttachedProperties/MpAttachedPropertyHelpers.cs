@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
             if (_instancePropertyLookup.TryGetValue(obj, out Dictionary<string, object> objPropLookup)) {
                 //instance has properties
                 if (objPropLookup.ContainsKey(propName)) {
-                    //instance property already has value
+                    //instance property already has paramValue
                     objPropLookup[propName] = newValue;
                     _instancePropertyLookup[obj] = objPropLookup;
                 } else {

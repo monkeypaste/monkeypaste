@@ -134,7 +134,7 @@ namespace MonkeyPaste {
                         $"DataObject error! URI List should ALWAYS be a collection but was '{kvp.Value}'");
 
                     if (_IgnoredFormatNames.Contains(kvp.Key.Name)) {
-                        // don't need to worry about storing this (value type is list)
+                        // don't need to worry about storing this (paramValue type is list)
                         continue;
                     }
                     if (kvp.Key.Name == MpPortableDataFormats.Files) {

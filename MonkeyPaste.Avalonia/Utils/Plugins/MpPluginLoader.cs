@@ -643,11 +643,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             try {
-                if (pluginAssembly.FindSubTypes<MpISupportHeadlessAnalyzerComponentFormat>() is { } acl && acl.Any()) {
-                    plugin.analyzer = acl.FirstOrDefault().GetFormat(new MpHeadlessAnalyzerComponentFormatRequest());
+                if (pluginAssembly.FindSubTypes<MpISupportHeadlessAnalyzerFormat>() is { } acl && acl.Any()) {
+                    plugin.analyzer = acl.FirstOrDefault().GetFormat(new MpHeadlessComponentFormatRequest());
                 }
                 if (pluginAssembly.FindSubTypes<MpISupportHeadlessClipboardComponentFormat>() is { } cbhcl && cbhcl.Any()) {
-                    plugin.oleHandler = cbhcl.FirstOrDefault().GetFormats(new MpHeadlessClipboardComponentFormatRequest());
+                    plugin.oleHandler = cbhcl.FirstOrDefault().GetFormats(new MpHeadlessComponentFormatRequest());
                 }
             }
             catch (Exception ex) {
@@ -694,12 +694,12 @@ namespace MonkeyPaste.Avalonia {
                 var preset_param_vals_with_no_param_match =
                     preset.values.Where(x => cbf.parameters.All(y => y.paramId != x.paramId));
                 foreach (var preset_param_val_with_no_param_match in preset_param_vals_with_no_param_match) {
-                    throw new MpUserNotifiedException($"Cannot find parameter with paramId '{preset_param_val_with_no_param_match.paramId}' referenced by Preset '{preset.label}' for Plugin '{plugin_label}'. Parameter may have changed or was removed, update preset value or remove it.");
+                    throw new MpUserNotifiedException($"Cannot find parameter with paramId '{preset_param_val_with_no_param_match.paramId}' referenced by Preset '{preset.label}' for Plugin '{plugin_label}'. Parameter may have changed or was removed, update preset paramValue or remove it.");
                 }
                 var preset_vals_for_persistent_params =
                     preset.values.Where(x => cbf.parameters.FirstOrDefault(y => x.paramId == y.paramId).isSharedValue);
                 foreach (var preset_val_for_persistent_params in preset_vals_for_persistent_params) {
-                    throw new MpUserNotifiedException($"Cannot set persistent parameters in Presets. Param value w/ id '{preset_val_for_persistent_params.paramId}' in Preset '{preset.label}' for Plugin '{plugin_label}' needs to be removed or value can be specified in the parameter definition section.");
+                    throw new MpUserNotifiedException($"Cannot set persistent parameters in Presets. Param paramValue w/ id '{preset_val_for_persistent_params.paramId}' in Preset '{preset.label}' for Plugin '{plugin_label}' needs to be removed or paramValue can be specified in the parameter definition section.");
                 }
             }
 

@@ -17,7 +17,7 @@ namespace AltOleHandler {
                 // already omitted
                 return data;
             }
-            string paramVal = pkvp.value;
+            string paramVal = pkvp.paramValue;
             try {
                 // NOTE by internal convention 'paramId' is an int.
                 // plugin creator has to manage mapping internally

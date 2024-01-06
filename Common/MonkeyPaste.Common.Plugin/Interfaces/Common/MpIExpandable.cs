@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public interface MpIExpandableViewModel {
+    public interface MpIExpandable {
         bool IsExpanded { get; set; }
     }
 }

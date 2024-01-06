@@ -902,7 +902,7 @@ namespace MonkeyPaste.Avalonia {
                                                 //.Select(x=>
                                                 //    new MpPluginParameterValueFormat() {
                                                 //        isDefault = true,
-                                                //        value = x
+                                                //        paramValue = x
                                                 //    })
                                                 //.ToList()
                                         }

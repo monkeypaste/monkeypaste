@@ -961,7 +961,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyCount != value) {
-                    //CopyItem.CopyCount = value;
+                    //CopyItem.CopyCount = paramValue;
                     //HasModelChanged = true;
                     NotifyModelChanged(CopyItem, nameof(CopyItem.CopyCount), value);
                     OnPropertyChanged(nameof(CopyCount));
@@ -978,7 +978,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (PasteCount != value) {
-                    //CopyItem.PasteCount = value;
+                    //CopyItem.PasteCount = paramValue;
                     //HasModelChanged = true;
                     NotifyModelChanged(CopyItem, nameof(CopyItem.PasteCount), value);
                     OnPropertyChanged(nameof(PasteCount));
@@ -1183,7 +1183,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItemHexColor != value) {
-                    //CopyItem.ItemColor = value;
+                    //CopyItem.ItemColor = paramValue;
                     //HasModelChanged = true;
 
                     NotifyModelChanged(CopyItem, nameof(CopyItem.ItemColor), value);

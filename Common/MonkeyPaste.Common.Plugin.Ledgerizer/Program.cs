@@ -5,12 +5,22 @@ using System.IO.Compression;
 namespace MonkeyPaste.Common.Plugin.Ledgerizer {
     internal class Program {
 
+
+        const string BUILD_CONFIG =
+#if DEBUG
+            "Debug";
+#else
+            "Release";
+#endif
         static string[] Plugins = [
             "ChatGpt",
             "ComputerVision",
             "FileConverter",
             "ImageAnnotator",
+            "MinimalExample",
             "QrCoder",
+            "TextToSpeech",
+            "TextTranslator",
             "WebSearch"
         ];
         static bool LEDGERIZE_LOCAL = true;
@@ -57,30 +67,42 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             if (!LocalReleasesDir.IsDirectory()) {
                 MpFileIo.CreateDirectory(LocalReleasesDir);
             }
-            MpFileIo.DeleteDirectory(Path.Combine(projDir, "bin"));
-            MpFileIo.DeleteDirectory(Path.Combine(projDir, "obj"));
             string publish_dir = Path.Combine(LocalReleasesDir, Path.GetFileName(projDir));
 
-            var proc = new Process();
-            proc.StartInfo.FileName = @"C:\Program Files\dotnet\dotnet.exe";
-            proc.StartInfo.Arguments = $"publish --configuration Release --output {publish_dir}";
-            proc.StartInfo.WorkingDirectory = projDir;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.Start();
-            string proc_output = proc.StandardOutput.ReadToEnd();
+            if (CanBuild(projDir)) {
+                MpFileIo.DeleteDirectory(Path.Combine(projDir, "bin"));
+                MpFileIo.DeleteDirectory(Path.Combine(projDir, "obj"));
+                var proc = new Process();
+                proc.StartInfo.FileName = @"C:\Program Files\dotnet\dotnet.exe";
+                proc.StartInfo.Arguments = $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
+                proc.StartInfo.WorkingDirectory = projDir;
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.Start();
+                string proc_output = proc.StandardOutput.ReadToEnd();
 
-            proc.WaitForExit();
-            int exit_code = proc.ExitCode;
-            proc.Close();
+                proc.WaitForExit();
+                int exit_code = proc.ExitCode;
+                proc.Close();
 
-            if (exit_code != 0) {
-                Console.WriteLine("");
-                Console.WriteLine($"Error from '{Path.GetFileName(projDir)}' exit code '{exit_code}'");
-                Console.WriteLine(proc_output);
-                Console.WriteLine("");
+                if (exit_code != 0) {
+                    Console.WriteLine("");
+                    Console.WriteLine($"Error from '{Path.GetFileName(projDir)}' exit code '{exit_code}'");
+                    Console.WriteLine(proc_output);
+                    Console.WriteLine("");
+                    return null;
+                }
+            } else if (Path.Combine(projDir, "bin", BUILD_CONFIG) is string build_dir &&
+                        build_dir.IsDirectory()) {
+                if (publish_dir.IsDirectory()) {
+                    MpFileIo.DeleteDirectory(publish_dir);
+                }
+                MpFileIo.CreateDirectory(publish_dir);
+                new DirectoryInfo(build_dir).CopyContents(new DirectoryInfo(publish_dir), true, true);
+            } else {
                 return null;
             }
+
             if (!publish_dir.IsDirectory()) {
                 return null;
             }
@@ -90,6 +112,31 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             Console.WriteLine(output_path + " DONE");
 
             return output_path.ToFileSystemUriFromPath();
+        }
+
+        static bool CanBuild(string projDir) {
+            string dot_net_match_str = @"<Project Sdk=""Microsoft.NET.Sdk"">";
+
+            if (Directory.GetFiles(projDir).FirstOrDefault(x => x.EndsWith(".csproj")) is string proj_path &&
+                !MpFileIo.ReadTextFromFile(proj_path).Contains(dot_net_match_str)) {
+                return false;
+            }
+            return true;
+        }
+        static (string, string) GetProcessArgs(string projDir, string publish_dir) {
+            string dot_net_match_str = @"<Project Sdk=""Microsoft.NET.Sdk"">";
+
+            if (Directory.GetFiles(projDir).FirstOrDefault(x => x.EndsWith(".csproj")) is string proj_path &&
+                !MpFileIo.ReadTextFromFile(proj_path).Contains(dot_net_match_str)) {
+                return (
+                    @"C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe",
+                    @$"/p:OutDir={publish_dir}"
+                    );
+            }
+            return (
+                    @"C:\Program Files\dotnet\dotnet.exe",
+                    $"publish --configuration Release --output {publish_dir}"
+                    );
         }
     }
 }

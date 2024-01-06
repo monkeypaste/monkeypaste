@@ -148,8 +148,8 @@ namespace MonkeyPaste.Avalonia {
         /// Add an item to the undoable list.
         /// </summary>
         /// <param name="property">The property change.</param>
-        /// <param name="oldValue">The original value.</param>
-        /// <param name="newValue">The updated value.</param>
+        /// <param name="oldValue">The original paramValue.</param>
+        /// <param name="newValue">The updated paramValue.</param>
         protected void AddUndo(object oldValue, object newValue, string name = "", [CallerMemberName] string property = "") {
             AddUndo(this, property, oldValue, newValue, string.IsNullOrEmpty(name) ? property : name);
         }
@@ -159,8 +159,8 @@ namespace MonkeyPaste.Avalonia {
         /// </summary>
         /// <param name="instance">The instance to add the undoable item against.</param>
         /// <param name="property">The property change.</param>
-        /// <param name="oldValue">The original value.</param>
-        /// <param name="newValue">The updated value.</param>
+        /// <param name="oldValue">The original paramValue.</param>
+        /// <param name="newValue">The updated paramValue.</param>
         /// <param name="name">The name of the undo operation.</param>
         protected void AddUndo(object instance, string property, object oldValue, object newValue, string name) {
             Undoable.Add(new MpUndoableProperty(instance, property, oldValue, newValue, name));

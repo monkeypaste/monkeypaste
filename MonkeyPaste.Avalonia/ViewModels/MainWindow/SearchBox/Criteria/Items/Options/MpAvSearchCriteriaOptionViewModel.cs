@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         public double SliderValue {
             get {
                 // NOTE presuming this is only needed for color distance
-                // and unit value is scaled to 0-255
+                // and unit paramValue is scaled to 0-255
                 if (string.IsNullOrWhiteSpace(Value)) {
                     Value = "0";
                 }
@@ -399,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
 
                 string out_of_range_msg = $"Value must be from {value_range.Item1} to {value_range.Item2}";
                 if (FilterValue.HasMultiValue()) {
-                    // multi-value 
+                    // multi-paramValue 
                     var is_not_number_idxs = Values.Where(x => notNumRegEx.IsMatch(x)).Select(x => Values.IndexOf(x)).ToList();
                     if (is_not_number_idxs.Count > 0) {
                         // non-number characters
@@ -421,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 } else {
-                    // single value
+                    // single paramValue
                     bool is_not_number = notNumRegEx.IsMatch(Value);
                     if (is_not_number) {
                         // non-number characters
@@ -441,7 +441,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             } else if (UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
-                string invalid_hex_msg = "Must be a hex (6 or 8 value) string starting with '#'";
+                string invalid_hex_msg = "Must be a hex (6 or 8 paramValue) string starting with '#'";
                 if (!Value.IsStringHexColor()) {
                     ValidationText = invalid_hex_msg;
                 }

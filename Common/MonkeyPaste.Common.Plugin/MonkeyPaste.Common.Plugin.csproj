@@ -29,20 +29,15 @@
   </Target>
 
   <ItemGroup>
-    <Compile Remove="Formats\Components\Reusable\Response\Annotations\**" />
-    <Compile Remove="Formats\Components\Reusable\Response\NewContent\**" />
     <Compile Remove="Formats\Google\**" />
-    <EmbeddedResource Remove="Formats\Components\Reusable\Response\Annotations\**" />
-    <EmbeddedResource Remove="Formats\Components\Reusable\Response\NewContent\**" />
     <EmbeddedResource Remove="Formats\Google\**" />
-    <None Remove="Formats\Components\Reusable\Response\Annotations\**" />
-    <None Remove="Formats\Components\Reusable\Response\NewContent\**" />
     <None Remove="Formats\Google\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="Formats\Components\Contact\" />
+    <Folder Include="Formats\Parameters\" />
+    <Folder Include="Util\" />
   </ItemGroup>
 
   <ItemGroup>

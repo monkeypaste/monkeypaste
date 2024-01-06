@@ -223,7 +223,7 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Large images (more than a few MBs) can make drag-and-drop and overall performance somewhat sluggish unfortunately. Try to keep this value low..
+        ///   Looks up a localized string similar to Large images (more than a few MBs) can make drag-and-drop and overall performance somewhat sluggish unfortunately. Try to keep this paramValue low..
         /// </summary>
         public static string ImgMaxHint {
             get {

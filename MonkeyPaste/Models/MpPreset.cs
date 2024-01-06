@@ -7,11 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpPluginPreset :
+    public class MpPreset :
         MpDbModelBase,
         MpISourceRef,
         MpILabelText,
-        MpIClonableDbModel<MpPluginPreset> {
+        MpIClonableDbModel<MpPreset> {
 
         #region MpILabelText Implementation
         string MpILabelText.LabelText => Label;
@@ -33,11 +33,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region Columns
-        [Column("pk_MpPluginPresetId")]
+        [Column("pk_MpPresetId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
-        [Column("MpPluginPresetGuid")]
+        [Column("MpPresetGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         public string PluginGuid { get; set; }
@@ -143,7 +143,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpPluginPreset> CreateOrUpdateAsync(
+        public static async Task<MpPreset> CreateOrUpdateAsync(
             string pluginGuid = "",
             string guid = "",
             string label = "",
@@ -176,7 +176,7 @@ namespace MonkeyPaste {
                 return dup_check;
             }
 
-            var newPluginPreset = new MpPluginPreset() {
+            var newPluginPreset = new MpPreset() {
                 AnalyticItemPresetGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 PluginGuid = pluginGuid,
                 Label = label,
@@ -199,10 +199,10 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpPluginPreset> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
+        public async Task<MpPreset> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             // NOTE does not clone ShortcutId,IsDefault or IsQuickAction
 
-            var caip = new MpPluginPreset() {
+            var caip = new MpPreset() {
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
                 PluginGuid = this.PluginGuid,
                 Label = this.Label + " - Copy",
@@ -241,7 +241,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpPluginPreset() : base() { }
+        public MpPreset() : base() { }
 
         public override async Task DeleteFromDatabaseAsync() {
             if (Id < 1) {

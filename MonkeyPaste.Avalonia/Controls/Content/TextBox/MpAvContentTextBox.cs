@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleTextChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvContentTextBox tb) {
-                //RaisePropertyChanged(TextProperty, oldValue, value);
+                //RaisePropertyChanged(TextProperty, oldValue, paramValue);
             }
         }
 

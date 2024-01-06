@@ -193,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyAnalysisTransaction =>
             Transactions.Any(x => x.IsAnalysisTransaction);
 
-        public int LastTabIdx { get; set; } = -1;
+        public int LastTabIdx { get; set; } = (int)MpTransactionTabType.Response;
 
         #endregion
 

@@ -1,15 +1,15 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
 namespace WebSearch {
     public class WebSearch : MpIAnalyzeComponent {
+        const string URI_PARAM_ID = "1";
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
             if (req != null &&
-                req.GetRequestParamStringValue(1) is string uri) {
+                req.GetParamValue<string>(URI_PARAM_ID) is string uri) {
                 try {
                     using (var myProcess = new Process()) {
                         myProcess.StartInfo.UseShellExecute = true;

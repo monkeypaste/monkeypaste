@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                     ParameterReqFormat.items == null) {
                     return false;
                 }
-                return PresetViewModel.ParamLookup.Difference(ParameterReqFormat.items.ToDictionary(x => x.paramId, x => x.value)).Any();
+                return PresetViewModel.ParamLookup.Difference(ParameterReqFormat.items.ToDictionary(x => x.paramId, x => x.paramValue)).Any();
 
             }
         }
@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand ResetPresetValuesCommand => new MpAsyncCommand(
             async () => {
-                var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(PresetViewModel.AnalyticItemPresetId);
+                var preset = await MpDataModelProvider.GetItemAsync<MpPreset>(PresetViewModel.AnalyticItemPresetId);
 
                 await PresetViewModel.InitializeAsync(preset);
 
@@ -162,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
                         // case, not sure
                         continue;
                     }
-                    pvm.CurrentValue = req_param.value;
+                    pvm.CurrentValue = req_param.paramValue;
                 }
                 //PresetViewModel.ResetOrDeleteThisPresetCommand.Execute(ParameterReqFormat);
                 OnPropertyChanged(nameof(CanRestore));

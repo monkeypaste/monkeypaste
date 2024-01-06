@@ -56,7 +56,7 @@ namespace MonkeyPaste.Common.Plugin {
         /// </summary>
         public string licenseUrl { get; set; }
         /// <summary>
-        /// When <value>true</value>, this plugin will <b>not install</b> if user does not accept the optionally viewable <see cref="licenseUrl"/> 
+        /// When <paramValue>true</paramValue>, this plugin will <b>not install</b> if user does not accept the optionally viewable <see cref="licenseUrl"/> 
         /// </summary>
         public bool? requireLicenseAcceptance { get; set; }
         /// <summary>
@@ -76,7 +76,7 @@ namespace MonkeyPaste.Common.Plugin {
         /// </summary>
         public string packageUrl { get; set; }
         /// <summary>
-        /// Terms that describe this plugin for searching and group in comma separated value format (csv). It cannot be more than 1024 characters long.
+        /// Terms that describe this plugin for searching and group in comma separated paramValue format (csv). It cannot be more than 1024 characters long.
         /// </summary>
         public string tags { get; set; }
 

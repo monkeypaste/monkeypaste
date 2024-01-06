@@ -22,7 +22,7 @@ namespace CoreOleHandler {
                 // already omitted
                 return data;
             }
-            string paramVal = paramInfo.value;
+            string paramVal = paramInfo.paramValue;
             try {
                 // NOTE by internal convention 'paramId' is an int.
                 // plugin creator has to manage mapping internally
@@ -221,11 +221,11 @@ namespace CoreOleHandler {
                                     if (data is not string base64 || base64.ToAvBitmap() is not { } bmp) {
                                         break;
                                     }
-                                    bool ignore_empty = req.GetRequestParamBoolValue(CoreOleParamType.PNG_R_IGNORE_EMPTY);
+                                    bool ignore_empty = req.GetParamValue<bool>(CoreOleParamType.PNG_R_IGNORE_EMPTY.ToString());
                                     bool do_scale = paramVal.ParseOrConvertToBool(false);
 
-                                    double max_w = req.GetRequestParamDoubleValue(CoreOleParamType.PNG_R_MAXW);
-                                    double max_h = req.GetRequestParamDoubleValue(CoreOleParamType.PNG_R_MAXH);
+                                    double max_w = req.GetParamValue<double>(CoreOleParamType.PNG_R_MAXW.ToString());
+                                    double max_h = req.GetParamValue<double>(CoreOleParamType.PNG_R_MAXH.ToString());
 
                                     MpSize bmp_size = bmp.Size.ToPortableSize();
                                     MpSize adj_size = bmp_size.ResizeKeepAspect(max_w, max_h);

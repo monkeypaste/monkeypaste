@@ -43,15 +43,9 @@ namespace MinimalExample {
 Every plugin must have a `manifest.json` file included in its bundle. At a minimum it provides basic meta and package information. But will also include rules for the types of content and parameters it can handle.
 ```jsx
 {
-    "title": "Hello World",
-    "description": "Outputs 'Hello World' as a new text clip",
-    "version": "1.0.0",
-    "author": "Thomas Kefauver",
-    "guid": "aa4ceef6-e050-4ed5-b308-7c99942436c3",
-    "projectUrl": "https://github.com/monkeypaste/QRCoder/",
-    "iconUri": "https://en.wikipedia.org/wiki/Monkey_selfie_copyright_dispute#/media/File:Macaca_nigra_self-portrait_large.jpg",
-    "packageType": "Dll",
-    "tags": "Core, Qr Code, Text, Image, Link, Converter"
+  "title": "Hello World",
+  "guid": "aa4ceef6-e050-4ed5-b308-7c99942436c3",
+  "packageUrl": "https://github.com/monkeypaste/MinimalExample/releases/download/v1.0.0/MinimalExample.zip",
 }
 ```
  Required Fields:
@@ -60,7 +54,7 @@ Every plugin must have a `manifest.json` file included in its bundle. At a minim
 | --- | --- | --- | ---|
 | title | Any name is fine but it must have one |✅|✅|
 | guid | An RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens |✅|✅|
-| version | A version format that follows common practices |❌|✅|
+| version | The default is 1.0.0 but setting blank is not valid. A major, minor, patch format is preferred. |❌|✅|
 | packageUrl | A url to a zip compressed file (.zip) of this projects build output |❌|✅|
 
 :::tip Guid Generator

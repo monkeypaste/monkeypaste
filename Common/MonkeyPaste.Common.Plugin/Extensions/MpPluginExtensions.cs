@@ -2,103 +2,25 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
-    public interface MpICustomCsvFormat {
-        MpCsvFormatProperties CsvFormat { get; }
-    }
-    public class MpCsvFormatProperties {
-        public static string EXCEL_EOF_MARKER = "\0"; // tested in excel 365 on windows csv terminates with \0 on a trailing line
-        public static string CSV_DEFAULT_COLUMN_SEPARATOR = ",";
-        public static string CSV_DEFAULT_ROW_SEPARATOR = Environment.NewLine;
 
-        public static double CSV_DEFAULT_FORMATTED_FONT_SIZE = 14.0d;
-        public static string CSV_DEFAULT_FORMATTED_FONT_FAMILY = "Consolas";
-
-        public static MpCsvFormatProperties Default => new MpCsvFormatProperties();
-        public static MpCsvFormatProperties DefaultBase64Value => new MpCsvFormatProperties() { IsValueBase64 = true };
-
-        public string EocSeparator { get; set; } = CSV_DEFAULT_COLUMN_SEPARATOR;
-        public string EorSeparator { get; set; } = CSV_DEFAULT_ROW_SEPARATOR;
-
-        public double FormattedFontSize { get; set; } = CSV_DEFAULT_FORMATTED_FONT_SIZE;
-        public string FormattedFontFamily { get; set; } = CSV_DEFAULT_FORMATTED_FONT_FAMILY;
-
-        public bool IsValueBase64 { get; set; } = false;
-
-        public Encoding ValueEncoding { get; set; } = null; // default/null resolves to UTF-8 (or tentatively based on locale)
-
-        public string EncodeValue(string value) {
-            //return IsValueBase64 ? value.ToBase64String(ValueEncoding) : value;
-            return IsValueBase64 ?
-                Convert.ToBase64String(Encoding.UTF8.GetBytes(value)) : value;
-        }
-
-        public string DecodeValue(string value) {
-            if (IsValueBase64) {
-                //if (!value.IsStringBase64()) {
-                //    // predefined values may not be encoded..
-                //    return value;
-                //}
-                //return value.ToStringFromBase64(ValueEncoding);
-                return Encoding.UTF8.GetString(Convert.FromBase64String(value));
-            }
-            return value;
-        }
-    }
     public static class MpPluginExtensions {
-        #region Csv
-        public static string ToCsv(this IEnumerable<string> strList, MpICustomCsvFormat csvObj) {
-            return ToCsv(strList, csvObj.CsvFormat);
-        }
-        public static string ToCsv(this IEnumerable<string> strList, MpCsvFormatProperties csvProps = null) {
-            if (strList == null || !strList.Any()) {
-                return string.Empty;
-            }
-            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            return
-                string.Join(
-                    csvProps.EocSeparator,
-                    strList.Select(x => csvProps.EncodeValue(x)));
-        }
-        public static List<string> ToListFromCsv(this string csvStr, MpICustomCsvFormat csvObj) {
-            return ToListFromCsv(csvStr, csvObj.CsvFormat);
-        }
-        public static List<string> ToListFromCsv(this string csvStr, MpCsvFormatProperties csvProps = null) {
-            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            return
-                csvStr.Split(new string[] { csvProps.EocSeparator }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => csvProps.DecodeValue(x))
-                .ToList();
-        }
+        #region Private Variables
 
-        public static string AddCsvItem(this string csvStr, string item, bool allowDup = true, MpCsvFormatProperties csvProps = null) {
-            csvProps = csvProps ?? MpCsvFormatProperties.Default;
-            var items = csvStr.ToListFromCsv(csvProps);
-            if (allowDup || !items.Contains(item)) {
-                items.Add(item);
-            }
-            return items.ToCsv(csvProps);
-        }
-
-        public static string RemoveCsvItem(this string csvStr, string item, bool removeAll = true, MpCsvFormatProperties csvProps = null) {
-            csvProps = csvProps ?? MpCsvFormatProperties.Default;
-            var items = csvStr.ToListFromCsv(csvProps);
-            List<string> to_remove = new();
-            foreach (var curitem in items) {
-                if (curitem == item && (removeAll || !to_remove.Any())) {
-                    to_remove.Add(curitem);
-                }
-            }
-            to_remove.ForEach(x => items.Remove(x));
-            return items.ToCsv(csvProps);
-        }
+        private static Dictionary<Type, Func<MpPluginParameterRequestFormat, string, object>> typeConvLookup = new() {
+            {typeof(bool),GetRequestParamBoolValue},
+            {typeof(int),GetRequestParamIntValue},
+            {typeof(double),GetRequestParamDoubleValue},
+            {typeof(string),GetRequestParamStringValue},
+            {typeof(List<string>),GetRequestParamStringListValue}
+        };
 
         #endregion
 
+        #region Public Methods
 
-
+        #region Parsers
         public static DateTime ParseOrConvertToDateTime(this object obj, object fallback = null) {
             if (obj == default) {
                 if (obj == fallback) {
@@ -260,8 +182,6 @@ namespace MonkeyPaste.Common.Plugin {
             Debugger.Break();
             return 0;
         }
-
-
         public static bool ParseOrConvertToBool(this object obj, object fallback = null) {
             if (obj == null) {
                 if (obj == fallback) {
@@ -304,10 +224,58 @@ namespace MonkeyPaste.Common.Plugin {
             Debugger.Break();
             return false;
         }
+        #endregion
 
-        private static MpParameterRequestItemFormat ValidateGet(MpPluginParameterRequestFormat req, object paramId) {
+        public static string GetParamValue(this MpPluginParameterRequestFormat req, string paramId, string fallback = default) {
+            return GetParamValue<string>(req, paramId, fallback);
+        }
+        public static T GetParamValue<T>(this MpPluginParameterRequestFormat req, string paramId, T fallback = default) {
+            object result = null;
+            if (typeConvLookup.TryGetValue(typeof(T), out var getter)) {
+                result = getter.Invoke(req, paramId);
+            } else {
+                throw new NotSupportedException($"Type '{typeof(T)}' not supported. Conversion must be from one of the supported types: {string.Join(",", typeConvLookup.Select(x => x.Key.Name))}");
+            }
+            if (result == null) {
+                result = fallback;
+            }
+            return (T)result;
+        }
+
+        #endregion
+
+        #region Private Methods
+        #region Param Parse Wrappers
+
+        private static object GetRequestParamBoolValue(this MpPluginParameterRequestFormat req, string paramId) {
+            var kvp = ValidateGet(req, paramId);
+            return kvp.paramValue.ParseOrConvertToBool();
+        }
+
+        private static object GetRequestParamIntValue(this MpPluginParameterRequestFormat req, string paramId) {
+            var kvp = ValidateGet(req, paramId);
+            return kvp.paramValue.ParseOrConvertToInt();
+        }
+
+        private static object GetRequestParamDoubleValue(this MpPluginParameterRequestFormat req, string paramId) {
+            var kvp = ValidateGet(req, paramId);
+            return kvp.paramValue.ParseOrConvertToDouble();
+        }
+
+        private static object GetRequestParamStringValue(this MpPluginParameterRequestFormat req, string paramId) {
+            var kvp = ValidateGet(req, paramId);
+            return kvp.paramValue;
+        }
+
+        private static object GetRequestParamStringListValue(this MpPluginParameterRequestFormat req, string paramId) {
+            var kvp = ValidateGet(req, paramId);
+            return kvp.paramValue.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
+        }
+        #endregion
+
+        private static MpParameterRequestItemFormat ValidateGet(MpPluginParameterRequestFormat req, string paramId) {
             if (paramId == null) {
-                throw new NullReferenceException("paramId is null, must have value");
+                throw new NullReferenceException("paramId is null, must have paramValue");
             }
             if (req == null ||
                 req.items == null) {
@@ -320,36 +288,6 @@ namespace MonkeyPaste.Common.Plugin {
             }
             return kvp;
         }
-        public static bool GetRequestParamBoolValue(this MpPluginParameterRequestFormat req, object paramId) {
-            var kvp = ValidateGet(req, paramId);
-            return kvp.value.ParseOrConvertToBool();
-        }
-
-        public static int GetRequestParamIntValue(this MpPluginParameterRequestFormat req, object paramId) {
-            var kvp = ValidateGet(req, paramId);
-            return kvp.value.ParseOrConvertToInt();
-        }
-
-        public static double GetRequestParamDoubleValue(this MpPluginParameterRequestFormat req, object paramId) {
-            var kvp = ValidateGet(req, paramId);
-            return kvp.value.ParseOrConvertToDouble();
-        }
-
-        public static string GetRequestParamStringValue(this MpPluginParameterRequestFormat req, object paramId) {
-            var kvp = ValidateGet(req, paramId);
-            return kvp.value;
-        }
-
-        public static List<string> GetRequestParamStringListValue(this MpPluginParameterRequestFormat req, object paramId) {
-            var kvp = ValidateGet(req, paramId);
-            return kvp.value.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
-        }
-
-        public static bool HasParam(this MpPluginParameterRequestFormat req, object paramId) {
-            if (req == null || req.items == null || req.items.All(x => !x.paramId.Equals(paramId))) {
-                return false;
-            }
-            return true;
-        }
+        #endregion
     }
 }

@@ -66,21 +66,21 @@ namespace MonkeyPaste.Avalonia {
         //        return base.Child;
         //    }
         //    set {
-        //        if (this.Child != value) {
+        //        if (this.Child != paramValue) {
         //            if (this.Child != null) {
         //                // Restore original clipping of the old child
         //                this.Child.SetValue(Control.ClipProperty, _oldClip);
         //            }
 
-        //            if (value != null) {
+        //            if (paramValue != null) {
         //                // Store the current clipping of the new child
-        //                _oldClip = value.GetValue(Control.ClipProperty);
+        //                _oldClip = paramValue.GetValue(Control.ClipProperty);
         //            } else {
         //                // If we dont set it to null we could leak a Geometry object
         //                _oldClip = null;
         //            }
 
-        //            base.Child = value;
+        //            base.Child = paramValue;
         //        }
         //    }
         //}

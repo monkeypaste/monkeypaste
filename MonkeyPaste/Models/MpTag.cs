@@ -213,7 +213,7 @@ namespace MonkeyPaste {
             } else {
                 throw new Exception("Cannot compare xam model to local model");
             }
-            //returns db column name and string value of dr that is diff
+            //returns db column name and string paramValue of dr that is diff
             var diffLookup = new Dictionary<string, string>();
             diffLookup = CheckValue(TagGuid, other.TagGuid,
                 "MpTagGuid",

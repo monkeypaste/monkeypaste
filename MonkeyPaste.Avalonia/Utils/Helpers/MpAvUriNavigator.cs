@@ -184,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     return;
                 }
-                if (sr is MpPluginPreset pp) {
+                if (sr is MpPreset pp) {
                     var nav_to_aipvm =
                         MpAvAnalyticItemCollectionViewModel.Instance
                         .AllPresets

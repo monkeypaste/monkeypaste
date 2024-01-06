@@ -350,7 +350,8 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(string plugin_guid) {
             PluginGuid = plugin_guid;
-            if (!ValidateAnalyzer(PluginFormat)) {
+            bool is_valid = await ValidateAnalyzerAsync(PluginFormat);
+            if (!is_valid) {
                 PluginGuid = null;
                 return;
             }
@@ -402,7 +403,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpAvAnalyticItemPresetViewModel> CreatePresetViewModelAsync(MpPluginPreset aip) {
+        public async Task<MpAvAnalyticItemPresetViewModel> CreatePresetViewModelAsync(MpPreset aip) {
             MpAvAnalyticItemPresetViewModel naipvm = new MpAvAnalyticItemPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
@@ -539,13 +540,13 @@ namespace MonkeyPaste.Avalonia {
         #region Db Event Handlers
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpPluginPreset aip) {
+            if (e is MpPreset aip) {
 
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpPluginPreset aip) {
+            if (e is MpPreset aip) {
                 if (aip.PluginGuid == PluginGuid) {
                     var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if (presetVm != null) {
@@ -619,20 +620,36 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private bool ValidateAnalyzer(MpPluginWrapper pf) {
-            if (pf == null) {
+        private async Task<bool> ValidateAnalyzerAsync(MpPluginWrapper pf) {
+            if (pf == null || pf.analyzer == null) {
                 MpConsole.WriteTraceLine("plugin error, not registered");
                 return false;
             }
-
-            bool isValid = true;
-            var sb = new StringBuilder();
-
-            if (isValid) {
-                return true;
+            bool needs_fixing = false;
+            Func<object, object> retryFunc = (args) => {
+                return null;
+            };
+            if (pf.analyzer.parameters != null) {
+                var dup_param_ids = pf.analyzer.parameters.GroupBy(x => x.paramId).Where(x => x.Count() > 1);
+                foreach (var dup_param_id_grp in dup_param_ids) {
+                    var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.InvalidPlugin,
+                        title: $"{pf.title} Error",
+                        body: $"Duplicate paramId '{dup_param_id_grp.Key}' detected (all must be unique).{Environment.NewLine}Labels:{Environment.NewLine}{string.Join(Environment.NewLine, dup_param_id_grp.Select(x => x.label))}",
+                        retryAction: retryFunc,
+                        fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(pf.ManifestPath)));
+                    if (result == MpNotificationDialogResultType.Ignore) {
+                        return false;
+                    }
+                    needs_fixing = true;
+                    break;
+                }
             }
-            MpConsole.WriteLine(sb.ToString());
-            return false;
+            if (needs_fixing) {
+                return await ValidateAnalyzerAsync(pf);
+            }
+
+            return true;
         }
 
         private async Task<bool> PrepareAnalysisAsync(MpAvAnalyticItemPresetViewModel targetAnalyzer, object args) {
@@ -767,7 +784,7 @@ namespace MonkeyPaste.Avalonia {
                          // apply provided parameter configuration to preset
                          foreach (var ppri in prf.items) {
                              if (preset_to_select.Items.FirstOrDefault(x => x.ParamId.ToString() == ppri.paramId.ToString()) is MpAvParameterViewModelBase pvm) {
-                                 pvm.CurrentValue = ppri.value;
+                                 pvm.CurrentValue = ppri.paramValue;
                              }
                          }
                      }
@@ -832,9 +849,9 @@ namespace MonkeyPaste.Avalonia {
                         // loop through req settings and set preset to those values
                         foreach (var req_kvp in aprf.items) {
                             if (aipvm.Items.FirstOrDefault(x => x.ParamId == req_kvp.paramId) is MpAvParameterViewModelBase pvm) {
-                                pvm.CurrentValue = req_kvp.value;
+                                pvm.CurrentValue = req_kvp.paramValue;
                             } else {
-                                MpConsole.WriteLine($"Param req item id '{req_kvp.paramId}' w/ value '{req_kvp.value}' not found on preset '{aipvm}'");
+                                MpConsole.WriteLine($"Param req item id '{req_kvp.paramId}' w/ paramValue '{req_kvp.paramValue}' not found on preset '{aipvm}'");
                             }
                         }
                         IsBusy = false;
@@ -952,7 +969,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var np_icon = await def_icon.CloneDbModelAsync();
 
-                MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(
+                MpPreset newPreset = await MpPreset.CreateOrUpdateAsync(
                         pluginGuid: PluginGuid,
                         isActionPreset: isActionPreset,
                         sortOrderIdx: Items.Count,

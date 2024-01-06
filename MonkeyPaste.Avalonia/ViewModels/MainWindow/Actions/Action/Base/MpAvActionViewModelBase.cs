@@ -290,7 +290,7 @@ namespace MonkeyPaste.Avalonia {
         //        null :
         //        PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
 
-        public Dictionary<object, MpAvParameterViewModelBase> ArgLookup =>
+        public Dictionary<string, MpAvParameterViewModelBase> ArgLookup =>
            ActionArgs.ToDictionary(x => x.ParamId, x => x);
         public virtual ObservableCollection<MpAvParameterViewModelBase> ActionArgs { get; protected set; } = new ObservableCollection<MpAvParameterViewModelBase>();
 
@@ -332,7 +332,7 @@ namespace MonkeyPaste.Avalonia {
             get => Parent == null || Parent.FocusAction == null ? false : Parent.FocusAction.ActionId == ActionId;
             //set {
 
-            //    if(IsSelected != value) {
+            //    if(IsSelected != paramValue) {
             //        Parent.FocusAction = this;
             //        OnPropertyChanged(nameof(IsSelected));
             //    }

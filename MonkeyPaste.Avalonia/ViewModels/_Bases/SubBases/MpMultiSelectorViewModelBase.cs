@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override C SelectedItem {
             get => PrimaryItem;
-            //set => base.SelectedItem = value; 
+            //set => base.SelectedItem = paramValue; 
         }
 
         public virtual C PrimaryItem { get; }

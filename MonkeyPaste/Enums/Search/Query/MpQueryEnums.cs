@@ -202,7 +202,7 @@ namespace MonkeyPaste {
                 unit_val = double.Parse(mv);
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error parsing within last unit value of '{mv}'", ex);
+                MpConsole.WriteTraceLine($"Error parsing within last unit paramValue of '{mv}'", ex);
                 return string.Empty;
             }
 

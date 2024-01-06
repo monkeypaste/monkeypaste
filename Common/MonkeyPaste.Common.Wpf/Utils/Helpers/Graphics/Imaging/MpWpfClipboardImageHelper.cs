@@ -132,7 +132,7 @@ namespace MonkeyPaste.Common.Wpf {
             //Int32 biClrUsed = 0;
             //Int32 biClrImportant = 0;
 
-            // The aforementioned "BITFIELDS": colour masks applied to the Int32 pixel value to get the R, G and B values.
+            // The aforementioned "BITFIELDS": colour masks applied to the Int32 pixel paramValue to get the R, G and B values.
             WriteIntToByteArray(fullImage, hdrSize + 0, 4, true, 0x00FF0000);
             WriteIntToByteArray(fullImage, hdrSize + 4, 4, true, 0x0000FF00);
             WriteIntToByteArray(fullImage, hdrSize + 8, 4, true, 0x000000FF);
@@ -361,7 +361,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static void WriteIntToByteArray(Byte[] data, Int32 startIndex, Int32 bytes, Boolean littleEndian, UInt32 value) {
             Int32 lastByte = bytes - 1;
             if (data.Length < startIndex + bytes)
-                throw new ArgumentOutOfRangeException("startIndex", "Data array is too small to write a " + bytes + "-byte value at offset " + startIndex + ".");
+                throw new ArgumentOutOfRangeException("startIndex", "Data array is too small to write a " + bytes + "-byte paramValue at offset " + startIndex + ".");
             for (Int32 index = 0; index < bytes; index++) {
                 Int32 offs = startIndex + (littleEndian ? index : lastByte - index);
                 data[offs] = (Byte)(value >> (8 * index) & 0xFF);
@@ -371,7 +371,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static UInt32 ReadIntFromByteArray(Byte[] data, Int32 startIndex, Int32 bytes, Boolean littleEndian) {
             Int32 lastByte = bytes - 1;
             if (data.Length < startIndex + bytes)
-                throw new ArgumentOutOfRangeException("startIndex", "Data array is too small to read a " + bytes + "-byte value at offset " + startIndex + ".");
+                throw new ArgumentOutOfRangeException("startIndex", "Data array is too small to read a " + bytes + "-byte paramValue at offset " + startIndex + ".");
             UInt32 value = 0;
             for (Int32 index = 0; index < bytes; index++) {
                 Int32 offs = startIndex + (littleEndian ? index : lastByte - index);

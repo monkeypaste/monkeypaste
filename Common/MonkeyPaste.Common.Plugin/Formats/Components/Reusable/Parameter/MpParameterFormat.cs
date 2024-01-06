@@ -93,7 +93,7 @@ namespace MonkeyPaste.Common.Plugin {
             }
             set {
                 if (!string.IsNullOrEmpty(value) && paramId != value) {
-                    // don't let omitted/empty name become value
+                    // don't let omitted/empty name become paramValue
                     _paramId = value;
                 }
             }

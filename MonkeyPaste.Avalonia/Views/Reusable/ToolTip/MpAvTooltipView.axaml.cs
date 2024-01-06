@@ -180,9 +180,9 @@ namespace MonkeyPaste.Avalonia {
         //    if (tl.Parent is not Control hc) {
         //        return;
         //    }
-        //    hc.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnHostOrHostTopLevelVisibleChanged(hc));
+        //    hc.GetObservable(Control.IsVisibleProperty).Subscribe(paramValue => OnHostOrHostTopLevelVisibleChanged(hc));
         //    if (TopLevel.GetTopLevel(hc) is TopLevel host_tl) {
-        //        host_tl.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnHostOrHostTopLevelVisibleChanged(host_tl));
+        //        host_tl.GetObservable(Control.IsVisibleProperty).Subscribe(paramValue => OnHostOrHostTopLevelVisibleChanged(host_tl));
         //    }
         //    // workaround to pass tooltip type from hint to tooltip
         //    if (hc.Classes.Contains("warning")) {

@@ -6,20 +6,17 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace GoogleContactsFetcher {
     public class GoogleContactFetcher :
         MpIContactFetcherComponentAsync,
         MpISupportDeferredParameterCommand,
         MpIAnalyzeComponentAsync {
+        const string FIELDS_PARAM_ID = "1";
         private const string SECRETS_FILE_NAME = "client_secrets_desktop.json";
         private string _clientSecretsPath = null;
         //string ClientSecretsPath {
@@ -67,7 +64,7 @@ namespace GoogleContactsFetcher {
         }
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
             string fields_str = null;
-            if (req.GetRequestParamStringListValue(1) is IEnumerable<string> fields) {
+            if (req.GetParamValue<List<string>>(FIELDS_PARAM_ID) is IEnumerable<string> fields) {
                 fields_str = string.Join(",", fields);
             }
             if (fields_str == null) {

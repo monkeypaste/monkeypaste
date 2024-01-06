@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
                     return double.Parse(CurrentValue);
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error converting slider current value '{CurrentValue}' ex: ", ex);
+                    MpConsole.WriteTraceLine($"Error converting slider current paramValue '{CurrentValue}' ex: ", ex);
                     return 0;
                 }
             }
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error converting slider value '{value}' ex: ", ex);
+                MpConsole.WriteTraceLine($"Error converting slider paramValue '{value}' ex: ", ex);
                 return null;
             }
         }

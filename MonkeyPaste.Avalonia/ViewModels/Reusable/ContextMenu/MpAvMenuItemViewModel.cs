@@ -169,8 +169,8 @@ namespace MonkeyPaste.Avalonia {
         //public string Header {
         //    get => _header.EscapeMenuItemHeader(AltNavIdx);
         //    set {
-        //        if (Header != value && Header != value.EscapeMenuItemHeader(AltNavIdx)) {
-        //            _header = value;
+        //        if (Header != paramValue && Header != paramValue.EscapeMenuItemHeader(AltNavIdx)) {
+        //            _header = paramValue;
         //            OnPropertyChanged(nameof(Header));
         //        }
         //    }

@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
                 int ci_trans_id = await LogAnalyzerTransactionAsync(
                     pluginFormat, at,
                     sourceContent,
-                    sourceHandler as MpPluginPreset,
+                    sourceHandler as MpPreset,
                     suppressWrite);
                 return ci_trans_id;
             }
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
             MpPluginWrapper pluginFormat,
             MpAnalyzerTransaction trans,
             MpCopyItem sourceContent,
-            MpPluginPreset preset,
+            MpPreset preset,
             bool suppressWrite = false) {
 
             MpJsonMessageFormatType respType = MpJsonMessageFormatType.Error;
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
         //    MpPluginWrapper pluginFormat,
         //    MpAnalyzerTransaction trans,
         //    MpCopyItem sourceContent,
-        //    MpPluginPreset preset,
+        //    MpPreset preset,
         //    bool suppressWrite = false) {
         //    if (trans.Response == null) {
         //        trans.Response = new MpPluginResponseFormatBase();

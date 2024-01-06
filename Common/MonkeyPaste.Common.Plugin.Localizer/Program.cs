@@ -74,7 +74,7 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
                     // unkeyed or non-string property
                     localized_value = pi.GetValue(templated_manifest);
                 } else {
-                    // value is "%ResourceKeyName%"
+                    // paramValue is "%ResourceKeyName%"
                     string key = val.Replace(RESOURCE_KEY_OPEN_TOKEN, string.Empty).Replace(RESOURCE_KEY_CLOSE_TOKEN, string.Empty);
                     localized_value = GetResourceValue(resx_reader, key);
                 }

@@ -699,7 +699,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
-            await _connectionAsync.CreateTableAsync<MpPluginPreset>();
+            await _connectionAsync.CreateTableAsync<MpPreset>();
             await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
             await _connectionAsync.CreateTableAsync<MpShortcut>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();

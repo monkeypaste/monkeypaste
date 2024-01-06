@@ -17,6 +17,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+#pragma warning disable CA1416 // Validate platform compatibility
         public static Bitmap? ToAvBitmap(this System.Drawing.Bitmap bmp) {
             if (bmp == null || !OperatingSystem.IsWindows()) {
                 return null;
@@ -39,6 +40,7 @@ namespace MonkeyPaste.Common.Avalonia {
             //bmp.Dispose();
             return avBmp;
         }
+#pragma warning restore CA1416 // Validate platform compatibility
 
         #endregion
     }

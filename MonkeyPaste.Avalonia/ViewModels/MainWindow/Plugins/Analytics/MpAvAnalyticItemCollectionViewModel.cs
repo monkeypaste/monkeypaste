@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            await RemoveAnalyzerReferencesAsync(aivm, false);
+            //await RemoveAnalyzerReferencesAsync(aivm, false);
             bool success = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url);
 
             IsBusy = false;

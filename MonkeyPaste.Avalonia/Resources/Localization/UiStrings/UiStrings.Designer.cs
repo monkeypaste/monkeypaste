@@ -683,7 +683,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time toast message is shown in seconds. When value is 0 message must be closed manually..
+        ///   Looks up a localized string similar to Time toast message is shown in seconds. When paramValue is 0 message must be closed manually..
         /// </summary>
         public static string ActionAlertShowTimeHint {
             get {
@@ -1335,7 +1335,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A value of 0 will repeat parent action indefinitely.
+        ///   Looks up a localized string similar to A paramValue of 0 will repeat parent action indefinitely.
         /// </summary>
         public static string ActionRepeatCountHint {
             get {
@@ -3118,7 +3118,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;All occurances of this template will be set to the paramValue you provide here&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateDynamicHint {
             get {

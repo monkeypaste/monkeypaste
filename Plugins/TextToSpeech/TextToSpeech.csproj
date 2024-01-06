@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TextToSpeech_codebased.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="logo.png" />
     <None Remove="manifest.json" />
     <None Remove="manifest_declarative.json" />

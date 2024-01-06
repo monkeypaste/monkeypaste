@@ -1,0 +1,18 @@
+{
+  "title": "Speech Synthesizer",
+  "description": "Converts text to audio",
+  "version": "1.0.0",
+  "author": "Monkey LLC",
+  "guid": "a0fd9559-5512-4fdb-99a4-fe92015ab81d",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Core,Audio,Accessibility,Speech,Text,Windows",
+  "dependencies": [
+    {
+      "type": "os",
+      "name": "Windows",
+      "version": "10.0.18362"
+    }
+  ]
+}

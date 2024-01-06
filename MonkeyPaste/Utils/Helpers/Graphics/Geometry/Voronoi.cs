@@ -752,7 +752,7 @@ namespace Voronoi2 {
                 if (!PQempty()) {
                     newintstar = PQ_min();
                 }
-                // if the lowest site has a smaller y value than the lowest vector
+                // if the lowest site has a smaller y paramValue than the lowest vector
                 // intersection,
                 // process the site otherwise process the vector intersection
 

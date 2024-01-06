@@ -1,16 +1,17 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
 
 namespace FileConverter {
     public class FileConverter : MpIAnalyzeComponent {
+        const string FILE_PATH_PARAM_ID = "1";
+        const string TARGET_TYPE_PARAM_ID = "2";
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
-            string path = req.GetRequestParamStringValue(1);
+            string path = req.GetParamValue<string>(FILE_PATH_PARAM_ID);
             if (!path.IsFile()) {
                 return null;
             }
-            string target_type = req.GetRequestParamStringValue(2);
+            string target_type = req.GetParamValue<string>(TARGET_TYPE_PARAM_ID);
             string target_format;
             object target_data = null;
             if (target_type == "Image") {

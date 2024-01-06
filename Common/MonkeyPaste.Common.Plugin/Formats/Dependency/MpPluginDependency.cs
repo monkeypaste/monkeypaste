@@ -19,7 +19,7 @@
         /// </summary>
         public MpPluginDependencyType type { get; set; }
         /// <summary>
-        /// The string value of <see cref="MpUserDeviceType"/>. There's only support currrently for 'Windows' here
+        /// The string paramValue of <see cref="MpUserDeviceType"/>. There's only support currrently for 'Windows' here
         /// </summary>
         public string name { get; set; }
         public string version { get; set; }

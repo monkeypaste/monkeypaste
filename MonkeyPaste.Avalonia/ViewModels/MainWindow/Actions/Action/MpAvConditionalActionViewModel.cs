@@ -218,8 +218,8 @@ namespace MonkeyPaste.Avalonia {
         //        return Arg2.ToEnum<MpCopyItemType>();
         //    }
         //    set {
-        //        if (ContentItemType != value) {
-        //            Arg2 = value.ToString();
+        //        if (ContentItemType != paramValue) {
+        //            Arg2 = paramValue.ToString();
         //            HasModelChanged = true;
         //            OnPropertyChanged(nameof(ContentItemType));
         //        }

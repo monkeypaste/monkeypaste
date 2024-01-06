@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                         int randColorSeed = valueStr.Length;
                         if (valueStr.IsStringImageResourceKey() &&
                             Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
-                            // when value is key add its resource path's length to vary color more
+                            // when paramValue is key add its resource path's length to vary color more
                             randColorSeed += res_path.Length;
                         }
                         int rand_idx = (randColorSeed % max) * MpSystemColors.COLOR_PALETTE_ROWS;
@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                         //int randColorSeed = valueStr.Length;
                         //if (valueStr.IsStringImageResourceKey() &&
                         //    Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
-                        //    // when value is key add its resource path's length to vary color more
+                        //    // when paramValue is key add its resource path's length to vary color more
                         //    randColorSeed += res_path.Length;
                         //}
                         //int len = randColorSeed;
@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 catch {
-                    // what does imgResource end with? what is value and param?
+                    // what does imgResource end with? what is paramValue and param?
                     MpDebug.Break();
                 }
             }

@@ -4,9 +4,9 @@
         public static void Spring(ref double x, ref double v, double xt, double h, double zeta = 0.22d, double omega = 25.0d) {
             /*
               from https://allenchou.net/2015/04/game-math-precise-control-over-numeric-springing/
-              x     - value             (input/output)
+              x     - paramValue             (input/output)
               v     - velocity          (input/output)
-              xt    - target value      (input)
+              xt    - target paramValue      (input)
               zeta  - damping ratio     (input)
               omega - angular frequency (input)
               h     - time step         (input)

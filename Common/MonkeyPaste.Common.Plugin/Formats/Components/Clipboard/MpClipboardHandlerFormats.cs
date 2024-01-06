@@ -1,33 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Plugin {
-    public interface MpIHeadlessComponentFormatBase : MpIPluginComponentBase { }
-    public interface MpISupportHeadlessAnalyzerComponentFormat : MpIHeadlessComponentFormatBase {
-        MpAnalyzerPluginFormat GetFormat(MpHeadlessAnalyzerComponentFormatRequest request);
-    }
-    public interface MpISupportHeadlessClipboardComponentFormat : MpIHeadlessComponentFormatBase {
-        MpClipboardHandlerFormats GetFormats(MpHeadlessClipboardComponentFormatRequest request);
-    }
-    public class MpAnalyzerPluginFormat : MpPluginContentComponentBaseFormat {
-        //public new MpHttpAnalyzerTransactionFormat http { get; set; }
-    }
-    public abstract class MpHeadlessComponentFormatRequest : MpPluginRequestFormatBase { }
-    public class MpHeadlessClipboardComponentFormatRequest : MpHeadlessComponentFormatRequest { }
-    public class MpHeadlessAnalyzerComponentFormatRequest : MpHeadlessComponentFormatRequest { }
-    public interface MpIOlePluginComponent : MpIPluginComponentBase {
-    }
-
-    public interface MpIOleReaderComponent : MpIOlePluginComponent {
-        Task<MpOlePluginResponse> ProcessOleReadRequestAsync(MpOlePluginRequest request);
-    }
-
-    public interface MpIOleWriterComponent : MpIOlePluginComponent {
-        Task<MpOlePluginResponse> ProcessOleWriteRequestAsync(MpOlePluginRequest request);
-    }
-
-    public class MpClipboardHandlerFormats {
+    public class MpClipboardHandlerFormats : MpPluginComponentFormatBase {
         public List<MpClipboardHandlerFormat> readers { get; set; } = new List<MpClipboardHandlerFormat>();
         public List<MpClipboardHandlerFormat> writers { get; set; } = new List<MpClipboardHandlerFormat>();
     }

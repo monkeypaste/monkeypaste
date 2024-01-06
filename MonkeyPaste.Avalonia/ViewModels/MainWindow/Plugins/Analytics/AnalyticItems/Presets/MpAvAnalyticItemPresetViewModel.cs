@@ -189,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<object, string> ParamLookup =>
+        public Dictionary<string, string> ParamLookup =>
             Items.ToDictionary(x => x.ParamId, x => x.CurrentValue);
         public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
@@ -408,7 +408,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpPluginPreset Preset { get; protected set; }
+        public MpPreset Preset { get; protected set; }
 
         #endregion
 
@@ -432,7 +432,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginPreset aip) {
+        public async Task InitializeAsync(MpPreset aip) {
             IsBusy = true;
 
             Items.Clear();
@@ -603,12 +603,6 @@ namespace MonkeyPaste.Avalonia {
             if (this is MpAvIParameterCollectionViewModel pcvm) {
                 pcvm.OnPropertyChanged(nameof(pcvm.Items));
             }
-        }
-
-        public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
-            //used to load remote content and called from CreateParameterViewModel in preset
-            await Task.Delay(1);
-            return aip;
         }
 
         #endregion

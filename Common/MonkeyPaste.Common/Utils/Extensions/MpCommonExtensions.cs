@@ -430,8 +430,8 @@ namespace MonkeyPaste.Common {
         }
 
         public static void AddFlag<T>(ref this T value, T flag) where T : struct, Enum {
-            //string result = $"{value}, {flag}".Trim(new[] { ' ', ',' }); ;
-            //value = (T)Enum.Parse(typeof(T), result);
+            //string result = $"{paramValue}, {flag}".Trim(new[] { ' ', ',' }); ;
+            //paramValue = (T)Enum.Parse(typeof(T), result);
             string resultStr =
                 string.Join(
                     ", ",
@@ -448,7 +448,7 @@ namespace MonkeyPaste.Common {
             }
         }
         public static void RemoveFlag<T>(ref this T value, T flag) where T : struct, Enum {
-            // remove flag from string of value and any leading/trailing commas 
+            // remove flag from string of paramValue and any leading/trailing commas 
             string resultStr =
                 string.Join(
                     ", ",
@@ -465,7 +465,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static IEnumerable<T> All<T>(this T value) where T : struct, Enum {
-            // remove flag from string of value and any leading/trailing commas 
+            // remove flag from string of paramValue and any leading/trailing commas 
             return value.ToString().SplitNoEmpty(",").Select(x => x.ToEnum<T>());
         }
 
@@ -539,7 +539,7 @@ namespace MonkeyPaste.Common {
 
             //////////// If the code reaches here, no BOM/signature was found, so now
             //////////// we need to 'taste' the file to see if can manually discover
-            //////////// the encoding. A high taster value is desired for UTF-8
+            //////////// the encoding. A high taster paramValue is desired for UTF-8
             if (taster == 0 || taster > b.Length) taster = b.Length;    // Taster size can't be bigger than the filesize obviously.
 
 
@@ -735,7 +735,7 @@ namespace MonkeyPaste.Common {
                 propertyInfo.SetValue(obj, safeValue, null);
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"SetPropertyValue set value error. ", ex);
+                MpConsole.WriteTraceLine($"SetPropertyValue set paramValue error. ", ex);
             }
         }
         #endregion

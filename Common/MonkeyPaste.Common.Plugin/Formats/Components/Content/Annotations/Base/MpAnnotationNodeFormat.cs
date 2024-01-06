@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpAnnotationNodeFormat : MpILabelText,
+    public class MpAnnotationNodeFormat :
+        MpILabelText,
         MpIIconResource,
         MpIClampedValue,
         MpIAnnotationNode,
@@ -13,14 +14,6 @@ namespace MonkeyPaste.Common.Plugin {
         #region Statics
 
         public static MpAnnotationNodeFormat Parse(string json) {
-            //MpAnnotationNodeFormat root = JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(
-            //    json, 
-            //    new JsonSerializerSettings() {
-            //    Converters = { 
-            //            new MpAnnotationJsonConverter() 
-            //        }});
-            //return root;
-
             var anf = JsonConvert.DeserializeObject(json);
 
             if (anf is JObject jobj) {
@@ -104,7 +97,7 @@ namespace MonkeyPaste.Common.Plugin {
                 sb.AppendLine($"{indent}Footer: {footer}");
             }
             if (score > 0) {
-                // presume that if scored and stored decimal value will always
+                // presume that if scored and stored decimal paramValue will always
                 // be more than 0 if even very small
                 sb.AppendLine($"{indent}Score: {score}");
             }
@@ -129,11 +122,7 @@ namespace MonkeyPaste.Common.Plugin {
         public virtual double minScore { get; set; } = 0;
         public virtual double maxScore { get; set; } = 1;
         public virtual double score { get; set; }
-
-        public virtual bool isVisible { get; set; } = true;
         public virtual List<MpAnnotationNodeFormat> children { get; set; }
-
-        public MpContentElementFormat style { get; set; }
         #endregion
     }
 
@@ -165,18 +154,6 @@ namespace MonkeyPaste.Common.Plugin {
         public int Offset { get; set; }
         public int Length { get; set; }
         #endregion
-    }
-
-    public class MpContentElementFormat : MpIContentElement {
-        public string type { get; set; }
-        public string content { get; set; }
-        public string bgColor { get; }
-        public string fgColor { get; }
-        public string fontSize { get; }
-        public string fontFamily { get; }
-        public string fontWeight { get; }
-
-
     }
 
 }

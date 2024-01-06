@@ -2,7 +2,7 @@
   "title": "Web Search",
   "description": "Uses default uri handler to search for selection",
   "version": "1.0.0",
-  "author": "Monkey LLC",
+  "author": "Monkey",
   "guid": "56241e2d-84bd-4f12-b7fd-14911f24cf35",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/WebSearch/master/README.md",
   "projectUrl": "https://github.com/monkeypaste/WebSearch",

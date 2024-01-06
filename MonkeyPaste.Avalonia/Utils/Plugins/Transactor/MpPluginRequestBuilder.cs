@@ -1,6 +1,4 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpPluginRequestBuilder {
         public static async Task<MpAnalyzerPluginRequestFormat> BuildRequestAsync(
             List<MpParameterFormat> paramFormats,
-            Dictionary<object, string> paramValues,
+            Dictionary<string, string> paramValues,
             MpCopyItem sourceContent,
             bool evaluateSourceRefs) {
             // evaluate all content queries and map params to req kvps
@@ -46,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
                     paramValue;
             return new MpParameterRequestItemFormat() {
                 paramId = paramFormat.paramId,
-                value = req_item_value
+                paramValue = req_item_value
             };
         }
 

@@ -135,6 +135,18 @@
                     Value="False" />
 
         </Style>
+
+        <!--  INSTALLED/UPDATE ICON  -->
+        <Style Selector="Image#InstallOrUpdateIcon.installed">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource CheckImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent3BgColor}" />
+
+        </Style>
+        <Style Selector="Image#InstallOrUpdateIcon.installed.can-update">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent5BgColor}" />
+
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="PluginRootContainer"
           Classes.browse="{Binding SelectedTabType, ConverterParameter=Browse, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
@@ -299,16 +311,33 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                         <Grid RowDefinitions="30,60"
-                              ColumnDefinitions="50,*">
-                            <!--  PLUGIN ICON  -->
-                            <Image x:Name="PluginIcon"
-                                   Grid.Row="0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0"
-                                   Margin="5"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"
-                                   Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+                              ColumnDefinitions="60,*">
+                            <Grid Grid.Row="0"
+                                  Grid.RowSpan="2"
+                                  Grid.Column="0"
+                                  RowDefinitions="0.5*,0.5*"
+                                  Margin="5">
+                                <!--  PLUGIN ICON  -->
+                                <Image x:Name="PluginIcon"
+                                       Grid.Row="0"
+                                       Width="50"
+                                       Height="50"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Top"
+                                       Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+
+                                <!--  INSTALLED/UPDATE CHECKED  -->
+                                <Image x:Name="InstallOrUpdateIcon"
+                                       IsVisible="{Binding !IsBusy}"
+                                       Grid.Row="1"
+                                       Width="20"
+                                       Height="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       Classes.installed="{Binding HasInstallation}"
+                                       Classes.can-update="{Binding CanUpdate}" />
+                            </Grid>
+
 
                             <!--  PLUGIN TITLE  -->
                             <TextBlock x:Name="PluginTitleBlock"

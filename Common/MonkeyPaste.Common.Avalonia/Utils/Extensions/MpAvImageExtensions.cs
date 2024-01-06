@@ -209,7 +209,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         //If this color doesnt already exists in the dictionary, add it
                         countDictionary.Add(currentColor, 1);
                     } else {
-                        //If it exists, increment the value and update it
+                        //If it exists, increment the paramValue and update it
                         countDictionary[currentColor] = currentCount + 1;
                     }
                 }

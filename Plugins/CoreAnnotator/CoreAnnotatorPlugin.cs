@@ -13,12 +13,12 @@ namespace CoreAnnotator {
         Currency,
         HexColor
     }
-    public class CoreAnnotatorPlugin : MpIAnalyzeComponent, MpISupportHeadlessAnalyzerComponentFormat {
+    public class CoreAnnotatorPlugin : MpIAnalyzeComponent, MpISupportHeadlessAnalyzerFormat {
         const int FIRST_FORMAT_IDX = 2;
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
             var resp = new MpAnalyzerPluginResponseFormat();
 
-            string content_pt = req.GetRequestParamStringValue("plaintext");
+            string content_pt = req.GetParamValue<string>("plaintext");
             if (string.IsNullOrWhiteSpace(content_pt)) {
                 return null;
             }
@@ -29,7 +29,7 @@ namespace CoreAnnotator {
                     continue;
                 }
                 MpRegExType rt = param.paramId.ToStringOrEmpty().ToEnum<MpRegExType>();
-                if (rt == MpRegExType.None || !req.GetRequestParamBoolValue(param.paramId)) {
+                if (rt == MpRegExType.None || !req.GetParamValue<bool>(param.paramId)) {
                     continue;
                 }
                 formats.Add(rt);
@@ -52,7 +52,7 @@ namespace CoreAnnotator {
             return resp;
         }
 
-        public MpAnalyzerPluginFormat GetFormat(MpHeadlessAnalyzerComponentFormatRequest request) {
+        public MpAnalyzerPluginFormat GetFormat(MpHeadlessComponentFormatRequest request) {
             Resources.Culture = new System.Globalization.CultureInfo(request.cultureCode);
 
             return new MpAnalyzerPluginFormat() {
@@ -62,8 +62,8 @@ namespace CoreAnnotator {
                 outputType = new MpPluginOutputFormat() {
                     textAnnotation = true
                 },
-                presets = new List<MpPluginPresetFormat>() {
-                    new MpPluginPresetFormat() {
+                presets = new List<MpPresetFormat>() {
+                    new MpPresetFormat() {
                         guid = "a9fa2fbf-025d-4ced-a23b-234085b5ac5f",
                         label = Resources.DefAnnLabel,
                         description = Resources.DefAnnHint,

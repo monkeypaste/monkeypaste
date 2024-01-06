@@ -312,7 +312,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpPluginPreset Preset { get; set; }
+        public MpPreset Preset { get; set; }
 
         #endregion
 
@@ -347,7 +347,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginPreset aip) {
+        public async Task InitializeAsync(MpPreset aip) {
             IsBusy = true;
 
             Items.Clear();

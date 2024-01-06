@@ -13,9 +13,9 @@ namespace MonkeyPaste.Avalonia {
             MpParameterHostType hostType,
             int paramHostId,
             MpIParameterHostViewModel pluginHost) {
-            MpPluginPreset host_db_preset = null;
+            MpPreset host_db_preset = null;
             if (hostType == MpParameterHostType.Preset) {
-                host_db_preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(paramHostId);
+                host_db_preset = await MpDataModelProvider.GetItemAsync<MpPreset>(paramHostId);
             }
             // get all preset values from db
             var param_db_values = await MpDataModelProvider.GetAllParameterHostValuesAsync(hostType, paramHostId);
@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             // loop through plugin formats parameters and add or replace (if found in db) the preset values
             foreach (MpParameterFormat paramFormat in pluginHost.ComponentFormat.parameters) {
                 if (paramFormat.isValueDeferred) {
-                    // make deferred value request
+                    // make deferred paramValue request
                     var req = new MpPluginDeferredParameterValueRequestFormat() { paramId = paramFormat.paramId };
                     MpPluginDeferredParameterValueResponseFormat resp = await RequestDefferredValuesAsync(pluginHost, req);
 
@@ -34,11 +34,11 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 if (!param_db_values.Any(x => paramFormat.paramId.Equals(x.ParamId))) {
-                    // if no value is found in db for a parameter defined in manifest...
+                    // if no paramValue is found in db for a parameter defined in manifest...
 
                     string paramVal = string.Empty;
                     if (host_db_preset != null && pluginHost.ComponentFormat.presets != null) {
-                        // when param is part of a preset prefer manifest preset value
+                        // when param is part of a preset prefer manifest preset paramValue
                         var host_format_preset = pluginHost.ComponentFormat.presets.FirstOrDefault(x => x.guid == host_db_preset.Guid);
                         if (host_format_preset == null) {
                             // manifest presets should hardset preset guid from manifest file, is this an old analyzer?
@@ -46,13 +46,13 @@ namespace MonkeyPaste.Avalonia {
                         } else if (host_format_preset.values != null) {
                             var host_format_preset_val = host_format_preset.values.FirstOrDefault(x => x.paramId.Equals(paramFormat.paramId));
                             if (host_format_preset_val != null) {
-                                // this parameter has a preset value in manifest
+                                // this parameter has a preset paramValue in manifest
                                 paramVal = host_format_preset_val.value.ToListFromCsv(paramFormat.CsvProps).ToCsv(paramFormat.CsvProps);
                             }
                         }
                     }
                     if (paramFormat.isSharedValue) {
-                        // for persistent param's set value using any other preset if found
+                        // for persistent param's set paramValue using any other preset if found
                         MpDebug.Assert(string.IsNullOrEmpty(paramVal), "Preset w/ persistent param validation failed (should be caught in plugin loader)");
 
                         var existing_persist_pvl = await MpDataModelProvider.GetAllParameterValueInstancesForPluginAsync(pluginHost.PluginGuid, paramFormat.paramId);
@@ -63,12 +63,12 @@ namespace MonkeyPaste.Avalonia {
 
                     if (string.IsNullOrEmpty(paramVal) &&
                         paramFormat.values != null && paramFormat.values.Count > 0) {
-                        // ensure value encoding is correct for control type
+                        // ensure paramValue encoding is correct for control type
 
-                        // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
+                        // if parameter has a predefined paramValue (a case when not would be a text box that needs input so its paramValue is empty)
                         var def_param_vals = paramFormat.values.Where(x => x.isDefault).ToList();
                         if (def_param_vals.Count == 0) {
-                            // if no default is defined use first available value
+                            // if no default is defined use first available paramValue
                             def_param_vals.Add(paramFormat.values[0]);
                         }
 

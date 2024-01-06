@@ -5,13 +5,13 @@ using SkiaSharp.QrCode.Image;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QrCoder {
     public class QrCoder : MpIAnalyzeComponent {
+        const string CONV_TEXT_PARAM_ID = "1";
+        const string SOURCE_TITLE_PARAM_ID = "2";
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
-            string textToConvert = req.GetRequestParamStringValue(1);
+            string textToConvert = req.GetParamValue<string>(CONV_TEXT_PARAM_ID);
 
             var qrCode = new QrCode(textToConvert, new Vector2Slim(256, 256), SKEncodedImageFormat.Png);
 
@@ -23,7 +23,7 @@ namespace QrCoder {
                 var resp = new MpAnalyzerPluginResponseFormat() {
                     dataObjectLookup = new Dictionary<string, object> {
                         { MpPortableDataFormats.Image, imageBytes },
-                        { MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, $"{req.GetRequestParamStringValue(2)} - Qr Code" }
+                        { MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, $"{req.GetParamValue<string>(SOURCE_TITLE_PARAM_ID)} - Qr Code" }
                     }
                 };
                 return resp;

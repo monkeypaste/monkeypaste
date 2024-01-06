@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<MpCopyItem> ConvertAsync(
             MpPluginWrapper pluginFormat,
             MpAnalyzerTransaction trans,
-            Dictionary<object, string> paramValues,
+            Dictionary<string, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool suppressWrite) {

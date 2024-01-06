@@ -298,7 +298,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpAvClipboardFormatPresetViewModel> CreatePresetViewModelAsync(MpPluginPreset aip) {
+        public async Task<MpAvClipboardFormatPresetViewModel> CreatePresetViewModelAsync(MpPreset aip) {
             MpAvClipboardFormatPresetViewModel naipvm = new MpAvClipboardFormatPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
@@ -359,13 +359,13 @@ namespace MonkeyPaste.Avalonia {
         #region Db Event Handlers
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpPluginPreset aip) {
+            if (e is MpPreset aip) {
 
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpPluginPreset aip) {
+            if (e is MpPreset aip) {
                 if (aip.PluginGuid == FormatGuid) {
                     var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if (presetVm != null) {
@@ -551,9 +551,9 @@ namespace MonkeyPaste.Avalonia {
                         // loop through req settings and set preset to those values
                         foreach (var req_kvp in aprf.items) {
                             if (aipvm.Items.FirstOrDefault(x => x.ParamId == req_kvp.paramId) is MpAvParameterViewModelBase pvm) {
-                                pvm.CurrentValue = req_kvp.value;
+                                pvm.CurrentValue = req_kvp.paramValue;
                             } else {
-                                MpConsole.WriteLine($"Param req item id '{req_kvp.paramId}' w/ value '{req_kvp.value}' not found on preset '{aipvm}'");
+                                MpConsole.WriteLine($"Param req item id '{req_kvp.paramId}' w/ paramValue '{req_kvp.paramValue}' not found on preset '{aipvm}'");
                             }
                         }
                         IsBusy = false;
@@ -659,7 +659,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var np_icon = await def_icon.CloneDbModelAsync();
 
-                MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(
+                MpPreset newPreset = await MpPreset.CreateOrUpdateAsync(
                         pluginGuid: FormatGuid,
                         sortOrderIdx: Items.Count,
                         iconId: np_icon.Id,

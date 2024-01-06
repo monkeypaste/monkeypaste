@@ -1,7 +1,6 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public interface MpIPluginComponentBase {
-    }
-    public interface MpIUnloadPluginComponent : MpIPluginComponentBase {
-        void Unload();
-    }
+    /// <summary>
+    /// Empty base interface to all Plugin Components
+    /// </summary>
+    public interface MpIPluginComponentBase { }
 }

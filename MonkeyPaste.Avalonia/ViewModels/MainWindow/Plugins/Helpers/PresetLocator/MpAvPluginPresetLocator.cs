@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginPresetLocator {
-        public static async Task<IEnumerable<MpPluginPreset>> LocatePresetsAsync(
+        public static async Task<IEnumerable<MpPreset>> LocatePresetsAsync(
             MpIParameterHostViewModel presetHost,
             bool enableOnReset = false,
             bool showMessages = false) {
@@ -56,9 +56,9 @@ namespace MonkeyPaste.Avalonia {
             return db_presets.OrderBy(x => x.SortOrderIdx);
         }
 
-        private static async Task<List<MpPluginPreset>> CreateOrUpdatePresetsAsync(
+        private static async Task<List<MpPreset>> CreateOrUpdatePresetsAsync(
             MpIParameterHostViewModel pluginHost,
-            List<MpPluginPreset> db_presets) {
+            List<MpPreset> db_presets) {
             // when manifest changes this will:
             // 1. Create default presets if none exists
             // 2. Add/Remove preset parameter values based on parameter format differences since last successful load
@@ -97,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
                 var db_vals_to_remove = db_vals.Where(x => params_to_remove.Any(y => y.ParamId.Equals(x.ParamId)));
                 await Task.WhenAll(db_vals_to_remove.Select(x => x.DeleteFromDatabaseAsync()));
 
-                // add new parameter value to preset
+                // add new parameter paramValue to preset
                 foreach (MpParameterFormat param_to_add in params_to_add) {
                     foreach (var param_value_to_add in param_to_add.values) {
                         // add new param values to each preset
@@ -143,23 +143,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public static async Task<MpPluginPreset> CreateOrResetManifestPresetModelAsync(
+        public static async Task<MpPreset> CreateOrResetManifestPresetModelAsync(
             MpIParameterHostViewModel pluginHost, string presetGuid, int sortOrderIdx = 0) {
 
-            MpPluginPresetFormat preset_format = null;
+            MpPresetFormat preset_format = null;
             if (pluginHost.ComponentFormat.presets != null) {
                 preset_format = pluginHost.ComponentFormat.presets.FirstOrDefault(x => x.guid == presetGuid);
             }
 
             if (preset_format == null) {
                 // create empty preset..all properties fallback onto host
-                preset_format = new MpPluginPresetFormat() {
+                preset_format = new MpPresetFormat() {
                     guid = presetGuid
                 };
                 if (pluginHost.ComponentFormat.presets != null && pluginHost.ComponentFormat.presets.Count > 0) {
                     pluginHost.ComponentFormat.presets.Add(preset_format);
                 } else {
-                    pluginHost.ComponentFormat.presets = new List<MpPluginPresetFormat>() { preset_format };
+                    pluginHost.ComponentFormat.presets = new List<MpPresetFormat>() { preset_format };
                 }
 
             }
@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrEmpty(preset_description)) {
                 preset_description = $"Auto-generated default preset for '{preset_label}'";
             }
-            var preset_model = await MpPluginPreset.CreateOrUpdateAsync(
+            var preset_model = await MpPreset.CreateOrUpdateAsync(
                                 pluginGuid: pluginHost.PluginGuid,
                                 guid: presetGuid,
                                 isDefault: preset_format.isDefault,

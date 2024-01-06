@@ -884,10 +884,10 @@ namespace MonkeyPaste.Avalonia {
             //    if (!CanSelect) {
             //        return;
             //    }
-            //    if (value == null) {
+            //    if (paramValue == null) {
             //        AllItems.ForEach(scrollx => scrollx.IsSelected = false);
             //    } else {
-            //        AllItems.ForEach(scrollx => scrollx.IsSelected = scrollx.CopyItemId == value.CopyItemId);
+            //        AllItems.ForEach(scrollx => scrollx.IsSelected = scrollx.CopyItemId == paramValue.CopyItemId);
             //    }
             //    OnPropertyChanged(nameof(SelectedItem));
             //    OnPropertyChanged(nameof(SelectedPinTrayItem));
@@ -913,7 +913,7 @@ namespace MonkeyPaste.Avalonia {
                     // NOTE maybe righter to set AllItems to unselected here but not sure.
                     PinnedItems.ForEach(x => x.IsSelected = false);
                 } else {
-                    //SelectedItem = value;
+                    //SelectedItem = paramValue;
                     value.IsSelected = true;
                 }
                 OnPropertyChanged(nameof(SelectedItem));
@@ -935,7 +935,7 @@ namespace MonkeyPaste.Avalonia {
                     // see SelectedPinTray comments
                     Items.ForEach(x => x.IsSelected = false);
                 } else {
-                    //SelectedItem = value;
+                    //SelectedItem = paramValue;
                     value.IsSelected = true;
                 }
                 OnPropertyChanged(nameof(SelectedItem));
@@ -4034,7 +4034,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                // BUG Sparse count should only have value during a loadmore
+                // BUG Sparse count should only have paramValue during a loadmore
                 // not sure how this doesn't get decremented to 0 but it'll block 
                 // any subsequent query from completing if not done
                 SparseLoadMoreRemaining = 0;

@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public object ClickCommandParameter => // NOTE when value not provided, use paramId
+        public object ClickCommandParameter => // NOTE when paramValue not provided, use paramId
             CurrentValue == null ||
             CurrentValue.ToString() == string.Empty ?
                 ParamId : CurrentValue;

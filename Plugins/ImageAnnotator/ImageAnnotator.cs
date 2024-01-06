@@ -12,8 +12,8 @@ namespace ImageAnnotator {
         const string PARAM_ID_CONTENT = "img64";
 
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
-            double confidence = req.GetRequestParamDoubleValue(PARAM_ID_CONFIDENCE);
-            string imgBase64 = req.GetRequestParamStringValue(PARAM_ID_CONTENT);
+            double confidence = req.GetParamValue<double>(PARAM_ID_CONFIDENCE);
+            string imgBase64 = req.GetParamValue<string>(PARAM_ID_CONTENT);
 
             try {
                 if (_scorer == null) {

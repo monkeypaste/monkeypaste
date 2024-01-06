@@ -194,8 +194,8 @@ namespace MonkeyPaste.Avalonia {
                 //    }
                 if (SelectedRoutingTypeIdx != value) {
                     value = Math.Max(0, value);
-                    //RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
-                    RoutingType = (MpRoutingType)value;//RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                    //RoutingType = RoutingTypes[paramValue].ToString().ToEnum<MpRoutingType>();
+                    RoutingType = (MpRoutingType)value;//RoutingTypes[paramValue].ToString().ToEnum<MpRoutingType>();
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
                 //}
@@ -359,8 +359,8 @@ namespace MonkeyPaste.Avalonia {
         //        return _shortcut;
         //    }
         //    set {
-        //        if (_shortcut != value) {
-        //            _shortcut = value;
+        //        if (_shortcut != paramValue) {
+        //            _shortcut = paramValue;
         //            OnPropertyChanged(nameof(Shortcut));
         //            OnPropertyChanged(nameof(RoutingType));
         //            OnPropertyChanged(nameof(KeyString));
@@ -510,7 +510,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpShortcutType.SelectTag:
                     return typeof(MpTag);
                 case MpShortcutType.AnalyzeCopyItemWithPreset:
-                    return typeof(MpPluginPreset);
+                    return typeof(MpPreset);
                 case MpShortcutType.InvokeTrigger:
                     return typeof(MpAction);
             }

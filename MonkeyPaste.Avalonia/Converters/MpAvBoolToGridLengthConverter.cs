@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            //if(value is GridLength gl) {
+            //if(paramValue is GridLength gl) {
             //    return gl.Value == 0 && gl.GridUnitType == GridUnitType.Pixel;
             //}
             //return false;

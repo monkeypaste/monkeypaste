@@ -2,7 +2,7 @@
   "title": "QR Code Generator",
   "description": "Converts text to QR code",
   "version": "1.0.0",
-  "author": "Monkey LLC",
+  "author": "Monkey",
   "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",
   "projectUrl": "https://github.com/monkeypaste/QrCoder",

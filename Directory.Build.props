@@ -25,6 +25,7 @@
     <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
     <PushPlugins>false</PushPlugins>
+    <AvaloniaVersion>11.1.999-cibuild0043318-beta</AvaloniaVersion>
   </PropertyGroup>
 
   <!-- SYSTEM PROPERTIES -->

@@ -2,7 +2,7 @@
   "title": "コアクリップボードハンドラ",
   "description": "デフォルトのクリップボード形式を処理します",
   "version": "1.0.0",
-  "author": "Monkey LLC",
+  "author": "Monkey",
   "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "コア、クリップボード、ドラッグ アンド ドロップ、テキスト、RTF、リッチ テキスト、Html、CSV、画像、PNG、Jpg、Jpeg、リンク",

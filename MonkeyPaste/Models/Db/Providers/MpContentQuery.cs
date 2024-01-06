@@ -57,7 +57,7 @@ namespace MonkeyPaste {
                     // to keep RefreshQuery giving accurate results but needs to use AllTag
                     qi_tag_ids = new[] { MpTag.AllTagId };
                 } else if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
-                    // match value will be tag guid to remain device agnostic
+                    // match paramValue will be tag guid to remain device agnostic
                     int tag_id = await MpDataModelProvider.GetItemIdByGuidAsync<MpTag>(qi.MatchValue);
                     if (tag_id == 0) {
                         // none provided yet so pass active tag through
@@ -78,7 +78,7 @@ namespace MonkeyPaste {
                 var sq = sub_queries[i];
                 sb.AppendLine(sq.Item1);
                 if (i < sub_queries.Count - 1) {
-                    // first query is always simple and its join value is ignored
+                    // first query is always simple and its join paramValue is ignored
                     sb.AppendLine(sub_queries[i + 1].Item2);
                 }
             }
