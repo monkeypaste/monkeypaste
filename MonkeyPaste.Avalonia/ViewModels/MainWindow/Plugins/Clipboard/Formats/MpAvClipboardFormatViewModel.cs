@@ -26,23 +26,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpAvClipboardHandlerItemViewModel> Readers {
+        public IEnumerable<MpAvClipboardHandlerItemViewModel> AllHandlers {
             get {
                 if (Parent == null) {
                     return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
                 }
-                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z => z.IsReader)));
+                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName));
             }
         }
 
-        public IEnumerable<MpAvClipboardHandlerItemViewModel> Writers {
-            get {
-                if (Parent == null) {
-                    return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
-                }
-                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z => z.IsWriter)));
-            }
-        }
+        public IEnumerable<MpAvClipboardHandlerItemViewModel> Readers =>
+            AllHandlers.Where(x => x.Items.Any(y => y.IsReader));
+
+        public IEnumerable<MpAvClipboardHandlerItemViewModel> Writers =>
+            AllHandlers.Where(x => x.Items.Any(y => y.IsWriter));
 
         #endregion
 
@@ -73,39 +70,46 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string IconResourceKeyStr {
+        public object IconResourceObj {
             get {
-                string keyStr = "FormatImage";
-                switch (FormatName) {
-                    case MpPortableDataFormats.Files:
-                        keyStr = "Files" + keyStr;
-                        break;
-                    case MpPortableDataFormats.Rtf:
-                        keyStr = "Rtf" + keyStr;
-                        break;
-                    case MpPortableDataFormats.MimeText:
-                    case MpPortableDataFormats.Text3:
-                    case MpPortableDataFormats.Text2:
-                    case MpPortableDataFormats.Text:
-                        keyStr = "Text" + keyStr;
-                        break;
-                    case MpPortableDataFormats.Html:
-                    case MpPortableDataFormats.Xhtml:
-                        keyStr = "Html" + keyStr;
-                        break;
-                    case MpPortableDataFormats.Csv:
-                        keyStr = "Csv" + keyStr;
-                        break;
-                    case MpPortableDataFormats.Image:
-                        keyStr = "Bitmap" + keyStr;
-                        break;
-                    default:
-                        keyStr = "QuestionMarkImage";
-                        break;
+                // find first enabled handler
+                if (AllHandlers.FirstOrDefault(x => x.Items.Any(y => y.Items.Any(z => z.IsEnabled))) is { } hvm) {
+                    // find that handlers format vm
+                    if (hvm.Items.FirstOrDefault(x => x.HandledFormat == FormatName) is { } hfvm) {
+                        return hfvm.HandledFormatIconId;
+                    }
                 }
+                //string keyStr = "FormatImage";
+                //switch (FormatName) {
+                //    case MpPortableDataFormats.Files:
+                //        keyStr = "Files" + keyStr;
+                //        break;
+                //    case MpPortableDataFormats.Rtf:
+                //        keyStr = "Rtf" + keyStr;
+                //        break;
+                //    case MpPortableDataFormats.MimeText:
+                //    case MpPortableDataFormats.Text3:
+                //    case MpPortableDataFormats.Text2:
+                //    case MpPortableDataFormats.Text:
+                //        keyStr = "Text" + keyStr;
+                //        break;
+                //    case MpPortableDataFormats.Html:
+                //    case MpPortableDataFormats.Xhtml:
+                //        keyStr = "Html" + keyStr;
+                //        break;
+                //    case MpPortableDataFormats.Csv:
+                //        keyStr = "Csv" + keyStr;
+                //        break;
+                //    case MpPortableDataFormats.Image:
+                //        keyStr = "Bitmap" + keyStr;
+                //        break;
+                //    default:
+                //        keyStr = "QuestionMarkImage";
+                //        break;
+                //}
 
 
-                return Mp.Services.PlatformResource.GetResource(keyStr) as string;
+                return "QuestionMarkImage";
             }
         }
         #endregion

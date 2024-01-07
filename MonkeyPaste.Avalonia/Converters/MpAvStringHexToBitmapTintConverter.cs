@@ -80,24 +80,6 @@ namespace MonkeyPaste.Avalonia {
                             randColorSeed += res_path.Length;
                         }
                         int rand_idx = (randColorSeed % max) * MpSystemColors.COLOR_PALETTE_ROWS;
-
-                        //int max = MpSystemColors.ContentColors.Count - 1;
-                        //int randColorSeed = valueStr.Length;
-                        //if (valueStr.IsStringImageResourceKey() &&
-                        //    Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
-                        //    // when paramValue is key add its resource path's length to vary color more
-                        //    randColorSeed += res_path.Length;
-                        //}
-                        //int len = randColorSeed;
-                        //int rand_idx = (int)((double)len).Wrap(0, max);
-                        //if (rand_idx % (MpSystemColors.COLOR_PALETTE_COLS - 1) == 0) {
-                        //    // if rand color is last column (gray scale) bump it 
-                        //    rand_idx = rand_idx + 1;
-                        //    if (rand_idx > max) {
-                        //        rand_idx = 0;
-                        //    }
-                        //}
-                        ////MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
                         hex = MpSystemColors.ContentColors[rand_idx].RemoveHexAlpha();
                         if (MpAvThemeViewModel.Instance.IsThemeDark) {
                             hex = MpColorHelpers.MakeBright(hex);
@@ -110,6 +92,14 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         hex = Mp.Services.PlatformResource.GetResource<string>(trk.ToString());
                     }
+                    if (!string.IsNullOrEmpty(hex)) {
+                        if (paramParts.Any(x => x == "darker")) {
+                            hex = MpColorHelpers.GetDarkerHexColor(hex);
+                        } else if (paramParts.Any(x => x == "lighter")) {
+                            hex = MpColorHelpers.GetLighterHexColor(hex);
+                        }
+                    }
+
 
                 } else if (paramParts.Length > 1) {
                     hex = MpColorHelpers.ParseHexFromString(paramParts[0]);

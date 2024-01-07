@@ -6,7 +6,7 @@ An image annotator plugin for [MonkeyPaste](https://www.monkeypaste.com).
 ## Requirements
 - An installation of [MonkeyPaste](https://www.monkeypaste.com/download) 
 ## Remarks
-This project can be used as a reference for anyone interested in [MonkeyPaste](https://www.monkeypaste.com) plugin development.
+This project can be used as a reference for anyone interested in [plugin development](https://www.monkeypaste.com/docs/plugins/plugin-development) for [MonkeyPaste](https://www.monkeypaste.com).
 
 Here's some highlights of what it demonstrates:
 - Reading images from MonkeyPaste

@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (MpAvClipboardHandlerCollectionViewModel.Instance.FormatViewModels.FirstOrDefault(x => x.FormatName == Format)
                     is MpAvClipboardFormatViewModel cfvm) {
-                    return cfvm.IconResourceKeyStr;
+                    return cfvm.IconResourceObj;
                 }
                 return "QuestionMarkImage";
             }

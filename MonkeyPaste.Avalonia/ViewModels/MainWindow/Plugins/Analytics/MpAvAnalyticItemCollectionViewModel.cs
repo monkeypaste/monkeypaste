@@ -268,6 +268,7 @@ namespace MonkeyPaste.Avalonia {
                 var paivm = await CreateAnalyticItemViewModelAsync(analyzer_guid);
                 if (paivm.PluginFormat == null) {
                     // internal error/invalid issue with plugin, ignore it
+                    await MpPluginLoader.UnloadAndRemovePluginAsync(analyzer_guid);
                     continue;
                 }
                 Items.Add(paivm);

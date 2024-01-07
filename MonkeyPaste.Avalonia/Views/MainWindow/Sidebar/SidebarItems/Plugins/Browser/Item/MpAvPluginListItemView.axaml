@@ -1,0 +1,78 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+                       xmlns:pcl="using:MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvPluginItemViewModel"
+                       x:DataType="local:MpAvPluginItemViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPluginListItemView">
+    <local:MpAvUserControl.Styles>
+
+        <!--  INSTALLED/UPDATE ICON  -->
+        <Style Selector="Image#InstallOrUpdateIcon.installed">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource CheckRoundImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=darker|ThemeAccent3BgColor}" />
+
+        </Style>
+        <Style Selector="Image#InstallOrUpdateIcon.installed.can-update">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent5BgColor}" />
+
+        </Style>
+
+    </local:MpAvUserControl.Styles>
+
+    <Grid RowDefinitions="30,60"
+          ColumnDefinitions="60,*">
+
+        <!--  PLUGIN ICON  -->
+        <Image x:Name="PluginIcon"
+               Grid.Row="0"
+               Grid.RowSpan="2"
+               Grid.Column="0"
+               Margin="5"
+               Width="50"
+               Height="50"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Top"
+               Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+
+
+        <!--  PLUGIN TITLE  -->
+        <TextBlock x:Name="PluginTitleBlock"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   TextWrapping="NoWrap"
+                   Text="{Binding PluginTitle}" />
+
+        <!--  INSTALLED/UPDATE CHECKED  -->
+        <Image x:Name="InstallOrUpdateIcon"
+               IsVisible="{Binding !IsBusy}"
+               Grid.Row="0"
+               Grid.Column="1"
+               Width="15"
+               Height="15"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               Classes.installed="{Binding HasInstallation}"
+               Classes.can-update="{Binding CanUpdate}" />
+
+        <!--  PLUGIN DESCRIPTION  -->
+        <TextBlock x:Name="PluginDescriptionBlock"
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   FontSize="12"
+                   TextWrapping="WrapWithOverflow"
+                   Text="{Binding PluginDescription}" />
+    </Grid>
+</local:MpAvUserControl>
+

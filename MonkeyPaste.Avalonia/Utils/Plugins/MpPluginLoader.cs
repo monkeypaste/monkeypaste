@@ -199,7 +199,7 @@ namespace MonkeyPaste.Avalonia {
             AddPluginToDeleteList(plugin);
             // clear ref to plugin
             plugin = null;
-            success = await UnloadAndRemovePluginAsync(manifest_path);
+            success = await UnloadAndRemovePluginAsync(plugin_guid);
             if (success && needs_restart) {
                 // NOTE this won't return if they choose restart
                 await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
@@ -414,13 +414,13 @@ namespace MonkeyPaste.Avalonia {
             Plugins.AddOrReplace(manifestPath, plugin);
             return true;
         }
-        private static async Task<bool> UnloadAndRemovePluginAsync(string manifest_path) {
-            if (!Plugins.TryGetValue(manifest_path, out MpPluginWrapper plugin) ||
+        public static async Task<bool> UnloadAndRemovePluginAsync(string plugin_guid) {
+            if (!PluginLookup.TryGetValue(plugin_guid, out MpPluginWrapper plugin) ||
                 plugin == null) {
-                MpConsole.WriteLine($"Plugin not found to remove for manifest path '{manifest_path}'");
+                MpConsole.WriteLine($"Plugin not found to remove with guid '{plugin_guid}'");
                 return true;
             }
-            bool success = Plugins.Remove(manifest_path);
+            bool success = Plugins.Remove(plugin.ManifestPath);
             await plugin.UnloadAsync();
             plugin = null;
 
@@ -476,11 +476,11 @@ namespace MonkeyPaste.Avalonia {
                     sb.AppendLine();
                     sb.AppendLine($"Fix by changing plugin guid or removing duplicates. Otherwise all will be ignored.");
 
-                    var to_remove_min_refs = toRemove.Select(x => (x.Key, x.Value.RootDirectory)).ToList();
+                    var to_remove_min_refs = toRemove.Select(x => (x.Value.guid, x.Value.RootDirectory)).ToList();
                     toRemove = null;
 
                     foreach (var tr in to_remove_min_refs) {
-                        await UnloadAndRemovePluginAsync(tr.Key);
+                        await UnloadAndRemovePluginAsync(tr.guid);
                     }
                     var dup_guids_detected_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,

@@ -172,7 +172,7 @@
                         Classes="defaultButton pinTrayButton outlineOver"
                         IsVisible="{Binding CanAddItemWhileIgnoringClipboard}"
                         Command="{Binding AddItemWhileIgnoringClipboardCommand}">
-                    <Image Source="{Binding Source={StaticResource BullsEyeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                    <Image Source="{Binding Source={StaticResource BullsEyeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent2Color}" />
                     <ToolTip.Tip>
                         <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ManuallyAddFromClipboard, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                                ToolTipText="{Binding ., ConverterParameter=ManuallyAddFromClipboard, Converter={x:Static local:MpAvEnumKeyToUiStringConverter.Instance}}" />

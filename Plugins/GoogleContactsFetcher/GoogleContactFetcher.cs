@@ -17,50 +17,23 @@ namespace GoogleContactsFetcher {
         MpISupportDeferredParameterCommand,
         MpIAnalyzeComponentAsync {
         const string FIELDS_PARAM_ID = "1";
-        private const string SECRETS_FILE_NAME = "client_secrets_desktop.json";
+
+        static string _credPath =>
+            Path.Combine(
+                Path.GetDirectoryName(typeof(GoogleContactFetcher).Assembly.Location),
+                "credentials.json");
         private string _clientSecretsPath = null;
-        //string ClientSecretsPath {
-        //    get {
-        //        if (_clientSecretsPath == null) {
-        //            //@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\bin\Debug\net7.0-windows\Plugins\GoogleContactsFetcher\client_secrets_desktop.json";
-        //            _clientSecretsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), @"client_secrets_desktop.json");
-        //        }
-        //        MpConsole.WriteLine("contacts secret path: " + _clientSecretsPath);
-        //        return _clientSecretsPath;
-        //    }
-        //}
 
-        //
-
-        //     addresses,ageRanges,biographies,birthdays,calendarUrls,clientData
-        //    ,coverPhotos,emailAddresses,events,externalIds,genders,imClients *
-        //     interests,locales,locations,memberships,metadata,miscKeywords,names
-        //    ,nicknames,occupations,organizations,phoneNumbers,photos,relations
-        //    ,sipAddresses,skills,urls,userDefined
         private string _personFields = "metadata,addresses,names,emailAddresses";
         //"addresses,ageRanges,biographies,birthdays,calendarUrls,clientData,coverPhotos,emailAddresses,events,externalIds,genders,
         //imClients,interests,locales,locations,memberships,metadata,miscKeywords,names,,nicknames,occupations,organizations,phoneNumbers,
         //photos,relations,,sipAddresses,skills,urls,userDefined";
 
         public async Task<MpPluginContactFetchResponseFormat> FetchAsync(MpPluginContactFetchRequestFormat args) {
-            SetSecretsPath(args);
             var result = await FetchContactsAsync_internal(_personFields);
             return new MpPluginContactFetchResponseFormat() {
                 Contacts = result
             };
-        }
-        private void SetSecretsPath(object args) {
-            // default to root plugin dir
-            string secrets_dir = Path.GetDirectoryName(this.GetType().Assembly.Location);
-            if (args is string custom_secrets_dir && custom_secrets_dir.IsDirectory()) {
-                secrets_dir = custom_secrets_dir;
-            }
-            string secrets_path = Path.Combine(secrets_dir, SECRETS_FILE_NAME);
-            if (!secrets_path.IsFile()) {
-                throw new FileNotFoundException("Must have secrets file", secrets_path);
-            }
-            _clientSecretsPath = secrets_path;
-
         }
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
             string fields_str = null;
@@ -85,15 +58,15 @@ namespace GoogleContactsFetcher {
 
         private async Task<IEnumerable<MpIContact>> FetchContactsAsync_internal(object personFields) {
             List<MpIContact> fallback = new List<MpIContact>();
-            if (!File.Exists(_clientSecretsPath)) {
+            if (!File.Exists(_credPath)) {
                 MpDebug.Break();
-                MpConsole.WriteTraceLine($"Google Cred file does not exists at path: '{_clientSecretsPath}'");
+                MpConsole.WriteTraceLine($"Google Cred file does not exists at path: '{_credPath}'");
                 return fallback;
             }
 
             try {
                 UserCredential credential = null;
-                using (var stream = new FileStream(_clientSecretsPath, FileMode.Open, FileAccess.Read)) {
+                using (var stream = new FileStream(_credPath, FileMode.Open, FileAccess.Read)) {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.FromStream(stream).Secrets,
                         new[] { PeopleServiceService.ScopeConstants.ContactsReadonly },
@@ -101,7 +74,7 @@ namespace GoogleContactsFetcher {
                 }
                 var peopleService = new PeopleServiceService(new BaseClientService.Initializer() {
                     HttpClientInitializer = credential,
-                    ApplicationName = "Google API Test",
+                    ApplicationName = "MonkeyPaste - Contact Fetcher",
                 });
 
                 PeopleResource.ConnectionsResource.ListRequest peopleRequest =

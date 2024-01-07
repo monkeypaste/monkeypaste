@@ -6,18 +6,16 @@
 
         <CornerRadius x:Key="ControlCornerRadius">5,5,5,5</CornerRadius>
         <Thickness x:Key="ButtonBorderThemeThickness">1</Thickness>
-        <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
+        <Thickness x:Key="ButtonPadding">10,5,10,5</Thickness>
     </Styles.Resources>
 
     <Style Selector=":is(Button)">
         <Setter Property="Cursor"
                 Value="Hand" />
         <Setter Property="FontWeight"
-                Value="SemiBold" />
+                Value="DemiBold" />
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
-        <!--<Setter Property="IsTabStop"
-                Value="True" />-->
     </Style>
 
     <Style Selector=":is(Button).defaultButton">
@@ -30,7 +28,7 @@
     </Style>
     <Style Selector=":is(Button).defaultButton:pressed">
         <Setter Property="RenderTransform"
-                Value="scale(0.98)" />
+                Value="scale(0.70)" />
     </Style>
 
     <Style Selector=":is(Button).noBg">
@@ -78,7 +76,7 @@
                 Value="False" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) TextBlock">
+    <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) DockPanel TextBlock">
         <Setter Property="Margin"
                 Value="7,0,0,0" />
     </Style>

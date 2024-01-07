@@ -962,7 +962,6 @@
         "controlType": "TextBox",
         "unitType": "PlainText",
         "isRequired": true,
-        "isVisible": true,
         "paramId": 4,
         "isExecuteParameter": true,
         "isSharedValue": true
@@ -973,7 +972,6 @@
         "controlType": "TextBox",
         "unitType": "PlainText",
         "isRequired": false,
-        "isVisible": true,
         "paramId": 5,
         "isExecuteParameter": true,
         "isSharedValue": true

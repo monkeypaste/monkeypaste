@@ -41,27 +41,27 @@ namespace MinimalExample {
 
 #### Manifest.json
 Every plugin must have a `manifest.json` file included in its bundle. At a minimum it provides basic meta and package information. But will also include rules for the types of content and parameters it can handle.
-```jsx
+
+While testing, this is a minimal `manifest.json`:
+
+```jsx title="../MinimalExample/manifest.json" 
 {
-  "title": "Hello World",
+  "title": "Minimal Example",
   "guid": "aa4ceef6-e050-4ed5-b308-7c99942436c3",
-  "packageUrl": "https://github.com/monkeypaste/MinimalExample/releases/download/v1.0.0/MinimalExample.zip",
 }
 ```
  Required Fields:
 
-| Field | Detail| Testing | Publishing|
+| Field | Detail| Test | Publish|
 | --- | --- | --- | ---|
 | title | Any name is fine but it must have one |✅|✅|
 | guid | An RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens |✅|✅|
-| version | The default is 1.0.0 but setting blank is not valid. A major, minor, patch format is preferred. |❌|✅|
-| packageUrl | A url to a zip compressed file (.zip) of this projects build output |❌|✅|
+| version | The default is 1.0.0 but setting blank is not valid. A major, minor, patch format is required. |❌|✅|
+| packageUrl | Only needed when publishing. A url to a zip compressed file (.zip) of this projects build output |❌|✅|
 
 :::tip Guid Generator
 To get a nice `guid` or if you receive an `InvalidPlugin` error due to the `guid` value you provide,  use [www.guidgenerator.com](https://www.guidgenerator.com/online-guid-generator.aspx) with only 'Hyphens' checked (I think its default). The tool is free and what I use so it should validate fine then.
 :::
-
-
 
 #### Folder Structure
 

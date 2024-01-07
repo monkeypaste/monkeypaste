@@ -1,9 +1,7 @@
 ﻿using MonkeyPaste.Common;
-using System;
 using System.Diagnostics;
 using System.Reflection;
 #if WINDOWS
-using Windows.ApplicationModel;
 #else
 using Xamarin.Essentials;
 #endif
@@ -19,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
             "MonkeyPaste";
         public string ThisAppProductVersion {
             get {
-#if WINDOWS
+#if WINDOWS && WAP
                 // from https://stackoverflow.com/a/62719001/105028
                 try {
                     var version = Package.Current.Id.Version;
@@ -32,14 +30,14 @@ namespace MonkeyPaste.Avalonia {
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error reading package info. ", ex);
                     return string.Empty;
-                }
+                } 
 #elif ANDROID
                 return VersionTracking.CurrentVersion;
 #else
                 if (Assembly.GetEntryAssembly() is Assembly ass &&
                     ass.Location.IsFileOrDirectory() &&
                     FileVersionInfo.GetVersionInfo(ass.Location) is { } fvi) {
-                    return fvi.ProductVersion;
+                    return fvi.FileVersion;
                 }
                 return "1.0.0";
 #endif

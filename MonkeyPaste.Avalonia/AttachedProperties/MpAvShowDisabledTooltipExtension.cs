@@ -46,10 +46,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void AttachedControl_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            if (sender is not Control control) {
+            if (sender is not Control control ||
+                TopLevel.GetTopLevel(control) is not { } tl) {
                 return;
             }
-            var tl = TopLevel.GetTopLevel(control);
+
             tl.AddHandler(TopLevel.PointerMovedEvent, TopLevel_PointerMoved, RoutingStrategies.Tunnel);
         }
 

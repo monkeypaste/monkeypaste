@@ -1,7 +1,7 @@
-﻿{
+{
   "title": "Computer Vision",
   "description": "Provides descriptive information about a given image",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": "Monkey",
   "guid": "56024047-fe88-412d-aa65-1878ff088879",
   "packageType": "Dll",

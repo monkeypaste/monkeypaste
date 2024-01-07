@@ -5,6 +5,7 @@ using System.IO.Compression;
 namespace MonkeyPaste.Common.Plugin.Ledgerizer {
     internal class Program {
 
+        static bool LEDGERIZE_LOCAL = true;
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -12,7 +13,13 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
 #else
             "Release";
 #endif
-        static string[] Plugins = [
+
+        const string README_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/README.md";
+        const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
+        const string PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
+        const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
+
+        static string[] PluginNames = [
             "ChatGpt",
             "ComputerVision",
             "FileConverter",
@@ -23,7 +30,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             "TextTranslator",
             "WebSearch"
         ];
-        static bool LEDGERIZE_LOCAL = true;
+
 
         static string LocalLedgerDir = MpLedgerConstants.LOCAL_LEDGER_DIR;
 
@@ -40,73 +47,64 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             MpFileIo.DeleteDirectory(LocalReleasesDir);
 
             MpManifestLedger ledger = new MpManifestLedger();
-            foreach (var plugin in Plugins) {
-                string mfp = Path.Combine(
-                                        MpCommonHelpers.GetSolutionDir(),
-                                        "Plugins",
-                                        plugin,
-                                        "manifest.json");
-                string mft = MpFileIo.ReadTextFromFile(mfp);
-                var mf = mft.DeserializeObject<MpManifestFormat>();
+            foreach (var plugin_name in PluginNames) {
+                string plugin_manifest_path = Path.Combine(
+                        MpCommonHelpers.GetSolutionDir(),
+                        "Plugins",
+                        plugin_name,
+                        "manifest.json");
+                string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
+                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
 
-                if (LEDGERIZE_LOCAL) {
-                    mf.packageUrl = PublishPlugin(Path.GetDirectoryName(mfp));
-                    if (mf.packageUrl == null) {
-                        continue;
-                    }
+                string plugin_proj_dir = Path.GetDirectoryName(plugin_manifest_path);
+                string local_package_uri = PublishToLocalReleases(plugin_proj_dir);
+                if (local_package_uri == null) {
+                    continue;
                 }
-                ledger.manifests.Add(mf);
+                plugin_manifest.packageUrl = local_package_uri;
+                ledger.manifests.Add(plugin_manifest);
             }
-            string ledger_text = ledger.SerializeObjectOmitNulls().ToPrettyPrintJson();
+
+            string ledger_text = FinishPublish(ledger);
             MpFileIo.WriteTextToFile(LedgerPath, ledger_text);
             Console.WriteLine($"Ledger written to: ");
             Console.WriteLine(LedgerPath);
         }
 
-        static string PublishPlugin(string projDir) {
+        static string PublishToLocalReleases(string proj_dir) {
             if (!LocalReleasesDir.IsDirectory()) {
                 MpFileIo.CreateDirectory(LocalReleasesDir);
             }
-            string publish_dir = Path.Combine(LocalReleasesDir, Path.GetFileName(projDir));
+            string publish_dir = Path.Combine(LocalReleasesDir, Path.GetFileName(proj_dir));
 
-            if (CanBuild(projDir)) {
-                MpFileIo.DeleteDirectory(Path.Combine(projDir, "bin"));
-                MpFileIo.DeleteDirectory(Path.Combine(projDir, "obj"));
-                var proc = new Process();
-                proc.StartInfo.FileName = @"C:\Program Files\dotnet\dotnet.exe";
-                proc.StartInfo.Arguments = $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
-                proc.StartInfo.WorkingDirectory = projDir;
-                proc.StartInfo.UseShellExecute = false;
-                proc.StartInfo.RedirectStandardOutput = true;
-                proc.Start();
-                string proc_output = proc.StandardOutput.ReadToEnd();
+            MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "bin"));
+            MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "obj"));
+            var proc = new Process();
+            proc.StartInfo.FileName = @"C:\Program Files\dotnet\dotnet.exe";
+            proc.StartInfo.Arguments = $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
+            proc.StartInfo.WorkingDirectory = proj_dir;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+            string proc_output = proc.StandardOutput.ReadToEnd();
 
-                proc.WaitForExit();
-                int exit_code = proc.ExitCode;
-                proc.Close();
+            proc.WaitForExit();
+            int exit_code = proc.ExitCode;
+            proc.Close();
+            proc.Dispose();
 
-                if (exit_code != 0) {
-                    Console.WriteLine("");
-                    Console.WriteLine($"Error from '{Path.GetFileName(projDir)}' exit code '{exit_code}'");
-                    Console.WriteLine(proc_output);
-                    Console.WriteLine("");
-                    return null;
-                }
-            } else if (Path.Combine(projDir, "bin", BUILD_CONFIG) is string build_dir &&
-                        build_dir.IsDirectory()) {
-                if (publish_dir.IsDirectory()) {
-                    MpFileIo.DeleteDirectory(publish_dir);
-                }
-                MpFileIo.CreateDirectory(publish_dir);
-                new DirectoryInfo(build_dir).CopyContents(new DirectoryInfo(publish_dir), true, true);
-            } else {
+            if (exit_code != 0) {
+                Console.WriteLine("");
+                Console.WriteLine($"Error from '{Path.GetFileName(proj_dir)}' exit code '{exit_code}'");
+                Console.WriteLine(proc_output);
+                Console.WriteLine("");
                 return null;
             }
 
             if (!publish_dir.IsDirectory()) {
                 return null;
             }
-            string output_path = Path.Combine(LocalReleasesDir, $"{Path.GetFileName(projDir)}.zip");
+            string output_path = Path.Combine(LocalReleasesDir, $"{Path.GetFileName(proj_dir)}.zip");
             ZipFile.CreateFromDirectory(publish_dir, output_path, CompressionLevel.Fastest, true);
             MpFileIo.DeleteDirectory(publish_dir);
             Console.WriteLine(output_path + " DONE");
@@ -114,29 +112,90 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             return output_path.ToFileSystemUriFromPath();
         }
 
-        static bool CanBuild(string projDir) {
-            string dot_net_match_str = @"<Project Sdk=""Microsoft.NET.Sdk"">";
-
-            if (Directory.GetFiles(projDir).FirstOrDefault(x => x.EndsWith(".csproj")) is string proj_path &&
-                !MpFileIo.ReadTextFromFile(proj_path).Contains(dot_net_match_str)) {
-                return false;
+        static string FinishPublish(MpManifestLedger ledger) {
+            if (LEDGERIZE_LOCAL) {
+                return ledger.SerializeObjectOmitNulls().ToPrettyPrintJson();
             }
-            return true;
+
+            foreach (var manifest in ledger.manifests) {
+                string proj_dir = Path.Combine(
+                                MpCommonHelpers.GetSolutionDir(),
+                                "Plugins",
+                                Path.GetFileNameWithoutExtension(manifest.packageUrl.ToPathFromUri()));
+                manifest.packageUrl = PushReleaseToGitHub(manifest, proj_dir);
+                if (manifest.packageUrl == null) {
+                    // didn't upload
+                    continue;
+                }
+                string plugin_name = Path.GetFileName(proj_dir);
+                manifest.readmeUrl = string.Format(README_URL_FORMAT, plugin_name);
+                manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
+                manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
+            }
+            return ledger.SerializeObjectOmitNulls().ToPrettyPrintJson();
         }
-        static (string, string) GetProcessArgs(string projDir, string publish_dir) {
-            string dot_net_match_str = @"<Project Sdk=""Microsoft.NET.Sdk"">";
+        static string PushReleaseToGitHub(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
+            string local_package_uri = manifest.packageUrl;
+            string version = manifest.version;
+            // see this about gh release https://cli.github.com/manual/gh_release_create
+            string source_package_path = local_package_uri.ToPathFromUri();
+            string target_package_name = $"v{version}";
+            string target_package_file_name = $"{target_package_name}.zip";
+            string target_package_path = Path.Combine(proj_dir, target_package_file_name);
 
-            if (Directory.GetFiles(projDir).FirstOrDefault(x => x.EndsWith(".csproj")) is string proj_path &&
-                !MpFileIo.ReadTextFromFile(proj_path).Contains(dot_net_match_str)) {
-                return (
-                    @"C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe",
-                    @$"/p:OutDir={publish_dir}"
-                    );
+            MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
+            var proc = new Process();
+            proc.StartInfo.FileName = @"C:\Program Files\GitHub CLI\gh.exe";
+            proc.StartInfo.WorkingDirectory = proj_dir;
+            proc.StartInfo.Arguments = $"release create {target_package_name} --latest --generate-notes {target_package_file_name}";
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+            string proc_output = proc.StandardOutput.ReadToEnd();
+
+            proc.WaitForExit();
+            int exit_code = proc.ExitCode;
+            proc.Close();
+            proc.Dispose();
+            MpFileIo.DeleteFile(target_package_path);
+
+            if (exit_code == 1) {
+                // version exist, increment
+                if (version.SplitNoEmpty(".") is not { } verParts ||
+                    !int.TryParse(verParts.Last(), out int minor_rev)) {
+                    Console.WriteLine($"Error bad version for plugin at '{proj_dir}'");
+                    return null;
+                }
+                manifest.version = $"{verParts[0]}.{verParts[1]}.{minor_rev + 1}";
+
+                var new_ver_result = PushReleaseToGitHub(manifest, proj_dir, initial_failed_ver ?? version);
+                return new_ver_result;
+            } else if (exit_code == 0 && initial_failed_ver != null) {
+                // new rev works, update local manifest to match
+
+                // NOTE avoiding full re-write since manifest can be subclass, just replacing version...
+                string manifest_json = MpFileIo.ReadTextFromFile(Path.Combine(proj_dir, "manifest.json"));
+                string old_ver_json = $"\"version\": \"{initial_failed_ver}\"";
+                string new_ver_json = $"\"version\": \"{version}\"";
+                if (manifest_json.Contains(old_ver_json)) {
+                    manifest_json = manifest_json.Replace(old_ver_json, new_ver_json);
+                    MpFileIo.WriteTextToFile(Path.Combine(proj_dir, "manifest.json"), manifest_json);
+                } else {
+                    Console.WriteLine($"Error! Could not find old ver string '{old_ver_json}' trying to replace with '{new_ver_json}' in plugin '{proj_dir}'");
+                }
             }
-            return (
-                    @"C:\Program Files\dotnet\dotnet.exe",
-                    $"publish --configuration Release --output {publish_dir}"
-                    );
+
+            if (exit_code != 0) {
+                Console.WriteLine("");
+                Console.WriteLine($"Error from '{Path.GetFileName(proj_dir)}' exit code '{exit_code}'");
+                Console.WriteLine(proc_output);
+                Console.WriteLine("");
+                return null;
+            }
+
+            string github_release_uri = string.Format(PACKAGE_URL_FORMAT, Path.GetFileName(proj_dir), target_package_name);
+            Console.WriteLine(github_release_uri + " DONE");
+            return github_release_uri;
         }
     }
 }

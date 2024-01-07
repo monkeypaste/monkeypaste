@@ -22,13 +22,16 @@ namespace TextToSpeech {
 
                 string ps_path = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-                    "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+                    "System32",
+                    "cmd.exe");
+                //"WindowsPowerShell", "v1.0", "powershell.exe");
                 if (!ps_path.IsFile()) {
                     throw new Exception("cannot speak");
                 }
                 var proc = new Process();
                 proc.StartInfo.FileName = ps_path;
-                proc.StartInfo.Arguments = $"-Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');";
+                //proc.StartInfo.Arguments = $"-windowstyle Hidden -Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');";
+                proc.StartInfo.Arguments = $"/c start /min \"\" powershell -windowstyle Hidden -executionpolicy bypass -Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');\"";
                 proc.StartInfo.WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.CreateNoWindow = true;

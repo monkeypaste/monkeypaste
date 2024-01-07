@@ -12,7 +12,11 @@
 
   <ItemGroup>
     <None Remove="contacts_icon.png" />
+    <None Remove="credentials.json" />
     <None Remove="manifest.json" />
+    <Content Include="credentials.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="manifest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1463,6 +1463,12 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\Item\Detail\MpAvPluginDetailView.axaml.cs">
+      <DependentUpon>MpAvPluginDetailView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\Item\MpAvPluginListItemView.axaml.cs">
+      <DependentUpon>MpAvPluginListItemView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\MpAvPluginBrowserView.axaml.cs">
       <DependentUpon>MpAvPluginBrowserView.axaml</DependentUpon>
     </Compile>

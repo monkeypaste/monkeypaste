@@ -2527,7 +2527,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
+            // NOTE this is on a bg thread
+
+            Dispatcher.UIThread.Post(() => OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard)));
 
             bool is_startup_ido = Mp.Services.ClipboardMonitor.IsStartupClipboard;
 
@@ -4707,10 +4709,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand AddItemWhileIgnoringClipboardCommand => new MpAsyncCommand(
             async () => {
+                if (!CanAddItemWhileIgnoringClipboard) {
+                    // cmd execute isn't updating when visibility changes
+                }
                 await AddItemFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject);
-            },
-            () => {
-                return CanAddItemWhileIgnoringClipboard;
             });
 
         public MpIAsyncCommand DeleteAllContentCommand => new MpAsyncCommand(

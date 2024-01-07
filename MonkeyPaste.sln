@@ -93,6 +93,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGpt", "Plugins\ChatGpt\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTranslator", "Plugins\TextTranslator\TextTranslator.csproj", "{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MonkeyPaste.com", "MonkeyPaste.com\", "{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_56691"
+		Debug.AspNetCompiler.PhysicalPath = "MonkeyPaste.com\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56691\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_56691"
+		Release.AspNetCompiler.PhysicalPath = "MonkeyPaste.com\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56691\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "56691"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1545,6 +1565,48 @@ Global
 		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x64.Build.0 = Release|x64
 		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x86.ActiveCfg = Release|x86
 		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE}.Release|x86.Build.0 = Release|x86
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|x64.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Debug|x86.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|Any CPU.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|ARM.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|ARM.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|ARM64.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|ARM64.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|iPhone.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|iPhone.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|x64.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|x64.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|x86.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Nuget_Release|x86.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|ARM.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|ARM.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|ARM64.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|ARM64.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|iPhone.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|iPhone.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|x64.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|x64.Build.0 = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|x86.ActiveCfg = Debug|Any CPU
+		{A819F5EC-EB9F-4DC7-A7A6-41E8D31783A7}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1574,12 +1636,12 @@ Global
 		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = Text
-		RESX_TaskErrorCategory = Message
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_RemoveEmptyEntries = False
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_DuplicateKeyHandling = Fail
 		RESX_ShowPerformanceTraces = True
+		RESX_DuplicateKeyHandling = Fail
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_RemoveEmptyEntries = False
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_TaskErrorCategory = Message
+		RESX_ExcelExportMode = Text
 	EndGlobalSection
 EndGlobal

@@ -3,7 +3,6 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,16 +21,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-
-
-        //#region MpIBoxViewModel Implementation
-        //public double X { get; set; }
-        //public double Y { get; set; }
-        //public double Width { get; }
-        //public double Height { get; }
-
-        //#endregion
 
         #region MpIAsyncComboBoxItemViewModel Implementation
         int MpIComboBoxItemViewModel.IconId => PluginIconId;
@@ -147,7 +136,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpClipboardHandlerItemViewModel_PropertyChanged;
         }
 
-
         #endregion
 
         #region Public Methods
@@ -162,7 +150,6 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
                 return;
             }
-
 
             PluginIconId = await GetOrCreateIconIdAsync();
 

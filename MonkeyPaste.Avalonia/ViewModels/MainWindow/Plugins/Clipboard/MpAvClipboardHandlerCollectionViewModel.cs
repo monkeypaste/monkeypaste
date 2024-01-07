@@ -375,6 +375,8 @@ namespace MonkeyPaste.Avalonia {
                 bool success = await ValidateHandlerFormatsAsync(paivm);
                 if (success) {
                     Items.Add(paivm);
+                } else {
+                    await MpPluginLoader.UnloadAndRemovePluginAsync(ole_guid);
                 }
             }
 
