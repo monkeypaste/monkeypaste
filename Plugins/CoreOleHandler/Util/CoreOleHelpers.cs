@@ -18,30 +18,30 @@ namespace CoreOleHandler {
             }
         }
 
-        public static void SetCulture(MpPluginRequestFormatBase req, List<MpPluginUserNotificationFormat> ntfl = default) {
+        public static void SetCulture(MpPluginRequestFormatBase req, List<MpUserNotification> ntfl = default) {
             if (req == null) {
                 return;
             }
             try {
                 if (Resources.Culture != null &&
-                    Resources.Culture.Name == req.cultureCode) {
+                    Resources.Culture.Name == req.culture) {
                     return;
                 }
-                Resources.Culture = new System.Globalization.CultureInfo(req.cultureCode);
+                Resources.Culture = new System.Globalization.CultureInfo(req.culture);
             }
             catch (Exception ex) {
 
                 if (ntfl != default) {
                     ntfl.Add(
-                        new MpPluginUserNotificationFormat() {
+                        new MpUserNotification() {
                             NotificationType = MpPluginNotificationType.PluginResponseWarning,
                             Title = Resources.NtfFormatIgnoredTitle,
                             Body = ex.ToString(),
-                            Detail = req.cultureCode,
+                            Detail = req.culture,
                             IconSourceObj = MpBase64Images.ClipboardIcon
                         });
                 }
-                MpConsole.WriteTraceLine($"Error settings culture code to '{req.cultureCode}'");
+                MpConsole.WriteTraceLine($"Error settings culture code to '{req.culture}'");
             }
         }
 

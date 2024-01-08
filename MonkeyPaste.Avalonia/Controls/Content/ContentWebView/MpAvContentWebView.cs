@@ -741,14 +741,14 @@ namespace MonkeyPaste.Avalonia {
                                 }
 
                                 var hex_delta = new MpQuillDelta() {
-                                    ops = new List<Op>() {
-                                        new Op() {
+                                    ops = new List<MpQuillOp>() {
+                                        new MpQuillOp() {
                                             retain = navUriReq.linkDocIdx
                                         },
-                                        new Op() {
+                                        new MpQuillOp() {
                                             delete = navUriReq.linkText.Length
                                         },
-                                        new Op() {
+                                        new MpQuillOp() {
                                             insert = result_hex
                                         }
                                     }
@@ -822,7 +822,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpEditorBindingFunctionType.getContactsFromFetcher:
-                    var cl = await MpAvTemplateModelHelper.Instance.GetContactsAsync();
+                    var cl = await MpFetchPluginsDataProvider.GetContactsAsync();
                     getResp.responseFragmentJsonStr = MpJsonExtensions.SerializeObject(cl);
                     break;
 

@@ -3,9 +3,9 @@
 namespace MonkeyPaste.Avalonia {
     public interface MpIParameterHostViewModel : MpIViewModel {
         int IconId { get; }
-        MpPluginWrapper PluginFormat { get; }
-        MpParameterHostBaseFormat ComponentFormat { get; }
-        MpParameterHostBaseFormat BackupComponentFormat { get; }
+        MpRuntimePlugin PluginFormat { get; }
+        MpPresetParamaterHostBase ComponentFormat { get; }
+        MpPresetParamaterHostBase BackupComponentFormat { get; }
         string PluginGuid { get; }
     }
 }

@@ -28,13 +28,13 @@ namespace MonkeyPaste.Avalonia {
 
         public override int IconId => PluginIconId;
 
-        public override MpParameterHostBaseFormat ComponentFormat => AnalyzerComponentFormat;
+        public override MpPresetParamaterHostBase ComponentFormat => AnalyzerComponentFormat;
 
-        public override MpParameterHostBaseFormat BackupComponentFormat =>
+        public override MpPresetParamaterHostBase BackupComponentFormat =>
             PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
                 null : PluginFormat.backupCheckPluginFormat.analyzer;
 
-        public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
+        public MpAnalyzerComponent AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
 
         //public override MpIPluginComponentBase PluginComponent =>
@@ -620,34 +620,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private async Task<bool> ValidateAnalyzerAsync(MpPluginWrapper pf) {
-            if (pf == null || pf.analyzer == null) {
-                MpConsole.WriteTraceLine("plugin error, not registered");
-                return false;
-            }
-            bool needs_fixing = false;
-            Func<object, object> retryFunc = (args) => {
-                return null;
-            };
-            if (pf.analyzer.parameters != null) {
-                var dup_param_ids = pf.analyzer.parameters.GroupBy(x => x.paramId).Where(x => x.Count() > 1);
-                foreach (var dup_param_id_grp in dup_param_ids) {
-                    var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.InvalidPlugin,
-                        title: $"{pf.title} Error",
-                        body: $"Duplicate paramId '{dup_param_id_grp.Key}' detected (all must be unique).{Environment.NewLine}Labels:{Environment.NewLine}{string.Join(Environment.NewLine, dup_param_id_grp.Select(x => x.label))}",
-                        retryAction: retryFunc,
-                        fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(pf.ManifestPath)));
-                    if (result == MpNotificationDialogResultType.Ignore) {
-                        return false;
-                    }
-                    needs_fixing = true;
-                    break;
-                }
-            }
-            if (needs_fixing) {
-                return await ValidateAnalyzerAsync(pf);
-            }
+        private async Task<bool> ValidateAnalyzerAsync(MpRuntimePlugin pf) {
+            // NOTE validate should all be handled in loader, 
+            // but just leaving this for continuity
+            await Task.Delay(1);
 
             return true;
         }

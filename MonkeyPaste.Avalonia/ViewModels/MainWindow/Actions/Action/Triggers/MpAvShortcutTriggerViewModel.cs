@@ -38,11 +38,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpHeadlessPluginFormat _actionComponentFormat;
-        public override MpHeadlessPluginFormat ActionComponentFormat {
+        private MpHeadlessComponent _actionComponentFormat;
+        public override MpHeadlessComponent ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpHeadlessPluginFormat() {
+                    _actionComponentFormat = new MpHeadlessComponent() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = UiStrings.ActionShortcutTriggerLabel,

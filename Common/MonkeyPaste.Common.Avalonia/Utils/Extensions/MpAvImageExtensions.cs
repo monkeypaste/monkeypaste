@@ -266,34 +266,40 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         public static unsafe PixelColor[,] GetPixels(this Bitmap bitmap) {
             using (var memoryStream = new MemoryStream()) {
-                bitmap.Save(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
-                using var lockedBitmap = writeableBitmap.Lock();
+                try {
+                    bitmap.Save(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                    using var lockedBitmap = writeableBitmap.Lock();
 
-                byte* bmpPtr = (byte*)lockedBitmap.Address;
-                int width = writeableBitmap.PixelSize.Width;
-                int height = writeableBitmap.PixelSize.Height;
+                    byte* bmpPtr = (byte*)lockedBitmap.Address;
+                    int width = writeableBitmap.PixelSize.Width;
+                    int height = writeableBitmap.PixelSize.Height;
 
-                PixelColor[,] pixels = new PixelColor[width, height];
+                    PixelColor[,] pixels = new PixelColor[width, height];
 
-                for (int row = 0; row < height; row++) {
-                    for (int col = 0; col < width; col++) {
-                        byte blue = *bmpPtr++;
-                        byte green = *bmpPtr++;
-                        byte red = *bmpPtr++;
-                        byte alpha = *bmpPtr++;
+                    for (int row = 0; row < height; row++) {
+                        for (int col = 0; col < width; col++) {
+                            byte blue = *bmpPtr++;
+                            byte green = *bmpPtr++;
+                            byte red = *bmpPtr++;
+                            byte alpha = *bmpPtr++;
 
-                        pixels[col, row] = new PixelColor() {
-                            Alpha = alpha,
-                            Red = red,
-                            Green = green,
-                            Blue = blue
-                        };
+                            pixels[col, row] = new PixelColor() {
+                                Alpha = alpha,
+                                Red = red,
+                                Green = green,
+                                Blue = blue
+                            };
+                        }
                     }
-                }
 
-                return pixels;
+                    return pixels;
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error getting bmp pixels. ", ex);
+                    return new PixelColor[,] { };
+                }
             }
         }
         public static unsafe byte* PutPixel(WriteableBitmap bitmap, PixelColor pixel, byte* bmpPtr) {

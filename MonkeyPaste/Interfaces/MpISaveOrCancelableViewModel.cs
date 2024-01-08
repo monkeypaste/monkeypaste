@@ -10,7 +10,7 @@ namespace MonkeyPaste {
         bool CanSaveOrCancel { get; }
     }
     //public interface MpIPluginComponentViewModel : MpIViewModel {
-    //    public MpParameterHostBaseFormat ComponentFormat { get; }
+    //    public MpPresetParamaterHost ComponentFormat { get; }
     //}
 
 }

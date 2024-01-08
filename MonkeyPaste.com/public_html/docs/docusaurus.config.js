@@ -13,10 +13,10 @@ const config = {
   tagline: '(coming soon!)',
   favicon: 'img/favicon.ico',
 
-  // url: "https://localhost",
-  // baseUrl: "/docs/build",
-  url: "https://monkeypaste.com",
-  baseUrl: "/",
+  url: "https://localhost",
+  baseUrl: "/docs/build",
+  // url: "https://monkeypaste.com",
+  // baseUrl: "/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.

@@ -27,7 +27,7 @@ namespace CoreOleHandler {
                 return null;
             }
 
-            List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
+            List<MpUserNotification> nfl = new List<MpUserNotification>();
             CoreOleHelpers.SetCulture(request);
             List<Exception> exl = new List<Exception>();
             IDataObject write_output = ido_dict == null ? new MpAvDataObject() : ido_dict.ToDataObject();
@@ -63,7 +63,7 @@ namespace CoreOleHandler {
                 }
 
                 foreach (var param in request.items) {
-                    data = CoreParamProcessor.ProcessParam(
+                    data = CoreOleParamProcessor.ProcessParam(
                         paramInfo: param,
                         format: write_format,
                         data: data,
@@ -143,14 +143,14 @@ namespace CoreOleHandler {
                     imgBytes.ToBase64String() is string imgStr) {
                     // text as image
                     data_to_write = imgStr;
-                    fe = CoreParamProcessor.CurImageExtVal;
+                    fe = CoreOleParamProcessor.CurImageExtVal;
                 }
             } else if (source_type == "image") {
                 if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
                     // image as image
                     data_to_write = imgStr;
-                    fe = CoreParamProcessor.CurImageExtVal;
+                    fe = CoreOleParamProcessor.CurImageExtVal;
                 } else {
                     string pref_text_format = GetPreferredTextFileFormat(ido);
                     if (ido.TryGetData(pref_text_format, out string text)) {

@@ -25,7 +25,7 @@ namespace AltOleHandler {
                 request.dataObjectLookup is not Dictionary<string, object> ido_dict) {
                 return null;
             }
-            List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
+            List<MpUserNotification> nfl = new List<MpUserNotification>();
             List<Exception> exl = new List<Exception>();
             IDataObject write_output = ido_dict == null ? new MpAvDataObject() : ido_dict.ToDataObject();
             var writeFormats =

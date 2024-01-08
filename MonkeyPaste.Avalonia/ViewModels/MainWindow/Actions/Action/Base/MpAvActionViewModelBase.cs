@@ -274,16 +274,16 @@ namespace MonkeyPaste.Avalonia {
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginWrapper PluginFormat { get; set; }
+        public MpRuntimePlugin PluginFormat { get; set; }
 
-        public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
-        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+        public MpPresetParamaterHostBase ComponentFormat => ActionComponentFormat;
+        MpPresetParamaterHostBase MpIParameterHostViewModel.BackupComponentFormat =>
             PluginFormat == null ||
             PluginFormat.backupCheckPluginFormat == null ||
             PluginFormat.backupCheckPluginFormat.headless == null ?
                 null : PluginFormat.backupCheckPluginFormat.headless;
 
-        public virtual MpHeadlessPluginFormat ActionComponentFormat { get; protected set; }
+        public virtual MpHeadlessComponent ActionComponentFormat { get; protected set; }
 
         //public MpIPluginComponentBase PluginComponent =>
         //    PluginFormat == null || PluginFormat.Components == null ?
@@ -1430,7 +1430,7 @@ namespace MonkeyPaste.Avalonia {
                 // then if lastoutput is input type
                 // update GetInput to set CopyItem to last output (may need to check at end of analyze perform)
                 if (ActionComponentFormat == null) {
-                    ActionComponentFormat = new MpHeadlessPluginFormat() {
+                    ActionComponentFormat = new MpHeadlessComponent() {
                         parameters = new List<MpParameterFormat>()
                     };
                 }

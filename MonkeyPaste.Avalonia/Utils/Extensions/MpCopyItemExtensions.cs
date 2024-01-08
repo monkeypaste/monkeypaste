@@ -115,22 +115,22 @@ namespace MonkeyPaste.Avalonia {
         public static MpQuillDelta ToDelta(this MpCopyItem ci) {
             // DO NOT DELETE! part of omitted transaction change-tracking 
             MpQuillDelta deltaObj = new MpQuillDelta() {
-                ops = new List<Op>()
+                ops = new List<MpQuillOp>()
             };
 
             switch (ci.ItemType) {
                 case MpCopyItemType.Text:
                     // NOTE no formatting here, could re-use html->rtf converter strutcutre to go delta
-                    deltaObj.ops.Add(new Op() { insert = ci.ItemData.ToPlainText() });
+                    deltaObj.ops.Add(new MpQuillOp() { insert = ci.ItemData.ToPlainText() });
                     break;
                 case MpCopyItemType.Image:
-                    deltaObj.ops.Add(new Op() {
-                        insert = new ImageInsert() { image = $"data:image/png;base64,{ci.ItemData}" },
-                        attributes = new Attributes() { align = "center" }
+                    deltaObj.ops.Add(new MpQuillOp() {
+                        insert = new MpQuillImageInsert() { image = $"data:image/png;base64,{ci.ItemData}" },
+                        attributes = new MpQuillAttributes() { align = "center" }
                     });
                     break;
                 case MpCopyItemType.FileList:
-                    deltaObj.ops.Add(new Op() {
+                    deltaObj.ops.Add(new MpQuillOp() {
                         insert = ci.ItemData
                     });
 

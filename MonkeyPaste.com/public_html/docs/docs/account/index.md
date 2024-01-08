@@ -52,7 +52,7 @@ By default with a free account, this clip capacity stuff can get pretty frustrat
 
 ## On-Demand clipboard listening
 
-By pausing the clipboard listener, *System Tray->Pause* a 🎯 icon will appear in the top-right of the *Pin Tray*. 
+By pausing the clipboard listener, *System Tray->Pause* a 🎯 icon will appear in the top-right of the *Pin Tray* when there is something **new** on the clipboard. 
 <p><img class="figure narrow" src="/docs/build/img/free_acct_sug_bullseye_btn.png" /></p>
 
 :::tip 

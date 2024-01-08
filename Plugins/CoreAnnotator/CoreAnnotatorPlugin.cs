@@ -15,10 +15,12 @@ namespace CoreAnnotator {
     }
     public class CoreAnnotatorPlugin : MpIAnalyzeComponent, MpISupportHeadlessAnalyzerFormat {
         const int FIRST_FORMAT_IDX = 2;
+
+        const string CONTENT_PARAM_ID = "content";
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
             var resp = new MpAnalyzerPluginResponseFormat();
 
-            string content_pt = req.GetParamValue<string>("plaintext");
+            string content_pt = req.GetParamValue(CONTENT_PARAM_ID);
             if (string.IsNullOrWhiteSpace(content_pt)) {
                 return null;
             }
@@ -51,11 +53,10 @@ namespace CoreAnnotator {
             }
             return resp;
         }
+        public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
+            Resources.Culture = new System.Globalization.CultureInfo(request.culture);
 
-        public MpAnalyzerPluginFormat GetFormat(MpHeadlessComponentFormatRequest request) {
-            Resources.Culture = new System.Globalization.CultureInfo(request.cultureCode);
-
-            return new MpAnalyzerPluginFormat() {
+            return new MpAnalyzerComponent() {
                 inputType = new MpPluginInputFormat() {
                     text = true
                 },
@@ -68,28 +69,20 @@ namespace CoreAnnotator {
                         label = Resources.DefAnnLabel,
                         description = Resources.DefAnnHint,
                         values = new[] {
-                            new MpPluginPresetValueFormat(true.ToString(), MpRegExType.Url.ToFlagNamesCsvString()),
-                            new MpPluginPresetValueFormat(true.ToString(), MpRegExType.Email.ToFlagNamesCsvString()),
-                            new MpPluginPresetValueFormat(true.ToString(), MpRegExType.PhoneNumber.ToFlagNamesCsvString()),
-                            new MpPluginPresetValueFormat(true.ToString(), MpRegExType.Currency.ToFlagNamesCsvString()),
-                            new MpPluginPresetValueFormat(true.ToString(), MpRegExType.HexColor.ToFlagNamesCsvString())
+                            new MpPresetValueFormat(MpRegExType.Url.ToFlagNamesCsvString(), true.ToString()),
+                            new MpPresetValueFormat(MpRegExType.Email.ToFlagNamesCsvString(), true.ToString()),
+                            new MpPresetValueFormat(MpRegExType.PhoneNumber.ToFlagNamesCsvString(), true.ToString()),
+                            new MpPresetValueFormat(MpRegExType.Currency.ToFlagNamesCsvString(), true.ToString()),
+                            new MpPresetValueFormat(MpRegExType.HexColor.ToFlagNamesCsvString(), true.ToString())
                         }.ToList()
                     }
                 },
                 parameters = new List<MpParameterFormat>() {
                     new MpParameterFormat() {
-                        label = "Html to annotate",
-                        controlType = MpParameterControlType.TextBox,
-                        unitType = MpParameterValueUnitType.RawDataContentQuery,
-                        paramId = "content",
-                        isVisible = false,
-                        value = new MpPluginParameterValueFormat("{ItemData}",true)
-                    },
-                    new MpParameterFormat() {
                         label = "PlainTexr to annotate",
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                        paramId = "plaintext",
+                        paramId = CONTENT_PARAM_ID,
                         isVisible = false,
                         value = new MpPluginParameterValueFormat("{ItemData}",true)
                     },

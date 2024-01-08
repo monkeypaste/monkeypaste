@@ -11,17 +11,17 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
         public abstract int IconId { get; }
         public virtual string PluginGuid { get; set; }
-        public virtual MpPluginWrapper PluginFormat {
+        public virtual MpRuntimePlugin PluginFormat {
             get {
-                var kvp = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid);
+                var kvp = MpPluginLoader.PluginManifestLookup.FirstOrDefault(x => x.Value.guid == PluginGuid);
                 if (kvp.IsDefault()) {
                     return null;
                 }
                 return kvp.Value;
             }
         }
-        public abstract MpParameterHostBaseFormat ComponentFormat { get; }
-        public abstract MpParameterHostBaseFormat BackupComponentFormat { get; }
+        public abstract MpPresetParamaterHostBase ComponentFormat { get; }
+        public abstract MpPresetParamaterHostBase BackupComponentFormat { get; }
         //public abstract MpIPluginComponentBase PluginComponent { get; }
         #endregion
 

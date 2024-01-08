@@ -1722,6 +1722,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\Editor\src\components\editor\NewFolder\" />
+    <Folder Include="Utils\Plugins\Headless\" />
     <Folder Include="ViewModels\SystemTray\Version\" />
   </ItemGroup>
 

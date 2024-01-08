@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpTransactionLogger {
         public static async Task<int> LogTransactionAsync(
-            MpPluginWrapper pluginFormat,
+            MpRuntimePlugin pluginFormat,
             MpPluginTransactionBase trans,
             MpCopyItem sourceContent,
             object sourceHandler,
@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static async Task<int> LogAnalyzerTransactionAsync(
-            MpPluginWrapper pluginFormat,
+            MpRuntimePlugin pluginFormat,
             MpAnalyzerTransaction trans,
             MpCopyItem sourceContent,
             MpPreset preset,
@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
             return cit.Id;
         }
         //private static async Task<int> LogAnalyzerTransactionAsync(
-        //    MpPluginWrapper pluginFormat,
+        //    MpRuntimePlugin pluginFormat,
         //    MpAnalyzerTransaction trans,
         //    MpCopyItem sourceContent,
         //    MpPreset preset,

@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvExtensions {
         #region Plugins
 
-        public static MpIManagePluginComponents GetComponentManager(this MpManifestFormat mf) {
+        public static MpIManagePluginComponents GetComponentManager(this MpManifest mf) {
             if (mf == null) {
                 return new MpPluginFallbackComponentManager();
             }

@@ -112,9 +112,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public string PluginGuid { get; private set; }
-        public MpPluginWrapper PluginFormat {
+        public MpRuntimePlugin PluginFormat {
             get {
-                var kvp = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid);
+                var kvp = MpPluginLoader.PluginManifestLookup.FirstOrDefault(x => x.Value.guid == PluginGuid);
                 if (kvp.IsDefault()) {
                     return null;
                 }
@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
+        public MpClipboardComponent ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
 
         #endregion
 

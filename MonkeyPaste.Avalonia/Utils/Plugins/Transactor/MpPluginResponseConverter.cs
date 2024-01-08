@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpPluginResponseConverter {
         public static async Task<MpCopyItem> ConvertAsync(
-            MpPluginWrapper pluginFormat,
+            MpRuntimePlugin pluginFormat,
             MpAnalyzerTransaction trans,
             Dictionary<string, string> paramValues,
             MpCopyItem sourceCopyItem,

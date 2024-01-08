@@ -58,7 +58,7 @@ namespace CoreOleHandler {
             }
             CoreOleHelpers.SetCulture(request);
 
-            List<MpPluginUserNotificationFormat> nfl = [];
+            List<MpUserNotification> nfl = [];
             List<Exception> exl = [];
             Dictionary<string, object> conversion_results = [];
             MpAvDataObject read_output = new();
@@ -83,7 +83,7 @@ namespace CoreOleHandler {
                 if (!request.ignoreParams) {
                     foreach (var param in request.items) {
                         try {
-                            data = CoreParamProcessor.ProcessParam(
+                            data = CoreOleParamProcessor.ProcessParam(
                                 paramInfo: param,
                                 format: read_format,
                                 data: dataStr,

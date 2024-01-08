@@ -1,10 +1,16 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
 
     public interface MpIHeadlessComponentFormatBase : MpIPluginComponentBase { }
+    /// <summary>
+    /// Allows an analyzer's configuration to be determined at runtime
+    /// </summary>
     public interface MpISupportHeadlessAnalyzerFormat : MpIHeadlessComponentFormatBase {
-        MpAnalyzerPluginFormat GetFormat(MpHeadlessComponentFormatRequest request);
+        MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request);
     }
+    /// <summary>
+    /// Allows an clipboard handler's configuration to be determined at runtime
+    /// </summary>
     public interface MpISupportHeadlessClipboardComponentFormat : MpIHeadlessComponentFormatBase {
-        MpClipboardHandlerFormats GetFormats(MpHeadlessComponentFormatRequest request);
+        MpClipboardComponent GetFormats(MpHeadlessComponentFormatRequest request);
     }
 }

@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
-
+    /// <summary>
+    /// Helpers to simplify common plugin stuff
+    /// </summary>
     public static class MpPluginExtensions {
         #region Private Variables
 
@@ -21,6 +23,21 @@ namespace MonkeyPaste.Common.Plugin {
         #region Public Methods
 
         #region Parsers
+        public static string GetParamValue(this MpPluginParameterRequestFormat req, string paramId, string fallback = default) {
+            return GetParamValue<string>(req, paramId, fallback);
+        }
+        public static T GetParamValue<T>(this MpPluginParameterRequestFormat req, string paramId, T fallback = default) {
+            object result = null;
+            if (typeConvLookup.TryGetValue(typeof(T), out var getter)) {
+                result = getter.Invoke(req, paramId);
+            } else {
+                throw new NotSupportedException($"Type '{typeof(T)}' not supported. Conversion must be from one of the supported types: {string.Join(",", typeConvLookup.Select(x => x.Key.Name))}");
+            }
+            if (result == null) {
+                result = fallback;
+            }
+            return (T)result;
+        }
         public static DateTime ParseOrConvertToDateTime(this object obj, object fallback = null) {
             if (obj == default) {
                 if (obj == fallback) {
@@ -226,21 +243,25 @@ namespace MonkeyPaste.Common.Plugin {
         }
         #endregion
 
-        public static string GetParamValue(this MpPluginParameterRequestFormat req, string paramId, string fallback = default) {
-            return GetParamValue<string>(req, paramId, fallback);
+        #region Csv
+
+        public static MpCsvFormatProperties GetControlCsvProps(this MpParameterControlType controlType) {
+            return IsControlTypeMultiValue(controlType) ?
+                MpCsvFormatProperties.DefaultBase64Value :
+                MpCsvFormatProperties.Default;
         }
-        public static T GetParamValue<T>(this MpPluginParameterRequestFormat req, string paramId, T fallback = default) {
-            object result = null;
-            if (typeConvLookup.TryGetValue(typeof(T), out var getter)) {
-                result = getter.Invoke(req, paramId);
-            } else {
-                throw new NotSupportedException($"Type '{typeof(T)}' not supported. Conversion must be from one of the supported types: {string.Join(",", typeConvLookup.Select(x => x.Key.Name))}");
-            }
-            if (result == null) {
-                result = fallback;
-            }
-            return (T)result;
+
+        public static bool IsControlTypeMultiValue(this MpParameterControlType controlType) {
+            return
+                controlType == MpParameterControlType.MultiSelectList ||
+                controlType == MpParameterControlType.EditableList;
         }
+        public static bool IsControlCsvValue(this MpParameterControlType controlType) {
+            return GetControlCsvProps(controlType).IsValueBase64;
+        }
+
+        #endregion
+
 
         #endregion
 

@@ -54,7 +54,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                         plugin_name,
                         "manifest.json");
                 string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
-                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
+                MpManifest plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifest>();
 
                 string plugin_proj_dir = Path.GetDirectoryName(plugin_manifest_path);
                 string local_package_uri = PublishToLocalReleases(plugin_proj_dir);
@@ -134,7 +134,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             }
             return ledger.SerializeObjectOmitNulls().ToPrettyPrintJson();
         }
-        static string PushReleaseToGitHub(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
+        static string PushReleaseToGitHub(MpManifest manifest, string proj_dir, string initial_failed_ver = null) {
             string local_package_uri = manifest.packageUrl;
             string version = manifest.version;
             // see this about gh release https://cli.github.com/manual/gh_release_create

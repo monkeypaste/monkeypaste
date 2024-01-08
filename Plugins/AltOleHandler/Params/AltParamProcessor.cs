@@ -10,7 +10,7 @@ namespace AltOleHandler {
             string format,
             object data,
             out Exception ex,
-            out List<MpPluginUserNotificationFormat> nfl) {
+            out List<MpUserNotification> nfl) {
             ex = null;
             nfl = null;
             if (data == null || pkvp == null) {

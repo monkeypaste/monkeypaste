@@ -51,7 +51,7 @@ namespace TextToSpeech {
             catch (Exception ex) {
                 return new MpAnalyzerPluginResponseFormat() {
                     userNotifications = new[] {
-                            new MpPluginUserNotificationFormat() {
+                            new MpUserNotification() {
                                 NotificationType = MpPluginNotificationType.PluginResponseError,
                                 Title = "Web Search Error",
                                 Body = ex.Message,
@@ -62,8 +62,8 @@ namespace TextToSpeech {
             }
             return null;
         }
-        public MpAnalyzerPluginFormat GetFormat(MpHeadlessComponentFormatRequest request) {
-            return new MpAnalyzerPluginFormat() {
+        public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
+            return new MpAnalyzerComponent() {
                 inputType = new MpPluginInputFormat() {
                     text = true
                 },

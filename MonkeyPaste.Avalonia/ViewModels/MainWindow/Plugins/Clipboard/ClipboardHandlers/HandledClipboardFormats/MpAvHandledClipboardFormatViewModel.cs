@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Implementation
 
-        public override MpPluginWrapper PluginFormat {
+        public override MpRuntimePlugin PluginFormat {
             get {
                 if (Parent == null) {
                     return null;
@@ -59,9 +59,9 @@ namespace MonkeyPaste.Avalonia {
         public override int IconId => HandledFormatIconId;
         public override string PluginGuid => FormatGuid;
 
-        public override MpParameterHostBaseFormat ComponentFormat => ClipboardPluginFormat;
+        public override MpPresetParamaterHostBase ComponentFormat => ClipboardPluginFormat;
 
-        public override MpParameterHostBaseFormat BackupComponentFormat =>
+        public override MpPresetParamaterHostBase BackupComponentFormat =>
             PluginFormat == null ||
             PluginFormat.backupCheckPluginFormat == null ||
             PluginFormat.backupCheckPluginFormat.oleHandler == null ||

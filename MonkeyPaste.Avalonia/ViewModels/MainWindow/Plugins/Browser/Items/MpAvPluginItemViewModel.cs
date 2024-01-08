@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsReadmeLoading { get; set; }
         public bool IsUpdatePending {
             get {
-                if (InstalledFormat is not MpPluginWrapper pw) {
+                if (InstalledFormat is not MpRuntimePlugin pw) {
                     return false;
                 }
                 return pw.UpdateDir.IsDirectory();
@@ -244,10 +244,10 @@ namespace MonkeyPaste.Avalonia {
         #region Format props
 
 
-        private MpManifestFormat _pluginFormat;
-        public MpManifestFormat PluginFormat {
+        private MpManifest _pluginFormat;
+        public MpManifest PluginFormat {
             get {
-                MpManifestFormat result = null;
+                MpManifest result = null;
                 if (Parent == null) {
                     result = AllFormats.FirstOrDefault();
                 } else {
@@ -279,7 +279,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        IEnumerable<MpManifestFormat> AllFormats {
+        IEnumerable<MpManifest> AllFormats {
             get {
                 if (Parent == null) {
                     yield break;
@@ -291,21 +291,21 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        IList<MpManifestFormat> RemoteFormats =>
+        IList<MpManifest> RemoteFormats =>
             AllFormats
-            .Where(x => x is not MpPluginFormat)
+            .Where(x => x is not MpPlugin)
             .ToList();
-        MpPluginFormat InstalledFormat =>
+        MpPlugin InstalledFormat =>
             AllFormats
-            .OfType<MpPluginFormat>()
+            .OfType<MpPlugin>()
             .FirstOrDefault();
 
-        MpManifestFormat[] SortedRemoteFormats =>
+        MpManifest[] SortedRemoteFormats =>
             RemoteFormats
             .OrderByDescending(x => x.version.ToVersion())
             .ToArray();
 
-        MpManifestFormat SelectedRemoteFormat {
+        MpManifest SelectedRemoteFormat {
             get {
                 if (SelectedRemoteFormatIdx >= RemoteFormats.Count) {
                     return null;
@@ -431,7 +431,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string PluginManifestDirectory {
             get {
-                if (PluginFormat is MpPluginWrapper pf) {
+                if (PluginFormat is MpRuntimePlugin pf) {
                     return pf.ManifestDir;
                 }
                 return string.Empty;
@@ -520,8 +520,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             var req_args = new Dictionary<string, string>() {
-                {"plugin_guid",PluginGuid },
-                {"version",PluginVersionText },
+                {"plugin_guid", PluginGuid },
+                {"version", PluginVersionText },
                 {"is_install", is_install ?"1":"0" }
             };
             var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(PLUGIN_INFO_URL, req_args);

@@ -4709,9 +4709,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand AddItemWhileIgnoringClipboardCommand => new MpAsyncCommand(
             async () => {
-                if (!CanAddItemWhileIgnoringClipboard) {
-                    // cmd execute isn't updating when visibility changes
-                }
+                // BUG cmd execute isn't updating when visibility changes via CanAddItemWhileIgnoringClipboard
                 await AddItemFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject);
             });
 

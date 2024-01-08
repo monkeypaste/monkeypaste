@@ -1,5 +1,4 @@
 ﻿using Avalonia.Input;
-using Avalonia.Platform.Storage;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -190,6 +189,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
         // private  uint CF_BITMAP = 0;
+#pragma warning disable CA1416 // Validate platform compatibility
         public void SetBitmap(byte[] bytes) {
             if (!OperatingSystem.IsWindows()) {
                 return;
@@ -252,6 +252,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 #endif
         }
+#pragma warning restore CA1416 // Validate platform compatibility
 
 
 

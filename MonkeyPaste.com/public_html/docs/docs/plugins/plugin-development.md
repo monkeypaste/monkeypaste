@@ -15,6 +15,7 @@ Add the MonkeyPaste.Common.Plugin dll from nuget or the cli:
 dotnet add package MonkeyPaste.Common.Plugin
 ```
 
+
 :::info 
 Javascript and python plugin wrappers are currently in an alpha-stage of development. Check back at the [repo](https://github.com/monkeypaste) for more updates!
 :::
@@ -166,7 +167,16 @@ These are plugins I've made and they all should be available from the *Plugin Br
 |[FileConverter](https://github.com/monkeypaste/FileConverter)|
 |[ImageAnnotator](https://github.com/monkeypaste/ImageAnnotator)|
 |[QrCoder](https://github.com/monkeypaste/QrCoder)|
+|[TextToSpeech](https://github.com/monkeypaste/TextToSpeech)|
+|[TextTranslator](https://github.com/monkeypaste/TextTranslator)|
 |[WebSearch](https://github.com/monkeypaste/WebSearch)|
+
+:::info Project Dependencies
+If you want to build any of projects mentioned above you'll need the `MonkeyPaste.Common` package:
+```
+dotnet add package MonkeyPaste.Common --version 1.0.0
+```
+:::
 
 :::tip Divide & Conquer
 They all are fairly simple. Only a few small classes that you can adapt for your own ideas.
@@ -176,8 +186,10 @@ Check the *Remarks* section on each projects readme to see the techincal aspects
 
 
 
+
+
 ## Feedback
-Feel free to raise an issue on one of the repos at [https://github.com/orgs/monkeypaste/repositories](https://github.com/orgs/monkeypaste/repositories)
+Feel free to raise an issue at [https://github.com/orgs/monkeypaste/repositories](https://github.com/orgs/monkeypaste/repositories)
 
 
 

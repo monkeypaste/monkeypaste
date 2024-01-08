@@ -52,6 +52,16 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Unused\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis" Version="1.64.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
+    <PackageReference Include="Google.Apis.PeopleService.v1" Version="1.64.0.3093" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(PushPlugins)' == 'True'">
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />

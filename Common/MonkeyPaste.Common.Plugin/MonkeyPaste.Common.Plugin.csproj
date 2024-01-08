@@ -7,9 +7,9 @@
     <Title>MonkeyPaste.Common.Plugin</Title>
     <Authors>Monkey</Authors>
     <Product>MonkeyPaste</Product>
-    <Description>MonkeyPaste is a cross-platform clipboard automation and productivity tool allowing extensibility byway of a simple client-server plugin interface. This library is the minimum requirement for creating custom plugins for MonkeyPaste.</Description>
-    <PackageProjectUrl>https://www.monkeypaste.com/</PackageProjectUrl>
-    <PackageIcon>monkey_128x128.png</PackageIcon>
+    <Description>The minimum requirement for creating custom plugins for MonkeyPaste.</Description>
+    <PackageProjectUrl>https://github.com/monkeypaste/MonkeyPaste.Common.Plugin</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageTags>monkeypaste, monkey, clipboard, copy, paste, drag, drop, netstandard, net, plugin, extension</PackageTags>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
@@ -29,19 +29,7 @@
   </Target>
 
   <ItemGroup>
-    <Compile Remove="Formats\Google\**" />
-    <EmbeddedResource Remove="Formats\Google\**" />
-    <None Remove="Formats\Google\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Formats\Components\Contact\" />
-    <Folder Include="Formats\Parameters\" />
-    <Folder Include="Util\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\artwork\monkey_128x128.png">
+    <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -52,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="readme.md">
+    <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

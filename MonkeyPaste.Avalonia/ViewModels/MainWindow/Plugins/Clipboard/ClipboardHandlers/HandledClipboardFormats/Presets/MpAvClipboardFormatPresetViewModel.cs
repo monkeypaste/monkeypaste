@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIPluginComponentViewModel Implementation
-        public MpParameterHostBaseFormat ComponentFormat => ClipboardFormat;
+        public MpPresetParamaterHostBase ComponentFormat => ClipboardFormat;
 
         #endregion
 

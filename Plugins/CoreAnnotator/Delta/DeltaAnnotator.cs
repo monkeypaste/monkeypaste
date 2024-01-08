@@ -21,7 +21,7 @@ namespace CoreAnnotator {
         #region Public Methods
 
         public static MpQuillDelta Annotate(string plain_text, IEnumerable<MpRegExType> formats) {
-            MpQuillDelta delta = new MpQuillDelta() { ops = new List<Op>() };
+            MpQuillDelta delta = new MpQuillDelta() { ops = new List<MpQuillOp>() };
             if (string.IsNullOrEmpty(plain_text)) {
                 return delta;
             }
@@ -38,7 +38,7 @@ namespace CoreAnnotator {
             return delta;
         }
         private static MpQuillDelta AnnotateType(string pt, MpRegExType annotationRegExType) {
-            MpQuillDelta delta = new MpQuillDelta() { ops = new List<Op>() };
+            MpQuillDelta delta = new MpQuillDelta() { ops = new List<MpQuillOp>() };
 
             if (annotationRegExType == MpRegExType.None) {
                 return delta;
@@ -54,8 +54,8 @@ namespace CoreAnnotator {
                     // bad match
                     continue;
                 }
-                Op op = new Op() {
-                    format = new DeltaRange() { index = m.Index, length = m.Length },
+                MpQuillOp op = new MpQuillOp() {
+                    format = new MpQuillDeltaRange() { index = m.Index, length = m.Length },
                     attributes = attr
                 };
 
@@ -64,12 +64,12 @@ namespace CoreAnnotator {
             return delta;
         }
 
-        private static Attributes GetLinkAttributes(MpRegExType annotationRegExType, string match) {
+        private static MpQuillAttributes GetLinkAttributes(MpRegExType annotationRegExType, string match) {
             string href = GetLinkHref(annotationRegExType, match);
             if (string.IsNullOrEmpty(href)) {
                 return null;
             }
-            var attr = new Attributes() {
+            var attr = new MpQuillAttributes() {
                 linkType = annotationRegExType.ToString().ToLower(),
                 link = href
             };
@@ -104,7 +104,7 @@ namespace CoreAnnotator {
         }
 
         private static MpQuillDelta ProcessCollisions(MpQuillDelta delta) {
-            List<Op> ops_to_remove = new List<Op>();
+            List<MpQuillOp> ops_to_remove = new List<MpQuillOp>();
             // order ops by desc length,
             // then remove any op that collides with it
             // so longest match in any collision remains

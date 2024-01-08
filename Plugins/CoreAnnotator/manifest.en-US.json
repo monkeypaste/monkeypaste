@@ -1,12 +1,13 @@
 {
   "title": "Core Text Annotator",
-  "description": "Provides basic hyperlink support for text based content",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
   "version": "1.0.0",
+  "description": "Provides basic hyperlink support for text based content",
   "author": "Monkey",
-  "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "Core, Annotate, Text, Link, Color, Parsing, Address, Phone, Email, Currency,Finance",
-  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
   "iconUri": "icon.png",
-  "packageType": "Dll"
+  "packageType": "Dll",
+  "pluginType": "Analyzer",
+  "debugMode": "None"
 }

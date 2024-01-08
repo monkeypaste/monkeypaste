@@ -9,8 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-
-
 #if CEFNET_WV
 #endif
 

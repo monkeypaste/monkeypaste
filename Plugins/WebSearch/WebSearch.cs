@@ -20,7 +20,7 @@ namespace WebSearch {
                 catch (Exception ex) {
                     return new MpAnalyzerPluginResponseFormat() {
                         userNotifications = new[] {
-                            new MpPluginUserNotificationFormat() {
+                            new MpUserNotification() {
                                 NotificationType = MpPluginNotificationType.PluginResponseError,
                                 Title = "Web Search Error",
                                 Body = ex.Message,

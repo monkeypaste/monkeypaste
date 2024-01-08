@@ -8,29 +8,28 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginAssemblyHelpers {
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Load(string manifestPath, MpPluginWrapper plugin, out Assembly component_assembly) {
-            component_assembly = null;
+        public static async Task LoadComponentsAsync(string manifestPath, MpRuntimePlugin plugin) {
             AssemblyLoadContext alc = null;
             plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
             string bundle_path = GetBundlePath(manifestPath, plugin);
-            IEnumerable<MpIPluginComponentBase> components = null;
             switch (plugin.packageType) {
                 default:
                 case MpPluginPackageType.Dll:
-                    component_assembly = LoadDll(bundle_path, out alc);
-                    components = component_assembly.FindSubTypes<MpIPluginComponentBase>();
+                    var dll_assembly = LoadDll(bundle_path, out alc);
+                    plugin.Components = dll_assembly.FindSubTypes<MpIPluginComponentBase>().ToArray();
                     break;
                 case MpPluginPackageType.Nuget:
-                    component_assembly = LoadNuget(bundle_path, out alc);
-                    components = component_assembly.FindSubTypes<MpIPluginComponentBase>();
+                    var nuget_assembly = LoadNuget(bundle_path, out alc);
+                    plugin.Components = nuget_assembly.FindSubTypes<MpIPluginComponentBase>().ToArray();
                     break;
                 case MpPluginPackageType.Python:
-                    component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
-                    components = new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
+                    //component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
+                    plugin.Components = new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
                     break;
                     //case MpPluginPackageType.Http:
                     //    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
@@ -38,7 +37,29 @@ namespace MonkeyPaste.Avalonia {
                     //    break;
             }
             plugin.LoadContext = alc;
-            plugin.Components = components.ToArray();
+
+            switch (plugin.pluginType) {
+                case MpPluginType.Analyzer:
+                    if (plugin.analyzer != null) {
+                        break;
+                    }
+                    plugin.analyzer =
+                        await plugin.IssueRequestAsync(
+                            nameof(MpISupportHeadlessAnalyzerFormat.GetFormat),
+                            typeof(MpISupportHeadlessAnalyzerFormat).FullName,
+                            new MpHeadlessComponentFormatRequest(), sync_only: true) as MpAnalyzerComponent;
+                    break;
+                case MpPluginType.Clipboard:
+                    if (plugin.oleHandler != null) {
+                        break;
+                    }
+                    plugin.oleHandler =
+                        await plugin.IssueRequestAsync(
+                            nameof(MpISupportHeadlessClipboardComponentFormat.GetFormats),
+                            typeof(MpISupportHeadlessClipboardComponentFormat).FullName,
+                            new MpHeadlessComponentFormatRequest(), sync_only: true) as MpClipboardComponent;
+                    break;
+            }
         }
         private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
             alc = null;
@@ -72,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static string GetBundlePath(string manifestPath, MpPluginWrapper plugin) {
+        private static string GetBundlePath(string manifestPath, MpRuntimePlugin plugin) {
             string bundle_ext = GetBundleExt(plugin.packageType, plugin.version);
             string bundle_dir = Path.GetDirectoryName(manifestPath);
             string bundle_file_name = Path.GetFileName(bundle_dir);
@@ -97,6 +118,7 @@ namespace MonkeyPaste.Avalonia {
                     return "dll";
             }
         }
+
         #region Extensions
         public static IEnumerable<T> FindSubTypes<T>(this Assembly pluginAssembly) {
             if (pluginAssembly == null) {

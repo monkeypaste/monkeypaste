@@ -181,7 +181,7 @@ namespace MonkeyPaste.Avalonia {
                 return result2;
             }
             var nf = inf as MpNotificationFormat;
-            if (nf == null && inf is MpPluginUserNotificationFormat pnf) {
+            if (nf == null && inf is MpUserNotification pnf) {
                 // convert plugin notification to core nf
                 nf = new MpNotificationFormat(pnf);
             }

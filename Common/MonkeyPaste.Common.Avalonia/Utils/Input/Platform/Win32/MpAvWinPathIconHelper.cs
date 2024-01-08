@@ -46,6 +46,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return GetBitmapFromIconHandle(hIcon);
         }
 
+#pragma warning disable CA1416 // Validate platform compatibility
         private static Bitmap GetBitmapFromIconHandle(IntPtr hIcon) {
             if (hIcon == IntPtr.Zero || !OperatingSystem.IsWindows()) {
                 return null;
@@ -66,6 +67,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return null;
 #endif
         }
+#pragma warning restore CA1416 // Validate platform compatibility
 
         private static IntPtr GetIconHandleFromFilePath(string filepath, int iconsize) {
             const uint SHGFI_SYSICONINDEX = 0x4000;

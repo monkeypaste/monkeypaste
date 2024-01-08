@@ -44,7 +44,7 @@ namespace MonkeyPaste {
 
         public MpNotificationFormat() { }
 
-        public MpNotificationFormat(MpPluginUserNotificationFormat pluginNotfication) {
+        public MpNotificationFormat(MpUserNotification pluginNotfication) {
             if (pluginNotfication == null) {
                 return;
             }

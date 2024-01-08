@@ -262,13 +262,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var analyzer_guids =
-                MpPluginLoader.Plugins.Where(x => x.Value.analyzer != null).Select(x => x.Value.guid);
+                MpPluginLoader.PluginManifestLookup.Where(x => x.Value.analyzer != null).Select(x => x.Value.guid);
 
             foreach (var analyzer_guid in analyzer_guids) {
                 var paivm = await CreateAnalyticItemViewModelAsync(analyzer_guid);
                 if (paivm.PluginFormat == null) {
                     // internal error/invalid issue with plugin, ignore it
-                    await MpPluginLoader.UnloadAndRemovePluginAsync(analyzer_guid);
+                    await MpPluginLoader.DetachPluginByGuidAsync(analyzer_guid);
                     continue;
                 }
                 Items.Add(paivm);

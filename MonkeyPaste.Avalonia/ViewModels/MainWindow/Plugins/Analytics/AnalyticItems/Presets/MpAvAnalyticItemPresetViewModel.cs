@@ -49,15 +49,15 @@ namespace MonkeyPaste.Avalonia {
         string MpIParameterHostViewModel.PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginWrapper PluginFormat => Parent == null ? null : Parent.PluginFormat;
+        public MpRuntimePlugin PluginFormat => Parent == null ? null : Parent.PluginFormat;
 
-        MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
+        MpPresetParamaterHostBase MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
 
-        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+        MpPresetParamaterHostBase MpIParameterHostViewModel.BackupComponentFormat =>
             PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
                 null : PluginFormat.backupCheckPluginFormat.analyzer;
 
-        public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
+        public MpAnalyzerComponent AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
 
 
@@ -107,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIPluginComponentViewModel Implementation
-        public MpParameterHostBaseFormat ComponentFormat => AnalyzerFormat;
+        public MpPresetParamaterHostBase ComponentFormat => AnalyzerFormat;
 
         #endregion
 
@@ -399,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public MpAnalyzerPluginFormat AnalyzerFormat {
+        public MpAnalyzerComponent AnalyzerFormat {
             get {
                 if (Parent == null) {
                     return null;

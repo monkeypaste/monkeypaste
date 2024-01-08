@@ -3,7 +3,7 @@
         object ComparableSortValue { get; }
     }
     //public interface MpIPluginComponentViewModel : MpIViewModel {
-    //    public MpParameterHostBaseFormat ComponentFormat { get; }
+    //    public MpPresetParamaterHost ComponentFormat { get; }
     //}
 
 }

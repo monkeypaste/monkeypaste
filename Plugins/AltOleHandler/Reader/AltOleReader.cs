@@ -57,7 +57,7 @@ namespace AltOleHandler {
 
             }
 
-            List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
+            List<MpUserNotification> nfl = new List<MpUserNotification>();
             List<Exception> exl = new List<Exception>();
             var read_output = new MpAvDataObject();
             var readFormats = request.formats.Where(x => availableFormats.Contains(x));

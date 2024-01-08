@@ -106,11 +106,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHostViewModel Implementation
         int MpIParameterHostViewModel.IconId => 0;
-        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+        MpPresetParamaterHostBase MpIParameterHostViewModel.BackupComponentFormat =>
             null;
         string MpIParameterHostViewModel.PluginGuid => null;
-        public MpPluginWrapper PluginFormat { get; set; }
-        public MpParameterHostBaseFormat ComponentFormat =>
+        public MpRuntimePlugin PluginFormat { get; set; }
+        public MpPresetParamaterHostBase ComponentFormat =>
             PluginFormat == null ?
                 null :
                 PluginFormat.headless;

@@ -228,8 +228,8 @@ namespace MonkeyPaste.Avalonia {
                     MpSettingsTabType.Account,
                     new [] {
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Status) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountEmail),
@@ -295,8 +295,8 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Register) {
                             FrameHint = UiStrings.PrefRegistrationFrameHint,
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountShowLogin.ToString(),
@@ -350,8 +350,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Login) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountShowRegister.ToString(),
@@ -395,8 +395,8 @@ namespace MonkeyPaste.Avalonia {
                     MpSettingsTabType.Preferences,
                     new[] {
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Theme) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.ThemeTypeName),
@@ -432,8 +432,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.DefaultFonts) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
@@ -485,8 +485,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Sound) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
@@ -520,8 +520,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Taskbar) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.ShowInTaskbar),
@@ -554,8 +554,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Window) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr),
@@ -601,8 +601,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Hints) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.ShowTooltips),
@@ -641,8 +641,8 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
                             SortOrderIdx = int.MinValue,
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
@@ -664,8 +664,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Limits) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.MaxUndoLimit),
@@ -713,8 +713,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Tracking) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.IgnoreAppendedItems),
@@ -786,8 +786,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Startup) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.LoadOnLogin),
@@ -846,8 +846,8 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Search) {
                             // BUG sorting this so its first to prevent it always scrolling into view on tab change
                             SortOrderIdx = int.MaxValue,
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.MaxRecentTextsCount),
@@ -911,8 +911,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Content) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.IsSpellCheckEnabled),
@@ -982,8 +982,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.TopScreenEdgeGestures) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.ScrollToOpen),
@@ -1025,8 +1025,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Shortcuts) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ChangeRoutingType.ToString(),
@@ -1046,8 +1046,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Password) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ChangeDbPassword.ToString(),
@@ -1086,8 +1086,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.System) {
-                            PluginFormat = new MpPluginWrapper() {
-                                headless = new MpHeadlessPluginFormat() {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ClearRecentSearches.ToString(),

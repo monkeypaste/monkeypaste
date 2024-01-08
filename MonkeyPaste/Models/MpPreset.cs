@@ -133,13 +133,13 @@ namespace MonkeyPaste {
         }
 
         //[Ignore]
-        //public MpAnalyzerPluginFormat AnalyzerFormat { get; set; }
+        //public MpAnalyzerComponent AnalyzerFormat { get; set; }
 
         //[Ignore]
         //public MpClipboardHandlerFormat ClipboardFormat { get; set; }
 
         //[Ignore]
-        //public MpParameterHostBaseFormat ComponentFormat { get; set; }
+        //public MpPresetParamaterHost ComponentFormat { get; set; }
 
         #endregion
 

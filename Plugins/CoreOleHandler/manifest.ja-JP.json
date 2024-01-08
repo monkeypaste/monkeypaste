@@ -1,12 +1,13 @@
 {
   "title": "コアクリップボードハンドラ",
-  "description": "デフォルトのクリップボード形式を処理します",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "version": "1.0.0",
+  "description": "デフォルトのクリップボード形式を処理します",
   "author": "Monkey",
-  "requireLicenseAcceptance": false,
   "projectUrl": "https://www.monkeypaste.com",
   "tags": "コア、クリップボード、ドラッグ アンド ドロップ、テキスト、RTF、リッチ テキスト、Html、CSV、画像、PNG、Jpg、Jpeg、リンク",
-  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "iconUri": "/Resources/Images/icon.png",
-  "packageType": "Dll"
+  "packageType": "Dll",
+  "pluginType": "Clipboard",
+  "debugMode": "None"
 }

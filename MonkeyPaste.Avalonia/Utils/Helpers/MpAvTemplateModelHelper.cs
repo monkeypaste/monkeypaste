@@ -1,9 +1,6 @@
 ﻿using HtmlAgilityPack;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -128,32 +125,6 @@ namespace MonkeyPaste.Avalonia {
             return text.Contains("<span class=\"template-blot");
         }
 
-        public async Task<IEnumerable<MpIContact>> GetContactsAsync() {
-            // TODO passing args as null cause dunno what should use
-            var contact_fetches = await Task.WhenAll(MpPluginLoader.Plugins.Select(x => IssueFetchRequestAsync(x.Value, null)));
-            var contacts = contact_fetches.SelectMany(x => x.Contacts).Distinct();
-            return contacts;
-        }
-
-        private static async Task<MpPluginContactFetchResponseFormat> IssueFetchRequestAsync(MpPluginWrapper plugin, MpPluginContactFetchRequestFormat req) {
-            string method_name = nameof(MpIContactFetcherComponent.Fetch);
-            string on_type = typeof(MpIContactFetcherComponent).FullName;
-            var resp = await plugin.IssueRequestAsync(method_name, on_type, req) as MpPluginContactFetchResponseFormat;
-            return resp;
-        }
-        public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {
-            switch (templateType) {
-                case MpTextTemplateType.Contact:
-                    return "ContactIcon";
-                case MpTextTemplateType.DateTime:
-                    return "AlarmClockIcon";
-                case MpTextTemplateType.Dynamic:
-                    return "YinYangIcon";
-                case MpTextTemplateType.Static:
-                    return "IceCubeIcon";
-            }
-            return string.Empty;
-        }
 
         #endregion
 

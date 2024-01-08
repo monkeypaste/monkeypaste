@@ -47,7 +47,7 @@ namespace GoogleContactsFetcher {
 
             return new MpAnalyzerPluginResponseFormat() {
                 userNotifications = new[] {
-                    new MpPluginUserNotificationFormat() {
+                    new MpUserNotification() {
                         Title = $"Request: {fields_str}",
                         Body = string.Join(Environment.NewLine,contacts.Select(x=>x.FullName)),
                         NotificationType = MpPluginNotificationType.PluginResponseMessage,

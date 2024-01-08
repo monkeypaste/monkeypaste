@@ -76,8 +76,8 @@ namespace ComputerVision {
             }
             return resp;
         }
-        public MpAnalyzerPluginFormat GetFormat(MpHeadlessComponentFormatRequest request) {
-            return new MpAnalyzerPluginFormat() {
+        public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
+            return new MpAnalyzerComponent() {
                 inputType = new MpPluginInputFormat() {
                     image = true
                 },

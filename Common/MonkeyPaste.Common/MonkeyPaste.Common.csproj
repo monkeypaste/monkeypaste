@@ -5,6 +5,16 @@
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <UserSecretsId>76007d6d-3b32-4d7d-a98b-36f9c70b1848</UserSecretsId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>MonkeyPaste.Common</Title>
+    <Authors>Monkey</Authors>
+    <PackageProjectUrl>https://github.com/monkeypaste/MonkeyPaste.Common.Plugin</PackageProjectUrl>
+    <Product>MonkeyPaste</Product>
+    <Description>A suite of clipboard, automation and data processing tools for [MonkeyPaste](https://www.monkeypaste.com) plugin developers</Description>
+    <PackageIcon>nuget_icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>monkeypaste, monkey, clipboard, copy, paste, drag, drop, netstandard, net, plugin, extension</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.54"  />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.54" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
@@ -36,7 +46,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\MonkeyPaste.Common.Plugin\nuget_icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
   <Target Name="CommonReqsDone" AfterTargets="PostBuildEvent"></Target>

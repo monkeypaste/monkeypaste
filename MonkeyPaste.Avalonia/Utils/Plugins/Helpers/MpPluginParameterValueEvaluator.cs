@@ -3,7 +3,6 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpPluginParameterValueEvaluator {
@@ -129,9 +128,9 @@ namespace MonkeyPaste.Avalonia {
             bool asRawData,
             bool uriEscaped,
             object last_output_args) {
-            if (MpParameterFormat.IsControlCsvValue(controlType)) {
+            if (controlType.IsControlCsvValue()) {
                 // for csv values, split decode actual text to get query result then return re-encoded csv
-                var csvProps = MpParameterFormat.GetControlCsvProps(controlType);
+                var csvProps = controlType.GetControlCsvProps();
                 var decoded_vals = curVal.ToListFromCsv(csvProps);
                 var decoded_val_results = new List<string>();
                 foreach (var decoded_val in decoded_vals) {

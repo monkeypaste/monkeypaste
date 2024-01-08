@@ -368,7 +368,10 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var ole_guids = MpPluginLoader.Plugins.Where(x => x.Value.oleHandler != null).Select(x => x.Value.guid);
+            var ole_guids =
+                MpPluginLoader.Plugins
+                .Where(x => x.pluginType == MpPluginType.Clipboard)
+                .Select(x => x.guid);
 
             foreach (var ole_guid in ole_guids) {
                 var paivm = await CreateClipboardHandlerItemViewModelAsync(ole_guid);
@@ -376,7 +379,7 @@ namespace MonkeyPaste.Avalonia {
                 if (success) {
                     Items.Add(paivm);
                 } else {
-                    await MpPluginLoader.UnloadAndRemovePluginAsync(ole_guid);
+                    await MpPluginLoader.DetachPluginByGuidAsync(ole_guid);
                 }
             }
 
