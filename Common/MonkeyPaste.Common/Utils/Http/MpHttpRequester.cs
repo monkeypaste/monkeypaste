@@ -10,7 +10,11 @@ namespace MonkeyPaste.Common {
         const string SUCCESS_PREFIX = "[SUCCESS]";
         const string ERROR_PREFIX = "[ERROR]";
 
-        public static async Task<string> SubmitPostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000, bool add_debug = MpServerConstants.IS_SERVER_LOCAL) {
+        public static async Task<string> SubmitPostDataToUrlAsync(
+            string url,
+            Dictionary<string, string> keyValuePairs,
+            int timeout_ms = 10_000,
+            bool add_debug = MpServerConstants.IS_SERVER_LOCAL) {
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
@@ -67,7 +71,7 @@ namespace MonkeyPaste.Common {
 
         public static bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
             response = response.ToStringOrEmpty();
-            MpConsole.WriteLine($"Server response: '{response}'");
+            //MpConsole.WriteLine($"Server response: '{response}'");
             string msg_suffix;
             bool success = false;
 

@@ -124,7 +124,7 @@
 
                     <!--<av:HtmlLabel x:Name="FakeWindowDetail"
                                   local:MpAvHtmlStylerExtension.IsEnabled="True"
-                                  local:MpAvHtmlStylerExtension.DefaultColor="#FF6250"
+                                  local:MpAvHtmlStylerExtension.DefaultHexColor="#FF6250"
                                   local:MpAvHtmlStylerExtension.DefaultFontSize="10"
                                   AutoSize="True"
                                   Text="{Binding FakeWindowDetail}" />-->

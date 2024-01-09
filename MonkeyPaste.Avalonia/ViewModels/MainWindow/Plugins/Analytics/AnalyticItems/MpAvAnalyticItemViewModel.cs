@@ -368,9 +368,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             Items.Clear();
-            //if(Title == "Yolo") {
-            //    MpDebug.Break();
-            //}
 
             // NOTE ignoring plugin update msgs on initial load cause its a bunch and not relevant
             var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
@@ -839,31 +836,52 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                Dictionary<string, string> shared_params_to_clear_or_restore = new Dictionary<string, string>();
+                Dictionary<string, string> shared_params = new Dictionary<string, string>();
                 foreach (var sp in aipvm.Items.Where(x => x.IsSharedValue)) {
-                    shared_params_to_clear_or_restore.Add(sp.ParamId.ToString(), sp.CurrentValue);
+                    shared_params.Add(sp.ParamId.ToString(), sp.CurrentValue);
                 }
 
-                if (shared_params_to_clear_or_restore.Any()) {
+                // recreate default preset record (name, icon, etc.)
+                var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
+                    this, aipvm.PresetGuid, Items.IndexOf(aipvm));
+
+                MpNotificationDialogResultType share_reset_type = MpNotificationDialogResultType.None;
+                if (shared_params.Any()) {
                     // ntf w/ yes/no/cancel to reset shared values
-                    var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    share_reset_type = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.ModalResetSharedValuePreset,
                         title: UiStrings.CommonConfirmLabel,
                         body: string.Format(UiStrings.NtfResetSharedValueText, aipvm.Label),
                         iconSourceObj: "QuestionMarkImage");
-                    if (result == MpNotificationDialogResultType.Cancel) {
+                    if (share_reset_type == MpNotificationDialogResultType.Cancel) {
                         IsBusy = false;
                         return;
                     }
-                    if (result == MpNotificationDialogResultType.ResetAll ||
-                        result == MpNotificationDialogResultType.ResetShared) {
-                        // clear shared values
-                        foreach (var kvp in shared_params_to_clear_or_restore) {
-                            shared_params_to_clear_or_restore[kvp.Key] = string.Empty;
+                    if (share_reset_type == MpNotificationDialogResultType.ResetAll ||
+                        share_reset_type == MpNotificationDialogResultType.ResetShared) {
+
+                        var defaultPresetValues = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Preset, aipvm.AnalyticItemPresetId);
+
+                        foreach (var kvp in shared_params) {
+                            // reset shared values to whatever defaults are
+                            if (defaultPresetValues.FirstOrDefault(x => x.ParamId == kvp.Key) is { } def_kvp_val) {
+                                MpConsole.WriteLine($"Reseting param {kvp.Key} from:'{kvp.Value}' to:'{def_kvp_val.Value}'");
+                                shared_params[kvp.Key] = def_kvp_val.Value;
+                            } else {
+                                // how did this happen
+                            }
                         }
 
-                        if (result == MpNotificationDialogResultType.ResetShared) {
+                        if (share_reset_type == MpNotificationDialogResultType.ResetShared) {
                             // leave unshared alone
+
+                            // update shared values and trigger db write for other instance updates
+                            foreach (var shared_param_to_restore in shared_params) {
+                                var cur_param = aipvm.Items.FirstOrDefault(x => x.ParamId.ToString() == shared_param_to_restore.Key);
+                                MpDebug.Assert(cur_param != null, $"Can't find shared param '{shared_param_to_restore.Key}'");
+                                cur_param.CurrentValue = shared_param_to_restore.Value;
+                                cur_param.SaveCurrentValueCommand.Execute(null);
+                            }
 
                             Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == aipvm.AnalyticItemPresetId);
                             OnPropertyChanged(nameof(SelectedItem));
@@ -872,22 +890,20 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 }
-                // recreate default preset record (name, icon, etc.)
-                var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
-                    this, aipvm.PresetGuid, Items.IndexOf(aipvm));
 
                 // before initializing preset remove current values from db or it won't reset values
                 await Task.WhenAll(aipvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
 
                 await aipvm.InitializeAsync(defaultPresetModel);
 
-                if (shared_params_to_clear_or_restore.Any()) {
-                    // update shared values and trigger db write for other instance updates
-                    foreach (var shared_param_to_restore in shared_params_to_clear_or_restore) {
-                        var cur_param = aipvm.Items.FirstOrDefault(x => x.ParamId.ToString() == shared_param_to_restore.Key);
-                        MpDebug.Assert(cur_param != null, $"Can't find shared param '{shared_param_to_restore.Key}'");
-                        cur_param.CurrentValue = shared_param_to_restore.Value;
-                        cur_param.SaveCurrentValueCommand.Execute(null);
+                if (share_reset_type == MpNotificationDialogResultType.ResetUnshared) {
+                    foreach (var paravm in aipvm.Items) {
+                        if (shared_params.FirstOrDefault(x => x.Key == paravm.ParamId) is { } shared_kvp &&
+                            !shared_kvp.IsDefault()) {
+                            //restore current shared value
+                            paravm.CurrentValue = shared_kvp.Value;
+                            paravm.SaveCurrentValueCommand.Execute(null);
+                        }
                     }
                 }
                 Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == aipvm.AnalyticItemPresetId);

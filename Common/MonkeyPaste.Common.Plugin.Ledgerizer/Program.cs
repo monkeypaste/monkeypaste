@@ -4,8 +4,15 @@ using System.IO.Compression;
 
 namespace MonkeyPaste.Common.Plugin.Ledgerizer {
     internal class Program {
+        const string VERSION_PHRASE = "Im the big T pot check me out";
 
-        static bool LEDGERIZE_LOCAL = true;
+        static bool DO_LOCAL = true;
+
+        static bool DO_REMOTE = false;
+        static bool FORCE_REMOTE_VERSION = true;
+
+        static bool DO_VERSIONS = true;
+
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -31,20 +38,23 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             "WebSearch"
         ];
 
-
-        static string LocalLedgerDir = MpLedgerConstants.LOCAL_LEDGER_DIR;
-
-        static string LedgerPath =
+        //ledger-local.json
+        static string LocalLedgerPath =
             Path.Combine(
-                LocalLedgerDir,
-                LEDGERIZE_LOCAL ?
-                    MpLedgerConstants.LOCAL_LEDGER_NAME :
-                    MpLedgerConstants.REMOTE_LEDGER_NAME);
+                MpLedgerConstants.LEDGER_PROJ_DIR,
+                MpLedgerConstants.LOCAL_LEDGER_NAME);
 
-        static string LocalReleasesDir = MpLedgerConstants.LOCAL_RELEASE_DIR;
+        //ledger.json
+        static string RemoteLedgerPath =
+            Path.Combine(
+                MpLedgerConstants.LEDGER_PROJ_DIR,
+                MpLedgerConstants.REMOTE_LEDGER_NAME);
+
 
         static void Main(string[] args) {
-            MpFileIo.DeleteDirectory(LocalReleasesDir);
+            if (DO_LOCAL) {
+                MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
+            }
 
             MpManifestLedger ledger = new MpManifestLedger();
             foreach (var plugin_name in PluginNames) {
@@ -57,7 +67,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 MpManifest plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifest>();
 
                 string plugin_proj_dir = Path.GetDirectoryName(plugin_manifest_path);
-                string local_package_uri = PublishToLocalReleases(plugin_proj_dir);
+                string local_package_uri = PackPlugin(plugin_proj_dir, plugin_manifest.guid);
                 if (local_package_uri == null) {
                     continue;
                 }
@@ -65,58 +75,96 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 ledger.manifests.Add(plugin_manifest);
             }
 
-            string ledger_text = FinishPublish(ledger);
-            MpFileIo.WriteTextToFile(LedgerPath, ledger_text);
-            Console.WriteLine($"Ledger written to: ");
-            Console.WriteLine(LedgerPath);
+            if (DO_LOCAL) {
+                // write ledger-local.js
+                MpConsole.WriteLine($"Local ledger written to: {MpFileIo.WriteTextToFile(
+                    MpLedgerConstants.LOCAL_LEDGER_URI.ToPathFromUri(),
+                    ledger.SerializeObjectOmitNulls().ToPrettyPrintJson())}", true);
+            }
+            if (DO_REMOTE) {
+                MpConsole.WriteLine($"Remote ledger written to: {MpFileIo.WriteTextToFile(
+                    MpLedgerConstants.REMOTE_LEDGER_URI.ToPathFromUri(),
+                    PublishRemote(ledger))}", true);
+            }
+            if (DO_VERSIONS) {
+                if (DO_LOCAL) {
+                    UpdateVersions(ledger, false);
+                }
+                if (DO_REMOTE) {
+                    UpdateVersions(ledger, true);
+                }
+            }
+            MpConsole.WriteLine("Done.. press key to finish", true);
+            Console.ReadLine();
         }
 
-        static string PublishToLocalReleases(string proj_dir) {
-            if (!LocalReleasesDir.IsDirectory()) {
-                MpFileIo.CreateDirectory(LocalReleasesDir);
-            }
-            string publish_dir = Path.Combine(LocalReleasesDir, Path.GetFileName(proj_dir));
+        static string PackPlugin(string proj_dir, string guid) {
+            string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
+            string plugin_name = Path.GetFileName(proj_dir);
 
+            if (!root_pack_dir.IsDirectory()) {
+                // create packages dir if first pack
+                MpFileIo.CreateDirectory(root_pack_dir);
+            }
+            string publish_dir = Path.Combine(root_pack_dir, plugin_name);
+
+            // delete build stuff
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "bin"));
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "obj"));
-            var proc = new Process();
-            proc.StartInfo.FileName = @"C:\Program Files\dotnet\dotnet.exe";
-            proc.StartInfo.Arguments = $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
-            proc.StartInfo.WorkingDirectory = proj_dir;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.Start();
-            string proc_output = proc.StandardOutput.ReadToEnd();
 
-            proc.WaitForExit();
-            int exit_code = proc.ExitCode;
-            proc.Close();
-            proc.Dispose();
+            // perform publish and output to ledger proj/packages_* dir
+            (int exit_code, string proc_output) =
+                RunProcess(
+                    file: "dotnet",
+                    dir: proj_dir,
+                    args: $"publish --configuration {BUILD_CONFIG} --output {publish_dir}");
 
             if (exit_code != 0) {
-                Console.WriteLine("");
-                Console.WriteLine($"Error from '{Path.GetFileName(proj_dir)}' exit code '{exit_code}'");
-                Console.WriteLine(proc_output);
-                Console.WriteLine("");
+                MpConsole.WriteLine("");
+                MpConsole.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'");
+                MpConsole.WriteLine(proc_output);
+                MpConsole.WriteLine("");
                 return null;
             }
 
             if (!publish_dir.IsDirectory()) {
                 return null;
             }
-            string output_path = Path.Combine(LocalReleasesDir, $"{Path.GetFileName(proj_dir)}.zip");
+            // zip publish output 
+            string output_path = Path.Combine(root_pack_dir, $"{plugin_name}.zip");
             ZipFile.CreateFromDirectory(publish_dir, output_path, CompressionLevel.Fastest, true);
-            MpFileIo.DeleteDirectory(publish_dir);
-            Console.WriteLine(output_path + " DONE");
 
+            // get plugin install dir
+            string plugin_install_dir =
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+#if DEBUG
+                    "MonkeyPaste_DEBUG",
+#else
+                    "MonkeyPaste",
+#endif
+                    "Plugins",
+                    guid);
+            string install_update_suffix = string.Empty;
+            if (plugin_install_dir.IsDirectory()) {
+                // if plugin is installed we need to use this build output 
+                // at least for debugging but probably in general too
+                string inner_install_dir = Path.Combine(plugin_install_dir, plugin_name);
+                MpFileIo.DeleteDirectory(inner_install_dir);
+                // duplicate just published dir to plugin container dir
+                MpFileIo.CreateDirectory(inner_install_dir);
+                MpFileIo.CopyDirectory(publish_dir, inner_install_dir);
+                install_update_suffix = " install UPDATED";
+            }
+            // cleanup published output
+            MpFileIo.DeleteDirectory(publish_dir);
+            MpConsole.WriteLine($"{plugin_name} local DONE" + install_update_suffix);
+
+            // return zip uri to use for local packageUrl
             return output_path.ToFileSystemUriFromPath();
         }
 
-        static string FinishPublish(MpManifestLedger ledger) {
-            if (LEDGERIZE_LOCAL) {
-                return ledger.SerializeObjectOmitNulls().ToPrettyPrintJson();
-            }
-
+        static string PublishRemote(MpManifestLedger ledger) {
             foreach (var manifest in ledger.manifests) {
                 string proj_dir = Path.Combine(
                                 MpCommonHelpers.GetSolutionDir(),
@@ -135,41 +183,54 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             return ledger.SerializeObjectOmitNulls().ToPrettyPrintJson();
         }
         static string PushReleaseToGitHub(MpManifest manifest, string proj_dir, string initial_failed_ver = null) {
+            string plugin_name = Path.GetFileName(proj_dir);
             string local_package_uri = manifest.packageUrl;
             string version = manifest.version;
             // see this about gh release https://cli.github.com/manual/gh_release_create
             string source_package_path = local_package_uri.ToPathFromUri();
-            string target_package_name = $"v{version}";
-            string target_package_file_name = $"{target_package_name}.zip";
+            string target_tag_name = $"v{version}";
+            string target_package_file_name = $"{target_tag_name}.zip";
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
 
             MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
-            var proc = new Process();
-            proc.StartInfo.FileName = @"C:\Program Files\GitHub CLI\gh.exe";
-            proc.StartInfo.WorkingDirectory = proj_dir;
-            proc.StartInfo.Arguments = $"release create {target_package_name} --latest --generate-notes {target_package_file_name}";
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.Start();
-            string proc_output = proc.StandardOutput.ReadToEnd();
+            (int exit_code, string proc_output) = RunProcess(
+                file: "gh.exe",
+                dir: proj_dir,
+                args: $"release create {target_tag_name} --latest --generate-notes {target_package_file_name}");
 
-            proc.WaitForExit();
-            int exit_code = proc.ExitCode;
-            proc.Close();
-            proc.Dispose();
             MpFileIo.DeleteFile(target_package_path);
 
             if (exit_code == 1) {
-                // version exist, increment
-                if (version.SplitNoEmpty(".") is not { } verParts ||
-                    !int.TryParse(verParts.Last(), out int minor_rev)) {
-                    Console.WriteLine($"Error bad version for plugin at '{proj_dir}'");
-                    return null;
+                // version exist
+                if (FORCE_REMOTE_VERSION) {
+                    // delete version, call again
+                    if (initial_failed_ver != null) {
+                        // should only occur once 
+                        MpConsole.WriteLine($"Uncaught error after delete for '{proj_dir}' skipping upload");
+                        return null;
+                    }
+                    (int del_exit_code, string del_proc_output) =
+                        RunProcess(
+                            file: "gh.exe",
+                            dir: proj_dir,
+                            args: $"release delete {target_tag_name} -yes --cleanup-tag");
+                    if (exit_code != 0) {
+                        MpConsole.WriteLine($"Error delete failed exit code {del_exit_code}");
+                        return null;
+                    }
+                } else {
+                    // increment, call again
+                    if (version.SplitNoEmpty(".") is not { } verParts ||
+                        !int.TryParse(verParts.Last(), out int minor_rev)) {
+                        MpConsole.WriteLine($"Error bad version for plugin at '{proj_dir}'");
+                        return null;
+                    }
+                    manifest.version = $"{verParts[0]}.{verParts[1]}.{minor_rev + 1}";
                 }
-                manifest.version = $"{verParts[0]}.{verParts[1]}.{minor_rev + 1}";
-
+                // if first fail use failed version
                 var new_ver_result = PushReleaseToGitHub(manifest, proj_dir, initial_failed_ver ?? version);
                 return new_ver_result;
+
             } else if (exit_code == 0 && initial_failed_ver != null) {
                 // new rev works, update local manifest to match
 
@@ -181,21 +242,66 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                     manifest_json = manifest_json.Replace(old_ver_json, new_ver_json);
                     MpFileIo.WriteTextToFile(Path.Combine(proj_dir, "manifest.json"), manifest_json);
                 } else {
-                    Console.WriteLine($"Error! Could not find old ver string '{old_ver_json}' trying to replace with '{new_ver_json}' in plugin '{proj_dir}'");
+                    MpConsole.WriteLine($"Error! Could not find old ver string '{old_ver_json}' trying to replace with '{new_ver_json}' in plugin '{proj_dir}'");
                 }
             }
 
             if (exit_code != 0) {
-                Console.WriteLine("");
-                Console.WriteLine($"Error from '{Path.GetFileName(proj_dir)}' exit code '{exit_code}'");
-                Console.WriteLine(proc_output);
-                Console.WriteLine("");
+                MpConsole.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'", true);
+                MpConsole.WriteLine(proc_output, false, true);
                 return null;
             }
 
-            string github_release_uri = string.Format(PACKAGE_URL_FORMAT, Path.GetFileName(proj_dir), target_package_name);
-            Console.WriteLine(github_release_uri + " DONE");
+            string github_release_uri = string.Format(PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
+            MpConsole.WriteLine($"{plugin_name} remote DONE");
             return github_release_uri;
+        }
+
+        static void UpdateVersions(MpManifestLedger ledger, bool is_remote) {
+            bool is_done = false;
+
+            _ = Task.Run(async () => {
+                foreach (var mf in ledger.manifests) {
+                    var req_args = new Dictionary<string, string>() {
+                        {"plugin_guid", mf.guid },
+                        {"version", mf.version},
+                        {"is_install", "0" },
+                        {"add_phrase", "Im the big T pot check me out" }
+                    };
+                    string url = is_remote ?
+                        $"{MpServerConstants.REMOTE_SERVER_URL}/plugins/plugin-info-check.php" :
+                        $"{MpServerConstants.LOCAL_SERVER_URL}/plugins/plugin-info-check.php";
+
+                    var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(url, req_args);
+                    bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
+                    if (success) {
+                        MpConsole.WriteLine($"{mf} info check resp: {resp}");
+
+                    }
+                }
+                is_done = true;
+            });
+
+            while (!is_done) {
+                Thread.Sleep(100);
+            }
+
+        }
+        static (int, string) RunProcess(string file, string dir, string args) {
+            var proc = new Process();
+            proc.StartInfo.FileName = file;
+            proc.StartInfo.WorkingDirectory = dir;
+            proc.StartInfo.Arguments = args;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+            string proc_output = proc.StandardOutput.ReadToEnd();
+
+            proc.WaitForExit();
+            int exit_code = proc.ExitCode;
+            proc.Close();
+            proc.Dispose();
+            return (exit_code, proc_output);
         }
     }
 }

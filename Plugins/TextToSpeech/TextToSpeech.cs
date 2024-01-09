@@ -2,62 +2,24 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace TextToSpeech {
     public class TextToSpeechPlugin :
-        MpIAnalyzeComponent,
+        MpIAnalyzeComponentAsync,
         MpISupportHeadlessAnalyzerFormat {
         const string TEXT_PARAM_ID = "1";
 
-        public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
+        public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
             if (req == null ||
                 req.GetParamValue<string>(TEXT_PARAM_ID) is not string text) {
                 return null;
             }
-            try {
-                // from https://stackoverflow.com/a/39647762/105028
-
-                string ps_path = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-                    "System32",
-                    "cmd.exe");
-                //"WindowsPowerShell", "v1.0", "powershell.exe");
-                if (!ps_path.IsFile()) {
-                    throw new Exception("cannot speak");
-                }
-                var proc = new Process();
-                proc.StartInfo.FileName = ps_path;
-                //proc.StartInfo.Arguments = $"-windowstyle Hidden -Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');";
-                proc.StartInfo.Arguments = $"/c start /min \"\" powershell -windowstyle Hidden -executionpolicy bypass -Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');\"";
-                proc.StartInfo.WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                proc.StartInfo.UseShellExecute = false;
-                proc.StartInfo.CreateNoWindow = true;
-                proc.StartInfo.RedirectStandardOutput = true;
-                proc.Start();
-                string proc_output = proc.StandardOutput.ReadToEnd();
-
-                proc.WaitForExit();
-                int exit_code = proc.ExitCode;
-                proc.Close();
-
-                if (exit_code != 0) {
-                    throw new Exception($"Cannot speak.{Environment.NewLine}Error #{exit_code}{Environment.NewLine}{proc_output}");
-                }
-
-            }
-            catch (Exception ex) {
+            (int code, string output) = await MpCli.RunAsync(
+                args: $"/c start /min \"\" powershell -windowstyle Hidden -executionpolicy bypass -Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');\"");
+            if (code != 0) {
                 return new MpAnalyzerPluginResponseFormat() {
-                    userNotifications = new[] {
-                            new MpUserNotification() {
-                                NotificationType = MpPluginNotificationType.PluginResponseError,
-                                Title = "Web Search Error",
-                                Body = ex.Message,
-                                IconSourceObj = MpBase64Images.Error
-                            }
-                        }.ToList()
+                    errorMessage = $"Error code: {code}{Environment.NewLine}{output}"
                 };
             }
             return null;

@@ -26,9 +26,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants      
 
+
         #endregion
 
         #region Statics
+        static bool USE_LOCAL_LEDGER = true;
+        static string LEDGER_URI =>
+            USE_LOCAL_LEDGER ?
+                MpLedgerConstants.LOCAL_LEDGER_URI :
+                MpLedgerConstants.REMOTE_LEDGER_URI;
+
+
         private static MpAvPluginBrowserViewModel _instance;
         public static MpAvPluginBrowserViewModel Instance => _instance ?? (_instance = new MpAvPluginBrowserViewModel());
         #endregion
@@ -178,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<IEnumerable<MpManifest>> GetRemoteManifests() {
-            string ledger_json = await MpFileIo.ReadTextFromUriAsync(MpLedgerConstants.LEDGER_URI);
+            string ledger_json = await MpFileIo.ReadTextFromUriAsync(LEDGER_URI);
             var ledger = MpJsonExtensions.DeserializeObject<MpManifestLedger>(ledger_json);
             if (ledger == null || ledger.manifests == null) {
                 return Array.Empty<MpManifest>();

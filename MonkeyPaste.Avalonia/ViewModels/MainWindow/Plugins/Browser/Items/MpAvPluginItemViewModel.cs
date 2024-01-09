@@ -23,9 +23,6 @@ namespace MonkeyPaste.Avalonia {
         static string ABUSE_BASE_URL =
             $"{MpServerConstants.PLUGINS_BASE_URL}/abuse?id=";
 
-        static string PLUGIN_INFO_URL =
-            $"{MpServerConstants.PLUGINS_BASE_URL}/plugin-info-check.php";
-
 
         #endregion
 
@@ -241,8 +238,18 @@ namespace MonkeyPaste.Avalonia {
         // NOTE SelectedRemoteFormatIdx is a placeholder if multiple versions get supported
         public int SelectedRemoteFormatIdx { get; set; } = 0;
 
+        #region Server Info
+        bool IsUnpublished { get; set; }
+        public DateTime? PluginPublishedDateTime { get; private set; }
+        public int InstallCount { get; private set; }
+        #endregion
+
         #region Format props
 
+        public string SelectedRemotePackageUrl =>
+            SelectedRemoteFormat == null ?
+                null :
+                SelectedRemoteFormat.packageUrl;
 
         private MpManifest _pluginFormat;
         public MpManifest PluginFormat {
@@ -372,11 +379,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        #region Server Info
-
-        public DateTime? PluginPublishedDateTime { get; private set; }
-        public int InstallCount { get; private set; }
-        #endregion
 
         #region Details
         public string PluginVersionText {
@@ -491,13 +493,13 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(PluginFormat):
                     LoadIconAsync().FireAndForgetSafeAsync();
-                    LoadOrUpdatePluginInfoAsync().FireAndForgetSafeAsync();
                     LoadDepViewModelAsync().FireAndForgetSafeAsync();
                     break;
                 case nameof(IsSelected):
                     if (!IsSelected) {
                         break;
                     }
+                    LoadPluginStatsAsync().FireAndForgetSafeAsync();
                     RefreshState();
                     OnPropertyChanged(nameof(RootDependencyCollection));
                     break;
@@ -515,24 +517,23 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task LoadOrUpdatePluginInfoAsync(bool is_install = false) {
-            if (PluginFormat == null) {
+        private async Task LoadPluginStatsAsync() {
+            if (PluginPublishedDateTime.HasValue || IsUnpublished) {
+                // only set once if not refresh
                 return;
             }
-            var req_args = new Dictionary<string, string>() {
-                {"plugin_guid", PluginGuid },
-                {"version", PluginVersionText },
-                {"is_install", is_install ?"1":"0" }
-            };
-            var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(PLUGIN_INFO_URL, req_args);
-            bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
-            if (success) {
-                if (int.TryParse(resp_args["install_count"], out int install_count)) {
-                    InstallCount = install_count;
-                }
-                if (DateTime.TryParse(resp_args["publish_dt"], out DateTime pub_dt)) {
-                    PluginPublishedDateTime = pub_dt;
-                }
+
+            (int count, DateTime? pub_dt) =
+                await MpPluginLoader.GetOrUpdatePluginStatsAsync(PluginGuid, false);
+
+            InstallCount = count;
+
+            if (pub_dt.HasValue) {
+                PluginPublishedDateTime = pub_dt;
+                IsUnpublished = false;
+            } else {
+                PluginPublishedDateTime = null;
+                IsUnpublished = true;
             }
         }
         private async Task LoadIconAsync() {
@@ -632,11 +633,13 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand InstallPluginCommand => new MpAsyncCommand(
             async () => {
-                IsBusy = true;
-                if (PluginFormat.GetComponentManager() is { } cm) {
-                    LoadOrUpdatePluginInfoAsync(true).FireAndForgetSafeAsync();
-                    bool success = await cm.InstallAsync(PluginGuid, PackageUrl);
+                if (PluginFormat.GetComponentManager() is not { } cm) {
+                    return;
                 }
+
+                IsBusy = true;
+                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl);
+                LoadPluginStatsAsync().FireAndForgetSafeAsync();
 
                 IsBusy = false;
                 Parent.PerformFilterCommand.Execute("Refresh");
@@ -655,10 +658,11 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                IsBusy = true;
-                if (PluginFormat.GetComponentManager() is { } cm) {
-                    await cm.UninstallAsync(PluginGuid);
+                if (PluginFormat.GetComponentManager() is not { } cm) {
+                    return;
                 }
+                IsBusy = true;
+                await cm.UninstallAsync(PluginGuid);
 
                 // refresh list to remove this plugin
                 IsBusy = false;
@@ -669,11 +673,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UpdatePluginCommand => new MpAsyncCommand(
             async () => {
-                IsBusy = true;
-                if (PluginFormat.GetComponentManager() is { } cm) {
-                    LoadOrUpdatePluginInfoAsync(true).FireAndForgetSafeAsync();
-                    bool success = await cm.BeginUpdateAsync(PluginGuid, PackageUrl);
+                if (PluginFormat.GetComponentManager() is not { } cm) {
+                    return;
                 }
+
+                IsBusy = true;
+                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl);
 
                 IsBusy = false;
 

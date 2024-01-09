@@ -2491,7 +2491,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>Update Error</value>
   </data>
   <data name="NtfPluginUpdateFailedText" xml:space="preserve">
-    <value>Something went wrong. To restore this plugin you will need to restart. Would you like to restart now or later?</value>
+    <value>Couldn't download update</value>
   </data>
   <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
     <value>Update Failed</value>
@@ -2535,5 +2535,8 @@ You can restart now and complete the update by re-installing, ignore this and up
   </data>
   <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
     <value>Finish Uninstall?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Unpublished</value>
   </data>
 </root>

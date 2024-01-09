@@ -49,6 +49,7 @@
                            Margin="0"
                            VerticalAlignment="Center"
                            FontSize="14"
+                           Foreground="{Binding Background, ElementName=TooltipOuterContainer, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                            IsVisible="{Binding !IsHtml, ElementName=ToolTipView}"
                            Text="{Binding ToolTipText, ElementName=ToolTipView}"
                            TextWrapping="WrapWithOverflow" />
@@ -56,7 +57,7 @@
                               MaxWidth="600"
                               IsVisible="{Binding IsHtml, ElementName=ToolTipView}"
                               local:MpAvHtmlStylerExtension.DefaultFontSize="14"
-                              local:MpAvHtmlStylerExtension.DefaultColor="{Binding Foreground, ElementName=ToolTipTextBlock}"
+                              local:MpAvHtmlStylerExtension.DefaultHexColor="{Binding Foreground, ElementName=ToolTipTextBlock, Converter={x:Static local:MpAvBrushToHexStringConverter.Instance}}"
                               local:MpAvHtmlStylerExtension.IsEnabled="True"
                               Text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
             </Grid>

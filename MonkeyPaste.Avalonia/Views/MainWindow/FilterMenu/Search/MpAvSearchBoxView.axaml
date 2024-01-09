@@ -320,7 +320,7 @@
 
                     <!--  SEARCH AUTOCOMPLETE BOX  -->
 
-                    <AutoCompleteBox x:Name="SearchBox"
+                    <!--<AutoCompleteBox x:Name="SearchBox"
                                      BorderThickness="1.5"
                                      Classes="common"
                                      Classes.invalid="{Binding !IsSearchValid}"
@@ -345,7 +345,32 @@
                                 <Binding Path="IsExpanded" />
                             </MultiBinding>
                         </AutoCompleteBox.IsVisible>
-                    </AutoCompleteBox>
+                    </AutoCompleteBox>-->
+                    <TextBox x:Name="SearchBox"
+                             BorderThickness="1.5"
+                             Classes="common"
+                             Classes.invalid="{Binding !IsSearchValid}"
+                             TabIndex="1"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             HorizontalAlignment="Stretch"
+                             Cursor="IBeam"
+                             local:MpAvDropExtension.IsEnabled="True"
+                             local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                             local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                             local:MpAvDelayedTextChangedExtension.Text="{Binding SearchText, Mode=TwoWay}"
+                             Watermark="{x:Static local:UiStrings.CommonSearchWatermark}"
+                             FontSize="14"
+                             Background="Transparent"
+                             Padding="0"
+                             Margin="5,0">
+                        <TextBox.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                <Binding Path="IsExpandAnimating" />
+                                <Binding Path="IsExpanded" />
+                            </MultiBinding>
+                        </TextBox.IsVisible>
+                    </TextBox>
                 </DockPanel>
             </Border>
 

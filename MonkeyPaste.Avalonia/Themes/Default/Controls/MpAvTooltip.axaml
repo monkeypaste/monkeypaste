@@ -15,11 +15,6 @@
                 Value="inset 0 0 2 2 #46000000" />-->
     </Style>
 
-    <Style Selector="local|MpAvToolTipView TextBlock#ToolTipTextBlock">
-        <Setter Property="Foreground"
-                Value="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
-    </Style>
-
     <!--  WARNING  -->
 
     <Style Selector="local|MpAvToolTipView.warning Border">

@@ -5,12 +5,15 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.IO;
+
 #if CEFNET_WV
 using CefNet;
 #endif
 
 namespace MonkeyPaste.Avalonia {
     internal class Program {
+        static bool CLEAR_STORAGE = false;
         static bool LOCALIZE_ONLY = false;
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -26,6 +29,20 @@ namespace MonkeyPaste.Avalonia {
                         break;
                 }
             }
+            if (CLEAR_STORAGE) {
+                // NOTE use this when local storage folder won't go away
+                string path1 = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "MonkeyPaste");
+                string path2 = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "MonkeyPaste_DEBUG");
+                bool success1 = MpFileIo.DeleteDirectory(path1);
+                bool success2 = MpFileIo.DeleteDirectory(path2);
+                Console.WriteLine($"Deleted '{path1}': {success1.ToTestResultLabel()}");
+                Console.WriteLine($"Deleted '{path2}': {success2.ToTestResultLabel()}");
+            }
+
             if (LOCALIZE_ONLY) {
                 MpAvCurrentCultureViewModel.SetAllCultures(new System.Globalization.CultureInfo("zh-CN"));
                 return;

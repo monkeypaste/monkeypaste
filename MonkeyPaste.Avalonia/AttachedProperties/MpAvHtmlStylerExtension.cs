@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static readonly AttachedProperty<MpHtmlStyleType> HtmlStyleTypeProperty =
-            AvaloniaProperty.RegisterAttached<object, HtmlControl, MpHtmlStyleType>(
+            AvaloniaProperty.RegisterAttached<object, Control, MpHtmlStyleType>(
                 "HtmlStyleType",
                 MpHtmlStyleType.None);
 
@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static readonly AttachedProperty<double> DefaultFontSizeProperty =
-            AvaloniaProperty.RegisterAttached<object, HtmlControl, double>(
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
                 "DefaultFontSize",
                 MpAvPrefViewModel.Instance == null ?
                     MpAvPrefViewModel.BASE_DEFAULT_FONT_SIZE :
@@ -59,18 +59,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region DefaultColor AvaloniaProperty
-        public static string GetDefaultColor(AvaloniaObject obj) {
-            return obj.GetValue(DefaultColorProperty);
+        #region DefaultHexColor AvaloniaProperty
+        public static string GetDefaultHexColor(AvaloniaObject obj) {
+            return obj.GetValue(DefaultHexColorProperty);
         }
 
-        public static void SetDefaultColor(AvaloniaObject obj, string value) {
-            obj.SetValue(DefaultColorProperty, value);
+        public static void SetDefaultHexColor(AvaloniaObject obj, string value) {
+            obj.SetValue(DefaultHexColorProperty, value);
         }
 
-        public static readonly AttachedProperty<string> DefaultColorProperty =
-            AvaloniaProperty.RegisterAttached<object, HtmlControl, string>(
-                "DefaultColor",
+        public static readonly AttachedProperty<string> DefaultHexColorProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string>(
+                "DefaultHexColor",
                 Mp.Services == null || Mp.Services.PlatformResource == null ?
                     "#000000" :
                     Mp.Services.PlatformResource
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static readonly AttachedProperty<ICommand> LinkClickCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, HtmlControl, ICommand>(
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
                 "LinkClickCommand",
                 null);
 
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static readonly AttachedProperty<object> LinkClickCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<object, HtmlControl, object>(
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
                 "LinkClickCommandParameter",
                 null);
 
@@ -217,7 +217,7 @@ body {{ color: {0}; font: {1}px {2}; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
-                        GetDefaultColor(hc),
+                        GetDefaultHexColor(hc),
                         GetDefaultFontSize(hc),
                         MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily,
                         Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent3Color.ToString()).RemoveHexAlpha());

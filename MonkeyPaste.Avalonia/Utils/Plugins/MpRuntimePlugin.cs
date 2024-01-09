@@ -44,6 +44,9 @@ namespace MonkeyPaste.Avalonia {
             contactFetcher = null;
             backupCheckPluginFormat = null;
 
+            if (LoadContext == null) {
+                return;
+            }
             WeakReference wr = new WeakReference(LoadContext);
             // from https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability#use-a-custom-collectible-assemblyloadcontext
             LoadContext.Unload();

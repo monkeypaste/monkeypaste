@@ -64,11 +64,9 @@ namespace MonkeyPaste.Avalonia {
         private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
             alc = null;
             try {
-                if (dllPath.ToLower().Contains("synth")) {
-                    return Assembly.LoadFrom(dllPath);
-                }
-                alc = new MpPluginAssemblyLoadContext(dllPath);
-                return alc.LoadFromAssemblyPath(dllPath);
+                //alc = new MpPluginAssemblyLoadContext(dllPath);
+                //return alc.LoadFromAssemblyPath(dllPath);
+                return Assembly.LoadFrom(dllPath);
             }
             catch (Exception ex) {
                 throw new MpUserNotifiedException($"Plugin Linking error '{dllPath}':{Environment.NewLine}{ex}");

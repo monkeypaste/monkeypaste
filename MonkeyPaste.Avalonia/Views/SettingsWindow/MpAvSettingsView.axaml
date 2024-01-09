@@ -375,9 +375,11 @@
                                       VerticalContentAlignment="Center">
                     <Grid>
 
-                        <!--  FILTER TEXTBOX  -->
+                        <!--
+                            FILTER TEXTBOX
+                        -->
 
-                        <AutoCompleteBox MinWidth="150"
+                        <!--<AutoCompleteBox MinWidth="150"
                                          MinHeight="30"
                                          Classes="common"
                                          VerticalAlignment="Stretch"
@@ -388,7 +390,20 @@
                                          local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                          local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                          local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
+                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />-->
+
+                        <TextBox MinWidth="150"
+                                 MinHeight="30"
+                                 Classes="common"
+                                 VerticalAlignment="Stretch"
+                                 VerticalContentAlignment="Center"
+                                 BorderThickness="0"
+                                 Margin="0"
+                                 Padding="10,0,0,0"
+                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                 local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
+                                 Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
 
 
                         <!--  CLEAR FILTER BUTTON  -->

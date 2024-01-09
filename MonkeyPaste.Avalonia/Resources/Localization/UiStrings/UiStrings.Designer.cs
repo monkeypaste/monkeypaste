@@ -3768,7 +3768,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Something went wrong. To restore this plugin you will need to restart. Would you like to restart now or later?.
+        ///   Looks up a localized string similar to Couldn&apos;t download update.
         /// </summary>
         public static string NtfPluginUpdateFailedText {
             get {
@@ -4313,6 +4313,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginUninstallPendingTooltip {
             get {
                 return ResourceManager.GetString("PluginUninstallPendingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpublished.
+        /// </summary>
+        public static string PluginUnpublishedLabel {
+            get {
+                return ResourceManager.GetString("PluginUnpublishedLabel", resourceCulture);
             }
         }
         

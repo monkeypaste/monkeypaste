@@ -108,7 +108,6 @@
             <DataGrid x:Name="PresetDataGrid"
                       Grid.Row="0"
                       IsReadOnly="False"
-                      Focusable="True"
                       ItemsSource="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}"
                       SelectionMode="Single"

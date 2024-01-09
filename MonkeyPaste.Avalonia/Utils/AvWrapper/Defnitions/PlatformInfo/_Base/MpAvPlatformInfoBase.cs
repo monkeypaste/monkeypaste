@@ -12,12 +12,16 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-        public virtual bool IsTraceEnabled { get; set; } =
+        public virtual bool IsTraceEnabled {
+            get {
+                bool do_trace = App.HasStartupArg(App.TRACE_ARG);
 #if DEBUG
-            true;
+                return true;
 #else
-            true;
+                return do_trace;
 #endif
+            }
+        }
         public virtual bool IsDesktop =>
             OperatingSystem.IsWindows() ||
             OperatingSystem.IsMacOS() ||

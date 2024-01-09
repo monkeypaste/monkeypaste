@@ -71,6 +71,19 @@
 
         </Style>
 
+        <!--  PUBLISHED INFO TEXT  -->
+        <Style Selector="SelectableTextBlock#PublishedTextBlock"
+               x:DataType="local:MpAvPluginItemViewModel">
+            <Setter Property="Text"
+                    Value="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+
+        </Style>
+        <Style Selector="SelectableTextBlock#PublishedTextBlock.unpublished">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.PluginUnpublishedLabel}" />
+
+        </Style>
+
     </local:MpAvUserControl.Styles>
 
     <ScrollViewer MinHeight="300">
@@ -206,12 +219,14 @@
             <SelectableTextBlock Grid.Row="8"
                                  Grid.Column="0"
                                  Classes="detailLabel"
+                                 IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                  Text="{x:Static local:UiStrings.PluginBrowserLicenseLabel}" />
             <local:MpAvMarqueeTextBox Grid.Row="8"
                                       Grid.Column="2"
                                       Classes="detailInfo link"
                                       VerticalAlignment="Bottom"
                                       NavigateUriRequiredKeyString="{x:Null}"
+                                      IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                       Text="{x:Static local:UiStrings.PluginBrowserSeeLicenseLinkText}"
                                       NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                       NavigateUriCommandParameter="{Binding PluginLicenseUrl}">
@@ -225,10 +240,11 @@
                                  Grid.Column="0"
                                  Classes="detailLabel"
                                  Text="{x:Static local:UiStrings.PluginBrowserPublishedLabel}" />
-            <SelectableTextBlock Grid.Row="9"
+            <SelectableTextBlock x:Name="PublishedTextBlock"
+                                 Grid.Row="9"
                                  Grid.Column="2"
                                  Classes="detailInfo"
-                                 Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+                                 Classes.unpublished="{Binding PluginPublishedDateTime, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
 
             <!--  PROJECT URL  -->
             <SelectableTextBlock Grid.Row="10"

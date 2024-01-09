@@ -1,7 +1,6 @@
 ﻿
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
-using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -108,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAutoCompleteOpen { get; set; }
         public bool IsSearching { get; set; }
 
-        public bool HasText => SearchText.Length > 0;
+        public bool HasText => SearchText != null && SearchText.Length > 0;
 
         #endregion
 
@@ -139,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (_searchText != value) {
-                    _searchText = value;
+                    _searchText = value == null ? string.Empty : value;
                     OnPropertyChanged(nameof(SearchText));
                     OnPropertyChanged(nameof(HasText));
                 }
@@ -322,8 +320,10 @@ namespace MonkeyPaste.Avalonia {
                 IsExpanded = true;
 
                 if (MpAvMainView.Instance.GetVisualDescendant<MpAvSearchBoxView>() is MpAvSearchBoxView sbv &&
-                   sbv.FindControl<AutoCompleteBox>("SearchBox") is AutoCompleteBox acb &&
-                   acb.GetTemplateChildren().OfType<TextBox>().FirstOrDefault() is TextBox tb) {
+                   //sbv.FindControl<AutoCompleteBox>("SearchBox") is AutoCompleteBox acb &&
+                   //acb.GetTemplateChildren().OfType<TextBox>().FirstOrDefault() is TextBox tb
+                   sbv.GetVisualDescendant<TextBox>() is { } tb
+                   ) {
                     if (needs_text) {
                         // when opening for first time from auto search it'll misss first character
                         // (i think from hiding filter menus before tag selected?)
@@ -333,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
                     // otherwise search would trigger on 1st character
                     // so using actual control to mimic typical search
 
-                    bool success = await tb.TrySetFocusAsync(NavigationMethod.Pointer);
+                    bool success = await tb.TrySetFocusAsync(NavigationMethod.Tab);
                     MpConsole.WriteLine($"Auto search focus success: {success}");
                 }
 

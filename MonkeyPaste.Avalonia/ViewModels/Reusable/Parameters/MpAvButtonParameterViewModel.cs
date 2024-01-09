@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common.Plugin;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -72,6 +73,18 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Title));
         }
         #endregion
+
+        protected override void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.MpAnalyticItemParameterViewModel_PropertyChanged(sender, e);
+            switch (e.PropertyName) {
+                case nameof(IsHovering):
+                    if (IsHovering) {
+                        OnPropertyChanged(nameof(CurrentValue));
+                        OnPropertyChanged(nameof(Title));
+                    }
+                    break;
+            }
+        }
 
         #region Commands
 

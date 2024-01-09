@@ -36,6 +36,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+
+        static string PLUGIN_INFO_URL =>
+            $"{MpServerConstants.PLUGINS_BASE_URL}/plugin-info-check.php";
         static string MANIFEST_INVARIANT_FILE_NAME =>
             $"{MANIFEST_FILE_NAME_PREFIX}.{MANIFEST_FILE_EXT}";
 
@@ -177,7 +180,9 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 bool success = await LoadPluginAsync(manifest_path, silentInstall);
-
+                if (success && !silentInstall) {
+                    await GetOrUpdatePluginStatsAsync(plugin_guid, true);
+                }
                 return success;
             }
             catch (Exception ex) {
@@ -217,7 +222,7 @@ namespace MonkeyPaste.Avalonia {
             string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir);
             if (!plugin_update_dir.IsDirectory()) {
                 // update failed, only returns if no restart
-                await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
+                await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
                     title: UiStrings.NtfPluginUpdateFailedTitle,
                     message: UiStrings.NtfPluginUpdateFailedText,
                     iconResourceObj: "ErrorImage");
@@ -545,6 +550,28 @@ namespace MonkeyPaste.Avalonia {
                 // remove update dir
                 MpFileIo.DeleteDirectory(update_dir);
             }
+            // increment install stats for all updates 
+            Task.WhenAll(UpdatedPluginGuids.Select(x => GetOrUpdatePluginStatsAsync(x, true))).FireAndForgetSafeAsync();
+        }
+
+        public static async Task<(int, DateTime?)> GetOrUpdatePluginStatsAsync(string guid, bool is_install) {
+            var req_args = new Dictionary<string, string>() {
+                {"plugin_guid", guid },
+                {"is_install", is_install ?"1":"0" }
+            };
+            var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(PLUGIN_INFO_URL, req_args);
+            bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
+            int count = 0;
+            DateTime? pub_dt = null;
+            if (success) {
+                if (int.TryParse(resp_args["install_count"], out int install_count)) {
+                    count = install_count;
+                }
+                if (DateTime.TryParse(resp_args["publish_dt"], out DateTime resp_pub_dt)) {
+                    pub_dt = resp_pub_dt;
+                }
+            }
+            return (count, pub_dt);
         }
 
         private static async Task<string> DownloadAndExtractPluginToDirAsync(string plugin_guid, string packageUrl, string targetBaseDir) {
