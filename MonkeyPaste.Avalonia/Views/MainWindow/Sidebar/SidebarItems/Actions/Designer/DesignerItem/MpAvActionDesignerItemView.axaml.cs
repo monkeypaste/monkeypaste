@@ -2,11 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -94,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 drag_ttvm = ttvm;
             } else {
                 // external drop
-                var ext_ci = await e.Data.ToCopyItemAsync();
+                var ext_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(e.Data, false, MpDataObjectSourceType.ActionDrop);
                 if (ext_ci != null && ext_ci.Id > 0) {
                     drop_cil.Add(ext_ci);
                 }

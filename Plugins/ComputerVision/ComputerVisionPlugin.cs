@@ -84,6 +84,21 @@ namespace ComputerVision {
                 outputType = new MpPluginOutputFormat() {
                     imageAnnotation = true
                 },
+                presets = new List<MpPresetFormat>() {
+                    new MpPresetFormat() {
+                        label = "Multi-select test 1",
+                        values = new List<MpPresetValueFormat>() {
+                            new MpPresetValueFormat(
+                                PARAM_ID_VISUAL_FEATURES,
+                                string.Join(
+                                    ",",
+                                    new[]{
+                                        ComputerVisionFeatureType.Description.ToString(),
+                                        ComputerVisionFeatureType.Categories.ToString()})),
+                            new MpPresetValueFormat(PARAM_ID_DETAILS,ComputerDetailType.Landmarks.ToString()),
+                        }
+                    }
+                },
                 parameters = new List<MpParameterFormat>() {
                     new MpParameterFormat() {
                         label = "Visual Features",

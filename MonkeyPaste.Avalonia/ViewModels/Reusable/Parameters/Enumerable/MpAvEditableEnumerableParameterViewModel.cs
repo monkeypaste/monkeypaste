@@ -65,9 +65,9 @@ namespace MonkeyPaste.Avalonia {
 
             List<string> current_values = DefaultValues;
 
-            if (!string.IsNullOrEmpty(PresetValueModel.Value)) {
+            if (!string.IsNullOrEmpty(ParameterValue.Value)) {
                 // when not initial load use stored values
-                current_values = PresetValueModel.Value.ToListFromCsv(CsvProperties);
+                current_values = ParameterValue.Value.ToListFromCsv(CsvProperties);
             }
 
             foreach (var paramVal in current_values) {

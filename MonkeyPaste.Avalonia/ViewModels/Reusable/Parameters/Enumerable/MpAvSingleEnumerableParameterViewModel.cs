@@ -61,8 +61,8 @@ namespace MonkeyPaste.Avalonia {
             Items.Clear();
 
             string selectedValue = null;
-            if (!string.IsNullOrEmpty(PresetValueModel.Value)) {
-                selectedValue = PresetValueModel.Value;
+            if (!string.IsNullOrEmpty(ParameterValue.Value)) {
+                selectedValue = ParameterValue.Value;
             } else {
                 selectedValue = DefaultValues.FirstOrDefault();
             }

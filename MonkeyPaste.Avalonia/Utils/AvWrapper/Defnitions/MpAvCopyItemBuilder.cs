@@ -1,5 +1,4 @@
-﻿using Avalonia.Platform.Storage;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
@@ -37,16 +36,21 @@ namespace MonkeyPaste.Avalonia {
 
             await NormalizePlatformFormatsAsync(avdo);
 
-            Tuple<MpCopyItemType, string, string> data_tuple = await DecodeContentDataAsync(avdo);
+            (MpCopyItemType itemType,
+                string itemData,
+                string itemDelta,
+                string itemPlainText) = await DecodeContentDataAsync(avdo);
 
-            if (data_tuple == null ||
-                data_tuple.Item1 == MpCopyItemType.None ||
-                data_tuple.Item2 == null) {
+            if (itemType == MpCopyItemType.None ||
+                itemData == null) {
                 MpConsole.WriteLine("Warning! CopyItemBuilder could not create itemData");
                 return null;
             }
 
-            MpCopyItem ci = await PerformDupCheckAsync(avdo, data_tuple.Item1, force_allow_dup, suppressWrite);
+            (MpCopyItem ci, string checksum) = await PerformDupCheckAsync(
+                compare_data: itemPlainText,
+                itemType: itemType,
+                force_allow_dup, suppressWrite);
 
             IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
 
@@ -57,9 +61,6 @@ namespace MonkeyPaste.Avalonia {
                 // new, non-duplicate or don't care
                 var dobj = await MpDataObject.CreateAsync(pdo: avdo);
 
-                MpCopyItemType itemType = data_tuple.Item1;
-                string itemData = data_tuple.Item2;
-                string itemDelta = data_tuple.Item3;
                 string default_title = await GetDefaultItemTitleAsync(itemType, avdo);
                 int itemIconId = PickIconIdFromSourceRefs(refs);
 
@@ -69,6 +70,7 @@ namespace MonkeyPaste.Avalonia {
                     data: itemData,
                     itemType: itemType,
                     iconId: itemIconId,
+                    checksum: checksum,
                     suppressWrite: suppressWrite);
                 if (ci == null) {
                     // probably null data, clean up pre-create
@@ -144,31 +146,28 @@ namespace MonkeyPaste.Avalonia {
             // but maybe it could be contextual, not sure
             return (int)primary_source.IconResourceObj;
         }
-        private async Task<MpCopyItem> PerformDupCheckAsync(
-            MpAvDataObject avdo,
+        private async Task<(MpCopyItem, string)> PerformDupCheckAsync(
+            string compare_data,
             MpCopyItemType itemType,
             bool force_allow_dup,
             bool suppressWrite) {
+            string pre_item_checksum = MpCopyItem.GetContentCheckSum(compare_data);
             if (!MpAvPrefViewModel.Instance.IsDuplicateCheckEnabled ||
                 force_allow_dup ||
                 suppressWrite) {
-                return null;
+                return (null, pre_item_checksum);
             }
-            string compare_data;
-            if (!avdo.TryGetData<string>(itemType.ToCompatibilityDataFormat(), out compare_data)) {
-                return null;
-            }
-            var dups = await MpDataModelProvider.GetCopyItemByCheckSumAsync(MpCopyItem.GetContentCheckSum(compare_data));
+            var dups = await MpDataModelProvider.GetCopyItemByCheckSumAsync(pre_item_checksum);
             if (dups.Count > 1) {
                 MpConsole.WriteLine($"Warning! multiple dups detected. There should only be 1 or dup check was disabled and later re-enabled. Returning most recent by cap datetime...");
             }
             if (dups.OrderByDescending(x => x.CopyDateTime).FirstOrDefault() is not MpCopyItem dupCheck) {
-                return null;
+                return (null, pre_item_checksum);
             }
 
             MpConsole.WriteLine($"Duplicate item detected, returning original id:'{dupCheck.Id}'");
             dupCheck.WasDupOnCreate = true;
-            return dupCheck;
+            return (dupCheck, null);
         }
 
         private string[] _CommonDataFormatsByPriority = new[] {
@@ -278,7 +277,7 @@ namespace MonkeyPaste.Avalonia {
             return itemData;
         }
 
-        private async Task<Tuple<MpCopyItemType, string, string>> DecodeContentDataAsync(MpAvDataObject avdo) {
+        private async Task<(MpCopyItemType, string, string, string)> DecodeContentDataAsync(MpAvDataObject avdo) {
             string itemData = GetItemDataByPriority(avdo, out MpDataFormatType inputTextFormat);
             MpCopyItemType itemType = inputTextFormat.ToCopyItemType();
 
@@ -327,10 +326,13 @@ namespace MonkeyPaste.Avalonia {
                 itemType == MpCopyItemType.Text &&
                 itemData.IsNullOrWhitespaceHtmlString()) {
                 // if text is just whitespace and those ignored flag to ignore item
-                return null;
+                return default;
+            }
+            if (itemPlainText == null) {
+                itemPlainText = itemData;
             }
 
-            return new Tuple<MpCopyItemType, string, string>(itemType, itemData, delta);
+            return (itemType, itemData, delta, itemPlainText);
         }
 
         private async Task<string> GetDefaultItemTitleAsync(MpCopyItemType itemType, MpAvDataObject avdo) {

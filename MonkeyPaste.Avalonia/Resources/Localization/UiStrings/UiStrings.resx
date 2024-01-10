@@ -2539,4 +2539,25 @@ You can restart now and complete the update by re-installing, ignore this and up
   <data name="PluginUnpublishedLabel" xml:space="preserve">
     <value>Unpublished</value>
   </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto-generated default preset for '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>No clip selected</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analyze Selected Clip</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Assign a shortcut to run '{0}' on the selected clip</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Global Paste</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Assign Global Paste Shortcut for '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
 </root>

@@ -178,12 +178,12 @@ namespace MonkeyPaste.Avalonia {
                     // plugin name doesn't describe item
                     host_label += $" {lt.LabelText}";
                 }
-                preset_label = $"{host_label} - Default{manifest_preset_idx + 1}";
+                preset_label = $"{host_label} - {UiStrings.CommonDefaultLabel}{manifest_preset_idx + 1}";
             }
 
             string preset_description = preset_format.description;
             if (string.IsNullOrEmpty(preset_description)) {
-                preset_description = $"Auto-generated default preset for '{preset_label}'";
+                preset_description = string.Format(UiStrings.AnalyzerAutoGenPresetDescription, preset_label);
             }
             var preset_model = await MpPreset.CreateOrUpdateAsync(
                                 pluginGuid: pluginHost.PluginGuid,

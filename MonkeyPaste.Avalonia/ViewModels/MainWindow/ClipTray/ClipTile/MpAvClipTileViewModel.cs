@@ -637,8 +637,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?
-                $"Assign Global Paste Shortcut for '{CopyItemTitle}'" :
-                "Global Paste";
+                string.Format(UiStrings.ClipShortcutUnassignedTooltip, CopyItemTitle) :
+                UiStrings.ClipShortcutTooltip;
 
 
         public bool IsResizerEnabled =>

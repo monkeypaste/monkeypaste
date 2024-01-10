@@ -44,29 +44,29 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     plugin.analyzer =
-                        await plugin.IssueRequestAsync(
+                        await plugin.IssueRequestAsync<MpAnalyzerComponent>(
                             nameof(MpISupportHeadlessAnalyzerFormat.GetFormat),
                             typeof(MpISupportHeadlessAnalyzerFormat).FullName,
-                            new MpHeadlessComponentFormatRequest(), sync_only: true) as MpAnalyzerComponent;
+                            new MpHeadlessComponentFormatRequest(), sync_only: true);
                     break;
                 case MpPluginType.Clipboard:
                     if (plugin.oleHandler != null) {
                         break;
                     }
                     plugin.oleHandler =
-                        await plugin.IssueRequestAsync(
+                        await plugin.IssueRequestAsync<MpClipboardComponent>(
                             nameof(MpISupportHeadlessClipboardComponentFormat.GetFormats),
                             typeof(MpISupportHeadlessClipboardComponentFormat).FullName,
-                            new MpHeadlessComponentFormatRequest(), sync_only: true) as MpClipboardComponent;
+                            new MpHeadlessComponentFormatRequest(), sync_only: true);
                     break;
             }
         }
         private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
             alc = null;
             try {
-                //alc = new MpPluginAssemblyLoadContext(dllPath);
-                //return alc.LoadFromAssemblyPath(dllPath);
-                return Assembly.LoadFrom(dllPath);
+                alc = new MpPluginAssemblyLoadContext(dllPath);
+                return alc.LoadFromAssemblyPath(dllPath);
+                //return Assembly.LoadFrom(dllPath);
             }
             catch (Exception ex) {
                 throw new MpUserNotifiedException($"Plugin Linking error '{dllPath}':{Environment.NewLine}{ex}");

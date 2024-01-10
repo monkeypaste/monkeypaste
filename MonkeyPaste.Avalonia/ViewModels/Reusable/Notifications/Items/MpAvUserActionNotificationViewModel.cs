@@ -421,7 +421,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             aipvm.ExecuteItems.ForEach(x => x.PropertyChanged += HandleParamPropChange);
-            CanSubmit = aipvm.Parent.PerformAnalysisCommand.CanExecute(aipvm.Parent.CurrentExecuteArgs);
+            //CanSubmit = aipvm.Parent.PerformAnalysisCommand.CanExecute(aipvm.Parent.CurrentExecuteArgs);
+            CanSubmit = aipvm.IsAllValid;
         }
         private void CleanupParams() {
             if (Body is not MpAvAnalyticItemPresetViewModel aipvm) {
@@ -435,7 +436,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (e.PropertyName == nameof(pvm.CurrentValue)) {
-                CanSubmit = aipvm.Parent.PerformAnalysisCommand.CanExecute(aipvm.Parent.CurrentExecuteArgs);
+                //CanSubmit = aipvm.Parent.PerformAnalysisCommand.CanExecute(aipvm.Parent.CurrentExecuteArgs);
+                CanSubmit = aipvm.IsAllValid;
             }
         }
 

@@ -20,7 +20,7 @@ namespace MonkeyPaste {
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
-        [Column("fk_MpPluginPresetId")]
+        [Column("fk_MpPresetId")]
         public int PresetId { get; set; }
 
         #endregion

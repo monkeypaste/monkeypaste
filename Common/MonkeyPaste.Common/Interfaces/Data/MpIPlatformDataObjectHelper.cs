@@ -3,6 +3,7 @@
 namespace MonkeyPaste.Common {
     public interface MpIPlatformDataObjectTools {
         bool IsOleBusy { get; }
+        Task<object> ReadAnalyzerDataObjectAsync(object idoObj);
         Task<object> ReadDragDropDataObjectAsync(object idoObj);
         Task<object> ReadClipboardAsync(bool ignorePlugins);
         Task<object> WriteDragDropDataObjectAsync(object idoObj);

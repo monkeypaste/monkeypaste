@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-const WIN_VER = '1.0.9.0';
+const WIN_VER = '1.0.7.0';
 
 function exit_w_version_resp(string $device_type)
 {

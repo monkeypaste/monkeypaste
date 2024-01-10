@@ -1515,11 +1515,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-generated default preset for &apos;{0}&apos;.
+        /// </summary>
+        public static string AnalyzerAutoGenPresetDescription {
+            get {
+                return ResourceManager.GetString("AnalyzerAutoGenPresetDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} only accepts input of type(s): {1}.
         /// </summary>
         public static string AnalyzerCannotExecuteMessage {
             get {
                 return ResourceManager.GetString("AnalyzerCannotExecuteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No clip selected.
+        /// </summary>
+        public static string AnalyzerCannotExecuteNoSelectionText {
+            get {
+                return ResourceManager.GetString("AnalyzerCannotExecuteNoSelectionText", resourceCulture);
             }
         }
         
@@ -1547,6 +1565,24 @@ namespace MonkeyPaste.Avalonia {
         public static string AnalyzerSelectorLabel {
             get {
                 return ResourceManager.GetString("AnalyzerSelectorLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyze Selected Clip.
+        /// </summary>
+        public static string AnalyzerShortcutTooltip {
+            get {
+                return ResourceManager.GetString("AnalyzerShortcutTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign a shortcut to run &apos;{0}&apos; on the selected clip.
+        /// </summary>
+        public static string AnalyzerShortcutUnassignedTooltip {
+            get {
+                return ResourceManager.GetString("AnalyzerShortcutUnassignedTooltip", resourceCulture);
             }
         }
         
@@ -1781,6 +1817,24 @@ namespace MonkeyPaste.Avalonia {
         public static string ClipboardPluginHandlersHeader {
             get {
                 return ResourceManager.GetString("ClipboardPluginHandlersHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global Paste.
+        /// </summary>
+        public static string ClipShortcutTooltip {
+            get {
+                return ResourceManager.GetString("ClipShortcutTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign Global Paste Shortcut for &apos;{0}&apos;.
+        /// </summary>
+        public static string ClipShortcutUnassignedTooltip {
+            get {
+                return ResourceManager.GetString("ClipShortcutUnassignedTooltip", resourceCulture);
             }
         }
         

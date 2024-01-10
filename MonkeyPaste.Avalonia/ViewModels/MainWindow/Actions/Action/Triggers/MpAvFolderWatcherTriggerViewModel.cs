@@ -1,5 +1,4 @@
-﻿using Avalonia.Platform.Storage;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -69,7 +68,8 @@ namespace MonkeyPaste.Avalonia {
 
                 // set title to '<FileName> <ChangeType>'
                 avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, Path.GetFileNameWithoutExtension(e.FullPath) + $" {e.ChangeType}");
-                MpCopyItem ci = await avdo.ToCopyItemAsync(true);
+                // set item source to file explorer
+                MpCopyItem ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false, MpDataObjectSourceType.FolderWatcher);
                 if (ci == null) {
                     return;
                 }

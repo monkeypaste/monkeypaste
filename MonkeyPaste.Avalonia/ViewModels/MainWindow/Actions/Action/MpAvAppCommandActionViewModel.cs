@@ -127,14 +127,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (ArgLookup.TryGetValue(SELECTED_SHORTCUT_ID_PARAM_ID, out var pvmb)) {
-                pvmb.InitializeAsync(pvmb.PresetValueModel).FireAndForgetSafeAsync();
+                pvmb.InitializeAsync(pvmb.ParameterValue).FireAndForgetSafeAsync();
             }
         }
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is not MpShortcut) {
             }
             if (ArgLookup.TryGetValue(SELECTED_SHORTCUT_ID_PARAM_ID, out var pvmb)) {
-                pvmb.InitializeAsync(pvmb.PresetValueModel).FireAndForgetSafeAsync();
+                pvmb.InitializeAsync(pvmb.ParameterValue).FireAndForgetSafeAsync();
             }
         }
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {

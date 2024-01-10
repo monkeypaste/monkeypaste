@@ -1,10 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonoMac.CoreImage;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -92,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
         private static async Task<MpPluginDeferredParameterValueResponseFormat> RequestDefferredValuesAsync(MpIParameterHostViewModel pluginHost, MpPluginDeferredParameterValueRequestFormat req) {
             string method_name = nameof(MpISupportDeferredValue.RequestParameterValue);
             string on_type = typeof(MpISupportDeferredValue).FullName;
-            var resp = await pluginHost.PluginFormat.IssueRequestAsync(method_name, on_type, req) as MpPluginDeferredParameterValueResponseFormat;
+            var resp = await pluginHost.PluginFormat.IssueRequestAsync<MpPluginDeferredParameterValueResponseFormat>(method_name, on_type, req);
             return resp;
         }
     }

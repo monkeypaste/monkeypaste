@@ -156,11 +156,16 @@ namespace MonkeyPaste {
             string title = "",
             int dataObjectId = 0,
             int iconId = 0,
+            string checksum = default,
             bool suppressWrite = false) {
 
             if (dataObjectId <= 0 && !suppressWrite) {
                 throw new Exception($"Should have dataObjectId. param was {dataObjectId}");
             }
+            if (checksum == default) {
+                throw new Exception("Item must have checksum");
+            }
+
             var create_dt = DateTime.Now;
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
@@ -171,13 +176,10 @@ namespace MonkeyPaste {
                 ItemType = itemType,
                 CopyCount = 1,
                 DataObjectId = dataObjectId,
-                IconId = iconId
+                IconId = iconId,
+                ContentCheckSum = checksum
             };
             if (!suppressWrite) {
-                if (itemType != MpCopyItemType.Text) {
-                    // ignore text, it gets its 
-                    newCopyItem.ContentCheckSum = GetContentCheckSum(data);
-                }
                 await newCopyItem.WriteToDatabaseAsync(true);
                 if (newCopyItem.Id == 0) {
                     // didn't write, must be empty data

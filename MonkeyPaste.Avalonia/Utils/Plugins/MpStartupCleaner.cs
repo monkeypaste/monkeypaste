@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
                         csvProps: MpAvPrefViewModel.Instance.CsvFormat);
             MpConsole.WriteLine($"StartupCleaner path removed: '{path}'");
         }
-        public static void UnloadAll() {
+        public static bool UnloadAll(bool clearFailures = true) {
             // delete all existing paths to unload, noting ones it can't delete
             List<string> to_unload = MpAvPrefViewModel.Instance.PluginDirsToUnloadCsvStr.ToListFromCsv(MpAvPrefViewModel.Instance.CsvFormat);
             List<string> errors = new List<string>();
@@ -46,9 +46,18 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvPrefViewModel.Instance.PluginDirsToUnloadCsvStr = string.Empty;
             if (!errors.Any()) {
-                return;
+                return true;
             }
-            MpDebug.Assert(!errors.Any(), $"Startup cleaner error removing:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
+            if (clearFailures) {
+                MpDebug.Assert(!errors.Any(), $"Startup cleaner error removing:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
+            } else {
+                // called testing alc
+                foreach (var path in errors) {
+                    // restore failed deletes
+                    AddPathToDelete(path);
+                }
+            }
+            return false;
         }
 
     }

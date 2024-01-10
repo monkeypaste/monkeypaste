@@ -1378,6 +1378,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 if (args is MpIShortcutCommandViewModel scvm) {
                     _ = await CreateOrUpdateViewModelShortcutAsync(scvm);
+                    scvm.OnPropertyChanged(nameof(scvm.KeyString));
                     if (scvm is MpAvShortcutRecorderParameterViewModel srvm) {
                         // DO NOT DELETE THIS AGAIN param won't clear (seems to update tho) w/o it
                         srvm.OnPropertyChanged(nameof(srvm.KeyGroups));

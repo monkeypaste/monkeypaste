@@ -5,7 +5,6 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvInternalDataObjectExtensions {
@@ -260,13 +259,6 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             return ido.Contains(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT);
-        }
-
-        public static async Task<MpCopyItem> ToCopyItemAsync(
-            this IDataObject avdo,
-            bool is_copy = false) {
-            var result = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, is_copy);
-            return result;
         }
 
 

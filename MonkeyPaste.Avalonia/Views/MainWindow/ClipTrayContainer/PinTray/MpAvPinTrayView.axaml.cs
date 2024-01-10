@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                 .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
 
             Dispatcher.UIThread.Post(async () => {
-                var avdo_ci = await mpdo.ToCopyItemAsync(is_copy);
+                var avdo_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, is_copy, MpDataObjectSourceType.PinTrayDrop);
                 if (avdo_ci == null || avdo_ci.Id <= 0) {
                     // source rejected, add blocked or no content-enabled format
                 } else {

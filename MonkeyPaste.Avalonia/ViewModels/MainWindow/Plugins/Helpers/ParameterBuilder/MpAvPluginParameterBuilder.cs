@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
                 var missing_params = pvm.Items.OfType<MpAvMissingParameterViewModel>().ToList();
                 for (int i = 0; i < missing_params.Count; i++) {
                     // delete missing parameter
-                    await missing_params[i].PresetValueModel.DeleteFromDatabaseAsync();
+                    await missing_params[i].ParameterValue.DeleteFromDatabaseAsync();
                     new_items.Remove(missing_params[i]);
                 }
                 if (pvm.Items is ObservableCollection<MpAvParameterViewModelBase> pvmil) {

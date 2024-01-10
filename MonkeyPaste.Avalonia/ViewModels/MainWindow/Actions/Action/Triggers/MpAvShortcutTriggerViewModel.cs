@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var pvm) && pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
                     Dispatcher.UIThread.Post(async () => {
-                        await scrpvm.InitializeAsync(scrpvm.PresetValueModel);
+                        await scrpvm.InitializeAsync(scrpvm.ParameterValue);
                     });
                 }
             }
@@ -132,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpShortcut s && s.Id == ShortcutId) {
                 if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var pvm) && pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
                     Dispatcher.UIThread.Post(async () => {
-                        await scrpvm.InitializeAsync(scrpvm.PresetValueModel);
+                        await scrpvm.InitializeAsync(scrpvm.ParameterValue);
                     });
                 }
             }

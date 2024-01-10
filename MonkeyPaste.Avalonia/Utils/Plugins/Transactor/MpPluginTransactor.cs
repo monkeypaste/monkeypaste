@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
         private static async Task<MpAnalyzerPluginResponseFormat> IssueRequestAsync(MpRuntimePlugin plugin, MpAnalyzerPluginRequestFormat req) {
             string method_name = nameof(MpIAnalyzeComponent.Analyze);
             string on_type = typeof(MpIAnalyzeComponent).FullName;
-            var resp = await plugin.IssueRequestAsync(method_name, on_type, req) as MpAnalyzerPluginResponseFormat;
+            var resp = await plugin.IssueRequestAsync<MpAnalyzerPluginResponseFormat>(method_name, on_type, req);
             return resp;
         }
 

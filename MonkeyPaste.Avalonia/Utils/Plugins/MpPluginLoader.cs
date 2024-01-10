@@ -197,17 +197,21 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<bool> DeletePluginByGuidAsync(string plugin_guid, bool needs_restart = true) {
             // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
-            if (!PluginManifestLookup.Any(x => x.Value.guid == plugin_guid)) {
+            if (!PluginGuidLookup.TryGetValue(plugin_guid, out var plugin)) {
                 return true;
             }
-            MpRuntimePlugin plugin = PluginManifestLookup.FirstOrDefault(x => x.Value.guid == plugin_guid).Value;
             bool success = true;
 
-            string manifest_path = plugin.ManifestPath;
-            AddPluginToDeleteList(plugin);
             // clear ref to plugin
-            plugin = null;
             success = await DetachPluginByGuidAsync(plugin_guid);
+
+            AddPluginToDeleteList(plugin);
+            plugin = null;
+
+            if (success) {
+                bool test = MpStartupCleaner.UnloadAll(false);
+                MpConsole.WriteLine($"Plugin '{plugin_guid}' delete was {test.ToTestResultLabel()}");
+            }
             if (success && needs_restart) {
                 // NOTE this won't return if they choose restart
                 await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(

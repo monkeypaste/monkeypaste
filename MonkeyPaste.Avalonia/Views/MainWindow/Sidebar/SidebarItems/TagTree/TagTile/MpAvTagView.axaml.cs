@@ -243,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
                     // CONTENT DROP
 
                     BindingContext.IsBusy = true;
-                    var drop_ci = await mpdo.ToCopyItemAsync(is_copy);
+                    var drop_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, is_copy, MpDataObjectSourceType.TagDrop);
 
                     if (drop_ci == null || drop_ci.Id <= 0) {
                         ResetDrop();

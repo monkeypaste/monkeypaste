@@ -5,7 +5,6 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -338,17 +337,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsDataObjectValid(MpPortableDataObject pdo) {
             return pdo.ContainsData(HandledFormat);
         }
-        public async Task<MpOlePluginResponse> IssueOleRequestAsync(MpOlePluginRequest req) {
-            string method_name =
-                IsReader ?
-                    nameof(MpIOleReaderComponent.ProcessOleReadRequestAsync) :
-                    nameof(MpIOleWriterComponent.ProcessOleWriteRequestAsync);
-            string on_type = IsReader ?
-                typeof(MpIOleReaderComponent).FullName :
-                typeof(MpIOleWriterComponent).FullName;
-            var resp = await PluginFormat.IssueRequestAsync(method_name, on_type, req) as MpOlePluginResponse;
-            return resp;
-        }
         public override string ToString() {
             return $"Format: {Title} Preset: {(SelectedItem == null ? "None" : SelectedItem.Label)} Enabled: {(SelectedItem == null ? "Null" : SelectedItem.IsEnabled)}";
         }
@@ -473,7 +461,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (var pvm in presets_w_missing_params) {
                 var missing_params = pvm.Items.OfType<MpAvMissingParameterViewModel>().ToList();
                 for (int i = 0; i < missing_params.Count; i++) {
-                    await missing_params[i].PresetValueModel.DeleteFromDatabaseAsync();
+                    await missing_params[i].ParameterValue.DeleteFromDatabaseAsync();
                     pvm.Items.Remove(missing_params[i]);
                 }
             }
@@ -520,7 +508,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var presetVm = presetVmArg as MpAvClipboardFormatPresetViewModel;
                 foreach (var presetVal in presetVm.Items) {
-                    await presetVal.PresetValueModel.DeleteFromDatabaseAsync();
+                    await presetVal.ParameterValue.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
 
@@ -593,7 +581,7 @@ namespace MonkeyPaste.Avalonia {
                     this, aipvm.PresetGuid, Items.IndexOf(aipvm));
 
                 // before initializing preset remove current values from db or it won't reset values
-                await Task.WhenAll(aipvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
+                await Task.WhenAll(aipvm.Items.Select(x => x.ParameterValue.DeleteFromDatabaseAsync()));
 
                 await aipvm.InitializeAsync(defaultPresetModel);
 

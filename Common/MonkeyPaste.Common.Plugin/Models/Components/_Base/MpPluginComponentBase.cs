@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
+    /// <summary>
+    /// The base object to all 
+    /// </summary>
     public abstract class MpPluginComponentBase { }
     public abstract class MpPresetParamaterHostBase : MpPluginComponentBase {
 

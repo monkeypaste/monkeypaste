@@ -380,7 +380,7 @@ namespace MonkeyPaste.Avalonia {
         private string _currentValue = string.Empty;
         public virtual string CurrentValue {
             get {
-                if (PresetValueModel == null) {
+                if (ParameterValue == null) {
                     return string.Empty;
                 }
                 return _currentValue;
@@ -393,23 +393,31 @@ namespace MonkeyPaste.Avalonia {
                 if (CurrentValue != value) {
                     _currentValue = value;
                     if (CanSetModelValue()) {
-                        PresetValueModel.Value = _currentValue;
+                        ParameterValue.Value = _currentValue;
                     }
                     OnPropertyChanged(nameof(CurrentValue));
                 }
             }
         }
 
-        public int ParameterValueId {
+        public int ParameterHostId {
             get {
-                if (PresetValueModel == null) {
+                if (ParameterValue == null) {
                     return 0;
                 }
-                return PresetValueModel.Id;
+                return ParameterValue.ParameterHostId;
+            }
+        }
+        public int ParameterValueId {
+            get {
+                if (ParameterValue == null) {
+                    return 0;
+                }
+                return ParameterValue.Id;
             }
         }
 
-        public MpParameterValue PresetValueModel { get; set; }
+        public MpParameterValue ParameterValue { get; set; }
 
         #endregion
 
@@ -489,7 +497,7 @@ namespace MonkeyPaste.Avalonia {
         public MpParameterFormat ParameterFormat {
             get {
                 if (Parent is MpIParameterHostViewModel phvm && phvm.ComponentFormat != null && phvm.ComponentFormat.parameters != null) {
-                    return phvm.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == PresetValueModel.ParamId);
+                    return phvm.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == ParameterValue.ParamId);
                 }
                 return _paramFormat;
 
@@ -535,8 +543,8 @@ namespace MonkeyPaste.Avalonia {
             bool wasBusy = IsBusy;
             IsBusy = true;
 
-            PresetValueModel = aipv;
-            _currentValue = PresetValueModel == null ? string.Empty : PresetValueModel.Value;
+            ParameterValue = aipv;
+            _currentValue = ParameterValue == null ? string.Empty : ParameterValue.Value;
             if (IsConfirmRemember) {
                 IsRememberChecked = !string.IsNullOrEmpty(CurrentValue);
             } else {
@@ -582,6 +590,26 @@ namespace MonkeyPaste.Avalonia {
             // TODO add pattern check here
             return string.Empty;
         }
+
+        public async Task SaveParameterAsync() {
+            string value_to_write = CurrentValue;
+            if (IsConfirmRemember && !IsRememberChecked) {
+                // always clear unremember values
+                value_to_write = string.Empty;
+            }
+            //IsBusy = true;
+            if (IsSharedValue && Parent is MpIParameterHostViewModel phvm) {
+                // update all references to persistent param with this new paramValue 
+                var all_param_refs =
+                    await MpDataModelProvider.GetAllParameterValueInstancesForPluginAsync(ParamId.ToString(), phvm.PluginGuid);
+
+                all_param_refs.ForEach(x => x.Value = value_to_write);
+                await Task.WhenAll(all_param_refs.Select(x => x.WriteToDatabaseAsync()));
+            } else {
+                ParameterValue.Value = value_to_write;
+                await ParameterValue.WriteToDatabaseAsync();
+            }
+        }
         #endregion
 
         #region Protected Methods
@@ -592,7 +620,17 @@ namespace MonkeyPaste.Avalonia {
                     MpISaveOrCancelableViewModel socvm = null;
                     if (Parent is MpISaveOrCancelableViewModel) {
                         // analyzers
-                        socvm = Parent as MpISaveOrCancelableViewModel;
+                        if (e.PropertyName == nameof(CurrentValue) &&
+                            Parent is MpAvAnalyticItemPresetViewModel aipvm &&
+                            aipvm.IsExecuting &&
+                            IsExecuteParameter) {
+                            // automatically save execute param changes WHILE executing 
+                            SaveCurrentValueCommand.Execute(null);
+                        } else {
+
+                            socvm = Parent as MpISaveOrCancelableViewModel;
+                        }
+
                     } else if (Parent is MpAvHandledClipboardFormatViewModel hcfvm) {
                         socvm = hcfvm.Items.FirstOrDefault(x => x.Items.Any(x => x.ParameterValueId == ParameterValueId));
                     }
@@ -641,8 +679,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // when marked as not remember but model has paramValue need to clear it for uncheck to persist
                 return
-                    PresetValueModel != null &&
-                    !string.IsNullOrEmpty(PresetValueModel.Value);
+                    ParameterValue != null &&
+                    !string.IsNullOrEmpty(ParameterValue.Value);
             }
             return true;
         }
@@ -663,16 +701,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Db Event Handlers
 
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpParameterValue pv &&
-                pv.Id == ParameterValueId &&
+                IsSharedValue &&
+                pv.ParamId == ParamId &&
+                pv.ParameterHostId == ParameterHostId &&
                 pv.Value != CurrentValue) {
-                if (IsSharedValue) {
-                    // this param is persistent but not the instance that was updated
-                    Dispatcher.UIThread.Post(async () => {
-                        await InitializeAsync(pv);
-                    });
-                }
+                CurrentValue = pv.Value;
+                await ParameterValue.WriteToDatabaseAsync();
+                Dispatcher.UIThread.Post(async () => {
+                    await InitializeAsync(pv);
+                });
             }
         }
         #endregion
@@ -712,24 +751,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 Task.Run(async () => {
-                    string value_to_write = CurrentValue;
-                    if (IsConfirmRemember && !IsRememberChecked) {
-                        // always clear unremember values
-                        value_to_write = string.Empty;
-                    }
-                    //IsBusy = true;
-                    if (IsSharedValue && Parent is MpIParameterHostViewModel phvm) {
-                        // update all references to persistent param with this new paramValue 
-                        var all_param_refs =
-                            await MpDataModelProvider.GetAllParameterValueInstancesForPluginAsync(ParamId.ToString(), phvm.PluginGuid);
-
-                        all_param_refs.ForEach(x => x.Value = value_to_write);
-                        await Task.WhenAll(all_param_refs.Select(x => x.WriteToDatabaseAsync()));
-                    } else {
-                        PresetValueModel.Value = value_to_write;
-                        await PresetValueModel.WriteToDatabaseAsync();
-                    }
-                    return;
+                    await SaveParameterAsync();
                 });
             },
             (args) => {

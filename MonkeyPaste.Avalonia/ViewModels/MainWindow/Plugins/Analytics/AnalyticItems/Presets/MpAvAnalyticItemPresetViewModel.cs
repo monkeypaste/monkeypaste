@@ -228,9 +228,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsExecuting { get; set; }
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?
-                $"Assign shortcut to '{Label}'" :
-                $"Paste '{Label}'";
-        //KeyString;
+                string.Format(UiStrings.AnalyzerShortcutUnassignedTooltip, Label) :
+                UiStrings.AnalyzerShortcutTooltip;
 
         public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;
@@ -494,7 +493,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool Validate() {
             foreach (var pvm in Items) {
-                pvm.Validate();
+                pvm.ValidationMessage = pvm.GetValidationMessage(IsExecuting);
             }
             OnPropertyChanged(nameof(IsAllValid));
             return IsAllValid;

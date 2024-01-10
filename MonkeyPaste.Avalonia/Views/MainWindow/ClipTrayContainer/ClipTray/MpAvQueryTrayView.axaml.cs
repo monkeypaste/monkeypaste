@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                 .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
 
             Dispatcher.UIThread.Post(async () => {
-                var drop_ci = await mpdo.ToCopyItemAsync(is_copy: is_copy);
+                var drop_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, is_copy, MpDataObjectSourceType.QueryTrayDrop);
                 if (drop_ci == null || drop_ci.Id == 0) {
                     ResetDrop();
                     return;

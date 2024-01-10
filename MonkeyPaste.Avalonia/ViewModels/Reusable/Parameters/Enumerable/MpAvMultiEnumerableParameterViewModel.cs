@@ -57,8 +57,8 @@ namespace MonkeyPaste.Avalonia {
 
             List<string> selectedValues = new List<string>();
 
-            if (!string.IsNullOrEmpty(PresetValueModel.Value)) {
-                selectedValues = PresetValueModel.Value.ToListFromCsv(CsvProperties);
+            if (!string.IsNullOrEmpty(ParameterValue.Value)) {
+                selectedValues = ParameterValue.Value.ToListFromCsv(CsvProperties);
             } else {
                 selectedValues = DefaultValues;
             }

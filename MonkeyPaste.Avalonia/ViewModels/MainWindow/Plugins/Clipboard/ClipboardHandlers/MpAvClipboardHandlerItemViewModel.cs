@@ -182,6 +182,17 @@ namespace MonkeyPaste.Avalonia {
             return hcfvm;
         }
 
+        public async Task<MpOlePluginResponse> IssueOleRequestAsync(MpOlePluginRequest req, bool is_read) {
+            string method_name =
+                is_read ?
+                    nameof(MpIOleReaderComponent.ProcessOleReadRequestAsync) :
+                    nameof(MpIOleWriterComponent.ProcessOleWriteRequestAsync);
+            string on_type = is_read ?
+                typeof(MpIOleReaderComponent).FullName :
+                typeof(MpIOleWriterComponent).FullName;
+            var resp = await PluginFormat.IssueRequestAsync<MpOlePluginResponse>(method_name, on_type, req, clone_resp: false);
+            return resp;
+        }
         #endregion
 
         #region Private Methods

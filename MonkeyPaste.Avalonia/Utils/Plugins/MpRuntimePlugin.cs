@@ -58,6 +58,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
+        public async Task<T> IssueRequestAsync<T>(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false, bool clone_resp = true) where T : new() {
+            object resultObj = await IssueRequestAsync(methodName, typeName, req, sync_only);
+            if (resultObj is not T result) {
+                return default;
+            }
+            if (clone_resp) {
+                string result_json = result.SerializeObject();
+                T cloned_result = result_json.DeserializeObject<T>();
+                result = default;
+                return cloned_result;
+            }
+            return result;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public async Task<object> IssueRequestAsync(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false) {
             if (req != null && req.culture == null) {
                 // always proivde current culture in every request
@@ -77,14 +92,14 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE2 this presumes all other components have ONE req arg
 
                 object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
+                object result = null;
                 if (methodName.EndsWith("Async")) {
                     dynamic task = mi.Invoke(comp, args);
-                    object result = await task;
-                    return result;
+                    result = await task;
                 } else {
-                    object result = mi.Invoke(comp, args);
-                    return result;
+                    result = mi.Invoke(comp, args);
                 }
+                return result;
             }
             if (!methodName.EndsWith("Async") && !sync_only) {
                 // re issue async

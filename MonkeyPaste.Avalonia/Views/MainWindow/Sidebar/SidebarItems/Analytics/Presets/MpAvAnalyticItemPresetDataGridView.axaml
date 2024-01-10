@@ -132,9 +132,8 @@
                                 <Button x:Name="PresetIcon"
                                         IsHitTestVisible="{Binding !IsGeneratedDefaultPreset}"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
-                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
+                                        Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
+                                        CommandParameter="{Binding $self}">
                                     <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                 </Button>
                             </DataTemplate>
@@ -188,8 +187,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <ToggleButton x:Name="EditToggleButton"
                                               Classes="defaultButton noBg noHoverBg outlineOver square"
-                                              local:MpAvPointerCommandExtension.IsEnabled="True"
-                                              local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsLabelReadOnlyCommand}"
+                                              Command="{Binding ToggleIsLabelReadOnlyCommand}"
                                               IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
 
                                     <ToolTip.Tip>
@@ -208,8 +206,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <ToggleButton x:Name="QuickActionToggleButton"
                                               Classes="defaultButton noBg noHoverBg outlineOver square"
-                                              local:MpAvPointerCommandExtension.IsEnabled="True"
-                                              local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsQuickActionCommand}"
+                                              Command="{Binding ToggleIsQuickActionCommand}"
                                               IsChecked="{Binding IsQuickAction, Mode=OneWay}">
 
                                     <ToolTip.Tip>
@@ -268,9 +265,11 @@
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
                                         Classes.assigned="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}">
+                                        Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                        CommandParameter="{Binding .}">
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="{Binding ShortcutTooltipText}" />
+                                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=AnalyzeCopyItemWithPreset}"
+                                                               ToolTipText="{Binding ShortcutTooltipText}" />
                                     </ToolTip.Tip>
                                     <Image />
                                 </Button>
@@ -285,8 +284,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button Classes="defaultButton noBg noHoverBg outlineOver square"
                                         IsEnabled="{Binding !Parent.IsBusy}"
-                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
+                                        Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
                                     <Grid>
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}">
                                             <Image.IsVisible>
@@ -328,8 +326,7 @@
                                 <Button x:Name="DuplicateButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
                                         IsEnabled="{Binding !Parent.IsBusy}"
-                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DuplicateThisPresetCommand}">
+                                        Command="{Binding DuplicateThisPresetCommand}">
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDuplicateLabel}" />
                                     </ToolTip.Tip>
@@ -359,8 +356,7 @@
                                 <Button x:Name="ResetOrDeleteButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
                                         IsEnabled="{Binding !Parent.IsBusy}"
-                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ResetOrDeleteThisPresetCommand}">
+                                        Command="{Binding ResetOrDeleteThisPresetCommand}">
                                     <Classes.canDelete>
                                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                                             <Binding Path="!IsManifestPreset" />

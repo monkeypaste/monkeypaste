@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvClipTrayViewModel :
         MpAvViewModelBase<MpAvClipTileViewModel>,
         MpIContentBuilder,
@@ -68,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentBuilder Implementation
 
-        public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy) {
+        public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy, MpDataObjectSourceType sourceType) {
             IDataObject ido = avOrPortableDataObject as IDataObject;
             if (ido == null && avOrPortableDataObject.ToDataObject() is IDataObject cnvIdo) {
                 ido = cnvIdo;
@@ -84,6 +85,38 @@ namespace MonkeyPaste.Avalonia {
                 bool is_partial_internal = mpdo.ContainsPartialContentRef();
                 mpdo.FinalizeContentOleTitle(!is_partial_internal, is_copy);
             }
+            //
+            bool remove_ext = false;
+            switch (sourceType) {
+                case MpDataObjectSourceType.FolderWatcher:
+                    // remove ext if there 
+                    if (mpdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
+                        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT));
+                    }
+                    // add file explorer as source
+                    mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, new MpPortableProcessInfo(Mp.Services.PlatformInfo.OsFileManagerPath));
+                    break;
+                case MpDataObjectSourceType.PluginResponse:
+                    // always remove external source
+                    remove_ext = true;
+                    break;
+                case MpDataObjectSourceType.ActionDrop:
+                case MpDataObjectSourceType.PinTrayDrop:
+                case MpDataObjectSourceType.QueryTrayDrop:
+                case MpDataObjectSourceType.TagDrop:
+                    // remove ext if drag from internal
+                    remove_ext = MpAvDoDragDropWrapper.IsAnyDragging;
+                    break;
+                case MpDataObjectSourceType.AppendEnabled:
+                    // we don't want to remove here but is it going to be correct?
+                    remove_ext = Mp.Services.ClipboardMonitor.IsStartupClipboard;
+                    break;
+            }
+
+            if (remove_ext && mpdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
+                mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT));
+            }
+
             MpCopyItem content = await AddItemFromDataObjectAsync(mpdo, is_copy);
             return content;
         }
@@ -4809,8 +4842,7 @@ namespace MonkeyPaste.Avalonia {
                 PendingNewModels.RemoveAt(0);
                 append_ctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_ci);
             } else if (Mp.Services.ClipboardMonitor.LastClipboardDataObject != null) {
-                var processed_avdo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject);
-                var cb_ci = await BuildFromDataObjectAsync(processed_avdo, false);
+                var cb_ci = await BuildFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject, false, MpDataObjectSourceType.AppendEnabled);
                 if (cb_ci != null) {
                     // one case this happens is activating append right after startup w/o altering clipboard
                     append_ctvm = await CreateOrRetrieveClipTileViewModelAsync(cb_ci);

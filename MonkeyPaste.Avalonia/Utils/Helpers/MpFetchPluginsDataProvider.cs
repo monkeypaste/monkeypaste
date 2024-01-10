@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
         private static async Task<MpPluginContactFetchResponseFormat> IssueFetchRequestAsync(MpRuntimePlugin plugin, MpPluginContactFetchRequestFormat req) {
             string method_name = nameof(MpIContactFetcherComponent.Fetch);
             string on_type = typeof(MpIContactFetcherComponent).FullName;
-            var resp = await plugin.IssueRequestAsync(method_name, on_type, req) as MpPluginContactFetchResponseFormat;
+            var resp = await plugin.IssueRequestAsync<MpPluginContactFetchResponseFormat>(method_name, on_type, req);
             return resp;
         }
     }

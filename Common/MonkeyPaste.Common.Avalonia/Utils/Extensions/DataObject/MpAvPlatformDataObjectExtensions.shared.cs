@@ -1,5 +1,6 @@
 ﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -270,6 +271,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 } else if (dataObj is IEnumerable<IStorageItem> sil) {
                     // si[] -> string list
                     typed_data = sil.Select(x => x.TryGetLocalPath()) as T;
+                } else if (dataObj is JArray ja) {
+                    typed_data = ja.ToList().Select(x => x.ToString()) as T;
                 } else {
 
                 }

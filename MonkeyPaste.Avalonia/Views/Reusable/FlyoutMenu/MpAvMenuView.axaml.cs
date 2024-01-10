@@ -48,7 +48,8 @@ namespace MonkeyPaste.Avalonia {
 
                 offset = MpPoint.Zero;
 
-                if (TopLevel.GetTopLevel(target) is TopLevel tl) {
+                if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused &&
+                    TopLevel.GetTopLevel(target) is TopLevel tl) {
                     var tlp = tl.PointToClient(MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation.ToAvPixelPoint(tl.VisualPixelDensity()));
                     offset = tl.TranslatePoint(tlp, target).Value.ToPortablePoint();
                 }

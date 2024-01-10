@@ -176,6 +176,19 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
 
+        async Task<object> MpIPlatformDataObjectTools.ReadAnalyzerDataObjectAsync(object idoObj) {
+            if (idoObj is not IDataObject ido) {
+                MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+                return null;
+            }
+            var avdo = await PerformOlePluginRequestAsync(
+                isRead: true,
+                isDnd: false,
+                ido: ido,
+                attachActiveProcessIfNone: false,
+                ignorePlugins: false);
+            return avdo;
+        }
         async Task<object> MpIPlatformDataObjectTools.ReadDragDropDataObjectAsync(object idoObj) {
             if (idoObj is not IDataObject ido) {
                 MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
@@ -543,6 +556,7 @@ namespace MonkeyPaste.Avalonia {
             bool isDnd,
             IDataObject ido,
             bool ignorePlugins,
+            bool attachActiveProcessIfNone = true,
             bool ignoreClipboardChange = false) {
             if (IsOleProcessingBlocked) {
                 MpConsole.WriteLine($"Ole request attempt BLOCKED");
@@ -599,8 +613,9 @@ namespace MonkeyPaste.Avalonia {
             Dictionary<string, object> dataLookup = ido.ToDictionary();
             var avdo = new MpAvDataObject();
 
+            var format_handlers = handled_formats.Select(x => x.Parent).Distinct();
             // only make 1 request per component
-            foreach (var hcfvm in handled_formats) {
+            foreach (var hcfvm in format_handlers) {
                 // req to component contains unprocessed input ido
                 // with only the formats/params for the custom or def enabled presets 
                 var req = new MpOlePluginRequest() {
@@ -609,14 +624,14 @@ namespace MonkeyPaste.Avalonia {
                     ignoreParams = ignorePlugins,
                     formats =
                     preset_vms
-                        .Where(x => x.Parent == hcfvm)
+                        .Where(x => x.Parent.Parent == hcfvm)
                         .Select(x => x.FormatName)
                         .Union(ido_formats)
                         .Distinct()
                         .ToList(),
                     items =
                         preset_vms
-                            .Where(x => x.Parent == hcfvm)
+                            .Where(x => x.Parent.Parent == hcfvm)
                             .SelectMany(x => x.Items
                                 .Select(y =>
                                     new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue))).ToList(),
@@ -625,16 +640,16 @@ namespace MonkeyPaste.Avalonia {
                 Func<Task<MpOlePluginResponse>> retryHandlerFunc = async () => {
                     // NOTE this isn't really implemented since clipboard handlers are passive
                     // but just stubbed out here...
-                    var result = await hcfvm.IssueOleRequestAsync(req);
+                    var result = await hcfvm.IssueOleRequestAsync(req, isRead);
                     return result;
                 };
 
                 // get response from request
-                MpOlePluginResponse resp = await hcfvm.IssueOleRequestAsync(req);
+                MpOlePluginResponse resp = await hcfvm.IssueOleRequestAsync(req, isRead);
 
                 // process response for any ntf or retry requests
                 resp = await MpPluginTransactor.ValidatePluginResponseAsync(
-                    hcfvm.Title,
+                    hcfvm.HandlerName,
                     req,
                     resp,
                     retryHandlerFunc);
@@ -655,7 +670,8 @@ namespace MonkeyPaste.Avalonia {
             // unmark busy for next ole comm
             IsBusy = false;
 
-            if (active_pi != null &&
+            if (attachActiveProcessIfNone &&
+                active_pi != null &&
                 !avdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
                 // only attach process info if not 
                 avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, active_pi.Clone());
