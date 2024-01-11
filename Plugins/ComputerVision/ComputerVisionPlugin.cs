@@ -86,6 +86,7 @@ namespace ComputerVision {
                 },
                 presets = new List<MpPresetFormat>() {
                     new MpPresetFormat() {
+                        guid = "9c8a40a5-7e2a-4600-b8dc-12611174c8c7",
                         label = "Multi-select test 1",
                         values = new List<MpPresetValueFormat>() {
                             new MpPresetValueFormat(
@@ -107,7 +108,7 @@ namespace ComputerVision {
                         values =
                             typeof(ComputerVisionFeatureType)
                             .GetEnumNames()
-                            .Select(x=>new MpPluginParameterValueFormat() {
+                            .Select(x=>new MpParameterValueFormat() {
                                 label = x,
                                 value = x.ToLower(),
                                 isDefault = true
@@ -121,7 +122,7 @@ namespace ComputerVision {
                         values =
                             typeof(ComputerDetailType)
                             .GetEnumNames()
-                            .Select(x=>new MpPluginParameterValueFormat() {
+                            .Select(x=>new MpParameterValueFormat() {
                                 label = x,
                                 value = x.ToLower(),
                                 isDefault = true
@@ -151,7 +152,7 @@ namespace ComputerVision {
                     new MpParameterFormat() {
                         isExecuteParameter = true,
                         controlType = MpParameterControlType.Hyperlink,
-                        value = new MpPluginParameterValueFormat(SIGNUP_URL,"Sign Up",true),
+                        value = new MpParameterValueFormat(SIGNUP_URL,"Sign Up",true),
                         paramId = PARAM_ID_SIGNUP,
                     },
                     new MpParameterFormat() {
@@ -160,7 +161,7 @@ namespace ComputerVision {
                         label = "Source Content",
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                        value = new MpPluginParameterValueFormat("{ItemData}",true),
+                        value = new MpParameterValueFormat("{ItemData}",true),
                         paramId = PARAM_ID_CONTENT,
                     },
                 }

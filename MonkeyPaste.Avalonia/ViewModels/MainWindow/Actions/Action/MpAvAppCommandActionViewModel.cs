@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = ALWAYS_CONTINUE_PARAM_ID,
                                 description = UiStrings.ActionAppCommandAlwaysContinueHint,
-                                value = new MpPluginParameterValueFormat(true.ToString(),true)
+                                value = new MpParameterValueFormat(true.ToString(),true)
                             }
                         }
                     };

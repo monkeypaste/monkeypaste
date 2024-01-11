@@ -1443,13 +1443,13 @@ namespace MonkeyPaste.Avalonia {
                         description = UiStrings.ActionAnalyzerChildInputParamHint,
                         isRequired = true,
                         paramId = INPUT_TYPE_PARAM_ID,
-                        values = new List<MpPluginParameterValueFormat>() {
-                            new MpPluginParameterValueFormat() {
+                        values = new List<MpParameterValueFormat>() {
+                            new MpParameterValueFormat() {
                                 isDefault = true,
                                 value = MpAnalyzerChildInputType.LastOutput.ToString(),
                                 label = MpAnalyzerChildInputType.LastOutput.EnumToUiString()
                             },
-                            new MpPluginParameterValueFormat() {
+                            new MpParameterValueFormat() {
                                 value = MpAnalyzerChildInputType.SourceClip.ToString(),
                                 label = MpAnalyzerChildInputType.SourceClip.EnumToUiString()
                             },

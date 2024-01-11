@@ -21,6 +21,8 @@ namespace MonkeyPaste.Avalonia {
             }
             if (isDark) {
                 queryString.Add("docusaurus-theme", "dark");
+            } else {
+                queryString.Add("docusaurus-theme", "light");
             }
             string custom_url = url + "?" + queryString.ToString() + anchor_suffix;
             return custom_url;

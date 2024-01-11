@@ -2,6 +2,6 @@
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpPluginDeferredParameterValueResponseFormat : MpPluginResponseFormatBase {
-        public List<MpPluginParameterValueFormat> Values { get; set; }
+        public List<MpParameterValueFormat> Values { get; set; }
     }
 }

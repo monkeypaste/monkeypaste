@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_PATH_PARAM_ID,
                                 description = UiStrings.ActionCondInPropHint,
-                                value = new MpPluginParameterValueFormat(MpContentQueryPropertyPathType.ItemData.ToQueryFragmentString(),true)
+                                value = new MpParameterValueFormat(MpContentQueryPropertyPathType.ItemData.ToQueryFragmentString(),true)
                             },
                             new MpParameterFormat() {
                                 label = UiStrings.ActionCondNotLabel,
@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                                     typeof(MpComparisonOperatorType)
                                     .GetEnumNames()
                                     .Select((x,idx)=>
-                                        new MpPluginParameterValueFormat() {
+                                        new MpParameterValueFormat() {
                                             label = x.ToEnum<MpComparisonOperatorType>().EnumToUiString(),
                                             value = x // NOTE!! 
                                         }

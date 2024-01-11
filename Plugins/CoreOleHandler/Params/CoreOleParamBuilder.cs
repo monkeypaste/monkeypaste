@@ -53,7 +53,7 @@ namespace CoreOleHandler {
                 description = string.Format(isReader ? Resources.CommonIgnoreReaderHint : Resources.CommonIgnoreWriterHint, format),
                 controlType = MpParameterControlType.CheckBox,
                 unitType = MpParameterValueUnitType.Bool,
-                value = new MpPluginParameterValueFormat(false.ToString()),
+                value = new MpParameterValueFormat(false.ToString()),
                 paramId = GetParamId(format, isReader, Resources.CommonIgnoreLabel)
             });
             if (tup.Item3 >= 0) {
@@ -64,7 +64,7 @@ namespace CoreOleHandler {
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 1,
                     maximum = MAX_MAX_TEXT,
-                    value = new MpPluginParameterValueFormat(tup.Item3.ToString(), true),
+                    value = new MpParameterValueFormat(tup.Item3.ToString(), true),
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });
             }
@@ -94,7 +94,7 @@ namespace CoreOleHandler {
                         description = Resources.Rtf2HtmlHint,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
-                        value = new MpPluginParameterValueFormat(true.ToString(), true),
+                        value = new MpParameterValueFormat(true.ToString(), true),
                         paramId = GetParamId(format, isReader, "tohtml")
                     });
                     break;
@@ -105,7 +105,7 @@ namespace CoreOleHandler {
                         description = Resources.Html2RtfHint,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
-                        value = new MpPluginParameterValueFormat(true.ToString(), true),
+                        value = new MpParameterValueFormat(true.ToString(), true),
                         paramId = GetParamId(format, isReader, "tortf")
                     });
                     break;
@@ -116,7 +116,7 @@ namespace CoreOleHandler {
                             description = Resources.ImgIgnoreTransparentImgHint,
                             controlType = MpParameterControlType.CheckBox,
                             unitType = MpParameterValueUnitType.Bool,
-                            value = new MpPluginParameterValueFormat(true.ToString(), true),
+                            value = new MpParameterValueFormat(true.ToString(), true),
                             paramId = GetParamId(format, isReader, "ignore_empty")
                         });
                         pfl.Add(new MpParameterFormat() {
@@ -127,7 +127,7 @@ namespace CoreOleHandler {
                             paramId = GetParamId(format, isReader, "maxw"),
                             minimum = 0,
                             maximum = 30_000,
-                            value = new MpPluginParameterValueFormat(3000.ToString(), true)
+                            value = new MpParameterValueFormat(3000.ToString(), true)
                         });
                         pfl.Add(new MpParameterFormat() {
                             label = Resources.ImgMaxHLabel,
@@ -137,7 +137,7 @@ namespace CoreOleHandler {
                             paramId = GetParamId(format, isReader, "maxh"),
                             minimum = 0,
                             maximum = 30_000,
-                            value = new MpPluginParameterValueFormat(3000.ToString(), true)
+                            value = new MpParameterValueFormat(3000.ToString(), true)
                         });
                         pfl.Add(new MpParameterFormat() {
                             label = Resources.ImgDoScaleLabel,
@@ -145,7 +145,7 @@ namespace CoreOleHandler {
                             controlType = MpParameterControlType.CheckBox,
                             unitType = MpParameterValueUnitType.Bool,
                             paramId = GetParamId(format, isReader, "scaleoversized"),
-                            value = new MpPluginParameterValueFormat(true.ToString(), true)
+                            value = new MpParameterValueFormat(true.ToString(), true)
                         });
                     } else {
                         pfl.Add(new MpParameterFormat() {
@@ -156,7 +156,7 @@ namespace CoreOleHandler {
                             paramId = GetParamId(format, isReader, "exporttype"),
                             values =
                                 new[] { "bmp", "png", "jpg" }
-                                .Select(x => new MpPluginParameterValueFormat(x, x == "png"))
+                                .Select(x => new MpParameterValueFormat(x, x == "png"))
                                 .ToList()
                         });
                     }

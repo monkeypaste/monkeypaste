@@ -526,7 +526,7 @@
     <value>Hide all '{0}' notifications</value>
   </data>
   <data name="NotificationOptionHideLabel" xml:space="preserve">
-    <value>Hide</value>
+    <value>Dismiss</value>
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Last active app unknown. Switch to intended app to monkey paste.</value>
@@ -2559,5 +2559,29 @@ You can restart now and complete the update by re-installing, ignore this and up
   <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
     <value>Assign Global Paste Shortcut for '{0}'</value>
     <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Forgot Password?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Requires restart) When enabled diagnostic information will be stored. This can slow performance and may contain personal information.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Log to File</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Open Logs Folder</value>
   </data>
 </root>

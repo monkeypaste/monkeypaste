@@ -11,7 +11,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -381,6 +380,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region System
+
+        public bool IsLoggingEnabled { get; set; }
 
         public bool LoadOnLogin { get; set; } = false;
         public string LastLoadedVersion { get; set; }
@@ -773,14 +774,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-#if DEBUG
-        public ICommand LogDecryptedPrefsCommand => new MpCommand(
-            () => {
-                MpConsole.WriteLine($"Decrypted prefs at path '{PreferencesPath}':");
-                MpConsole.WriteLine(SerializeJsonObject());
-            });
-#endif
 
         #endregion
     }

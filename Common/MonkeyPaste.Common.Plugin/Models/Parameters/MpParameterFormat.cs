@@ -130,17 +130,17 @@ namespace MonkeyPaste.Common.Plugin {
         /// <summary>
         /// A container for single-value <see cref="controlType"/>'s default string representation <br/><br/><b>Note: </b>Only <see cref="value"/> or <see cref="values"/> can be defined <b>not both</b>.
         /// </summary>
-        public MpPluginParameterValueFormat value { private get; set; }
+        public MpParameterValueFormat value { private get; set; }
 
 
-        private List<MpPluginParameterValueFormat> _values;
+        private List<MpParameterValueFormat> _values;
         /// <summary>
         /// A list of possible default values for this parameter. 
         /// </summary>
-        public List<MpPluginParameterValueFormat> values {
+        public List<MpParameterValueFormat> values {
             get {
                 if (_values == null) {
-                    _values = new List<MpPluginParameterValueFormat>();
+                    _values = new List<MpParameterValueFormat>();
                     if (value != null) {
                         value.isDefault = true;
                         _values.Add(value);

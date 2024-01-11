@@ -28,7 +28,7 @@ namespace MonkeyPaste.Common.Plugin {
         /// </summary>
         public string description { get; set; } = string.Empty;
         /// <summary>
-        /// A list of paramId's and the value for them. For multi-select parameters you can use a comma-separated string of the <b>values</b> that each have a cooresponding <see cref="MpPluginParameterValueFormat.value"/> to link with it.
+        /// A list of paramId's and the value for them. For multi-select parameters you can use a comma-separated string of the <b>values</b> that each have a cooresponding <see cref="MpParameterValueFormat.value"/> to link with it.
         /// </summary>
         public List<MpPresetValueFormat> values { get; set; } = new List<MpPresetValueFormat>();
     }

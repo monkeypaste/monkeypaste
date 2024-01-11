@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                 Content = new MpAvAssignShortcutView()
             };
             ascw.Classes.Add("assignWindow");
-            ascw.Classes.Add("fadeIn");
+            //ascw.Classes.Add("fadeIn");
 
             ascw.Activated += (s, e) => {
                 MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentActivated);

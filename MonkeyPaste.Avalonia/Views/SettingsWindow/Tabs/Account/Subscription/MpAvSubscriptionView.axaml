@@ -230,15 +230,13 @@
                                         <Border Grid.Row="1"
                                                 Classes="badge"
                                                 IsVisible="{Binding MatchesAccount}"
+                                                Padding="0,3,0,0"
                                                 Classes.active="{Binding !IsExpired, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                                                 Classes.expired="{Binding IsExpired, Source={x:Static local:MpAvAccountViewModel.Instance}}">
                                             <TextBlock />
                                         </Border>
 
                                     </Grid>
-
-
-
 
                                     <!--  RATE  -->
                                     <TransitioningContentControl DockPanel.Dock="Right"
@@ -269,7 +267,7 @@
                                                     <Border Grid.Row="1"
                                                             Classes="badge trial"
                                                             HorizontalAlignment="Right"
-                                                            Padding="5,0"
+                                                            Padding="5,3,5,0"
                                                             IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                             Background="Crimson">
                                                         <TextBlock Foreground="White"

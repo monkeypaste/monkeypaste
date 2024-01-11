@@ -54,13 +54,23 @@ namespace MonkeyPaste.Avalonia {
             var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
             double nw_x = anchor_s_origin.X + (anchor_s_size.Width / 2) - (nw_s_size.Width / 2);
             double nw_y = anchor_s_origin.Y + (anchor_s_size.Height / 2) - (nw_s_size.Height / 2);
+
             if (TopLevel.GetTopLevel(owner_c) is Window owner_w &&
                 owner_w.Screens.ScreenFromVisual(owner_w) is { } scr) {
                 var s_size = scr.WorkingArea.Size;
                 nw_x = Math.Clamp(nw_x, 0, s_size.Width - nw_s_size.Width);
                 nw_y = Math.Clamp(nw_y, 0, s_size.Height - nw_s_size.Height);
             }
-            return new PixelPoint((int)nw_x, (int)nw_y);
+            PixelPoint pos = new PixelPoint((int)nw_x, (int)nw_y);
+            if (pos.X == 0 && owner_c is not Window &&
+                TopLevel.GetTopLevel(owner_c) is Window owner_w2) {
+                // BUG sometimes ntf ends up in bottom corner of screen
+                // NOTE ensuring this doesn't get stuck in a loop by checking if owner is window
+
+                // fallback and center to owner window
+                return GetWindowPositionByAnchorVisual(nw, owner_w2);
+            }
+            return pos;
         }
         #endregion
 
@@ -75,7 +85,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
         private static Size GetWindowSize(Window w, double fallback_w = 350, double fallbach_h = 150) {
             if (w.Width > 0 && w.Height > 0) {
                 double th = GetWindowTitleHeight(w);

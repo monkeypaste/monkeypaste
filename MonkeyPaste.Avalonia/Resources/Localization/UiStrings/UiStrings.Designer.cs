@@ -187,6 +187,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forgot Password?.
+        /// </summary>
+        public static string AccountForgotPwdButtonLabel {
+            get {
+                return ResourceManager.GetString("AccountForgotPwdButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content and trash are limited to {0} and {1} clips respectively..
         /// </summary>
         public static string AccountFreeDescription {
@@ -261,6 +270,15 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
+        public static string AccountLoginButtonLabel {
+            get {
+                return ResourceManager.GetString("AccountLoginButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
         public static string AccountLoginButtonText {
             get {
                 return ResourceManager.GetString("AccountLoginButtonText", resourceCulture);
@@ -291,6 +309,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountLoginWindowTitle {
             get {
                 return ResourceManager.GetString("AccountLoginWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string AccountLogoutButtonLabel {
+            get {
+                return ResourceManager.GetString("AccountLogoutButtonLabel", resourceCulture);
             }
         }
         
@@ -3668,7 +3695,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide.
+        ///   Looks up a localized string similar to Dismiss.
         /// </summary>
         public static string NotificationOptionHideLabel {
             get {
@@ -4553,6 +4580,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Requires restart) When enabled diagnostic information will be stored. This can slow performance and may contain personal information..
+        /// </summary>
+        public static string PrefEnableLoggingHint {
+            get {
+                return ResourceManager.GetString("PrefEnableLoggingHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log to File.
+        /// </summary>
+        public static string PrefEnableLoggingLabel {
+            get {
+                return ResourceManager.GetString("PrefEnableLoggingLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to forget the password?.
         /// </summary>
         public static string PrefForgetDbPwdNtfText {
@@ -4996,6 +5041,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string PrefShowLogsFolderBtnText {
+            get {
+                return ResourceManager.GetString("PrefShowLogsFolderBtnText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Logs Folder.
+        /// </summary>
+        public static string PrefShowLogsFolderLabel {
+            get {
+                return ResourceManager.GetString("PrefShowLogsFolderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Titles.
         /// </summary>
         public static string PrefShowTitlesLabel {
@@ -5192,6 +5255,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PrefUserFileExtLabel {
             get {
                 return ResourceManager.GetString("PrefUserFileExtLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Privacy Policy.
+        /// </summary>
+        public static string PrivacyPolicyLabel {
+            get {
+                return ResourceManager.GetString("PrivacyPolicyLabel", resourceCulture);
             }
         }
         

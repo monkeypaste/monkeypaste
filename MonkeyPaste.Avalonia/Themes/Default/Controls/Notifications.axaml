@@ -10,7 +10,14 @@
     <Style Selector=":is(Window).notificationWindow:not(.resizable)">
         <Setter Property="CanResize"
                 Value="False" />
-
+    </Style>
+    <Style Selector=":is(Window).notificationWindow.resizable">
+        <Setter Property="CanResize"
+                Value="True" />
+        <Setter Property="Width"
+                Value="{StaticResource NaN}" />
+        <Setter Property="MinWidth"
+                Value="350" />
     </Style>
     <Style Selector=":is(Window).notificationWindow:not(.welcome)"
            x:DataType="local:MpAvNotificationViewModelBase">
@@ -43,12 +50,6 @@
     </Style>
 
     <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
-    <Style Selector=":is(Window).notificationWindow.userAction">
-        <Setter Property="Width"
-                Value="350" />
-        <Setter Property="SizeToContent"
-                Value="Height" />
-    </Style>
     <Style Selector=":is(Window).notificationWindow.userAction.reset, :is(Window).notificationWindow.userAction.params">
         <Setter Property="Width"
                 Value="450" />

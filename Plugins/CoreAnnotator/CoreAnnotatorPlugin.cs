@@ -84,42 +84,42 @@ namespace CoreAnnotator {
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
                         paramId = CONTENT_PARAM_ID,
                         isVisible = false,
-                        value = new MpPluginParameterValueFormat("{ItemData}",true)
+                        value = new MpParameterValueFormat("{ItemData}",true)
                     },
                     new MpParameterFormat() {
                         label = Resources.UrlLabel,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         paramId = MpRegExType.Url.ToString(),
-                        value = new MpPluginParameterValueFormat(true.ToString(),true)
+                        value = new MpParameterValueFormat(true.ToString(),true)
                     },
                     new MpParameterFormat() {
                         label = Resources.EmailLabel,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         paramId = MpRegExType.Email.ToString(),
-                        value = new MpPluginParameterValueFormat(true.ToString(),true)
+                        value = new MpParameterValueFormat(true.ToString(),true)
                     },
                     new MpParameterFormat() {
                         label = Resources.PhoneLabel,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         paramId = MpRegExType.PhoneNumber.ToString(),
-                        value = new MpPluginParameterValueFormat(true.ToString(),true)
+                        value = new MpParameterValueFormat(true.ToString(),true)
                     },
                     new MpParameterFormat() {
                         label = Resources.CurrencyLabel,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         paramId = MpRegExType.Currency.ToString(),
-                        value = new MpPluginParameterValueFormat(true.ToString(),true)
+                        value = new MpParameterValueFormat(true.ToString(),true)
                     },
                     new MpParameterFormat() {
                         label = Resources.HexLabel,
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         paramId = MpRegExType.HexColor.ToString(),
-                        value = new MpPluginParameterValueFormat(true.ToString(),true)
+                        value = new MpParameterValueFormat(true.ToString(),true)
                     },
                 }
             };

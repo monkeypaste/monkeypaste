@@ -41,7 +41,7 @@ namespace AltOleHandler {
                 description = $"When checked {format} format will not be {(isReader ? "read from" : "written to")} the clipboard or drag-and-drop data.",
                 controlType = MpParameterControlType.CheckBox,
                 unitType = MpParameterValueUnitType.Bool,
-                value = new MpPluginParameterValueFormat(false.ToString()),
+                value = new MpParameterValueFormat(false.ToString()),
                 paramId = GetParamId(format, isReader, "ignore")
             });
             if (tup.Item3 >= 0) {
@@ -52,7 +52,7 @@ namespace AltOleHandler {
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 1,
                     maximum = int.MaxValue,
-                    value = new MpPluginParameterValueFormat(tup.Item3.ToString()),
+                    value = new MpParameterValueFormat(tup.Item3.ToString()),
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });
             }
@@ -82,7 +82,7 @@ namespace AltOleHandler {
                         description = $"When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (only for supported platforms)",
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
-                        value = new MpPluginParameterValueFormat(true.ToString(), true),
+                        value = new MpParameterValueFormat(true.ToString(), true),
                         paramId = GetParamId(format, isReader, "tohtml")
                     });
                     break;
@@ -93,7 +93,7 @@ namespace AltOleHandler {
                         description = $"When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (only for supported platforms)",
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
-                        value = new MpPluginParameterValueFormat(true.ToString(), true),
+                        value = new MpParameterValueFormat(true.ToString(), true),
                         paramId = GetParamId(format, isReader, "tortf")
                     });
                     break;
@@ -107,7 +107,7 @@ namespace AltOleHandler {
                             paramId = GetParamId(format, isReader, "exporttype"),
                             values =
                                 new[] { "bmp", "png", "jpg" }
-                                .Select(x => new MpPluginParameterValueFormat(x, x == "png"))
+                                .Select(x => new MpParameterValueFormat(x, x == "png"))
                                 .ToList()
                         });
                     }

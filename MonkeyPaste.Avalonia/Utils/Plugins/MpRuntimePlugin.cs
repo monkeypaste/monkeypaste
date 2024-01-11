@@ -58,12 +58,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task<T> IssueRequestAsync<T>(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false, bool clone_resp = true) where T : new() {
+        public async Task<T> IssueRequestAsync<T>(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false, bool clone_resp = false) where T : new() {
             object resultObj = await IssueRequestAsync(methodName, typeName, req, sync_only);
             if (resultObj is not T result) {
                 return default;
             }
             if (clone_resp) {
+                // NOTE this never runs cause it doesn't help but it was for trying to elimante plugin assembly refs when unloading
                 string result_json = result.SerializeObject();
                 T cloned_result = result_json.DeserializeObject<T>();
                 result = default;

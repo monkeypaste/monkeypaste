@@ -61,7 +61,7 @@ function exit_w_success($msg = "")
 
 function exit_w_error($msg = "")
 {
-    echo ERROR_MSG . " " . $msg;
+    echo ERROR_MSG . $msg;
     exit(0);
 }
 function exit_w_errors(array $errors)

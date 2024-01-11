@@ -43,19 +43,12 @@ namespace MonkeyPaste.Avalonia {
         Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string pluginGuid, string packageUrl) {
             throw new NotImplementedException();
         }
-
-        async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
-            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } aivm) {
-                MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find handler");
-                return false;
-            }
-            // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
-
+        private async Task RemoveHandlerReferencesAsync(MpAvClipboardHandlerItemViewModel chivm, bool deletePresets) {
             IsOleProcessingBlocked = true;
             while (IsProcessingOleRequest) {
                 await Task.Delay(100);
             }
-            while (aivm.IsBusy) {
+            while (chivm.IsBusy) {
                 // wait if executing
                 await Task.Delay(100);
             }
@@ -63,22 +56,32 @@ namespace MonkeyPaste.Avalonia {
 
             Mp.Services.ClipboardMonitor.StopMonitor();
 
-            await Task.WhenAll(
-                aivm.Items
+            if (deletePresets) {
+                await Task.WhenAll(
+                chivm.Items
                 .SelectMany(x => x.Items)
                 .Select(x => x.Preset.DeleteFromDatabaseAsync()));
-
-            // remove from plugin dir
-            bool success = await MpPluginLoader.DeletePluginByGuidAsync(aivm.PluginGuid);
+            }
 
             // remove from collection
-            Items.Remove(aivm);
+            Items.Remove(chivm);
             OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
 
             Mp.Services.ClipboardMonitor.StartMonitor(true);
             IsOleProcessingBlocked = false;
+        }
+        async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
+            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } chivm) {
+                MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find handler");
+                return false;
+            }
+            // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
+            await RemoveHandlerReferencesAsync(chivm, true);
+
+            // remove from plugin dir
+            bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
 
             if (SelectedItem == null) {
                 SelectedItem = SortedItems.FirstOrDefault();
@@ -381,6 +384,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            MpPluginLoader.Plugins.CollectionChanged += Plugins_CollectionChanged;
+
             var ole_guids =
                 MpPluginLoader.Plugins
                 .Where(x => x.pluginType == MpPluginType.Clipboard)
@@ -431,6 +436,8 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+
+
         public MpAvClipboardFormatPresetViewModel FindFormatPreset(string pluginGuid, string formatName, bool isReader) {
             return
                 AllPresets.FirstOrDefault(x =>
@@ -448,6 +455,15 @@ namespace MonkeyPaste.Avalonia {
             MpAvClipboardHandlerItemViewModel aivm = new MpAvClipboardHandlerItemViewModel(this);
             await aivm.InitializeAsync(ole_guid);
             return aivm;
+        }
+        private void Plugins_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            var plugin_guids_to_remove = Items.Where(x => !MpPluginLoader.PluginGuidLookup.ContainsKey(x.PluginGuid)).Select(x => x.PluginGuid).ToList();
+            foreach (string guid in plugin_guids_to_remove) {
+                // this should only find matches when plugins were removed for invalidation(s) during install. 
+                if (Items.FirstOrDefault(x => x.PluginGuid == guid) is { } aivm) {
+                    RemoveHandlerReferencesAsync(aivm, false).FireAndForgetSafeAsync();
+                }
+            }
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(SortedItems));

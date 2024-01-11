@@ -38,8 +38,8 @@ namespace MonkeyPaste.Avalonia {
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = true,
                                 paramId = IS_TOAST_ALERT_PARAM_ID,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value ="True"
                                     }
@@ -60,8 +60,8 @@ namespace MonkeyPaste.Avalonia {
                                 maximum = 10,
                                 paramId = TOAST_SHOW_TIME_SECONDS_PARAM_ID,
                                 description = UiStrings.ActionAlertShowTimeHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value ="3"
                                     }
@@ -73,36 +73,36 @@ namespace MonkeyPaste.Avalonia {
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = true,
                                 paramId = IS_AUDIBLE_ALERT_PARAM_ID,
-                                value = new MpPluginParameterValueFormat(false.ToString(),true)
+                                value = new MpParameterValueFormat(false.ToString(),true)
                             },
                             new MpParameterFormat() {
                                 label = UiStrings.ActionAlertSoundTypeLabel,
                                 controlType = MpParameterControlType.ComboBox,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 paramId = SOUND_TYPE_PARAM_ID,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         label = UiStrings.ActionAlertMonkeySound,
                                         value ="MonkeySound"
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertTingSound,
                                         value ="TingSound"
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertChimeSound,
                                         value ="ChimeSound"
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertAlertSound,
                                         value ="AlertSound"
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertBlipSound,
                                         value ="BlipSound"
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertSonarSound,
                                         value ="SonarSound"
                                     },
@@ -113,8 +113,8 @@ namespace MonkeyPaste.Avalonia {
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Decimal,
                                 paramId = SOUND_VOLUME_PARAM_ID,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value ="1.0"
                                     }
@@ -124,8 +124,8 @@ namespace MonkeyPaste.Avalonia {
                                 label = UiStrings.ActionAlertPreviewLabel,
                                 controlType = MpParameterControlType.Button,
                                 paramId = TEST_ALERT_PARAM_ID,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value = TEST_ALERT_PARAM_ID
                                     }

@@ -260,6 +260,7 @@ namespace MonkeyPaste.Avalonia {
             while (!MpPluginLoader.IsLoaded) {
                 await Task.Delay(100);
             }
+            MpPluginLoader.Plugins.CollectionChanged += Plugins_CollectionChanged;
 
             var analyzer_guids =
                 MpPluginLoader.PluginManifestLookup.Where(x => x.Value.analyzer != null).Select(x => x.Value.guid);
@@ -297,6 +298,7 @@ namespace MonkeyPaste.Avalonia {
             IsLoaded = true;
             IsBusy = false;
         }
+
 
         public MpAvMenuItemViewModel GetContentContextMenuItem(MpCopyItemType contentType) {
             var availItems = Items.Where(x => x.IsContentTypeValid(contentType));
@@ -350,6 +352,15 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SortedItems));
+        }
+        private void Plugins_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            var plugin_guids_to_remove = Items.Where(x => !MpPluginLoader.PluginGuidLookup.ContainsKey(x.PluginGuid)).Select(x => x.PluginGuid).ToList();
+            foreach (string guid in plugin_guids_to_remove) {
+                // this should only find matches when plugins were removed for invalidation(s) during install. 
+                if (Items.FirstOrDefault(x => x.PluginGuid == guid) is { } aivm) {
+                    RemoveAnalyzerReferencesAsync(aivm, false).FireAndForgetSafeAsync();
+                }
+            }
         }
 
         private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(string plugin_guid) {

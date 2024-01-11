@@ -35,8 +35,8 @@ namespace TextToSpeech {
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
                         paramId = TEXT_PARAM_ID,
-                        values = new List<MpPluginParameterValueFormat>() {
-                            new MpPluginParameterValueFormat() {
+                        values = new List<MpParameterValueFormat>() {
+                            new MpParameterValueFormat() {
                                 value = "{ItemData}"
                             }
                         }

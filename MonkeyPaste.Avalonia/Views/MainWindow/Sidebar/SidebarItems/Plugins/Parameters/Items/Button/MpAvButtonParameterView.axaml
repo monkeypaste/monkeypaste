@@ -23,22 +23,24 @@
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
-        <Style Selector="Button.param.link"
+        <Style Selector="Grid.trynav Button.param"
                x:DataType="local:MpAvButtonParameterViewModel">
             <Setter Property="Command"
                     Value="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding CurrentValue}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
     </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
         <!--  NOTE when control is hyperlink and cmd is not set it'll use CurrentValue as Nav uri  -->
-        <Grid>
+        <Grid Classes.trynav="{Binding ClickCommand, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <Button Classes="param link"
-                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                     IsVisible="{Binding IsLink}">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding CurrentValue}" />
-                </ToolTip.Tip>
                 <TextBlock Text="{Binding Title}" />
             </Button>
             <Button Classes="param defaultButton"

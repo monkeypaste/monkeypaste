@@ -57,8 +57,8 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = REPEAT_COUNT_PARAM_ID,
                                 description = UiStrings.ActionRepeatCountHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value ="0"
                                     }
@@ -73,8 +73,8 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = REPEAT_DELAY_MS_PARAM_ID,
                                 description = UiStrings.ActionRepeatDelayHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value ="0"
                                     }

@@ -10,7 +10,6 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemViewModel :
-        //MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
         MpAvPresetParamHostViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
         MpISelectableViewModel,
         MpIAsyncCollectionObject,
@@ -36,11 +35,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAnalyzerComponent AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
-
-        //public override MpIPluginComponentBase PluginComponent =>
-        //    PluginFormat == null || PluginFormat.Components == null ?
-        //        null :
-        //        PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
 
         #endregion
 
@@ -112,8 +106,6 @@ namespace MonkeyPaste.Avalonia {
         public override bool IsLoaded =>
             Items.Count > 0 &&
             Items[0].Items.Count > 0;
-
-        //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
         public bool IsHovering { get; set; } = false;
 

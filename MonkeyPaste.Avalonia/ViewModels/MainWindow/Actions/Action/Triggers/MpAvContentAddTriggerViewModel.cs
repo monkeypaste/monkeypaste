@@ -30,21 +30,21 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = CONTENT_TYPE_PARAM_ID,
                                 description = UiStrings.ActionContentAddTriggerHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         label = UiStrings.ActionContentAddAllLabel,
                                         value = MpCopyItemType.None.ToString()
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ClipTileDefTitleTextPrefix,
                                         value = MpCopyItemType.Text.ToString()
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ClipTileDefTitleImagePrefix,
                                         value = MpCopyItemType.Image.ToString()
                                     },
-                                    new MpPluginParameterValueFormat() {
+                                    new MpParameterValueFormat() {
                                         label = UiStrings.ClipTileDefTitleFilesPrefix,
                                         value = MpCopyItemType.FileList.ToString()
                                     },
@@ -57,8 +57,8 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = false,
                                 paramId = IGNORE_DUP_CONTENT_PARAM_ID,
                                 description = UiStrings.ActionContentAddIgnoreDupHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value = true.ToString()
                                     }

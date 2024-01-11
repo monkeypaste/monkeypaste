@@ -151,6 +151,12 @@ namespace MonkeyPaste.Avalonia {
             Navigate(Address);
         }
 
+#if CEFNET_WV
+        protected override void Dispose(bool disposing) {
+            base.Dispose(disposing);
+            _isBrowserCreated = false;
+        }
+#endif
         #endregion
 
         #region IsNavigating

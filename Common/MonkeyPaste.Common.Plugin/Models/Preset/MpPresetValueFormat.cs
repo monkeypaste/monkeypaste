@@ -8,7 +8,7 @@
         /// </summary>
         public string paramId { get; set; } = string.Empty;
         /// <summary>
-        /// The value to be used by <see cref="MpParameterFormat.value"/>. For multi-select <see cref="MpParameterFormat.controlType"/>'s this <see cref="value"/> can be a comma-separated (csv) string of the <see cref="MpPluginParameterValueFormat.value"/>'s defined for that particular parameter.
+        /// The value to be used by <see cref="MpParameterFormat.value"/>. For multi-select <see cref="MpParameterFormat.controlType"/>'s this <see cref="value"/> can be a comma-separated (csv) string of the <see cref="MpParameterValueFormat.value"/>'s defined for that particular parameter.
         /// </summary>
         public string value { get; set; } = string.Empty;
         public MpPresetValueFormat() { }

@@ -45,15 +45,6 @@ namespace MonkeyPaste.Avalonia {
                 case MpParameterValueUnitType.RawDataContentQuery:
                     curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, true, false, last_output_args);
                     break;
-                case MpParameterValueUnitType.Base64Text:
-                    curVal = curVal.ToBytesFromBase64String().ToBase64String();
-                    break;
-                case MpParameterValueUnitType.FileSystemPath:
-                    if (string.IsNullOrWhiteSpace(curVal)) {
-                        break;
-                    }
-                    curVal = curVal.ToFile();
-                    break;
                 default:
                     curVal = Mp.Services.StringTools.ToPlainText(curVal);
                     break;

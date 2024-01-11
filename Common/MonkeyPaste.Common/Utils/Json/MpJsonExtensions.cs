@@ -46,7 +46,7 @@ namespace MonkeyPaste.Common {
 
         #region Deserialize
         public static MpPluginParameterRequestFormat ParseParamRequest(string json) {
-            var req_lookup = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            var req_lookup = json.DeserializeObject<Dictionary<string, object>>();
             if (req_lookup != null &&
                 req_lookup.TryGetValue("items", out var itemsObj) && itemsObj is JArray items_jarray) {
                 var param_lookup = new Dictionary<string, string>();
@@ -64,10 +64,10 @@ namespace MonkeyPaste.Common {
             return null;
         }
 
-        public static T DeserializeObject<T>(this string obj) where T : new() {
+        public static T DeserializeObject<T>(this string obj, JsonSerializerSettings settings = null) where T : new() {
             if (obj is string objStr) {
                 try {
-                    return JsonConvert.DeserializeObject<T>(objStr);
+                    return JsonConvert.DeserializeObject<T>(objStr, settings);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine("Error deserializing str: " + objStr, ex);
@@ -90,7 +90,7 @@ namespace MonkeyPaste.Common {
 
                     // NOTE ignoring encoding since string is base 64
                     string objStr = objBase64Str.ToStringFromBase64(enc);
-                    return JsonConvert.DeserializeObject<T>(objStr, settings);
+                    return objStr.DeserializeObject<T>(settings);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine("Error deserializing base64 str: " + objBase64Str, ex);

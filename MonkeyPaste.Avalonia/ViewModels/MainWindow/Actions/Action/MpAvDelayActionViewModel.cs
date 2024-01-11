@@ -35,8 +35,8 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = DELAY_MS_PARAM_ID,
                                 description = UiStrings.ActionDelayActionHint,
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
+                                values = new List<MpParameterValueFormat>() {
+                                    new MpParameterValueFormat() {
                                         isDefault = true,
                                         value ="1000"
                                     }

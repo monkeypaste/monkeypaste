@@ -533,7 +533,7 @@ namespace MonkeyPaste.Common {
                     return bytes;
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
+                    MpConsole.WriteTraceLine($"Error reading bytes from '{uri}'. ", ex);
                 }
             }
             return null;

@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = true,
                                 paramId = IGNORE_CHANGE_PARAM_ID,
-                                value = new MpPluginParameterValueFormat(true.ToString(),true),
+                                value = new MpParameterValueFormat(true.ToString(),true),
                                 description = UiStrings.ActionSetClipboardIgnoreChangeHint
                             },
                             new MpParameterFormat() {

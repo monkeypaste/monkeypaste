@@ -327,8 +327,8 @@ namespace MonkeyPaste.Avalonia {
                     msg = ant == MpAccountNtfType.AccountExpiredLocal ?
                         UiStrings.AccountExpiredNtfLocalCaption :
                         ant == MpAccountNtfType.AccountExpiredRemote ?
-                        UiStrings.AccountExpiredNtfRemoteCaption :
-                        UiStrings.AccountExpiredNtfOfflineCaption;
+                            UiStrings.AccountExpiredNtfRemoteCaption :
+                            UiStrings.AccountExpiredNtfOfflineCaption;
                     msg = string.Format(msg, AccountType.EnumToUiString(), NextPaymentDisplayValue);
                     ntf_type = MpNotificationType.SubscriptionExpired;
                     show_time = 10_000;
@@ -344,13 +344,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAccountNtfType.ExistingLoginSuccessful:
                     title = UiStrings.AccountExistingLoginTitle;
-                    msg = string.Format(UiStrings.AccountExistingLoginText, AccountType.EnumToUiString(), BillingCycleType.EnumToUiString());
+                    msg = string.Format(
+                        UiStrings.AccountExistingLoginText,
+                        AccountType.EnumToUiString(),
+                        BillingCycleType.EnumToUiString());
                     icon = "MonkeyWinkImage";
-                    break;
-                case MpAccountNtfType.RegistrationError:
-                    title = UiStrings.AccountRegistrationFailedTitle;
-                    msg = args[0];
-                    icon = "ErrorImage";
                     break;
                 case MpAccountNtfType.RegistrationSuccessful:
                     title = UiStrings.AccountRegistrationSuccessfulNtfTitle;
@@ -362,9 +360,14 @@ namespace MonkeyPaste.Avalonia {
                     msg = UiStrings.AccountResetPasswordCaption;
                     icon = "MonkeyWinkImage";
                     break;
+                case MpAccountNtfType.RegistrationError:
+                    title = UiStrings.AccountRegistrationFailedTitle;
+                    msg = args[0];
+                    icon = "ErrorImage";
+                    break;
                 case MpAccountNtfType.ResetError:
                     title = UiStrings.AccountResetPasswordErrorTitle;
-                    msg = UiStrings.CommonConnectionFailedCaption;
+                    msg = args[0];
                     icon = "ErrorImage";
                     break;
                 case MpAccountNtfType.PurchaseCompleted:
@@ -395,11 +398,18 @@ namespace MonkeyPaste.Avalonia {
                     msg = string.Format(
                                 UiStrings.NtfCapAccountDowngradeText,
                                 AccountType.EnumToUiString(),
-                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
+                                IsFree ?
+                                    UiStrings.AccountFreeNextPaymentDisplayText :
+                                    IsMonthly ?
+                                        UiStrings.AccountMonthlyLabel :
+                                        UiStrings.AccountYearlyLabel,
                                 ContentCapacityDisplayValue,
                                 TrashCapacityDisplayValue);
                     icon = "MonkeyWinkImage";
                     break;
+            }
+            if (args.Length > 0 && msg != args[0]) {
+                // should be showing server message
             }
 
             if (ntf_type == MpNotificationType.None) {
@@ -474,7 +484,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             TimeSpan min_wait = TimeSpan.FromMinutes(5);
-            TimeSpan max_wait = TimeSpan.FromMinutes(15);
+            TimeSpan max_wait = TimeSpan.FromMinutes(30);
             int wait_ms = MpRandom.Rand.Next((int)min_wait.TotalMilliseconds, (int)max_wait.TotalMilliseconds);
 
             var rate_timer = new DispatcherTimer() {

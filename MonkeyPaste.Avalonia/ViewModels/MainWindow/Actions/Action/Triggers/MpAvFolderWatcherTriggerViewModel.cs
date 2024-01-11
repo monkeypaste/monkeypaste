@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
                                     .GetEnumNames()
                                     .Take(typeof(WatcherChangeTypes).Length()-1) // omit 'All'
                                     .Select(x=>
-                                        new MpPluginParameterValueFormat() {
+                                        new MpParameterValueFormat() {
                                             isDefault = true,
                                             label = x.ToEnum<WatcherChangeTypes>().EnumToUiString(),
                                             value = x

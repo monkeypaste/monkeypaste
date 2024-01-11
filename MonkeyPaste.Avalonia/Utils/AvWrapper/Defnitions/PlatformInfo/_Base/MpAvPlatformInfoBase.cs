@@ -14,7 +14,9 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public virtual bool IsTraceEnabled {
             get {
-                bool do_trace = App.HasStartupArg(App.TRACE_ARG);
+                bool do_trace =
+                    App.HasStartupArg(App.TRACE_ARG) ||
+                    LoggingEnabledCheckPath.IsFile();
 #if DEBUG
                 return true;
 #else
@@ -220,10 +222,6 @@ namespace MonkeyPaste.Avalonia {
                 return _storageDir;
             }
         }
-
-
-
-
         public virtual string EditorPath {
             get {
                 if (OperatingSystem.IsBrowser()) {
@@ -232,13 +230,11 @@ namespace MonkeyPaste.Avalonia {
                 return Path.Combine(ExecutingDir, "Resources", "Editor", "index.html");
             }
         }
-
         public virtual string TermsPath {
             get {
                 return Path.Combine(ExecutingDir, "Resources", "Legal", "terms", "terms.html");
             }
         }
-
         public virtual string HelpPath {
             get {
                 if (OperatingSystem.IsBrowser()) {
@@ -255,6 +251,8 @@ namespace MonkeyPaste.Avalonia {
         public string LogPath =>
             Path.Combine(LogDir, LogFileName);
 
+        public string LoggingEnabledCheckPath =>
+            Path.Combine(LogDir, ".enabled");
         #endregion
 
         #region Console
@@ -272,11 +270,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvPlatformInfoBase() {
-#if RELEASE
-            IsTraceEnabled = App.HasStartupArg(App.TRACE_ARG);
-#endif
-        }
+        public MpAvPlatformInfoBase() { }
         #endregion
 
         #region Private Methods

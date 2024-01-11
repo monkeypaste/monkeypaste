@@ -12,6 +12,7 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -28,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
             nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
+            nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
         };
 
         private string[] _reinitContentParams => new string[] {
@@ -237,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
                                             label = UiStrings.AccountEmailLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
@@ -245,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
                                             label = UiStrings.AccountUserNameLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountType),
@@ -253,7 +255,7 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
                                             label = UiStrings.AccountSubscriptionLabel,
-                                            value = new MpPluginParameterValueFormat(
+                                            value = new MpParameterValueFormat(
                                                 val: MpAvPrefViewModel.Instance.AccountType.ToString(),
                                                 label: MpAvPrefViewModel.Instance.AccountType.EnumToUiString())
                                         },
@@ -263,7 +265,7 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
                                             label = UiStrings.AccountBillingCycleLabel,
-                                            value = new MpPluginParameterValueFormat(
+                                            value = new MpParameterValueFormat(
                                                 val: MpAvPrefViewModel.Instance.AccountBillingCycleType.ToString(),
                                                 label: MpAvPrefViewModel.Instance.AccountBillingCycleType.EnumToUiString())
                                         },
@@ -273,7 +275,7 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
                                             label = UiStrings.AccountNextPaymentLabel,
-                                            value = new MpPluginParameterValueFormat(
+                                            value = new MpParameterValueFormat(
                                                 MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.Never ?
                                                     MpBillingCycleType.Never.EnumToUiString() :
                                                     MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString(UiStrings.CommonDateFormat))
@@ -281,13 +283,13 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountLogout.ToString(),
                                             controlType = MpParameterControlType.Button,
-//                                            isVisible =
-//#if DEBUG
-//                                            true,
-//#else
-//                                            false,
-//#endif
-                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogout.ToString(),"Logout")
+                                            isVisible =
+#if DEBUG
+                                            true,
+#else
+                                            false,
+#endif
+                                            value = new MpParameterValueFormat(MpRuntimePrefParamType.AccountLogout.ToString(),UiStrings.AccountLogoutButtonText)
                                         }
                                     }
                                 }
@@ -301,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountShowLogin.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat() {
+                                            value = new MpParameterValueFormat() {
                                                 label = UiStrings.AccountExistingAccountButtonLabel}
                                         },
                                         new MpParameterFormat() {
@@ -309,39 +311,39 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.AccountEmailLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.AccountUserNameLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword),
                                             controlType = MpParameterControlType.PasswordBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.AccountPasswordLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword2),
                                             controlType = MpParameterControlType.PasswordBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.CommonConfirmLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword2)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword2)
                                         },
 
                                        new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountShowPrivacyPolicy.ToString(),
                                             controlType = MpParameterControlType.Hyperlink,
-                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountShowPrivacyPolicy.ToString(),"Privacy Policy")
+                                            value = new MpParameterValueFormat(MpRuntimePrefParamType.AccountShowPrivacyPolicy.ToString(),UiStrings.PrivacyPolicyLabel)
                                         },
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat() {
+                                            value = new MpParameterValueFormat() {
                                                 label = UiStrings.AccountRegisterButtonText
                                             }
                                         }
@@ -356,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountShowRegister.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat() {
+                                            value = new MpParameterValueFormat() {
                                                 label = UiStrings.AccountSwitchToRegisterButtonLabel
                                             }
                                         },
@@ -365,24 +367,24 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.AccountUserNameLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword),
                                             controlType = MpParameterControlType.PasswordBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.AccountPasswordLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
                                         },
                                        new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountResetPassword.ToString(),
                                             controlType = MpParameterControlType.Hyperlink,
-                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountResetPassword.ToString(),"Forgot Passwprd?")
+                                            value = new MpParameterValueFormat(MpRuntimePrefParamType.AccountResetPassword.ToString(), UiStrings.AccountForgotPwdButtonLabel)
                                         },
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountLogin.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogin.ToString(),"Login")
+                                            value = new MpParameterValueFormat(MpRuntimePrefParamType.AccountLogin.ToString(),UiStrings.AccountLoginButtonLabel)
                                         }
                                     }
                                 }
@@ -403,12 +405,12 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.PrefThemeStyleLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Light,
                                                     value = MpThemeType.Light.ToString()
                                                 },
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark,
                                                     value = MpThemeType.Dark.ToString()
                                                 },
@@ -419,8 +421,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefThemeColorLabel,
                                             description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.PrefThemeColorHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.CommonSelectLabel,
                                                     value = MpRuntimePrefParamType.ThemeHexColor.ToString()
@@ -447,7 +449,7 @@ namespace MonkeyPaste.Avalonia {
                                                 .Where(x=>!string.IsNullOrEmpty(x))
                                                 .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
                                                 .OrderBy(x=>x)
-                                                .Select(x=>new MpPluginParameterValueFormat() {
+                                                .Select(x=>new MpParameterValueFormat() {
                                                     isDefault = MpAvThemeViewModel.Instance.DefaultReadOnlyFontFamily.ToLower() == x.ToLower(),
                                                     value = x
                                                 }).ToList()
@@ -463,7 +465,7 @@ namespace MonkeyPaste.Avalonia {
                                                 .Where(x=>!string.IsNullOrEmpty(x))
                                                 .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
                                                 .OrderBy(x=>x)
-                                                .Select(x=>new MpPluginParameterValueFormat() {
+                                                .Select(x=>new MpParameterValueFormat() {
                                                     isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLower() == x.ToLower(),
                                                     value = x
                                                 }).ToList()
@@ -475,7 +477,7 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefContentFontSizeLabel,
                                             values =
                                                 new int[]{ 8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98 }
-                                                .Select(x=>new MpPluginParameterValueFormat() {
+                                                .Select(x=>new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.DefaultFontSize == x,
                                                     value = x.ToString(),
                                                 }).ToList()
@@ -495,7 +497,7 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefSoundThemeLabel,
                                             values =
                                                 new int[]{ 0, 1, 2, 3 }
-                                                .Select(x=>new MpPluginParameterValueFormat() {
+                                                .Select(x=>new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.NotificationSoundGroupIdx == x,
                                                     label = ((MpSoundGroupType)x).ToString(),
                                                     value = x.ToString(),
@@ -508,8 +510,8 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefNtfVolumeLabel,
                                             minimum = 0,
                                             maximum = 1,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.NotificationSoundVolume.ToString()
                                                 }
@@ -528,8 +530,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowInTaskbarLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ShowInTaskbar.ToString()
                                                 }
@@ -542,8 +544,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowInTaskSwitcher,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ShowInTaskSwitcher.ToString()
                                                 }
@@ -564,7 +566,7 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefMainWindowShowBehaviorLabel,
                                             values =
                                                 Enum.GetNames(typeof(MpMainWindowShowBehaviorType))
-                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                .Select(x=> new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr.ToLower() == x.ToLower(),
                                                     value = x,
                                                     label = x.ToEnum<MpMainWindowShowBehaviorType>().EnumToUiString()
@@ -575,8 +577,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefMainWindowAnimateLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.AnimateMainWindow.ToString()
                                                 }
@@ -589,8 +591,8 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefMainWindowOpacityLabel,
                                             minimum = 0,
                                             maximum = 1,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.GlobalBgOpacity.ToString()
                                                 }
@@ -609,8 +611,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowTooltipsLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ShowTooltips.ToString()
                                                 }
@@ -621,8 +623,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowHintsLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ShowHints.ToString()
                                                 }
@@ -633,7 +635,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefHideWatermarksLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.HideCapWarnings.ToString())
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.HideCapWarnings.ToString())
                                         },
                                     }
                                 }
@@ -653,7 +655,7 @@ namespace MonkeyPaste.Avalonia {
                                             values =
                                                 MpAvCurrentCultureViewModel.Instance.LangLookup
                                                 .Select(x=>
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = x.Key == MpAvPrefViewModel.Instance.CurrentCultureCode,
                                                     label = x.Value,
                                                     value = x.Key
@@ -673,20 +675,20 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.PrefUndoLimitLabel,
                                             description = UiStrings.PrefUndoLimitHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxUndoLimit.ToString() == "10",
                                                     value = "10".ToString()
                                                 },
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxUndoLimit.ToString() == "50",
                                                     value = "50".ToString()
                                                 },
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxUndoLimit.ToString() == "100",
                                                     value = "100".ToString()
                                                 },
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxUndoLimit.ToString() == "-1",
                                                     value = "-1".ToString(),
                                                     label = UiStrings.PrefUndoLimitNoLimitLabel
@@ -701,8 +703,8 @@ namespace MonkeyPaste.Avalonia {
                                             maximum = 50,
                                             label = UiStrings.PrefPinTrayCapacityLabel,
                                             description = UiStrings.PrefPinTrayCapacityHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.MaxPinClipCount.ToString()
                                                 }
@@ -722,8 +724,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefIgnoreAppendsLabel,
                                             description = UiStrings.PrefIgnoreAppendsHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IgnoreAppendedItems.ToString()
                                                 }
@@ -735,8 +737,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefIgnoreInternalClipboardLabel,
                                             description = UiStrings.PrefIgnoreInternalClipboardHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges.ToString()
                                                 }
@@ -748,8 +750,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefIgnoreWhiteSpaceLabel,
                                             description = UiStrings.PrefIgnoreWhiteSpaceHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems.ToString()
                                                 }
@@ -761,8 +763,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefPasteHistoryLabel,
                                             description = UiStrings.PrefPasteHistoryHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.TrackExternalPasteHistory.ToString()
                                                 }
@@ -774,8 +776,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefIgnoreDupLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
                                                 },
@@ -794,12 +796,20 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefLoginLoadLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.LoadOnLogin.ToString()
                                                 },
                                             }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.PrefEnableLoggingLabel,
+                                            description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.PrefEnableLoggingHint,
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.IsLoggingEnabled.ToString(),true)
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
@@ -807,8 +817,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefStartupClipboardLabel,
                                             description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.PrefStartupClipboardHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.AddClipboardOnStartup.ToString()
                                                 }
@@ -822,7 +832,7 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefTrashCycleLabel,
                                             values =
                                                 Enum.GetNames(typeof(MpTrashCleanupModeType))
-                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                .Select(x=> new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.TrashCleanupModeTypeStr.ToLower() == x.ToString().ToLower(),
                                                     value = x
                                                 }).ToList()
@@ -832,8 +842,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefStartupClipboardListenLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup.ToString()
                                                 }
@@ -855,16 +865,16 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = UiStrings.PrefRecentTextLimitLabel,
                                             description = UiStrings.PrefRecentTextLimitHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "10",
                                                     value = "10".ToString()
                                                 },
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "50",
                                                     value = "50".ToString()
                                                 },
-                                                new MpPluginParameterValueFormat() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "100",
                                                     value = "100".ToString()
                                                 }
@@ -876,8 +886,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefAutoSearchLabel,
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values =new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsAutoSearchEnabled.ToString()
                                                 },
@@ -891,8 +901,8 @@ namespace MonkeyPaste.Avalonia {
                                             label = UiStrings.PrefUserFileExtLabel,
                                             description = UiStrings.PrefUserFileExtHint,
                                             values =
-                                            new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.UserDefinedFileExtensionsCsv
                                                 }
@@ -919,8 +929,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefSpellCheckLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsSpellCheckEnabled.ToString()
                                                 },
@@ -932,8 +942,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefRichContentLabel,
                                             description = UiStrings.PrefRichContentHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
                                                 }
@@ -945,8 +955,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefDestFormatLabel,
                                             description = UiStrings.PrefDestFormatHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled.ToString()
                                                 }
@@ -958,8 +968,8 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefResetClipboardLabel,
                                             description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.PrefResetClipboardHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste.ToString()
                                                 }
@@ -970,8 +980,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowTitlesLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ShowContentTitles.ToString()
                                                 }
@@ -991,8 +1001,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefMainWindowShowOnScrollLabel,
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values =new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.ScrollToOpen.ToString()
                                                 },
@@ -1006,7 +1016,7 @@ namespace MonkeyPaste.Avalonia {
                                             description = UiStrings.PrefShowWindowAndLockHint,
                                             values =
                                                 Enum.GetNames(typeof(MpScrollToOpenAndLockType))
-                                                .Select((x,idx)=> new MpPluginParameterValueFormat() {
+                                                .Select((x,idx)=> new MpParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.ScrollToOpenAndLockTypeStr == x,
                                                     value = x,
                                                     label = x.ToEnum<MpScrollToOpenAndLockType>().EnumToUiString()
@@ -1018,7 +1028,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefShowWindowOnDragLabel,
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.DragToOpen.ToString())
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.DragToOpen.ToString())
                                         }
                                     }
                                 }
@@ -1035,7 +1045,7 @@ namespace MonkeyPaste.Avalonia {
                                             description = UiStrings.ShortcutRoutingProfileTypeHint,
                                             values =
                                                 Enum.GetNames(typeof(MpShortcutRoutingProfileType))
-                                                .Select((x,idx)=> new MpPluginParameterValueFormat() {
+                                                .Select((x,idx)=> new MpParameterValueFormat() {
                                                     isDefault = MpAvShortcutCollectionViewModel.Instance.RoutingProfileType.ToString() == x,
                                                     value = x, // NOTE!!
                                                     label = x.ToEnum<MpShortcutRoutingProfileType>().EnumToUiString()
@@ -1053,8 +1063,8 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.ChangeDbPassword.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefChangePasswordLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.PrefChangePasswordButtonText,
                                                     value = MpRuntimePrefParamType.ChangeDbPassword.ToString()
@@ -1065,8 +1075,8 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.ClearDbPassword.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefClearPasswordLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.PrefClearPasswordButtonLabel,
                                                     value = MpRuntimePrefParamType.ClearDbPassword.ToString()
@@ -1077,7 +1087,7 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.ForgetDbPassword.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefForgetPasswordLabel,
-                                            value = new MpPluginParameterValueFormat() {
+                                            value = new MpParameterValueFormat() {
                                                 label = UiStrings.PrefForgetPasswordButtonLabel
                                             }
                                         },
@@ -1093,11 +1103,23 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.ClearRecentSearches.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefClearSearchesLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.PrefClearSearchesButtonText,
                                                     value = MpRuntimePrefParamType.ClearRecentSearches.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ShowLogsFolder.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = UiStrings.PrefShowLogsFolderLabel,
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = UiStrings.PrefShowLogsFolderBtnText,
+                                                    value = MpRuntimePrefParamType.ShowLogsFolder.ToString()
                                                 }
                                             }
                                         },
@@ -1106,8 +1128,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefRestorNtfLabel,
                                             description = UiStrings.PrefRestoreNtfHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.CommonResetLabel,
                                                     value = MpRuntimePrefParamType.ResetNtf.ToString()
@@ -1119,8 +1141,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefResetShortcutsLabel,
                                             description = UiStrings.PrefResetShortcutsHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.CommonResetLabel,
                                                     value = MpRuntimePrefParamType.ResetShortcuts.ToString()
@@ -1132,8 +1154,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefResetPluginCacheLabel,
                                             description = UiStrings.PrefResetPluginCacheHint,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.CommonResetLabel,
                                                     value = MpRuntimePrefParamType.ResetPluginCache.ToString()
@@ -1144,8 +1166,8 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.DeleteAllContent.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefDeleteAllLabel,
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     label = UiStrings.PrefDeleteAllButtonText,
                                                     value = MpRuntimePrefParamType.DeleteAllContent.ToString()
@@ -1173,7 +1195,7 @@ namespace MonkeyPaste.Avalonia {
                             new MpParameterValue() {
                                 ParamId = x.paramId,
                                 Value =
-                                x.values.FirstOrDefault(x => x.isDefault) is MpPluginParameterValueFormat ppvf ?
+                                x.values.FirstOrDefault(x => x.isDefault) is MpParameterValueFormat ppvf ?
                                     ppvf.value : string.Empty
                             }, fvm)));
 
@@ -1414,6 +1436,9 @@ namespace MonkeyPaste.Avalonia {
         #region Pref Handling
         private void MpPrefViewModel_Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled):
+                    SetIsLoggingEnabled(MpAvPrefViewModel.Instance.IsLoggingEnabled);
+                    break;
                 case nameof(MpAvPrefViewModel.Instance.LoadOnLogin):
                     SetLoadOnLogin(MpAvPrefViewModel.Instance.LoadOnLogin);
                     break;
@@ -1483,6 +1508,15 @@ namespace MonkeyPaste.Avalonia {
             MpAvAppRestarter.ShutdownWithRestartTask("System Preference Change");
         }
 
+        private void SetIsLoggingEnabled(bool isLoggingEnabled) {
+            if (isLoggingEnabled) {
+                // create dummy file so if logging is enabled its known immediatly on startup
+                using (File.Create(Mp.Services.PlatformInfo.LoggingEnabledCheckPath)) { }
+            } else {
+                MpFileIo.DeleteFile(Mp.Services.PlatformInfo.LoggingEnabledCheckPath);
+            }
+
+        }
         private void SetLanguage(string cultureCode) {
             MpAvCurrentCultureViewModel.Instance.SetCultureCommand.Execute(cultureCode);
         }
@@ -1936,6 +1970,10 @@ namespace MonkeyPaste.Avalonia {
                         }
                     case MpRuntimePrefParamType.DeleteAllContent: {
                             MpAvClipTrayViewModel.Instance.DeleteAllContentCommand.Execute(null);
+                            break;
+                        }
+                    case MpRuntimePrefParamType.ShowLogsFolder: {
+                            MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(Mp.Services.PlatformInfo.LogDir.ToFileSystemUriFromPath());
                             break;
                         }
 

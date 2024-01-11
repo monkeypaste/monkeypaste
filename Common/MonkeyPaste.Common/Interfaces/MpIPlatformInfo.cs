@@ -15,6 +15,7 @@ namespace MonkeyPaste.Common {
         string StorageDir { get; }
         string LogDir { get; }
         string LogPath { get; }
+        string LoggingEnabledCheckPath { get; }
         bool IsDesktop { get; }
         bool IsMobile { get; }
         bool IsBrowser { get; }
