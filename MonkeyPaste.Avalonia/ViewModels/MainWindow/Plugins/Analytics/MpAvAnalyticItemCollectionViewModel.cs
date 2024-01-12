@@ -34,17 +34,16 @@ namespace MonkeyPaste.Avalonia {
 
         async Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl) {
             bool success = await MpPluginLoader.InstallPluginAsync(pluginGuid, packageUrl);
-            if (!success) {
-                return false;
+            if (success) {
+                IsBusy = true;
+
+                var aivm = await CreateAnalyticItemViewModelAsync(pluginGuid);
+                Items.Add(aivm);
+
+                IsBusy = false;
             }
-            IsBusy = true;
 
-            var aivm = await CreateAnalyticItemViewModelAsync(pluginGuid);
-            Items.Add(aivm);
-
-            IsBusy = false;
-
-            return true;
+            return success;
         }
         async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
             if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } aivm) {

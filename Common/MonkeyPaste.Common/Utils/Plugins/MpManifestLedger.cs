@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MonkeyPaste.Common {
     public class MpManifestLedger {
-        public List<MpManifest> manifests { get; set; } = new List<MpManifest>();
+        public List<MpManifestFormat> manifests { get; set; } = new List<MpManifestFormat>();
     }
 
 

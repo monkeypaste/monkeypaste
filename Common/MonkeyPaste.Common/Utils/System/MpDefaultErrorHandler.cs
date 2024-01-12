@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste.Common {

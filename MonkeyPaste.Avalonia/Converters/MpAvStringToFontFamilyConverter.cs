@@ -2,6 +2,7 @@
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Globalization;
 using System.Linq;

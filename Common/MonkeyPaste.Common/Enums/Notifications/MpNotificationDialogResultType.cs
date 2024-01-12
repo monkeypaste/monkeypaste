@@ -10,6 +10,7 @@
         Retry,
         Fix,
         Shutdown,
+        Delete,
         DoNotShow,
         Loading,
         Text,

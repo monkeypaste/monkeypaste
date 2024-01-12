@@ -4,6 +4,7 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -251,10 +252,10 @@ namespace MonkeyPaste.Avalonia {
                 null :
                 SelectedRemoteFormat.packageUrl;
 
-        private MpManifest _pluginFormat;
-        public MpManifest PluginFormat {
+        private MpManifestFormat _pluginFormat;
+        public MpManifestFormat PluginFormat {
             get {
-                MpManifest result = null;
+                MpManifestFormat result = null;
                 if (Parent == null) {
                     result = AllFormats.FirstOrDefault();
                 } else {
@@ -286,7 +287,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        IEnumerable<MpManifest> AllFormats {
+        IEnumerable<MpManifestFormat> AllFormats {
             get {
                 if (Parent == null) {
                     yield break;
@@ -298,21 +299,21 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        IList<MpManifest> RemoteFormats =>
+        IList<MpManifestFormat> RemoteFormats =>
             AllFormats
-            .Where(x => x is not MpPlugin)
+            .Where(x => x is not MpPluginFormat)
             .ToList();
-        MpPlugin InstalledFormat =>
+        MpPluginFormat InstalledFormat =>
             AllFormats
-            .OfType<MpPlugin>()
+            .OfType<MpPluginFormat>()
             .FirstOrDefault();
 
-        MpManifest[] SortedRemoteFormats =>
+        MpManifestFormat[] SortedRemoteFormats =>
             RemoteFormats
             .OrderByDescending(x => x.version.ToVersion())
             .ToArray();
 
-        MpManifest SelectedRemoteFormat {
+        MpManifestFormat SelectedRemoteFormat {
             get {
                 if (SelectedRemoteFormatIdx >= RemoteFormats.Count) {
                     return null;
@@ -639,7 +640,22 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = true;
                 bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl);
-                LoadPluginStatsAsync().FireAndForgetSafeAsync();
+
+                // TODO success should only return true if plugin installs fine but it gets gummed up w/
+                // all the nested exception handling...this shouldn't be done here
+                success = MpPluginLoader.PluginGuidLookup.ContainsKey(PluginGuid);
+
+                MpConsole.WriteLine($"Install of {PluginTitle} plugin: {success.ToTestResultLabel()}");
+                if (success) {
+                    LoadPluginStatsAsync().FireAndForgetSafeAsync();
+                } else {
+                    // if install failed mark for delete to prevent startup failures
+                    // this won't affect saved info
+
+                    // TODO this should call MpPluginLoader.Delete
+                    MpPluginLoader.UninstalledPluginGuids.Add(PluginGuid);
+                    MpStartupCleaner.AddPathToDelete(Path.Combine(MpPluginLoader.PluginRootDir, PluginGuid));
+                }
 
                 IsBusy = false;
                 Parent.PerformFilterCommand.Execute("Refresh");

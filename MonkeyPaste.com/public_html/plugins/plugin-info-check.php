@@ -9,7 +9,7 @@ function exit_w_default_resp()
         'publish_dt' => '',
     ]));
 }
-function get_plugin_by_guid(string $plugin_guid): mixed
+function get_plugin_by_guid(string $plugin_guid)
 {
     $sql = 'SELECT *
                 FROM plugin

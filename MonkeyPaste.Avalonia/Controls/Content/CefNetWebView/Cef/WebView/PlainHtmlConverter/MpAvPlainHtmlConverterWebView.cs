@@ -1,5 +1,5 @@
 ﻿using Avalonia.LogicalTree;
-using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
 

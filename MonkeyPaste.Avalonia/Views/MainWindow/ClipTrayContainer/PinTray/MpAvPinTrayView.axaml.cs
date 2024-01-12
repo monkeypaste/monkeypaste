@@ -6,7 +6,7 @@ using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

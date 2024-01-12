@@ -26,8 +26,8 @@
     <CultureExt>en-US</CultureExt>
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
-    <AvaloniaVersion>11.1.999-cibuild0043318-beta</AvaloniaVersion>
-    <!--<AvaloniaVersion>11.0.6</AvaloniaVersion>-->
+    <!--<AvaloniaVersion>11.1.999-cibuild0043318-beta</AvaloniaVersion>-->
+    <AvaloniaVersion>11.0.6</AvaloniaVersion>
   </PropertyGroup>
 
   <!-- SYSTEM PROPERTIES -->

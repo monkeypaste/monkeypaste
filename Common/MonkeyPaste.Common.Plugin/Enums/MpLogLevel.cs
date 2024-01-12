@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste.Common.Plugin {
     public enum MpLogLevel {
         None = 0,
         Fatal,

@@ -1,7 +1,4 @@
 ﻿using Compunet.YoloV8;
-using MonkeyPaste.Common;
-
-//using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using SixLabors.ImageSharp;
 
@@ -45,7 +42,7 @@ namespace ImageAnnotator {
 
                         return new MpAnalyzerPluginResponseFormat() {
                             dataObjectLookup = new Dictionary<string, object> {
-                                { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, rootNode.SerializeObjectOmitNulls() }
+                                { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, rootNode.SerializeObject(true) }
                             }
                         };
                     }

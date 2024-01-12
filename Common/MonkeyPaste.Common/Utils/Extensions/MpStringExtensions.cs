@@ -41,30 +41,7 @@ namespace MonkeyPaste.Common {
             string prefix = @"data:image/png;base64,";
             return prefix + base64Str;
         }
-        public static string ToDecodedString(this byte[] bytes, Encoding enc = null, bool stripNulls = false) {
-            if (bytes == null || bytes.Length == 0) {
-                return string.Empty;
-            }
-            // TODO should use local encoding here
-            string out_str;
-            if (enc == null) {
-                bytes.DetectTextEncoding(out string decodedStr);
-                out_str = decodedStr;
-            } else {
-                out_str = enc.GetString(bytes);
-            }
-            if (stripNulls) {
-                // some cases the string has '\0' chars, which will invalidate URI as a prob
-                // i think its when the byte count is longer than the actual string or 
-                // some kind of padding isn't right so '\0' is added to the byte[]
-                // code from https://stackoverflow.com/a/35182252/105028
 
-                // s == "heresastring\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0(etc)"    
-                out_str = out_str.Split(new[] { '\0' }, 2)[0];
-                // s == "heresastring"
-            }
-            return out_str;
-        }
 
         public static byte[] ToBytesFromString(this string str, Encoding enc = null) {
             // NOTE str intended to be text not base64
@@ -82,15 +59,6 @@ namespace MonkeyPaste.Common {
             return bytes;
         }
 
-        public static string ToStringFromBase64(this string str, Encoding enc = null) {
-            var bytes = Convert.FromBase64String(str);
-            var text = bytes.ToDecodedString(enc);
-            return text;
-        }
-
-        public static string ToBase64String(this string str, Encoding enc = null) {
-            return str.ToBytesFromString(enc).ToBase64String();
-        }
 
         #endregion
 

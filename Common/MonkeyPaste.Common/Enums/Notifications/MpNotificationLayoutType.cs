@@ -6,6 +6,7 @@
         Warning, //confirm
         UserAction, //retry/ignore/quit
         ErrorWithOption, //retry/ignore/quit
-        ErrorAndShutdown //confirm
+        ErrorAndShutdown, //confirm
+        ErrorWithFixAndDelete
     }
 }

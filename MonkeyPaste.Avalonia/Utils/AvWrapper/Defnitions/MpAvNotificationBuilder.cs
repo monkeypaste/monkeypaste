@@ -208,11 +208,12 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpNotificationLayoutType.Warning:
                 case MpNotificationLayoutType.Message:
-                    nvmb = new MpAvMessageNotificationViewModel();
-                    break;
+                //nvmb = new MpAvMessageNotificationViewModel();
+                //break;
                 case MpNotificationLayoutType.UserAction:
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.ErrorAndShutdown:
+                case MpNotificationLayoutType.ErrorWithFixAndDelete:
                     nvmb = new MpAvUserActionNotificationViewModel();
                     break;
                 default:

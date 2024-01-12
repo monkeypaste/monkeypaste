@@ -1,16 +1,5 @@
-﻿using Avalonia.Input;
-using Avalonia.Input.Platform;
-using Avalonia.Platform.Storage;
-
-using MonoMac.AppKit;
-using MonoMac.CoreText;
-using MonoMac.Foundation;
-
-using System;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Threading.Tasks;
 using IDataObject = Avalonia.Input.IDataObject;
 

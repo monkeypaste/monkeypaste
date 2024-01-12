@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {

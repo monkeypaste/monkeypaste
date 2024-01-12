@@ -1,12 +1,5 @@
-﻿
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Platform;
-using Avalonia.Rendering;
-using Avalonia.VisualTree;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;

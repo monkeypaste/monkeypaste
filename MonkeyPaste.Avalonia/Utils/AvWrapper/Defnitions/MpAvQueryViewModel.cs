@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

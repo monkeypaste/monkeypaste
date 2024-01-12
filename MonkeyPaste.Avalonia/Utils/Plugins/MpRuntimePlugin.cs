@@ -9,7 +9,7 @@ using System.Runtime.Loader;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpRuntimePlugin : MpPlugin {
+    public class MpRuntimePlugin : MpPluginFormat {
         [JsonIgnore]
         public MpHeadlessComponent headless { get; set; } = null;
         [JsonIgnore]
@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task<T> IssueRequestAsync<T>(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false, bool clone_resp = false) where T : new() {
+        public async Task<T> IssueRequestAsync<T>(string methodName, string typeName, MpMessageRequestFormatBase req, bool sync_only = false, bool clone_resp = false) where T : new() {
             object resultObj = await IssueRequestAsync(methodName, typeName, req, sync_only);
             if (resultObj is not T result) {
                 return default;
@@ -74,12 +74,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task<object> IssueRequestAsync(string methodName, string typeName, MpPluginRequestFormatBase req, bool sync_only = false) {
+        public async Task<object> IssueRequestAsync(string methodName, string typeName, MpMessageRequestFormatBase req, bool sync_only = false) {
             if (req != null && req.culture == null) {
                 // always proivde current culture in every request
                 req.culture = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
             }
-            Type onType = typeof(MpPlugin).Assembly.GetType(typeName);
+            Type onType = typeof(MpPluginFormat).Assembly.GetType(typeName);
             if (onType == null) {
                 MpDebug.Break($"Plugin type '{typeName}' not found");
                 return null;

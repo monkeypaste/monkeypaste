@@ -1295,9 +1295,9 @@ namespace MonkeyPaste.Avalonia {
             }
             var req = new MpQuillUpdateContentRequestMessage();
             if (jsonObj is MpQuillDelta) {
-                req.deltaFragmentStr = jsonObj.SerializeObjectToBase64OmitNulls();
+                req.deltaFragmentStr = jsonObj.SerializeObjectToBase64(true);
             } else if (jsonObj is MpAnnotationNodeFormat) {
-                req.annotationFragmentStr = jsonObj.SerializeObjectToBase64OmitNulls();
+                req.annotationFragmentStr = jsonObj.SerializeObjectToBase64(true);
             } else {
                 // since there is nothing known to apply consider it successful
                 return true;

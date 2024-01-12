@@ -1,5 +1,6 @@
 ﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

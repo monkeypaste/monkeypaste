@@ -755,7 +755,7 @@ namespace MonkeyPaste.Avalonia {
                      // select from tile transaction context menu
 
                      preset_to_select = argParts[0] as MpAvAnalyticItemPresetViewModel;
-                     if (argParts[1] is MpPluginParameterRequestFormat prf) {
+                     if (argParts[1] is MpParameterMessageRequestFormat prf) {
                          // apply provided parameter configuration to preset
                          foreach (var ppri in prf.items) {
                              if (preset_to_select.Items.FirstOrDefault(x => x.ParamId.ToString() == ppri.paramId.ToString()) is MpAvParameterViewModelBase pvm) {

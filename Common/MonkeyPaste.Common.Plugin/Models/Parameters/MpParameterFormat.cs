@@ -75,7 +75,7 @@ namespace MonkeyPaste.Common.Plugin {
         /// </summary>
         public bool isSharedValue { get; set; }
         /// <summary>
-        /// (Default is false) Allows <see cref="values"/> to be determined at runtime. When true your plugin must implement <see cref="MpISupportDeferredValue"/> or <see cref="MpISupportDeferredValueAsync"/> where you will receive this parameters <see cref="paramId"/> in the <see cref="MpPluginDeferredParameterValueRequestFormat"/> request. 
+        /// (Default is false) Allows <see cref="values"/> to be determined at runtime. When true your plugin must implement <see cref="MpISupportDeferredValue"/> or <see cref="MpISupportDeferredValueAsync"/> where you will receive this parameters <see cref="paramId"/> in the <see cref="MpDeferredParameterValueRequestFormat"/> request. 
         /// </summary>
         public bool isValueDeferred { get; set; }
         /// <summary>

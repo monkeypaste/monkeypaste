@@ -18,7 +18,7 @@ namespace CoreOleHandler {
             }
         }
 
-        public static void SetCulture(MpPluginRequestFormatBase req, List<MpUserNotification> ntfl = default) {
+        public static void SetCulture(MpMessageRequestFormatBase req, List<MpUserNotification> ntfl = default) {
             if (req == null) {
                 return;
             }

@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
         public DateTime RequestTime { get; set; }
         public DateTime? ResponseTime { get; set; }
 
-        public MpPluginParameterRequestFormat Request { get; set; }
+        public MpParameterMessageRequestFormat Request { get; set; }
         public MpAnalyzerPluginResponseFormat Response { get; set; }
 
         public string TransactionErrorMessage { get; set; }

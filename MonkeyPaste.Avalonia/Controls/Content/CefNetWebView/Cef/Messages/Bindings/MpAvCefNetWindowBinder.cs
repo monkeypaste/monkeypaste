@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using CefNet;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
 

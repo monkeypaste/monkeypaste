@@ -21,8 +21,8 @@ namespace MonkeyPaste.Avalonia {
             foreach (MpParameterFormat paramFormat in pluginHost.ComponentFormat.parameters) {
                 if (paramFormat.isValueDeferred) {
                     // make deferred paramValue request
-                    var req = new MpPluginDeferredParameterValueRequestFormat() { paramId = paramFormat.paramId };
-                    MpPluginDeferredParameterValueResponseFormat resp = await RequestDefferredValuesAsync(pluginHost, req);
+                    var req = new MpDeferredParameterValueRequestFormat() { paramId = paramFormat.paramId };
+                    MpDeferredParameterValueResponseFormat resp = await RequestDefferredValuesAsync(pluginHost, req);
 
                     if (resp == null) {
                         // values will just be empty, up to plugin configuration to handle that
@@ -86,10 +86,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private static async Task<MpPluginDeferredParameterValueResponseFormat> RequestDefferredValuesAsync(MpIParameterHostViewModel pluginHost, MpPluginDeferredParameterValueRequestFormat req) {
+        private static async Task<MpDeferredParameterValueResponseFormat> RequestDefferredValuesAsync(MpIParameterHostViewModel pluginHost, MpDeferredParameterValueRequestFormat req) {
             string method_name = nameof(MpISupportDeferredValue.RequestParameterValue);
             string on_type = typeof(MpISupportDeferredValue).FullName;
-            var resp = await pluginHost.PluginFormat.IssueRequestAsync<MpPluginDeferredParameterValueResponseFormat>(method_name, on_type, req);
+            var resp = await pluginHost.PluginFormat.IssueRequestAsync<MpDeferredParameterValueResponseFormat>(method_name, on_type, req);
             return resp;
         }
     }

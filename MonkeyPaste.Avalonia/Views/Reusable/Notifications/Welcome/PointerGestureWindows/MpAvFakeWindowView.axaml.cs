@@ -1,5 +1,5 @@
 using Avalonia.Input;
-using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
 

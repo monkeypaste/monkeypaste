@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using SchedulerTask = Microsoft.Win32.TaskScheduler.Task;
 

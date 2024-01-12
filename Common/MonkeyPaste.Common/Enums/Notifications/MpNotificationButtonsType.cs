@@ -18,5 +18,6 @@
         ResetAllResetSharedResetUnsharedCancel,
         RestartIgnoreCancel,
         RestartNowLater,
+        DeleteIgnoreFix
     }
 }

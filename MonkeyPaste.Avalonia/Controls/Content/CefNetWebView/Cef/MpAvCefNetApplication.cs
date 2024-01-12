@@ -3,6 +3,7 @@
 using Avalonia.Threading;
 using CefNet;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -32,17 +33,22 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        private static string _logFilePath;
+        private static string _logFilePath = string.Empty;
         public static string LogFilePath {
             get {
-                if (_logFilePath == null) {
+                if (string.IsNullOrEmpty(_logFilePath)) {
                     MpIPlatformInfo pi =
                         Mp.Services == null ||
                         Mp.Services.PlatformInfo == null ?
                             new MpAvPlatformInfo_desktop() :
                             Mp.Services.PlatformInfo;
-                    MpConsole.Init(pi);
-                    _logFilePath = Path.Combine(pi.LogDir, "cef.log");
+                    if (!MpConsole.HasInitialized) {
+                        MpConsole.Init(pi.IsTraceEnabled ? pi.LogPath : null);
+                    }
+                    if (pi.IsTraceEnabled) {
+                        _logFilePath = Path.Combine(pi.LogDir, "cef.log");
+                    }
+
                 }
                 return _logFilePath;
             }
@@ -176,10 +182,12 @@ namespace MonkeyPaste.Avalonia {
                 //settings.CommandLineArgsDisabled = true;
                 settings.WindowlessRenderingEnabled = true;
             }
-            settings.LogFile = LogFilePath;
+            if (!string.IsNullOrEmpty(LogFilePath)) {
+                settings.LogFile = LogFilePath;
+                settings.LogSeverity = CefLogSeverity.Error;
+            }
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Error;
 
             App.FrameworkShutdown += App_FrameworkShutdown;
 

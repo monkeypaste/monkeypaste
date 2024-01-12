@@ -36,7 +36,7 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
             invariant_resource_path = invariant_resource_path.Replace("\"", string.Empty);
 
             string templated_manifest_json = MpFileIo.ReadTextFromFile(templated_manifest_path);
-            MpPlugin templated_manifest = MpJsonExtensions.DeserializeObject<MpPlugin>(templated_manifest_json);
+            MpPluginFormat templated_manifest = MpJsonExtensions.DeserializeObject<MpPluginFormat>(templated_manifest_json);
             var lang_codes = string.IsNullOrWhiteSpace(target_lang_code) ?
                 MpLocalizationHelpers.GetAvailableCultures(
                     Path.GetDirectoryName(invariant_resource_path),
@@ -51,8 +51,8 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
             Environment.Exit(0);
         }
 
-        private static string LocalizeManifest(MpPlugin templated_manifest, string lang_code) {
-            MpPlugin localized_manifest = new MpPlugin();
+        private static string LocalizeManifest(MpPluginFormat templated_manifest, string lang_code) {
+            MpPluginFormat localized_manifest = new MpPluginFormat();
 
             var localized_name_parts = new string[] {
                 Path.GetFileNameWithoutExtension(invariant_resource_path),
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
 
             string resx_path = localized_resource_path.IsFile() ? localized_resource_path : invariant_resource_path;
             using ResXResourceReader resx_reader = new ResXResourceReader(resx_path);
-            foreach (var pi in typeof(MpPlugin).GetProperties()) {
+            foreach (var pi in typeof(MpPluginFormat).GetProperties()) {
                 object localized_value = null;
                 if (pi.GetValue(templated_manifest) is not string val ||
                     !val.StartsWith(RESOURCE_KEY_OPEN_TOKEN) ||

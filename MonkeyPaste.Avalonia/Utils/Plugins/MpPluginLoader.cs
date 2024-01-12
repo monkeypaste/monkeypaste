@@ -93,6 +93,7 @@ namespace MonkeyPaste.Avalonia {
             await ValidateLoadedPluginsAsync();
             IsLoaded = true;
         }
+
         public static async Task<bool> ReloadPluginAsync(string plugin_guid) {
             var kvp = PluginManifestLookup.FirstOrDefault(x => x.Value.guid == plugin_guid);
             if (kvp.IsDefault()) {
@@ -101,39 +102,6 @@ namespace MonkeyPaste.Avalonia {
             string manifestPath = kvp.Key;
             bool success = await LoadPluginAsync(manifestPath);
             return success;
-        }
-        public static bool ValidatePluginDependencies(MpRuntimePlugin plugin) {
-            if (plugin == null) {
-                return false;
-            }
-            if (plugin.dependencies == null) {
-                return true;
-            }
-            var this_os_dep = new MpPluginDependency() {
-                type = MpPluginDependencyType.os,
-                name = Mp.Services.PlatformInfo.OsType.ToString(),
-                version = Mp.Services.PlatformInfo.OsVersion
-            };
-
-            foreach (var dep in plugin.dependencies) {
-                switch (dep.type) {
-                    case MpPluginDependencyType.os:
-                        MpUserDeviceType dep_os = dep.name.ToEnum<MpUserDeviceType>();
-                        MpUserDeviceType actual_os = this_os_dep.name.ToEnum<MpUserDeviceType>();
-                        if (actual_os != dep_os) {
-                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. OS not supported Requires {dep}. Actual {this_os_dep}");
-                            return false;
-                        }
-                        // TODO compare version here
-                        // see https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges
-                        if (!string.IsNullOrWhiteSpace(dep.version) && dep.version.ToVersion() < Mp.Services.PlatformInfo.OsVersion.ToVersion()) {
-                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. Version not supported Requires {dep}. Actual {this_os_dep}");
-                            return false;
-                        }
-                        break;
-                }
-            }
-            return true;
         }
         public static string CreatePluginBackup(string guid, out string original_dir) {
             original_dir = null;
@@ -203,18 +171,15 @@ namespace MonkeyPaste.Avalonia {
             if (!PluginGuidLookup.TryGetValue(plugin_guid, out var plugin)) {
                 return true;
             }
-            bool success = true;
-
-            // clear ref to plugin
-            success = await DetachPluginByGuidAsync(plugin_guid);
+            bool success = await DetachPluginByGuidAsync(plugin_guid);
 
             AddPluginToDeleteList(plugin);
             plugin = null;
 
-            if (success) {
-                bool test = MpStartupCleaner.UnloadAll(false);
-                MpConsole.WriteLine($"Plugin '{plugin_guid}' delete was {test.ToTestResultLabel()}");
-            }
+            //if (success) {
+            //    bool test = MpStartupCleaner.UnloadAll(false);
+            //    MpConsole.WriteLine($"Plugin '{plugin_guid}' delete was {test.ToTestResultLabel()}");
+            //}
             if (success && needs_restart) {
                 // NOTE this won't return if they choose restart
                 await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
@@ -251,6 +216,25 @@ namespace MonkeyPaste.Avalonia {
             };
         }
 
+        public static async Task<(int, DateTime?)> GetOrUpdatePluginStatsAsync(string guid, bool is_install) {
+            var req_args = new Dictionary<string, string>() {
+                {"plugin_guid", guid },
+                {"is_install", is_install ?"1":"0" }
+            };
+            var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(PLUGIN_INFO_URL, req_args);
+            bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
+            int count = 0;
+            DateTime? pub_dt = null;
+            if (success) {
+                if (int.TryParse(resp_args["install_count"], out int install_count)) {
+                    count = install_count;
+                }
+                if (DateTime.TryParse(resp_args["publish_dt"], out DateTime resp_pub_dt)) {
+                    pub_dt = resp_pub_dt;
+                }
+            }
+            return (count, pub_dt);
+        }
         #endregion
 
         #region Private Methods
@@ -260,6 +244,39 @@ namespace MonkeyPaste.Avalonia {
                     UpdatedPluginGuids.Clear();
                     break;
             }
+        }
+        private static bool ValidatePluginDependencies(MpRuntimePlugin plugin) {
+            if (plugin == null) {
+                return false;
+            }
+            if (plugin.dependencies == null) {
+                return true;
+            }
+            var this_os_dep = new MpPluginDependency() {
+                type = MpPluginDependencyType.os,
+                name = Mp.Services.PlatformInfo.OsType.ToString(),
+                version = Mp.Services.PlatformInfo.OsVersion
+            };
+
+            foreach (var dep in plugin.dependencies) {
+                switch (dep.type) {
+                    case MpPluginDependencyType.os:
+                        MpUserDeviceType dep_os = dep.name.ToEnum<MpUserDeviceType>();
+                        MpUserDeviceType actual_os = this_os_dep.name.ToEnum<MpUserDeviceType>();
+                        if (actual_os != dep_os) {
+                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. OS not supported Requires {dep}. Actual {this_os_dep}");
+                            return false;
+                        }
+                        // TODO compare version here
+                        // see https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges
+                        if (!string.IsNullOrWhiteSpace(dep.version) && dep.version.ToVersion() < Mp.Services.PlatformInfo.OsVersion.ToVersion()) {
+                            MpConsole.WriteLine($"Cannot load plugin '{plugin.title}'. Version not supported Requires {dep}. Actual {this_os_dep}");
+                            return false;
+                        }
+                        break;
+                }
+            }
+            return true;
         }
         private static async Task LoadAllPluginsAsync() {
             Plugins.Clear();
@@ -391,7 +408,8 @@ namespace MonkeyPaste.Avalonia {
                 //while (needsFixing) {
                 //    await Task.Delay(100);
                 //}
-                return await LoadPluginAsync(manifestPath);
+                bool fix_result = await LoadPluginAsync(manifestPath);
+                return fix_result;
             }
 
             // valid after here
@@ -571,7 +589,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
         private static void FinishPluginUpdates() {
             MpDebug.Assert(!IsLoaded, $"Plugin loader error! Plugin updates should only be called BEFORE plugins are loaded");
             UpdatedPluginGuids.Clear();
@@ -603,27 +620,6 @@ namespace MonkeyPaste.Avalonia {
             // increment install stats for all updates 
             Task.WhenAll(UpdatedPluginGuids.Select(x => GetOrUpdatePluginStatsAsync(x, true))).FireAndForgetSafeAsync();
         }
-
-        public static async Task<(int, DateTime?)> GetOrUpdatePluginStatsAsync(string guid, bool is_install) {
-            var req_args = new Dictionary<string, string>() {
-                {"plugin_guid", guid },
-                {"is_install", is_install ?"1":"0" }
-            };
-            var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(PLUGIN_INFO_URL, req_args);
-            bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
-            int count = 0;
-            DateTime? pub_dt = null;
-            if (success) {
-                if (int.TryParse(resp_args["install_count"], out int install_count)) {
-                    count = install_count;
-                }
-                if (DateTime.TryParse(resp_args["publish_dt"], out DateTime resp_pub_dt)) {
-                    pub_dt = resp_pub_dt;
-                }
-            }
-            return (count, pub_dt);
-        }
-
         private static async Task<string> DownloadAndExtractPluginToDirAsync(string plugin_guid, string packageUrl, string targetBaseDir) {
             // returns packagr CONTAINING dir ie the guid wrapper dir
             var package_bytes = await Task.Run(async () => {
@@ -680,7 +676,6 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
         }
-
         private static void MoveExtraRuntimeModules(string plugin_outer_dir) {
             // some assemblies end up in a sub folder /runtimes and won't load right, this moves those where 
             // they need to be so plugins (mine at least) can just be 1 package for all platforms

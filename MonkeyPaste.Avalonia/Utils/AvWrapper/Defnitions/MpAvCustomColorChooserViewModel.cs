@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 using System.Windows.Input;
 

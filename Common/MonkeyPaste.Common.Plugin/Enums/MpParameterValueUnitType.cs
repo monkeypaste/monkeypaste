@@ -52,7 +52,7 @@
         /// </summary>
         RawDataContentQuery,
         /// <summary>
-        /// Used with <see cref="MpParameterControlType.MultiSelectList"/> and <see cref="MpParameterControlType.EditableList"/> to receive a list of the selected <see cref="MpParameterValueFormat.value"/>'s. <br/><br/>To access the values as a list of strings use the extension method <see cref="MpPluginExtensions.GetRequestParamStringListValue(MpPluginParameterRequestFormat, string)"/> on the <see cref="MpPluginRequestFormatBase"/> parameter.
+        /// Used with <see cref="MpParameterControlType.MultiSelectList"/> and <see cref="MpParameterControlType.EditableList"/> to receive a list of the selected <see cref="MpParameterValueFormat.value"/>'s. <br/><br/>To access the values as a list of strings use the extension method <see cref="MpPluginExtensions.GetRequestParamStringListValue(MpParameterMessageRequestFormat, string)"/> on the <see cref="MpMessageRequestFormatBase"/> parameter.
         /// </summary>
         DelimitedPlainText,
         /// <summary>

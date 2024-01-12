@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using System;

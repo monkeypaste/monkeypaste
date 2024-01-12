@@ -2,6 +2,8 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Avalonia.Media.Imaging;
+using MonkeyPaste.Common.Plugin;
+
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpPluginDeferredParameterValueResponseFormat : MpPluginResponseFormatBase {
+    public class MpDeferredParameterValueResponseFormat : MpMessageResponseFormatBase {
         public List<MpParameterValueFormat> Values { get; set; }
     }
 }

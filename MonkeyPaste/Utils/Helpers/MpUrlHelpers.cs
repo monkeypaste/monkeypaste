@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Nager.PublicSuffix;
 using System;
 using System.Linq;

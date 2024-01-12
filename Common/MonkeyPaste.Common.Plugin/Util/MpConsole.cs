@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Common {
+namespace MonkeyPaste.Common.Plugin {
     public static class MpConsole {
         #region Private Variables
         #endregion
@@ -20,16 +20,15 @@ namespace MonkeyPaste.Common {
             MpLogLevel.None;
 #endif
 
-        static bool HasInitialized { get; set; } = false;
+        public static bool HasInitialized { get; set; } = false;
 
 
-        static bool LogToFile { get; set; }// =>
-                                           //#if DEBUG
-                                           //            true;
-                                           //#else
-                                           //            true;
-                                           //#endif
-        static bool LogToConsole { get; set; } = true;
+        static bool IsLogEnabled { get; set; }// =>
+                                              //#if DEBUG
+                                              //            true;
+                                              //#else
+                                              //            true;
+                                              //#endif
 
         static string LogFilePath { get; set; }
 
@@ -37,7 +36,7 @@ namespace MonkeyPaste.Common {
 
         #region Public Methods
 
-        public static void Init(MpIPlatformInfo pi) {
+        public static void Init(string logPath) {
             if (HasInitialized) {
                 return;
             }
@@ -45,23 +44,21 @@ namespace MonkeyPaste.Common {
             // NOTE on desktop cefnet MUST be initialized before basically anything (any services)
             // or bizarre crashes occur. So cefnet creates a temp platform info to setup its logging
             // and then initializes console w/ temp info so in main startup init has already happened 
-            pi = pi == null ? MpCommonTools.Services.PlatformInfo : pi;
 
-            LogFilePath = pi.LogPath;
-            LogToFile = pi.IsTraceEnabled;
-            LogToConsole = pi.IsTraceEnabled;
+            LogFilePath = logPath;
+            IsLogEnabled = logPath != null;
 
-            if (LogToConsole && pi.ConsoleTraceListener != null) {
-                //Trace.Listeners.Clear();
-                //Trace.Listeners.Add(pi.ConsoleTraceListener);
-            }
-            if (LogToFile) {
+            // if (LogToConsole && pi.ConsoleTraceListener != null) {
+            //Trace.Listeners.Clear();
+            //Trace.Listeners.Add(pi.ConsoleTraceListener);
+            //}
+            if (IsLogEnabled) {
                 try {
-                    if (LogFilePath.IsFile()) {
-                        MpFileIo.DeleteFile(LogFilePath);
+                    if (File.Exists(LogFilePath)) {
+                        File.Delete(LogFilePath);
                     }
-                    if (!pi.LogDir.IsDirectory()) {
-                        MpFileIo.CreateDirectory(pi.LogDir);
+                    if (!Directory.Exists(Path.GetDirectoryName(LogFilePath))) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(LogFilePath));
                     }
 
                     using (File.Create(LogFilePath)) { }
@@ -84,7 +81,7 @@ namespace MonkeyPaste.Common {
             if (!stampless) {
                 sb.Append($"{GetLogStamp(level)}");
             }
-            sb.Append(line.ToStringOrEmpty());
+            sb.Append(line == null ? string.Empty : line);
             WriteLineWrapper(sb.ToString(), false, pad_pre, pad_post);
         }
 

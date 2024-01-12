@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -89,7 +90,7 @@ namespace MonkeyPaste.Common {
             args = msg_suffix.DeserializeObject<Dictionary<string, string>>();
             if (!string.IsNullOrWhiteSpace(msg_suffix) && args.Count == 0) {
                 // shouldnon-input error, add it to empty key
-                MpDebug.Assert(!success, $"Should only have non-lookup result for error");
+                //MpDebug.Assert(!success, $"Should only have non-lookup result for error");
                 args = new() { { string.Empty, msg_suffix } };
             }
             return success;

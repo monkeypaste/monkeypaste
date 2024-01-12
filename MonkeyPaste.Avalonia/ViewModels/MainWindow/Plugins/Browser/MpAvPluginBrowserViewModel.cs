@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
                 return _tabs;
             }
         }
-        public ObservableCollection<MpManifest> AllManifests { get; set; } = [];
+        public ObservableCollection<MpManifestFormat> AllManifests { get; set; } = [];
         public IList<string> RecentPluginSearches { get; private set; }
 
         public ObservableCollection<MpAvPluginItemViewModel> Items { get; private set; } = new ObservableCollection<MpAvPluginItemViewModel>();
@@ -185,11 +185,11 @@ namespace MonkeyPaste.Avalonia {
             RecentPluginSearches = await MpAvPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpAvPrefViewModel.Instance.RecentPluginSearchTexts), st);
         }
 
-        private async Task<IEnumerable<MpManifest>> GetRemoteManifests() {
+        private async Task<IEnumerable<MpManifestFormat>> GetRemoteManifests() {
             string ledger_json = await MpFileIo.ReadTextFromUriAsync(LEDGER_URI);
             var ledger = MpJsonExtensions.DeserializeObject<MpManifestLedger>(ledger_json);
             if (ledger == null || ledger.manifests == null) {
-                return Array.Empty<MpManifest>();
+                return Array.Empty<MpManifestFormat>();
             }
             return ledger.manifests;
         }

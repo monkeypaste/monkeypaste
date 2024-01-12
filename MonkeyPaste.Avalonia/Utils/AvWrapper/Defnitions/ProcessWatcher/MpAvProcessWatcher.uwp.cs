@@ -12,13 +12,14 @@ using System.Text;
 using Avalonia.Platform;
 using System.Runtime.InteropServices;
 using static MonkeyPaste.Avalonia.NativeMethods;
+using MonkeyPaste.Common.Plugin;
+
 
 
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
 using static MonkeyPaste.Common.Wpf.WinApi;
-using WfScreen = System.Windows.Forms.Screen;
 
 #endif
 

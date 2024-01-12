@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using MonkeyPaste.Common;
-using System;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
@@ -14,9 +12,15 @@ namespace MonkeyPaste.Avalonia {
 
         Control ITemplate<object, Control>.Build(object param) {
             string key = "TextBodyTemplate";
-            if (param is MpAvUserActionNotificationViewModel uanvm &&
-                uanvm.HasParams) {
-                key = "ParameterCollectionTemplate";
+            if (param is MpAvUserActionNotificationViewModel uanvm) {
+                if (uanvm.HasParams) {
+                    key = "ParameterCollectionTemplate";
+                } else if (uanvm.ShowTextBox) {
+                    key = "TextBoxTemplate";
+                } else if (uanvm.ShowBusySpinner || uanvm.ShowProgressSpinner) {
+                    key = "BusyTemplate";
+                }
+
             }
             return AvailableTemplates[key].Build(param);
         }

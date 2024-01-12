@@ -2,6 +2,7 @@
 using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;

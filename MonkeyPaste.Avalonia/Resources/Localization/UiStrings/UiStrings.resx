@@ -880,7 +880,9 @@ But fret not! No data is lost after downgrading. Only new stuff will be evaluate
     <value>Content Capacity Reached!</value>
   </data>
   <data name="NtfCapHideHint" xml:space="preserve">
-    <value>* You can hide these warnings by clicking 'hide all' from the options menu above.</value>
+    <value>* You can hide these warnings by 
+clicking 'hide all' from the 
+options menu above.</value>
   </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
     <value>Max Trash storage is {0}.</value>
@@ -2583,5 +2585,8 @@ You can restart now and complete the update by re-installing, ignore this and up
   </data>
   <data name="PrefShowLogsFolderLabel" xml:space="preserve">
     <value>Open Logs Folder</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Browse Plugins</value>
   </data>
 </root>

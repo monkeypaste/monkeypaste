@@ -1,12 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-
-namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste.Common.Plugin {
     public class MpPortableDataFormat {
         public string Name { get; private set; }
 

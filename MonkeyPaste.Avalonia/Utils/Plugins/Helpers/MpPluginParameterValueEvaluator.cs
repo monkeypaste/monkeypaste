@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                 argParts[1].ToStringOrEmpty() is not string json_path_query) {
                 return null;
             }
-            MpPluginResponseFormatBase prf = ao.OutputData as MpPluginResponseFormatBase;
+            MpMessageResponseFormatBase prf = ao.OutputData as MpMessageResponseFormatBase;
             if (prf == null && ao is MpAvAnalyzeOutput ano) {
                 prf = ano.PluginResponse;
             }

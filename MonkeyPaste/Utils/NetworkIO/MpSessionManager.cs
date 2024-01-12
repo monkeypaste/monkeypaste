@@ -1,5 +1,6 @@
 ﻿//using Xamarin.Essentials;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

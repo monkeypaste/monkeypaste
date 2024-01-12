@@ -1,7 +1,7 @@
 ﻿using Avalonia.Collections;
-using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Globalization;
 using System.Linq;

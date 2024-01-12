@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

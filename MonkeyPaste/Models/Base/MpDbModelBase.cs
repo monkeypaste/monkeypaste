@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using SQLite;
 using System;

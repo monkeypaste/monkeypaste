@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {

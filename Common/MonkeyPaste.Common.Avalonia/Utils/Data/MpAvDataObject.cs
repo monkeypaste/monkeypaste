@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using MonkeyPaste.Common.Plugin;
+
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;

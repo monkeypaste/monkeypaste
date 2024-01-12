@@ -8,6 +8,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using MonkeyPaste.Common.Plugin;
+
 
 #if WINDOWS
 

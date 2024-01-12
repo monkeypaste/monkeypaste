@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

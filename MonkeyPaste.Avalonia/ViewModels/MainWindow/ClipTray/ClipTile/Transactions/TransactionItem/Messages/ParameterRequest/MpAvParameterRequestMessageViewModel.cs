@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Common;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpPluginParameterRequestFormat ParameterReqFormat { get; private set; }
+        public MpParameterMessageRequestFormat ParameterReqFormat { get; private set; }
 
         #endregion
 
@@ -87,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
             if (!string.IsNullOrEmpty(Json)) {
-                ParameterReqFormat = MpJsonExtensions.ParseParamRequest(Json);
+                ParameterReqFormat = ParseParamRequest(Json);
             }
 
             var tsl = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);
@@ -134,6 +135,25 @@ namespace MonkeyPaste.Avalonia {
         }
         private void PresetViewModel_OnParameterValuesChanged(object sender, MpAvParameterViewModelBase e) {
             OnPropertyChanged(nameof(CanRestore));
+        }
+
+        public MpParameterMessageRequestFormat ParseParamRequest(string json) {
+            var req_lookup = json.DeserializeObject<Dictionary<string, object>>();
+            if (req_lookup != null &&
+                req_lookup.TryGetValue("items", out var itemsObj) && itemsObj is JArray items_jarray) {
+                var param_lookup = new Dictionary<string, string>();
+                foreach (var kvp_jtoken in items_jarray) {
+                    if (kvp_jtoken.SelectToken("paramId", false) is JToken param_token &&
+                        kvp_jtoken.SelectToken("paramValue", false) is JToken val_token) {
+
+                        param_lookup.Add(param_token.Value<string>(), val_token.Value<string>());
+                    }
+                }
+                return new MpParameterMessageRequestFormat() {
+                    items = param_lookup.Select(x => new MpParameterRequestItemFormat(x.Key, x.Value)).ToList()
+                };
+            }
+            return null;
         }
         #endregion
 

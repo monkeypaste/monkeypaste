@@ -61,15 +61,30 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-        private static Assembly LoadDll(string dllPath, out AssemblyLoadContext alc) {
+        private static Assembly LoadDll(string targetDllPath, out AssemblyLoadContext alc) {
             alc = null;
             try {
-                alc = new MpPluginAssemblyLoadContext(dllPath);
-                return alc.LoadFromAssemblyPath(dllPath);
-                //return Assembly.LoadFrom(dllPath);
+                //alc = new MpPluginAssemblyLoadContext(targetDllPath);
+                //return alc.LoadFromAssemblyPath(targetDllPath);
+
+                return Assembly.LoadFrom(targetDllPath);
+
+                //return Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
+
+                //Assembly result = null;
+                //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
+                //foreach (var dll_path in dir_dlls) {
+                //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
+                //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
+                //    if (dll_path == targetDllPath) {
+                //        result = assembly;
+                //    }
+                //}
+                //return result;
+
             }
             catch (Exception ex) {
-                throw new MpUserNotifiedException($"Plugin Linking error '{dllPath}':{Environment.NewLine}{ex}");
+                throw new MpUserNotifiedException($"Plugin Linking error '{targetDllPath}':{Environment.NewLine}{ex}");
             }
         }
         private static Assembly LoadNuget(string nupkgPath, out AssemblyLoadContext alc) {

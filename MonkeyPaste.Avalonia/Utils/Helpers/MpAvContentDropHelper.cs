@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 //using Xamarin.Essentials;
 using System.Collections.Generic;

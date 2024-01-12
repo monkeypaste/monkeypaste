@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using SQLite;
 using System;
@@ -89,7 +90,7 @@ namespace MonkeyPaste {
         #region MpIJsonBase64Object Implementation
 
         public string SerializeObjectToBase64(Encoding enc = null) {
-            return MpJsonExtensions.SerializeObjectToBase64(this, null, enc);
+            return MpJsonExtensions.SerializeObjectToBase64(this, false, enc);
         }
 
         #endregion

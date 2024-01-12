@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using NetCoreAudio;
 using System;
 using System.Collections.Generic;

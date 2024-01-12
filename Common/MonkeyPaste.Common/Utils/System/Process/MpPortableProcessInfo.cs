@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
@@ -56,7 +57,7 @@ namespace MonkeyPaste.Common {
 
         public override string ToString() {
             //return string.Format(@"Handle '{0}' Path '{1}' Title '{2}' ", Handle, ProcessPath, MainWindowTitle);
-            return MpJsonExtensions.SerializeObject(this);
+            return this.SerializeObject();
         }
 
         public object Clone() {

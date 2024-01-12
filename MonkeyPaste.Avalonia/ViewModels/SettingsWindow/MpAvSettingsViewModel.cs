@@ -1497,23 +1497,32 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async Task ShowRestartDialogAsync() {
-            var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
+            // NOTE only returns if not restarting
+            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                notificationType: MpNotificationType.ModalRestartNowOrLater,
                 title: UiStrings.CommonConfirmLabel,
-                message: UiStrings.PrefRestartConfirmNtfText,
-                iconResourceObj: "ClockArrowImage");
-            if (!result) {
-                // cancel
-                return;
-            }
-            MpAvAppRestarter.ShutdownWithRestartTask("System Preference Change");
+                body: UiStrings.PrefRestartConfirmNtfText,
+                iconSourceObj: "ClockArrowImage");
         }
 
         private void SetIsLoggingEnabled(bool isLoggingEnabled) {
+            string log_path = Mp.Services.PlatformInfo.LoggingEnabledCheckPath;
+            string log_dir = Path.GetDirectoryName(log_path);
             if (isLoggingEnabled) {
-                // create dummy file so if logging is enabled its known immediatly on startup
-                using (File.Create(Mp.Services.PlatformInfo.LoggingEnabledCheckPath)) { }
+                if (!log_path.IsFile()) {
+                    try {
+                        if (!log_dir.IsDirectory()) {
+                            MpFileIo.CreateDirectory(log_dir);
+                        }
+                        // create dummy file so if logging is enabled its known immediatly on startup
+                        using (File.Create(Mp.Services.PlatformInfo.LoggingEnabledCheckPath)) { }
+                    }
+                    catch { }
+                }
             } else {
-                MpFileIo.DeleteFile(Mp.Services.PlatformInfo.LoggingEnabledCheckPath);
+                if (log_path.IsFile()) {
+                    MpFileIo.DeleteFile(log_path);
+                }
             }
 
         }

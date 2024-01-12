@@ -5,6 +5,7 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <Platforms>$(DefaultPlatforms)</Platforms>
+    <!--<EnableDynamicLoading>true</EnableDynamicLoading>-->
   </PropertyGroup>
 
   <ItemGroup>

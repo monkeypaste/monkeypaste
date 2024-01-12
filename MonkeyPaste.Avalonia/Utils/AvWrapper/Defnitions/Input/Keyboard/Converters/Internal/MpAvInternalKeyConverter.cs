@@ -1,5 +1,6 @@
 ﻿using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 
 namespace MonkeyPaste.Avalonia {

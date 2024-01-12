@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;

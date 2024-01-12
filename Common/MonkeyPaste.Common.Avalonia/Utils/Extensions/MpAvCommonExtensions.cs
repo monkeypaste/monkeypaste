@@ -14,6 +14,7 @@ using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

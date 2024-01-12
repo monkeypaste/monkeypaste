@@ -48,8 +48,8 @@
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-
     <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
+
     <Style Selector=":is(Window).notificationWindow.userAction.reset, :is(Window).notificationWindow.userAction.params">
         <Setter Property="Width"
                 Value="450" />

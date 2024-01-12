@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.X509;

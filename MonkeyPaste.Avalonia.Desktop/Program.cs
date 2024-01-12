@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.IO;
+using MonkeyPaste.Common.Plugin;
+
 
 #if CEFNET_WV
 using CefNet;

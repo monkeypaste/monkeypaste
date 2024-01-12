@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -152,6 +153,16 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
 
+                        // PLUGIN BROWSER
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayPluginBrowserLabel,
+                            IconTintHexStr = MpSystemColors.orange1,
+                            IconSourceObj = "JigsawImage",
+                            CommandSrcObj = MpAvPluginBrowserViewModel.Instance,
+                            CommandPath = nameof(MpAvPluginBrowserViewModel.Instance.ShowPluginBrowserCommand)
+                        },
+                        
                         // SETTINGS
 
                         new MpAvMenuItemViewModel() {

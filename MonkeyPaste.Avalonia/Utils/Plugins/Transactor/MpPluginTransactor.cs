@@ -85,9 +85,9 @@ namespace MonkeyPaste.Avalonia {
 
         public static async Task<T> ValidatePluginResponseAsync<T>(
             string pluginLabel,
-            MpPluginParameterRequestFormat request,
-            MpPluginResponseFormatBase response,
-            Func<Task<T>> retryFunc) where T : MpPluginResponseFormatBase {
+            MpParameterMessageRequestFormat request,
+            MpMessageResponseFormatBase response,
+            Func<Task<T>> retryFunc) where T : MpMessageResponseFormatBase {
             if (response == null) {
                 //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
                 MpConsole.WriteLine($"Plugin response null");
@@ -111,11 +111,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private static async Task<MpPluginResponseFormatBase> HandlePluginNotifcationsAsync<T>(
-            MpPluginParameterRequestFormat request,
-            MpPluginResponseFormatBase response,
+        private static async Task<MpMessageResponseFormatBase> HandlePluginNotifcationsAsync<T>(
+            MpParameterMessageRequestFormat request,
+            MpMessageResponseFormatBase response,
             Func<Task<T>> retryFunc,
-            int cur_idx = 0) where T : MpPluginResponseFormatBase {
+            int cur_idx = 0) where T : MpMessageResponseFormatBase {
             if (response.userNotifications == null || response.userNotifications.Count == 0) {
                 return response;
             }

@@ -4,6 +4,7 @@ using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using WindowStartupLocation = Avalonia.Controls.WindowStartupLocation;
@@ -197,8 +198,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsWindowOpen) {
                         IsWindowActive = true;
                     } else if (Mp.Services.PlatformInfo.IsDesktop) {
-                        var sw = CreateHelpWindow();
-                        sw.Show();
+                        //var sw = CreateHelpWindow();
+                        //sw.Show();
+                        MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(CurrentUrl);
                         MpMessenger.SendGlobal(MpMessageType.HelpWindowOpened);
                     }
                 }

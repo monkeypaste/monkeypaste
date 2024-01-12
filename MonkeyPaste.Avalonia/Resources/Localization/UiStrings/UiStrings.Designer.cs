@@ -3795,7 +3795,9 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to * You can hide these warnings by clicking &apos;hide all&apos; from the options menu above..
+        ///   Looks up a localized string similar to * You can hide these warnings by 
+        ///clicking &apos;hide all&apos; from the 
+        ///options menu above..
         /// </summary>
         public static string NtfCapHideHint {
             get {
@@ -6247,6 +6249,15 @@ namespace MonkeyPaste.Avalonia {
         public static string SysTrayPleaseWaitTooltip {
             get {
                 return ResourceManager.GetString("SysTrayPleaseWaitTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse Plugins.
+        /// </summary>
+        public static string SysTrayPluginBrowserLabel {
+            get {
+                return ResourceManager.GetString("SysTrayPluginBrowserLabel", resourceCulture);
             }
         }
         

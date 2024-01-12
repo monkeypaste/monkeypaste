@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -158,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
             //#if DESKTOP
             BaseItems.AddRange(new[] {
                 //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
-                new MpAvLoaderItemViewModel(typeof(MpConsole),UiStrings.LoaderLoggerLabel, Mp.Services.PlatformInfo),
+                new MpAvLoaderItemViewModel(typeof(MpConsole),UiStrings.LoaderLoggerLabel, Mp.Services.PlatformInfo.LogPath),
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), UiStrings.LoaderSysTrayLabel),
                 new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),UiStrings.LoaderThemeLabel),
                 new MpAvLoaderItemViewModel(typeof(MpDb), UiStrings.LoaderDataLabel),

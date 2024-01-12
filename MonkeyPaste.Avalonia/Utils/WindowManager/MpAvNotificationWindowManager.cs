@@ -4,6 +4,7 @@ using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
 

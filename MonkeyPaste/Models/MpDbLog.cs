@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin;
 using SQLite;
 using System;
 using System.Collections.Generic;

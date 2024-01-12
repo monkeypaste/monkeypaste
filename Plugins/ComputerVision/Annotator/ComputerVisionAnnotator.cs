@@ -1,6 +1,4 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using Newtonsoft.Json;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +6,7 @@ namespace ComputerVision {
     public class ComputerVisionAnnotator {
         public ComputerVisionAnnotator() { }
         public MpAnalyzerPluginResponseFormat CreateAnnotations(MpAnalyzerPluginResponseFormat resp, string respJsonStr) {
-            Root root = JsonConvert.DeserializeObject<Root>(respJsonStr);
+            Root root = respJsonStr.DeserializeObject<Root>();
             List<MpAnnotationNodeFormat> annotations = new List<MpAnnotationNodeFormat>();
 
             if (ProcessCategories(root.categories) is MpAnnotationNodeFormat cat_an) {
@@ -50,7 +48,7 @@ namespace ComputerVision {
                 resp.dataObjectLookup = new Dictionary<string, object>() {
                     {
                         MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT,
-                        root_annotation.SerializeObjectOmitNulls()
+                        root_annotation.SerializeObject(true)
                     } };
             }
 
@@ -359,7 +357,7 @@ namespace ComputerVision {
                     new MpAnnotationNodeFormat() {
                         type = "ImageType",
                         label = "Clip Art Type",
-                        body = ((ImageClipArtType)it.clipArtType).EnumToProperCase()
+                        body = ((ImageClipArtType)it.clipArtType).ToString()
                     },
                     new MpAnnotationNodeFormat() {
                         type = "ImageType",

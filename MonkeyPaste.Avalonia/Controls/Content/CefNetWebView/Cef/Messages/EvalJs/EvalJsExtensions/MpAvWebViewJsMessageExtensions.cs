@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

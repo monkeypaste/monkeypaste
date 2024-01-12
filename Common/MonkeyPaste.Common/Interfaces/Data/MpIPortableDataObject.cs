@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Common {
     public interface MpIPortableDataObject {

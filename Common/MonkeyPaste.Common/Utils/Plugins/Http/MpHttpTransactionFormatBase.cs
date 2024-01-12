@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common {
 
         public MpHttpRequestFormat request { get; set; }
 
-        public MpPluginResponseFormatBase response { get; set; }
+        public MpMessageResponseFormatBase response { get; set; }
     }
     public class MpHttpAnalyzerTransactionFormat : MpHttpTransactionFormatBase {
         public new MpAnalyzerPluginResponseFormat response { get; set; }

@@ -1,17 +1,12 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Storage;
-using Windows.UI.Notifications;
-using WinRT;
 
 namespace MonkeyPaste.Avalonia {
     [ComImport, Guid("3A3DCD6C-3EAB-43DC-BCDE-45671CE800C8")]

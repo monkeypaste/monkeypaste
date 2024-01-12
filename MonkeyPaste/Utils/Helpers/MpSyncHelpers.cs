@@ -1,5 +1,5 @@
 ﻿//using Xamarin.Forms;
-using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections;
 using System.Collections.Generic;

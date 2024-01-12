@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {

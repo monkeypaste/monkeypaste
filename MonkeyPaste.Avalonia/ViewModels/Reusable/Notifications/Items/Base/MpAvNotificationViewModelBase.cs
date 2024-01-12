@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Media;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,6 +59,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpNotificationLayoutType.Warning;
 
                 case MpNotificationType.InvalidPlugin:
+                //return MpNotificationLayoutType.ErrorWithFixAndDelete;
                 case MpNotificationType.InvalidAction:
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
@@ -113,6 +115,8 @@ namespace MonkeyPaste.Avalonia {
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
                     switch (layoutType) {
+                        case MpNotificationLayoutType.ErrorWithFixAndDelete:
+                            return MpNotificationButtonsType.DeleteIgnoreFix;
                         case MpNotificationLayoutType.ErrorWithOption:
                         case MpNotificationLayoutType.UserAction:
                             return MpNotificationButtonsType.IgnoreRetryFix;

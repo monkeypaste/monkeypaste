@@ -275,11 +275,13 @@
                 <GridSplitter x:Name="TransactionDetailSplitter"
                               Grid.Row="1"
                               Height="1"
+                              IsVisible="{Binding !IsPlainTextView}"
                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Top"
                               ResizeDirection="Rows"
                               Classes="horizontal level1" />
+
             </Grid>
         </Border>
 

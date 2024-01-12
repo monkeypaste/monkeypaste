@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowFixButton => CanFix && !IsFixing;
         public bool ShowSubmitButton { get; set; }
         public bool ShowRetryButton => IsFixing && RetryAction != null;
-
+        public bool ShowDeleteButton { get; set; }
         public bool ShowRestartButton { get; set; }
         public bool ShowShutdownButton { get; set; }
         public bool ShowRestartNowButton { get; set; }
@@ -191,6 +192,10 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(nf);
             switch (ButtonsType) {
+                case MpNotificationButtonsType.DeleteIgnoreFix:
+                    ShowDeleteButton = true;
+                    ShowIgnoreButton = true;
+                    break;
                 case MpNotificationButtonsType.RestartNowLater:
                     ShowRestartNowButton = true;
                     ShowLaterButton = true;
@@ -500,6 +505,11 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 DialogResult = MpNotificationDialogResultType.Shutdown;
                 Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.UserNtfCmd, "userAction cmd");
+            });
+
+        public ICommand DeleteCommand => new MpCommand(
+            () => {
+                DialogResult = MpNotificationDialogResultType.Delete;
             });
 
         public ICommand YesCommand => new MpCommand(

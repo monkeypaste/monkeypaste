@@ -2,24 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MonkeyPaste.Common {
-    public enum MpDataFormatType {
-        None = 0,
-        PlainText,
-        Html,
-        HtmlFragment,
-        DeltaJson,
-        Rtf2Html,
-        Rtf,
-        Rtfd,
-        Csv,
-        Png,
-        Tiff,
-        Jpg,
-        Gif,
-        Bmp,
-        FileList
-    }
+namespace MonkeyPaste.Common.Plugin {
 
 
     public static class MpPortableDataFormats {
@@ -342,7 +325,7 @@ namespace MonkeyPaste.Common {
             }
             if (kvpl.Count() > 1) {
                 // multiple formats w/ same name but different case detected
-                MpDebug.Break();
+                //MpDebug.Break();
                 var match_kvp = kvpl.FirstOrDefault(x => x.Value.Name == format);
                 if (!match_kvp.Equals(default(KeyValuePair<int, MpPortableDataFormat>))) {
                     // when exact match found return that one...
