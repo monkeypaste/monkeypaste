@@ -64,10 +64,10 @@ namespace MonkeyPaste.Avalonia {
         private static Assembly LoadDll(string targetDllPath, out AssemblyLoadContext alc) {
             alc = null;
             try {
-                //alc = new MpPluginAssemblyLoadContext(targetDllPath);
-                //return alc.LoadFromAssemblyPath(targetDllPath);
+                alc = new MpPluginAssemblyLoadContext(targetDllPath);
+                return alc.LoadFromAssemblyPath(targetDllPath);
 
-                return Assembly.LoadFrom(targetDllPath);
+                //return Assembly.LoadFrom(targetDllPath);
 
                 //return Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
 

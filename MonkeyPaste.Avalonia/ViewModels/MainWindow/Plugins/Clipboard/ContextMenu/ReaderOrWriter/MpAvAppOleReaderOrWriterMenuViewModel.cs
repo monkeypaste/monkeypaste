@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public override string Header =>
-            IsReader ? "Read" : "Write";
+            IsReader ? UiStrings.CommonReadLabel : UiStrings.CommonWriteLabel;
 
         public override object IconSourceObj =>
             IsReader ? "GlassesImage" : "PenImage";

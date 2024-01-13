@@ -2587,6 +2587,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Read.
+        /// </summary>
+        public static string CommonReadLabel {
+            get {
+                return ResourceManager.GetString("CommonReadLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string CommonRefreshTooltip {
@@ -2754,6 +2763,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonWaitLabel {
             get {
                 return ResourceManager.GetString("CommonWaitLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write.
+        /// </summary>
+        public static string CommonWriteLabel {
+            get {
+                return ResourceManager.GetString("CommonWriteLabel", resourceCulture);
             }
         }
         
