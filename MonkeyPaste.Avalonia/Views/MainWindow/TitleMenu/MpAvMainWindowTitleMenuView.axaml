@@ -180,9 +180,16 @@
                     Margin="5,0,0,0"
                     Width="20"
                     Height="20"
-                    IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     Command="{Binding ForceMinimizeMainWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     Classes="noBg noHoverBg noBorder noHoverBorder">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsDesktop"
+                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                        <Binding Path="IsChecked"
+                                 ElementName="LockToggleButton" />
+                    </MultiBinding>
+                </Button.IsVisible>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonMinimizeWindowLabel}"
                                            InputGestureText="{Binding ., ConverterParameter=HideMainWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />

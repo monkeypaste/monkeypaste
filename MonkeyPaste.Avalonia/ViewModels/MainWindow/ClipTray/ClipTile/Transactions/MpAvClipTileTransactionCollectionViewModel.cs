@@ -57,7 +57,8 @@ namespace MonkeyPaste.Avalonia {
                         .OrderBy(x => SortedTransactions.IndexOf(SortedTransactions.FirstOrDefault(y => y.HasSource(x))))
                         .ToList();
 
-                List<MpAvMenuItemViewModel> cmil = new List<MpAvMenuItemViewModel>();
+                var source_ref_and_mi_tups = new List<(MpISourceRef, MpAvMenuItemViewModel)>();
+                // first create flat list of sources and their default sub-items
                 foreach (var source_ref in distinct_sources) {
                     // find all pertinent msgs for this source ordered by trans dt
 
@@ -93,24 +94,123 @@ namespace MonkeyPaste.Avalonia {
 
                     source_mi.SubItems = source_sub_mil;
                     // add source to output list
-                    cmil.Add(source_mi);
+                    source_ref_and_mi_tups.Add((source_ref, source_mi));
                 }
 
-                if (!cmil.Any()) {
+                var grouped_tups = new List<(MpISourceRef, MpAvMenuItemViewModel)>();
+                if (source_ref_and_mi_tups.Any()) {
+                    // now group urls into apps and presets results into presets and presets into analyzers
+
+                    foreach (var tup in source_ref_and_mi_tups) {
+                        if (tup.Item1 is MpApp) {
+                            // create base level apps
+                            grouped_tups.Add(tup);
+                        }
+                        if (tup.Item1 is MpCopyItem) {
+                            // NOTE hiding clip sources cause its confusing, they can be a source OR this is a source for them
+                            // and the transaction log maybe messing up the transaction type for BOTH these cases
+                            // so can't clearly know the relationship and as is it maybe more confusing than helpful to show.
+                            // As long as analysis source is there thats the pertinent info really...
+
+                            // create base level clips (clips can be a source or THIS clip is a source to the clip)
+                            //if (AllSources.FirstOrDefault(x => x.SourceRef == tup.Item1) is { } ci_source_vm) {
+                            //}
+                            //grouped_tups.Add(tup);
+                        }
+                        if (tup.Item1 is MpPreset preset &&
+                            MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == preset.Id) is { } aipvm) {
+
+                            if (grouped_tups.FirstOrDefault(x => x.Item1.SourceType == MpTransactionSourceType.AnalyzerPreset && aipvm.Parent.Items.Any(y => y.AnalyticItemPresetId == preset.Id))
+                                is { } analyzer_group_tup &&
+                                analyzer_group_tup.Item2 is MpAvMenuItemViewModel preset_analyzer_mi &&
+                                preset_analyzer_mi.SubItems.ToList() is { } analyzer_subitems) {
+                                // analyzer group already exists
+
+                                // add preset to analyzer
+                                analyzer_subitems.Insert(0, tup.Item2);
+                                preset_analyzer_mi.SubItems = analyzer_subitems;
+                            } else {
+                                // this presets analyzer not added yet
+
+                                // add url to domain
+                                List<MpAvMenuItemViewModel> analyzer_sub_items = [tup.Item2];
+
+                                // create domain item w/ url sub item and reject after
+                                var analyzer_mi = new MpAvMenuItemViewModel() {
+                                    IconSourceObj = aipvm.Parent.IconId,
+                                    Header = aipvm.Parent.Title,
+                                    SubItems = analyzer_sub_items
+                                };
+                                grouped_tups.Add((preset, analyzer_mi));
+                            }
+                        }
+                    }
+                    foreach (var tup in source_ref_and_mi_tups) {
+                        if (tup.Item1 is MpUrl url) {
+                            if (grouped_tups.FirstOrDefault(x => url.AppId == x.Item1.SourceObjId && x.Item1.SourceType == MpTransactionSourceType.App)
+                                    is { } url_app_tup) {
+                                // found this url's app
+
+                                if (url_app_tup.Item2.SubItems.FirstOrDefault(x => x.Header == url.UrlDomainPath) is MpAvMenuItemViewModel url_domain_mi &&
+                                    url_domain_mi.SubItems.ToList() is { } url_domain_subitems) {
+                                    // found this urls domain sub-item
+                                    // add url to domain
+                                    url_domain_subitems.Insert(0, tup.Item2);
+                                    url_domain_mi.SubItems = url_domain_subitems;
+                                } else {
+                                    // this domain not added to app yet
+
+                                    // add url to domain
+                                    List<MpAvMenuItemViewModel> domain_sub_items = [tup.Item2];
+
+                                    // add domain reject thing (if not top level)
+                                    if (!MpUrlHelpers.IsUrlTopLevel(url.UrlPath) &&
+                                        MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == url.Id) is { } uvm) {
+
+                                        // TOGGLE REJECT SOURCE DOMAIN
+
+                                        domain_sub_items.Add(
+                                            new MpAvMenuItemViewModel() {
+                                                HasLeadingSeparator = true,
+                                                Header = $"{(url.IsDomainRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} {UiStrings.SourceDomainLabel} '{url.UrlDomainPath}'",
+                                                AltNavIdx = 0,
+                                                IconResourceKey = url.IsDomainRejected ? "AddGreenImage" : "NoEntryImage",
+                                                Command = uvm.ToggleIsDomainRejectedCommand
+                                            });
+                                    }
+                                    // create domain item w/ url sub item and reject after
+                                    var domain_mi = new MpAvMenuItemViewModel() {
+                                        IconSourceObj = url.IconId,
+                                        Header = url.UrlDomainPath,
+                                        SubItems = domain_sub_items
+                                    };
+
+                                    if (url_app_tup.Item2 is MpAvMenuItemViewModel url_app_mivm &&
+                                        url_app_mivm.SubItems.ToList() is { } url_app_subitems) {
+                                        // add domain to app 
+                                        url_app_subitems.Insert(0, domain_mi);
+                                        url_app_mivm.SubItems = url_app_subitems;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                } else {
                     // no transactions to show, something must be wrong
                     // to avoid weird menu layout show stub item
-                    cmil.Add(
-                        new MpAvMenuItemViewModel() {
+                    grouped_tups.Add(
+                        (null, new MpAvMenuItemViewModel() {
                             IconResourceKey = "QuestionMarkImage",
                             Header = UiStrings.ClipTileTransactionErrorText
-                        });
+                        }));
                 }
                 return new MpAvMenuItemViewModel() {
                     Header = UiStrings.ClipTileSourcesHeader,
                     HasLeadingSeparator = true,
                     IconResourceKey = "EggImage",
-                    SubItems = cmil
-
+                    SubItems = grouped_tups.Select(x => x.Item2).ToList()
                 };
             }
         }

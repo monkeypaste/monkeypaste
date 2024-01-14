@@ -8,7 +8,9 @@ namespace MonkeyPaste.Avalonia {
             {"no-proxy-server",null },
             {"disable-component-update",null },
             {"process-per-site",null },
+#if OUTSYS_WV
             {"enable-devtools-experiments",null },
+#endif
 #if CEFNET_WV
             {"in-process-gpu",null },
             {"disable-gpu",null },

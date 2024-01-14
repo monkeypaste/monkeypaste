@@ -1561,16 +1561,25 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public async Task RefreshModelAsync() {
+        public async Task ReloadAsync() {
+            if (GetContentView() is not MpAvContentWebView cv) {
+                return;
+            }
+
+            await cv.ReloadAsync();
+            await Task.Delay(100);
+            await ReloadModelAsync();
+            await Task.Delay(100);
+            await cv.LoadEditorAsync();
+            await cv.LoadContentAsync();
+        }
+
+        public async Task ReloadModelAsync() {
             while (HasModelChanged) {
                 await Task.Delay(100);
             }
             var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(CopyItemId);
             await InitializeAsync(ci, QueryOffsetIdx);
-            //wait for model to propagate then trigger view to reload
-            if (GetContentView() is MpIContentView cv) {
-                await cv.LoadContentAsync();
-            }
         }
         public void ClearSelection(bool clearEditing = true) {
             IsSelected = false;
@@ -2077,10 +2086,6 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
 
-            if (pow.DataContext is MpAvMainWindowViewModel) {
-                // should be other vm here
-
-            }
             pow.Close();
             if (IsPopoutCloseRequireConfirm) {
                 while (IsBusy) {
@@ -2514,7 +2519,14 @@ namespace MonkeyPaste.Avalonia {
                     IsSelected = true;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
+                    bool needs_lock = !MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
+                    if (needs_lock) {
+                        MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+                    }
                     await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
+                    if (needs_lock) {
+                        MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+                    }
                 } else {
                     // Some kinda view nav here
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818

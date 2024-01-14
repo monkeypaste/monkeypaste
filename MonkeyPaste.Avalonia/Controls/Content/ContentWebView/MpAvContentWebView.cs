@@ -868,7 +868,17 @@ namespace MonkeyPaste.Avalonia {
 
                         processed_drag_avdo = await Mp.Services
                             .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
+                        MpPortableProcessInfo drag_pi = Mp.Services.DragProcessWatcher.DragProcess;
 
+                        if (drag_pi == null &&
+                            processed_drag_avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var proc_drag_pi)) {
+                            drag_pi = proc_drag_pi;
+                        }
+                        if (drag_pi != null) {
+                            // convert source app to uri 
+                            string drag_app_url = await Mp.Services.SourceRefTools.FetchOrCreateAppRefUrlAsync(drag_pi);
+                            processed_drag_avdo.AddOrUpdateUri(drag_app_url);
+                        }
                         if (BindingContext.CopyItemType == MpCopyItemType.FileList &&
                             processed_drag_avdo.TryGetData(MpPortableDataFormats.Files, out object fn_obj)) {
                             // NOTE for file drops files are converted to fragment and dropped like append handling
@@ -1004,9 +1014,36 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public override string ToString() {
+            return $"Address: '{Address.ToStringOrEmpty().SplitNoEmpty($"/").LastOrDefault()}' DataContext: '{DataContext}'";
+        }
+
+        private void ClearState() {
+            DataContext = null;
+            ContentId = 0;
+            _lastContentHandle = null;
+            IsDomLoaded = false;
+            IsEditorInitialized = false;
+            IsEditorLoaded = false;
+
+        }
         public async Task ReloadAsync() {
+            if (IsEditorLoaded) {
+                SendMessage($"prepareForReload_ext()");
+            }
+#if CEFNET_WV
+            await Task.Delay(1);
+            try {
+                ReloadIgnoreCache();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error reloading {this}.", ex);
+            }
+#else
             await LoadEditorAsync();
             await LoadContentAsync();
+#endif
+
         }
 
         public async Task<MpQuillEditorSelectionStateMessage> GetSelectionStateAsync() {
@@ -1199,7 +1236,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public async Task LoadEditorAsync() {
             Dispatcher.UIThread.VerifyAccess();
-
 #if CEFNET_WV
             var sw = Stopwatch.StartNew();
             while (!IsDomLoaded) {
@@ -1317,8 +1353,14 @@ namespace MonkeyPaste.Avalonia {
             if (this is WebView wv && wv.PendingEvalCount() > 0 ||
                 BindingContext == null) {
                 this.NeedsEvalJsCleared = true;
+                var sw = Stopwatch.StartNew();
                 while (NeedsEvalJsCleared) {
                     await Task.Delay(100);
+                    if (sw.ElapsedMilliseconds > 5_000) {
+                        MpConsole.WriteLine($"Content web view '{this}' load content NeedEvalJsCleared timeout, unsetting and conitnuing ");
+                        NeedsEvalJsCleared = false;
+                        break;
+                    }
                 }
             }
 #endif

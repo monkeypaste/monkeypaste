@@ -196,8 +196,8 @@ function performDataTransferOnContent(
     }
     let host_dt_obj = convertDataTransferToHostDataItems(dt);
     onDataTransferCompleted_ntf(
-        toJsonObjFromBase64Str(globals.LastTextChangedDelta),
-        toJsonObjFromBase64Str(host_dt_obj),
+        toBase64FromJsonObj(globals.LastTextChangedDelta),
+        toBase64FromJsonObj(host_dt_obj),
         transferLabel);
 
     // SCROLL TO DEST

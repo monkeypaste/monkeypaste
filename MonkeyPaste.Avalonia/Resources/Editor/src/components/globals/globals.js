@@ -261,6 +261,7 @@ var globals = {
 	DropItemElms: [],
 	DropMoveLineColor: 'red',
 	DropCopyLineColor: 'green',
+	DropHtmlLineColor: 'blue',
 
 	// #endregion
 	// #endregion
@@ -731,6 +732,7 @@ var globals = {
 
 	// #region MAIN
 	IsLoaded: false,
+	IsReloading: false,
 	DomParser: new DOMParser(),
 	DomSerializer: new XMLSerializer(),
 	IsTesting: false,

@@ -277,7 +277,12 @@ namespace MonkeyPaste.Common.Avalonia {
                 } else {
 
                 }
-            } //else if(Enum.GetUnderlyingType typeof(T) ==)
+            } else if (typeof(T) == typeof(MpPortableProcessInfo)) {
+                // wants process info
+                if (dataObj is string ppi_json) {
+                    typed_data = ppi_json.DeserializeObject<MpPortableProcessInfo>() as T;
+                }
+            }
             if (typed_data == null) {
                 MpDebug.Break($"Unhandled dataobj get, source is '{dataObj.GetType()}' target is '{format}'");
             }

@@ -114,6 +114,11 @@
         });
 
         window.onbeforeunload = function (e) {
+            if (globals && globals.IsReloading) {
+                // disable confirm
+                console.log('unload accepted, is reloading');
+                return undefined;
+            }
             //if (!isRunningInHost()) {
             //    return;
             //}

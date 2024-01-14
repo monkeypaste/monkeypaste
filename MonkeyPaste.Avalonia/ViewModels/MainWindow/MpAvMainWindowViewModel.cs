@@ -708,6 +708,9 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
 #if DESKTOP
+                    if (MpAvWindowManager.MainWindow == null) {
+                        break;
+                    }
                     MpAvWindowManager.MainWindow.Position = MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.Scaling);
                     //MpConsole.WriteLine($"Vis mw position: {MpAvWindowManager.MainWindow.Position}");
 #endif
@@ -717,6 +720,9 @@ namespace MonkeyPaste.Avalonia {
                     // mw opacity mask is always open screen rect
                     // mwcg is what is animated so it hides outside current screen workarea
 #if DESKTOP
+                    if (MpAvWindowManager.MainWindow == null) {
+                        break;
+                    }
                     MpAvWindowManager.MainWindow.Position = MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.Scaling);
 #endif
 

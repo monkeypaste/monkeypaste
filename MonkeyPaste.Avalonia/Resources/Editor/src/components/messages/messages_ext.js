@@ -17,6 +17,10 @@ function initDefaults_ext(defaultsMsgStr_base64) {
 	initDefaults(defaults_obj);
 }
 
+function prepareForReload_ext() {
+	globals.IsReloading = true;
+}
+
 async function loadContentAsync_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
 	//log('loadContentAsync_ext: ' + loadContentMsgStr_base64);

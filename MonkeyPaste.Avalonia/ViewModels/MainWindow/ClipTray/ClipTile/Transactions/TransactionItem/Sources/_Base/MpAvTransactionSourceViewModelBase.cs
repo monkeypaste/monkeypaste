@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                 if (TransactionSource == null) {
                     return null;
                 }
-                // BROWSE TO OPTION
+                // root item
                 var mivm = new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     IconSourceObj = IconSourceObj,
@@ -66,7 +66,9 @@ namespace MonkeyPaste.Avalonia {
 
                 };
                 var sub_mivml = new List<MpAvMenuItemViewModel>() {
+                // BROWSE TO OPTION
                         new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
                             Header = string.Format(UiStrings.ClipTileSourceBrowseToLabel,SourceLabel),
                             IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "OpenImage",
                             AltNavIdx = 5,
@@ -79,27 +81,27 @@ namespace MonkeyPaste.Avalonia {
                     // REJECT SOURCE
                     sub_mivml.Add(
                         new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
                             Header = $"{(IsSourceRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} '{SourceLabel}'",
                             AltNavIdx = 0,
                             IconResourceKey = IsSourceRejected ? "AddGreenImage" : "NoEntryImage",
                             Command = ToggleSourceRejectionCommand
                         });
 
-                    if (SourceRef is MpUrl url &&
-                        !MpUrlHelpers.IsUrlTopLevel(url.UrlPath)) {
+                    // NOTE below moved to top level menu create logic
+                    //if (SourceRef is MpUrl url &&
+                    //    !MpUrlHelpers.IsUrlTopLevel(url.UrlPath)) {
 
-                        // REJECT SOURCE DOMAIN
+                    //    // REJECT SOURCE DOMAIN
 
-                        sub_mivml.Add(
-                            new MpAvMenuItemViewModel() {
-                                Header = $"{(url.IsDomainRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} {UiStrings.SourceDomainLabel} '{url.UrlDomainPath}'",
-                                AltNavIdx = 0,
-                                IconResourceKey = url.IsDomainRejected ? "AddGreenImage" : "NoEntryImage",
-                                Command = ToggleSourceRejectionCommand,
-                                CommandParameter = "domain"
-                            });
-                    }
+                    //    sub_mivml.Add(
+                    //        new MpAvMenuItemViewModel() {
+                    //            Header = $"{(url.IsDomainRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} {UiStrings.SourceDomainLabel} '{url.UrlDomainPath}'",
+                    //            AltNavIdx = 0,
+                    //            IconResourceKey = url.IsDomainRejected ? "AddGreenImage" : "NoEntryImage",
+                    //            Command = ToggleSourceRejectionCommand,
+                    //            CommandParameter = "domain"
+                    //        });
+                    //}
                 }
                 mivm.SubItems = sub_mivml;
                 return mivm;

@@ -5,7 +5,6 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Speech.Synthesis;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -530,33 +529,17 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
-                await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true);
+                await MpAvClipTrayViewModel.Instance.DisposeAndReloadAllCommand.ExecuteAsync();
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                SpeechSynthesizer synth = new SpeechSynthesizer();
-                synth.SetOutputToDefaultAudioDevice();
-                synth.Volume = 100;
-                synth.Speak("Hey dude");
-                await Task.Delay(1);
-
-                //var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
-                //if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {
-                //    string icon = Mp.Services.IconBuilder.GetPathIconBase64(chrome_app.ProcessPath);
-                //    MpFileIo.WriteByteArrayToFile(@"/Users/tkefauver/Desktop/icon_test.png", icon.ToBytesFromBase64String(), false);
-                //    Mp.Services.ProcessWatcher.SetActiveProcess(chrome_app);
-                //}
+                await MpAvClipTrayViewModel.Instance.ReloadAllCommand.ExecuteAsync();
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                MpAppendModeFlags test = MpAppendModeFlags.AppendLine | MpAppendModeFlags.AppendInsert | MpAppendModeFlags.Pre;
-                test.RemoveFlag(MpAppendModeFlags.AppendInsert);
-                test.RemoveFlag(MpAppendModeFlags.AppendLine);
-                test.RemoveFlag(MpAppendModeFlags.Pre);
-                test.AddFlag(MpAppendModeFlags.Manual);
-                test.RemoveFlag(MpAppendModeFlags.AppendInsert);
+                MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {

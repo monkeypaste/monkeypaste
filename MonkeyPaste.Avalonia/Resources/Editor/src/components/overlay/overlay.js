@@ -147,6 +147,9 @@ function drawDropPreview(ctx, color, thickness = 1.0, line_style = [5, 5]) {
     if (isDragCopy()) {
         color = globals.DropCopyLineColor;
     }
+    if (isDropHtml()) {
+        color = globals.DropHtmlLineColor;
+    }
     if (isNullOrUndefined(color)) {
         color = globals.DropMoveLineColor;
     }

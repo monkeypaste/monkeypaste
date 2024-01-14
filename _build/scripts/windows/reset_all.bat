@@ -1,4 +1,5 @@
 taskkill /f /im "MonkeyPaste.Avalonia.Desktop.exe"
+
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\bin\"
 
@@ -23,10 +24,11 @@ rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.De
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\bin\"
 
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste\obj\"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste\bin\"
+
 rmdir /S /Q "C:\Users\tkefauver\AppData\Local\MonkeyPaste" 
 rmdir /S /Q "C:\Users\tkefauver\AppData\Local\MonkeyPaste_DEBUG" 
 
 pause
-rem cd "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\"
-rem dotnet build
 
