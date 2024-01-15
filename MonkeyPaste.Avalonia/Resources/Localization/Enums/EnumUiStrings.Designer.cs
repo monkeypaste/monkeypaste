@@ -2392,6 +2392,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decrease Focus.
+        /// </summary>
+        public static string MpShortcutType_DecreaseFocus {
+            get {
+                return ResourceManager.GetString("MpShortcutType_DecreaseFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Selected Items.
         /// </summary>
         public static string MpShortcutType_DeleteSelectedItems {
@@ -2437,11 +2446,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide Main Window.
+        ///   Looks up a localized string similar to Increase Focus.
         /// </summary>
-        public static string MpShortcutType_HideMainWindow {
+        public static string MpShortcutType_IncreaseFocus {
             get {
-                return ResourceManager.GetString("MpShortcutType_HideMainWindow", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_IncreaseFocus", resourceCulture);
             }
         }
         

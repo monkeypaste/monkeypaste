@@ -30,7 +30,7 @@ function initEditor() {
 	globals.quill.on("text-change", onEditorTextChanged);
 
 	getEditorElement().addEventListener('focus', onEditorFocus);
-	getEditorElement().addEventListener('blur', onEditorBlur);
+	getEditorElement().addEventListener('blur', onEditorBlur, true);
 
 	globals.ContentLoadedEvent = new Event("onContentLoaded");
 }
@@ -194,6 +194,7 @@ function updateEditorSizesAndPositions() {
 }
 
 function focusEditor() {
+	globals.quill.focus();
 	getEditorElement().focus();
 }
 
@@ -232,7 +233,6 @@ function enableReadOnly(fromHost = false) {
 
 	hideAllToolbars();
 	disableSubSelection();
-
 
 	getEditorContainerElement().classList.remove('editable');
 	getEditorContainerElement().classList.remove('sub-select');
@@ -302,11 +302,13 @@ function enableSubSelection(fromHost = false, paste_button_info = null) {
 	showAnnotations();
 	updateAllElements();
 
-	drawOverlay();
 
-	if (!fromHost) {
+	if (fromHost) {
+		focusEditor();
+	} else {
 		onSubSelectionEnabledChanged_ntf(isSubSelectionEnabled());
 	}
+	drawOverlay();
 	log('sub-selection ENABLED fromHost: ' + fromHost);
 }
 
@@ -358,9 +360,6 @@ function onEditorFocus(e) {
 
 function onEditorBlur(e) {
 	log('editor lost focus');
-	//if (isTemplateFocused()) {
-	//	return;
-	//}
 	getEditorContainerElement().classList.remove('editor-focused');
 	drawOverlay();
 }

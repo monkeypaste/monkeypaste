@@ -13,7 +13,8 @@
         ManuallyAddFromClipboard,
 
         // APPLICATION
-        HideMainWindow,
+        DecreaseFocus,
+        IncreaseFocus,
         ExitApplication,
         PasteToExternal,
         PasteSelection,

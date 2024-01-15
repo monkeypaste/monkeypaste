@@ -14,25 +14,26 @@
         <!--  TABS  -->
         <Style Selector="RadioButton.tab">
             <Style.Resources>
-                <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeAccent5BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource ThemeAccent4Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeGrayAccent3Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeGrayAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource ThemeGrayAccent3Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeGrayAccent2Color}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeGrayAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="{DynamicResource ThemeInteractiveColor}" />
 
-                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource ThemeAccent4BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource ThemeAccent5BgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource ThemeAccent5Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource ThemeAccent5BgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeGrayAccent2Color}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeGrayAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{DynamicResource ThemeInteractiveColor}" />
+                <Thickness x:Key="ToggleButtonBorderThemeThickness">1,1,1,1</Thickness>
             </Style.Resources>
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
@@ -49,7 +50,7 @@
             <Setter Property="Padding"
                     Value="0" />
         </Style>
-        <Style Selector="RadioButton.tab.first">
+        <!--<Style Selector="RadioButton.tab.first">
             <Style.Resources>
                 <Thickness x:Key="ToggleButtonBorderThemeThickness">6,3,3,3</Thickness>
             </Style.Resources>
@@ -63,7 +64,7 @@
             <Style.Resources>
                 <Thickness x:Key="ToggleButtonBorderThemeThickness">3,3,3,3</Thickness>
             </Style.Resources>
-        </Style>
+        </Style>-->
 
         <Style Selector="RadioButton.tab.omitted">
             <Setter Property="Cursor"
@@ -87,6 +88,8 @@
                     Value="Uniform" />
             <Setter Property="Margin"
                     Value="0,10,0,0" />
+            <Setter Property="Effect"
+                    Value="{DynamicResource ThemeBgGlow}" />
         </Style>
 
         <Style Selector="RadioButton.tab Label">
@@ -100,6 +103,8 @@
                     Value="5" />
             <Setter Property="FontSize"
                     Value="18" />
+            <Setter Property="Effect"
+                    Value="{DynamicResource ThemeBgDropShadow}" />
         </Style>
     </UserControl.Styles>
     <Grid>
@@ -122,7 +127,7 @@
                      CommandParameter="0">
             <DockPanel>
                 <Label Content="{x:Static local:UiStrings.SettingsAccountTabLabel}" />
-                <Image Source="{Binding Source={StaticResource UserImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Source="{Binding Source={StaticResource UserColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
 
@@ -137,7 +142,7 @@
                      CommandParameter="1">
             <DockPanel>
                 <Label Content="{x:Static local:UiStrings.SettingsPrefTabLabel}" />
-                <Image Source="{Binding Source={StaticResource SlidersImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Source="{Binding Source={StaticResource SlidersColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
 
@@ -152,7 +157,7 @@
                      CommandParameter="2">
             <DockPanel>
                 <Label Content="{x:Static local:UiStrings.SettingsInteropTabLabel}" />
-                <Image Source="{Binding Source={StaticResource ClipboardBwImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Source="{Binding Source={StaticResource ClipboardImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
 
@@ -167,7 +172,7 @@
                      CommandParameter="3">
             <DockPanel>
                 <Label Content="{x:Static local:UiStrings.SettingsShortcutTabLabel}" />
-                <Image Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Source="{Binding Source={StaticResource KeyboardColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
     </Grid>

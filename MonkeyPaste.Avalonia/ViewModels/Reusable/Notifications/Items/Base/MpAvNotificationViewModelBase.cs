@@ -244,13 +244,18 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string BorderHexColor {
             get {
+                MpThemeResourceKey key;
                 if (IsWarningNotification) {
-                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString());
+                    key = MpThemeResourceKey.ThemeAccent1Color;
+                } else if (IsErrorNotification) {
+                    key = MpThemeResourceKey.ThemeAccent2Color;
+                } else {
+                    key =
+                        MpAvThemeViewModel.Instance.IsThemeDark ?
+                            MpThemeResourceKey.ThemeDarkColor :
+                            MpThemeResourceKey.ThemeLightColor;
                 }
-                if (IsErrorNotification) {
-                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString());
-                }
-                return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString());
+                return Mp.Services.PlatformResource.GetResource<string>(key.ToString());
             }
         }
 

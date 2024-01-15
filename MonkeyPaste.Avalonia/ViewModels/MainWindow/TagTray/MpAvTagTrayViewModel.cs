@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
         ICommand MpAvIMenuItemViewModel.Command => null;
         object MpAvIMenuItemViewModel.CommandParameter => null;
         string MpAvIMenuItemViewModel.Header => UiStrings.ClipTileTagContextMenuLabel;
-        object MpAvIMenuItemViewModel.IconSourceObj => "PinToCollectionImage";
+        object MpAvIMenuItemViewModel.IconSourceObj => "TagColorImage";
         string MpAvIMenuItemViewModel.InputGestureText { get; }
         bool MpAvIMenuItemViewModel.StaysOpenOnClick => false;
         bool MpAvIMenuItemViewModel.HasLeadingSeparator => true;

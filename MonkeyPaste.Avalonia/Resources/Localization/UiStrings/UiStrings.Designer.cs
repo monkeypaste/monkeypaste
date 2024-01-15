@@ -3750,7 +3750,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trash or unlink something from &apos;{0}&apos; to add more..
+        ///   Looks up a localized string similar to Trash or unlink something 
+        ///from &apos;{0}&apos; to add more..
         /// </summary>
         public static string NtfCapBlockHint1 {
             get {

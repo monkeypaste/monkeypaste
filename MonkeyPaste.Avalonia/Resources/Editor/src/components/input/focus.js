@@ -21,8 +21,9 @@ function setInputFocusable(isInputFocused) {
 		log('host selection changed. globals.IsHostFocused: ' + isInputFocused);
 	}
 	globals.IsHostFocused = isInputFocused;
-	if (isInputFocused && !document.hasFocus()) {
-		forceWindowFocus();
+	if (isInputFocused) {
+		//forceWindowFocus();
+		focusEditor();
 	}
 	if (!globals.IsHostFocused) {
 		hideAllPopups();
@@ -38,13 +39,15 @@ function isWindowFocused() {
 	if (!isRunningOnHost()) {
 		return true;
 	}
-	if (document.hasFocus()) {
-		if (globals.IsHostFocused == null) {
-			return true;
-		}
-		return globals.IsHostFocused;
-	}
-	return false;
+	// NOTE disabling below, when disabling read only (from increase focus 'space' key) focus is lost for some reason
+	//if (document.hasFocus()) {
+	//	if (globals.IsHostFocused == null) {
+	//		return true;
+	//	}
+	//	return globals.IsHostFocused;
+	//}
+	//return false;
+	return globals.IsHostFocused;
 }
 // #endregion State
 

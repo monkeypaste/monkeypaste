@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
         public static Dictionary<string, string> Args { get; } = new() {
             {"no-proxy-server",null },
             {"disable-component-update",null },
-            {"process-per-site",null },
+            //{"process-per-site",null },
 #if OUTSYS_WV
             {"enable-devtools-experiments",null },
 #endif

@@ -110,6 +110,7 @@ function disableReadOnly_ext() {
 
 	//let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
 	//globals.availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
+	
 	disableReadOnly(true);
 	clearLastDelta();
 

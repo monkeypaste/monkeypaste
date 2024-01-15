@@ -106,10 +106,10 @@
         </Style>
     </Window.Styles>
     <Border x:Name="OuterBorder"
-            Classes="contrastBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
+            BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             Background="{DynamicResource ThemeColor}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>

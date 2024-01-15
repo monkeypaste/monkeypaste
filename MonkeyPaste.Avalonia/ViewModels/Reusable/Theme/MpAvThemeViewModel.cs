@@ -64,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
             //"jigsaw.png",
             "joystickative.png",
             "joystickative2.png",
+            "keyboardcolor.png",
             "ladybug.png",
             "lifepreserver.png",
             "megaphone.png",
@@ -81,12 +82,15 @@ namespace MonkeyPaste.Avalonia {
             "remove.png",
             "select.png",
             "sheep.png",
+            "sliderscolor.png",
             "spellcheck.png",
             "stargold.png",
             "staryellow.png",
             "staryellow2.png",
+            "tagcolor.png",
             "text.png",
             "trophy.png",
+            "usercolor.png",
             "warning.png",
             "warningtime.png",
         };
@@ -368,8 +372,8 @@ namespace MonkeyPaste.Avalonia {
             prev = Math.Max(0.5d, prev);
             hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
 
+            hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
             if (tt == MpThemeType.Dark) {
-                hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
                 //if (tt == MpThemeType.Dark) {
                 tl = Math.Max(25d / 100d, tl - (15d / 100d));
                 //} else {
@@ -439,7 +443,7 @@ namespace MonkeyPaste.Avalonia {
             // 18
             palette.Add(MpColorHelpers.ColorFromHsv(h, 0.3d, 0.9d).ToHex(true));
             // 19
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true));
+            palette.Add(MpColorHelpers.GetDarkerHexColor(MpColorHelpers.ColorFromHsv(h, 0.3d, 0.9d).ToHex(true)));
 
             if (tt == MpThemeType.Dark) {
                 // 20 (fg)
@@ -463,6 +467,10 @@ namespace MonkeyPaste.Avalonia {
             palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.15d, 0.65d).ToHex(true));
             // 26
             palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.05d, 0.95d).ToHex(true));
+            // 27
+            palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.8d).ToHex(true));
+            // 28
+            palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.2d).ToHex(true));
 
             var colors = palette.Select(x => x.ToAvColor()).ToArray();
             SetThemeValue(MpThemeResourceKey.ThemeColor, colors[0]);
@@ -501,8 +509,8 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[25]);
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
 
-            var test = palette.Where(x => x.ToLower() == "#ff252226" || x.ToLower() == "#252226").Select(x => palette.IndexOf(x));
-
+            SetThemeValue(MpThemeResourceKey.ThemeLightColor, colors[27]);
+            SetThemeValue(MpThemeResourceKey.ThemeDarkColor, colors[28]);
 
             MpMessenger.SendGlobal(MpMessageType.ThemeChanged);
         }

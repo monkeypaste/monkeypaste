@@ -63,7 +63,7 @@ function onScrollBarVisibilityChanged_ntf(can_x, can_y) {
 		canScrollX: can_x,
 		canScrollY: can_y
 	};
-	log('can x: ' + can_x + ' can y: ' + can_y);
+	//log('can x: ' + can_x + ' can y: ' + can_y);
 	const msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyScrollBarVisibilityChanged', msgStr);
 }

@@ -261,7 +261,7 @@ var globals = {
 	DropItemElms: [],
 	DropMoveLineColor: 'red',
 	DropCopyLineColor: 'green',
-	DropHtmlLineColor: 'blue',
+	DropHtmlLineColor: 'lightblue',
 
 	// #endregion
 	// #endregion
@@ -274,6 +274,8 @@ var globals = {
 	IgnoreNextSelectionChange: false,
 	SuppressContentChangedNtf: false,
 	IsToolbarsLoaded: false,
+
+	IsDisablingReadOnly: false,
 
 	IsRtl: false,
 	// #endregion

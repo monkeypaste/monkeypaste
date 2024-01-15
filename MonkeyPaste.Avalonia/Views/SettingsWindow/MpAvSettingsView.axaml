@@ -13,7 +13,6 @@
                        x:DataType="local:MpAvSettingsViewModel"
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
-                       Background="{DynamicResource SettingsWindowBgBrush}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
     <local:MpAvUserControl.Resources>
         <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush">Transparent</SolidColorBrush>
@@ -22,6 +21,19 @@
     </local:MpAvUserControl.Resources>
 
     <local:MpAvUserControl.Styles>
+        <!--  CONTAINER BG  -->
+
+
+        <Style Selector="DockPanel#OuterContainer">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3Color}" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.dark">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+        </Style>
+    
+        <!--  FOOTER  -->
 
         <Style Selector="Button.footer">
             <Setter Property="HorizontalContentAlignment"
@@ -30,6 +42,15 @@
                     Value="5,3" />
             <Setter Property="Margin"
                     Value="10,0" />
+        </Style>
+
+        <Style Selector="DockPanel#OuterContainer Border#FooterContainer">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.dark Border#FooterContainer">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3Color}" />
         </Style>
 
         <!--  FRAMES  -->
@@ -345,7 +366,9 @@
                     Value="0,0,10,10" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <DockPanel LastChildFill="True">
+    <DockPanel x:Name="OuterContainer"
+               Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+               LastChildFill="True">
         <StackPanel x:Name="TabAndFilterPanel"
                     IsVisible="{Binding !IsLoginOnly}"
                     DockPanel.Dock="Top"
@@ -429,8 +452,7 @@
                 HorizontalAlignment="Stretch"
                 BorderThickness="0,1.5,0,0"
                 BorderBrush="Silver"
-                MinHeight="48"
-                Background="{DynamicResource ThemeCompliment2Color}">
+                MinHeight="48">
             <DockPanel>
                 <Button x:Name="ResetButton"
                         IsVisible="{Binding IsPrefTabSelected}"

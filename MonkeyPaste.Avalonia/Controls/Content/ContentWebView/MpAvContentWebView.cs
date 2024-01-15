@@ -1537,16 +1537,11 @@ namespace MonkeyPaste.Avalonia {
                 ) {
                 return;
             }
-            var msg = new MpQuillIsHostFocusedChangedMessage() {
-                isHostFocused = IsContentSelected
-            };
-            if (IsContentSelected) {
-                if (BindingContext.IsSubSelectionEnabled) {
-                    this.Focus();
-                    SendMessage($"hostIsFocusedChanged_ext('{msg.SerializeObjectToBase64()}')");
-                }
+            if (IsContentSelected && BindingContext.IsSubSelectionEnabled) {
+                FocusEditor();
             }
         }
+
 
         #endregion
 
@@ -1612,8 +1607,17 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     GrowView();
                     SendMessage($"disableReadOnly_ext()");
+                    await Task.Delay(1000);
+                    FocusEditor();
                 }
             });
+        }
+
+        public void FocusEditor() {
+            this.Focus();
+            SendMessage($"hostIsFocusedChanged_ext('{new MpQuillIsHostFocusedChangedMessage() {
+                isHostFocused = true
+            }.SerializeObjectToBase64()}')");
         }
         #endregion
 
@@ -1656,11 +1660,12 @@ namespace MonkeyPaste.Avalonia {
                     !BindingContext.IsDropOverTile) {
                     GrowView();
                 }
+                await Task.Delay(300);
+                FocusEditor();
             } else {
                 SendMessage("disableSubSelection_ext()");
                 ShrinkView();
             }
-
         }
 
         #endregion

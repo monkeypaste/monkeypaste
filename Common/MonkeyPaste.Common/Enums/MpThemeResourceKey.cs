@@ -13,6 +13,8 @@
         PreThemeIdx,
 
         ThemeColor,
+        ThemeLightColor,
+        ThemeDarkColor,
 
         ThemeBlackColor,
         ThemeWhiteColor,

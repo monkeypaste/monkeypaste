@@ -218,6 +218,33 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             });
 
+        public ICommand DecraseFocusCommand => new MpCommand(
+             () => {
+                 var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                     MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.Execute(null);
+                     return;
+                 }
+
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                     avm.PasteActionCommand.Execute(null);
+                     return;
+                 }
+             },
+            () => {
+
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return false;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
+                    return MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.CanExecute(null);
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
+                    return avm.PasteActionCommand.CanExecute(null);
+                }
+                return false;
+            });
+
         public ICommand DecreaseFocusCommand => new MpCommand(
             () => {
                 if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
@@ -227,19 +254,29 @@ namespace MonkeyPaste.Avalonia {
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
                     // clip tile control focus
                     if (fc is TextBox && !ctvm.IsTitleReadOnly) {
+                        // finish title edit
                         ctvm.FinishEditTitleCommand.Execute(null);
                         return;
                     }
                     if (ctvm.IsSubSelectionEnabled) {
                         if (ctvm.IsContentReadOnly) {
+                            // disable sub selection
                             ctvm.DisableSubSelectionCommand.Execute(null);
                             if (fc is MpAvContentTextBox ctb) {
                                 ctb.TryKillFocusAsync().FireAndForgetSafeAsync();
                             }
                             return;
                         }
+                        // enable read only
                         ctvm.EnableContentReadOnlyCommand.Execute(null);
                         return;
+                    }
+                    if (ctvm.IsWindowOpen) {
+                        if (ctvm.IsAppendNotifier) {
+                            // prompt to end appending
+                            MpAvClipTrayViewModel.Instance.DeactivateAppendModeCommand.Execute(null);
+                            return;
+                        }
                     }
                 }
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvSearchBoxViewModel>(out var sbvm)) {
@@ -258,12 +295,47 @@ namespace MonkeyPaste.Avalonia {
                         TopLevel.GetTopLevel(fc) is MpAvWindow w) {
                         // searchbox clear text button is focus, move focus to mw
                         w.TrySetFocusAsync().FireAndForgetSafeAsync();
+                        return;
                     }
                 }
-
+                if (fc.GetVisualAncestor<MpAvWindow>() is { } fc_w &&
+                    fc_w is not MpAvNotificationWindow &&
+                    fc_w is not MpAvMainWindow) {
+                    // minimize window
+                    fc_w.WindowState = WindowState.Minimized;
+                    return;
+                }
+                // attempt to hide main window
                 MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(null);
             }, () => {
-                return MpAvWindowManager.ActiveWindow != null;
+                return MpAvWindowManager.IsAnyActive;
+            });
+
+        public ICommand IncreaseFocusCommand => new MpCommand(
+            () => {
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
+                    // clip tile control focus
+                    if (!ctvm.IsTitleReadOnly) {
+                        // ignore when editing title
+                        return;
+                    }
+                    if (ctvm.IsSubSelectionEnabled) {
+                        if (ctvm.IsContentReadOnly) {
+                            // disable read only
+                            ctvm.DisableContentReadOnlyCommand.Execute(null);
+                            return;
+                        }
+                    } else {
+                        // enable sub-selection
+                        ctvm.EnableSubSelectionCommand.Execute(null);
+                        return;
+                    }
+                }
+            }, () => {
+                return MpAvWindowManager.IsAnyActive;
             });
 
         #endregion

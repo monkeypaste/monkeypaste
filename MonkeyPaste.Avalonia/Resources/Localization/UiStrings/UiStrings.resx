@@ -857,7 +857,8 @@ But fret not! No data is lost after downgrading. Only new stuff will be evaluate
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
-    <value>Trash or unlink something from '{0}' to add more.</value>
+    <value>Trash or unlink something 
+from '{0}' to add more.</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
     <value>Max '{0}' storage is {1}.</value>

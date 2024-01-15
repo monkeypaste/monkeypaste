@@ -1,6 +1,10 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="UserColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/usercolor.png</sys:String>
+    <sys:String x:Key="SlidersColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/sliderscolor.png</sys:String>
+    <sys:String x:Key="KeyboardColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/keyboardcolor.png</sys:String>
+    <sys:String x:Key="TagColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/tagcolor.png</sys:String>
     <sys:String x:Key="LadyBugImage">avares://MonkeyPaste.Avalonia/Assets/Images/ladybug.png</sys:String>
     <sys:String x:Key="CommandImage">avares://MonkeyPaste.Avalonia/Assets/Images/command.png</sys:String>
     <sys:String x:Key="DownCloudImage">avares://MonkeyPaste.Avalonia/Assets/Images/downcloud.png</sys:String>
@@ -110,7 +114,7 @@
     <sys:String x:Key="HotkeyActiveImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystickactive2.png</sys:String>
     <sys:String x:Key="PasteToAppImage">avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png</sys:String>
     <sys:String x:Key="BullsEyeImage">avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png</sys:String>
-    <sys:String x:Key="PinToCollectionImage">avares://MonkeyPaste.Avalonia/Assets/Images/tag.png</sys:String>
+    <sys:String x:Key="TagImage">avares://MonkeyPaste.Avalonia/Assets/Images/tag.png</sys:String>
     <sys:String x:Key="OpenEyeImage">avares://MonkeyPaste.Avalonia/Assets/Images/eye.png</sys:String>
     <sys:String x:Key="ClosedEyeImage">avares://MonkeyPaste.Avalonia/Assets/Images/eye_closed.png</sys:String>
     <sys:String x:Key="UserImage">avares://MonkeyPaste.Avalonia/Assets/Images/user.png</sys:String>

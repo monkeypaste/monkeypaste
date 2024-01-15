@@ -21,6 +21,9 @@ If you have the 'Unlimited' plan, there is no limit to the amount of content you
 Free and basic accounts content capacity (will be referred to as *content cap*) is limited to some fixed amount so that newly added clips will replace the oldest in a first-in-first-out manner. Where the [oldest](#recycling-details) clip will be moved to the [Trash](docs/collections/trash.md).
 
 :::tip 
+<p>
+  <img src={require('/img/account_cap_protect_clip.png').default} class="figure" title="Clips tagged to favorites will never be recycled 🔒"/>  
+</p> 
 Adding a clip to the **Favorites** collection guarantees it will not be recycled.
 :::
 
@@ -53,7 +56,7 @@ By default with a free account, this clip capacity stuff can get pretty frustrat
 ## On-Demand clipboard listening
 
 By pausing the clipboard listener, *System Tray->Pause* a 🎯 icon will appear in the top-right of the *Pin Tray* when there is something **new** on the clipboard. 
-<p><img class="figure narrow" src="/docs/build/img/free_acct_sug_bullseye_btn.png" /></p>
+<p><img class="figure narrow" src={require('/img/free_acct_sug_bullseye_btn.png').default} /></p>
 
 :::tip 
 You can uncheck *Settings->Preferences->Listen To Clipboard On Startup* to **always** have the clipboard listener be paused.

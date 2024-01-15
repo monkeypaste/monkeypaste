@@ -1,0 +1,39 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       x:Class="MonkeyPaste.Avalonia.MpAvSettingsTabCollectionView">
+    <ItemsControl x:Name="SettingsFrameItemsControl"
+                  ItemsSource="{Binding}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="local:MpAvSettingsFrameViewModel">
+                <local:MpAvSettingsFrameView Classes.selected="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                    <local:MpAvSettingsFrameView.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="FilteredItems"
+                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                            <Binding Path="IsVisible" />
+                        </MultiBinding>
+                    </local:MpAvSettingsFrameView.IsVisible>
+                </local:MpAvSettingsFrameView>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+
+            <ItemsPanelTemplate>
+                <WrapPanel HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
+
+</local:MpAvUserControl>

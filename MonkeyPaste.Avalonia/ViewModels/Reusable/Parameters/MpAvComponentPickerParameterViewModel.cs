@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 switch (ComponentType) {
                     case MpSelectableComponentType.Collection:
-                        return "PinToCollectionImage";
+                        return "TagImage";
                     case MpSelectableComponentType.Action:
                         return "BoltImage";
                     case MpSelectableComponentType.Analyzer:

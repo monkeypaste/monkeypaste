@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpTriggerType.ClipAdded:
                         return "ClipboardImage";
                     case MpTriggerType.ClipTagged:
-                        return "PinToCollectionImage";
+                        return "TagImage";
                     case MpTriggerType.FileSystemChanged:
                         return "FolderImage";
                     case MpTriggerType.Shortcut:
@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpActionType.Analyze:
                         return "BrainImage";
                     case MpActionType.Classify:
-                        return "PinToCollectionImage";
+                        return "TagColorImage";
                     case MpActionType.Conditional:
                         return "ScalesImage";
                     case MpActionType.Repeater:

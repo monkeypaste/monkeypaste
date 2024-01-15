@@ -339,8 +339,9 @@ namespace MonkeyPaste.Avalonia {
                 // only allow content drop onto link tags
                 return false;
             }
+            bool is_partial = ido.ContainsPartialContentRef();
             bool is_internal = ido.ContainsContentRef();
-            if (!is_copy && is_internal) {
+            if (!is_copy && is_internal && !is_partial) {
                 if (ido.TryGetSourceRefIdBySourceType(MpTransactionSourceType.CopyItem, out int ciid)) {
                     bool is_already_linked = BindingContext.IsCopyItemLinked(ciid);
                     if (is_already_linked) {

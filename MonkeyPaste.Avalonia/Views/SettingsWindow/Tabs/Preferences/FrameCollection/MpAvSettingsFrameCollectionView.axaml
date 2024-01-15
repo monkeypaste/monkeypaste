@@ -35,4 +35,5 @@
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
+  
 </local:MpAvUserControl>

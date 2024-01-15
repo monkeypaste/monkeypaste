@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpAvViewModelBase<MpAvClipTrayViewModel>,
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
+        MpIWindowStateViewModel,
         MpIDraggable,
         MpIAnimatable,
         MpILocatorItem,
@@ -679,7 +680,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public WindowState PopOutWindowState { get; set; }
+        public WindowState WindowState { get; set; }
 
         #region Append
         //public bool IsAppendTrayItem {
@@ -1729,6 +1730,9 @@ namespace MonkeyPaste.Avalonia {
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
+                        if (!IsFocusWithin) {
+                            FocusContainerAsync(NavigationMethod.Pointer).FireAndForgetSafeAsync();
+                        }
                     } else {
                         LastDeselectedDateTime = DateTime.Now;
                         if (!IsWindowOpen &&
@@ -2015,14 +2019,6 @@ namespace MonkeyPaste.Avalonia {
             #region Window Bindings
 
             pow.Bind(
-                Window.WindowStateProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(PopOutWindowState),
-                    Mode = BindingMode.TwoWay
-                });
-
-            pow.Bind(
                 Window.MinWidthProperty,
                 new Binding() {
                     Source = this,
@@ -2059,7 +2055,7 @@ namespace MonkeyPaste.Avalonia {
             return pow;
         }
 
-        public async Task<bool> FocusContainerAsync(NavigationMethod focusType, bool selectOnFocus = false) {
+        public async Task<bool> FocusContainerAsync(NavigationMethod focusType) {
             if (GetContentView() is not Control c) {
                 return false;
             }
@@ -2110,6 +2106,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             cv.LoadContentAsync().FireAndForgetSafeAsync(this);
+            if (cv is not MpAvContentWebView wv) {
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                // since selection isn't changing need manually move focus to pop out window
+                await Task.Delay(1000);
+                wv.FocusEditor();
+            });
         }
         private void HandleThisPopoutActivate(MpAvWindow pow, EventArgs e) {
 
@@ -2163,10 +2167,10 @@ namespace MonkeyPaste.Avalonia {
                         confirm_owner = pow;
                     } else {
                         confirm_owner = ppctv;
-                        if (PopOutWindowState == WindowState.Minimized ||
+                        if (WindowState == WindowState.Minimized ||
                             !pow.IsActive) {
                             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                            PopOutWindowState = WindowState.Normal;
+                            WindowState = WindowState.Normal;
                             pow.Activate();
                         }
                     }

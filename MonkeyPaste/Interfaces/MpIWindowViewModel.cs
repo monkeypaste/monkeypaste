@@ -1,10 +1,13 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public interface MpIWindowViewModel : MpIViewModel {
         MpWindowType WindowType { get; }
     }
-
+    public interface MpIWindowStateViewModel : MpIWindowViewModel {
+        WindowState WindowState { get; set; }
+    }
     public interface MpIIsAnimatedWindowViewModel : MpIWindowViewModel {
         bool IsAnimated { get; }
         bool IsAnimating { get; set; }
@@ -23,6 +26,8 @@ namespace MonkeyPaste {
     public interface MpIWindowHandlesClosingViewModel : MpIWindowViewModel {
         bool IsWindowCloseHandled { get; }
     }
-
+    public interface MpIWantsTopmostWindowViewModel : MpIWindowViewModel {
+        bool WantsTopmost { get; }
+    }
 
 }

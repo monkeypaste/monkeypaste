@@ -330,8 +330,11 @@
   <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
     <value>Manually Add From Clipboard</value>
   </data>
-  <data name="MpShortcutType_HideMainWindow" xml:space="preserve">
-    <value>Hide Main Window</value>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>Decrease Focus</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>Increase Focus</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
     <value>Exit Application</value>

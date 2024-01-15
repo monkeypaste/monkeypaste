@@ -214,7 +214,11 @@ namespace MonkeyPaste.Avalonia {
                             MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand
                         },
                         {
-                            MpShortcutType.HideMainWindow,
+                            MpShortcutType.IncreaseFocus,
+                            MpAvApplicationCommand.Instance.IncreaseFocusCommand
+                        },
+                        {
+                            MpShortcutType.DecreaseFocus,
                             MpAvApplicationCommand.Instance.DecreaseFocusCommand
                         },
                         {

@@ -1531,6 +1531,8 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
+
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
             OnPropertyChanged(nameof(LayoutType));
@@ -2479,8 +2481,6 @@ namespace MonkeyPaste.Avalonia {
                             // them right
                             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeEnd);
                         });
-                    } else {
-                        RefreshQueryPageOffsetsAsync().FireAndForgetSafeAsync();
                     }
 
                     break;
@@ -2493,8 +2493,6 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TotalQueryCountChanged:
                     OnPropertyChanged(nameof(IsQueryEmpty));
                     OnPropertyChanged(nameof(Mp.Services.Query.TotalAvailableItemsInQuery));
-                    //AllItems.ForEach(x => x.UpdateQueryOffset());
-                    RefreshQueryPageOffsetsAsync().FireAndForgetSafeAsync();
                     break;
 
                 // DND
@@ -2514,6 +2512,12 @@ namespace MonkeyPaste.Avalonia {
                     CurPasteOrDragItem = null;
                     break;
             }
+        }
+
+        private void Instance_OnGlobalMouseReleased(object sender, bool e) {
+            // BUG in some cases dragend/dragcancel/drop isn't getting reported
+            // and corner buttons stop showing up this shall fix it
+            IsAnyDropOverTrays = false;
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
@@ -2638,29 +2642,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task RefreshQueryPageOffsetsAsync() {
-            await Task.Delay(0);
-            //return;
-            //Dispatcher.UIThread.VerifyAccess();
-
-            //while (IsAnyBusy) {
-            //    await Task.Delay(100);
-            //}
-            //int head_offset_idx = -1;
-            //if (!IsQueryTrayEmpty) {
-            //    var ordered_query_item_ids = QueryItems.OrderBy(scrollx => scrollx.QueryOffsetIdx).Select(scrollx => scrollx.IsPinPlaceholder ? scrollx.PinPlaceholderCopyItemId : scrollx.CopyItemId).ToList();
-            //    head_offset_idx = await Mp.Services.Query.FetchItemOffsetIdxAsync(ordered_query_item_ids.First());
-            //    for (int i = 0; i < ordered_query_item_ids.Count; i++) {
-            //        int new_offset_idx = head_offset_idx + i;
-            //        var ctvm = QueryItems.FirstOrDefault(scrollx => scrollx.IsPinPlaceholder ? scrollx.PinPlaceholderCopyItemId == ordered_query_item_ids[i] : scrollx.CopyItemId == ordered_query_item_ids[i]);
-            //        if (ctvm == null) {
-            //            continue;
-            //        }
-            //        ctvm.UpdateQueryOffset(new_offset_idx);
-            //    }
-
-            //}
-        }
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(object ci_or_ciid) {
 
             MpAvClipTileViewModel nctvm = null;
@@ -5024,7 +5005,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (AppendClipTileViewModel == null ||
-                AppendClipTileViewModel.PopOutWindowState == WindowState.Minimized) {
+                AppendClipTileViewModel.WindowState == WindowState.Minimized) {
 
                 ShowEmptyOrMinimizedAppendNotifications(_appendModeFlags, last_flags);
             }
