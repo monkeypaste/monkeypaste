@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
             DataObject = MpAvDataObject.Parse(Json);
             if (DataObject != null) {
                 foreach (var kvp in DataObject.DataFormatLookup) {
-                    var doivm = await CreateDataObjectItemViewModel(kvp.Key.Name, kvp.Value);
+                    var doivm = await CreateDataObjectItemViewModel(kvp.Key, kvp.Value);
                     Items.Add(doivm);
                 }
             }

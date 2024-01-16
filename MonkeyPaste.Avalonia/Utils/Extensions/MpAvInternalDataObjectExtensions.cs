@@ -193,7 +193,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Content
-
+        public static bool IsAppendableSourceType(this MpDataObjectSourceType dost) {
+            switch (dost) {
+                default:
+                    return false;
+                case MpDataObjectSourceType.ClipboardWatcher:
+                    return true;
+            }
+        }
         public static void FinalizeContentOleTitle(this IDataObject ido, bool isFullContentReference, bool isCopy) {
             // title should be unaltered ci.title
             if (isFullContentReference && !isCopy) {
@@ -227,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (!isFullContentReference) {
-                ido.Set(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT, ci.PublicHandle);
+                ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT, ci.PublicHandle);
             }
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_ID_FORMAT, ci.Id);
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, ci.ItemType.ToString());
@@ -248,6 +255,21 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
+        public static MpDataObjectSourceType GetDataObjectSourceType(this IDataObject ido) {
+            if (ido.TryGetData(MpPortableDataFormats.INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT, out string formatTypeStr) &&
+                formatTypeStr.ToEnum<MpDataObjectSourceType>() is { } dost) {
+                return dost;
+            }
+            return MpDataObjectSourceType.None;
+        }
+
+        public static void SetDataObjectSourceType(this IDataObject ido, MpDataObjectSourceType sourceType) {
+            if (ido.GetDataObjectSourceType() is { } dost && dost != MpDataObjectSourceType.None && dost != sourceType) {
+                MpDebug.Break($"Warning setting data object source type! Was '{dost}' trying to set it to {sourceType}");
+            }
+            ido.Set(MpPortableDataFormats.INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT, sourceType.ToString());
+        }
+
         public static bool ContainsPartialContentRef(this IDataObject ido) {
             // NOTE public handle is used for sub-selection OLE because
             // public handle is only available for active tiles which is only when
@@ -259,7 +281,7 @@ namespace MonkeyPaste.Avalonia {
             if (ido == null) {
                 return false;
             }
-            return ido.Contains(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT);
+            return ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT);
         }
 
 

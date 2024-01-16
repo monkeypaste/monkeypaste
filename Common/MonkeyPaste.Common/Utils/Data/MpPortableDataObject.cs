@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common.Plugin;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace MonkeyPaste.Common {
 
         #region Properties
 
-        public virtual Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; set; } = new Dictionary<MpPortableDataFormat, object>();
+        public virtual ConcurrentDictionary<string, object> DataFormatLookup { get; set; } = new ConcurrentDictionary<string, object>();
 
         #endregion
 
@@ -24,7 +25,6 @@ namespace MonkeyPaste.Common {
         #region Constructors
 
         public MpPortableDataObject() {
-            DataFormatLookup = new Dictionary<MpPortableDataFormat, object>();
         }
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
@@ -39,15 +39,11 @@ namespace MonkeyPaste.Common {
         #region Public Methods
 
         public bool ContainsData(string format) {
-            return GetData(format) != null;
+            return DataFormatLookup.ContainsKey(format);
         }
 
         public virtual object GetData(string format) {
-            var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if (pdf == null) {
-                return null;
-            }
-            DataFormatLookup.TryGetValue(pdf, out object data);
+            DataFormatLookup.TryGetValue(format, out object data);
             return data;
         }
 
@@ -81,47 +77,22 @@ namespace MonkeyPaste.Common {
         //}
 
         public virtual void SetData(string format, object data) {
-            var pdf = MpPortableDataFormats.GetDataFormat(format);
-            MpDebug.Assert(pdf != null, $"Shouldn't ever be null anymore");
-
-            //if (data is string[] newStrArr &&
-            //    TryGetData(format, out string[] curStrArr) &&
-            //        newStrArr.Any(x => !curStrArr.Contains(x))) {
-            //    MpConsole.WriteLine($"String list ({format}) updated", true);
-            //    MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curStrArr)}");
-            //    MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newStrArr)}", false, true);
-
-            //    // update string list IN PLACE
-            //    Array.Resize(ref curStrArr, newStrArr.Length);
-            //    //newStrArr.CopyTo(curStrArr, 0);
-            //    for (int i = 0; i < curStrArr.Length; i++) {
-            //        curStrArr[i] = newStrArr[i];
-            //    }
-            //    return;
-            //} 
-            //else if (data is byte[] newBytes &&
-            //           TryGetData(format, out byte[] curBytes) &&
-            //            !curBytes.SequenceEqual(newBytes)) {
-            //    // update image IN PLACE
-            //    if (curBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-            //        MpConsole.WriteLine($"place holder for {format} replaced with '{newBytes.ToDecodedString()}'");
-            //    }
-            //    Array.Resize(ref curBytes, newBytes.Length);
-            //    newBytes.CopyTo(curBytes, 0);
-            //    DataFormatLookup[pdf] = curBytes;
-            //    return;
-            //}
-            DataFormatLookup.AddOrReplace(pdf, data);
+            if (!DataFormatLookup.TryAdd(format, data)) {
+                DataFormatLookup[format] = data;
+            }
+        }
+        public virtual bool Remove(string format) {
+            return DataFormatLookup.TryRemove(format, out _);
         }
 
 
         public string SerializeData() {
-            return MpJsonExtensions.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
+            return MpJsonExtensions.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key, x => (object)x.Value));
         }
 
         public override string ToString() {
             var sb = new StringBuilder();
-            DataFormatLookup.ForEach(x => sb.Append(x.Key.Name + "|"));
+            DataFormatLookup.ForEach(x => sb.Append(x.Key + " | "));
             return sb.ToString();
         }
 

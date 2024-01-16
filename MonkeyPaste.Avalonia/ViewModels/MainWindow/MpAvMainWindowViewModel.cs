@@ -970,7 +970,7 @@ namespace MonkeyPaste.Avalonia {
             if (force_activate && MpAvWindowManager.MainWindow is { } mw) {
                 // when mw is shown and not active it doesn't hide or receive input until activated
                 mw.Activate();
-                mw.Topmost = true;
+                //mw.Topmost = true;
             }
 
             MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}' MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");

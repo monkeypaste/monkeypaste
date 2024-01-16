@@ -179,29 +179,28 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
 
-        async Task<object> MpIPlatformDataObjectTools.ReadAnalyzerDataObjectAsync(object idoObj) {
+        async Task<object> MpIPlatformDataObjectTools.ReadDataObjectAsync(object idoObj, MpDataObjectSourceType sourceType) {
             if (idoObj is not IDataObject ido) {
                 MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
                 return null;
             }
-            var avdo = await PerformOlePluginRequestAsync(
-                isRead: true,
-                isDnd: false,
-                ido: ido,
-                attachActiveProcessIfNone: false,
-                ignorePlugins: false);
-            return avdo;
-        }
-        async Task<object> MpIPlatformDataObjectTools.ReadDragDropDataObjectAsync(object idoObj) {
-            if (idoObj is not IDataObject ido) {
-                MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-                return null;
-            }
-            var avdo = await PerformOlePluginRequestAsync(
-                isRead: true,
-                isDnd: true,
-                ido: ido,
-                ignorePlugins: false);
+            bool is_dnd =
+                sourceType == MpDataObjectSourceType.ClipTileDrop ||
+                sourceType == MpDataObjectSourceType.TagDrop ||
+                sourceType == MpDataObjectSourceType.QueryTrayDrop ||
+                sourceType == MpDataObjectSourceType.PinTrayDrop ||
+                sourceType == MpDataObjectSourceType.ActionDrop;
+
+            bool attachExtProcess = sourceType != MpDataObjectSourceType.PluginResponse;
+
+            MpAvDataObject avdo = await PerformOlePluginRequestAsync(
+                        isRead: true,
+                        isDnd: is_dnd,
+                        ido: ido,
+                        ignorePlugins: false,
+                        attachActiveProcessIfNone: attachExtProcess);
+            avdo.SetDataObjectSourceType(sourceType);
+
             return avdo;
         }
         async Task<object> MpIPlatformDataObjectTools.WriteDragDropDataObjectAsync(object idoObj) {

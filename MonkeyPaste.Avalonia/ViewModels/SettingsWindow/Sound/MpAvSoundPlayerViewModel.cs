@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         bool IsMuted =>
-            MpAvPrefViewModel.Instance.NotificationSoundVolume > 0;
+            MpAvPrefViewModel.Instance.NotificationSoundVolume == 0;
 
         public bool CanPlaySound =>
             IsOsSupported;

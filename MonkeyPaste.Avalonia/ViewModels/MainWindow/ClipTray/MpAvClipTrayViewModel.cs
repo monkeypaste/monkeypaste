@@ -70,16 +70,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentBuilder Implementation
 
-        public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy, MpDataObjectSourceType sourceType) {
+        public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy, MpDataObjectSourceType sourceType = default) {
             IDataObject ido = avOrPortableDataObject as IDataObject;
             if (ido == null && avOrPortableDataObject.ToDataObject() is IDataObject cnvIdo) {
                 ido = cnvIdo;
             }
-            MpAvDataObject mpdo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(ido) as MpAvDataObject;
+            sourceType = sourceType == default ? ido.GetDataObjectSourceType() : sourceType;
+            MpAvDataObject mpdo = await Mp.Services.DataObjectTools.ReadDataObjectAsync(ido, sourceType) as MpAvDataObject;
 
             if (mpdo == null) {
                 return null;
             }
+            mpdo.SetDataObjectSourceType(sourceType);
 
             if (mpdo.ContainsContentRef()) {
                 // internal source, finalize title 
@@ -92,9 +94,7 @@ namespace MonkeyPaste.Avalonia {
             switch (sourceType) {
                 case MpDataObjectSourceType.FolderWatcher:
                     // remove ext if there 
-                    if (mpdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
-                        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT));
-                    }
+                    mpdo.Remove(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT);
                     // add file explorer as source
                     mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, new MpPortableProcessInfo(Mp.Services.PlatformInfo.OsFileManagerPath));
                     break;
@@ -106,6 +106,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpDataObjectSourceType.PinTrayDrop:
                 case MpDataObjectSourceType.QueryTrayDrop:
                 case MpDataObjectSourceType.TagDrop:
+                case MpDataObjectSourceType.ClipTileDrop:
                     // remove ext if drag from internal
                     remove_ext = MpAvDoDragDropWrapper.IsAnyDragging;
                     is_drop = true;
@@ -117,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (remove_ext && mpdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
-                mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT));
+                mpdo.Remove(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT);
             } else if (!remove_ext && !mpdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
                 MpPortableProcessInfo source_pi = is_drop ?
                     Mp.Services.DragProcessWatcher.DragProcess :
@@ -2608,7 +2609,8 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.Post(async () => {
                 IsAddingStartupClipboardItem = is_startup_ido;
-                await AddItemFromDataObjectAsync(mpdo as MpAvDataObject);
+                await BuildFromDataObjectAsync(mpdo as MpAvDataObject, false, MpDataObjectSourceType.ClipboardWatcher);
+                //await AddItemFromDataObjectAsync(mpdo as MpAvDataObject);
 
                 IsAddingStartupClipboardItem = false;
             });
@@ -3121,7 +3123,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // update cap in view
                 ProcessAccountCapsAsync(MpAccountCapCheckType.Refresh).FireAndForgetSafeAsync();
-            } else {
+            } else if (IsModelToBeAdded(ci)) {
                 await ProcessAccountCapsAsync(MpAccountCapCheckType.Add);
                 MpAvTagTrayViewModel.Instance.AllTagViewModel.UpdateClipCountAsync().FireAndForgetSafeAsync();
             }
@@ -3132,7 +3134,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool wasAppended = false;
-            if (IsAnyAppendMode) {
+            if (IsAnyAppendMode && ci.DataObjectSourceType.IsAppendableSourceType()) {
                 wasAppended = await UpdateAppendModeAsync(ci);
                 if (!wasAppended && PendingNewModels.All(x => x.Id != ci.Id)) {
                     PendingNewModels.Add(ci);
@@ -3680,60 +3682,62 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-
-                await AddItemFromDataObjectAsync(SelectedItem.CopyItem.ToAvDataObject());
+                var avdo = SelectedItem.CopyItem.ToAvDataObject();
+                await BuildFromDataObjectAsync(avdo, true);
 
                 IsBusy = false;
             }, () => SelectedItem != null && SelectedItem.IsContentReadOnly);
 
-        public ICommand AddNewItemsCommand => new MpAsyncCommand<object>(
-            async (tagDropCopyItemOnlyArg) => {
-
-                DispatcherPriority dp = DispatcherPriority.Normal;
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
-                    !MpAvMainWindowViewModel.Instance.IsMainWindowActive) {
-                    // this case can cause system lag so lower priority
-                    // TODO find better priority this is too low i think
-                    //dp = DispatcherPriority.ApplicationIdle;
-                    dp = DispatcherPriority.Normal;
+        public MpIAsyncCommand AddNewItemsCommand => new MpAsyncCommand(
+            async () => {
+                var sw = Stopwatch.StartNew();
+                while (IsPinTrayBusy) {
+                    if (sw.ElapsedMilliseconds > 5_000) {
+                        MpConsole.WriteLine($"AddNewItems cmd timeout, adding anyway");
+                        IsPinTrayBusy = false;
+                        break;
+                    }
                 }
-                await Dispatcher.UIThread.InvokeAsync(async () => {
-                    IsPinTrayBusy = true;
+                if (!PendingNewModels.Any()) {
+                    // nothing to add (at least now)
+                    return;
+                }
+                IsPinTrayBusy = true;
 
-                    int selectedId = -1;
-                    if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked && SelectedItem != null) {
-                        selectedId = SelectedItem.CopyItemId;
-                    }
+                int selectedId = -1;
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked && SelectedItem != null) {
+                    selectedId = SelectedItem.CopyItemId;
+                }
 
-                    // NOTE only adding most recent to not clog up pin tray, all badge will convey other added items
-                    var most_recent_pending_ci = PendingNewModels.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
-                    if (PendingNewModels.Where(x => x.Id != most_recent_pending_ci.Id) is IEnumerable<MpCopyItem> other_pending_cil &&
-                        other_pending_cil.Any() &&
-                        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == MpTag.AllTagId) is MpAvTagTileViewModel all_ttvm &&
-                        other_pending_cil.Where(x => !all_ttvm.CopyItemIdsNeedingView.Contains(x.Id)).Select(x => x.Id) is IEnumerable<int> other_pending_ciids_neeeding_view) {
-                        // NOTE this worksaround 'All' tag being a pseudo link tag to allow badge count w/o 
-                        // interrupting linking logic
-                        all_ttvm.CopyItemIdsNeedingView.AddRange(other_pending_ciids_neeeding_view);
-                    }
-                    MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_pending_ci);
-                    await PinTileCommand.ExecuteAsync(nctvm);
-
-                    PendingNewModels.Clear();
-                    if (selectedId >= 0) {
-                        var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
-                        if (selectedVm != null) {
-                            selectedVm.IsSelected = true;
-                        }
-                    }
+                // NOTE only adding most recent to not clog up pin tray, all badge will convey other added items
+                var most_recent_pending_ci = PendingNewModels.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
+                if (PendingNewModels.Where(x => x.Id != most_recent_pending_ci.Id) is IEnumerable<MpCopyItem> other_pending_cil &&
+                    other_pending_cil.Any() &&
+                    MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == MpTag.AllTagId) is MpAvTagTileViewModel all_ttvm &&
+                    other_pending_cil.Where(x => !all_ttvm.CopyItemIdsNeedingView.Contains(x.Id)).Select(x => x.Id) is IEnumerable<int> other_pending_ciids_neeeding_view) {
+                    // NOTE this worksaround 'All' tag being a pseudo link tag to allow badge count w/o 
+                    // interrupting linking logic
+                    all_ttvm.CopyItemIdsNeedingView.AddRange(other_pending_ciids_neeeding_view);
+                }
+                if (most_recent_pending_ci == null || most_recent_pending_ci.Id <= 0) {
+                    // i think this is how the phantom tiles are getting added, 
                     IsPinTrayBusy = false;
-                    //using tray scroll changed so tile drop behaviors update their drop rects
-                }, dp);
-            },
-            (tagDropCopyItemOnlyArg) => {
-                if (tagDropCopyItemOnlyArg is MpCopyItem tag_drop_ci) {
-                    MpDebug.Assert(PendingNewModels.All(x => x.Id != tag_drop_ci.Id), "AddNewItems cmd error. should only happen once from drop in tag view");
-                    PendingNewModels.Add(tag_drop_ci);
+                    return;
                 }
+                MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_pending_ci);
+                await PinTileCommand.ExecuteAsync(nctvm);
+
+                PendingNewModels.Clear();
+                if (selectedId >= 0) {
+                    var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
+                    if (selectedVm != null) {
+                        selectedVm.IsSelected = true;
+                    }
+                }
+                IsPinTrayBusy = false;
+                //using tray scroll changed so tile drop behaviors update their drop rects
+            },
+            () => {
                 if (PendingNewModels.Count == 0) {
                     return false;
                 }
@@ -4766,7 +4770,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand AddItemWhileIgnoringClipboardCommand => new MpAsyncCommand(
             async () => {
                 // BUG cmd execute isn't updating when visibility changes via CanAddItemWhileIgnoringClipboard
-                await AddItemFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject);
+                await BuildFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject, false, MpDataObjectSourceType.ClipboardWatcher);
             });
 
         public MpIAsyncCommand DeleteAllContentCommand => new MpAsyncCommand(
@@ -5122,7 +5126,25 @@ namespace MonkeyPaste.Avalonia {
                 deactivate_append_ctvm.IsAppendNotifier = false;
             }
         }
-        private async Task<bool> UpdateAppendModeAsync(MpCopyItem aci, bool isNew = true) {
+
+        private bool IsModelToBeAdded(MpCopyItem aci) {
+            // this prevents cap from treating temporary append only items from 'Add' processing
+            if (aci.WasDupOnCreate) {
+                return false;
+            }
+            if (
+                !IsAnyAppendMode ||
+                AppendClipTileViewModel == null ||
+                !aci.DataObjectSourceType.IsAppendableSourceType() ||
+                !IsCopyItemAppendable(aci)) {
+                // not going to be appended
+                return true;
+            }
+            // item WILL be appended, so added determined by pref
+            return !MpAvPrefViewModel.Instance.IgnoreAppendedItems;
+        }
+
+        private async Task<bool> UpdateAppendModeAsync(MpCopyItem aci) {
             // returns true if item was appended
 
             Dispatcher.UIThread.VerifyAccess();
@@ -5146,6 +5168,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
+            bool isNew = !aci.WasDupOnCreate;
             string append_data = aci.ItemData;
             if (AppendClipTileViewModel.CopyItemType == MpCopyItemType.FileList) {
                 append_data = await MpAvFileItemCollectionViewModel.CreateFileListEditorFragment(aci);
@@ -5163,7 +5186,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
 
-                        if (!isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
+                        if (isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
                             // if item is not new or will persist include ref to it
                             // NOTE item ref is added to END to keep primary source at front
                             aci_create_sources.Add(aci);

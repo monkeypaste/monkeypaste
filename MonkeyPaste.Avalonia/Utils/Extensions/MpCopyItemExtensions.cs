@@ -12,10 +12,11 @@ namespace MonkeyPaste.Avalonia {
             bool includeSelfRef = false,
             bool includeTitle = false,
             string[] forceFormats = null) {
-            if (ci == null) {
-                return new MpAvDataObject();
-            }
             var avdo = new MpAvDataObject();
+            avdo.SetDataObjectSourceType(MpDataObjectSourceType.ClipTileClone);
+            if (ci == null) {
+                return avdo;
+            }
             if (forceFormats == null) {
                 switch (ci.ItemType) {
                     case MpCopyItemType.Text:

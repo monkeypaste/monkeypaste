@@ -1,9 +1,8 @@
-﻿using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 
 namespace MonkeyPaste.Common {
     public interface MpIPortableDataObject {
-        Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; }
+        ConcurrentDictionary<string, object> DataFormatLookup { get; }
 
         bool ContainsData(string format);
         object GetData(string format);

@@ -343,7 +343,7 @@ namespace MonkeyPaste.Avalonia {
             await avdo.MapAllPseudoFormatsAsync();
             // remove all empty formats (workaround for cefnet bug w/ empty asciiUrl
             avdo.DataFormatLookup.Where(x => x.Value == null)
-                .ForEach(x => avdo.DataFormatLookup.Remove(x.Key));
+                .ForEach(x => avdo.Remove(x.Key));
             return avdo;
         }
 
@@ -866,9 +866,10 @@ namespace MonkeyPaste.Avalonia {
 
                         var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
 
-                        processed_drag_avdo = await Mp.Services
-                            .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
                         MpPortableProcessInfo drag_pi = Mp.Services.DragProcessWatcher.DragProcess;
+
+                        processed_drag_avdo = await Mp.Services
+                            .DataObjectTools.ReadDataObjectAsync(unprocessed_drag_avdo, MpDataObjectSourceType.ClipTileDrop) as IDataObject;
 
                         if (drag_pi == null &&
                             processed_drag_avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var proc_drag_pi)) {

@@ -131,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE need to use processed/output data object, avdo becomes disposed
             var mpdo = await
                 Mp.Services.DataObjectTools
-                .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+                .ReadDataObjectAsync(e.Data, MpDataObjectSourceType.PinTrayDrop) as MpAvDataObject;
 
             Dispatcher.UIThread.Post(async () => {
                 var avdo_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, is_copy, MpDataObjectSourceType.PinTrayDrop);
@@ -177,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
             if (drop_idx < 0) {
                 return false;
             }
-            string drag_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT) as string;
+            string drag_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT) as string;
             if (string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
                 // Tile drop is always valid
                 return true;

@@ -14,6 +14,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemCollectionViewModel :
         MpAvViewModelBase,
+        MpIWantsTopmostWindowViewModel,
         MpICloseWindowViewModel,
         MpIExpandableViewModel {
 
@@ -43,6 +44,8 @@ namespace MonkeyPaste.Avalonia {
             get => IsCriteriaWindowOpen;
             set => IsCriteriaWindowOpen = value;
         }
+        bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
+            true;
         #endregion
 
 

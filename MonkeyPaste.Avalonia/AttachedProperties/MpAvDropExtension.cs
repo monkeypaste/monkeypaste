@@ -129,7 +129,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region DropEffects AvaloniaProperty
         public static DragDropEffects GetDropEffects(AvaloniaObject obj) {
             return obj.GetValue(DropEffectsProperty);
@@ -142,6 +141,21 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<DragDropEffects> DropEffectsProperty =
             AvaloniaProperty.RegisterAttached<object, Control, DragDropEffects>(
                 "DropEffects", DragDropEffects.None);
+
+        #endregion
+
+        #region SourceType AvaloniaProperty
+        public static MpDataObjectSourceType GetSourceType(AvaloniaObject obj) {
+            return obj.GetValue(SourceTypeProperty);
+        }
+
+        public static void SetSourceType(AvaloniaObject obj, MpDataObjectSourceType value) {
+            obj.SetValue(SourceTypeProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpDataObjectSourceType> SourceTypeProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpDataObjectSourceType>(
+                "SourceType", MpDataObjectSourceType.None);
 
         #endregion
 
@@ -205,7 +219,6 @@ namespace MonkeyPaste.Avalonia {
             control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
         }
 
-
         private static void DragEnter(object sender, DragEventArgs e) {
             if (sender is not Control c) {
                 return;
@@ -265,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
             }
             e.Handled = GetIsDropHandled(tb);
             var processed_drag_avdo = await Mp.Services
-                       .DataObjectTools.ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+                       .DataObjectTools.ReadDataObjectAsync(e.Data, GetSourceType(tb)) as MpAvDataObject;
             Dispatcher.UIThread.Post(() => {
                 string drop_text = processed_drag_avdo.GetData(MpPortableDataFormats.Text) as string;
                 int drop_idx = tb.CaretIndex;

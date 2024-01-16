@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common.Plugin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -122,25 +121,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public string FormatName {
-            get {
-                if (Format == null) {
-                    return string.Empty;
-                }
-                return Format.Name;
-            }
-        }
-
-        public int FormatId {
-            get {
-                if (Format == null) {
-                    return -1;
-                }
-                return Format.Id;
-            }
-        }
-
-        public MpPortableDataFormat Format { get; set; }
+        public string FormatName { get; private set; }
 
         #endregion
 
@@ -152,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipboardFormatViewModel(MpAvClipboardHandlerCollectionViewModel parent, string format) : base(parent) {
             PropertyChanged += MpClipboardFormatViewModel_PropertyChanged;
-            Format = MpPortableDataFormats.GetDataFormat(format);
+            FormatName = format;
         }
 
         #endregion

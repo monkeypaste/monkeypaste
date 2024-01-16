@@ -64,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
 
                 string default_title = await GetDefaultItemTitleAsync(itemType, avdo);
                 int itemIconId = PickIconIdFromSourceRefs(refs);
+                MpDataObjectSourceType dataObjectSourceType = avdo.GetDataObjectSourceType();
 
                 ci = await MpCopyItem.CreateAsync(
                     dataObjectId: dobj.Id,
@@ -72,6 +73,7 @@ namespace MonkeyPaste.Avalonia {
                     itemType: itemType,
                     iconId: itemIconId,
                     checksum: checksum,
+                    dataObjectSourceType: dataObjectSourceType,
                     suppressWrite: suppressWrite);
                 if (ci == null) {
                     // probably null data, clean up pre-create
@@ -412,7 +414,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
-            MpConsole.WriteLine($"DataObject format normalization complete. Available dataobject formats: {string.Join(",", avdo.DataFormatLookup.Select(x => x.Key.Name))}");
+            MpConsole.WriteLine($"DataObject format normalization complete. Available dataobject formats: {string.Join(",", avdo.DataFormatLookup.Select(x => x.Key))}");
             return avdo;
         }
 

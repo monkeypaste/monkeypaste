@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIContentBuilder {
-        Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy, MpDataObjectSourceType sourceType);
+        Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy, MpDataObjectSourceType sourceType = default);
     }
 }

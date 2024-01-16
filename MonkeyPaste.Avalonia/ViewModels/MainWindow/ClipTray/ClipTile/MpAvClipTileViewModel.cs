@@ -1447,7 +1447,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // NOTE only silent lock for pop out
                 // when appending user likely wants external app fully visible
-                pow.Show(silentLock: false);
+                pow.Show();
             }
 
             OnPropertyChanged(nameof(IsWindowOpen));

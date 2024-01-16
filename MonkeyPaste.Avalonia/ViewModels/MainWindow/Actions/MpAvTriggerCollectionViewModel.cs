@@ -16,6 +16,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
         MpAvViewModelBase,
         MpIPopupMenuViewModel,
+        MpIWantsTopmostWindowViewModel,
         MpIAsyncCollectionObject,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
@@ -69,6 +70,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIActiveWindowViewModel Implementation        
         public bool IsWindowActive { get; set; }
+        #endregion
+
+        #region MpIWantsTopmostWindowViewModel Implementation        
+        bool MpIWantsTopmostWindowViewModel.WantsTopmost => true;
         #endregion
 
         #region MpIPopupMenuViewModel Implementation
@@ -662,7 +667,6 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvTriggerActionChooserView(),
-                Topmost = true,
                 DataContext = this,
                 Padding = new Thickness(10),
                 Background = Brushes.DimGray

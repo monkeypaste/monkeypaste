@@ -191,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
                         // trigger sidebar pop out
                         w.WindowState = WindowState.Normal;
                         w.Activate();
-                        w.Topmost = true;
+                        //w.Topmost = true;
                     }
                     break;
             }

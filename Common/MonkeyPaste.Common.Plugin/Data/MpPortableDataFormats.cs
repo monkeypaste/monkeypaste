@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
 
@@ -57,7 +56,7 @@ namespace MonkeyPaste.Common.Plugin {
 
             // internal
             INTERNAL_SOURCE_URI_LIST_FORMAT, // maps to LinuxUriList            
-            INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT,
+            INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT,
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
             INTERNAL_CONTENT_ANNOTATION_FORMAT,
@@ -69,10 +68,10 @@ namespace MonkeyPaste.Common.Plugin {
             INTERNAL_ACTION_ITEM_FORMAT,
             INTERNAL_PROCESS_INFO_FORMAT,
             INTERNAL_FILE_LIST_FRAGMENT_FORMAT,
-            INTERNAL_CONTENT_ID_FORMAT
+            INTERNAL_CONTENT_ID_FORMAT,
+            INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT
         };
 
-        private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();
 
         #endregion
 
@@ -209,13 +208,13 @@ namespace MonkeyPaste.Common.Plugin {
         public const string INTERNAL_SOURCE_URI_LIST_FORMAT = LinuxUriList;
 
         public const string INTERNAL_CONTENT_ID_FORMAT = "Mp Internal Content";
-        public const string INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT = "Mp Internal Partial Content";
+        public const string INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT = "Mp Internal Partial Content";
         public const string INTERNAL_CONTENT_TYPE_FORMAT = "Mp Internal Content Type";
         public const string INTERNAL_CONTENT_TITLE_FORMAT = "Mp Internal Content Title";
-
         public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
         public const string INTERNAL_CONTENT_ANNOTATION_FORMAT = "Mp Internal Content Annotation";
         public const string INTERNAL_CONTENT_DELTA_FORMAT = "Mp Internal Quill Delta Json";
+
         public const string INTERNAL_PARAMETER_REQUEST_FORMAT = "Mp Internal Parameter Request Format";
         public const string INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT = "Mp Internal Search Criteria Item";
         public const string INTERNAL_TAG_ITEM_FORMAT = "Mp Internal Tag Tile Item";
@@ -228,6 +227,7 @@ namespace MonkeyPaste.Common.Plugin {
 
 
         // NOTE data object is not registered and only used to merge data objects
+        public const string INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT = "Mp Internal Data Object Source Type Format";
         public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
 
         public const string PLACEHOLDER_DATAOBJECT_TEXT = "3acaaed7-862d-47f5-8614-3259d40fce4d";
@@ -238,7 +238,7 @@ namespace MonkeyPaste.Common.Plugin {
         public static string[] InternalFormats = new string[] {
             INTERNAL_SOURCE_URI_LIST_FORMAT,
             INTERNAL_CONTENT_ID_FORMAT,
-            INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT,
+            INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT,
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
             INTERNAL_CONTENT_ANNOTATION_FORMAT,
@@ -253,14 +253,16 @@ namespace MonkeyPaste.Common.Plugin {
             INTERNAL_PARAMETER_VALUE_FORMAT,
             INTERNAL_FILE_LIST_FRAGMENT_FORMAT,
             INTERNAL_RTF_TO_HTML_FORMAT,
-            INTERNAL_HTML_TO_RTF_FORMAT
+            INTERNAL_HTML_TO_RTF_FORMAT,
+            INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT
         };
         #endregion
 
         #region Properties
 
+        private static List<string> _formatLookup = new List<string>();
         public static IEnumerable<string> RegisteredFormats =>
-            _formatLookup.Select(x => x.Value.Name);
+            _formatLookup;
 
         #endregion
 
@@ -269,70 +271,25 @@ namespace MonkeyPaste.Common.Plugin {
         public static void Init(MpIPlatformDataObjectRegistrar registrar) {
             _registrar = registrar;
 
-            _formatLookup = new Dictionary<int, MpPortableDataFormat>();
+            _formatLookup.Clear();
 
             foreach (string formatName in _defaultFormatNames) {
                 RegisterDataFormat(formatName);
             }
         }
-        public static MpPortableDataFormat GetDataFormat(int id) {
-            if (_formatLookup.TryGetValue(id, out var df)) {
-                return df;
-            }
-            return null;
-        }
 
-        public static MpPortableDataFormat GetDataFormat(string format) {
-            int id = GetDataFormatId(format);
-            if (id < 0) {
-                //MpConsole.WriteLine($"Unregistered data format '{format}' accessed. Registering it...");
-                RegisterDataFormat(format);
-                return GetDataFormat(format);
+        public static void RegisterDataFormat(string format) {
+            if (_formatLookup.Contains(format)) {
+                return;
             }
-            _formatLookup.TryGetValue(id, out MpPortableDataFormat dataFormat);
-            return dataFormat;
-        }
-
-        public static MpPortableDataFormat RegisterDataFormat(string format) {
-            int id = GetDataFormatId(format);
-            if (id >= 0) {
-                //MpConsole.WriteTraceLine($"Warning attempted to register already registered format name:'{format}' id:{id}");
-                return _formatLookup[id];
-            }
-            id = _registrar.RegisterFormat(format);
-            var pdf = new MpPortableDataFormat(format, id);
-            _formatLookup.Add(pdf.Id, pdf);
+            // pretty sure registering is only needed for win32 c++ but just keeping it
+            int id = _registrar == null ? 0 : _registrar.RegisterFormat(format);
+            _formatLookup.Add(format);
             MpConsole.WriteLine($"Successfully registered format name:'{format}' id:{id}");
-            return pdf;
         }
 
         public static void UnregisterDataFormat(string format) {
-            int id = GetDataFormatId(format);
-            if (id == 0) {
-                // format doesn't exist so pretend it was successfull but log 
-                //MpConsole.WriteTraceLine($"Warning attempted to unregister a non-registered format named '{format}'");
-                return;
-            }
-            if (_formatLookup.Remove(id)) {
-                //MpConsole.WriteLine($"Successfully unregistered format name:'{format}' id:{id}");
-            }
-        }
-
-        public static int GetDataFormatId(string format) {
-            var kvpl = _formatLookup.Where(x => x.Value.Name.ToLower() == format.ToLower());
-            if (!kvpl.Any()) {
-                return -1;
-            }
-            if (kvpl.Count() > 1) {
-                // multiple formats w/ same name but different case detected
-                //MpDebug.Break();
-                var match_kvp = kvpl.FirstOrDefault(x => x.Value.Name == format);
-                if (!match_kvp.Equals(default(KeyValuePair<int, MpPortableDataFormat>))) {
-                    // when exact match found return that one...
-                    return match_kvp.Key;
-                }
-            }
-            return kvpl.First().Key;
+            _formatLookup.Remove(format);
         }
 
         #endregion

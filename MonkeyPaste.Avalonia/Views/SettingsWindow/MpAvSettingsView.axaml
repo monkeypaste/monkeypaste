@@ -46,11 +46,11 @@
 
         <Style Selector="DockPanel#OuterContainer Border#FooterContainer">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+                    Value="{DynamicResource ThemeCompliment4DarkColor}" />
         </Style>
         <Style Selector="DockPanel#OuterContainer.dark Border#FooterContainer">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment3Color}" />
+                    Value="{DynamicResource ThemeCompliment4Color}" />
         </Style>
 
         <!--  FRAMES  -->

@@ -209,7 +209,6 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvPluginBrowserView(),
-                Topmost = true
             };
             if (pbw.Content is MpAvPluginBrowserView pbv &&
                 pbv.FindControl<TabStrip>("PluginTabStrip") is TabStrip ts) {

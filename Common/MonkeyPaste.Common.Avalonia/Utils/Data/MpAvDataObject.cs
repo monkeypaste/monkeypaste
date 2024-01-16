@@ -40,7 +40,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public MpAvDataObject(string format, object data) : base(format, data) { }
         public MpAvDataObject(Dictionary<string, object> items) : base(items) { }
         public MpAvDataObject(MpPortableDataObject mpdo) :
-            this(mpdo.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value)) { }
+            this(mpdo.DataFormatLookup.ToDictionary(x => x.Key, x => x.Value)) { }
 
         public override void SetData(string format, object data) {
             // NOTE this wrapper just ensures formats are saved properly 
@@ -261,7 +261,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Avalonia.Input.IDataObject Implementation
 
         IEnumerable<string> IDataObject.GetDataFormats() {
-            return DataFormatLookup.Select(x => x.Key.Name);
+            return DataFormatLookup.Select(x => x.Key);
         }
 
         bool IDataObject.Contains(string dataFormat) {

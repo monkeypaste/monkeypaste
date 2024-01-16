@@ -87,7 +87,7 @@ namespace AltOleHandler {
                 if (write_output is MpAvDataObject avdo) {
                     var empty_formats = write_output.GetAllDataFormats().Where(x => !write_output.ContainsData(x));
                     // NOTE need to make sure empty formats are removed or clipboard will bark
-                    empty_formats.ForEach(x => avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(x)));
+                    empty_formats.ForEach(x => avdo.Remove(x));
                     var test = avdo.GetAllDataFormats().Where(x => !avdo.ContainsData(x));
                     if (test.Any()) {
 

@@ -306,8 +306,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
                 return true;
             } else if (ido is MpPortableDataObject mpdo &&
-                MpPortableDataFormats.GetDataFormat(format) is MpPortableDataFormat pdf) {
-                mpdo.DataFormatLookup.Remove(pdf);
+                        mpdo.Remove(format)) {
                 return true;
             }
             return false;

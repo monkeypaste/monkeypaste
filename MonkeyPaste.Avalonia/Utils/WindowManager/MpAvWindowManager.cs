@@ -214,8 +214,10 @@ namespace MonkeyPaste.Avalonia {
             }
             if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
                 adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
-                w.Topmost = true;
+                //w.Topmost = true;
                 ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
+            } else {
+                UpdateTopmost();
             }
         }
         private static void Window_Deactivated(object sender, EventArgs e) {
@@ -232,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
             } else {
                 UpdateTopmost();
-                StartChildLifecycleChangeDelay(w);
+                //StartChildLifecycleChangeDelay(w);
             }
         }
         private static void Window_Opened(object sender, System.EventArgs e) {
@@ -413,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
                 // ignore update while animating out
-                return;
+                //return;
             }
 
             // NOTE only update unowned windows because modal ntf
@@ -421,13 +423,21 @@ namespace MonkeyPaste.Avalonia {
             // get non-minimzed windows wanting topmost ordered by least priority
             var priority_ordered_topmost_wl = AllWindows
                 .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
-                .OrderBy(x => x.IsActive)
-                .ThenBy(x => (int)x.BindingContext.WindowType);
+                //.OrderBy(x => x.IsActive)
+                .OrderByDescending(x => (int)x.BindingContext.WindowType);
+            // activate windows wanting top most from highest to lowestpriority
+            var mw = AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
-            // activate windows wanting top most for lowest to highest priority
+            if (priority_ordered_topmost_wl.Contains(mw)) {
+                mw.Topmost = true;
+            } else if (mw != null) {
+                mw.Topmost = false;
+            }
+
             priority_ordered_topmost_wl
-                //.ForEach((x, idx) => x.Topmost = idx == 0);
-                .ForEach(x => x.Topmost = true);
+                .Where(x => x is not MpAvMainWindow)
+                .ForEach((x, idx) => x.Topmost = idx == 0);
+            //.ForEach(x => x.Topmost = true);
         }
 
 

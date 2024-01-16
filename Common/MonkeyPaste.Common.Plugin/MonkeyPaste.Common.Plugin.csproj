@@ -27,6 +27,11 @@
       <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
     </ItemGroup>
   </Target>
+  <ItemGroup>
+    <Compile Remove="Data\DataFormat\**" />
+    <EmbeddedResource Remove="Data\DataFormat\**" />
+    <None Remove="Data\DataFormat\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="icon.png">

@@ -76,7 +76,7 @@ namespace MonkeyPaste {
                 } else if (kvp.Value is IEnumerable<object> valObjs) {
                     // file list
 
-                    if (kvp.Key.Name != MpPortableDataFormats.Files) {
+                    if (kvp.Key != MpPortableDataFormats.Files) {
                         // this table is only used for searching so no other enumerable types are currently needed
                         continue;
                     }
@@ -116,7 +116,7 @@ namespace MonkeyPaste {
                         // store each file item separately
                         _ = await MpDataObjectItem.CreateAsync(
                                     dataObjectId: ndio.Id,
-                                    itemFormat: kvp.Key.Name,
+                                    itemFormat: kvp.Key,
                                     itemData: fp,
                                     itemIconId: fp_icon_id);
 
@@ -130,14 +130,14 @@ namespace MonkeyPaste {
                     itemDataStr = kvp.Value.ToString();
                 } else {
                     MpDebug.Assert(
-                        kvp.Key.Name != MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,
+                        kvp.Key != MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,
                         $"DataObject error! URI List should ALWAYS be a collection but was '{kvp.Value}'");
 
-                    if (_IgnoredFormatNames.Contains(kvp.Key.Name)) {
+                    if (_IgnoredFormatNames.Contains(kvp.Key)) {
                         // don't need to worry about storing this (paramValue type is list)
                         continue;
                     }
-                    if (kvp.Key.Name == MpPortableDataFormats.Files) {
+                    if (kvp.Key == MpPortableDataFormats.Files) {
 
                     }
                     if (kvp.Value is IEnumerable<object> ol) {
@@ -150,7 +150,7 @@ namespace MonkeyPaste {
                 }
                 _ = await MpDataObjectItem.CreateAsync(
                     dataObjectId: ndio.Id,
-                    itemFormat: kvp.Key.Name,
+                    itemFormat: kvp.Key,
                     itemData: itemDataStr);
             }
             return ndio;

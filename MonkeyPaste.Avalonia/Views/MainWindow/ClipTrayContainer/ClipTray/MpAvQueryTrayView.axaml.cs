@@ -112,10 +112,10 @@ namespace MonkeyPaste.Avalonia {
             // NOTE need to use processed/output data object, avdo becomes disposed
             var mpdo = await
                 Mp.Services.DataObjectTools
-                .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+                .ReadDataObjectAsync(e.Data, MpDataObjectSourceType.QueryTrayDrop) as MpAvDataObject;
 
             Dispatcher.UIThread.Post(async () => {
-                var drop_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, is_copy, MpDataObjectSourceType.QueryTrayDrop);
+                var drop_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, is_copy);
                 if (drop_ci == null || drop_ci.Id == 0) {
                     ResetDrop();
                     return;

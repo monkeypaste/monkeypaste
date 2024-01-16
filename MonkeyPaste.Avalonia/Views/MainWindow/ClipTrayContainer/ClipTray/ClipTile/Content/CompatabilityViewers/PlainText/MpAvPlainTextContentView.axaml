@@ -18,6 +18,7 @@
     <local:MpAvContentTextBox x:Name="PlainTextContentTextBox"
                               Classes="fontFamilyOverride dnd"
                               local:MpAvDropExtension.DropCommand="{Binding TransactionCollectionViewModel.CreateTransactionFromOleOpCommand}"
+                              local:MpAvDropExtension.SourceType="ClipTileDrop"
                               local:MpAvTextControlDragExtension.IsDragging="{Binding IsTileDragging, Mode=TwoWay}"
                               local:MpAvHighlightTextExtension.IsEnabled="True"
                               BorderThickness="0"

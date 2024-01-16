@@ -260,23 +260,23 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (ctvm.IsSubSelectionEnabled) {
                         if (ctvm.IsContentReadOnly) {
-                            // disable sub selection
-                            ctvm.DisableSubSelectionCommand.Execute(null);
-                            if (fc is MpAvContentTextBox ctb) {
-                                ctb.TryKillFocusAsync().FireAndForgetSafeAsync();
+                            if (ctvm.DisableSubSelectionCommand.CanExecute(null)) {
+                                // disable sub selection
+                                ctvm.DisableSubSelectionCommand.Execute(null);
+                                if (fc is MpAvContentTextBox ctb) {
+                                    ctb.TryKillFocusAsync().FireAndForgetSafeAsync();
+                                }
+                                return;
                             }
-                            return;
+                            if (ctvm.IsAppendNotifier) {
+                                // prompt to end appending
+                                MpAvClipTrayViewModel.Instance.DeactivateAppendModeCommand.Execute(null);
+                                return;
+                            }
                         }
                         // enable read only
                         ctvm.EnableContentReadOnlyCommand.Execute(null);
                         return;
-                    }
-                    if (ctvm.IsWindowOpen) {
-                        if (ctvm.IsAppendNotifier) {
-                            // prompt to end appending
-                            MpAvClipTrayViewModel.Instance.DeactivateAppendModeCommand.Execute(null);
-                            return;
-                        }
                     }
                 }
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvSearchBoxViewModel>(out var sbvm)) {

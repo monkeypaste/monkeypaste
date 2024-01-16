@@ -114,11 +114,19 @@ namespace MonkeyPaste {
         public int ItemSize1 { get; set; }
         public int ItemSize2 { get; set; }
 
+        [Column("e_MpDataObjectSourceType")]
+        public string ItemSourceTypeStr { get; set; } = MpDataObjectSourceType.None.ToString();
+
         [Indexed]
         public string ContentCheckSum { get; set; }
         #endregion
 
         #region Properties
+        [Ignore]
+        public MpDataObjectSourceType DataObjectSourceType {
+            get => ItemSourceTypeStr.ToEnum<MpDataObjectSourceType>();
+            set => ItemSourceTypeStr = value.ToString();
+        }
 
         [Ignore]
         public Guid CopyItemGuid {
@@ -157,10 +165,14 @@ namespace MonkeyPaste {
             int dataObjectId = 0,
             int iconId = 0,
             string checksum = default,
+            MpDataObjectSourceType dataObjectSourceType = MpDataObjectSourceType.None,
             bool suppressWrite = false) {
 
             if (dataObjectId <= 0 && !suppressWrite) {
                 throw new Exception($"Should have dataObjectId. param was {dataObjectId}");
+            }
+            if (dataObjectSourceType == MpDataObjectSourceType.None) {
+                throw new Exception("Should have data object source type");
             }
             if (checksum == default) {
                 throw new Exception("Item must have checksum");
@@ -177,7 +189,8 @@ namespace MonkeyPaste {
                 CopyCount = 1,
                 DataObjectId = dataObjectId,
                 IconId = iconId,
-                ContentCheckSum = checksum
+                ContentCheckSum = checksum,
+                DataObjectSourceType = dataObjectSourceType
             };
             if (!suppressWrite) {
                 await newCopyItem.WriteToDatabaseAsync(true);

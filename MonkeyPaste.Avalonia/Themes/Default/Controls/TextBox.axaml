@@ -35,6 +35,8 @@
     <Style Selector="TextBox.dnd, :is(AutoCompleteBox).dnd">
         <Setter Property="local:MpAvDropExtension.IsEnabled"
                 Value="True" />
+        <Setter Property="local:MpAvDropExtension.SourceType"
+                Value="NonContentDrop" />
         <Setter Property="local:MpAvTextControlDragExtension.IsEnabled"
                 Value="True" />
     </Style>
