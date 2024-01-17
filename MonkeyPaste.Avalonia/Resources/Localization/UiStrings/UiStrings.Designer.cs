@@ -5044,6 +5044,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This only hides the main window. All other non-dialog windows always show in taskbar..
+        /// </summary>
+        public static string PrefShowInTaskbarHint {
+            get {
+                return ResourceManager.GetString("PrefShowInTaskbarHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show In Taskbar.
         /// </summary>
         public static string PrefShowInTaskbarLabel {
@@ -6245,7 +6254,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check For Update....
+        ///   Looks up a localized string similar to Check For Updates....
         /// </summary>
         public static string SysTrayCheckForUpdateLabel {
             get {
@@ -6254,7 +6263,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mode.
+        ///   Looks up a localized string similar to Send Feedback or Bug Report.
+        /// </summary>
+        public static string SysTrayFeebackLabel {
+            get {
+                return ResourceManager.GetString("SysTrayFeebackLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modes.
         /// </summary>
         public static string SysTrayModeHeader {
             get {

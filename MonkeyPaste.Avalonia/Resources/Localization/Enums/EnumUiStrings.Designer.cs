@@ -2248,15 +2248,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Taskbar.
-        /// </summary>
-        public static string MpSettingsFrameType_Taskbar {
-            get {
-                return ResourceManager.GetString("MpSettingsFrameType_Taskbar", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Theme.
         /// </summary>
         public static string MpSettingsFrameType_Theme {

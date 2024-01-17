@@ -1314,6 +1314,10 @@ namespace MonkeyPaste.Avalonia {
                             IsBusy = true;
                             SetModelToCurrent();
                             await SearchCriteriaItem.WriteToDatabaseAsync();
+                            if (SearchCriteriaItemId == 0) {
+                                // pending was saved, update model
+
+                            }
                             HasModelChanged = false;
                             _lastSavedCriteria = SearchCriteriaItem;
                             IsBusy = false;

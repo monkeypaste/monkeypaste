@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
 
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayModeHeader,
-                            IconResourceKey = "RobotClawImage",
+                            //IconResourceKey = "RobotArmColorImage",
                             SubItems = new List<MpAvMenuItemViewModel>() {
 
                                 // APPEND INLINE 
@@ -152,12 +152,13 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
 
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
+
                         // PLUGIN BROWSER
 
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayPluginBrowserLabel,
-                            IconTintHexStr = MpSystemColors.orange1,
-                            IconSourceObj = "JigsawImage",
+                            IconResourceKey = "JigsawImage",
                             CommandSrcObj = MpAvPluginBrowserViewModel.Instance,
                             CommandPath = nameof(MpAvPluginBrowserViewModel.Instance.ShowPluginBrowserCommand)
                         },
@@ -166,13 +167,14 @@ namespace MonkeyPaste.Avalonia {
 
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonSettingsTitle,
-                            IconResourceKey = "CogImage",
+                            IconSourceObj = "CogColorImage",
                             CommandSrcObj = MpAvSettingsViewModel.Instance,
                             CommandPath = nameof(MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand),
                             //ShortcutArgs = new object[] { MpShortcutType.ShowSettings },
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ShowSettings),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
 
                         // HELP
 
@@ -184,6 +186,7 @@ namespace MonkeyPaste.Avalonia {
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.OpenHelp),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
+
 
                         // RATE APP
 
@@ -201,6 +204,15 @@ namespace MonkeyPaste.Avalonia {
                             IconResourceKey = "RadarImage",
                             Command = CheckForUpdateCommand,
                             CommandParameter = "Click"
+                        },
+                        
+                        // CHECK FOR UPDATE
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayFeebackLabel,
+                            IconResourceKey = "LetterImage",
+                            Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
+                            CommandParameter = MpServerConstants.SUPPORT_EMAIL_URI
                         },
 
                         // ABOUT

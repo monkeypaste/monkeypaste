@@ -16,19 +16,19 @@ function find_unverified_account(string $activation_code, string $email)
 
     $account = $statement->fetch(PDO::FETCH_ASSOC);
 
-    if(!$account) {
+    if (!$account) {
         return null;
     }
-    
+
     // already expired, delete the in active account with expired activation code
-    if ((int)$account['expired'] === 1) {
+    if ((int) $account['expired'] === 1) {
         delete_account_by_id($account['id']);
         return null;
     }
     // verify the password
-    if(password_verify($activation_code, $account['activation_code'])) {
+    if (password_verify($activation_code, $account['activation_code'])) {
         return $account;
-    }  
+    }
 }
 function delete_account_by_id(int $id, int $active = 0)
 {
@@ -53,21 +53,21 @@ function activate_account(int $id): bool
 
     return $statement->execute();
 }
-$account = NULL;
+$account = null;
 
 if (is_get_request()) {
 
     // sanitize the email & activation code
     [$inputs, $errors] = filter($_GET, [
         'email' => 'string | required | email',
-        'activation_code' => 'string | required'
+        'activation_code' => 'string | required',
     ]);
-    if($errors) {
+    if ($errors) {
         redirect_to('error.php');
     }
 
     $account = find_unverified_account($inputs['activation_code'], $inputs['email']);
-    if (!$account || !activate_account($account['id'])) {        
+    if (!$account || !activate_account($account['id'])) {
         redirect_to('error.php');
     }
 } else {

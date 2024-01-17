@@ -478,8 +478,9 @@ namespace MonkeyPaste.Common.Avalonia {
         public static double VisualPixelDensity(this Visual visual, Window w = null) {
 
             if (w == null &&
-                Application.Current.GetMainTopLevel() is Window mw) {
-                w = mw;
+                TopLevel.GetTopLevel(visual) is Window tlw) {
+                //Application.Current.GetMainTopLevel() is Window mw) {
+                w = tlw;
             }
 
             if (w == null) {

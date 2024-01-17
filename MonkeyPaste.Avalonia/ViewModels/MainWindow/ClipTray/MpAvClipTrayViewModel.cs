@@ -1907,6 +1907,12 @@ namespace MonkeyPaste.Avalonia {
 
             _isProcessingCap = true;
 
+            int added_ciid = 0;
+            if (source == MpAccountCapCheckType.Add &&
+                arg is int ciid) {
+                added_ciid = ciid;
+            }
+
             if (source == MpAccountCapCheckType.Link &&
                 arg is int tid &&
                 tid < 0 &&
@@ -1916,9 +1922,10 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Unlinking item from trash back to content, source changed from link to add.");
             }
 
+
             string last_cap_info = MpAvAccountTools.Instance.LastCapInfo.ToString();
             MpUserAccountType account_type = MpAvAccountViewModel.Instance.WorkingAccountType;
-            var cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type, source);
+            var cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type, source, added_ciid);
             MpConsole.WriteLine($"Account cap refreshed. SourceControl: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
 
@@ -2686,30 +2693,6 @@ namespace MonkeyPaste.Avalonia {
                 to_clear_pinned.ForEach(x => x.ResetTileSizeToDefaultCommand.Execute(null));
             }
         }
-        private async Task InitDefaultPlaceholdersAsync() {
-            Items.Clear();
-            for (int i = 0; i < DefaultLoadCount; i++) {
-                var ctvm = await CreateClipTileViewModelAsync(null);
-                Items.Add(ctvm);
-            }
-
-            while (Items.Any(x => x.IsAnyBusy)) {
-                await Task.Delay(100);
-            }
-        }
-
-        private void PerformLoadMore(bool isHi) {
-            if (QueryCommand.CanExecute(isHi)) {
-                QueryCommand.Execute(isHi);
-                return;
-            }
-            //Dispatcher.UIThread.Post(async () => {
-            //    while (!QueryCommand.CanExecute(isHi)) {
-            //        await Task.Delay(100);
-            //    }
-            //    QueryCommand.Execute(isHi);
-            //});
-        }
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
             if (e.OldItems != null) {
@@ -2815,11 +2798,13 @@ namespace MonkeyPaste.Avalonia {
 
         private int FindCurScrollAnchor() {
             int anchor_idx = 0;
-            if (SelectedItem != null &&
-                !SelectedItem.IsPinned) {
-                // prefer to anchor to selection
-                anchor_idx = SelectedItem.QueryOffsetIdx;
-            } else if (VisibleFromTopLeftQueryItems.FirstOrDefault() is MpAvClipTileViewModel anchor_ctvm) {
+            // NOTE omitting below, I think this is what causes ghost head
+            //if (SelectedItem != null &&
+            //    !SelectedItem.IsPinned) {
+            //    // prefer to anchor to selection
+            //    anchor_idx = SelectedItem.QueryOffsetIdx;
+            //} else 
+            if (VisibleFromTopLeftQueryItems.FirstOrDefault() is MpAvClipTileViewModel anchor_ctvm) {
                 // anchor to item with top left visible closest to top left
                 anchor_idx = anchor_ctvm.QueryOffsetIdx;
             } else if (MaxClipTrayQueryIdx > 0) {
@@ -2849,10 +2834,10 @@ namespace MonkeyPaste.Avalonia {
         }
         private void SetScrollAnchor() {
             if (_query_anchor_idx.HasValue) {
-                MpConsole.WriteLine($"SetScrollAnchor ignored, anchor already set.");
+                //MpConsole.WriteLine($"SetScrollAnchor ignored, anchor already set.");
             }
             _query_anchor_idx = FindCurScrollAnchor();
-            MpConsole.WriteLine($"[SET] Anchor idx: {_query_anchor_idx.Value}");
+            //MpConsole.WriteLine($"[SET] Anchor idx: {_query_anchor_idx.Value}");
         }
 
         private void ScrollToAnchor() {
@@ -3124,7 +3109,7 @@ namespace MonkeyPaste.Avalonia {
                 // update cap in view
                 ProcessAccountCapsAsync(MpAccountCapCheckType.Refresh).FireAndForgetSafeAsync();
             } else if (IsModelToBeAdded(ci)) {
-                await ProcessAccountCapsAsync(MpAccountCapCheckType.Add);
+                await ProcessAccountCapsAsync(MpAccountCapCheckType.Add, ci.Id);
                 MpAvTagTrayViewModel.Instance.AllTagViewModel.UpdateClipCountAsync().FireAndForgetSafeAsync();
             }
 

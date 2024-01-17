@@ -76,10 +76,10 @@ namespace MonkeyPaste.Avalonia {
                     new Binding() {
                         Source = tmivm.IconSrcBindingObj,
                         Path = tmivm.IconPropPath,
-                        Converter = MpAvIconSourceObjToBitmapConverter.Instance
+                        Converter = MpAvStringHexToBitmapTintConverter.Instance
                     });
             } else if (tmivm.IconSourceObj != null) {
-                rootIcon.Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), null, null) as WindowIcon;
+                rootIcon.Icon = MpAvStringHexToBitmapTintConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), null, null) as WindowIcon;
 
             }
 

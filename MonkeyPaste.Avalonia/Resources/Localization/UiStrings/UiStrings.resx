@@ -1613,7 +1613,7 @@ Would you like to go do that now?</value>
     <value>Auto - Copy</value>
   </data>
   <data name="SysTrayModeHeader" xml:space="preserve">
-    <value>Mode</value>
+    <value>Modes</value>
   </data>
   <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
     <value>Please wait MonkeyPaste is loading...</value>
@@ -2419,7 +2419,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <value>You are all up-to-date!</value>
   </data>
   <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
-    <value>Check For Update...</value>
+    <value>Check For Updates...</value>
   </data>
   <data name="SysTrayUpdateTooltip" xml:space="preserve">
     <value>New version available!
@@ -2595,5 +2595,11 @@ You can restart now and complete the update by re-installing, ignore this and up
   </data>
   <data name="CommonWriteLabel" xml:space="preserve">
     <value>Write</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Send Feedback or Bug Report</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>This only hides the main window. All other non-dialog windows always show in taskbar.</value>
   </data>
 </root>

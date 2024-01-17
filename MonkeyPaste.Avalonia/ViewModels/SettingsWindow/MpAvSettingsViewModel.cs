@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _restartContentParams => new string[] {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
-            nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
+            //nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
             nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
         };
 
@@ -47,10 +47,11 @@ namespace MonkeyPaste.Avalonia {
         public string[] HiddenParamIds => new string[] {
             nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
-            MpRuntimePrefParamType.ChangeRoutingType.ToString()
+            MpRuntimePrefParamType.ChangeRoutingType.ToString(),
             //nameof(MpAvPrefViewModel.Instance.UserDefinedFileExtensionsCsv)
             //nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
             //nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
+
         };
 
         private Dictionary<object, Action<MpAvPluginParameterItemView>> _runtimeParamAttachActions;
@@ -521,40 +522,6 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Taskbar) {
-                            PluginFormat = new MpRuntimePlugin() {
-                                headless = new MpHeadlessComponent() {
-                                    parameters = new List<MpParameterFormat>() {
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.ShowInTaskbar),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = UiStrings.PrefShowInTaskbarLabel,
-                                            values = new List<MpParameterValueFormat>() {
-                                                new MpParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.ShowInTaskbar.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
-                                            description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.CommonRequiresRestartHint,
-                                            isVisible = OperatingSystem.IsWindows(),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = UiStrings.PrefShowInTaskSwitcher,
-                                            values = new List<MpParameterValueFormat>() {
-                                                new MpParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.ShowInTaskSwitcher.ToString()
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Window) {
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
@@ -571,6 +538,19 @@ namespace MonkeyPaste.Avalonia {
                                                     value = x,
                                                     label = x.ToEnum<MpMainWindowShowBehaviorType>().EnumToUiString()
                                                 }).ToList()
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.ShowInTaskbar),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.PrefShowInTaskbarLabel,
+                                            description = UiStrings.PrefShowInTaskbarHint,
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpAvPrefViewModel.Instance.ShowInTaskbar.ToString()
+                                                }
+                                            }
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AnimateMainWindow),

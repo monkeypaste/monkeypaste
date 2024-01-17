@@ -248,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DecreaseFocusCommand => new MpCommand(
             () => {
                 if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
-                    MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(null);
+                    MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(MpMainWindowHideType.Force);
                     return;
                 }
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
@@ -306,9 +306,9 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 // attempt to hide main window
-                MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(null);
+                MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(MpMainWindowHideType.Force);
             }, () => {
-                return MpAvWindowManager.IsAnyActive;
+                return MpAvWindowManager.IsAnyActive || MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
             });
 
         public ICommand IncreaseFocusCommand => new MpCommand(

@@ -147,10 +147,53 @@ namespace MonkeyPaste.Common.Wpf {
         [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
         public static extern Int32 IntSetWindowLong(IntPtr hWnd, int nIndex, Int32 dwNewLong);
 
-
+        #region Topmost
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        /// <summary>
+        /// Places the window at the bottom of the Z order. If the hWnd parameter identifies a topmost window, the window loses its topmost status and is placed at the bottom of all other windows.
+        /// </summary>
+        public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+        /// <summary>
+        /// Places the window above all non-topmost windows (that is, behind all topmost windows). This flag has no effect if the window is already a non-topmost window.
+        /// </summary>
+        public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        /// <summary>
+        /// Places the window at the top of the Z order.
+        /// </summary>
+        public static readonly IntPtr HWND_TOP = new IntPtr(0);
+        /// <summary>
+        /// Places the window above all non-topmost windows. The window maintains its topmost position even when it is deactivated.
+        /// </summary>
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+
+        /// <summary>
+        /// Retains the current size (ignores the cx and cy parameters).
+        /// </summary>
+        public const UInt32 SWP_NOSIZE = 0x0001;
+        /// <summary>
+        /// Retains the current position (ignores X and Y parameters).
+        /// </summary>
+        public const UInt32 SWP_NOMOVE = 0x0002;
+        /// <summary>
+        /// Does not activate the window. If this flag is not set, the window is activated and moved to the top of either the topmost or non-topmost group (depending on the setting of the hWndInsertAfter parameter).
+        /// </summary>
+        public const UInt32 SWP_NOACTIVATE = 0x0010;
+        /// <summary>
+        /// Applies new frame styles set using the SetWindowLong function. Sends a WM_NCCALCSIZE message to the window, even if the window's size is not being changed. If this flag is not specified, WM_NCCALCSIZE is sent only when the window's size is being changed.
+        /// </summary>
+        public const UInt32 SWP_FRAMECHANGED = 0x0020;
+        /// <summary>
+        /// Retains the current Z order (ignores the hWndInsertAfter parameter).
+        /// </summary>
+        public const UInt32 SWP_NOZORDER = 0x0004;
+        /// <summary>
+        /// If the calling thread and the thread that owns the window are attached to different input queues, the system posts the request to the thread that owns the window. This prevents the calling thread from blocking its execution while other threads process the request.
+        /// </summary>
+        public const UInt32 SWP_ASYNCWINDOWPOS = 0x4000;
+
+        #endregion
         public static int IntPtrToInt32(IntPtr intPtr) {
             return unchecked((int)intPtr.ToInt64());
         }

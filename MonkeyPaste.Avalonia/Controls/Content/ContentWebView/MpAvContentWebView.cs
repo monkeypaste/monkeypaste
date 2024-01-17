@@ -1059,7 +1059,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void FinishDisposal() {
 #if CEFNET_WV
-            this.Dispose(true);
+            //this.Dispose(true);
 #endif
         }
         #endregion

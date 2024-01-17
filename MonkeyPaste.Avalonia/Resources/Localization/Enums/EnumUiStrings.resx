@@ -636,9 +636,6 @@
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
     <value>Sound</value>
   </data>
-  <data name="MpSettingsFrameType_Taskbar" xml:space="preserve">
-    <value>Taskbar</value>
-  </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
     <value>Window</value>
   </data>

@@ -325,7 +325,6 @@ namespace MonkeyPaste.Avalonia {
         public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
-        public bool ShowInTaskSwitcher { get; set; } = true;
 
         public bool AnimateMainWindow { get; set; } = true;
 

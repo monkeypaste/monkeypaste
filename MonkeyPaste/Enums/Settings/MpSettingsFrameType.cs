@@ -7,7 +7,6 @@
         Theme, //2 X
         DefaultFonts, //3
         Sound, //2
-        Taskbar, //2
         Window, //4
         Hints, //1
         International, //2

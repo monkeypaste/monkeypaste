@@ -465,6 +465,7 @@
     <None Remove="Assets\Images\keyboard.png" />
     <None Remove="Assets\Images\keyboardcolor.png" />
     <None Remove="Assets\Images\ladybug.png" />
+    <None Remove="Assets\Images\letter.png" />
     <None Remove="Assets\Images\lifepreserver.png" />
     <None Remove="Assets\Images\lines_x2_horiz %282%29.png" />
     <None Remove="Assets\Images\lines_x2_horiz.png" />
@@ -512,6 +513,7 @@
     <None Remove="Assets\Images\replace.png" />
     <None Remove="Assets\Images\reset.png" />
     <None Remove="Assets\Images\right_black.png" />
+    <None Remove="Assets\Images\robotarmcolor.png" />
     <None Remove="Assets\Images\robotclaw.png" />
     <None Remove="Assets\Images\RoundedTexture.png" />
     <None Remove="Assets\Images\rtf.png" />
@@ -853,6 +855,9 @@
     <AvaloniaResource Include="Assets\Images\ladybug.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\letter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\lifepreserver.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -905,6 +910,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\right_black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\robotarmcolor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\select.png">

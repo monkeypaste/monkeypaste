@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -99,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
             return EMPTY_RATE_TEXT;
         }
 
-        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat, MpAccountCapCheckType source) {
+        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat, MpAccountCapCheckType source, int added_ciid = 0) {
             int prev_content_count = _lastContentCount;
             int prev_trash_count = _lastTrashCount;
 
@@ -124,7 +123,8 @@ namespace MonkeyPaste.Avalonia {
             int favorite_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(
                 tid: MpTag.FavoritesTagId,
                 ignore_descendants: false);
-            IsContentAddPausedByAccount = favorite_count >= content_cap;
+
+            //IsContentAddPausedByAccount = favorite_count >= content_cap;
 
             // TO TRASH /////////////////////////////////////////////////////
 
@@ -138,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
                     content_offset < 0) {
                     content_offset = 0;
                 }
-                to_trash_ciid = await GetNextToTrashAsync(content_offset);
+                to_trash_ciid = await GetNextToTrashAsync(content_offset, added_ciid);
             }
 
             // TO REMOVE //////////////////////////////////////////
@@ -230,7 +230,12 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         #region Cap
-        private async Task<int> GetNextToTrashAsync(int offset) {
+        private async Task<int> GetNextToTrashAsync(int offset, int added_ciid) {
+            // NOTE during an 'Add' cap check added_ciid should be a new, non-duplicate ciid.
+            // for free accts when favorites is full it would be selected for removal and would immediatly go to trash.
+            // To workaround 'AddBlock' state, new item shouldn't be factored in so lowest priority favorite is selected.
+            // This way new items will always be added.
+
             // Problem: if user gets trial and accumulates 100 items then trial ends.
             // They will end up always having a working set of 100 items.
             // Solution: Move query offset to 100 - cap so:
@@ -241,17 +246,18 @@ namespace MonkeyPaste.Avalonia {
 select pk_MpCopyItemId 
 from MpCopyItem 
 where 
-pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?)
+pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?) and pk_MpCopyItemId!=?
 order by LastCapRelatedDateTime limit 1 offset ?";
 
-            var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, offset);
+            // select non-favorite, non added ciid offseted by count at account downgrade
+            var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, added_ciid, offset);
             if (to_trash_result.Any()) {
                 return to_trash_result.First();
             }
             // no non-favorited items to trash or next to trash has no response,
 
             // requery allowing favorites
-            to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, offset);
+            to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, added_ciid, offset);
             if (to_trash_result.Any()) {
                 return to_trash_result.First();
             }

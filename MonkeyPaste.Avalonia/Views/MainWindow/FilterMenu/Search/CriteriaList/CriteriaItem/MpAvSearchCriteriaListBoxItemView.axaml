@@ -16,7 +16,7 @@
         <!--  RE-ORDER BUTTONS  -->
         <Style Selector="Button#CriteriaDragButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeBlack}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeBlackColor}" />
         </Style>
         <Style Selector="Button#CriteriaDragButton:pointerover Image">
             <Setter Property="Source"

@@ -1,9 +1,5 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.VisualTree;
-using MonkeyPaste.Common;
 using System;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIFocusableViewModel : MpIViewModel {
@@ -46,7 +42,14 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (MpAvWindowManager.ActiveWindow is Window w &&
                     TopLevel.GetTopLevel(w) is TopLevel tl) {
-                    return tl.FocusManager.GetFocusedElement();
+                    var fe = tl.FocusManager.GetFocusedElement();
+                    if (fe == null || TopLevel.GetTopLevel(fe as Control) != tl) {
+                        // focus manager
+                        // a) doesn't treat active window as a focused control
+                        // b) seems to not care what top level you give it and returns focused input control
+                        return tl;
+                    }
+                    return fe;
                 }
                 return null;
             }

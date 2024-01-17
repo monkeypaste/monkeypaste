@@ -32,7 +32,7 @@
             <Setter Property="Background"
                     Value="{DynamicResource ThemeCompliment3DarkColor}" />
         </Style>
-    
+
         <!--  FOOTER  -->
 
         <Style Selector="Button.footer">
@@ -207,11 +207,17 @@
         <!--  DATAGRID ROW BG  -->
         <Style Selector="DataGridRow:nth-child(odd)">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment3Color}" />
+                    Value="{DynamicResource ThemeCompliment5Color}" />
         </Style>
         <Style Selector="DataGridRow:nth-child(even)">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+                    Value="{DynamicResource ThemeCompliment5LighterColor}" />
+        </Style>
+        <Style Selector="DataGridRow:selected">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment5DarkColor}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
         <!--  DATAGRID MARQUEE TEXTBOX  -->
         <Style Selector="local|MpAvMarqueeTextBox">

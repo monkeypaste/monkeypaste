@@ -33,6 +33,8 @@
             $"{DOMAIN_URL}/docs/build/blog" :
             $"{DOMAIN_URL}/blog";
 
+        public static string SUPPORT_EMAIL_URI =>
+            "mailto:support@monkeypaste.com";
 
     }
 }

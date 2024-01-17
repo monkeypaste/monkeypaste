@@ -478,11 +478,12 @@ namespace MonkeyPaste.Avalonia {
                 return IsSavedQuery;
             });
 
-        public ICommand SaveQueryCommand => new MpAsyncCommand(
+        public MpIAsyncCommand SaveQueryCommand => new MpAsyncCommand(
             async () => {
-                if (IsPendingQuery) {
-                    SavePendingQueryCommand.Execute(null);
-                    return;
+                bool was_pending = IsPendingQuery;
+                if (was_pending) {
+                    // creates query tag id, triggers rename tag
+                    await SavePendingQueryCommand.ExecuteAsync();
                 }
                 Items.ForEach(x => x.IgnoreHasModelChanged = false);
                 await Task.Delay(100);
@@ -490,9 +491,12 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 Items.ForEach(x => x.IgnoreHasModelChanged = true);
+                if (was_pending) {
+                    MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(QueryTagId);
+                }
             });
 
-        public ICommand SavePendingQueryCommand => new MpAsyncCommand(
+        public MpIAsyncCommand SavePendingQueryCommand => new MpAsyncCommand(
             async () => {
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 await ttrvm.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(
@@ -504,14 +508,6 @@ namespace MonkeyPaste.Avalonia {
                 QueryTagId = new_query_tag_id;
 
                 await ttrvm.FiltersTagViewModel.AddNewChildTagCommand.ExecuteAsync(new_query_tag_id);
-                // wait for tag to be added
-
-                await Task.Delay(300);
-                if (ttrvm.FiltersTagViewModel.Items.FirstOrDefault(x => x.TagId == new_query_tag_id) is MpAvTagTileViewModel new_query_ttvm) {
-                    // trigger rename
-                    new_query_ttvm.RenameTagCommand.Execute(null);
-                }
-
             }, () => {
                 return IsPendingQuery;
             });

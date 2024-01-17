@@ -5,6 +5,7 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +30,16 @@ namespace MonkeyPaste.Avalonia {
         public static Screens Screens =>
             AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
+        public static IReadOnlyList<MpAvWindow> TopmostWindowsByZOrder =>
+            AllWindows
+                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+                .OrderBy(x => (int)x.BindingContext.WindowType)
+                .ToList();
+
+        public static bool IsAnyChildWindowOpening =>
+            MpAvWindow.OpeningWindows.Where(x => x is not MpAvMainWindow).Any();
+        public static bool IsAnyChildWindowClosing =>
+            _waitingToClose.Where(x => x is not MpAvMainWindow).Any();
 
         public static MpAvWindow MainWindow =>
             AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
@@ -242,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             // close any waiting windows (startup bug)
-            _waitingToClose.ForEach(x => x.Close());
+            //_waitingToClose.ForEach(x => x.Close());
             w.OpenDateTime = DateTime.Now;
             //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
@@ -254,38 +265,19 @@ namespace MonkeyPaste.Avalonia {
             //w.Focus();
         }
 
-        private static void Nw_Closing(object sender, WindowClosingEventArgs e) {
+        private static void Window_Closing(object sender, WindowClosingEventArgs e) {
             if (sender is not MpAvWindow w) {
                 return;
             }
+
             if (w.DataContext is MpIWindowHandlesClosingViewModel whcvm &&
                     whcvm.IsWindowCloseHandled) {
                 // without this check closing evt is called twice in impl 
                 // handler from extra w.Close below
                 return;
             }
-
-            if (w != MainWindow) {
-                if (AllWindows.Count <= 1 && !_waitingToClose.Contains(w)) {
-                    // occurs in startup if loader was previously set to always hide and password attempt fails
-                    // when pwd window closes theres no main window so app closes
-                    // need to hide window and store ref and wait for new window before closing
-                    e.Cancel = true;
-                    w.Hide();
-                    _waitingToClose.Add(w);
-                    return;
-                }
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked &&
-                     MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                    e.Cancel = true;
-                    object dresult = null;
-                    if (w is MpAvWindow avw) {
-                        dresult = avw.DialogResult;
-                    }
-                    w.Close(dresult);
-                    return;
-                }
+            if (!_waitingToClose.Contains(w)) {
+                _waitingToClose.Add(w);
             }
 
             // workaround for https://github.com/AvaloniaUI/Avalonia/pull/10951
@@ -300,15 +292,20 @@ namespace MonkeyPaste.Avalonia {
                 //disp_obj.Dispose();
                 //w.DataContext = null;
             }
-            if (w.GetVisualDescendants<Control>().Where(x => x is IDisposable).Cast<IDisposable>() is IEnumerable<IDisposable> disp_controls) {
-                disp_controls.ForEach(x => x.Dispose());
+            if (w.GetVisualDescendants<Control>().Where(x => x is IDisposable).Cast<IDisposable>() is IEnumerable<IDisposable> disp_controls && disp_controls.Any()) {
+                //disp_controls.ForEach(x => x.Dispose());
             }
         }
-
-        private static void Nw_Closed(object sender, System.EventArgs e) {
+        private static void Window_Closed(object sender, System.EventArgs e) {
             if (sender is not MpAvWindow w) {
                 return;
             }
+
+            Dispatcher.UIThread.Post(async () => {
+                // wait activation change
+                await Task.Delay(500);
+                _waitingToClose.Remove(w);
+            });
             if (w.DataContext is MpIActiveWindowViewModel awvm) {
                 awvm.IsWindowActive = false;
             }
@@ -319,12 +316,13 @@ namespace MonkeyPaste.Avalonia {
             StartChildLifecycleChangeDelay(w);
         }
 
+
         #region Helpers
 
         private static void AttachAllHandlers(Window nw) {
             nw.Opened += Window_Opened;
-            nw.Closed += Nw_Closed;
-            nw.Closing += Nw_Closing;
+            nw.Closed += Window_Closed;
+            nw.Closing += Window_Closing;
             nw.Activated += Window_Activated;
             nw.Deactivated += Window_Deactivated;
             nw.DataContextChanged += Window_DataContextChanged;
@@ -342,8 +340,8 @@ namespace MonkeyPaste.Avalonia {
 
         private static void DetachAllHandlers(Window nw) {
             nw.Opened -= Window_Opened;
-            nw.Closed -= Nw_Closed;
-            nw.Closing -= Nw_Closing;
+            nw.Closed -= Window_Closed;
+            nw.Closing -= Window_Closing;
             nw.Activated -= Window_Activated;
             nw.Deactivated -= Window_Deactivated;
             nw.DataContextChanged -= Window_DataContextChanged;
@@ -413,32 +411,49 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(UpdateTopmost);
                 return;
             }
-            if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
-                // ignore update while animating out
-                //return;
+
+#if WINDOWS
+            nint last_handle = WinApi.HWND_TOPMOST;
+            for (int i = 0; i < TopmostWindowsByZOrder.Count; i++) {
+                MpAvWindow w = TopmostWindowsByZOrder[i];
+                double scale = w.VisualPixelDensity();
+                uint flags = WinApi.SWP_NOACTIVATE | WinApi.SWP_NOMOVE | WinApi.SWP_NOSIZE;
+                if (w is MpAvMainWindow && MpAvToolWindow_Win32.IsToolWindow(w.Handle)) {
+                    flags = WinApi.SWP_NOACTIVATE | WinApi.SWP_NOMOVE | WinApi.SWP_NOSIZE | WinApi.SWP_FRAMECHANGED | WinApi.SWP_ASYNCWINDOWPOS;
+                }
+                bool success =
+                    WinApi.SetWindowPos(
+                        hWnd: w.Handle,
+                        hWndInsertAfter: last_handle,
+                        X: 0,
+                        Y: 0,
+                        cx: 0,
+                        cy: 0,
+                        uFlags: flags);
+                if (!success) {
+                    MpConsole.WriteLine($"Failed to set topmost for windown '{w}'");
+                }
             }
-
-            // NOTE only update unowned windows because modal ntf
-
-            // get non-minimzed windows wanting topmost ordered by least priority
-            var priority_ordered_topmost_wl = AllWindows
-                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
-                //.OrderBy(x => x.IsActive)
-                .OrderByDescending(x => (int)x.BindingContext.WindowType);
-            // activate windows wanting top most from highest to lowestpriority
+#else
             var mw = AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
-            if (priority_ordered_topmost_wl.Contains(mw)) {
+            // activate windows wanting top most from highest to lowestpriority
+
+            if (TopmostWindowsByZOrder.Contains(mw)) {
                 mw.Topmost = true;
             } else if (mw != null) {
                 mw.Topmost = false;
             }
 
-            priority_ordered_topmost_wl
+            TopmostWindowsByZOrder
                 .Where(x => x is not MpAvMainWindow)
                 .ForEach((x, idx) => x.Topmost = idx == 0);
             //.ForEach(x => x.Topmost = true);
+#endif
+
+
         }
+
 
 
         private static async Task ShowWhileAnimatingAsync(Window w) {

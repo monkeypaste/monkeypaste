@@ -16,12 +16,18 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-
+    public enum MpMainWindowHideType {
+        None = 0,
+        Click,
+        Deactivate,
+        Force
+    }
     public class MpAvMainWindowViewModel :
         MpAvViewModelBase,
         MpIWindowViewModel,
         MpIIsAnimatedWindowViewModel,
         MpIActiveWindowViewModel,
+        MpIWindowStateViewModel,
         MpIWindowBoundsObserverViewModel,
         MpIWantsTopmostWindowViewModel,
         MpIResizableViewModel {
@@ -97,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITopmostWindow Implementation
         bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
-            IsMainWindowLocked;
+            true;// IsMainWindowLocked;
 
         #endregion
 
@@ -398,7 +404,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        bool IsToolWindow { get; set; }
         MpIPlatformScreenInfo LastOpenedScreenInfo { get; set; }
         public WindowState WindowState { get; set; } = WindowState.Normal;
         public bool IsMainWindowOrientationChanging { get; set; } = false;
@@ -455,9 +460,9 @@ namespace MonkeyPaste.Avalonia {
         private bool _isMainWindowLocked;
         public bool IsMainWindowLocked {
             get {
-                if (IsMainWindowSilentLocked) {
-                    return true;
-                }
+                //if (IsMainWindowSilentLocked) {
+                //    return true;
+                //}
                 return _isMainWindowLocked;
             }
             set {
@@ -802,7 +807,7 @@ namespace MonkeyPaste.Avalonia {
                     ShowMainWindowCommand.Execute(null);
                     break;
                 case MpMessageType.MainWindowDeactivated:
-                    HideMainWindowCommand.Execute(null);
+                    HideMainWindowCommand.Execute(MpMainWindowHideType.Deactivate);
                     break;
                 case MpMessageType.ScreenInfoChanged:
                     break;
@@ -907,43 +912,43 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpening = true;
 
 #if DESKTOP
-
-#if WINDOWS
-            if (MpAvPrefViewModel.Instance.ShowInTaskSwitcher == IsToolWindow) {
-                // toggle tool window
-                if (IsToolWindow) {
-                    MpAvToolWindow_Win32.UnsetAsToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
-                    IsToolWindow = false;
-                } else {
-                    MpAvToolWindow_Win32.SetAsToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
-                    IsToolWindow = true;
-                }
+            if (MpAvWindowManager.MainWindow is not { } mw) {
+                return;
             }
-#endif
-            if (MpAvWindowManager.MainWindow is Window w &&
-                MpAvPrefViewModel.Instance.ShowInTaskbar) {
-                w.WindowState = WindowState.Normal;
+
+            if (MpAvPrefViewModel.Instance.ShowInTaskbar) {
+                mw.WindowState = WindowState.Normal;
             }
 
             if (IsMainWindowInitiallyOpening) {
 #if WINDOWS
-                MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                MpAvToolWindow_Win32.SetAsNoHitTestWindow(mw.Handle);
 #endif
-                if (MpAvPrefViewModel.Instance.ShowInTaskSwitcher)
-                    MpAvWindowManager.MainWindow.Opacity = 0;
+                // if (MpAvPrefViewModel.Instance.ShowInTaskSwitcher) {
+                mw.Opacity = 0;
+                //}
+
                 IsMainWindowInHiddenLoadState = true;
             } else if (IsMainWindowInHiddenLoadState) {
 #if WINDOWS
-                MpAvToolWindow_Win32.RemoveNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                MpAvToolWindow_Win32.RemoveNoHitTestWindow(mw.Handle);
 #endif
-                MpAvWindowManager.MainWindow.Opacity = 1;
+                mw.Opacity = 1;
                 IsMainWindowInHiddenLoadState = false;
             }
 
-            DispatcherPriority show_priority =
-                IsMainWindowInHiddenLoadState ?
-                    DispatcherPriority.Background : DispatcherPriority.Normal;
-            Dispatcher.UIThread.Post(() => MpAvWindowManager.MainWindow.Show(null, false), show_priority);
+            Dispatcher.UIThread.Post(() => mw.Show(null));
+
+            // BUG WindowState=Minimized/Normal makes mw ignore topmost order
+            // what does work is always using window.Hide() (instead of minimize)
+            // but .hide() hides mw from everywhere, taskbar, taskswitch etc.
+
+            // below fixes WindowState issue 
+            // reactivate any other visible windows
+            MpAvWindowManager.TopmostWindowsByZOrder
+                .Where(x => x is not MpAvMainWindow)
+                .OrderBy(x => x.LastActiveDateTime)
+                .ForEach(x => x.Activate());
 #endif
 
             IsMainWindowVisible = true;
@@ -961,19 +966,7 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpening = false;
             LastOpenedScreenInfo = MainWindowScreen;
 
-            bool is_other_win_active = MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive);
-
-            bool force_activate =
-                !IsMainWindowActive &&
-                !is_other_win_active &&
-                !IsMainWindowInHiddenLoadState;
-            if (force_activate && MpAvWindowManager.MainWindow is { } mw) {
-                // when mw is shown and not active it doesn't hide or receive input until activated
-                mw.Activate();
-                //mw.Topmost = true;
-            }
-
-            MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}' MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
+            MpConsole.WriteLine($"SHOW WINDOW DONE. MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
         }
         public void FinishMainWindowHide() {
 
@@ -987,11 +980,11 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowClosing = false;
 
             SetMainWindowRect(MainWindowClosedScreenRect);
-            if (MpAvWindowManager.MainWindow is Window w &&
-                MpAvPrefViewModel.Instance.ShowInTaskbar) {
-                w.WindowState = WindowState.Minimized;
-            } else {
-                //App.MainView.Hide();
+
+            if (MpAvPrefViewModel.Instance.ShowInTaskbar) {
+                WindowState = WindowState.Minimized;
+            } else if (MpAvWindowManager.MainWindow is Window w) {
+                w.Hide();
             }
             IsMainWindowVisible = false;
             MpConsole.WriteLine("CLOSE WINDOW DONE");
@@ -1155,19 +1148,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
+            if (!Mp.Services.StartupState.IsPlatformLoaded) {
+                return;
+            }
             Dispatcher.UIThread.Post(() => {
-                if (MpAvWindowManager.MainWindow == null ||
-                    MpAvWindowManager.MainWindow.IsActive ||
-                    !isLeftButton ||
-                    !IsMainWindowOpen ||
-                    IsMainWindowClosing) {
-                    return;
-                }
-                var gmavp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation.ToAvPoint();
-                if (!MpAvMainView.Instance.Bounds.Contains(gmavp)) {
-                    // attempt to hide mw
-                    HideMainWindowCommand.Execute(null);
-                }
+                HideMainWindowCommand.Execute(MpMainWindowHideType.Click);
             });
 
         }
@@ -1177,14 +1162,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Dispatcher.UIThread.Post(() => {
-                if (IsMainWindowOpen &&
-                           !IsMainWindowClosing &&
-                          !IsMainWindowLocked &&
-                          //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
-                          MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation != null &&
-                          !MainWindowScreenRect.Contains(MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation)) {
-                    HideMainWindowCommand.Execute(null);
-                }
+
+                HideMainWindowCommand.Execute(MpMainWindowHideType.Click);
             });
         }
         private void Instance_OnGlobalMouseMove(object sender, MpPoint gmp) {
@@ -1266,7 +1245,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
 #if DESKTOP
-            await HideMainWindowCommand.ExecuteAsync(null);
+            await HideMainWindowCommand.ExecuteAsync(MpMainWindowHideType.Force);
 
             // only show in taskbar once initial/hidden show is complete
             MpAvWindowManager.MainWindow.Bind(
@@ -1374,12 +1353,76 @@ namespace MonkeyPaste.Avalonia {
                 if (IsMainWindowLocked) {
                     ToggleMainWindowLockCommand.Execute(null);
                 }
-                await HideMainWindowCommand.ExecuteAsync("force");
+                await HideMainWindowCommand.ExecuteAsync(MpMainWindowHideType.Force);
             },
             () => {
                 return IsMainWindowOpen;
             });
 
+        private bool CanHideMainWindow(object args) {
+#if MOBILE
+
+                return false;
+#else
+            MpMainWindowHideType hide_type = args == null ? MpMainWindowHideType.None : (MpMainWindowHideType)args;
+            if (hide_type == MpMainWindowHideType.Force) {
+                return true;
+            }
+
+            switch (hide_type) {
+                case MpMainWindowHideType.Force:
+                    return true;
+                case MpMainWindowHideType.Deactivate:
+                    return false;
+                case MpMainWindowHideType.Click:
+                    if (MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation is not { } gmp) {
+                        return false;
+                    }
+                    bool isInputFocused =
+               Mp.Services.FocusMonitor.FocusElement is Control c &&
+               (
+                   c.GetVisualAncestor<ContextMenu>() != null ||
+                   c.GetVisualAncestor<MenuItem>() != null ||
+                   c.GetVisualAncestor<ComboBoxItem>() != null ||
+                   (c.GetVisualAncestor<Window>() is Window w && w != MpAvWindowManager.MainWindow) ||
+                   (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
+               );
+
+                    bool isModalActive =
+                        MpAvWindowManager.AllWindows
+                        .Any(x => x.Owner == MpAvWindowManager.MainWindow && x.WindowType == MpWindowType.Modal);
+
+                    bool is_any_other_opening_or_closing =
+                        MpAvWindowManager.IsAnyChildWindowOpening || MpAvWindowManager.IsAnyChildWindowClosing;
+
+                    bool isNtfActive =
+                        MpAvWindowManager.AllWindows.Any(x => x.IsActive && x.DataContext is MpAvNotificationViewModelBase);
+
+                    bool is_click_off =
+                        !MainWindowScreenRect.Contains(gmp);
+
+                    bool canHide =
+                        is_click_off &&
+                        IsMainWindowOpen &&
+                        !MpAvWindowManager.IsAnyActive &&
+                        !IsMainWindowClosing &&
+                        !IsMainWindowLocked &&
+                        !IsAnyDropDownOpen &&
+                        !IsMainWindowInitiallyOpening &&
+                        !is_any_other_opening_or_closing &&
+                        !isModalActive &&
+                        !isInputFocused &&
+                        !IsAnyItemDragging &&
+                        !isNtfActive &&
+                        !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
+                        !IsResizing;
+                    return canHide;
+                default:
+                    return false;
+            }
+#endif
+
+        }
         public MpIAsyncCommand<object> HideMainWindowCommand => new MpAsyncCommand<object>(
             async (args) => {
                 Dispatcher.UIThread.VerifyAccess();
@@ -1398,61 +1441,8 @@ namespace MonkeyPaste.Avalonia {
                 FinishMainWindowHide();
             },
             (args) => {
-#if MOBILE
+                return CanHideMainWindow(args);
 
-                return false;
-#else
-
-                if (args.ToStringOrEmpty() == "force") {
-                    // always hide
-                    return true;
-                }
-
-                AnalyzeWindowState("hide");
-                bool isInputFocused =
-                    Mp.Services.FocusMonitor.FocusElement is Control c &&
-                    (
-                        c.GetVisualAncestor<ContextMenu>() != null ||
-                        c.GetVisualAncestor<MenuItem>() != null ||
-                        c.GetVisualAncestor<ComboBoxItem>() != null ||
-                        (c.GetVisualAncestor<Window>() is Window w && w != MpAvWindowManager.MainWindow) ||
-                        (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
-                    );
-
-                bool isModalActive =
-                    MpAvWindowManager.AllWindows
-                    .Any(x => x.Owner == MpAvWindowManager.MainWindow &&
-                                (x.DataContext is MpIWindowViewModel &&
-                                    (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
-
-                bool isNtfActive =
-                    MpAvWindowManager.AllWindows.Any(x => x.IsActive && x.DataContext is MpAvNotificationViewModelBase);
-                bool canHide = !IsMainWindowLocked &&
-                                  !IsAnyDropDownOpen &&
-                                  !IsMainWindowInitiallyOpening &&
-                                    !isModalActive &&
-                                    !isInputFocused &&
-                                  !IsAnyItemDragging &&
-                                  !isNtfActive &&
-                                  !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
-                                  !IsResizing;
-
-                if (!canHide) {
-                    //MpConsole.WriteLine("");
-                    //MpConsole.WriteLine($"Cannot hide main window:");
-                    //MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
-                    //MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
-                    //MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
-                    //MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
-                    //MpConsole.WriteLine($"IsAnyItemDragging: {(IsAnyItemDragging)}");
-                    //MpConsole.WriteLine($"IsAnyNotificationActivating: {(IsAnyNotificationActivating)}");
-                    //MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
-                    //MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
-                    //MpConsole.WriteLine($"isContextMenuOpen: {(isContextMenuOpen)}");
-                    //MpConsole.WriteLine("");
-                }
-                return canHide;
-#endif
             });
 
         public ICommand ToggleShowMainWindowCommand => new MpCommand(
@@ -1515,8 +1505,16 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleMainWindowLockCommand => new MpCommand<object>(
             (args) => {
+                bool new_state = !IsMainWindowLocked;
+                bool last_state = IsMainWindowLocked;
                 IsMainWindowLocked = !IsMainWindowLocked;
                 if (args is ToggleButton tb) {
+                    if (IsMainWindowLocked == last_state) {
+                        // state didn't change, silent lock overriding get
+                        IsMainWindowSilentLocked = new_state;
+                        IsMainWindowLocked = new_state;
+                        MpDebug.Assert(IsMainWindowLocked == new_state, $"Mw lock state error");
+                    }
                     tb.IsChecked = IsMainWindowLocked;
                 }
             });

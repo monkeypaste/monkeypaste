@@ -304,7 +304,8 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        private static async Task<int> AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            int item_id = 0;
             if (_connectionAsync == null) {
                 await CreateConnectionAsync();
             }
@@ -313,22 +314,24 @@ namespace MonkeyPaste {
 
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
-                return;
+                return item_id;
             }
 
             await LogWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             try {
-                await _connectionAsync.InsertAsync(item);
+                item_id = await _connectionAsync.InsertAsync(item);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Db Error inserting type '{typeof(T)}' with data {item}", ex);
             }
 
             NotifyWrite(MpDbLogActionType.Create, item as MpDbModelBase, ignoreSyncing);
+            return item_id;
         }
 
-        private static async Task UpdateItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        private static async Task<int> UpdateItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            int item_id = 0;
             if (_connectionAsync == null) {
                 await CreateConnectionAsync();
             }
@@ -337,27 +340,30 @@ namespace MonkeyPaste {
 
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
-                return;
+                return item_id;
             }
 
             await LogWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             try {
-                await _connectionAsync.UpdateAsync(item);
+                item_id = await _connectionAsync.UpdateAsync(item);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Db Error updating type '{typeof(T)}' with data {item}", ex);
             }
 
             NotifyWrite(MpDbLogActionType.Modify, item as MpDbModelBase, ignoreSyncing);
+            return item_id;
         }
 
-        public static async Task AddOrUpdateAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        public static async Task<int> AddOrUpdateAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            int item_id = 0;
             if ((item as MpDbModelBase).Id == 0) {
-                await AddItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+                item_id = await AddItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
             } else {
-                await UpdateItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+                item_id = await UpdateItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
             }
+            return item_id;
         }
 
         public static async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {

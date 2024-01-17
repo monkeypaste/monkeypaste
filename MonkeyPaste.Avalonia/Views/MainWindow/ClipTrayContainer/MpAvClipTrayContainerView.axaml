@@ -90,7 +90,7 @@
                 <Setter.Value>
                     <DropShadowEffect OffsetX="5"
                                       OffsetY="5"
-                                      Color="{DynamicResource ThemeBlack}"
+                                      Color="{DynamicResource ThemeBlackColor}"
                                       BlurRadius="7"
                                       Opacity="0.5" />
                 </Setter.Value>
@@ -102,7 +102,7 @@
                 <Setter.Value>
                     <DropShadowEffect OffsetX="5"
                                       OffsetY="5"
-                                      Color="{DynamicResource ThemeWhite}"
+                                      Color="{DynamicResource ThemeWhiteColor}"
                                       BlurRadius="7"
                                       Opacity="0.5" />
                 </Setter.Value>

@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -25,6 +26,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+
+        private static List<MpAvWindow> _openingWindows = [];
+        public static IReadOnlyList<MpAvWindow> OpeningWindows =>
+            _openingWindows;
 
         private static DevToolsOptions _defaultDevToolOptions;
         public static DevToolsOptions DefaultDevToolOptions =>
@@ -53,6 +58,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public nint Handle {
+            get {
+                if (this.TryGetPlatformHandle() is { } ph) {
+                    return ph.Handle;
+                }
+                return nint.Zero;
+            }
+        }
+
         public object DialogResult { get; set; }
 
         private MpWindowType _windowType = MpWindowType.None;
@@ -108,10 +122,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        protected override void OnOpened(EventArgs e) {
+            base.OnOpened(e);
+            Dispatcher.UIThread.Post(async () => {
+                // wait for window to activate (if it does)
+                await Task.Delay(500);
+                _openingWindows.Remove(this);
+            });
+        }
 
-        public void Show(Window owner = null, bool silentLock = true) {
-            if (silentLock) {
-                SilentLockMainWindowCheck(owner);
+        public new void Show(Window owner = null) {
+            //if (silentLock) {
+            //    SilentLockMainWindowCheck(owner);
+            //}
+            if (!_openingWindows.Contains(this)) {
+                _openingWindows.Add(this);
             }
 
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
