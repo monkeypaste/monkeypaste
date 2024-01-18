@@ -210,26 +210,7 @@
                             local:MpAvDropExtension.DragEnterCommand="{Binding ExpandFromDragCommand}"
                             Classes="noBg noHoverBg noBorder">
                         <ToolTip.Tip>
-                            <local:MpAvToolTipView>
-                                <local:MpAvToolTipView.ToolTipText>
-                                    <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                                        <Binding>
-                                            <Binding.Source>
-                                                <sys:String>Search in '</sys:String>
-                                            </Binding.Source>
-                                        </Binding>
-                                        <Binding Path="LastSelectedTagName"
-                                                 Source="{x:Static local:MpAvTagTrayViewModel.Instance}"
-                                                 FallbackValue="All"
-                                                 TargetNullValue="All" />
-                                        <Binding>
-                                            <Binding.Source>
-                                                <sys:String>'</sys:String>
-                                            </Binding.Source>
-                                        </Binding>
-                                    </MultiBinding>
-                                </local:MpAvToolTipView.ToolTipText>
-                            </local:MpAvToolTipView>
+                            <local:MpAvToolTipView ToolTipText="{Binding SearchButtonTooltipText}" />
                         </ToolTip.Tip>
                         <Button.RenderTransform>
                             <RotateTransform />

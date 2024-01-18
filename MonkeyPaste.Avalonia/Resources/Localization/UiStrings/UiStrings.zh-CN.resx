@@ -2139,4 +2139,376 @@
   <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
     <value>显示窗口和锁</value>
   </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>自由的！</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>给我们 5 颗星！</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>删除所有</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>删除所有内容</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>您确定要删除所有剪辑吗？！</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>我是一名独立开发者，请给予一些支持！</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>喜欢猴子粘贴吗？</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} 仅接受类型的输入：{1}</value>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>自动复制模式将在每次释放鼠标时触发复制命令。</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>右键单击粘贴模式将禁止（在 Linux 上不可用）单击鼠标右键并向活动应用程序发出粘贴命令。</value>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>预设</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>显示插件文件夹</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>报告</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>看法</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>显示工具提示</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>分析器注释其输入或创建新剪辑作为输出。</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>输入类型</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>触发器设计器“{0}”</value>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>选择一个{0}...</value>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>未找到...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0}触发器</value>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>不 - 当选中时，条件的真或假结果将被翻转。</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>才不是</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>请稍等...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>颜色选择器</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>选择匹配颜色</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>猴子复制触发器 - 模拟活动应用程序中的“复制”组合键，因此该触发器输入将是所选的任何内容。</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>高级过滤器</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>隐藏过滤器</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>恢复过滤器</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>创建过滤器</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>（可选）当留空时，将使用此操作输入设置剪贴板。</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>剪贴板的内容</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>如果为 true，则此操作设置剪贴板后不会添加任何剪辑。</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>忽略</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>没有为操作“{0}”选择分析器</value>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>未找到操作“{0}”的分析器</value>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>父级“{0}”过滤器仅针对“{1}”类型内容，分析器“{2}”永远不会执行，因为它不支持“{3}”类型的输入</value>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>没有为分类器“{0}”选择标签</value>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>未找到分类器“{0}”的标记</value>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>比较值只能是字母、数字或空格</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>没有为分类触发器“{0}”选择集合</value>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>找不到分类触发器“{0}”的集合</value>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>没有为触发器操作“{0}”指定文件夹</value>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>找不到触发器操作“{1}”的文件夹“{0}”</value>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>未设置操作“{0}”的文件写入器路径</value>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>未找到操作“{1}”的文件写入器路径“{0}”。</value>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>任务栏</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>了解插件</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>恢复此分析设置</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0}更改日志</value>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>请连接到互联网并稍后重试。</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - 帮助</value>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} 是最新版本</value>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>你们都是最新的！</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>检查更新...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>新版本上线！</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>单击下面更新为“{0}”</value>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>更新可用！</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>现在更新</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>“{0}”包含共享值。</value>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>清除最近的搜索</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>重置全部</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>重置共享</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>重置取消共享</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>执行选定的命令。</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>如果未选中且命令无法触发，则执行链将停止。</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>总是继续？</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>要执行的命令。</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>命令</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>没有为应用程序命令“{0}”选择命令</value>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>找不到应用程序命令“{0}”的命令</value>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>已选择</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>重新开始</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>更新“{0}”时出现问题。</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>更新错误</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>无法下载更新</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>更新失败</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>要完成更新，您需要重新启动。</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>更新就绪</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>之后</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>现在重启</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>待办的</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} 已成功更新为 {1}</value>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>核心插件是必需的且无法删除。</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>安装量</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>更新待定。</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>待办的</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>卸载正在等待。</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>要完成卸载，您需要重新启动。</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>完成卸载？</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>未发表</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>为“{0}”自动生成的默认预设</value>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>未选择剪辑</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>分析选定的剪辑</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>分配一个快捷方式以在选定的剪辑上运行“{0}”</value>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>全局粘贴</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>为“{0}”分配全局粘贴快捷方式</value>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>忘记密码？</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>隐私政策</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>（需要重新启动）启用后，将存储诊断信息。</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>记录到文件</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>打开日志文件夹</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>浏览插件</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>读</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>写</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>发送反馈或错误报告</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>这仅隐藏主窗口。</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>在“{0}”中搜索</value>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>添加过滤器</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>编辑加入类型</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>删除此过滤器</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>打开有关此问题的帮助...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} 个剪辑</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>无标题</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>未标记的源参考</value>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>改变</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>放</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>记录</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>绝不</value>
+  </data>
 </root>

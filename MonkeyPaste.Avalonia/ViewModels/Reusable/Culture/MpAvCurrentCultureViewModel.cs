@@ -1,18 +1,11 @@
-﻿using Avalonia.VisualTree;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Plugin.Localizer;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {

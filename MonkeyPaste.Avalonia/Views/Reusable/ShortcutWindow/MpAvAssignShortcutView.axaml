@@ -146,7 +146,7 @@
                 <TextBlock Text="{x:Static local:UiStrings.ShortcutRoutingTypeLabel}"
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
-                <local:MpAvToolTipInfoHintView Classes="info"
+                <local:MpAvToolTipHintView Classes="info"
                                                IsHtml="true"
                                                ToolTipText="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
             </StackPanel>
@@ -164,7 +164,7 @@
                     Spacing="5"
                     IsVisible="{Binding IsGlobal}"
                     HorizontalAlignment="Center">
-            <local:MpAvToolTipInfoHintView Classes="warning"
+            <local:MpAvToolTipHintView Classes="warning"
                                            VerticalAlignment="Center"
                                            ToolTipText="{x:Static local:UiStrings.ShortcutAssignGlobalHint}" />
             <TextBlock FontSize="16"

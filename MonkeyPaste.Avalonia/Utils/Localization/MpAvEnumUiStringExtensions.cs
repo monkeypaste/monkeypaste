@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvEnumUiStringExtensions {
@@ -30,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
             string enum_key = GetEnumKey(value);
 
             if (EnumUiStrings.ResourceManager.GetString(enum_key, MpAvCurrentCultureViewModel.Instance.CurrentCulture) is not string enum_ui_string) {
+
                 MpDebug.Break($"Missing enum key '{enum_key}'");
                 return string.Empty;
             }

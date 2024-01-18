@@ -2,9 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -30,6 +30,13 @@ namespace MonkeyPaste.Avalonia {
             var ctrvm = MpAvClipTrayViewModel.Instance;
             ctrvm.ZoomFactor = (ctrvm.MaxZoomFactor - ctrvm.MinZoomFactor) * percent;
             PositionZoomValueButton(p);
+        }
+
+        public void AdjustZoomFactor(bool is_increase) {
+            double delta = 0.3 * (is_increase ? 1 : -1);
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            ctrvm.ZoomFactor = Math.Clamp(ctrvm.ZoomFactor + delta, ctrvm.MinZoomFactor, ctrvm.MaxZoomFactor);
+            PositionZoomValueButton();
         }
 
         public void PositionZoomValueButton(MpPoint p = null) {

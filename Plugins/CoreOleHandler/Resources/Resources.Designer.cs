@@ -223,7 +223,7 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Large images (more than a few MBs) can make drag-and-drop and overall performance somewhat sluggish unfortunately. Try to keep this paramValue low..
+        ///   Looks up a localized string similar to Large images (more than a few MBs) can make drag-and-drop and overall performance somewhat sluggish unfortunately. Try to keep this value low..
         /// </summary>
         public static string ImgMaxHint {
             get {
@@ -381,6 +381,15 @@ namespace CoreOleHandler {
         public static string Rtf2HtmlLabel {
             get {
                 return ResourceManager.GetString("Rtf2HtmlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled.
+        /// </summary>
+        public static string UntitledLabel {
+            get {
+                return ResourceManager.GetString("UntitledLabel", resourceCulture);
             }
         }
     }

@@ -30,7 +30,7 @@
                            Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="frame header text"
                                Text="{Binding LabelText}" />
-                    <local:MpAvToolTipInfoHintView ToolTipText="{Binding FrameHint}"
+                    <local:MpAvToolTipHintView ToolTipText="{Binding FrameHint}"
                                                    Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                                                    Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                                                    Classes.error="{Binding FrameHintType, ConverterParameter=Error, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"

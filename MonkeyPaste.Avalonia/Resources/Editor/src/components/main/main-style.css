@@ -42,6 +42,7 @@ body {
     --commonborderradius: 5px;
     --appendpad: 15px;
     --maxfontsize: 98px;
+    --editorzoom: 100%;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);

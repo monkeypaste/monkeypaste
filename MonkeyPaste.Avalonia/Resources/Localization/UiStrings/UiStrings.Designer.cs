@@ -2290,6 +2290,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        public static string CommonChangeLabel {
+            get {
+                return ResourceManager.GetString("CommonChangeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Image....
         /// </summary>
         public static string CommonChooseImageHeader {
@@ -2493,6 +2502,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonMinimizeWindowLabel {
             get {
                 return ResourceManager.GetString("CommonMinimizeWindowLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string CommonNeverLabel {
+            get {
+                return ResourceManager.GetString("CommonNeverLabel", resourceCulture);
             }
         }
         
@@ -2704,6 +2722,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set.
+        /// </summary>
+        public static string CommonSetLabel {
+            get {
+                return ResourceManager.GetString("CommonSetLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string CommonSettingsTitle {
@@ -2754,6 +2781,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonUnpinItemLabel {
             get {
                 return ResourceManager.GetString("CommonUnpinItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled.
+        /// </summary>
+        public static string CommonUntitledLabel {
+            get {
+                return ResourceManager.GetString("CommonUntitledLabel", resourceCulture);
             }
         }
         
@@ -4095,6 +4131,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is required.
+        /// </summary>
+        public static string ParameterInvalidText {
+            get {
+                return ResourceManager.GetString("ParameterInvalidText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pin or Drop any media here!.
         /// </summary>
         public static string PinTrayEmptyLabel {
@@ -5343,6 +5388,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search in &apos;{0}&apos;.
+        /// </summary>
+        public static string SearchButtonTooltip {
+            get {
+                return ResourceManager.GetString("SearchButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Case Sensitive.
         /// </summary>
         public static string SearchCaseSensitiveLabel {
@@ -5357,6 +5411,15 @@ namespace MonkeyPaste.Avalonia {
         public static string SearchColorDistanceToolTipText {
             get {
                 return ResourceManager.GetString("SearchColorDistanceToolTipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Filter.
+        /// </summary>
+        public static string SearchCriteriaAddRowTooltip {
+            get {
+                return ResourceManager.GetString("SearchCriteriaAddRowTooltip", resourceCulture);
             }
         }
         
@@ -5393,6 +5456,24 @@ namespace MonkeyPaste.Avalonia {
         public static string SearchCriteriaHeadeRefreshTooltipText {
             get {
                 return ResourceManager.GetString("SearchCriteriaHeadeRefreshTooltipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Join Type.
+        /// </summary>
+        public static string SearchCriteriaJoinTypeTooltip {
+            get {
+                return ResourceManager.GetString("SearchCriteriaJoinTypeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this filter.
+        /// </summary>
+        public static string SearchCriteriaRemoveRowTooltip {
+            get {
+                return ResourceManager.GetString("SearchCriteriaRemoveRowTooltip", resourceCulture);
             }
         }
         
@@ -6054,6 +6135,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Record.
+        /// </summary>
+        public static string ShortcutRecordLabel {
+            get {
+                return ResourceManager.GetString("ShortcutRecordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;ul&gt;
         ///	&lt;li&gt;
         ///		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
@@ -6436,6 +6526,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} clips.
+        /// </summary>
+        public static string TagTileToolTip {
+            get {
+                return ResourceManager.GetString("TagTileToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Author(s).
         /// </summary>
         public static string TermsAuthorsInlineText {
@@ -6621,6 +6720,24 @@ namespace MonkeyPaste.Avalonia {
         public static string TimeSpanYears {
             get {
                 return ResourceManager.GetString("TimeSpanYears", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open help about this....
+        /// </summary>
+        public static string ToolTipHintLinkTooltip {
+            get {
+                return ResourceManager.GetString("ToolTipHintLinkTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlabeled Source Reference.
+        /// </summary>
+        public static string TransactionUnlabledRef {
+            get {
+                return ResourceManager.GetString("TransactionUnlabledRef", resourceCulture);
             }
         }
         

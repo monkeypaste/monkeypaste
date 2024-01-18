@@ -24,9 +24,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         private const string PRE_ESTABLISHED_USER_DB_PWD_TEXT = "<^&user has already set a password^&>";
+
         #endregion
 
         #region Statics
+        static bool SHOW_ACCOUNT_TAB = false;
         public static async Task ShowWelcomeNotificationAsync(bool forceShow = false) {
             bool will_show =
                 forceShow ||
@@ -47,7 +49,6 @@ namespace MonkeyPaste.Avalonia {
                         MaxShowTimeMs = -1
                     });
             }
-
         }
 
         private static MpAvWelcomeNotificationViewModel _instance;
@@ -68,7 +69,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeOptionGroupViewModel ScrollWheelBehaviorViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel DragToOpenBehaviorViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel DbPasswordViewModel { get; set; }
-
         public MpAvPointerGestureWindowViewModel CurPointerGestureWindowViewModel { get; set; }
 
         private MpAvWelcomeOptionGroupViewModel[] _items;
@@ -271,6 +271,10 @@ namespace MonkeyPaste.Avalonia {
                 IsAccountMonthlyChecked = is_active_monthly;
                 AccountViewModel.SelectedItem = AccountViewModel.Items[active_idx];
                 //IsExistingSubscriptionDetected = true;
+            }
+            if (!AccountViewModel.NeedsSkip && !SHOW_ACCOUNT_TAB) {
+                // skip account
+                AccountViewModel.NeedsSkip = true;
             }
             #endregion
 

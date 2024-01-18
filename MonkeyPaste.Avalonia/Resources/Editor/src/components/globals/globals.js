@@ -277,6 +277,8 @@ var globals = {
 
 	IsDisablingReadOnly: false,
 
+	EditorScale: 1.0,
+
 	IsRtl: false,
 	// #endregion
 

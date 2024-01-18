@@ -19,14 +19,11 @@ namespace MonkeyPaste.Avalonia {
                     case MpSettingsTabType.Preferences:
                         key = "PreferencesTemplate";
                         break;
-                    case MpSettingsTabType.Security:
-                        key = "SecurityTemplate";
+                    case MpSettingsTabType.CopyAndPaste:
+                        key = "InteropTemplate";
                         break;
                     case MpSettingsTabType.Shortcuts:
                         key = "ShortcutsTemplate";
-                        break;
-                    case MpSettingsTabType.Help:
-                        key = "HelpTemplate";
                         break;
                 }
             }

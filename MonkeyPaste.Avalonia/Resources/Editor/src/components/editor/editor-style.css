@@ -27,6 +27,7 @@
     font-family: var(--defaultFontFamily);
     font-size: var(--defaultFontSize);
     color: var(--defcontentfgcolor);
+    zoom: var(--editorzoom);
 }
 
 

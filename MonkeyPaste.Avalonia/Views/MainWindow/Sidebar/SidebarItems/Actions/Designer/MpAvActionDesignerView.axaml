@@ -1,52 +1,72 @@
-﻿<local:MpAvUserControl
-    x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerView"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:MonkeyPaste.Avalonia"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:paz="using:Avalonia.Controls.PanAndZoom"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    x:CompileBindings="True"
-    x:DataType="local:MpAvTriggerCollectionViewModel"
-    x:TypeArguments="local:MpAvTriggerCollectionViewModel"
-    mc:Ignorable="d">
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:paz="using:Avalonia.Controls.PanAndZoom"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       x:CompileBindings="True"
+                       x:DataType="local:MpAvTriggerCollectionViewModel"
+                       x:TypeArguments="local:MpAvTriggerCollectionViewModel"
+                       mc:Ignorable="d">
     <local:MpAvUserControl.Styles>
 
         <!--  DESIGNER LISTBOX  -->
 
         <Style Selector=":is(ListBox).actionDesigner">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="{StaticResource HitTestableTransparent}" />
-            <Setter Property="ClipToBounds" Value="False" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+            <Setter Property="ClipToBounds"
+                    Value="False" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                    Value="Disabled" />
         </Style>
 
         <Style Selector=":is(ListBox).actionDesigner /template/ ScrollViewer">
-            <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="ClipToBounds"
+                    Value="False" />
         </Style>
         <Style Selector=":is(ListBox).actionDesigner /template/ ScrollViewer /template/ ScrollContentPresenter">
-            <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="ClipToBounds"
+                    Value="False" />
         </Style>
 
 
         <!--  DESIGNER ITEM  -->
 
-        <Style x:DataType="local:MpAvActionViewModelBase" Selector=":is(ListBox).actionDesigner ListBoxItem">
-            <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}" />
-            <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}" />
-            <Setter Property="IsVisible" Value="{Binding IsActionDesignerVisible}" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="VerticalContentAlignment" Value="Stretch" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="VerticalAlignment" Value="Stretch" />
-            <Setter Property="ClipToBounds" Value="False" />
-            <Setter Property="Cursor" Value="SizeAll" />
-            <Setter Property="ZIndex" Value="{Binding DesignerZIndex, Mode=TwoWay}" />
+        <Style x:DataType="local:MpAvActionViewModelBase"
+               Selector=":is(ListBox).actionDesigner ListBoxItem">
+            <Setter Property="Canvas.Left"
+                    Value="{Binding X, Mode=TwoWay}" />
+            <Setter Property="Canvas.Top"
+                    Value="{Binding Y, Mode=TwoWay}" />
+            <Setter Property="IsVisible"
+                    Value="{Binding IsActionDesignerVisible}" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="ClipToBounds"
+                    Value="False" />
+            <Setter Property="Cursor"
+                    Value="SizeAll" />
+            <Setter Property="ZIndex"
+                    Value="{Binding DesignerZIndex, Mode=TwoWay}" />
         </Style>
 
         <!--  ZOOM THUMB  -->
@@ -55,73 +75,79 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Zoom {0:P}'}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat=' {0:P}'}" />
                     </Template>
                 </Setter.Value>
             </Setter>
-            <Setter Property="ToolTip.Placement" Value="Left" />
-            <Setter Property="CornerRadius" Value="5" />
-            <Setter Property="Height" Value="7" />
-            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="ToolTip.Placement"
+                    Value="Left" />
+            <Setter Property="CornerRadius"
+                    Value="5" />
+            <Setter Property="Height"
+                    Value="7" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
         </Style>
 
         <!--  DESIGNER FLOAT MENU BUTTONS  -->
 
         <Style Selector="Border#DesignerViewMenu :is(Button)">
-            <Setter Property="Margin" Value="5,2" />
+            <Setter Property="Margin"
+                    Value="5,2" />
         </Style>
 
         <Style Selector="Border#DesignerViewMenu Border">
-            <Setter Property="Width" Value="1" />
-            <Setter Property="VerticalAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="DimGray" />
-            <Setter Property="Margin" Value="1,0" />
+            <Setter Property="Width"
+                    Value="1" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Background"
+                    Value="DimGray" />
+            <Setter Property="Margin"
+                    Value="1,0" />
         </Style>
 
     </local:MpAvUserControl.Styles>
     <Border Background="{DynamicResource ActionDesignerBgBrush}">
-        <Grid
-            x:Name="ActionDesignerContainerGrid"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
+        <Grid x:Name="ActionDesignerContainerGrid"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
 
             <!--  DESIGNER ZOOM BORDER  -->
 
-            <local:MpAvZoomBorder
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                local:MpAvBoundsObserverExtension.IsEnabled="True"
-                local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
-                local:MpAvBoundsObserverExtension.ToScreen="True"
-                Background="{StaticResource HitTestableTransparent}"
-                Classes="actionDesigner"
-                ClipToBounds="False"
-                GridLineBrush="BurlyWood"
-                GridLineSpacing="50"
-                GridLineThickness="0.5"
-                IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                MaxScale="{Binding MaxScale}"
-                MinScale="{Binding MinScale}"
-                OriginBrush="Chocolate"
-                OriginThickness="1.5"
-                ShowGrid="{Binding IsGridVisible, FallbackValue=False, TargetNullValue=False}"
-                TailWidth="3"
-                TipLength="20"
-                TipWidth="10"
-                TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhiteColor}"
-                TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
-                TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
-                TransitionLineHoverBorderBrush="{DynamicResource HoverDefaultBorderBrush}"
-                TransitionLineThickness="1"
-                WarningBrush1="{DynamicResource DefaultWarningBrush1}"
-                WarningBrush2="{DynamicResource DefaultWarningBrush2}">
-                <ListBox
-                    x:Name="ActionDesignerListBox"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Classes="actionDesigner"
-                    ItemsSource="{Binding Items}"
-                    SelectedItem="{Binding FocusAction, Mode=TwoWay}">
+            <local:MpAvZoomBorder HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                  local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
+                                  local:MpAvBoundsObserverExtension.ToScreen="True"
+                                  Background="{StaticResource HitTestableTransparent}"
+                                  Classes="actionDesigner"
+                                  ClipToBounds="False"
+                                  GridLineBrush="BurlyWood"
+                                  GridLineSpacing="50"
+                                  GridLineThickness="0.5"
+                                  IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                  MaxScale="{Binding MaxScale}"
+                                  MinScale="{Binding MinScale}"
+                                  OriginBrush="Chocolate"
+                                  OriginThickness="1.5"
+                                  ShowGrid="{Binding IsGridVisible, FallbackValue=False, TargetNullValue=False}"
+                                  TailWidth="3"
+                                  TipLength="20"
+                                  TipWidth="10"
+                                  TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhiteColor}"
+                                  TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
+                                  TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
+                                  TransitionLineHoverBorderBrush="{DynamicResource HoverDefaultBorderBrush}"
+                                  TransitionLineThickness="1"
+                                  WarningBrush1="{DynamicResource DefaultWarningBrush1}"
+                                  WarningBrush2="{DynamicResource DefaultWarningBrush2}">
+                <ListBox x:Name="ActionDesignerListBox"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         Classes="actionDesigner"
+                         ItemsSource="{Binding Items}"
+                         SelectedItem="{Binding FocusAction, Mode=TwoWay}">
                     <ListBox.Resources>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
@@ -132,10 +158,9 @@
                     </ListBox.Resources>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Canvas
-                                x:Name="ActionDesignerCanvas"
-                                Background="{StaticResource HitTestableTransparent}"
-                                ClipToBounds="False">
+                            <Canvas x:Name="ActionDesignerCanvas"
+                                    Background="{StaticResource HitTestableTransparent}"
+                                    ClipToBounds="False">
                                 <Canvas.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
@@ -155,50 +180,47 @@
 
             <!--  SHOW GRID/ RESET VIEW MENU  -->
 
-            <Border
-                x:Name="DesignerViewMenu"
-                Margin="0,5,10,0"
-                Padding="5"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Background="Silver"
-                BorderBrush="DimGray"
-                BorderThickness="1"
-                CornerRadius="10"
-                IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+            <Border x:Name="DesignerViewMenu"
+                    Margin="0,5,10,0"
+                    Padding="5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Background="Silver"
+                    BorderBrush="DimGray"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                 <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
 
                     <!--  SHOW GRID TOGGLE BUTTON  -->
 
-                    <ToggleButton
-                        x:Name="ShowGridToggleButton"
-                        Grid.Column="0"
-                        Classes="defaultButton textOnlyButton outline outlineOver"
-                        Content="{x:Static local:UiStrings.TriggerDesignerToggleGridLabel}"
-                        IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
-                        IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                        IsThreeState="False" />
+                    <ToggleButton x:Name="ShowGridToggleButton"
+                                  Grid.Column="0"
+                                  Classes="defaultButton textOnlyButton outline outlineOver"
+                                  Content="{x:Static local:UiStrings.TriggerDesignerToggleGridLabel}"
+                                  IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
+                                  IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                  IsThreeState="False" />
                     <Border Grid.Column="1" />
 
                     <!--  RESET PAN/ZOOM BUTTON  -->
 
-                    <Button
-                        x:Name="ResetViewButton"
-                        Grid.Column="2"
-                        Classes="defaultButton textOnlyButton outline outlineOver"
-                        Command="{Binding ResetDesignerViewCommand}"
-                        Content="{x:Static local:UiStrings.CommonResetLabel}" />
+                    <Button x:Name="ResetViewButton"
+                            Grid.Column="2"
+                            Classes="defaultButton textOnlyButton outline outlineOver"
+                            Command="{Binding ResetDesignerViewCommand}"
+                            Content="{x:Static local:UiStrings.CommonResetLabel}" />
 
-                    <Border Grid.Column="3" IsVisible="{Binding !IsWindowOpen}" />
+                    <Border Grid.Column="3"
+                            IsVisible="{Binding !IsWindowOpen}" />
 
                     <!--  POP OUT WINDOW BUTTON  -->
 
-                    <Button
-                        x:Name="ShowDesignerWindowButton"
-                        Grid.Column="4"
-                        Classes="noBg noHoverBg defaultButton outline outlineOver"
-                        Command="{Binding ShowDesignerWindowCommand}"
-                        IsVisible="{Binding !IsWindowOpen}">
+                    <Button x:Name="ShowDesignerWindowButton"
+                            Grid.Column="4"
+                            Classes="noBg noHoverBg defaultButton outline outlineOver"
+                            Command="{Binding ShowDesignerWindowCommand}"
+                            IsVisible="{Binding !IsWindowOpen}">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
                         </ToolTip.Tip>
@@ -208,72 +230,69 @@
             </Border>
 
             <!--  ZOOM SLIDER  -->
-            <Border
-                Margin="0,0,5,5"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                <Slider
-                    x:Name="DesignerZoomSlider"
-                    Height="70"
-                    IsSnapToTickEnabled="False"
-                    Maximum="3"
-                    Minimum="0.1"
-                    Orientation="Vertical"
-                    TickFrequency="0.1"
-                    TickPlacement="None"
-                    Value="{Binding Scale, Mode=TwoWay}" />
+            <Border Margin="0,0,5,5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <Slider x:Name="DesignerZoomSlider"
+                        Height="70"
+                        IsSnapToTickEnabled="False"
+                        Maximum="3"
+                        Minimum="0.1"
+                        Orientation="Vertical"
+                        TickFrequency="0.1"
+                        TickPlacement="None"
+                        Value="{Binding Scale, Mode=TwoWay}" />
             </Border>
             <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
-            <Border
-                MinWidth="50"
-                MinHeight="50"
-                Margin="0,0,5,5"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                IsVisible="{Binding SelectedTrigger, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+            <Border MinWidth="50"
+                    MinHeight="50"
+                    Margin="0,0,5,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding SelectedTrigger, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                 <Border.Styles>
                     <Style Selector="Button Ellipse">
-                        <Setter Property="Stroke" Value="{DynamicResource DefaultBorderBrush}" />
+                        <Setter Property="Stroke"
+                                Value="{DynamicResource DefaultBorderBrush}" />
                     </Style>
                     <Style Selector="Button:pointerover Ellipse">
-                        <Setter Property="Stroke" Value="{DynamicResource HoverDefaultBorderBrush}" />
+                        <Setter Property="Stroke"
+                                Value="{DynamicResource HoverDefaultBorderBrush}" />
                     </Style>
                     <Style Selector="Button Label">
-                        <Setter Property="Foreground" Value="{DynamicResource DefaultBorderBrush}" />
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource DefaultBorderBrush}" />
                     </Style>
                     <Style Selector="Button:pointerover Label">
-                        <Setter Property="Foreground" Value="{DynamicResource HoverDefaultBorderBrush}" />
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource HoverDefaultBorderBrush}" />
                     </Style>
                 </Border.Styles>
-                <Button
-                    x:Name="AddNewActionButton"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Classes="noBg noHoverBg"
-                    Command="{Binding ShowTriggerSelectorMenuCommand}"
-                    CommandParameter="{Binding $self}">
+                <Button x:Name="AddNewActionButton"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Classes="noBg noHoverBg"
+                        Command="{Binding ShowTriggerSelectorMenuCommand}"
+                        CommandParameter="{Binding $self}">
                     <StackPanel Orientation="Vertical">
                         <Grid>
-                            <Ellipse
-                                Width="50"
-                                Height="50"
-                                Fill="Transparent"
-                                StrokeThickness="3" />
-                            <Rectangle
-                                Width="3"
-                                Height="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Fill="DimGray" />
-                            <Rectangle
-                                Width="30"
-                                Height="3"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Fill="DimGray" />
+                            <Ellipse Width="50"
+                                     Height="50"
+                                     Fill="Transparent"
+                                     StrokeThickness="3" />
+                            <Rectangle Width="3"
+                                       Height="30"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Fill="DimGray" />
+                            <Rectangle Width="30"
+                                       Height="3"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Fill="DimGray" />
                         </Grid>
                         <Label HorizontalAlignment="Center">
                             Add New

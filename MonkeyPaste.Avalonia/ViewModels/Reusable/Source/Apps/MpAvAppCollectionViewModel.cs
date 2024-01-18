@@ -48,12 +48,23 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
 
+
+        public MpAvAppViewModel SelectedCustomClipboardFormatItem { get; set; }
         public MpAvAppViewModel SelectedItem { get; set; }
         #endregion
 
         #region State
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
 
+        public bool DoSelectedPulse {
+            get {
+                if (SelectedItem == null) {
+                    return false;
+                }
+                return SelectedItem.DoFocusPulse;
+            }
+        }
+        public bool IsCustomClipboardDataGridExpanded { get; set; }
         #endregion
 
         #endregion
@@ -555,16 +566,6 @@ namespace MonkeyPaste.Avalonia {
                     // settings format strip click
                     // provided anchor_control is clicked button, use strip as anchor_control
                     anchor_control = ofsv;
-                    //if (source_control.DataContext is MpAvAppOlePresetViewModel clicked_format &&
-                    //    mivm.GetMenuPresetByPresetId(clicked_format.PresetId)
-                    //        is MpAvAppOlePresetMenuViewModel pvm) {
-                    //    // show ole menu opened to clicked preset
-                    //    MpAvAppOleMenuViewModelBase mvm = pvm.ParentObj as MpAvAppOleMenuViewModelBase;
-                    //    while (mvm != null) {
-                    //        mvm.IsSubMenuOpen = true;
-                    //        mvm = mvm.ParentObj as MpAvAppOleMenuViewModelBase;
-                    //    }
-                    //}
                 }
 
                 var cm = MpAvMenuView.ShowMenu(

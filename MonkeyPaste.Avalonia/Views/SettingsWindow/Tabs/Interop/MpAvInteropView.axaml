@@ -47,6 +47,19 @@
                     Value="{Binding $self, ConverterParameter=write, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
         </Style>
 
+        <!--  PULSE ROW  -->
+        <Style Selector="DataGrid#OleFormatsDataGrid DataGridRow">
+            <Setter Property="local:MpAvMutableClassesExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
+                    Value="" />
+
+        </Style>
+        <Style Selector="DataGrid#OleFormatsDataGrid.pulse-selection DataGridRow:selected">
+            <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
+                    Value="pulse" />
+
+        </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel x:DataType="local:MpAvAppCollectionViewModel"
                 Classes="expandersContainer"
@@ -54,7 +67,8 @@
 
         <!--  CLIPBOARD FORMATS  -->
 
-        <Expander Classes="header">
+        <Expander Classes="header"
+                  IsExpanded="{Binding IsCustomClipboardDataGridExpanded, Mode=TwoWay}">
             <Expander.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.Or}">
                     <Binding Path="FilterText"
@@ -73,7 +87,7 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropFormatsHeaderTitle}" />
 
-                    <local:MpAvToolTipInfoHintView IsHtml="True"
+                    <local:MpAvToolTipHintView IsHtml="True"
                                                    ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
@@ -96,7 +110,10 @@
 
                     <local:MpAvClipBorder Classes="filterDataGridContainer">
                         <Grid>
-                            <DataGrid local:MpAvDataGridRefreshExtension.IsEnabled="False"
+                            <DataGrid x:Name="OleFormatsDataGrid"
+                                      local:MpAvDataGridRefreshExtension.IsEnabled="False"
+                                      Classes.pulse-selection="{Binding DoSelectedPulse}"
+                                      SelectedItem="{Binding SelectedCustomClipboardFormatItem, Mode=TwoWay}"
                                       IsVisible="{Binding CustomClipboardFormatItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                       ItemsSource="{Binding CustomClipboardFormatItems}">
                                 <DataGrid.Columns>
@@ -295,7 +312,7 @@
                            Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropShortcutsHeaderTitle}" />
-                    <local:MpAvToolTipInfoHintView Classes="expander header warning"
+                    <local:MpAvToolTipHintView Classes="expander header warning"
                                                    IsHtml="True"
                                                    ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                 </StackPanel>
@@ -357,7 +374,7 @@
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
                                                     <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
-                                                    <local:MpAvToolTipInfoHintView IsHtml="True"
+                                                    <local:MpAvToolTipHintView IsHtml="True"
                                                                                    ToolTipText="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
@@ -379,7 +396,7 @@
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
                                                     <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
-                                                    <local:MpAvToolTipInfoHintView IsHtml="True"
+                                                    <local:MpAvToolTipHintView IsHtml="True"
                                                                                    ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
@@ -443,7 +460,7 @@
                            Source="{Binding Source={StaticResource ShieldImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropRejectedHeaderTitle}" />
-                    <local:MpAvToolTipInfoHintView Classes="expander header warning"
+                    <local:MpAvToolTipHintView Classes="expander header warning"
                                                    IsHtml="True"
                                                    ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
                 </StackPanel>
@@ -575,7 +592,7 @@
                                        Source="{Binding Source={StaticResource GlobeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                                 <TextBlock Classes="expander header"
                                            Text="{x:Static local:UiStrings.SettingsInteropRejectedUrlsHeaderLabel}" />
-                                <local:MpAvToolTipInfoHintView Classes="expander header warning"
+                                <local:MpAvToolTipHintView Classes="expander header warning"
                                                                ToolTipText="{x:Static local:UiStrings.SettingsInteropUrlHintText}" />
                             </StackPanel>
                         </Expander.Header>

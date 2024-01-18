@@ -209,7 +209,7 @@
         <Style Selector=":is(Button)">
             <!--<Setter Property="Margin"
                     Value="5,0" />-->
-          <Setter Property="Padding"
+            <Setter Property="Padding"
                     Value="10,5" />
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
@@ -227,6 +227,8 @@
 
     <DockPanel x:Name="SearchCriteriaContainer"
                Background="{DynamicResource SearchCriteriaBgBrush}"
+               local:MpAvHelpAnchorExtension.IsEnabled="True"
+               local:MpAvHelpAnchorExtension.LinkType="Filters"
                Classes.drag="{Binding IsAnyDragging}"
                Classes.alterable="{Binding CanAlter}">
         <local:MpAvSearchCriteriaHeaderView DockPanel.Dock="Top"

@@ -27,33 +27,6 @@ namespace MonkeyPaste.Avalonia {
             gs.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
             gs.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
             gs.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
-
-            //gs.AddHandler(Control.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
-            //gs.AddHandler(Control.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
-        }
-
-        private void Gs_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
-        }
-
-        private void Gs_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
-        }
-
-        public void UpdatePinTrayVarDimension(GridLength gl) {
-            var ctrcv_container_grid = this.FindControl<Grid>("ClipTrayContainerGrid");
-
-            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                if (ctrcv_container_grid.ColumnDefinitions.Count == 0) {
-                    return;
-                }
-                ctrcv_container_grid.ColumnDefinitions[0].Width = gl;
-            } else {
-                if (ctrcv_container_grid.RowDefinitions.Count == 0) {
-                    return;
-                }
-                ctrcv_container_grid.RowDefinitions[0].Height = gl;
-            }
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {

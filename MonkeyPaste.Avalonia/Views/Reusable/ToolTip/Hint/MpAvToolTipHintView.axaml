@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Name="InfoHintView"
+             x:Class="MonkeyPaste.Avalonia.MpAvToolTipHintView"
+             Background="Transparent">
+    <UserControl.Styles>
+        <Style Selector="Ellipse.hint">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="StrokeThickness"
+                    Value="1" />
+            <Setter Property="Stroke"
+                    Value="White" />
+        </Style>
+
+        <Style Selector="TextBlock.hint">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="10" />
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+    </UserControl.Styles>
+    <ToolTip.Tip>
+        <local:MpAvToolTipView ToolTipText="{Binding ToolTipText, ElementName=InfoHintView}"
+                               IsHtml="{Binding IsHtml, ElementName=InfoHintView}" />
+    </ToolTip.Tip>
+    <Grid x:Name="HintContainerGrid"
+          IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+          Cursor="Help"
+          Width="15"
+          Height="15">
+        <!--  INFO  -->
+        <Ellipse Classes="info hint"
+                 Fill="Blue" />
+        <TextBlock Classes="info hint"
+                   Text="i" />
+        <!--  WARNING  -->
+        <Ellipse Classes="warning hint"
+                 Stroke="Black"
+                 Fill="Yellow" />
+        <TextBlock Classes="warning hint"
+                   Foreground="Black"
+                   Text="!" />
+        <!--  ERROR  -->
+        <Ellipse Classes="error hint"
+                 Fill="Red" />
+        <TextBlock Classes="error hint"
+                   Text="x" />
+
+        <!--  LINK  -->
+        <Ellipse Classes="link hint"
+                 Fill="ForestGreen" />
+        <TextBlock Classes="link hint"
+                   Text="i" />
+    </Grid>
+</UserControl>

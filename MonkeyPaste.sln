@@ -1484,12 +1484,13 @@ Global
 		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
+		RESX_ConfirmAddLanguageFile = False
 		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
 	EndGlobalSection
 EndGlobal

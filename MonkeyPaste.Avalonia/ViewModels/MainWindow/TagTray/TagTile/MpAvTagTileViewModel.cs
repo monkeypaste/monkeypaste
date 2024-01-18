@@ -560,6 +560,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string TagToolTipText =>
+            string.Format(UiStrings.TagTileToolTip, TagClipCount);
+
         public string TagTextHexColor {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
@@ -725,7 +728,7 @@ namespace MonkeyPaste.Avalonia {
                 if (TagName != value) {
                     Tag.TagName = value;
                     if (Tag.TagName.Trim() == string.Empty) {
-                        Tag.TagName = "Untitled";
+                        Tag.TagName = UiStrings.CommonUntitledLabel;
                         if (IsTagNameTextBoxFocused) {
                             IsTagNameReadOnly = false;
                         }
@@ -1462,6 +1465,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvClipTileSortFieldViewModel.Instance.SelectedSortType : null;
 
                      t = await MpTag.CreateAsync(
+                            tagName: UiStrings.CommonUntitledLabel,
                              parentTagId: TagId,
                              treeSortIdx: Items.Count,
                              tagType: childTagType,

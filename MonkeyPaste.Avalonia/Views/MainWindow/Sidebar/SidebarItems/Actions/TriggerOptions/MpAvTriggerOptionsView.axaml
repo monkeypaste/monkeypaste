@@ -25,7 +25,7 @@
                     Value="12" />
             <Setter Property="FontWeight"
                     Value="Medium" />
-            <Setter Property="Width"
+            <Setter Property="MinWidth"
                     Value="75" />
             <Setter Property="Cursor"
                     Value="Hand" />

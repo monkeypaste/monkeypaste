@@ -531,24 +531,6 @@ namespace MonkeyPaste.Common {
             return notFoundValue;
         }
 
-        public static string ToFlagNamesCsvString<TEnum>(this TEnum flagEnum, MpCsvFormatProperties csvProps = null) where TEnum : struct {
-            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            List<string> flagNames = new List<string>();
-            //var eobj = Enum.ToObject(typeof(TEnum), flagEnum);
-            //if (eobj == null) {
-            //    return string.Empty;
-            //}
-            if (typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), false).Length == 0) {
-                flagNames.Add(flagEnum.ToString());
-            } else {
-                foreach (string curName in typeof(TEnum).GetEnumNames()) {
-                    if (Enum.TryParse(curName, false, out TEnum curEnum)) {
-                        flagNames.Add(curName);
-                    }
-                }
-            }
-            return flagNames.ToCsv(csvProps);
-        }
 
         #endregion
 

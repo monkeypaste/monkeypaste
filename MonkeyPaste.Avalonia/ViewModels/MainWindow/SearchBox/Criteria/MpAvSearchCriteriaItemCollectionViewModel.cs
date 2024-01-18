@@ -392,6 +392,7 @@ namespace MonkeyPaste.Avalonia {
                 return 0;
             }
             var pending_tag = await MpTag.CreateAsync(
+                            tagName: UiStrings.CommonUntitledLabel,
                             tagType: MpTagType.Query,
                             sortType: MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
                             isSortDescending: MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending);

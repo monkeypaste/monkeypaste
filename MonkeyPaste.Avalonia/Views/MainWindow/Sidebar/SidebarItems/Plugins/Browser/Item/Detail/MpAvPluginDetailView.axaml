@@ -64,7 +64,7 @@
 
         <!--  MANAGE BUTTONS  -->
         <Style Selector="Button.manageButton">
-            <Setter Property="Width"
+            <Setter Property="MinWidth"
                     Value="80" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />

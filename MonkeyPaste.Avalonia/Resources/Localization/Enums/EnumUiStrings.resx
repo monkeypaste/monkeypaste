@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
   <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
     <value>Last Output</value>
   </data>
@@ -124,7 +142,7 @@
     <value>Source Clip</value>
   </data>
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
-    <value />
+    <value>None</value>
   </data>
   <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
     <value>Holding Shift</value>
@@ -148,7 +166,7 @@
     <value>Yearly</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
     <value>Loader</value>
@@ -301,7 +319,7 @@
     <value>Plugin Response Warning With Option</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
     <value>Toggle Main Window</value>
@@ -454,7 +472,7 @@
     <value>Invoke Trigger</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpContentQueryPropertyPathType_ItemData" xml:space="preserve">
     <value>Item Data</value>
@@ -502,7 +520,7 @@
     <value>Last Output</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
     <value>Classify</value>
@@ -535,7 +553,7 @@
     <value>Application Command</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpTriggerType_ClipAdded" xml:space="preserve">
     <value>Clip Added</value>
@@ -553,7 +571,7 @@
     <value>Monkey Copy Shortcut</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
     <value>Internal</value>
@@ -565,7 +583,7 @@
     <value>Custom</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
     <value>os</value>
@@ -577,7 +595,7 @@
     <value>lib</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
     <value>Text</value>
@@ -616,7 +634,7 @@
     <value>Custom</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
     <value>Login</value>
@@ -700,7 +718,7 @@
     <value>Url</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
     <value>And</value>
@@ -1042,7 +1060,7 @@
     <value>Usage Score</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
     <value>Internal</value>
@@ -1078,7 +1096,7 @@
     <value>Regex</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
     <value>Free</value>
@@ -1090,7 +1108,7 @@
     <value>Unlimited</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpContentOptionType_Content" xml:space="preserve">
     <value>Content</value>
@@ -1114,7 +1132,7 @@
     <value>Mouse</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
     <value>Clear</value>
@@ -1123,7 +1141,7 @@
     <value>Delete</value>
   </data>
   <data name="MpTagType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpTagType_Link" xml:space="preserve">
     <value>Link</value>
@@ -1135,7 +1153,7 @@
     <value>Group</value>
   </data>
   <data name="MpReadOnlyTagType_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
     <value>Tags</value>
@@ -1168,7 +1186,7 @@
     <value>Files</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
     <value>Text</value>

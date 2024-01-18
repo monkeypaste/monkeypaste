@@ -108,6 +108,10 @@
                         Grid.Column="0"
                         Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg alterOnly"
                         Command="{Binding AddNextCriteriaItemCommand}">
+
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaAddRowTooltip}" />
+                    </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
 
@@ -117,6 +121,9 @@
                         Grid.Column="1"
                         Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg alterOnly"
                         Command="{Binding RemoveThisCriteriaItemCommand}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaRemoveRowTooltip}" />
+                    </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
 
@@ -128,6 +135,9 @@
                         Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg alterOnly"
                         IsVisible="{Binding !IsJoinPanelVisible}"
                         Command="{Binding SelectCustomNextJoinTypeCommand}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaJoinTypeTooltip}" />
+                    </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource Dots3x1Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
             </Grid>

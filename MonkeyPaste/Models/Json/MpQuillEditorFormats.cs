@@ -22,6 +22,7 @@ namespace MonkeyPaste {
         public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage {
+        public double editorScale { get; set; } = 1.0d;
         public int minLogLevel { get; set; }
         public bool isDebug { get; set; }
         public string defaultFontFamily { get; set; }
@@ -380,5 +381,8 @@ namespace MonkeyPaste {
         public bool isExpanded { get; set; }
         public double offsetX { get; set; }
         public double offsetY { get; set; }
+    }
+    public class MpQuillEditorScaleChangedMessage {
+        public double editorScale { get; set; } = 1.0d;
     }
 }

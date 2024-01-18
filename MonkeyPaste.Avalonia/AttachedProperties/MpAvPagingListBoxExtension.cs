@@ -727,40 +727,51 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PointerMouseWheelHandler(object s, global::Avalonia.Input.PointerWheelEventArgs e) {
-            if (s is ListBox lb) {
-                bool canScroll = GetCanScrollX(lb) || GetCanScrollY(lb);
-                if (!canScroll) {
-                    SetVelocityX(lb, 0);
-                    SetVelocityY(lb, 0);
-                    e.Handled = false;
-                    return;
-                }
-
-                e.Handled = true;
-
-                double scrollOffsetX = GetScrollOffsetX(lb);
-                double scrollOffsetY = GetScrollOffsetY(lb);
-                double maxScrollOffsetX = GetMaxScrollOffsetX(lb);
-                double maxScrollOffsetY = GetMaxScrollOffsetY(lb);
-                double dampX = GetWheelDampeningX(lb);
-                double dampY = GetWheelDampeningY(lb);
-                var lb_orientation = GetListOrientation(lb);
-                var layout_type = GetLayoutType(lb);
-                double vFactor = -120;
-
-                bool isScrollHorizontal = (lb_orientation == Orientation.Horizontal && layout_type == MpClipTrayLayoutType.Stack) ||
-                                            (lb_orientation == Orientation.Vertical && layout_type == MpClipTrayLayoutType.Grid);
-                double v0x = isScrollHorizontal
-                                ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
-                double v0y = isScrollHorizontal
-                                ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
-
-                double vx = v0x - (v0x * dampX);
-                double vy = v0y - (v0y * dampY);
-
-                SetVelocityX(lb, vx);
-                SetVelocityY(lb, vy);
+            if (s is not ListBox lb) {
+                return;
             }
+            if (e.KeyModifiers == KeyModifiers.Control &&
+                MpAvMainView.Instance != null &&
+                MpAvMainView.Instance.GetVisualDescendant<MpAvMainWindowTitleMenuView>() is { } mwtv) {
+
+                double val = e.Delta.X == 0 ? e.Delta.Y : e.Delta.X;
+                mwtv.AdjustZoomFactor(val > 0);
+                e.Handled = true;
+                return;
+            }
+
+            bool canScroll = GetCanScrollX(lb) || GetCanScrollY(lb);
+            if (!canScroll) {
+                SetVelocityX(lb, 0);
+                SetVelocityY(lb, 0);
+                e.Handled = false;
+                return;
+            }
+
+            e.Handled = true;
+
+            double scrollOffsetX = GetScrollOffsetX(lb);
+            double scrollOffsetY = GetScrollOffsetY(lb);
+            double maxScrollOffsetX = GetMaxScrollOffsetX(lb);
+            double maxScrollOffsetY = GetMaxScrollOffsetY(lb);
+            double dampX = GetWheelDampeningX(lb);
+            double dampY = GetWheelDampeningY(lb);
+            var lb_orientation = GetListOrientation(lb);
+            var layout_type = GetLayoutType(lb);
+            double vFactor = -120;
+
+            bool isScrollHorizontal = (lb_orientation == Orientation.Horizontal && layout_type == MpClipTrayLayoutType.Stack) ||
+                                        (lb_orientation == Orientation.Vertical && layout_type == MpClipTrayLayoutType.Grid);
+            double v0x = isScrollHorizontal
+                            ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
+            double v0y = isScrollHorizontal
+                            ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
+
+            double vx = v0x - (v0x * dampX);
+            double vy = v0y - (v0y * dampY);
+
+            SetVelocityX(lb, vx);
+            SetVelocityY(lb, vy);
         }
 
         private static void ScrollViewerPointerPressedHandler(object s, PointerPressedEventArgs e) {

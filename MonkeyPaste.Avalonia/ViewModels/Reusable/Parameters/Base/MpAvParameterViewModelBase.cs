@@ -583,7 +583,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE isExecuting is true when analyzer executing or trigger is enabling
             if (IsRequired && string.IsNullOrWhiteSpace(CurrentValue)) {
                 if ((isExecuting && IsExecuteParameter) || !IsExecuteParameter) {
-                    return $"{Label} is required";
+                    return string.Format(UiStrings.ParameterInvalidText, Label);
                 }
             }
 

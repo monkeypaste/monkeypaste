@@ -281,6 +281,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTree.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltipHint.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Notifications.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\RadioButton.axaml" />
@@ -1331,6 +1332,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ContextMenu.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginBrowser.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltipHint.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TopLevel.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
@@ -1571,8 +1573,8 @@
     <Compile Update="Views\Reusable\Terms\MpAvTermsView.axaml.cs">
       <DependentUpon>MpAvTermsView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
-      <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
+    <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipHintView.axaml.cs">
+      <DependentUpon>MpAvToolTipHintView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Menu\MpAvSettingsMenuView.axaml.cs">
       <DependentUpon>MpAvSettingsMenuView.xaml</DependentUpon>
@@ -1719,17 +1721,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.ja-JP.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.zh-CN.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.ja-JP.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1748,7 +1744,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Editor\src\components\editor\NewFolder\" />
     <Folder Include="Utils\Plugins\Headless\" />
     <Folder Include="ViewModels\SystemTray\Version\" />
   </ItemGroup>

@@ -30,9 +30,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        static bool USE_LOCAL_LEDGER = true;
         static string LEDGER_URI =>
-            USE_LOCAL_LEDGER ?
+            MpLedgerConstants.USE_LOCAL_LEDGER ?
                 MpLedgerConstants.LOCAL_LEDGER_URI :
                 MpLedgerConstants.REMOTE_LEDGER_URI;
 

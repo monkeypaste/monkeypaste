@@ -11,8 +11,8 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         static bool DO_REMOTE_PACKAGING = false;
         static bool FORCE_REPLACE_REMOTE_TAG = false;
 
-        static bool DO_LOCAL_VERSIONS = false;
-        static bool DO_REMOTE_VERSIONS = true;
+        static bool DO_LOCAL_VERSIONS = true;
+        static bool DO_REMOTE_VERSIONS = false;
 
 
         const string BUILD_CONFIG =

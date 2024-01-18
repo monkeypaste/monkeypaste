@@ -284,6 +284,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button Classes="defaultButton noBg noHoverBg outlineOver square"
                                         IsEnabled="{Binding !Parent.IsBusy}"
+                                        local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="True"
                                         Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
                                     <Grid>
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}">

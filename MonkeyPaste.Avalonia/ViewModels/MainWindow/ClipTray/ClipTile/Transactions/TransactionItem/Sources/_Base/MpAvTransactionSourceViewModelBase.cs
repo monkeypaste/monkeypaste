@@ -42,9 +42,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public virtual string LabelText =>
            SourceRef == null ?
-                "Unlabled SourceControl Ref" :
+                UiStrings.TransactionUnlabledRef :
                 string.IsNullOrEmpty(SourceRef.LabelText) ?
-                    "Untitled" :
+                    UiStrings.CommonUntitledLabel :
                     SourceRef.LabelText;
 
         public virtual string Body =>

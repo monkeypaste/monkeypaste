@@ -316,6 +316,11 @@ function sharedTemplateChanged_ext(changedTemplateTypeMsgBase64Str) {
 	log('shared template ' + req.deletedTemplateGuid + ' UPDATED by host');
 }
 
+function setEditorZoom_ext(scaleMsgBase64Str) {
+	// input 'MpQuillEditorScaleChangedMessage'
+	let req = toJsonObjFromBase64Str(scaleMsgBase64Str);
+	setEditorZoom(req.editorScale);
+}
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'
 //	let req = toJsonObjFromBase64Str(selMsgBase64Str);

@@ -62,7 +62,7 @@
 
             <!--  DESCRIPTION  -->
 
-            <local:MpAvToolTipInfoHintView Grid.Column="1"
+            <local:MpAvToolTipHintView Grid.Column="1"
                                            DockPanel.Dock="Right"
                                            Margin="0,5,2,0"
                                            IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"

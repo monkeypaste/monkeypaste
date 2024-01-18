@@ -150,6 +150,7 @@ function initDefaults(defaultsObj) {
 			}
 		});
 	}
+	setEditorZoom(defaultsObj.editorScale);
 
 	initShortcuts(defaultsObj.shortcutFragmentStr);
 }

@@ -230,12 +230,12 @@
             <!--  Zoom Factor Slider  -->
 
             <Grid x:Name="ZoomSliderContainerGrid"
-                  IsVisible="False"
+                  IsVisible="True"
                   Background="{StaticResource HitTestableTransparent}"
                   Cursor="Hand">
 
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat='Scale \{0:f\} x'}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat=' \{0:P\}'}" />
                 </ToolTip.Tip>
                 <!--  TRACK LINE  -->
                 <Border x:Name="ZoomTrackLine"

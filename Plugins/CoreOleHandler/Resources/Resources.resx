@@ -230,4 +230,7 @@
   <data name="Rtf2HtmlLabel" xml:space="preserve">
     <value>Convert To Html</value>
   </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
 </root>

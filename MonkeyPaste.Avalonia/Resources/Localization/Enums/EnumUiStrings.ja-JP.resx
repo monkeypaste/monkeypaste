@@ -117,7 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MpBillingCycleType_None" xml:space="preserve">
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>最後の出力</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>ソースクリップ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>シフトを押しながら</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>右上隅</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>左上隅</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>いつも</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
     <value>一度もない</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
@@ -150,6 +168,9 @@
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
     <value>アプリモードの変更</value>
   </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>デバッグ</value>
+  </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
     <value>コンテンツの上限に達しました</value>
   </data>
@@ -168,6 +189,12 @@
   <data name="MpNotificationType_Welcome" xml:space="preserve">
     <value>いらっしゃいませ</value>
   </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>利用可能なアップデート</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>利用可能なアップデートはありません</value>
+  </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
     <value>追加モードが変更されました</value>
   </data>
@@ -182,6 +209,9 @@
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
     <value>ファイル IO 警告</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>プラグインのアンロード エラー</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
     <value>無効なプラグイン</value>
@@ -210,6 +240,12 @@
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
     <value>DBパスワード入力</value>
   </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>アプリを評価</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>モーダルリセット共有値プリセット</value>
+  </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
     <value>モーダルコンテンツフォーマットの劣化</value>
   </data>
@@ -234,6 +270,15 @@
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
     <value>モーダル進行状況キャンセルメッセージボックス</value>
   </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>モーダルビジーメッセージボックス</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>モーダル再起動の無視</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>今すぐまたは後でモーダル再起動</value>
+  </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
     <value>追加終了の確認</value>
   </data>
@@ -248,9 +293,6 @@
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
     <value>オプション付きのプラグイン応答警告</value>
-  </data>
-  <data name="MpNotificationType_PluginResponseOther" xml:space="preserve">
-    <value>プラグインの応答 その他</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
     <value>メインウィンドウの切り替え</value>
@@ -276,17 +318,23 @@
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
     <value>追加の一時停止の切り替え</value>
   </data>
-  <data name="MpShortcutType_HideMainWindow" xml:space="preserve">
-    <value>メインウィンドウを隠す</value>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>クリップボードから手動で追加</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>集中力を下げる</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>集中力を高める</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
     <value>アプリケーションを終了する</value>
   </data>
-  <data name="MpShortcutType_PasteSelectedItems" xml:space="preserve">
-    <value>選択した項目を貼り付け</value>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>外部に貼り付け</value>
   </data>
-  <data name="MpShortcutType_PasteHere" xml:space="preserve">
-    <value>ここに貼り付けます</value>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>選択範囲を貼り付け</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
     <value>選択範囲をコピー</value>
@@ -459,11 +507,8 @@
   <data name="MpActionType_FileWriter" xml:space="preserve">
     <value>ファイルライター</value>
   </data>
-  <data name="MpActionType_AddFromClipboard" xml:space="preserve">
-    <value>クリップボードから追加</value>
-  </data>
-  <data name="MpActionType_KeySimulator" xml:space="preserve">
-    <value>キーシミュレータ</value>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>クリップボードの設定</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
     <value>遅れ</value>
@@ -471,17 +516,23 @@
   <data name="MpActionType_Alert" xml:space="preserve">
     <value>アラート</value>
   </data>
-  <data name="MpTriggerType_ContentAdded" xml:space="preserve">
-    <value>追加されたコンテンツ</value>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>アプリケーションコマンド</value>
   </data>
-  <data name="MpTriggerType_FileSystemChange" xml:space="preserve">
-    <value>ファイルシステムの変更</value>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>クリップを追加しました</value>
   </data>
-  <data name="MpTriggerType_ContentTagged" xml:space="preserve">
-    <value>タグ付けされたコンテンツ</value>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>ファイルシステムが変更されました</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>タグ付きクリップ</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
     <value>ショートカット</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>猿のコピーのショートカット</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
     <value>内部</value>
@@ -549,14 +600,11 @@
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
     <value>テーマ</value>
   </data>
-  <data name="MpSettingsFrameType_Fonts" xml:space="preserve">
-    <value>フォント</value>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>デフォルトのフォント</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
     <value>音</value>
-  </data>
-  <data name="MpSettingsFrameType_Taskbar" xml:space="preserve">
-    <value>タスクバー</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
     <value>窓</value>
@@ -582,8 +630,8 @@
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
     <value>コンテンツ</value>
   </data>
-  <data name="MpSettingsFrameType_DragAndDrop" xml:space="preserve">
-    <value>ドラッグアンドドロップ</value>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>トップ画面エッジジェスチャー</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
     <value>ショートカット</value>
@@ -958,7 +1006,7 @@
     <value>アイテムの種類</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value>使用状況スコア</value>
+    <value>使用スコア</value>
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
     <value>内部</value>
@@ -1023,9 +1071,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>ねずみ</value>
   </data>
-  <data name="MpMainWindowShowBehaviorType_Active" xml:space="preserve">
-    <value>アクティブ</value>
-  </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
     <value>クリア</value>
   </data>
@@ -1041,8 +1086,8 @@
   <data name="MpTagType_Group" xml:space="preserve">
     <value>グループ</value>
   </data>
-  <data name="MpReadOnlyTagType_Collections" xml:space="preserve">
-    <value>コレクション</value>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>タグ</value>
   </data>
   <data name="MpReadOnlyTagType_All" xml:space="preserve">
     <value>全て</value>
@@ -1071,6 +1116,15 @@
   <data name="MpReadOnlyTagType_Files" xml:space="preserve">
     <value>ファイル</value>
   </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>文章</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
   <data name="WatcherChangeTypes_Created" xml:space="preserve">
     <value>作成した</value>
   </data>
@@ -1086,16 +1140,25 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>全て</value>
   </data>
-  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
-    <value>シフトを押しながら</value>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>一度もない</value>
   </data>
-  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
-    <value>右上隅</value>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>毎日</value>
   </data>
-  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
-    <value>左上隅</value>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>毎週</value>
   </data>
-  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
-    <value>トップ画面エッジジェスチャー</value>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>毎月</value>
+  </data>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>暗い</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>なし</value>
   </data>
 </root>

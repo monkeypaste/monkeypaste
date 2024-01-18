@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,20 +34,42 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppOleRootMenuViewModel(object menuArg, string show_type) : base(null) {
             MenuArg = menuArg;
 
+            List<MpAvIMenuItemViewModel> items = null;
             if (show_type == "full") {
-                SubItems = new List<MpAvIMenuItemViewModel> {
+                // currently only shown from clip paste bar
+                items = new List<MpAvIMenuItemViewModel> {
                     new MpAvAppOleReaderOrWriterMenuViewModel(this, true),
                     new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
                 };
+                var manage_mivm = new MpAvMenuItemViewModel() {
+                    Header = UiStrings.CommonManageHeader,
+                    IconResourceKey = "CogColorImage",
+                    HasLeadingSeparator = true
+                };
+                if (MenuArg is MpAvAppViewModel avm) {
+                    // app has custom formats (show copy/paste stettings tab w/ this app selected)
+                    manage_mivm.Command = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand;
+                    manage_mivm.CommandParameter = new object[] {
+                        MpSettingsTabType.CopyAndPaste,
+                        avm.ToProcessInfo().SerializeObject() };
+                } else {
+                    // app has default formats (show clipboard sidebar)
+                    manage_mivm.Command = MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand;
+                    manage_mivm.CommandParameter = MpAvClipboardHandlerCollectionViewModel.Instance;
+                }
+                items.Add(manage_mivm);
             } else if (show_type == "read") {
-                SubItems = new List<MpAvIMenuItemViewModel> {
+                items = new List<MpAvIMenuItemViewModel> {
                     new MpAvAppOleReaderOrWriterMenuViewModel(this, true)
                 };
             } else if (show_type == "write") {
-                SubItems = new List<MpAvIMenuItemViewModel> {
+                items = new List<MpAvIMenuItemViewModel> {
                     new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
                 };
             }
+
+
+            SubItems = items;
         }
 
         #endregion

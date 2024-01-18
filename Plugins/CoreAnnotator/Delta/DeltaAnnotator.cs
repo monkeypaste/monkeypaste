@@ -6,7 +6,24 @@ using System.Text.RegularExpressions;
 
 namespace CoreAnnotator {
     public static class DeltaAnnotator {
-        #region Private Variable
+        #region Private Variables
+
+        static Dictionary<TextAnnotationType, Regex> _annRegExLookup;
+        static Dictionary<TextAnnotationType, Regex> AnnRegExLookup {
+            get {
+                if (_annRegExLookup == null) {
+                    var regex_strs = new Dictionary<TextAnnotationType, string>(){
+                        { TextAnnotationType.Url,@"(https?://|www|https?://www|file://).\S+"},
+                        { TextAnnotationType.Email,@"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})"},
+                        { TextAnnotationType.PhoneNumber,@"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})"},
+                        { TextAnnotationType.Currency,@"[$£€¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?"},
+                        { TextAnnotationType.HexColor,@"#([0-9]|[a-fA-F]){8}|#([0-9]|[a-fA-F]){6}"}
+                    };
+                    _annRegExLookup = regex_strs.ToDictionary(x => x.Key, x => new Regex(x.Value, RegexOptions.Compiled));
+                }
+                return _annRegExLookup;
+            }
+        }
         #endregion
 
         #region Constants
@@ -20,13 +37,10 @@ namespace CoreAnnotator {
 
         #region Public Methods
 
-        public static MpQuillDelta Annotate(string plain_text, IEnumerable<MpRegExType> formats) {
+        public static MpQuillDelta Annotate(string plain_text, IEnumerable<TextAnnotationType> formats) {
             MpQuillDelta delta = new MpQuillDelta() { ops = new List<MpQuillOp>() };
-            if (string.IsNullOrEmpty(plain_text)) {
-                return delta;
-            }
 
-            foreach (MpRegExType ft in formats) {
+            foreach (TextAnnotationType ft in formats) {
                 var annotation_type_results = AnnotateType(plain_text, ft);
                 delta.ops.AddRange(annotation_type_results.ops);
             }
@@ -37,14 +51,9 @@ namespace CoreAnnotator {
             delta.ops.ForEach(x => x.retain = 0);
             return delta;
         }
-        private static MpQuillDelta AnnotateType(string pt, MpRegExType annotationRegExType) {
+        private static MpQuillDelta AnnotateType(string pt, TextAnnotationType annotationRegExType) {
             MpQuillDelta delta = new MpQuillDelta() { ops = new List<MpQuillOp>() };
-
-            if (annotationRegExType == MpRegExType.None) {
-                return delta;
-            }
-
-            Regex regex = MpRegEx.RegExLookup[annotationRegExType];
+            Regex regex = AnnRegExLookup[annotationRegExType];
             MatchCollection mc = regex.Matches(pt);
             foreach (Match m in mc) {
                 MpConsole.WriteLine($"Annotation match: Type: {annotationRegExType} Value: {m.Value} Idx: {m.Index} Length: {m.Length}");
@@ -64,7 +73,7 @@ namespace CoreAnnotator {
             return delta;
         }
 
-        private static MpQuillAttributes GetLinkAttributes(MpRegExType annotationRegExType, string match) {
+        private static MpQuillAttributes GetLinkAttributes(TextAnnotationType annotationRegExType, string match) {
             string href = GetLinkHref(annotationRegExType, match);
             if (string.IsNullOrEmpty(href)) {
                 return null;
@@ -73,26 +82,26 @@ namespace CoreAnnotator {
                 linkType = annotationRegExType.ToString().ToLower(),
                 link = href
             };
-            if (annotationRegExType == MpRegExType.HexColor) {
+            if (annotationRegExType == TextAnnotationType.HexColor) {
                 var color = new MpColor(match);
                 attr.background = color.ToHex(true);
                 attr.color = attr.background.IsHexStringBright() ? "#000000" : "#FFFFFF";
             }
             return attr;
         }
-        private static string GetLinkHref(MpRegExType annotationRegExType, string match) {
+        private static string GetLinkHref(TextAnnotationType annotationRegExType, string match) {
             string href_value;
             switch (annotationRegExType) {
-                case MpRegExType.HexColor:
+                case TextAnnotationType.HexColor:
                     href_value = "javascript:;";
                     //var c = new MpColor(match);
                     //href_value = $"https://www.htmlcsscolor.com/hex/{c.ToHex(true).ToUpper().Replace("#", string.Empty)}";
                     break;
-                case MpRegExType.Email:
+                case TextAnnotationType.Email:
                     href_value = $"mailto:{match}";
                     break;
-                case MpRegExType.PhoneNumber:
-                case MpRegExType.Currency:
+                case TextAnnotationType.PhoneNumber:
+                case TextAnnotationType.Currency:
                     href_value = $"https://www.google.com/search?q={match}";
                     break;
                 default:

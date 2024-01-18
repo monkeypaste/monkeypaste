@@ -167,7 +167,7 @@
                             <Label Content="{x:Static local:UiStrings.SearchThresholdLabel}"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center" />
-                            <local:MpAvToolTipInfoHintView ToolTipText="{x:Static local:UiStrings.SearchColorDistanceToolTipText}" />
+                            <local:MpAvToolTipHintView ToolTipText="{x:Static local:UiStrings.SearchColorDistanceToolTipText}" />
 
                         </StackPanel>
 

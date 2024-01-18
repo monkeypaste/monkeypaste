@@ -99,5 +99,10 @@
                 <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
         </StackPanel>
+        <local:MpAvToolTipHintView DockPanel.Dock="Right"
+                                       VerticalAlignment="Top"
+                                       Classes="link"
+                                       CommandParameter="Filters" />
+
     </DockPanel>
 </local:MpAvUserControl>

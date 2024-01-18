@@ -92,6 +92,12 @@ function getEditorVisibleHeight() {
 
 // #region Setters
 
+function setEditorZoom(scale) {
+	// scale should be 0-3ish number
+	scale = isNullOrUndefined(scale) ? 1 : scale;
+	let zoom_val = parseFloat(scale) * 100;
+	setElementComputedStyleProp(document.body, '--editorzoom', zoom_val +'%');
+}
 function setEditorPlaceholderText(text) {
 	getEditorElement().setAttribute('data-placeholder', text);
 }

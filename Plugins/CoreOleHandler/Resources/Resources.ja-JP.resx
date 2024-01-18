@@ -141,4 +141,91 @@
   <data name="PluginTags" xml:space="preserve">
     <value>コア、クリップボード、ドラッグ アンド ドロップ、テキスト、RTF、リッチ テキスト、Html、CSV、画像、PNG、Jpg、Jpeg、リンク</value>
   </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>rtf がまだ存在しない場合、html は rtf に変換されます。</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTFに変換</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>これらのディレクトリは、クリップボードまたはドラッグ アンド ドロップ データから読み取られません。</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>無視されるディレクトリ</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>無視されるファイル拡張子</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>これらのファイル タイプは、クリップボードまたはドラッグ アンド ドロップ データからは読み取られません。</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>これらのファイル タイプは、クリップボードやドラッグ アンド ドロップ データには書き込まれません。</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>チェックすると、最大寸法より大きい画像はアスペクト比を維持しながら拡大縮小されます。</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>特大スケール</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>ビットマップをペーストまたはドロップする場合、これがデフォルトのファイルタイプになります。</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>デフォルトのエクスポートタイプ</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>完全に透明な画像がクリップボードに表示されることがありますが、これは混乱を招きます。</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>空の画像を無視する</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>残念ながら、大きな画像 (数 MB 以上) を使用すると、ドラッグ アンド ドロップが遅くなり、全体的なパフォーマンスが多少遅くなる可能性があります。</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>最大高さ</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>最大幅</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>パフォーマンス上の懸念から、最大文字数が必要です</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>最大文字数</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>フォーマット '{0}' には空または透過的なデータが含まれていたため、ブロックされました</value>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>空のデータがブロックされました</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>「{0}」形式には「無視」のフラグが設定されています</value>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>フォーマットは無視されます</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} の制限は {1}、データは {2} でした</value>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>検出された最大サイズ</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>コアクリップボードリーダー</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>コアクリップボードライター</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>html がまだ存在しない場合、rtf は html に変換されます。</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTMLに変換</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>無題</value>
+  </data>
 </root>

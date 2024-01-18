@@ -1,0 +1,46 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--  DEFAULT  -->
+    <Style Selector="local|MpAvToolTipHintView :is(Control).hint">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
+    <!--  INFO  -->
+    <Style Selector="local|MpAvToolTipHintView.info :is(Control).info">
+        <Setter Property="IsVisible"
+                Value="True" />
+    </Style>
+
+    <!--  Warning  -->
+    <Style Selector="local|MpAvToolTipHintView.warning :is(Control).warning">
+        <Setter Property="IsVisible"
+                Value="True" />
+    </Style>
+
+    <!--  Error  -->
+
+    <Style Selector="local|MpAvToolTipHintView.error :is(Control).error">
+        <Setter Property="IsVisible"
+                Value="True" />
+    </Style>
+
+    <!--  LINK  -->
+    <Style Selector="local|MpAvToolTipHintView.link">
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="ToolTipText"
+                Value="{x:Static local:UiStrings.ToolTipHintLinkTooltip}" />
+        <Setter Property="Command"
+                Value="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}" />
+    </Style>
+
+    <Style Selector="local|MpAvToolTipHintView.link :is(Control).link">
+        <Setter Property="IsVisible"
+                Value="True" />
+    </Style>
+</Styles>

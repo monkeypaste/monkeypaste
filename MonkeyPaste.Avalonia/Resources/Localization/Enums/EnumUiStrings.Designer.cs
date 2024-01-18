@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpActionType_None {
             get {
@@ -196,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpAnalyzerInputFormatFlags_None {
             get {
@@ -322,7 +322,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpClipboardFormatType_None {
             get {
@@ -484,7 +484,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpContentOptionType_None {
             get {
@@ -637,7 +637,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpContentQueryPropertyPathType_None {
             get {
@@ -1258,7 +1258,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpNextJoinOptionType_None {
             get {
@@ -1609,7 +1609,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpNotificationType_None {
             get {
@@ -1834,7 +1834,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpPluginDependencyType_None {
             get {
@@ -1906,7 +1906,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpReadOnlyTagType_None {
             get {
@@ -2023,7 +2023,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpRoutingType_None {
             get {
@@ -2086,7 +2086,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to None.
         /// </summary>
         public static string MpScrollToOpenAndLockType_None {
             get {
@@ -2167,7 +2167,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpSettingsFrameType_None {
             get {
@@ -2302,7 +2302,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpShortcutAssignmentClearButtonType_None {
             get {
@@ -2338,7 +2338,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpShortcutRoutingProfileType_None {
             get {
@@ -2482,7 +2482,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpShortcutType_None {
             get {
@@ -2860,7 +2860,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpTagType_None {
             get {
@@ -2928,6 +2928,24 @@ namespace MonkeyPaste.Avalonia {
         public static string MpTextOptionType_RegEx {
             get {
                 return ResourceManager.GetString("MpTextOptionType_RegEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string MpThemeType_Dark {
+            get {
+                return ResourceManager.GetString("MpThemeType_Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string MpThemeType_Light {
+            get {
+                return ResourceManager.GetString("MpThemeType_Light", resourceCulture);
             }
         }
         
@@ -3121,6 +3139,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Daily.
+        /// </summary>
+        public static string MpTrashCleanupModeType_Daily {
+            get {
+                return ResourceManager.GetString("MpTrashCleanupModeType_Daily", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly.
+        /// </summary>
+        public static string MpTrashCleanupModeType_Monthly {
+            get {
+                return ResourceManager.GetString("MpTrashCleanupModeType_Monthly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string MpTrashCleanupModeType_Never {
+            get {
+                return ResourceManager.GetString("MpTrashCleanupModeType_Never", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekly.
+        /// </summary>
+        public static string MpTrashCleanupModeType_Weekly {
+            get {
+                return ResourceManager.GetString("MpTrashCleanupModeType_Weekly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clip Added.
         /// </summary>
         public static string MpTriggerType_ClipAdded {
@@ -3157,7 +3211,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpTriggerType_None {
             get {
@@ -3184,7 +3238,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string MpUserAccountType_None {
             get {

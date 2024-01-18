@@ -7,6 +7,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using WindowStartupLocation = Avalonia.Controls.WindowStartupLocation;
 
 namespace MonkeyPaste.Avalonia {
@@ -79,8 +80,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsHelpSettingsTabVisible =>
-            false;
 
         public string CurrentUrl =>
             MpAvDocusaurusHelpers.GetCustomUrl(
@@ -180,8 +179,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand<object> NavigateToHelpLinkCommand => new MpAsyncCommand<object>(
-            async (args) => {
+        public ICommand NavigateToHelpLinkCommand => new MpCommand<object>(
+            (args) => {
                 MpHelpLinkType hlt = MpHelpLinkType.None;
                 if (args is MpHelpLinkType argLink) {
                     hlt = argLink;
@@ -191,26 +190,21 @@ namespace MonkeyPaste.Avalonia {
 
                 LastLinkType = hlt;
                 // open/activate settings window and select help tab...
-                if (IsHelpSettingsTabVisible) {
-                    await MpAvSettingsViewModel.Instance
-                        .ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Help);
-                } else {
-                    if (IsWindowOpen) {
-                        IsWindowActive = true;
-                    } else if (Mp.Services.PlatformInfo.IsDesktop) {
-                        //var sw = CreateHelpWindow();
-                        //sw.Show();
-                        MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(CurrentUrl);
-                        MpMessenger.SendGlobal(MpMessageType.HelpWindowOpened);
-                    }
+                if (IsWindowOpen) {
+                    IsWindowActive = true;
+                } else if (Mp.Services.PlatformInfo.IsDesktop) {
+                    //var sw = CreateHelpWindow();
+                    //sw.Show();
+                    MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(CurrentUrl);
+                    MpMessenger.SendGlobal(MpMessageType.HelpWindowOpened);
                 }
                 OnPropertyChanged(nameof(CurrentUrl));
 
                 MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{CurrentUrl}'");
             });
 
-        public MpIAsyncCommand NavigateToContextualHelpCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand NavigateToContextualHelpCommand => new MpCommand(
+            () => {
                 MpHelpLinkType anchor_help_type = MpHelpLinkType.None;
 
                 if (MpAvFocusManager.Instance.FocusElement is Control fc) {
@@ -224,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                 }
-                await NavigateToHelpLinkCommand.ExecuteAsync(anchor_help_type);
+                NavigateToHelpLinkCommand.Execute(anchor_help_type);
             },
             () => {
                 return MpAvWindowManager.IsAnyActive;

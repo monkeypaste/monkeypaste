@@ -82,7 +82,7 @@
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
                                     <TextBlock Text="{x:Static local:UiStrings.ShortcutDataGridRoutingHeader}" />
-                                    <local:MpAvToolTipInfoHintView IsHtml="True" ToolTipText="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
+                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
@@ -109,7 +109,7 @@
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
                                     <TextBlock Text="{x:Static local:UiStrings.ShortcutDataGridShortcutHeader}" />
-                                    <local:MpAvToolTipInfoHintView IsHtml="True" ToolTipText="{x:Static local:UiStrings.ShortcutGestureRulesHint}" />
+                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{x:Static local:UiStrings.ShortcutGestureRulesHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>

@@ -77,7 +77,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding TagClipCount, StringFormat='{}{0:#,0} items'}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding TagToolTipText}" />
                     </Template>
                 </Setter.Value>
             </Setter>

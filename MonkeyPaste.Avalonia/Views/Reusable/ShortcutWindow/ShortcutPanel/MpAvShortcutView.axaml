@@ -150,9 +150,8 @@
                            Margin="10,0,10,0"
                            FontStyle="Italic"
                            TextWrapping="WrapWithOverflow"
-                           Foreground="Black">
-                    Record
-                </TextBlock>
+                           Text="{x:Static local:UiStrings.ShortcutRecordLabel}"
+                           Foreground="Black" />
 
             </DockPanel>
         </Button>

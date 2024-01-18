@@ -20,6 +20,8 @@ namespace MonkeyPaste.Avalonia {
         // enums: (all enum to labels, maybe missing some ToStrings() in places...._
         public static Type[] UiEnums => new Type[] {
                 // enum to label
+                typeof(MpThemeType),
+                typeof(MpTrashCleanupModeType),
                 typeof(MpAnalyzerChildInputType),
                 typeof(MpScrollToOpenAndLockType),
                 typeof(MpBillingCycleType),
@@ -83,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
             { typeof(MpDateBeforeUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpDateAfterUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpTimeSpanWithinUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
-           // { typeof(MpBillingCycleType), UiStrings.AccountBillingCycleNoneLabel },
+            { typeof(MpScrollToOpenAndLockType), UiStrings.CommonNoneLabel },
         };
 
         static string EnumUiResxFileName =>
@@ -158,6 +160,10 @@ namespace MonkeyPaste.Avalonia {
                     string name_val = enumName.ToProperCase();
                     if (idx == 0 && _UniqueNones.TryGetValue(enumType, out string unique_none)) {
                         name_val = unique_none;
+                    }
+                    if (string.IsNullOrEmpty(name_val)) {
+                        // BUG resx translator won't transfer over empty entries so making single space
+                        name_val = " ";
                     }
                     elu.Add(name_key, name_val);
                 }

@@ -141,4 +141,91 @@
   <data name="PluginTags" xml:space="preserve">
     <value>核心、剪贴板、拖放、文本、Rtf、富文本、Html、Csv、图像、Png、Jpg、Jpeg、链接</value>
   </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>当 rtf 尚不存在时，html 将转换为 rtf。</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>转换为RTF</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>这些目录不会从剪贴板或拖放数据中读取。</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>忽略的目录</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>忽略的文件扩展名</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>这些文件类型不会从剪贴板或拖放数据中读取。</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>这些文件类型不会写入剪贴板或拖放数据。</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>选中后，大于最大尺寸的图像将被缩放，同时保留纵横比。</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>规模超大</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>粘贴或删除位图时，这将是默认文件类型</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>默认导出类型</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>有时完全透明的图像会显示在剪贴板上，这令人困惑。</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>忽略空图像</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>不幸的是，大图像（超过几 MB）可能会使拖放和整体性能有些缓慢。</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>最大高度</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>最大宽度</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>出于性能考虑，需要最大数量的字符</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>最大字符数</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>格式“{0}”包含空数据或透明数据并被阻止</value>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>空数据被阻止</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>“{0}”格式被标记为“忽略”</value>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>格式被忽略</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} 限制为 {1}，数据为 {2}</value>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>检测到的最大尺寸</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>核心剪贴板阅读器</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>核心剪贴板编写器</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>当 html 尚不存在时，rtf 将转换为 html。</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>转换为 HTML</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>无标题</value>
+  </data>
 </root>

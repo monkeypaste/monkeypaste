@@ -421,7 +421,8 @@
                                          local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
                                          Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />-->
 
-                        <TextBox MinWidth="150"
+                        <TextBox x:Name="FilterTextBox"
+                                 MinWidth="150"
                                  MinHeight="30"
                                  Classes="common"
                                  VerticalAlignment="Stretch"
@@ -490,21 +491,17 @@
 
                     <local:MpAvSettingsTabDataTemplateSelector>
                         <DataTemplate x:Key="AccountTemplate">
-                            <!--<local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />-->
                             <local:MpAvAccountView />
                         </DataTemplate>
                         <DataTemplate x:Key="PreferencesTemplate"
                                       x:DataType="local:MpAvSettingsViewModel">
                             <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredPreferenceFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
                         </DataTemplate>
-                        <DataTemplate x:Key="SecurityTemplate">
+                        <DataTemplate x:Key="InteropTemplate">
                             <local:MpAvInteropView />
                         </DataTemplate>
                         <DataTemplate x:Key="ShortcutsTemplate">
                             <local:MpAvShortcutsView />
-                        </DataTemplate>
-                        <DataTemplate x:Key="HelpTemplate">
-                            <local:MpAvWebPageView DataContext="{x:Static local:MpAvHelpViewModel.Instance}" />
                         </DataTemplate>
                     </local:MpAvSettingsTabDataTemplateSelector>
                 </TransitioningContentControl.DataTemplates>

@@ -150,7 +150,7 @@
         </Grid>
         <!--  ACTION HINT  -->
 
-        <local:MpAvToolTipInfoHintView
+        <local:MpAvToolTipHintView
             Grid.Column="3"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"

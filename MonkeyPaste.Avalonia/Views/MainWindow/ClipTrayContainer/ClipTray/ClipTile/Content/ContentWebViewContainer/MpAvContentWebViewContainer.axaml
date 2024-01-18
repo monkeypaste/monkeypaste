@@ -25,6 +25,7 @@
                               Focusable="{Binding IsSubSelectionEnabled}"
                               local:MpAvReceivesEventsExtension.IsEnabled="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               ContentId="{Binding CopyItemId, Mode=OneWay}"
+                              ContentScale="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               IsEditorLoaded="{Binding IsEditorLoaded, Mode=TwoWay}"
                               IsContentResizing="{Binding IsResizing}"
                               IsContentSelected="{Binding IsSelected}"

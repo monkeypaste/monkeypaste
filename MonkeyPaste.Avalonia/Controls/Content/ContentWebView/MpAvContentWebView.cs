@@ -972,13 +972,14 @@ namespace MonkeyPaste.Avalonia {
 
             Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
 
-            this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
-            this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
-            this.GetObservable(MpAvContentWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
-            this.GetObservable(MpAvContentWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged());
-            this.GetObservable(MpAvContentWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged());
-            this.GetObservable(MpAvContentWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged());
-            this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());
+            this.GetObservable(MpAvContentWebView.ContentScaleProperty).Subscribe(value => OnContentScaleChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged()).AddDisposable(_disposables);
 
         }
 
@@ -1100,6 +1101,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpQuillDefaultsRequestMessage() {
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,
+                editorScale = ContentScale,
                 isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
@@ -1131,7 +1133,7 @@ namespace MonkeyPaste.Avalonia {
                 itemData = BindingContext.EditorFormattedItemData,
                 isReadOnly = BindingContext.IsContentReadOnly,
                 isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled,
-                breakBeforeLoad = BreakOnNextLoad
+                breakBeforeLoad = BreakOnNextLoad,
             };
             BreakOnNextLoad = false;
 
@@ -1280,6 +1282,29 @@ namespace MonkeyPaste.Avalonia {
                 (x, o) => x.ContentId = o,
                 0);
 
+        #endregion
+
+        #region ContentScale Property
+
+        private double _ContentScale;
+        public double ContentScale {
+            get { return _ContentScale; }
+            set { SetAndRaise(ContentScaleProperty, ref _ContentScale, value); }
+        }
+        public static readonly DirectProperty<MpAvContentWebView, double> ContentScaleProperty =
+            AvaloniaProperty.RegisterDirect<MpAvContentWebView, double>(
+                nameof(ContentScale),
+                x => x.ContentScale,
+                (x, o) => x.ContentScale = o,
+                1);
+
+        private void OnContentScaleChanged() {
+            if (!IsEditorLoaded) {
+                return;
+            }
+            var req = new MpQuillEditorScaleChangedMessage() { editorScale = ContentScale };
+            SendMessage($"setEditorZoom_ext('{req.SerializeObjectToBase64()}')");
+        }
         #endregion
 
         #region IsContentLoaded Property

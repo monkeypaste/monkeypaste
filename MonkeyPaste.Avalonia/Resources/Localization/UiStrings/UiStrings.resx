@@ -2602,4 +2602,46 @@ You can restart now and complete the update by re-installing, ignore this and up
   <data name="PrefShowInTaskbarHint" xml:space="preserve">
     <value>This only hides the main window. All other non-dialog windows always show in taskbar.</value>
   </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Search in '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Add Filter</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Edit Join Type</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Remove this filter</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Open help about this...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clips</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Unlabeled Source Reference</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' is required</value>
+    <comment>Parameter Name</comment>
+  </data>
 </root>

@@ -113,7 +113,6 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="{Binding IsDesktop, ConverterParameter=*|0, Converter={x:Static local:MpAvBoolToGridLengthConverter.Instance}, Source={x:Static local:MpAvThemeViewModel.Instance}}" />
             <ColumnDefinition Width="{Binding IsDesktop, ConverterParameter=*|0, Converter={x:Static local:MpAvBoolToGridLengthConverter.Instance}, Source={x:Static local:MpAvThemeViewModel.Instance}}" />
-            <ColumnDefinition Width="{Binding IsHelpSettingsTabVisible, ConverterParameter=*|0, Converter={x:Static local:MpAvBoolToGridLengthConverter.Instance}, Source={x:Static local:MpAvHelpViewModel.Instance}}" />
         </Grid.ColumnDefinitions>
 
         <!--  ACCOUNT  -->

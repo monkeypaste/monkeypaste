@@ -112,7 +112,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
+        public string SearchButtonTooltipText =>
+            string.Format(UiStrings.SearchButtonTooltip, MpAvTagTrayViewModel.Instance.LastSelectedTagName);
         public string ExpandTooltipText {
             get {
                 if (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsCriteriaWindowOpen) {

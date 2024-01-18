@@ -453,13 +453,12 @@ namespace MonkeyPaste.Avalonia {
 
         public double DefaultZoomFactor { get; set; } = 1.0;
 
-        private double _zoomFactor = 1.0;
         public double ZoomFactor {
-            get => _zoomFactor;
+            get => MpAvPrefViewModel.Instance.EditorScale;
             set {
                 if (ZoomFactor != value) {
-                    LastZoomFactor = _zoomFactor;
-                    _zoomFactor = value;
+                    LastZoomFactor = MpAvPrefViewModel.Instance.EditorScale;
+                    MpAvPrefViewModel.Instance.EditorScale = value;
                     OnPropertyChanged(nameof(ZoomFactor));
                 }
             }
@@ -1195,7 +1194,7 @@ namespace MonkeyPaste.Avalonia {
                 string tag_name = string.Empty;
                 var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
                 if (scicvm.IsAdvSearchActive && scicvm.IsPendingQuery) {
-                    tag_name = "Untitled";
+                    tag_name = UiStrings.CommonUntitledLabel;
                 } else {
                     if (MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null) {
                         return UiStrings.QueryTrayNoSelection;
@@ -1562,8 +1561,6 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-
-
         public async Task<MpAvClipTileViewModel> CreateClipTileViewModelAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
             MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
             await ctvm.InitializeAsync(ci, queryOffsetIdx);
@@ -2378,18 +2375,24 @@ namespace MonkeyPaste.Avalonia {
                     ScrollToAnchor();
                     break;
                 case MpMessageType.SidebarItemSizeChangeBegin:
-                case MpMessageType.PinTrayResizeBegin:
                     SetScrollAnchor();
                     break;
                 case MpMessageType.SidebarItemSizeChanged:
-                case MpMessageType.PinTraySizeChanged:
                     RefreshQueryTrayLayout();
                     break;
                 case MpMessageType.SidebarItemSizeChangeEnd:
-                case MpMessageType.PinTrayResizeEnd:
                     ScrollToAnchor();
                     break;
                 // LAYOUT CHANGE
+                case MpMessageType.PinTrayResizeBegin:
+                    //SetScrollAnchor();
+                    break;
+                case MpMessageType.PinTraySizeChanged:
+                    //RefreshQueryTrayLayout();
+                    break;
+                case MpMessageType.PinTrayResizeEnd:
+                    RefreshQueryTrayLayout();
+                    break;
                 case MpMessageType.MainWindowInitialOpenComplete:
                     ResetTraySplitterCommand.Execute(null);
                     break;
@@ -2525,7 +2528,17 @@ namespace MonkeyPaste.Avalonia {
         private void Instance_OnGlobalMouseReleased(object sender, bool e) {
             // BUG in some cases dragend/dragcancel/drop isn't getting reported
             // and corner buttons stop showing up this shall fix it
+
+            // TODO if any dragging or dropping, wait 3 secs,
+            // if still, cancel all and log. May need to reinit clip trays
+
+
             IsAnyDropOverTrays = false;
+            // TODO Add disableDrag() called at end of contentChange in editor.
+            // See if cef startDrag or js dragEnter gets called.
+            // Both should never get called, cut cef out of dnd.
+            // Render/browser process crap is jamming it up, too many layers  
+
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
@@ -4680,7 +4693,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetTraySplitterCommand => new MpCommand<object>(
             (args) => {
-                if (App.PrimaryView is not MpAvMainView mv) {
+                if (MpAvMainView.Instance is not MpAvMainView mv) {
                     return;
                 }
                 var mgs = args as MpAvMovableGridSplitter;

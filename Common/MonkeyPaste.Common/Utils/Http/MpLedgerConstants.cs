@@ -1,5 +1,6 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public static class MpLedgerConstants {
+        public static bool USE_LOCAL_LEDGER => true;
 
         public const string REMOTE_LEDGER_NAME = "ledger.json";
         public const string LOCAL_LEDGER_NAME = "ledger-local.json";

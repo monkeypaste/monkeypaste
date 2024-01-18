@@ -1,5 +1,4 @@
-﻿using AngleSharp.Io;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -114,7 +113,7 @@ namespace CoreOleHandler {
                 fn = title;
             }
             if (string.IsNullOrWhiteSpace(fn)) {
-                fn = "untitled";
+                fn = Resources.UntitledLabel;
             }
 
             string source_type = null;

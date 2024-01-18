@@ -2,8 +2,7 @@
     public enum MpSettingsTabType {
         Account,
         Preferences,
-        Security,
+        CopyAndPaste,
         Shortcuts,
-        Help
     }
 }

@@ -325,7 +325,7 @@ namespace MonkeyPaste {
         public static async Task<MpTag> CreateAsync(
             int id = 0,
             string guid = "",
-            string tagName = "Untitled",
+            string tagName = default,
             int treeSortIdx = -1,
             int pinSortIdx = -1,
             int parentTagId = 0,
@@ -336,6 +336,9 @@ namespace MonkeyPaste {
             bool ignoreTracking = false,
             bool ignoreSyncing = false,
             bool suppressWrite = false) {
+            if (tagName == default) {
+                throw new Exception("tag name must be set");
+            }
             if (tagType == MpTagType.None) {
                 throw new Exception("TagType must be specified");
             }

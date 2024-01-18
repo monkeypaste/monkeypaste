@@ -11,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAppViewModel :
         MpAvViewModelBase<MpAvAppCollectionViewModel>,
         MpIHoverableViewModel,
+        MpAvIPulseViewModel,
         MpIFilterMatch,
         MpIIsValueEqual<MpAvAppViewModel> {
         #region Interfaces
@@ -70,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public bool DoFocusPulse { get; set; }
         public bool HasAnyShortcut =>
             ClipboardShortcutsId > 0;
 
@@ -288,6 +289,12 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
 
+                    break;
+                case nameof(DoFocusPulse):
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.DoSelectedPulse));
+                    }
+                    MpAvThemeViewModel.Instance.HandlePulse(this);
                     break;
             }
         }

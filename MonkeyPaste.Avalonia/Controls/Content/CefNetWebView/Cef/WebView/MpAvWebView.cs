@@ -2,12 +2,13 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using CefNet;
 using MonkeyPaste.Common.Plugin;
-
+using System.Collections.Generic;
 
 
 
@@ -39,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
         private bool _isBrowserCreated = false;
 #endif
+        protected List<IDisposable> _disposables = [];
         #endregion
 
         #region Constants
@@ -156,6 +158,10 @@ namespace MonkeyPaste.Avalonia {
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             _isBrowserCreated = false;
+            if (_disposables != null) {
+                _disposables.ForEach(x => x.Dispose());
+                _disposables.Clear();
+            }
         }
 #endif
         #endregion
@@ -218,7 +224,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWebView() : base() {
-            this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged());
+            this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(_disposables);
 #if CEFNET_WV
             Navigating += MpAvWebView_Navigating;
             Navigated += MpAvWebView_Navigated;
