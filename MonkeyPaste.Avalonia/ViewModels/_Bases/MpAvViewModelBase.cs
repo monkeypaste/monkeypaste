@@ -11,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvViewModelBase :
         //ReactiveObject,
         //IActivatableViewModel,
+        MpIHierarchialViewModel,
         INotifyPropertyChanged,
         MpIErrorHandler,
         MpIAsyncObject {

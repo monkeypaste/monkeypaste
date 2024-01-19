@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutTriggerViewModel :
-        MpAvTriggerActionViewModelBase,
-        //MpIShortcutCommandViewModel,
-        //MpAvIKeyGestureViewModel,
-        MpIApplicationCommandCollectionViewModel {
+        MpAvTriggerActionViewModelBase {
 
         #region Constants
 
@@ -19,21 +16,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpAvIApplicationCommandViewModel Implementation
-
-        public IEnumerable<MpApplicationCommand> Commands =>
-            new MpApplicationCommand[] {
-                new MpApplicationCommand() {
-                    Command = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand,
-                    CommandParameter = ActionId,
-                    Tag = SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID
-                }
-            };
-
-        #endregion
-
-
         #endregion
 
         #region MpIParameterHost Overrides

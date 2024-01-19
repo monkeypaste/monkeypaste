@@ -1516,6 +1516,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvParameterCollectionView.axaml.cs">
       <DependentUpon>MpAvParameterCollectionView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\TitleMenu\ZoomSlider\MpAvZoomFactorView.axaml.cs">
+      <DependentUpon>MpAvZoomFactorView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Mobile\Notifications\Loader\MpAvMobileLoaderView.axaml.cs">
       <DependentUpon>MpAvMobileLoaderView.axaml</DependentUpon>
     </Compile>
@@ -1630,7 +1633,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia" Version="11.0.7" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
@@ -1643,8 +1646,8 @@
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
-    <PackageReference Include="SharpHook" Version="5.2.0" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="SharpHook" Version="5.2.2" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="NetCoreAudio" Version="1.8.0" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />

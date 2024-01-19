@@ -1,0 +1,74 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpIZoomFactorViewModel"
+                       x:DataType="local:MpIZoomFactorViewModel"
+                       DataContext="{Binding SelectedItem, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="30"
+                       x:Class="MonkeyPaste.Avalonia.MpAvZoomFactorView">
+    <local:MpAvUserControl.Styles>
+        <!--  ZOOM SLIDER  -->
+        <Style Selector="Border.zoomLine">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+        <Style Selector="Button Border.zoomLine">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+        </Style>
+        <Style Selector="Grid#ZoomSliderContainerGrid:pointerover Border.zoomLine">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+        <Style Selector="Button:pointerover Border.zoomLine">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent4Color}" />
+        </Style>
+        <Style Selector="Button:pressed Border.zoomLine">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="ZoomSliderContainerGrid"
+          Background="{StaticResource HitTestableTransparent}"
+          Cursor="Hand">
+
+        <ToolTip.Tip>
+            <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, StringFormat=' \{0:P0\}'}" />
+        </ToolTip.Tip>
+        <!--  TRACK LINE  -->
+        <Border x:Name="ZoomTrackLine"
+                Classes="zoomLine" />
+        <!--  MIN LINE  -->
+        <Border x:Name="ZoomMinLine"
+                Classes="zoomLine" />
+        <!--  DEFAULT LINE  -->
+        <Border x:Name="ZoomDefaultLine"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Classes="zoomLine">
+            <Border.RenderTransform>
+                <TranslateTransform />
+            </Border.RenderTransform>
+        </Border>
+        <!--  MAX LINE  -->
+        <Border x:Name="ZoomMaxLine"
+                Classes="zoomLine" />
+
+        <!--  CUR VAL LINE  -->
+        <Border x:Name="CurValLine"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Classes="zoomLine zoomValueLine">
+            <Border.RenderTransform>
+                <TranslateTransform />
+            </Border.RenderTransform>
+        </Border>
+    </Grid>
+</local:MpAvUserControl>

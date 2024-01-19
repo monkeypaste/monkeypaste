@@ -59,7 +59,8 @@ async function loadContentAsync_ext(loadContentMsgStr_base64) {
 		req.annotationsJsonStr,
 		sel_state,
 		paste_button_info,
-		req.breakBeforeLoad);
+		req.breakBeforeLoad,
+		req.editorScale);
 
 }
 

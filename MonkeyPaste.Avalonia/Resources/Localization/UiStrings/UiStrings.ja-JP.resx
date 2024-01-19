@@ -2511,4 +2511,10 @@
   <data name="CommonNeverLabel" xml:space="preserve">
     <value>一度もない</value>
   </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>「{0}」は必須です</value>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(エラーあり)</value>
+  </data>
 </root>

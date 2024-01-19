@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
         MpIWindowStateViewModel,
+        MpIZoomFactorViewModel,
         MpIDraggable,
         MpIAnimatable,
         MpILocatorItem,
@@ -70,6 +71,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIZoomFactorViewModel Implementation
+        public double MinZoomFactor =>
+            MpCopyItem.MIN_ZOOM_FACTOR;
+        public double MaxZoomFactor =>
+            MpCopyItem.MAX_ZOOM_FACTOR;
+        public double DefaultZoomFactor =>
+            MpCopyItem.DEFAULT_ZOOM_FACTOR;
+        public double StepDelta =>
+            MpCopyItem.ZOOM_FACTOR_STEP;
+
+        #endregion
+
         #region MpIDraggableViewModel Implementation
         bool MpIDraggable.IsDragging {
             get => IsTileDragging;
@@ -77,6 +90,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
         #region MpIDbModelId Implementation
         int MpILocatorItem.LocationId =>
             IsPinPlaceholder ? PinPlaceholderCopyItemId : CopyItemId;
@@ -953,6 +967,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        public double ZoomFactor {
+            get {
+                if (CopyItem == null) {
+                    return MpCopyItem.DEFAULT_ZOOM_FACTOR;
+                }
+                return CopyItem.ZoomFactor;
+            }
+            set {
+                if (ZoomFactor != value) {
+                    CopyItem.ZoomFactor = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(ZoomFactor));
+                }
+            }
+        }
         public int CopyCount {
             get {
                 if (IsAnyPlaceholder) {
@@ -1292,6 +1321,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsTrashed));
             OnPropertyChanged(nameof(IsSelected));
             OnPropertyChanged(nameof(IsImplicitHover));
+            OnPropertyChanged(nameof(ZoomFactor));
 
             if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null) {
@@ -1730,7 +1760,8 @@ namespace MonkeyPaste.Avalonia {
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
-                        if (!IsFocusWithin) {
+                        if (!IsFocusWithin && !MpAvSearchBoxViewModel.Instance.IsAnySearchControlFocused) {
+                            // only focus tile if search isn't focused cause search as you type will take focus from search box
                             FocusContainerAsync(NavigationMethod.Pointer).FireAndForgetSafeAsync();
                         }
                     } else {
@@ -1993,6 +2024,9 @@ namespace MonkeyPaste.Avalonia {
                         IsContentReadOnly = true;
                         IsSubSelectionEnabled = false;
                     }
+                    break;
+                case nameof(ZoomFactor):
+                    MpMessenger.SendGlobal(MpMessageType.ContentZoomFactorChanged);
                     break;
             }
         }
@@ -2326,12 +2360,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
         public ICommand TileDragBeginCommand => new MpCommand(
             () => {
                 //MpAvDragDropManager.StartDragCheck(this);
             });
-
         public ICommand DoubleLeftClickHandlerCommand => new MpCommand(
             () => {
                 if (IsPinPlaceholder) {
@@ -2345,7 +2377,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return EnableSubSelectionCommand.CanExecute(null);
             });
-
         public ICommand EnableSubSelectionCommand => new MpCommand(
             () => {
                 IsSubSelectionEnabled = true;
@@ -2356,7 +2387,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 //MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemData.ToPlainText()));
             });
-
         public ICommand ResetTileSizeToDefaultCommand => new MpCommand<object>(
             (args) => {
                 bool do_width =
@@ -2384,7 +2414,6 @@ namespace MonkeyPaste.Avalonia {
                 IsResizing = false;
             });
 
-
         private MpCommand<object> _searchWebCommand;
         public ICommand SearchWebCommand {
             get {
@@ -2400,7 +2429,6 @@ namespace MonkeyPaste.Avalonia {
             }
             //MpHelpers.OpenUrl(args.ToString() + System.Uri.EscapeDataString(CopyItem.ItemData.ToPlainText()));
         }
-
         public ICommand RefreshDocumentCommand {
             get {
                 return new MpCommand(
@@ -2413,26 +2441,20 @@ namespace MonkeyPaste.Avalonia {
                     });
             }
         }
-
-
-
         public ICommand ToggleHideTitleCommand => new MpCommand(
             () => {
                 IsTitleVisible = !IsTitleVisible;
             }, () => !IsPlaceholder);
-
         public ICommand CancelEditTitleCommand => new MpCommand(
             () => {
                 CopyItemTitle = _originalTitle;
                 IsTitleReadOnly = true;
             });
-
         public ICommand FinishEditTitleCommand => new MpCommand(
             () => {
                 IsTitleReadOnly = true;
                 CopyItem.WriteToDatabaseAsync().FireAndForgetSafeAsync(this);
             });
-
         public MpIAsyncCommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
                 if (IsTitleFocused) {
@@ -2459,7 +2481,6 @@ namespace MonkeyPaste.Avalonia {
                 //await Task.Delay(300);
                 //IsBusy = false;
             });
-
         public ICommand CycleDetailCommand => new MpCommand<object>(
             (args) => {
                 if (args is int intArg) {
@@ -2495,7 +2516,6 @@ namespace MonkeyPaste.Avalonia {
                     CanShowContextMenu &&
                     !IsPinPlaceholder;
             });
-
         public MpIAsyncCommand<object> PersistContentStateCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args is string persist_state) {
@@ -2516,7 +2536,6 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 return !IsAnyPlaceholder;
             });
-
         public MpIAsyncCommand PinToPopoutWindowCommand => new MpAsyncCommand(
             async () => {
                 if (!IsSelected) {
@@ -2539,7 +2558,6 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return !IsWindowOpen && Parent != null;
             });
-
         public ICommand DisableSubSelectionCommand => new MpCommand(
             () => {
                 // rejected for append tile
@@ -2548,7 +2566,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return CanDisableSubSelection;
             });
-
         public ICommand EnableContentReadOnlyCommand => new MpCommand(
             () => {
                 IsContentReadOnly = true;
@@ -2556,7 +2573,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return CanEdit && !IsContentReadOnly;
             });
-
         public ICommand DisableContentReadOnlyCommand => new MpCommand(
             () => {
                 IsContentReadOnly = false;
@@ -2564,7 +2580,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return CanEdit && IsContentReadOnly;
             });
-
         public ICommand ToggleIsContentReadOnlyCommand => new MpAsyncCommand(
             async () => {
                 if (IsResizerEnabled || !IsContentReadOnly || IsPinned) {
@@ -2582,7 +2597,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return EnableContentReadOnlyCommand.CanExecute(null);
             });
-
         public ICommand ToggleEditContentCommand => new MpCommand(
             () => {
                 if (!IsSelected && IsContentReadOnly) {
@@ -2591,26 +2605,46 @@ namespace MonkeyPaste.Avalonia {
                 IsContentReadOnly = !IsContentReadOnly;
 
             }, () => IsTextItem);
-
         public MpIAsyncCommand<object> ShareCommand => new MpAsyncCommand<object>(
             async (args) => {
                 string pt = CopyItemData.ToPlainText("html");
                 await Mp.Services.ShareTools.ShareTextAsync(CopyItemTitle, pt);
             });
-
         public ICommand StoreSelectionStateCommand => new MpCommand(
             () => {
                 StorePersistentState();
             }, () => {
                 return !IsAnyPlaceholder;
             });
-
         public ICommand RestoreSelectionStateCommand => new MpCommand(
             () => {
                 RestorePersistentState();
             }, () => {
                 return !IsAnyPlaceholder;
             });
+
+        public ICommand ZoomInCommand => new MpCommand(
+            () => {
+                ZoomFactor = Math.Min(MaxZoomFactor, ZoomFactor + StepDelta);
+            });
+        public ICommand ZoomOutCommand => new MpCommand(
+            () => {
+                ZoomFactor = Math.Max(MinZoomFactor, ZoomFactor - StepDelta);
+            });
+
+        public ICommand ResetZoomCommand => new MpCommand(
+            () => {
+                ZoomFactor = DefaultZoomFactor;
+            });
+        public ICommand SetZoomCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not double newZoomFactor) {
+                    return;
+                }
+                ZoomFactor = Math.Clamp(newZoomFactor, MinZoomFactor, MaxZoomFactor);
+            });
+
+
         #endregion
     }
 }

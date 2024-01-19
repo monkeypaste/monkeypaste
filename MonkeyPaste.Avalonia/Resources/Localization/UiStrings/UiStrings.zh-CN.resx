@@ -2511,4 +2511,10 @@
   <data name="CommonNeverLabel" xml:space="preserve">
     <value>绝不</value>
   </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>“{0}”是必需的</value>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>（有错误）</value>
+  </data>
 </root>

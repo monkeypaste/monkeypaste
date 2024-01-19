@@ -335,7 +335,7 @@ namespace MonkeyPaste.Avalonia {
                     // otherwise search would trigger on 1st character
                     // so using actual control to mimic typical search
 
-                    bool success = await tb.TrySetFocusAsync(NavigationMethod.Tab);
+                    bool success = await tb.TrySetFocusAsync(NavigationMethod.Pointer);
                     MpConsole.WriteLine($"Auto search focus success: {success}");
                 }
 

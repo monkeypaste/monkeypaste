@@ -408,7 +408,7 @@
                             FILTER TEXTBOX
                         -->
 
-                        <!--<AutoCompleteBox MinWidth="150"
+                        <AutoCompleteBox MinWidth="150"
                                          MinHeight="30"
                                          Classes="common"
                                          VerticalAlignment="Stretch"
@@ -419,9 +419,9 @@
                                          local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                          local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                          local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />-->
+                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
 
-                        <TextBox x:Name="FilterTextBox"
+                        <!--<TextBox x:Name="FilterTextBox"
                                  MinWidth="150"
                                  MinHeight="30"
                                  Classes="common"
@@ -433,7 +433,7 @@
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                  local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                                 Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
+                                 Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />-->
 
 
                         <!--  CLEAR FILTER BUTTON  -->

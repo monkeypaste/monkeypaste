@@ -9,105 +9,12 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainWindowTitleMenuView : MpAvUserControl<MpAvMainWindowTitleMenuViewModel> {
-        private bool _wasZoomDragging = false;
         public MpAvMainWindowTitleMenuView() {
             InitializeComponent();
-
-            var czfb = this.FindControl<Control>("CurZoomFactorButton");
-            czfb.PointerMoved += Czfb_PointerMoved;
-            czfb.DoubleTapped += Czfb_DoubleTapped;
-
-            var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
-            czfb_cg.PointerReleased += Czfb_cg_PointerReleased;
 
             var windowDragButton = this.FindControl<Control>("WindowOrientationHandleButton");
             windowDragButton.AddHandler(Control.PointerPressedEvent, WindowDragButton_PointerPressed, RoutingStrategies.Tunnel);
         }
-
-        #region Zoom Slider
-
-        public void SetZoomFactor(double percent, MpPoint p = null) {
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            ctrvm.ZoomFactor = (ctrvm.MaxZoomFactor - ctrvm.MinZoomFactor) * percent;
-            PositionZoomValueButton(p);
-        }
-
-        public void AdjustZoomFactor(bool is_increase) {
-            double delta = 0.3 * (is_increase ? 1 : -1);
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            ctrvm.ZoomFactor = Math.Clamp(ctrvm.ZoomFactor + delta, ctrvm.MinZoomFactor, ctrvm.MaxZoomFactor);
-            PositionZoomValueButton();
-        }
-
-        public void PositionZoomValueButton(MpPoint p = null) {
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            double percent =
-                (ctrvm.ZoomFactor - ctrvm.MinZoomFactor) /
-                (ctrvm.MaxZoomFactor - ctrvm.MinZoomFactor);
-            var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
-            var czfb = this.FindControl<Control>("CurZoomFactorButton");
-
-            double offsetX = -czfb.Bounds.Width * 0.5;
-            double offsetY = -czfb.Bounds.Height * 0.5;
-            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                if (p == null) {
-                    p = new MpPoint(
-                        czfb_cg.Bounds.Width * percent,
-                        (czfb_cg.Bounds.Height / 2) - (czfb.Bounds.Height / 2));
-                } else {
-                    p.Y = (czfb_cg.Bounds.Height / 2) - (czfb.Bounds.Height / 2);
-                }
-                p.X += offsetX;
-            } else {
-                if (p == null) {
-                    p = new MpPoint(
-                        (czfb_cg.Bounds.Width / 2) - (czfb.Bounds.Width / 2),
-                        czfb_cg.Bounds.Height * percent);
-                } else {
-                    p.X = (czfb_cg.Bounds.Width / 2) - (czfb.Bounds.Width / 2);
-                }
-                p.Y += offsetY;
-            }
-            Canvas.SetLeft(czfb, p.X);
-            Canvas.SetTop(czfb, p.Y);
-        }
-        private void Czfb_cg_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            var czfb_cg = this.FindControl<Control>("CurZoomValueCanvas");
-            var cg_mp = e.GetClientMousePoint(czfb_cg);
-
-            double percent =
-                MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                    cg_mp.X / czfb_cg.Bounds.Width :
-                    cg_mp.Y / czfb_cg.Bounds.Height;
-            SetZoomFactor(percent, cg_mp);
-        }
-
-        private void Czfb_DoubleTapped(object sender, RoutedEventArgs e) {
-            MpAvClipTrayViewModel.Instance.ZoomFactor =
-                MpAvClipTrayViewModel.Instance.DefaultZoomFactor;
-        }
-
-        private void Czfb_PointerMoved(object sender, PointerEventArgs e) {
-            var czfb_cg = this.FindControl<Control>("CurZoomValueCanvas");
-            var cg_mp = e.GetClientMousePoint(czfb_cg);
-
-            if (e.IsLeftDown(sender as Control)) {
-                e.Pointer.Capture(sender as Control);
-                _wasZoomDragging = true;
-                PositionZoomValueButton(cg_mp);
-            } else if (_wasZoomDragging) {
-                _wasZoomDragging = false;
-
-                double percent =
-                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        cg_mp.X / czfb_cg.Bounds.Width :
-                        cg_mp.Y / czfb_cg.Bounds.Height;
-                SetZoomFactor(percent, cg_mp);
-            }
-
-        }
-
-        #endregion
 
         #region Window Drag
         private MpMainWindowOrientationType _startOrientation;

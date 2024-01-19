@@ -13,6 +13,14 @@
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles />
     <DockPanel LastChildFill="False">
+        <!--
+            Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
+        -->
+        <local:MpAvToolTipHintView DockPanel.Dock="Right"
+                                   VerticalAlignment="Top"
+                                   ToolTipText="{x:Static local:UiStrings.ToolTipHintLinkTooltip}"
+                                   Classes="link"
+                                   CommandParameter="Filters" />
         <StackPanel DockPanel.Dock="Left"
                     Orientation="Horizontal"
                     Spacing="5">
@@ -52,25 +60,6 @@
                        Source="{Binding Source={StaticResource CopyImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
 
-            <!--  SAVE BUTTON  -->
-
-            <Button x:Name="SaveAdvSearchButton"
-                    Classes="defaultButton alterOnly squareByHeight"
-                    Command="{Binding SaveQueryCommand}">
-
-                <Button.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="CanSave" />
-                        <Binding Path="CanAlter" />
-                    </MultiBinding>
-                </Button.IsVisible>
-
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSaveLabel}" />
-                </ToolTip.Tip>
-                <Image DockPanel.Dock="Left"
-                       Source="{Binding Source={StaticResource SaveImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-            </Button>
 
             <!--  DELETE BUTTON  -->
 
@@ -98,11 +87,27 @@
                 </ToolTip.Tip>
                 <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
+
+            <!--  SAVE BUTTON  -->
+
+            <Button x:Name="SaveAdvSearchButton"
+                    Classes="defaultButton alterOnly squareByHeight pulse"
+                    Command="{Binding SaveQueryCommand}">
+
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="CanSave" />
+                        <Binding Path="CanAlter" />
+                    </MultiBinding>
+                </Button.IsVisible>
+
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSaveLabel}" />
+                </ToolTip.Tip>
+                <Image DockPanel.Dock="Left"
+                       Source="{Binding Source={StaticResource SaveImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+            </Button>
         </StackPanel>
-        <local:MpAvToolTipHintView DockPanel.Dock="Right"
-                                       VerticalAlignment="Top"
-                                       Classes="link"
-                                       CommandParameter="Filters" />
 
     </DockPanel>
 </local:MpAvUserControl>

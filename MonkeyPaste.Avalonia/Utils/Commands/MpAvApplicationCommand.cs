@@ -338,6 +338,34 @@ namespace MonkeyPaste.Avalonia {
                 return MpAvWindowManager.IsAnyActive;
             });
 
+        public ICommand ZoomInSelectionCommand => new MpCommand(
+             () => {
+
+                 if (MpAvFocusManager.Instance.FocusElement is Control fc &&
+                    fc.TryGetSelfOrAncestorDataContext<MpIZoomFactorViewModel>(out var zfvm)) {
+                     zfvm.ZoomInCommand.Execute(null);
+                     return;
+                 }
+             });
+
+        public ICommand ZoomOutSelectionCommand => new MpCommand(
+             () => {
+                 if (MpAvFocusManager.Instance.FocusElement is Control fc &&
+                    fc.TryGetSelfOrAncestorDataContext<MpIZoomFactorViewModel>(out var zfvm)) {
+                     zfvm.ZoomOutCommand.Execute(null);
+                     return;
+                 }
+             });
+
+        public ICommand ResetSelectionZoomCommand => new MpCommand(
+             () => {
+                 if (MpAvFocusManager.Instance.FocusElement is Control fc &&
+                    fc.TryGetSelfOrAncestorDataContext<MpIZoomFactorViewModel>(out var zfvm)) {
+                     zfvm.ResetZoomCommand.Execute(null);
+                     return;
+                 }
+             });
+
         #endregion
     }
 }

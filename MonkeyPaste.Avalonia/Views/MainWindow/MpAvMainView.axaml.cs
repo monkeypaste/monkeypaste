@@ -432,11 +432,12 @@ namespace MonkeyPaste.Avalonia {
             var tmv_gltb = tmv.FindControl<Control>("GridLayoutToggleButton");
             var tmv_min_btn = tmv.FindControl<Button>("MinimizeMainWindowButton");
 
-            var tmv_zoom_slider_cg = tmv.FindControl<Grid>("ZoomSliderContainerGrid");
-            var tmv_zoom_slider_track_b = tmv.FindControl<Border>("ZoomTrackLine");
-            var tmv_zoom_slider_min_b = tmv.FindControl<Border>("ZoomMinLine");
-            var tmv_zoom_slider_max_b = tmv.FindControl<Border>("ZoomMaxLine");
-            var tmv_zoom_slider_val_btn = tmv.FindControl<Button>("CurZoomFactorButton");
+            var tmv_zfv = tmv.FindControl<MpAvZoomFactorView>("ZoomFactorView");
+            var tmv_zoom_slider_track_b = tmv_zfv.FindControl<Border>("ZoomTrackLine");
+            var tmv_zoom_slider_min_b = tmv_zfv.FindControl<Border>("ZoomMinLine");
+            var tmv_zoom_slider_def_b = tmv_zfv.FindControl<Border>("ZoomDefaultLine");
+            var tmv_zoom_slider_max_b = tmv_zfv.FindControl<Border>("ZoomMaxLine");
+            var tmv_zoom_slider_val_b = tmv_zfv.FindControl<Border>("CurValLine");
 
             double resizer_short_side = 0;
 
@@ -508,8 +509,8 @@ namespace MonkeyPaste.Avalonia {
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Right;
                 tmv_rsp.VerticalAlignment = VerticalAlignment.Stretch;
 
-                tmv_zoom_slider_cg.Width = tmvm.ZoomSliderLength;
-                tmv_zoom_slider_cg.Height = tmvm.DefaultTitleMenuFixedLength;
+                tmv_zfv.Width = tmvm.ZoomSliderLength;
+                tmv_zfv.Height = tmvm.DefaultTitleMenuFixedLength;
 
                 tmv_zoom_slider_track_b.Width = double.NaN;
                 tmv_zoom_slider_track_b.Height = tmvm.ZoomSliderLineWidth;
@@ -521,13 +522,16 @@ namespace MonkeyPaste.Avalonia {
                 tmv_zoom_slider_min_b.HorizontalAlignment = HorizontalAlignment.Left;
                 tmv_zoom_slider_min_b.VerticalAlignment = VerticalAlignment.Center;
 
+                tmv_zoom_slider_def_b.Width = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_def_b.Height = tmvm.DefaultTitleMenuFixedLength * 0.25;
+
                 tmv_zoom_slider_max_b.Width = tmvm.ZoomSliderLineWidth;
                 tmv_zoom_slider_max_b.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
                 tmv_zoom_slider_max_b.HorizontalAlignment = HorizontalAlignment.Right;
                 tmv_zoom_slider_max_b.VerticalAlignment = VerticalAlignment.Center;
 
-                tmv_zoom_slider_val_btn.Width = tmvm.ZoomSliderValueLength;
-                tmv_zoom_slider_val_btn.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
+                tmv_zoom_slider_val_b.Width = tmvm.ZoomSliderValueLength;
+                tmv_zoom_slider_val_b.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
 
                 tmv_gltb.Margin = new Thickness(10, 0, 0, 0);
                 tmv_min_btn.Margin = new Thickness(5, 0, 0, 0);
@@ -593,8 +597,8 @@ namespace MonkeyPaste.Avalonia {
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Stretch;
                 tmv_rsp.VerticalAlignment = VerticalAlignment.Bottom;
 
-                tmv_zoom_slider_cg.Width = tmvm.DefaultTitleMenuFixedLength;
-                tmv_zoom_slider_cg.Height = tmvm.ZoomSliderLength;
+                tmv_zfv.Width = tmvm.DefaultTitleMenuFixedLength;
+                tmv_zfv.Height = tmvm.ZoomSliderLength;
 
                 tmv_zoom_slider_track_b.Width = tmvm.ZoomSliderLineWidth;
                 tmv_zoom_slider_track_b.Height = double.NaN;
@@ -606,18 +610,21 @@ namespace MonkeyPaste.Avalonia {
                 tmv_zoom_slider_min_b.HorizontalAlignment = HorizontalAlignment.Center;
                 tmv_zoom_slider_min_b.VerticalAlignment = VerticalAlignment.Top;
 
+                tmv_zoom_slider_def_b.Width = tmvm.DefaultTitleMenuFixedLength * 0.25;
+                tmv_zoom_slider_def_b.Height = tmvm.ZoomSliderLineWidth;
+
                 tmv_zoom_slider_max_b.Width = tmvm.DefaultTitleMenuFixedLength * 0.5; ;
                 tmv_zoom_slider_max_b.Height = tmvm.ZoomSliderLineWidth;
                 tmv_zoom_slider_max_b.HorizontalAlignment = HorizontalAlignment.Center;
                 tmv_zoom_slider_max_b.VerticalAlignment = VerticalAlignment.Bottom;
 
-                tmv_zoom_slider_val_btn.Width = tmvm.DefaultTitleMenuFixedLength * 0.5; ;
-                tmv_zoom_slider_val_btn.Height = tmvm.ZoomSliderValueLength;
+                tmv_zoom_slider_val_b.Width = tmvm.DefaultTitleMenuFixedLength * 0.5; ;
+                tmv_zoom_slider_val_b.Height = tmvm.ZoomSliderValueLength;
 
                 tmv_gltb.Margin = new Thickness(0, 10, 0, 0);
                 tmv_min_btn.Margin = new Thickness(0, 0, 0, 0);
             }
-            tmv.PositionZoomValueButton();
+            tmv_zfv.UpdateMarkerPositions();
         }
         private void UpdateSidebarGridsplitter() {
             var mwvm = MpAvMainWindowViewModel.Instance;
@@ -789,19 +796,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.MainWindowSizeChanged: {
-                        var mwvm = MpAvMainWindowViewModel.Instance;
-                        if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
-                            // can't figure out how to make resizer align to bottom so have to manually translate to bottom
-
-                            //var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-                            //var resizerTransform = resizerView.RenderTransform as TranslateTransform;
-                            //resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
-                        }
-                        break;
-                    }
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView").PositionZoomValueButton();
+                    if (this.GetVisualDescendant<MpAvZoomFactorView>() is { } zfv) {
+                        zfv.UpdateMarkerPositions();
+                    }
                     break;
             }
         }

@@ -12,7 +12,8 @@ async function loadContentAsync(
 	annotationsJsonStr,
 	sel_state,
 	paste_button_info,
-	break_before_load) {
+	break_before_load,
+	editor_scale) {
 	if (break_before_load) {
 		log('breaking before load called...');
 		debugger;
@@ -25,6 +26,8 @@ async function loadContentAsync(
 	let was_editable = null;
 
 	try {
+		setEditorZoom(editor_scale);
+
 		if (is_reload) {
 			was_sub_sel_enabled = isSubSelectionEnabled();
 			was_editable = !isReadOnly();

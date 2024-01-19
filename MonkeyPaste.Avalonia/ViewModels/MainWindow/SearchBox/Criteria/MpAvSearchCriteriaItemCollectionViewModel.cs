@@ -262,18 +262,36 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            CheckModelChangeForDynamicCriteriaChange(e);
+        }
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            CheckModelChangeForDynamicCriteriaChange(e);
+        }
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpTag t && t.Id == QueryTagId) {
-                Dispatcher.UIThread.Post(async () => {
-                    await InitializeAsync(0, false);
-                });
-            }
+            CheckModelChangeForDynamicCriteriaChange(e);
         }
 
         #endregion
 
         #region Private Methods
+        private void CheckModelChangeForDynamicCriteriaChange(MpDbModelBase e) {
+            if (e is MpTag t) {
+                Dispatcher.UIThread.Post(() => {
+                    // when tags change, refresh any collection criterias
 
+                    if (IsPendingQuery) {
+                        // when pending just reset it, too much to change 
+                        Items.Where(x => x.Items.Any(y => y.IsCollectionRootOption))
+                        .ForEach(x => x.InitializeAsync(x.SearchCriteriaItem).FireAndForgetSafeAsync(x));
+                    } else {
+                        Items.Where(x => x.Items.Any(y => y.IsCollectionRootOption))
+                        .ForEach(x => x.RefreshAsync().FireAndForgetSafeAsync(x));
+                    }
+
+                });
+            }
+        }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 //case MpMessageType.AdvancedSearchExpanded:
@@ -283,7 +301,6 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsSavedQuery));
                     break;
-
             }
         }
         private void MpAvSearchCriteriaItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

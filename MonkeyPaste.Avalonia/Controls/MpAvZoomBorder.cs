@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        const double WHEEL_ZOOM_DELTA = 0.1d;
+        public const double WHEEL_ZOOM_DELTA = 0.1d;
         #endregion
 
         #region Statics
@@ -236,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            DesignerItem.Scale = 1.0d;
+            DesignerItem.ZoomFactor = 1.0d;
             DesignerItem.TranslateOffsetX = 0;
             DesignerItem.TranslateOffsetY = 0;
         }
@@ -245,7 +245,7 @@ namespace MonkeyPaste.Avalonia {
             if (DesignerItem == null) {
                 return;
             }
-            double scale = DesignerItem.Scale;
+            double scale = DesignerItem.ZoomFactor;
 
             if (scale < MinScale) {
                 return;
@@ -255,7 +255,7 @@ namespace MonkeyPaste.Avalonia {
             scale += zoomCorrected;
 
             scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
-            DesignerItem.Scale = scale;
+            DesignerItem.ZoomFactor = scale;
 
             var t = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY) * scale;
             //relative_anchor += MpAvTriggerCollectionViewModel.Instance.DesignerCenterLocation;
@@ -413,8 +413,8 @@ namespace MonkeyPaste.Avalonia {
             double offset_y = di.TranslateOffsetY;
 
             //var st = GetScaleTransform(Child);
-            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / di.Scale));
-            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / di.Scale));
+            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / di.ZoomFactor));
+            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / di.ZoomFactor));
 
             int major_count = 5;
             double major_thickness = 2;
@@ -579,14 +579,14 @@ namespace MonkeyPaste.Avalonia {
                 GetActionShape(avm) is Shape s) {
                 var s_rect = s.Bounds.ToPortableRect();
                 var s_center = s.TranslatePoint(new Point(/*s.Bounds.Width / 2, s.Bounds.Height / 2*/), lb).Value.ToPortablePoint();
-                s_center /= DesignerItem.Scale;
+                s_center /= DesignerItem.ZoomFactor;
                 s_rect.Move(s_center);
                 return s_rect;
             }
             return MpRect.Empty;
         }
         private void DrawActionShadow(DrawingContext ctx, MpAvActionViewModelBase avm) {
-            double scale = avm.Parent.Scale;
+            double scale = avm.Parent.ZoomFactor;
             MpPoint shadow_offset = new MpPoint(3, 3);// * scale;
             MpRect shape_rect = GetTranslatedActionShapeRect(avm);
 
@@ -800,7 +800,7 @@ namespace MonkeyPaste.Avalonia {
                 geometryContext.EndFigure(true);
             }
 
-            double scale = DesignerItem.Scale;
+            double scale = DesignerItem.ZoomFactor;
             using (ctx.PushTransform(
                     Matrix.CreateScale(scale, scale))) {
                 ctx.DrawGeometry(

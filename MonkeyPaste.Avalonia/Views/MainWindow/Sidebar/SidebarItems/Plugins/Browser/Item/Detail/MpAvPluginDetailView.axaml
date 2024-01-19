@@ -313,6 +313,7 @@
                       Grid.ColumnSpan="3"
                       Classes="header"
                       HorizontalAlignment="Stretch"
+                      Padding="0"
                       Margin="0,10,0,0"
                       IsVisible="{Binding PluginReadMeUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       IsExpanded="{Binding IsReadmeExpanded, Mode=TwoWay}">
@@ -336,6 +337,7 @@
                                                    VerticalAlignment="Center" />
                         <av:HtmlPanel HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch"
+                                      Background="{DynamicResource ThemeInteractiveBrush}"
                                       MinHeight="150"
                                       Opacity="{Binding IsVisible, ConverterParameter=0|1, ElementName=ReadmeBusyContainer, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                       Text="{Binding ReadMeHtml}" />

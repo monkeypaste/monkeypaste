@@ -127,8 +127,8 @@
                                   GridLineSpacing="50"
                                   GridLineThickness="0.5"
                                   IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                  MaxScale="{Binding MaxScale}"
-                                  MinScale="{Binding MinScale}"
+                                  MaxScale="{Binding MaxZoomFactor}"
+                                  MinScale="{Binding MinZoomFactor}"
                                   OriginBrush="Chocolate"
                                   OriginThickness="1.5"
                                   ShowGrid="{Binding IsGridVisible, FallbackValue=False, TargetNullValue=False}"
@@ -163,7 +163,7 @@
                                     ClipToBounds="False">
                                 <Canvas.RenderTransform>
                                     <TransformGroup>
-                                        <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
+                                        <ScaleTransform ScaleX="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
                                         <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" Y="{Binding TranslateOffsetY, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
                                     </TransformGroup>
                                 </Canvas.RenderTransform>
@@ -237,12 +237,12 @@
                 <Slider x:Name="DesignerZoomSlider"
                         Height="70"
                         IsSnapToTickEnabled="False"
-                        Maximum="3"
-                        Minimum="0.1"
+                        Minimum="{Binding MinZoomFactor}"
+                        Maximum="{Binding MaxZoomFactor}"
                         Orientation="Vertical"
                         TickFrequency="0.1"
                         TickPlacement="None"
-                        Value="{Binding Scale, Mode=TwoWay}" />
+                        Value="{Binding ZoomFactor, Mode=TwoWay}" />
             </Border>
             <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
             <Border MinWidth="50"

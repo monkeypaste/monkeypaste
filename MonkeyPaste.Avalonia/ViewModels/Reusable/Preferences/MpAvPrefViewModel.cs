@@ -318,8 +318,6 @@ namespace MonkeyPaste.Avalonia {
         #region Preferences
 
         #region Look & Feel
-
-        public double EditorScale { get; set; } = 1.0d;
         public bool ShowContentTitles { get; set; } = true;
         public string ThemeTypeName { get; set; } = MpThemeType.Dark.ToString();
         public string ThemeColor { get; set; } = MpSystemColors.purple;

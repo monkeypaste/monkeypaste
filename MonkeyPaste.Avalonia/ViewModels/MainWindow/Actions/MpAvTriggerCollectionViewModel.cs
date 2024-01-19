@@ -15,6 +15,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
         MpAvViewModelBase,
+        MpIZoomFactorViewModel,
         MpIPopupMenuViewModel,
         MpIWantsTopmostWindowViewModel,
         MpIAsyncCollectionObject,
@@ -30,13 +31,29 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         public const string DEFAULT_ANNOTATOR_TRIGGER_GUID = "561c8b4d-9b78-4e79-ac01-dc831c55e88c";
         public const string DEFAULT_ANNOTATOR_ANALYZE_GUID = "6cfa5188-5c9a-48aa-aa01-6c4cad8af3e4";
+
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
+        const double DEFAULT_SCALE = 1.0d;
         #endregion
 
         #region Statics
         #endregion
+
         #region Interfaces
+
+        #region MpIZoomFactorViewModel Implementation
+
+        public double MinZoomFactor =>
+            DEFAULT_MIN_SCALE;
+        public double MaxZoomFactor =>
+            DEFAULT_MAX_SCALE;
+        public double DefaultZoomFactor =>
+            DEFAULT_SCALE;
+        public double StepDelta =>
+            MpAvZoomBorder.WHEEL_ZOOM_DELTA;
+
+        #endregion
 
         #region MpISelectableViewModel Implementation
         private bool _isSelected;
@@ -56,6 +73,7 @@ namespace MonkeyPaste.Avalonia {
         public DateTime LastSelectedDateTime { get; set; } = DateTime.MinValue;
 
         #endregion
+
         #region MpIWindowViewModel Implementation
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.PopOut;
@@ -102,28 +120,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDesignerSettingsViewModel Implementation
 
-        public double MinScale => DEFAULT_MIN_SCALE;
-        public double MaxScale => DEFAULT_MAX_SCALE;
-
         public bool IsGridVisible {
             get {
                 return ParseShowGrid(DesignerSettingsArg);
             }
             set {
                 if (IsGridVisible != value) {
-                    SetDesignerItemSettings(Scale, TranslateOffsetX, TranslateOffsetY, value);
+                    SetDesignerItemSettings(ZoomFactor, TranslateOffsetX, TranslateOffsetY, value);
                     OnPropertyChanged(nameof(IsGridVisible));
                 }
             }
         }
-        public double Scale {
+        public double ZoomFactor {
             get {
                 return ParseScale(DesignerSettingsArg);
             }
             set {
-                if (Math.Abs(Scale - value) > 0.1) {
-                    SetDesignerItemSettings(value, TranslateOffsetX, TranslateOffsetY, IsGridVisible);
-                    OnPropertyChanged(nameof(Scale));
+                if (ZoomFactor != value) {
+                    SetDesignerItemSettings(Math.Clamp(value, MinZoomFactor, MaxZoomFactor), TranslateOffsetX, TranslateOffsetY, IsGridVisible);
+                    OnPropertyChanged(nameof(ZoomFactor));
                 }
             }
         }
@@ -133,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (Math.Abs(TranslateOffsetX - value) > 0.1) {
-                    SetDesignerItemSettings(Scale, Math.Round(value, 1), TranslateOffsetY, IsGridVisible);
+                    SetDesignerItemSettings(ZoomFactor, Math.Round(value, 1), TranslateOffsetY, IsGridVisible);
                     OnPropertyChanged(nameof(TranslateOffsetX));
                 }
             }
@@ -144,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (Math.Abs(TranslateOffsetY - value) > 0.1) {
-                    SetDesignerItemSettings(Scale, TranslateOffsetX, Math.Round(value, 1), IsGridVisible);
+                    SetDesignerItemSettings(ZoomFactor, TranslateOffsetX, Math.Round(value, 1), IsGridVisible);
                     OnPropertyChanged(nameof(TranslateOffsetY));
                 }
             }
@@ -162,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             //if (zb == null) {
-            Scale = 1;
+            ZoomFactor = 1;
             var focus_loc = GetDesignerItemCenter(FocusAction);
             TranslateOffsetX = focus_loc.X;
             TranslateOffsetY = focus_loc.Y;
@@ -470,7 +485,7 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception("This is only supposed to load root level triggers");
             }
             MpAvTriggerActionViewModelBase tavm = null;
-            switch ((MpTriggerType)(int.Parse(a.Arg3))) {
+            switch (a.Arg3.ToEnum<MpTriggerType>()) {
                 case MpTriggerType.ClipAdded:
                     tavm = new MpAvContentAddTriggerViewModel(this);
                     break;
@@ -579,9 +594,9 @@ namespace MonkeyPaste.Avalonia {
                     FocusAction = SelectedTrigger;
 
                     OnPropertyChanged(nameof(SelectedTriggerIdx));
-                    OnPropertyChanged(nameof(MinScale));
-                    OnPropertyChanged(nameof(MaxScale));
-                    OnPropertyChanged(nameof(Scale));
+                    OnPropertyChanged(nameof(MinZoomFactor));
+                    OnPropertyChanged(nameof(MaxZoomFactor));
+                    OnPropertyChanged(nameof(ZoomFactor));
                     OnPropertyChanged(nameof(TranslateOffsetX));
                     OnPropertyChanged(nameof(TranslateOffsetY));
                     OnPropertyChanged(nameof(IsGridVisible));
@@ -728,8 +743,8 @@ namespace MonkeyPaste.Avalonia {
                 label: UiStrings.TriggerAnnTriggerLabel,
                 actionType: MpActionType.Trigger,
                 sortOrderIdx: 0,
-                arg2: "True",
-                arg3: ((int)MpTriggerType.ClipAdded).ToString(),
+                arg2: true.ToString(),
+                arg3: MpTriggerType.ClipAdded.ToString(),
                 location: DefaultDesignerItemLocationLocation);
 
             var annotate_trigger_action_text_type_param = await MpParameterValue.CreateAsync(
@@ -994,7 +1009,26 @@ namespace MonkeyPaste.Avalonia {
                 IsWindowOpen = true;
             });
 
+        public ICommand ZoomInCommand => new MpCommand(
+            () => {
+                ZoomFactor = Math.Min(MaxZoomFactor, ZoomFactor + StepDelta);
+            });
+        public ICommand ZoomOutCommand => new MpCommand(
+            () => {
+                ZoomFactor = Math.Max(MinZoomFactor, ZoomFactor - StepDelta);
+            });
 
+        public ICommand ResetZoomCommand => new MpCommand(
+            () => {
+                ZoomFactor = DefaultZoomFactor;
+            });
+        public ICommand SetZoomCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not double newZoomFactor) {
+                    return;
+                }
+                ZoomFactor = Math.Clamp(newZoomFactor, MinZoomFactor, MaxZoomFactor);
+            });
         #endregion
     }
 }

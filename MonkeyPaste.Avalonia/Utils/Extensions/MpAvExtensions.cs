@@ -90,19 +90,20 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-        public static bool TryGetSelfOrAncestorDataContext<T>(this Control c, out T dc) where T : MpAvViewModelBase {
+        public static bool TryGetSelfOrAncestorDataContext<T>(this Control c, out T dc) where T : MpIViewModel {
             dc = c.GetSelfOrAncestorDataContext<T>();
-            return dc != default;
+            return dc != null;
         }
-        public static T GetSelfOrAncestorDataContext<T>(this Control c) where T : MpAvViewModelBase {
-            if (c == null || c.DataContext is not MpAvViewModelBase cur_vm) {
+        public static T GetSelfOrAncestorDataContext<T>(this Control c) where T : MpIViewModel {
+            if (c == null || c.DataContext is not MpIViewModel cur_vm) {
                 return default;
             }
             while (cur_vm != null) {
-                if (cur_vm is T) {
-                    return cur_vm as T;
+                if (cur_vm is T tvm) {
+                    return tvm;
                 }
-                if (cur_vm.ParentObj is MpAvViewModelBase par_vm) {
+                if (cur_vm is MpIHierarchialViewModel hvm &&
+                    hvm.ParentObj is MpIViewModel par_vm) {
                     cur_vm = par_vm;
                 } else {
                     cur_vm = null;

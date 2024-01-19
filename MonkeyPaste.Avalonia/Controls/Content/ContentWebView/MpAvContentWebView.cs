@@ -1101,7 +1101,6 @@ namespace MonkeyPaste.Avalonia {
             return new MpQuillDefaultsRequestMessage() {
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,
-                editorScale = ContentScale,
                 isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
@@ -1127,6 +1126,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                editorScale = ContentScale,
                 contentId = BindingContext.CopyItemId,
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.CopyItemType.ToString(),
@@ -1296,7 +1296,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(ContentScale),
                 x => x.ContentScale,
                 (x, o) => x.ContentScale = o,
-                1);
+                MpCopyItem.DEFAULT_ZOOM_FACTOR);
 
         private void OnContentScaleChanged() {
             if (!IsEditorLoaded) {

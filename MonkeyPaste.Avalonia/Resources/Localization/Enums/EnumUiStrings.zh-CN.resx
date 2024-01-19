@@ -1161,4 +1161,13 @@
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
     <value>没有任何</value>
   </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>放大选择</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>缩小选择范围</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>重置选择缩放</value>
+  </data>
 </root>

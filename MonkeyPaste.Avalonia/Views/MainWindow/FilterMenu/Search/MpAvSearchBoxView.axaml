@@ -301,7 +301,7 @@
 
                     <!--  SEARCH AUTOCOMPLETE BOX  -->
 
-                    <!--<AutoCompleteBox x:Name="SearchBox"
+                    <AutoCompleteBox x:Name="SearchBox"
                                      BorderThickness="1.5"
                                      Classes="common"
                                      Classes.invalid="{Binding !IsSearchValid}"
@@ -326,8 +326,8 @@
                                 <Binding Path="IsExpanded" />
                             </MultiBinding>
                         </AutoCompleteBox.IsVisible>
-                    </AutoCompleteBox>-->
-                    <TextBox x:Name="SearchBox"
+                    </AutoCompleteBox>
+                    <!--<TextBox x:Name="SearchBox"
                              BorderThickness="1.5"
                              Classes="common"
                              Classes.invalid="{Binding !IsSearchValid}"
@@ -351,7 +351,7 @@
                                 <Binding Path="IsExpanded" />
                             </MultiBinding>
                         </TextBox.IsVisible>
-                    </TextBox>
+                    </TextBox>-->
                 </DockPanel>
             </Border>
 

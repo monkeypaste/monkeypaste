@@ -343,7 +343,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-
         }
 
         public void ClearTagEditing() {

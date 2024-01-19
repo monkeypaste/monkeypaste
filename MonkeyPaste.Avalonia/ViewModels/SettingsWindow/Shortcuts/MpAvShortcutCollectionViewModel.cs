@@ -405,7 +405,19 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.ManuallyAddFromClipboard,
                             MpAvClipTrayViewModel.Instance.AddItemWhileIgnoringClipboardCommand
-                        }
+                        },
+                        {
+                            MpShortcutType.ZoomInOnSelection,
+                            MpAvApplicationCommand.Instance.ZoomInSelectionCommand
+                        },
+                        {
+                            MpShortcutType.ZoomOutOnSelection,
+                            MpAvApplicationCommand.Instance.ZoomOutSelectionCommand
+                        },
+                        {
+                            MpShortcutType.ResetSelectionZoom,
+                            MpAvApplicationCommand.Instance.ResetSelectionZoomCommand
+                        },
                     };
                 }
                 return _appCommandLookup;

@@ -31,7 +31,6 @@ namespace MonkeyPaste {
         MpIQueryResultProvider Query { get; set; }
         MpIContentQueryPage ContentQueryTools { get; set; }
         MpITagQueryTools TagQueryTools { get; set; }
-        MpIApplicationCommandManager AppCommandManager { get; set; }
         MpIIconBuilder IconBuilder { get; set; }
         MpIUrlBuilder UrlBuilder { get; set; }
         MpIAppBuilder AppBuilder { get; set; }

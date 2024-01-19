@@ -65,28 +65,6 @@
                     Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeGrayAccent1Color}" />
         </Style>
 
-        <!--  ZOOM SLIDER  -->
-        <Style Selector="Border.zoomLine">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
-        </Style>
-        <Style Selector="Button Border.zoomLine">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent2Color}" />
-        </Style>
-        <Style Selector="Grid#ZoomSliderContainerGrid:pointerover Border.zoomLine">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent1Color}" />
-        </Style>
-        <Style Selector="Button:pointerover Border.zoomLine">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent4Color}" />
-        </Style>
-        <Style Selector="Button:pressed Border.zoomLine">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent2Color}" />
-        </Style>
-
         <!--  RESIZER  -->
         <Style Selector="Border.resizer">
             <Setter Property="Cursor"
@@ -228,41 +206,8 @@
                     HorizontalAlignment="Right">
 
             <!--  Zoom Factor Slider  -->
-
-            <Grid x:Name="ZoomSliderContainerGrid"
-                  IsVisible="True"
-                  Background="{StaticResource HitTestableTransparent}"
-                  Cursor="Hand">
-
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat=' \{0:P\}'}" />
-                </ToolTip.Tip>
-                <!--  TRACK LINE  -->
-                <Border x:Name="ZoomTrackLine"
-                        Classes="zoomLine" />
-                <!--  MIN LINE  -->
-                <Border x:Name="ZoomMinLine"
-                        Classes="zoomLine" />
-                <!--  MAX LINE  -->
-                <Border x:Name="ZoomMaxLine"
-                        Classes="zoomLine" />
-
-                <!--  CUR VAL LINE  -->
-                <Canvas x:Name="CurZoomValueCanvas"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
-                    <Button x:Name="CurZoomFactorButton"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Classes="noBg noHoverBg noBorder">
-                        <Border Classes="zoomLine zoomValueLine"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Width="{Binding $parent.Bounds.Width}"
-                                Height="{Binding $parent.Bounds.Height}" />
-                    </Button>
-                </Canvas>
-            </Grid>
+            <local:MpAvZoomFactorView x:Name="ZoomFactorView"
+                                      IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, ConverterParameter=test, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
 
             <!--  Layout Toggle Button  -->
 

@@ -43,7 +43,7 @@
     </ToolTip.Tip>
     <Grid x:Name="HintContainerGrid"
           IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-          Cursor="Help"
+          Background="{StaticResource HitTestableTransparent}"
           Width="15"
           Height="15">
         <!--  INFO  -->

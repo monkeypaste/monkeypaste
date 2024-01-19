@@ -73,7 +73,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIFocusMonitor FocusMonitor { get; set; }
         public MpIDragProcessWatcher DragProcessWatcher { get; set; }
         public MpIDropProcessWatcher DropProcessWatcher { get; set; }
-        public MpIApplicationCommandManager AppCommandManager { get; set; }
         public MpIQueryResultProvider Query { get; set; }
         public MpIIconBuilder IconBuilder { get; set; }
         public MpIUrlBuilder UrlBuilder { get; set; }
@@ -166,8 +165,6 @@ namespace MonkeyPaste.Avalonia {
 
             DragProcessWatcher = new MpAvDndProcessWatcher();
             DropProcessWatcher = DragProcessWatcher as MpIDropProcessWatcher;
-
-            AppCommandManager = new MpAvApplicationCommandManager();
 
             CustomColorChooserMenuAsync = new MpAvCustomColorChooserViewModel();
 

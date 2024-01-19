@@ -108,11 +108,16 @@ namespace MonkeyPaste.Avalonia {
 
             ToolTipText = ToolTipText.Replace(prefix, string.Empty);
             this.Classes.Add(prefix.Replace("#", string.Empty));
-            if (ToolTip.GetTip(this) is not MpAvToolTipHintView ttv) {
+
+            if (ToolTip.GetTip(this) is not MpAvToolTipView ttv) {
                 return;
             }
             ttv.ToolTipText = ToolTipText;
             ttv.Classes.AddRange(this.Classes.Where(x => _prefixes.Any(y => y.Contains(x))));
+
+            if (ttv.Classes.Contains("link")) {
+
+            }
         }
 
         protected override void OnPointerEntered(PointerEventArgs e) {

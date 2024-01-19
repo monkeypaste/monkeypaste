@@ -15,6 +15,11 @@ namespace MonkeyPaste {
         MpILabelText {
         #region Constants
         public const bool IS_EMPTY_HTML_CHECK_ENABLED = false;
+        public const double MIN_ZOOM_FACTOR = 0.25d;
+        public const double MAX_ZOOM_FACTOR = 3.0d;
+        public const double DEFAULT_ZOOM_FACTOR = 1.0d;
+        public const double ZOOM_FACTOR_STEP = 0.1d;
+
         #endregion
 
         #region Statics
@@ -117,6 +122,8 @@ namespace MonkeyPaste {
         [Column("e_MpDataObjectSourceType")]
         public string ItemSourceTypeStr { get; set; } = MpDataObjectSourceType.None.ToString();
 
+        public double ZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
+
         [Indexed]
         public string ContentCheckSum { get; set; }
         #endregion
@@ -164,6 +171,7 @@ namespace MonkeyPaste {
             string title = "",
             int dataObjectId = 0,
             int iconId = 0,
+            double zoomFactor = DEFAULT_ZOOM_FACTOR,
             string checksum = default,
             MpDataObjectSourceType dataObjectSourceType = MpDataObjectSourceType.None,
             bool suppressWrite = false) {
@@ -187,6 +195,7 @@ namespace MonkeyPaste {
                 ItemData = data,
                 ItemType = itemType,
                 CopyCount = 1,
+                ZoomFactor = zoomFactor,
                 DataObjectId = dataObjectId,
                 IconId = iconId,
                 ContentCheckSum = checksum,

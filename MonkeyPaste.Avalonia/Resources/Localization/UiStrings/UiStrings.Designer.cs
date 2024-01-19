@@ -1304,6 +1304,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Has Errors).
+        /// </summary>
+        public static string ActionHasErrorsLabelSuffix {
+            get {
+                return ResourceManager.GetString("ActionHasErrorsLabelSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recorded key combinations will be simulated in the foreground application..
         /// </summary>
         public static string ActionKeySimActionHint {

@@ -450,21 +450,6 @@ namespace MonkeyPaste.Avalonia {
             ListOrientation == Orientation.Horizontal ?
                 ObservedPinTrayScreenHeight : ObservedPinTrayScreenWidth;
         public double LastZoomFactor { get; set; }
-
-        public double DefaultZoomFactor { get; set; } = 1.0;
-
-        public double ZoomFactor {
-            get => MpAvPrefViewModel.Instance.EditorScale;
-            set {
-                if (ZoomFactor != value) {
-                    LastZoomFactor = MpAvPrefViewModel.Instance.EditorScale;
-                    MpAvPrefViewModel.Instance.EditorScale = value;
-                    OnPropertyChanged(nameof(ZoomFactor));
-                }
-            }
-        }
-        public double MinZoomFactor => 0.25;
-        public double MaxZoomFactor => 3;
         public double ScrollVelocityX { get; set; }
         public double ScrollVelocityY { get; set; }
 
@@ -1559,6 +1544,7 @@ namespace MonkeyPaste.Avalonia {
 
             SetCurPasteInfoMessage(Mp.Services.ProcessWatcher.LastProcessInfo);
 
+            OnPropertyChanged(nameof(SelectedItem));
             IsBusy = false;
         }
         public async Task<MpAvClipTileViewModel> CreateClipTileViewModelAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
@@ -2319,10 +2305,6 @@ namespace MonkeyPaste.Avalonia {
                     //}
                     break;
 
-                case nameof(ZoomFactor):
-                    UpdateDefaultItemSize();
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayZoomFactorChanged);
-                    break;
                 case nameof(MaxTileHeight):
                 case nameof(MaxTileWidth):
                 case nameof(QueryTrayVerticalScrollBarWidth):
@@ -2437,17 +2419,6 @@ namespace MonkeyPaste.Avalonia {
                     //RefreshQueryTrayLayout();
                     ScrollToAnchor();
                     _isMainWindowOrientationChanging = false;
-                    break;
-
-                // TRAY ZOOM
-                case MpMessageType.TrayZoomFactorChangeBegin:
-                    SetScrollAnchor();
-                    break;
-                case MpMessageType.TrayZoomFactorChanged:
-                    ScrollToAnchor();
-                    break;
-                case MpMessageType.TrayZoomFactorChangeEnd:
-                    ScrollToAnchor();
                     break;
 
                 // SCROLL JUMP
@@ -3351,10 +3322,6 @@ namespace MonkeyPaste.Avalonia {
                 return CanTileNavigate();
             });
 
-        public ICommand ResetZoomFactorCommand => new MpCommand(
-            () => {
-                ZoomFactor = 1.0d;
-            });
 
         public MpIAsyncCommand<object> PinTileCommand => new MpAsyncCommand<object>(
              async (args) => {

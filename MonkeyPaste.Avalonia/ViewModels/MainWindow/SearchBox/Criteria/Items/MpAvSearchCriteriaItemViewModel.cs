@@ -959,8 +959,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
-
         #endregion
 
         #region Layout       
@@ -1263,23 +1261,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public void RefreshOptionItems() {
-            // HACK getting collection modified ex when using auto property so doing this instead
-            //var sel_items = new List<MpAvSearchCriteriaOptionViewModel>();
-            //var node = RootOptionViewModel;
-            //while (node != null) {
-            //    sel_items.Add(node);
-            //    int selIdx = node.Items.IndexOf(node.SelectedItem);
-            //    if ((selIdx <= 0 && !node.IsRootMultiValueOption) || !node.HasChildren) {
-            //        break;
-            //    }
-            //    node = node.SelectedItem;
-            //}
-            //Items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(sel_items);
-            //OnPropertyChanged(nameof(Items));
+        public async Task RefreshAsync() {
+            SetModelToCurrent();
+            await InitializeAsync(SearchCriteriaItem);
         }
+        #endregion
+
+        #region Protected Methods
 
         #endregion
+
 
         #region Private Methods
 
@@ -1403,7 +1394,7 @@ namespace MonkeyPaste.Avalonia {
             return sci;
         }
 
-        public void SetModelToCurrent() {
+        private void SetModelToCurrent() {
             SearchOptions =
                    string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x => x.SelectedItemIdx));
 

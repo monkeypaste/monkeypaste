@@ -83,9 +83,7 @@ namespace MonkeyPaste {
         PinTrayResizeEnd,
         PinTraySizeChanged,
 
-        TrayZoomFactorChangeBegin,
-        TrayZoomFactorChanged,
-        TrayZoomFactorChangeEnd,
+        ContentZoomFactorChanged,
 
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)

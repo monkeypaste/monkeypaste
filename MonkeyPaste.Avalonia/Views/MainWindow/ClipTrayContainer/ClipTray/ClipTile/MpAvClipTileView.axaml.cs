@@ -9,6 +9,11 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvClipTileView() {
             InitializeComponent();
+
+            this.AddHandler(
+                    InputElement.PointerWheelChangedEvent,
+                    MpAvClipTileView_OnPointerWheelChanged,
+                    RoutingStrategies.Tunnel);
         }
 
         protected override void OnLoaded(RoutedEventArgs e) {
@@ -28,6 +33,21 @@ namespace MonkeyPaste.Avalonia {
 
             //this.AddHandler(Control.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
         }
+
+        #region Zoom
+        private void MpAvClipTileView_OnPointerWheelChanged(object sender, PointerWheelEventArgs e) {
+            if (e.KeyModifiers != KeyModifiers.Control) {
+                return;
+            }
+            e.Handled = true;
+            bool is_increase = e.Delta.X > 0 || e.Delta.Y > 0;
+            if (is_increase) {
+                BindingContext.ZoomInCommand.Execute(null);
+            } else {
+                BindingContext.ZoomOutCommand.Execute(null);
+            }
+        }
+        #endregion
 
 
 

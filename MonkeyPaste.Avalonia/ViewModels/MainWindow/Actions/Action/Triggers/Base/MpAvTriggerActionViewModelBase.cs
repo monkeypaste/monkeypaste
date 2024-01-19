@@ -18,6 +18,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        #endregion
+
         #region MpIParameterHost Overrides
 
         private MpHeadlessComponent _actionComponentFormat;
@@ -52,6 +56,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
 
         #region MpITriggerPluginComponent Implementation
 
@@ -102,8 +107,8 @@ namespace MonkeyPaste.Avalonia {
         //IsEnabled.HasValue ? IsEnabled.IsTrue() ? "Disable" : "Enable" : "Has Errors";
         public string ToggleEnableOrDisableLabel {
             get {
-                string label = IsEnabled ? "Disable" : "Enable";
-                label += IsAllValid ? string.Empty : " (Has Errors)";
+                string label = IsEnabled ? UiStrings.CommonDisableLabel : UiStrings.CommonEnableLabel;
+                label += IsAllValid ? string.Empty : $" {UiStrings.ActionHasErrorsLabelSuffix}";
                 return label;
             }
         }
@@ -150,14 +155,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
-
+        // arg3
         public MpTriggerType TriggerType {
-            get {
-                if (Action == null || string.IsNullOrEmpty(Arg3)) {
-                    return 0;
-                }
-                return (MpTriggerType)int.Parse(Arg3);
-            }
+            get => Arg3.ToEnum<MpTriggerType>();
             set {
                 if (TriggerType != value) {
                     Arg3 = value.ToString();
@@ -166,6 +166,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
         #endregion
 
         #endregion
@@ -356,6 +357,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return Action != null && Parent != null;
             });
+
         #endregion
     }
 }

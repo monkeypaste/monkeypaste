@@ -88,6 +88,10 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsValueChanging { get; set; }
+        public bool IsCollectionRootOption =>
+            SelectedItemPathObj is MpRootOptionType &&
+            ((MpRootOptionType)SelectedItemPathObj) == MpRootOptionType.Collection;
+
         public bool IsColorOption =>
             FilterValue.HasFlag(MpContentQueryBitFlags.Rgba) ||
             FilterValue.HasFlag(MpContentQueryBitFlags.Hex);
@@ -277,8 +281,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
-
-
         public bool IsCheckable =>
             UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) &&
             !UnitType.HasFlag(MpSearchCriteriaUnitFlags.RegEx);

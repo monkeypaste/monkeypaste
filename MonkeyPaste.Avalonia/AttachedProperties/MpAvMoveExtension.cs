@@ -259,7 +259,7 @@ namespace MonkeyPaste.Avalonia {
             //delta.X *= 1 / avmb.Parent.Scale;
             //delta.Y *= 1 / avmb.Parent.Scale;
             var delta = new MpPoint(dx, dy);
-            delta /= dsvm.Scale;
+            delta /= dsvm.ZoomFactor;
             var newLoc = new MpPoint(adivm.X, adivm.Y) + delta;
             adivm.X = newLoc.X;
             adivm.Y = newLoc.Y;

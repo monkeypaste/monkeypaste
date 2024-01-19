@@ -2644,4 +2644,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>'{0}' is required</value>
     <comment>Parameter Name</comment>
   </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Has Errors)</value>
+  </data>
 </root>

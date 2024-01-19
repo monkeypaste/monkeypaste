@@ -3,9 +3,9 @@
 namespace MonkeyPaste {
     public interface MpIDesignerSettingsViewModel {
 
-        double MinScale { get; }
-        double MaxScale { get; }
-        double Scale { get; set; }
+        double MinZoomFactor { get; }
+        double MaxZoomFactor { get; }
+        double ZoomFactor { get; set; }
 
         double TranslateOffsetX { get; set; }
         double TranslateOffsetY { get; set; }

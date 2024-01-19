@@ -288,28 +288,28 @@
         </TextBlock>
 
         <!--  SELECTED PLUGIN VIEW  -->
+        <Border Margin="10,0,0,0"
+                Grid.Row="1"
+                Grid.Column="2"
+                IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
 
-        <local:MpAvPluginDetailView x:Name="SelectedPluginOuterContainer"
-                                    DataContext="{Binding SelectedItem}"
-                                    x:DataType="local:MpAvPluginItemViewModel"
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    CornerRadius="5"
-                                    Margin="10,0,0,0"
-                                    IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-            <local:MpAvPluginDetailView.Background>
-                <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="0.15" />
-            </local:MpAvPluginDetailView.Background>
-            <local:MpAvPluginDetailView.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="!IsVisible"
-                             ElementName="DetailBusyContainer" />
-                    <Binding Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                </MultiBinding>
-            </local:MpAvPluginDetailView.IsVisible>
+            <local:MpAvPluginDetailView x:Name="SelectedPluginOuterContainer"
+                                        DataContext="{Binding SelectedItem}"
+                                        x:DataType="local:MpAvPluginItemViewModel"
+                                        CornerRadius="5">
+                <local:MpAvPluginDetailView.Background>
+                    <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="0.25" />
+                </local:MpAvPluginDetailView.Background>
+                <local:MpAvPluginDetailView.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!IsVisible"
+                                 ElementName="DetailBusyContainer" />
+                        <Binding Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                    </MultiBinding>
+                </local:MpAvPluginDetailView.IsVisible>
 
-        </local:MpAvPluginDetailView>
-
+            </local:MpAvPluginDetailView>
+        </Border>
         <!--  SELECTED BUSY SPINNER  -->
         <local:MpAvBusySpinnerView x:Name="DetailBusyContainer"
                                    Grid.Row="1"

@@ -1161,4 +1161,13 @@
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
     <value>なし</value>
   </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>選択範囲を拡大</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>選択範囲をズームアウト</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>選択範囲をリセット</value>
+  </data>
 </root>

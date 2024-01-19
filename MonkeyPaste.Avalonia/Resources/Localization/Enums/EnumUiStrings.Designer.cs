@@ -2572,6 +2572,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Selection Zoom.
+        /// </summary>
+        public static string MpShortcutType_ResetSelectionZoom {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ResetSelectionZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scroll To End.
         /// </summary>
         public static string MpShortcutType_ScrollToEnd {
@@ -2802,6 +2811,24 @@ namespace MonkeyPaste.Avalonia {
         public static string MpShortcutType_WindowSizeUp {
             get {
                 return ResourceManager.GetString("MpShortcutType_WindowSizeUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom In On Selection.
+        /// </summary>
+        public static string MpShortcutType_ZoomInOnSelection {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ZoomInOnSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom Out On Selection.
+        /// </summary>
+        public static string MpShortcutType_ZoomOutOnSelection {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ZoomOutOnSelection", resourceCulture);
             }
         }
         

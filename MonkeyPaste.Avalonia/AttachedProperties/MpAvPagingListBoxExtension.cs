@@ -730,13 +730,9 @@ namespace MonkeyPaste.Avalonia {
             if (s is not ListBox lb) {
                 return;
             }
-            if (e.KeyModifiers == KeyModifiers.Control &&
-                MpAvMainView.Instance != null &&
-                MpAvMainView.Instance.GetVisualDescendant<MpAvMainWindowTitleMenuView>() is { } mwtv) {
-
-                double val = e.Delta.X == 0 ? e.Delta.Y : e.Delta.X;
-                mwtv.AdjustZoomFactor(val > 0);
-                e.Handled = true;
+            if (e.KeyModifiers == KeyModifiers.Control) {
+                // allow content zoom
+                e.Handled = false;
                 return;
             }
 

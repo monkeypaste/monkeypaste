@@ -20,4 +20,9 @@ namespace MonkeyPaste {
 
         event PropertyChangedEventHandler PropertyChanged;
     }
+
+    public interface MpIHierarchialViewModel : MpIViewModel {
+        [JsonIgnore]
+        object ParentObj { get; }
+    }
 }

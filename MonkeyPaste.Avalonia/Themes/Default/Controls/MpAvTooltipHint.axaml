@@ -5,6 +5,11 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!--  DEFAULT  -->
+    <Style Selector="local|MpAvToolTipHintView">
+        <Setter Property="Cursor"
+                Value="Help" />
+    </Style>
+
     <Style Selector="local|MpAvToolTipHintView :is(Control).hint">
         <Setter Property="IsVisible"
                 Value="False" />

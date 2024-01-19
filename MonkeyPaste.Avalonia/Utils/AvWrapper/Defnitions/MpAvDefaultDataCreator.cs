@@ -68,6 +68,10 @@ namespace MonkeyPaste.Avalonia {
                             new string[] {"728bfb06-1d96-441c-b710-efee383138be","Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"2025c6eb-2e89-4fa7-a69b-37f0eb4c0281","Control+Delete", MpShortcutType.PermanentlyDelete.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"518a1cb0-ffc1-4c06-b2bc-30aa29237d67","F1", MpShortcutType.OpenHelp.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "3fe88feb-10a4-4634-abd7-7fa1cec13924", "Control+=", MpShortcutType.ZoomInOnSelection.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "3fe88feb-10a4-4634-abd7-7fa1cec13924", "Control+=", MpShortcutType.ZoomInOnSelection.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "25c56dfa-2564-4dc1-85b4-16a658f4c8f2", "Control+-", MpShortcutType.ZoomOutOnSelection.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "384f3883-680c-4d2b-bd95-d2ed029ddc3d", "Control+0", MpShortcutType.ResetSelectionZoom.ToString(), MpRoutingType.Internal.ToString()},
                     };
                 }
                 return _defaultShortcutDefinitions;

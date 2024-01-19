@@ -22,7 +22,6 @@ namespace MonkeyPaste {
         public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage {
-        public double editorScale { get; set; } = 1.0d;
         public int minLogLevel { get; set; }
         public bool isDebug { get; set; }
         public string defaultFontFamily { get; set; }
@@ -41,6 +40,7 @@ namespace MonkeyPaste {
 
 
     public class MpQuillLoadContentRequestMessage {
+        public double editorScale { get; set; } = MpCopyItem.DEFAULT_ZOOM_FACTOR;
         public bool breakBeforeLoad { get; set; }
         public int contentId { get; set; }
         public bool isSubSelectionEnabled { get; set; }
