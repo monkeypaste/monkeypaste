@@ -66,7 +66,7 @@
 
             <!--  WHATS NEW TAB  -->
 
-            <TabItem IsSelected="True">
+            <TabItem IsSelected="False">
                 <TabItem.Header>
                     <Grid Classes="tab"
                           ColumnDefinitions="Auto,*">
@@ -77,7 +77,8 @@
                                    Text="{x:Static local:UiStrings.AccountWhatsNewTabName}" />
                     </Grid>
                 </TabItem.Header>
-                <local:MpAvClipBorder CornerRadius="15">
+                <local:MpAvClipBorder CornerRadius="15"
+                                      Margin="20,10,0,0">
 
                     <local:MpAvWebPageView HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch"
@@ -89,7 +90,7 @@
 
             <!--  SUBSCRIPTION TAB  -->
 
-            <TabItem>
+            <TabItem IsSelected="True">
                 <TabItem.Header>
                     <Grid Classes="tab"
                           ColumnDefinitions="Auto,*">

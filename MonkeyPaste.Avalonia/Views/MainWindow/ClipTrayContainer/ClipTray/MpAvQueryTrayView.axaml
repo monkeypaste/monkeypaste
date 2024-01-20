@@ -50,51 +50,6 @@
                 </Setter.Value>
             </Setter>-->
         </Style>
-
-        <!--  EMPTY TEXTBLOCK  -->
-
-        <!--  NO SEL  -->
-        <Style Selector="Grid#QueryTrayContainerGrid:not(.requerying) Border#QueryTrayEmptyContainer:not(.has_active_tag) TextBlock#EmptyNoSelTextBlock">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-        <Style Selector="Border#QueryTrayEmptyContainer:not(.has_active_tag) TextBlock#EmptyTagTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Border#QueryTrayEmptyContainer:not(.has_active_tag) TextBlock#EmptyPendingTagTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <!--  NO RESULT (PENDING)  -->
-        <Style Selector="Border#QueryTrayEmptyContainer.is_adv_active.is_adv_pending TextBlock#EmptyNoSelTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Border#QueryTrayEmptyContainer.is_adv_active.is_adv_pending TextBlock#EmptyTagTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Grid#QueryTrayContainerGrid:not(.requerying) Border#QueryTrayEmptyContainer.is_adv_active.is_adv_pending TextBlock#EmptyPendingTagTextBlock">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-
-        <!--  NO RESULT (TAG)  -->
-        <Style Selector="Border#QueryTrayEmptyContainer.has_active_tag TextBlock#EmptyNoSelTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Grid#QueryTrayContainerGrid:not(.requerying) Border#QueryTrayEmptyContainer.has_active_tag TextBlock#EmptyTagTextBlock">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-        <Style Selector="Border#QueryTrayEmptyContainer.has_active_tag TextBlock#EmptyPendingTagTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
     </local:MpAvUserControl.Styles>
     <Grid x:Name="QueryTrayContainerGrid"
           Classes.requerying="{Binding IsRequerying}"
@@ -224,9 +179,6 @@
 
         <Border x:Name="QueryTrayEmptyContainer"
                 Grid.Row="1"
-                Classes.has_active_tag="{Binding LastSelectedActiveItem, Source={x:Static local:MpAvTagTrayViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                Classes.is_adv_active="{Binding IsAdvSearchActive, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                Classes.is_adv_pending="{Binding IsPendingQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsHitTestVisible="False"
@@ -239,53 +191,8 @@
                              ElementName="QueryTrayBusyOuterBorder" />
                 </MultiBinding>
             </Border.IsVisible>
-            <Grid DataContext="{Binding LastSelectedActiveItem, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
-                  x:DataType="local:MpAvTagTileViewModel">
-                <!--  EMPTY NO SELECTION  -->
-                <TextBlock x:Name="EmptyNoSelTextBlock"
-                           Text="{x:Static local:UiStrings.QueryTrayNoSelection}"
-                           Classes="disabled emptyOverlayText" />
-                <!--  EMPTY TAG  -->
-                <TextBlock x:Name="EmptyTagTextBlock"
-                           Classes="disabled emptyOverlayText">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>'</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Path="TagName" />
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>'</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Source="{x:Static local:UiStrings.QueryTrayEmptyText}" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <!--  EMPTY PENDING QUERY  -->
-                <TextBlock x:Name="EmptyPendingTagTextBlock"
-                           Classes="disabled emptyOverlayText">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>'</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Source="{x:Static local:UiStrings.QueryTrayEmptyPendingTagName}" />
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>'</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Source="{x:Static local:UiStrings.QueryTrayEmptyText}" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </Grid>
+            <TextBlock Text="{Binding EmptyQueryTrayText}"
+                       Classes="disabled emptyOverlayText" />
         </Border>
 
 
@@ -312,7 +219,7 @@
                                            VerticalAlignment="Stretch" />
             </Border>
         </Border>
-      
+
         <!--  ADVANCED SEARCH  -->
         <Border x:Name="AdvancedSearchContainerBorder"
                 Grid.Row="0"

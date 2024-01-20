@@ -205,6 +205,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIConditionalSelectableViewModel Implementation
 
+        bool CanFocus {
+            get {
+                if (MpAvFocusManager.Instance.IsTextInputControlFocused) {
+                    return false;
+                }
+                return !IsFocusWithin && !MpAvSearchBoxViewModel.Instance.IsAnySearchControlFocused;
+            }
+        }
         public bool CanSelect =>
             !IsPinPlaceholder;
 
@@ -1760,7 +1768,7 @@ namespace MonkeyPaste.Avalonia {
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
-                        if (!IsFocusWithin && !MpAvSearchBoxViewModel.Instance.IsAnySearchControlFocused) {
+                        if (CanFocus) {
                             // only focus tile if search isn't focused cause search as you type will take focus from search box
                             FocusContainerAsync(NavigationMethod.Pointer).FireAndForgetSafeAsync();
                         }

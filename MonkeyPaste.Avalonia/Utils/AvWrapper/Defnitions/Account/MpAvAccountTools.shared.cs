@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
             if (uat == MpUserAccountType.Free) {
                 return 0;
             }
-            if (uat == MpUserAccountType.Standard) {
+            if (uat == MpUserAccountType.Basic) {
                 return isMonthly ? 1 : 2;
             }
             return isMonthly ? 3 : 4;
@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                 default:
                 case MpUserAccountType.Free:
                     return MAX_FREE_CLIP_COUNT;
-                case MpUserAccountType.Standard:
+                case MpUserAccountType.Basic:
                     return MAX_STANDARD_CLIP_COUNT;
                 case MpUserAccountType.Unlimited:
                     return MAX_UNLIMITED_CLIP_COUNT;
@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                 default:
                 case MpUserAccountType.Free:
                     return MAX_FREE_TRASH_COUNT;
-                case MpUserAccountType.Standard:
+                case MpUserAccountType.Basic:
                     return MAX_STANDARD_TRASH_COUNT;
                 case MpUserAccountType.Unlimited:
                     return MAX_UNLIMITED_TRASH_COUNT;
@@ -170,8 +170,8 @@ namespace MonkeyPaste.Avalonia {
         protected Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
             new Dictionary<string, (MpUserAccountType, bool)>() {
 #if DEBUG
-                {"9N0M0CF894CV", (MpUserAccountType.Standard, true) },
-                {"9NTBHV933F76", (MpUserAccountType.Standard, false) },
+                {"9N0M0CF894CV", (MpUserAccountType.Basic, true) },
+                {"9NTBHV933F76", (MpUserAccountType.Basic, false) },
 
                 {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
                 {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }
@@ -189,8 +189,8 @@ namespace MonkeyPaste.Avalonia {
         protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
         {(MpUserAccountType.Free,true),"$0.00" },
         {(MpUserAccountType.Free,false),"$0.00" },
-        {(MpUserAccountType.Standard,true),"$0.99" },
-        {(MpUserAccountType.Standard,false),"$9.99" },
+        {(MpUserAccountType.Basic,true),"$0.99" },
+        {(MpUserAccountType.Basic,false),"$9.99" },
         {(MpUserAccountType.Unlimited,true),"$2.99" },
         {(MpUserAccountType.Unlimited,false),"$29.99" }
         };

@@ -209,7 +209,8 @@ namespace MonkeyPaste.Avalonia {
                 options:
                     string.Join(",",
                     new[] {
-                            (int)MpRootOptionType.Type,
+                            (int)MpRootOptionType.Clip,
+                            (int)MpContentOptionType.Type,
                             (int)MpContentTypeOptionType.Text }));
 
             #endregion
@@ -237,7 +238,8 @@ namespace MonkeyPaste.Avalonia {
                 options:
                     string.Join(",",
                     new[] {
-                            (int)MpRootOptionType.Type,
+                            (int)MpRootOptionType.Clip,
+                            (int)MpContentOptionType.Type,
                             (int)MpContentTypeOptionType.Image }));
 
             #endregion
@@ -265,7 +267,8 @@ namespace MonkeyPaste.Avalonia {
                 options:
                     string.Join(",",
                     new[] {
-                            (int)MpRootOptionType.Type,
+                            (int)MpRootOptionType.Clip,
+                            (int)MpContentOptionType.Type,
                             (int)MpContentTypeOptionType.Files }));
 
             #endregion

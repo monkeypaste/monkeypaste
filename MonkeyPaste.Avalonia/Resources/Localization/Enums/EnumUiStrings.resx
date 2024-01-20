@@ -753,11 +753,8 @@
   <data name="MpRootOptionType_None" xml:space="preserve">
     <value>- Please Select -</value>
   </data>
-  <data name="MpRootOptionType_Clips" xml:space="preserve">
-    <value>Clips</value>
-  </data>
-  <data name="MpRootOptionType_Type" xml:space="preserve">
-    <value>Type</value>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>Clip</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
     <value>Collection</value>
@@ -1122,14 +1119,17 @@
   <data name="MpUserAccountType_Free" xml:space="preserve">
     <value>Free</value>
   </data>
-  <data name="MpUserAccountType_Standard" xml:space="preserve">
-    <value>Standard</value>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>Basic</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
     <value>Unlimited</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value> </value>
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>Type</value>
   </data>
   <data name="MpContentOptionType_Content" xml:space="preserve">
     <value>Content</value>

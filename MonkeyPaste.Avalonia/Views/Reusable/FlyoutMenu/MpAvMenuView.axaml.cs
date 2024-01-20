@@ -21,6 +21,11 @@ namespace MonkeyPaste.Avalonia {
             get => DataContext as MpAvIMenuItemViewModel;
             set => DataContext = value;
         }
+
+        public static void Init() {
+            // first context menu open is a lil slow, i 'think' doing this makes it a lil faster :/ 
+            _cm = new MpAvMenuView();
+        }
         public static void CloseMenu() {
             if (_cm != null) {
                 _cm.Close();

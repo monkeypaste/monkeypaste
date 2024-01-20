@@ -484,7 +484,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  .
+        ///   Looks up a localized string similar to - Please Select -.
         /// </summary>
         public static string MpContentOptionType_None {
             get {
@@ -498,6 +498,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpContentOptionType_Title {
             get {
                 return ResourceManager.GetString("MpContentOptionType_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string MpContentOptionType_Type {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_Type", resourceCulture);
             }
         }
         
@@ -1951,11 +1960,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clips.
+        ///   Looks up a localized string similar to Clip.
         /// </summary>
-        public static string MpRootOptionType_Clips {
+        public static string MpRootOptionType_Clip {
             get {
-                return ResourceManager.GetString("MpRootOptionType_Clips", resourceCulture);
+                return ResourceManager.GetString("MpRootOptionType_Clip", resourceCulture);
             }
         }
         
@@ -1992,15 +2001,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpRootOptionType_Sources {
             get {
                 return ResourceManager.GetString("MpRootOptionType_Sources", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type.
-        /// </summary>
-        public static string MpRootOptionType_Type {
-            get {
-                return ResourceManager.GetString("MpRootOptionType_Type", resourceCulture);
             }
         }
         
@@ -3292,6 +3292,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Basic.
+        /// </summary>
+        public static string MpUserAccountType_Basic {
+            get {
+                return ResourceManager.GetString("MpUserAccountType_Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Free.
         /// </summary>
         public static string MpUserAccountType_Free {
@@ -3306,15 +3315,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpUserAccountType_None {
             get {
                 return ResourceManager.GetString("MpUserAccountType_None", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Standard.
-        /// </summary>
-        public static string MpUserAccountType_Standard {
-            get {
-                return ResourceManager.GetString("MpUserAccountType_Standard", resourceCulture);
             }
         }
         

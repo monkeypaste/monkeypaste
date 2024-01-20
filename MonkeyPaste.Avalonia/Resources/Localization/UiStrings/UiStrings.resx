@@ -279,7 +279,8 @@
     <value>Uninstall</value>
   </data>
   <data name="QueryTrayEmptyText" xml:space="preserve">
-    <value> has no results.</value>
+    <value>{0} has no results.</value>
+    <comment>Collection Name</comment>
   </data>
   <data name="QueryTrayNoSelection" xml:space="preserve">
     <value>No selection.</value>
@@ -381,7 +382,7 @@
     <value>{0} Copy</value>
   </data>
   <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
-    <value>Unnamed Filter</value>
+    <value>Unsaved Filter</value>
   </data>
   <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
     <value>- Please Select -</value>
@@ -2646,5 +2647,17 @@ You can restart now and complete the update by re-installing, ignore this and up
   </data>
   <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
     <value>(Has Errors)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Limited</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Trash</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Unlimited</value>
   </data>
 </root>

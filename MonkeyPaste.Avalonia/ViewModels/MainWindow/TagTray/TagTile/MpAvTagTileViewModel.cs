@@ -1421,6 +1421,7 @@ namespace MonkeyPaste.Avalonia {
                  if (!IsExpanded) {
                      IsExpanded = true;
                  }
+                 bool needs_select = false;
                  bool isNew = false;
                  MpTag t = null;
                  MpTagType childTagType = TagType;
@@ -1445,6 +1446,7 @@ namespace MonkeyPaste.Avalonia {
                          // added when pending query is confirmed
                          t = await MpDataModelProvider.GetItemAsync<MpTag>(pendingTagId);
                          isNew = true;
+                         needs_select = true;
                      }
                  } else if (IsCollectionsTag) {
                      // special case for collection tag from add btn view cmd..
@@ -1490,8 +1492,13 @@ namespace MonkeyPaste.Avalonia {
 
                  OnPropertyChanged(nameof(SortedItems));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
+                 if (needs_select) {
+                     // pending query needs to select tag and w/o this rename will prevent
+                     // select later so selecting first
+                     await Parent.SelectTagCommand.ExecuteAsync(ttvm.TagId);
+                 }
                  if (isNew) {
-                     //await Task.Delay(300);
+                     await Task.Delay(300);
                      ttvm.RenameTagCommand.Execute(null);
                  }
 

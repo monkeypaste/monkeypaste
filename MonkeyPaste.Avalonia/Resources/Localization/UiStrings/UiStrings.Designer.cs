@@ -268,6 +268,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Limited.
+        /// </summary>
+        public static string AccountLimitedLabel {
+            get {
+                return ResourceManager.GetString("AccountLimitedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string AccountLoginButtonLabel {
@@ -539,6 +548,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Storage.
+        /// </summary>
+        public static string AccountStorageLabel {
+            get {
+                return ResourceManager.GetString("AccountStorageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subscription.
         /// </summary>
         public static string AccountSubscriptionLabel {
@@ -566,6 +584,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trash.
+        /// </summary>
+        public static string AccountTrashLabel {
+            get {
+                return ResourceManager.GetString("AccountTrashLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try for free!.
         /// </summary>
         public static string AccountTrialButtonText {
@@ -589,6 +616,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountUnlimitedDisplayText {
             get {
                 return ResourceManager.GetString("AccountUnlimitedDisplayText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited.
+        /// </summary>
+        public static string AccountUnlimitedLabel {
+            get {
+                return ResourceManager.GetString("AccountUnlimitedLabel", resourceCulture);
             }
         }
         
@@ -5370,7 +5406,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unnamed Filter.
+        ///   Looks up a localized string similar to Unsaved Filter.
         /// </summary>
         public static string QueryTrayEmptyPendingTagName {
             get {
@@ -5379,7 +5415,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  has no results..
+        ///   Looks up a localized string similar to {0} has no results..
         /// </summary>
         public static string QueryTrayEmptyText {
             get {

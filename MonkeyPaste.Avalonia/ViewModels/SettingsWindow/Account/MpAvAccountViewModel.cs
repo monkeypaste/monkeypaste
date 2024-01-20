@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFree =>
             AccountType == MpUserAccountType.Free;
         public bool IsStandard =>
-            AccountType == MpUserAccountType.Standard;
+            AccountType == MpUserAccountType.Basic;
         public bool IsUnlimited =>
             AccountType == MpUserAccountType.Unlimited;
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvAccountExtensions {
         public static bool IsPaidType(this MpUserAccountType uat) {
-            return uat == MpUserAccountType.Standard || uat == MpUserAccountType.Unlimited;
+            return uat == MpUserAccountType.Basic || uat == MpUserAccountType.Unlimited;
         }
     }
     public class MpAvSubscriptionItemViewModel :
@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
                         return "LoginImage";
                     case MpUserAccountType.Free:
                         return "StarGoldImage";
-                    case MpUserAccountType.Standard:
+                    case MpUserAccountType.Basic:
                         return "StarYellow2Image";
                     case MpUserAccountType.Unlimited:
                         return "TrophyImage";
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                         return UiStrings.WelcomeAccountRestoreLabel;
                     case MpUserAccountType.Free:
                         return UiStrings.WelcomeAccountFreeLabel;
-                    case MpUserAccountType.Standard:
+                    case MpUserAccountType.Basic:
                         return UiStrings.WelcomeAccountStandardLabel;
                     case MpUserAccountType.Unlimited:
                         return UiStrings.WelcomeAccountUnlimitedLabel;
@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                         return UiStrings.WelcomeAccountRestoreDescription;
                     case MpUserAccountType.Free:
                         return UiStrings.AccountFreeDescription;
-                    case MpUserAccountType.Standard:
+                    case MpUserAccountType.Basic:
                         return UiStrings.AccountStandardDescription;
                     case MpUserAccountType.Unlimited:
                         return UiStrings.AccountUnlimitedDescription;
@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                     DescriptionTemplate,
                     MpAvAccountTools.Instance.GetContentCapacity(MpUserAccountType.Free),
                     MpAvAccountTools.Instance.GetTrashCapacity(MpUserAccountType.Free),
-                    MpAvAccountTools.Instance.GetContentCapacity(MpUserAccountType.Standard));
+                    MpAvAccountTools.Instance.GetContentCapacity(MpUserAccountType.Basic));
             }
         }
         string MonthlyRateText =>
@@ -134,6 +134,12 @@ namespace MonkeyPaste.Avalonia {
                     MpAvAccountViewModel.Instance.BillingCycleType.EnumToUiString());
             }
         }
+
+        public int ClipCapCount =>
+            MpAvAccountTools.Instance.GetContentCapacity(AccountType);
+
+        public int TrashCapCount =>
+            MpAvAccountTools.Instance.GetTrashCapacity(AccountType);
         #endregion
 
         #region State

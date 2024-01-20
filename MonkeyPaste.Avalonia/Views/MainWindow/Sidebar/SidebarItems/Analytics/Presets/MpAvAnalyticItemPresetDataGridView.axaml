@@ -152,6 +152,7 @@
                                       VerticalAlignment="Stretch">
                                     <local:MpAvMarqueeTextBox local:MpAvIsFocusedExtension.IsEnabled="True"
                                                               local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
+                                                              AutoMarquee="{Binding IsSelected}"
                                                               MinHeight="20"
                                                               FontSize="14"
                                                               EditOnFocus="False"

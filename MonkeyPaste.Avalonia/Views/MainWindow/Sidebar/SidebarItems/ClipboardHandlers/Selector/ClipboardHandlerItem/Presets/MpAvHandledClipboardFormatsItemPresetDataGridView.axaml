@@ -153,6 +153,7 @@
                                         <local:MpAvMarqueeTextBox local:MpAvIsFocusedExtension.IsEnabled="True"
                                                                   local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
                                                                   MinHeight="20"
+                                                                  AutoMarquee="{Binding IsSelected}"
                                                                   FontSize="14"
                                                                   EditOnFocus="False"
                                                                   DropShadowBrush="Transparent"
@@ -193,13 +194,13 @@
                                                 Header="Enabled?">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                  <CheckBox Command="{Binding TogglePresetIsEnabledCommand}"
-                                            IsChecked="{Binding IsEnabled, Mode=OneWay}">
+                                    <CheckBox Command="{Binding TogglePresetIsEnabledCommand}"
+                                              IsChecked="{Binding IsEnabled, Mode=OneWay}">
 
-                                    <ToolTip.Tip>
-                                      <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEnabledLabel}" />
-                                    </ToolTip.Tip>
-                                  </CheckBox>
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEnabledLabel}" />
+                                        </ToolTip.Tip>
+                                    </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

@@ -68,6 +68,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
         private static Dictionary<Type, string> _UniqueNones => new Dictionary<Type, string>() {
+            { typeof(MpContentOptionType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpRootOptionType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpTextOptionType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpNumberOptionType), UiStrings.SearchCriteriaDefaultOptionLabel },

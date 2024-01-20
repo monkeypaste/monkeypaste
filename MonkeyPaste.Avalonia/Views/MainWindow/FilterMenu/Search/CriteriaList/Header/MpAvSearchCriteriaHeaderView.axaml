@@ -91,7 +91,7 @@
             <!--  SAVE BUTTON  -->
 
             <Button x:Name="SaveAdvSearchButton"
-                    Classes="defaultButton alterOnly squareByHeight pulse"
+                    Classes="defaultButton alterOnly squareByHeight"
                     Command="{Binding SaveQueryCommand}">
 
                 <Button.IsVisible>

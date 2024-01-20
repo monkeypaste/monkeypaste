@@ -1165,29 +1165,28 @@ namespace MonkeyPaste.Avalonia {
 
         public bool ShowTileShadow { get; set; } = true;
 
-        public string EmptyQueryTrayText {
-            get {
-                if (Mp.Services == null ||
+        public string EmptyQueryTrayText { get; private set; }
+        private string GetEmptyQueryTrayText() {
+            if (Mp.Services == null ||
                     Mp.Services.StartupState == null) {
-                    return string.Empty;
-                }
-                if (!IsQueryEmpty ||
-                    !Mp.Services.StartupState.IsPlatformLoaded) {
-                    return string.Empty;
-                }
-
-                string tag_name = string.Empty;
-                var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
-                if (scicvm.IsAdvSearchActive && scicvm.IsPendingQuery) {
-                    tag_name = UiStrings.CommonUntitledLabel;
-                } else {
-                    if (MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null) {
-                        return UiStrings.QueryTrayNoSelection;
-                    }
-                    tag_name = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagName;
-                }
-                return string.Format(UiStrings.QueryTrayEmptyText, tag_name);
+                return string.Empty;
             }
+            if (!IsQueryEmpty ||
+                !Mp.Services.StartupState.IsPlatformLoaded) {
+                return string.Empty;
+            }
+
+            string tag_name = string.Empty;
+            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
+            if (scicvm.IsAdvSearchActive && scicvm.IsPendingQuery) {
+                tag_name = UiStrings.QueryTrayEmptyPendingTagName;
+            } else {
+                if (MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null) {
+                    return UiStrings.QueryTrayNoSelection;
+                }
+                tag_name = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagName;
+            }
+            return string.Format(UiStrings.QueryTrayEmptyText, tag_name);
         }
 
         #region System Tray Icons
@@ -2441,7 +2440,7 @@ namespace MonkeyPaste.Avalonia {
                 // QUERY
 
                 case MpMessageType.RequeryCompleted:
-                    OnPropertyChanged(nameof(EmptyQueryTrayText));
+                    UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
                     RefreshQueryTrayLayout();
 
                     if (IsInitialQuery) {
@@ -2699,7 +2698,6 @@ namespace MonkeyPaste.Avalonia {
             // send signal immediatly but also wait and send for busy dependants
             OnPropertyChanged(nameof(IsPinTrayEmpty));
             OnPropertyChanged(nameof(IsQueryEmpty));
-            OnPropertyChanged(nameof(EmptyQueryTrayText));
             OnPropertyChanged(nameof(IsQueryTrayEmpty));
             OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
             OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
@@ -2714,10 +2712,10 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(IsQueryEmpty));
             OnPropertyChanged(nameof(IsPinTrayEmpty));
-            OnPropertyChanged(nameof(EmptyQueryTrayText));
             OnPropertyChanged(nameof(IsQueryTrayEmpty));
             OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
             OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
+            EmptyQueryTrayText = GetEmptyQueryTrayText();
         }
 
         #region Scroll Offset

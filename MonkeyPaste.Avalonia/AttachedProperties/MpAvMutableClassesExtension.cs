@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
@@ -10,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         static MpAvMutableClassesExtension() {
+            MutableClassesProperty.Changed.AddClassHandler<Control>((x, y) => HandleMutableClassesChanged(x, y));
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
 
@@ -18,18 +20,33 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region MutableClasses AvaloniaProperty
-        public static Classes GetMutableClasses(AvaloniaObject obj) {
+        public static string GetMutableClasses(AvaloniaObject obj) {
             return obj.GetValue(MutableClassesProperty);
         }
 
-        public static void SetMutableClasses(AvaloniaObject obj, Classes value) {
+        public static void SetMutableClasses(AvaloniaObject obj, string value) {
             obj.SetValue(MutableClassesProperty, value);
         }
 
-        public static readonly AttachedProperty<Classes> MutableClassesProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, Classes>(
+        public static readonly AttachedProperty<string> MutableClassesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string>(
                 "MutableClasses",
-                new Classes());
+                string.Empty);
+        private static void HandleMutableClassesChanged(Control attached_control, AvaloniaPropertyChangedEventArgs e) {
+            if (!GetIsEnabled(attached_control) ||
+                e.OldValue.ToStringOrEmpty().SplitNoEmpty("|") is not { } old_classes ||
+                    e.NewValue.ToStringOrEmpty().SplitNoEmpty("|") is not { } new_classes) {
+                return;
+            }
+            foreach (string old_class in old_classes) {
+                attached_control.Classes.Add(old_class);
+                MpConsole.WriteLine($"Mutable Class '{old_class}' REMOVED to '{attached_control}'");
+            }
+            foreach (string new_class in new_classes) {
+                attached_control.Classes.Add(new_class);
+                MpConsole.WriteLine($"Mutable Class '{new_class}' ADDED to '{attached_control}'");
+            }
+        }
         #endregion
 
 
@@ -50,44 +67,8 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is not bool isEnabledVal ||
-                element is not Control attached_control ||
-                GetMutableClasses(attached_control) is not Classes mutable_classes) {
+                element is not Control attached_control) {
                 return;
-            }
-
-            void Mutable_classes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-                if (GetMutableClasses(attached_control) is not Classes mutable_classes) {
-                    return;
-                }
-                if (e.NewItems != null) {
-                    foreach (string new_class in e.NewItems) {
-                        attached_control.Classes.Add(new_class);
-                        MpConsole.WriteLine($"Mutable Class '{new_class}' ADDED to '{attached_control}'");
-                    }
-                }
-                if (e.OldItems != null) {
-                    foreach (string old_class in e.OldItems) {
-                        attached_control.Classes.Add(old_class);
-                        MpConsole.WriteLine($"Mutable Class '{old_class}' REMOVED to '{attached_control}'");
-                    }
-                }
-            }
-
-            void AttachedControl_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-                if (sender is not Control w ||
-                    GetMutableClasses(w) is not Classes mutable_classes) {
-                    return;
-                }
-                mutable_classes.CollectionChanged -= Mutable_classes_CollectionChanged;
-                w.Unloaded -= AttachedControl_Unloaded;
-            }
-
-            if (isEnabledVal) {
-                mutable_classes.CollectionChanged += Mutable_classes_CollectionChanged;
-                attached_control.Unloaded += AttachedControl_Unloaded;
-            } else {
-                mutable_classes.CollectionChanged -= Mutable_classes_CollectionChanged;
-                attached_control.Unloaded -= AttachedControl_Unloaded;
             }
         }
 

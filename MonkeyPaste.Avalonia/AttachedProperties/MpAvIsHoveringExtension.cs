@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 
@@ -235,18 +236,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void RotateBorderBrush(Control c, double angle_delta, double? force_angle = null) {
-            Brush bb;
+            IBrush bb;
 
             if (c is TemplatedControl tc &&
-                tc.BorderBrush is Brush tc_bb) {
+                tc.BorderBrush is IBrush tc_bb) {
                 bb = tc_bb;
             } else if (c is Border b &&
-                b.BorderBrush is Brush b_bb) {
+                b.BorderBrush is IBrush b_bb) {
                 bb = b_bb;
             } else {
                 //MpDebug.Break($"Unhandled border follow control type '{c.GetType()}'");
                 return;
             }
+            if (bb is LinearGradientBrush lgb) {
+            }
+
 
             if (bb.Transform is not RotateTransform rt) {
                 //MpDebug.Break($"Border follow error, bb must have rotate transform");
@@ -259,9 +263,9 @@ namespace MonkeyPaste.Avalonia {
                 rt.Angle += angle_delta;
             }
             rt.Angle = rt.Angle.Wrap(0, 360);
-            //MpConsole.WriteLine($"Brush angle: {rt.Angle}");
+            MpConsole.WriteLine($"Brush angle: {rt.Angle}");
 
-            c.InvalidateAll();
+            c.Redraw();
         }
     }
 

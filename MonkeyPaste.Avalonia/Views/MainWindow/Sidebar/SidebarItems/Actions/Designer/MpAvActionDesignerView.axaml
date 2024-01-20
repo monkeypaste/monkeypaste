@@ -217,13 +217,13 @@
                     <!--  POP OUT WINDOW BUTTON  -->
 
                     <Button x:Name="ShowDesignerWindowButton"
-                            Grid.Column="4"
-                            ToolTip.Placement="Left"
                             Classes="noBg noHoverBg defaultButton outline outlineOver"
+                            Grid.Column="4"
                             Command="{Binding ShowDesignerWindowCommand}"
                             IsVisible="{Binding !IsWindowOpen}">
                         <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
+                            <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                                   ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadePopoutTooltipText}" />
                         </ToolTip.Tip>
                         <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </Button>

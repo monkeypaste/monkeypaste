@@ -305,9 +305,14 @@ namespace MonkeyPaste.Avalonia {
                     fc_w.WindowState = WindowState.Minimized;
                     return;
                 }
+                if (fc.GetVisualAncestor<TextBox>() is { } tb && !tb.IsReadOnly) {
+                    // don't hide in textbox
+                    return;
+                }
                 // attempt to hide main window
                 MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(MpMainWindowHideType.Force);
             }, () => {
+
                 return MpAvWindowManager.IsAnyActive || MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
             });
 

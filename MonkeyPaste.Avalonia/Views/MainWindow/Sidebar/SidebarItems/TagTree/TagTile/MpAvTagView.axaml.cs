@@ -85,7 +85,6 @@ namespace MonkeyPaste.Avalonia {
 
                 },
                 end: (end_e) => {
-                    MpDebug.BreakAll();
                     if (end_e == null) {
                         // release was handled in pointer release
 

@@ -82,6 +82,9 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.ShutdownLog();
             if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 MpAvWindowManager.CloseAll();
+#if CEFNET_WV
+                MpAvCefNetApplication.ShutdownCefNet();
+#endif
                 lifetime.Shutdown();
                 bool success = true;// lifetime.TryShutdown();
                 MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");

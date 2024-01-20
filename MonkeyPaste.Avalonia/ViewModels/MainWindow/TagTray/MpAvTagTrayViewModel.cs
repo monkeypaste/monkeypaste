@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvTagTileViewModel>()
                     .Select(x => x.TagId);
             }
-            return null;
+            return [tagId];
         }
         IEnumerable<int> MpITagQueryTools.GetSelfAndAllDescendantsTagIds(int tagId) {
             if (Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel ttvm) {
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvTagTileViewModel>()
                     .Select(x => x.TagId);
             }
-            return null;
+            return [tagId];
         }
         #endregion
 
@@ -629,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
                 return args is MpAvTagTileViewModel ttvm && ttvm.CanPin;
             });
 
-        public ICommand SelectTagCommand => new MpCommand<object>(
+        public MpIAsyncCommand<object> SelectTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsSelecting = true;
 

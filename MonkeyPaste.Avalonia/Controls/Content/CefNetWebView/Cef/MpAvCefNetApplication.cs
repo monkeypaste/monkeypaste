@@ -42,9 +42,9 @@ namespace MonkeyPaste.Avalonia {
                         Mp.Services.PlatformInfo == null ?
                             new MpAvPlatformInfo_desktop() :
                             Mp.Services.PlatformInfo;
-                    if (!MpConsole.HasInitialized) {
-                        MpConsole.Init(pi.IsTraceEnabled ? pi.LogPath : null);
-                    }
+                    //if (!MpConsole.HasInitialized) {
+                    //    MpConsole.Init(pi.IsTraceEnabled ? pi.LogPath : null);
+                    //}
                     if (pi.IsTraceEnabled) {
                         _logFilePath = Path.Combine(pi.LogDir, "cef.log");
                     }
@@ -182,9 +182,10 @@ namespace MonkeyPaste.Avalonia {
                 //settings.CommandLineArgsDisabled = true;
                 settings.WindowlessRenderingEnabled = true;
             }
+
             if (!string.IsNullOrEmpty(LogFilePath)) {
                 settings.LogFile = LogFilePath;
-                settings.LogSeverity = CefLogSeverity.Debug;
+                settings.LogSeverity = CefLogSeverity.Error;
             }
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
@@ -260,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public static void ResetCefNetLogging() {
+        private static void ResetCefNetLogging() {
 
             if (LogFilePath.IsFile() && !MpFileIo.IsFileInUse(LogFilePath)) {
                 MpFileIo.DeleteFile(LogFilePath);

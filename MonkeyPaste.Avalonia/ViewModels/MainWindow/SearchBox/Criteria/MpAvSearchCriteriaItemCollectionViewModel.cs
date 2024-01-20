@@ -283,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsPendingQuery) {
                         // when pending just reset it, too much to change 
                         Items.Where(x => x.Items.Any(y => y.IsCollectionRootOption))
-                        .ForEach(x => x.InitializeAsync(x.SearchCriteriaItem).FireAndForgetSafeAsync(x));
+                        .ForEach(x => x.InitializeAsync(new()).FireAndForgetSafeAsync(x));
                     } else {
                         Items.Where(x => x.Items.Any(y => y.IsCollectionRootOption))
                         .ForEach(x => x.RefreshAsync().FireAndForgetSafeAsync(x));
@@ -294,12 +294,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
-                //case MpMessageType.AdvancedSearchExpanded:
-                //case MpMessageType.AdvancedSearchUnexpanded:
-                //    AnimateAdvSearchMenuAsync(IsExpanded).FireAndForgetSafeAsync(this);
-                //    break;
                 case MpMessageType.TagSelectionChanged:
-                    OnPropertyChanged(nameof(IsSavedQuery));
+                    RefreshProperties();
                     break;
             }
         }
@@ -313,9 +309,7 @@ namespace MonkeyPaste.Avalonia {
                     Items.ForEach(x => x.OnPropertyChanged(nameof(HasModelChanged)));
                     break;
                 case nameof(QueryTagId):
-                    OnPropertyChanged(nameof(CurrentQueryTagViewModel));
-                    OnPropertyChanged(nameof(CanSave));
-                    OnPropertyChanged(nameof(CanAlter));
+                    RefreshProperties();
                     break;
                 case nameof(CanAlter):
                     OnPropertyChanged(nameof(DisabledInputTooltip));
@@ -336,6 +330,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasAnyCriteriaModelChanged):
                     OnPropertyChanged(nameof(CanSave));
+                    break;
+                case nameof(CanSave):
+                    if (!CanSave || IsPendingQuery) {
+                        break;
+                    }
+                    // update saved queries automatically 
+                    SaveQueryCommand.Execute(null);
                     break;
             }
         }
@@ -402,6 +403,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private async Task SaveCriteriaAsync() {
+            Items.ForEach(x => x.IgnoreHasModelChanged = false);
+            await Task.Delay(100);
+            while (IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            Items.ForEach(x => x.IgnoreHasModelChanged = true);
+            ResetLastStateToCurrent();
+        }
         private async Task<int> ConvertPendingToQueryTagAsync() {
             if (QueryTagId > 0) {
                 // not a simple search, check call stack
@@ -423,13 +433,11 @@ namespace MonkeyPaste.Avalonia {
                 matchValue: MpAvSearchBoxViewModel.Instance.SearchText);
 
             Items.ForEach(x => x.QueryTagId = pending_tag.Id);
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.HasModelChanged)));
-            await Task.Delay(50);
-            while (IsAnyBusy) {
-                await Task.Delay(100);
-            }
+
+            await SaveCriteriaAsync();
             return pending_tag.Id;
         }
+
 
         #endregion
 
@@ -498,20 +506,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand SaveQueryCommand => new MpAsyncCommand(
             async () => {
-                bool was_pending = IsPendingQuery;
-                if (was_pending) {
+                if (IsPendingQuery) {
                     // creates query tag id, triggers rename tag
                     await SavePendingQueryCommand.ExecuteAsync();
+                    return;
                 }
-                Items.ForEach(x => x.IgnoreHasModelChanged = false);
-                await Task.Delay(100);
-                while (IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                Items.ForEach(x => x.IgnoreHasModelChanged = true);
-                if (was_pending) {
-                    MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(QueryTagId);
-                }
+                await SaveCriteriaAsync();
             });
 
         public MpIAsyncCommand SavePendingQueryCommand => new MpAsyncCommand(
@@ -526,6 +526,11 @@ namespace MonkeyPaste.Avalonia {
                 QueryTagId = new_query_tag_id;
 
                 await ttrvm.FiltersTagViewModel.AddNewChildTagCommand.ExecuteAsync(new_query_tag_id);
+
+                // sick of this stupid save button!
+                // DO NOT REMOVE DELAY (for the love of pete I can't chain the commands together for save to stick so don't remove this!)
+                await Task.Delay(3000);
+                SaveQueryCommand.Execute(null);
             }, () => {
                 return IsPendingQuery;
             });

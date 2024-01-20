@@ -17,9 +17,9 @@ namespace MonkeyPaste.Avalonia {
             {"disable-gpu-compositing",null },
 
             {"ignore-certificate-errors",null },
-            {"enable-begin-frame-scheduling",null },
-            {"enable-media-stream",null },
-            {"enable-blink-features", "CSSPseudoHas"},
+            //{"enable-begin-frame-scheduling",null },
+           //{"enable-media-stream",null },
+            //{"enable-blink-features", "CSSPseudoHas"},
 #if LINUX
             {"no-zygote",null },
             {"no-sandbox",null },

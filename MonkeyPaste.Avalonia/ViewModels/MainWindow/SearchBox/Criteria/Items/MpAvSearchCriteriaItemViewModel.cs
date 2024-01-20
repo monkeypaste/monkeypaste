@@ -50,8 +50,8 @@ namespace MonkeyPaste.Avalonia {
                 if (QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
                     var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.Tag.Guid == MatchValue);
                     if (ttvm == null) {
-                        // should have found, is tagId a pending query id?
-                        MpDebug.Break();
+                        // probably a pending query
+                        return 0;
                     } else {
                         return ttvm.TagId;
                     }
@@ -241,7 +241,7 @@ namespace MonkeyPaste.Avalonia {
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                 tovm.Label = labels[i];
                 switch ((MpRootOptionType)i) {
-                    case MpRootOptionType.Clips:
+                    case MpRootOptionType.Clip:
                         tovm.ItemsOptionType = typeof(MpContentOptionType);
                         tovm.Items = GetContentOptionViewModel(tovm);
                         break;
@@ -256,10 +256,6 @@ namespace MonkeyPaste.Avalonia {
                     case MpRootOptionType.History:
                         tovm.ItemsOptionType = typeof(MpTransactionType);
                         tovm.Items = GetHistoryTypeOptionViewModel(tovm);
-                        break;
-                    case MpRootOptionType.Type:
-                        tovm.ItemsOptionType = typeof(MpContentTypeOptionType);
-                        tovm.Items = GetContentTypeOptionViewModel(tovm);
                         break;
                 }
                 rovm.Items.Add(tovm);
@@ -488,7 +484,7 @@ namespace MonkeyPaste.Avalonia {
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
         }
 
-        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentTypeContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentTypeSpecificOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
             // PATH: /Root/Content/TypeSpecific
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
@@ -531,6 +527,11 @@ namespace MonkeyPaste.Avalonia {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
                 switch ((MpContentOptionType)i) {
+                    case MpContentOptionType.Type:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.ItemsOptionType = typeof(MpContentTypeOptionType);
+                        ovm.Items = GetContentTypeOptionViewModel(ovm);
+                        break;
                     case MpContentOptionType.Content:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.Content;
@@ -540,7 +541,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpContentOptionType.TypeSpecific:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.ItemsOptionType = typeof(MpContentTypeOptionType);
-                        ovm.Items = GetContentTypeContentOptionViewModel(ovm);
+                        ovm.Items = GetContentTypeSpecificOptionViewModel(ovm);
                         break;
                     case MpContentOptionType.Title:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
@@ -571,7 +572,7 @@ namespace MonkeyPaste.Avalonia {
         #region Content Type Options
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentTypeOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
-            // PATH: /Root/ContentType
+            // PATH: /Root/Content/ContentType
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpContentTypeOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);

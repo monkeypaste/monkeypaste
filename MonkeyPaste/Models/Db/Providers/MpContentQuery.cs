@@ -168,29 +168,6 @@ namespace MonkeyPaste {
             }
 
             // TYPES
-
-            //if (!qf.HasFlag(MpContentQueryBitFlags.TextType) &&
-            //   !qf.HasFlag(MpContentQueryBitFlags.ImageType) &&
-            //   !qf.HasFlag(MpContentQueryBitFlags.FileType)) {
-            //    // NOTE this only can occur in adv search from ui validation in simple
-            //    // so when no types are selected treat as all or there'll be no results
-            //    qf |= MpContentQueryBitFlags.TextType |
-            //        MpContentQueryBitFlags.ImageType |
-            //        MpContentQueryBitFlags.FileType;
-            //}
-
-            //if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
-            //    types.Add("e_MpCopyItemType=?");
-            //    argList.Add(MpCopyItemType.Text.ToString());
-            //}
-            //if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
-            //    types.Add("e_MpCopyItemType=?");
-            //    argList.Add(MpCopyItemType.Image.ToString());
-            //}
-            //if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
-            //    types.Add("e_MpCopyItemType=?");
-            //    argList.Add(MpCopyItemType.FileList.ToString());
-            //}
             bool has_all_types = qf.HasAllFlags(MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType);
             bool has_no_types = !qf.HasAnyFlag(MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType);
             if (has_all_types || has_no_types) {

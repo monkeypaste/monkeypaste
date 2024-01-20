@@ -667,16 +667,23 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
 
-            if (e.IsLeftPress(this) &&
-                NavigateUriCommand != null &&
-                IsReadOnly) {
-                var req_keys =
-                    Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(NavigateUriRequiredKeyString);
-                if (e.KeyModifiers.HasAllFlags(req_keys.ToAvKeyModifiers())) {
-                    NavigateUriCommand?.Execute(NavigateUriCommandParameter);
-                } else {
-                    MpConsole.WriteLine($"Cannot exec nav cmd w/ param '{NavigateUriCommandParameter}'. Mods '{NavigateUriRequiredKeyString}' not pressed.");
+            if (e.IsLeftPress(this)) {
+                if (e.ClickCount == 2 && !IsReadOnly) {
+                    // BUG for some reason dbl click/select all doesn't work so handling here
+                    SelectAll();
+                    return;
                 }
+                if (NavigateUriCommand != null &&
+                    IsReadOnly) {
+                    var req_keys =
+                    Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(NavigateUriRequiredKeyString);
+                    if (e.KeyModifiers.HasAllFlags(req_keys.ToAvKeyModifiers())) {
+                        NavigateUriCommand?.Execute(NavigateUriCommandParameter);
+                    } else {
+                        MpConsole.WriteLine($"Cannot exec nav cmd w/ param '{NavigateUriCommandParameter}'. Mods '{NavigateUriRequiredKeyString}' not pressed.");
+                    }
+                }
+
             } else if (e.IsRightPress(this) && !IsReadOnly) {
                 // BUG suppressing context menu on marquee, weird bugs
                 // 1. it'll loose focus and go back to read only
@@ -842,6 +849,24 @@ namespace MonkeyPaste.Avalonia {
                     VisualChildren.Add(new TextBox());
                 }
                 foreach (var c in VisualChildren) {
+                    //if (c is TextBox tb && FocusOnDisableReadOnly && isTextBoxVisible) {
+                    //    // if textbox is new need to wait for it to show up to focus it
+                    //    async void Tb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+                    //        if (!this.IsLoaded) {
+                    //            return;
+                    //        }
+                    //        await tb.TrySetFocusAsync(NavigationMethod.Pointer);
+                    //        tb.SelectAll();
+                    //        tb.AttachedToVisualTree -= Tb_AttachedToVisualTree;
+
+                    //    }
+                    //    if (!was_added) {
+                    //        Tb_AttachedToVisualTree(tb, null);
+                    //    } else {
+                    //        tb.AttachedToVisualTree += Tb_AttachedToVisualTree;
+                    //    }
+
+                    //}
                     c.IsVisible = isTextBoxVisible;
                 }
                 if (isTextBoxVisible) {
@@ -852,7 +877,6 @@ namespace MonkeyPaste.Avalonia {
                     SetValue(ForegroundProperty, ReadOnlyForeground);
                 }
             });
-
         }
         private void RenderMarquee(DrawingContext ctx) {
             if (_unloaded) {

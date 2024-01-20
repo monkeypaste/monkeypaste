@@ -15,24 +15,9 @@
                        DataContext="{x:Static local:MpAvSubscriptionPurchaseViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSubscriptionView">
     <local:MpAvUserControl.Resources>
-        <LinearGradientBrush x:Key="RainbowBrush_test" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="Red" />
-                <GradientStop Offset="0.14" Color="Orange" />
-                <GradientStop Offset="0.28" Color="Yellow" />
-                <GradientStop Offset="0.42" Color="Green" />
-                <GradientStop Offset="0.56" Color="Blue" />
-                <GradientStop Offset="0.7" Color="Indigo" />
-                <GradientStop Offset="0.8" Color="Violet" />
-                <GradientStop Offset="0.94" Color="Red" />
-            </LinearGradientBrush.GradientStops>
-            <LinearGradientBrush.Transform>
-                <RotateTransform />
-            </LinearGradientBrush.Transform>
-        </LinearGradientBrush>
         <sys:Double x:Key="SubLbiBg_opacity">0.25</sys:Double>
-        <SolidColorBrush x:Key="SubLbiBg_hover" Color="{DynamicResource ThemeAccent1Color}" Opacity="{StaticResource SubLbiBg_opacity}" />
-        <SolidColorBrush x:Key="SubLbiBg_selected" Color="{DynamicResource ThemeWhiteColor}" Opacity="{StaticResource SubLbiBg_opacity}" />
+        <SolidColorBrush x:Key="SubLbiBg_hover" Color="{DynamicResource ThemeWhiteColor}" Opacity="0.2" />
+        <SolidColorBrush x:Key="SubLbiBg_selected" Color="Lime" Opacity="0.2" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  ACCOUNT TYPE LBI  -->
@@ -51,7 +36,9 @@
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="Margin"
-                    Value="10" />
+                    Value="0,0,0,10" />
+            <!--<Setter Property="Height"
+                    Value="100" />-->
             <Setter Property="Background"
                     Value="{StaticResource HitTestableTransparent}" />
             <Setter Property="Transitions">
@@ -59,9 +46,6 @@
                     <Transitions>
                         <TransformOperationsTransition Property="RenderTransform"
                                                        Duration="0:0:0.2" />
-                        <BrushTransition Property="Background"
-                                         Duration="0:0:0.25"
-                                         Easing="SineEaseOut" />
                     </Transitions>
                 </Setter.Value>
             </Setter>
@@ -69,56 +53,58 @@
 
         <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:pressed">
             <Setter Property="RenderTransform"
-                    Value="scale(0.98)" />
+                    Value="scale(0.74)" />
         </Style>
-
-        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:pointerover">
-            <Setter Property="Background"
-                    Value="{DynamicResource SubLbiBg_hover}" />
-        </Style>
-
-        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:selected">
-            <Setter Property="Background"
-                    Value="{DynamicResource SubLbiBg_selected}" />
-        </Style>
-
 
         <!--  OUTER BORDER  -->
-        <Style Selector="Border#OuterBorder">
+        <Style Selector="local|MpAvClipBorder#OuterBorder">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeWhiteBrush}" />
             <Setter Property="Background"
                     Value="{StaticResource HitTestableTransparent}" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Property="Background"
+                                         Duration="0:0:0.25" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <Style Selector="Border#OuterBorder.unlimited">
-            <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
-                    Value="True" />
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource RainbowBrush_test}" />
+        <Style Selector="local|MpAvClipBorder#OuterBorder.unlimited">
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+
+                    <LinearGradientBrush SpreadMethod="Repeat" TransformOrigin="0%,0%" StartPoint="0%,0%" EndPoint="100%,100%">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Offset="0" Color="Red" />
+                            <GradientStop Offset="0.14" Color="Orange" />
+                            <GradientStop Offset="0.28" Color="Yellow" />
+                            <GradientStop Offset="0.42" Color="Green" />
+                            <GradientStop Offset="0.56" Color="Blue" />
+                            <GradientStop Offset="0.7" Color="Indigo" />
+                            <GradientStop Offset="0.8" Color="Violet" />
+                            <GradientStop Offset="0.94" Color="Red" />
+                        </LinearGradientBrush.GradientStops>
+                        <LinearGradientBrush.Transform>
+                            <RotateTransform />
+                        </LinearGradientBrush.Transform>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <!--<Style Selector="ListBoxItem:pointerover:not(:selected) Border#OuterBorder">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeAccent1Color}" />
+
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:pointerover local|MpAvClipBorder#OuterBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource SubLbiBg_hover}" />
         </Style>
 
-        <Style Selector="ListBoxItem:pointerover:not(:selected) Border#OuterBorder.unlimited">
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource GoldBrush}" />
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:selected local|MpAvClipBorder#OuterBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource SubLbiBg_selected}" />
         </Style>
-
-        <Style Selector="ListBoxItem:selected Border#OuterBorder">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeAccent3Color}" />
-        </Style>
-
-        <Style Selector="Border#OuterBorder.unlimited">
-            <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
-                    Value="True" />
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource RainbowBrush_test}" />
-        </Style>-->
 
         <!--  ICON BORDER  -->
         <Style Selector="ListBox#AccountTypeListBox > ListBoxItem Border.acctIcon">
@@ -152,6 +138,10 @@
                     Value="0,7,0,0" />
             <Setter Property="CornerRadius"
                     Value="7" />
+            <Setter Property="MinHeight"
+                    Value="0" />
+            <Setter Property="MinWidth"
+                    Value="0" />
         </Style>
 
         <Style Selector="Border.active">
@@ -165,13 +155,17 @@
 
         <Style Selector="Border.badge TextBlock">
             <Setter Property="HorizontalAlignment"
-                    Value="Center" />
+                    Value="Stretch" />
             <Setter Property="TextAlignment"
                     Value="Center" />
             <Setter Property="FontWeight"
                     Value="SemiBold" />
             <Setter Property="FontSize"
-                    Value="9" />
+                    Value="8" />
+            <Setter Property="MinHeight"
+                    Value="0" />
+            <Setter Property="MinWidth"
+                    Value="0" />
         </Style>
         <Style Selector="Border.badge:not(.expired) TextBlock">
             <Setter Property="Foreground"
@@ -191,6 +185,43 @@
             <Setter Property="Text"
                     Value="{x:Static local:UiStrings.AccountActiveLabel}" />
         </Style>
+
+        <!--  ACCOUNT INFO INLINES  -->
+
+        <Style Selector="TextBlock.sub-info">
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="TextWrapping"
+                    Value="NoWrap" />
+        </Style>
+        <Style Selector="Run.bullet">
+            <Setter Property="Text"
+                    Value="● " />
+        </Style>
+        <Style Selector="Run.limited">
+            <Setter Property="Foreground"
+                    Value="Gold" />
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.AccountLimitedLabel}" />
+        </Style>
+        <Style Selector="Run.unlimited">
+            <Setter Property="Foreground"
+                    Value="Lime" />
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.AccountUnlimitedLabel}" />
+        </Style>
+        <Style Selector="Run.storage">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.AccountStorageLabel}" />
+        </Style>
+        <Style Selector="Run.trash">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.AccountTrashLabel}" />
+        </Style>
+        <Style Selector="Run.cap">
+            <Setter Property="Foreground"
+                    Value="Red" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid>
         <!--  SUBSCRIPTION CONTAINER  -->
@@ -209,7 +240,7 @@
             <!--  ACCT MONTLY TOGGLE  -->
             <ToggleSwitch x:Name="MonthlyToggleButton"
                           Grid.Row="0"
-                          Margin="0,0,0,10"
+                          Margin="0,0,0,5"
                           Classes="defaultButton"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
@@ -247,36 +278,35 @@
                         <Viewbox Stretch="UniformToFill"
                                  ClipToBounds="False">
                             <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
-                            <Border x:Name="OuterBorder"
-                                    Effect="{DynamicResource ThemeBlackDropShadow}"
-                                    Height="85"
-                                    Padding="10,0,10,0"
-                                    Classes.pulse="{Binding DoFocusPulse}"
-                                    Classes.unlimited="{Binding IsUnlimited}"
-                                    local:MpAvIsHoveringExtension.IsEnabled="{Binding $parent[TabItem].IsSelected}"
-                                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                    local:MpAvIsHoveringExtension.IsBorderFollowEnabled="False"
-                                    CornerRadius="7"
-                                    BorderThickness="2.5">
-                                <DockPanel HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch">
+                            <local:MpAvClipBorder x:Name="OuterBorder"
+                                                  Effect="{DynamicResource ThemeBlackDropShadow}"
+                                                  Height="60"
+                                                  Padding="10,0,10,0"
+                                                  Classes.pulse="{Binding DoFocusPulse}"
+                                                  Classes.unlimited="{Binding IsUnlimited}"
+                                                  local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                                  CornerRadius="7"
+                                                  BorderThickness="1.5">
+                                <Grid ColumnDefinitions="45,100,150,45">
 
                                     <!--  ACCOUNT TYPE ICON BORDER  -->
-                                    <Grid RowDefinitions="*,Auto"
-                                          DockPanel.Dock="Left"
-                                          VerticalAlignment="Center">
+                                    <StackPanel Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Spacing="3">
                                         <Border Classes="acctIcon squareByHeight"
+                                                VerticalAlignment="Center"
                                                 CornerRadius="7"
                                                 BorderThickness="2"
                                                 Padding="5">
-                                            <Image Width="30"
-                                                   Height="30"
+                                            <Image Width="20"
+                                                   Height="20"
                                                    Stretch="UniformToFill"
                                                    Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
                                         </Border>
 
                                         <!--  IS ACTIVE LABEL  -->
-                                        <Border Grid.Row="1"
+                                        <Border Margin="0"
                                                 Classes="badge"
                                                 IsVisible="{Binding MatchesAccount}"
                                                 Padding="0,3,0,0"
@@ -285,10 +315,105 @@
                                             <TextBlock />
                                         </Border>
 
-                                    </Grid>
+                                    </StackPanel>
+
+                                    <!--  ACCOUNT TYPE NAME  -->
+
+                                    <TextBlock Grid.Column="1"
+                                               Margin="0,0,15,0"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Right"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding LabelText}" />
+                                    <!--  ACCOUNT TYPE INFO  -->
+
+                                    <ContentControl Grid.Column="2"
+                                                    Margin="0,0,0,0"
+                                                    Content="{Binding}"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Center">
+                                        <ContentControl.DataTemplates>
+                                            <local:MpAvSubscriptionDetailTemplateSelector>
+                                                <!--  FREE TEMPLATE  -->
+                                                <DataTemplate x:Key="FreeTemplate"
+                                                              x:DataType="local:MpAvSubscriptionItemViewModel">
+                                                    <TextBlock Classes="sub-info"
+                                                               TextWrapping="WrapWithOverflow"
+                                                               TextAlignment="Left">
+                                                        <TextBlock.Inlines>
+                                                            <!--  Clip line  -->
+                                                            <Run Classes="bullet" />
+                                                            <Run Classes="limited" />
+                                                            <Run Classes="storage" />
+                                                            <Run Text="(" />
+                                                            <Run Text="{Binding ClipCapCount}"
+                                                                 Classes="cap" />
+                                                            <Run Text=")" />
+                                                            <LineBreak />
+                                                            <!--  Trash line  -->
+                                                            <Run Classes="bullet" />
+                                                            <Run Classes="limited" />
+                                                            <Run Classes="trash" />
+                                                            <Run Text="(" />
+                                                            <Run Text="{Binding TrashCapCount}"
+                                                                 Classes="cap" />
+                                                            <Run Text=")" />
+                                                        </TextBlock.Inlines>
+                                                    </TextBlock>
+                                                </DataTemplate>
+
+                                                <!--  BASIC TEMPLATE  -->
+                                                <DataTemplate x:Key="BasicTemplate"
+                                                              x:DataType="local:MpAvSubscriptionItemViewModel">
+                                                    <TextBlock Classes="sub-info"
+                                                               TextWrapping="WrapWithOverflow"
+                                                               TextAlignment="Left">
+                                                        <TextBlock.Inlines>
+                                                            <!--  Clip line  -->
+                                                            <Run Classes="bullet" />
+                                                            <Run Classes="limited" />
+                                                            <Run Classes="storage" />
+                                                            <Run Text="(" />
+                                                            <Run Text="{Binding ClipCapCount}"
+                                                                 Classes="cap" />
+                                                            <Run Text=")" />
+                                                            <LineBreak />
+                                                            <!--  Trash line  -->
+                                                            <Run Classes="bullet" />
+                                                            <Run Classes="unlimited" />
+                                                            <Run Classes="trash" />
+                                                        </TextBlock.Inlines>
+                                                    </TextBlock>
+                                                </DataTemplate>
+
+                                                <!--  UNLIMITED TEMPLATE  -->
+                                                <DataTemplate x:Key="UnlimitedTemplate"
+                                                              x:DataType="local:MpAvSubscriptionItemViewModel">
+                                                    <TextBlock Classes="sub-info"
+                                                               TextWrapping="WrapWithOverflow"
+                                                               TextAlignment="Left">
+                                                        <TextBlock.Inlines>
+                                                            <!--  Clip line  -->
+                                                            <Run Classes="bullet" />
+                                                            <Run Classes="unlimited" />
+                                                            <Run Classes="storage" />
+                                                            <LineBreak />
+                                                            <!--  Trash line  -->
+                                                            <Run Classes="bullet" />
+                                                            <Run Classes="unlimited" />
+                                                            <Run Classes="trash" />
+                                                        </TextBlock.Inlines>
+                                                    </TextBlock>
+                                                </DataTemplate>
+
+                                            </local:MpAvSubscriptionDetailTemplateSelector>
+                                        </ContentControl.DataTemplates>
+                                    </ContentControl>
 
                                     <!--  RATE  -->
-                                    <TransitioningContentControl DockPanel.Dock="Right"
+                                    <TransitioningContentControl Grid.Column="3"
                                                                  VerticalAlignment="Center"
                                                                  Content="{Binding IsMonthlyEnabled}">
                                         <TransitioningContentControl.PageTransition>
@@ -299,9 +424,10 @@
                                         </TransitioningContentControl.PageTransition>
                                         <TransitioningContentControl.ContentTemplate>
                                             <DataTemplate>
-                                                <Grid x:DataType="local:MpAvSubscriptionItemViewModel"
-                                                      DataContext="{Binding $parent[ListBoxItem].DataContext}"
-                                                      RowDefinitions="*,Auto">
+                                                <StackPanel VerticalAlignment="Center"
+                                                            x:DataType="local:MpAvSubscriptionItemViewModel"
+                                                            DataContext="{Binding $parent[ListBoxItem].DataContext}"
+                                                            Spacing="3">
                                                     <!--  RATE TEXT  -->
                                                     <TextBlock HorizontalAlignment="Left"
                                                                VerticalAlignment="Center"
@@ -309,63 +435,44 @@
                                                                TextAlignment="Right"
                                                                FontWeight="SemiBold"
                                                                FontStyle="Italic"
-                                                               FontSize="20"
-                                                               MinWidth="100"
+                                                               FontSize="16"
                                                                Text="{Binding RateText}" />
                                                     <!--  TRIAL BADGE  -->
                                                     <Border Grid.Row="1"
+                                                            Margin="0"
                                                             Classes="badge trial"
                                                             HorizontalAlignment="Right"
                                                             Padding="5,3,5,0"
                                                             IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                             Background="Crimson">
                                                         <TextBlock Foreground="White"
+                                                                   TextWrapping="WrapWithOverflow"
                                                                    Text="{Binding TrialText}" />
                                                     </Border>
-                                                </Grid>
+                                                </StackPanel>
                                             </DataTemplate>
                                         </TransitioningContentControl.ContentTemplate>
                                     </TransitioningContentControl>
-
-                                    <StackPanel Orientation="Horizontal"
-                                                Spacing="15">
-                                        <!--  ACCOUNT TYPE NAME  -->
-
-                                        <TextBlock HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Center"
-                                                   TextAlignment="Right"
-                                                   Width="120"
-                                                   FontSize="20"
-                                                   FontWeight="SemiBold"
-                                                   Text="{Binding LabelText}" />
-
-                                        <!--  ACCOUNT TYPE INFO  -->
-                                        <TextBlock HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Center"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"
-                                                   TextAlignment="Left"
-                                                   FontSize="13"
-                                                   Text="{Binding DescriptionText}" />
-
-                                    </StackPanel>
-                                </DockPanel>
-                            </Border>
+                                </Grid>
+                            </local:MpAvClipBorder>
                         </Viewbox>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <!--  BUY BUTTON  -->
+            <!--
+                BUY BUTTON
+            -->
             <Button x:Name="BuyButton"
+                    Margin="0,3,0,0"
                     Grid.Row="2"
                     Loaded="BuyButton_Loaded"
                     Classes="defaultButton"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
+                    Command="{Binding PurchaseSubscriptionCommand}"
                     IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                    Opacity="{Binding SelectedItem.CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, FallbackValue=0, TargetNullValue=0}"
-                    Command="{Binding PurchaseSubscriptionCommand}">
+                    Opacity="{Binding SelectedItem.CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, FallbackValue=0, TargetNullValue=0}">
                 <Button.RenderTransform>
                     <RotateTransform />
                 </Button.RenderTransform>

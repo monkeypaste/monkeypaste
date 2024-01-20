@@ -6,7 +6,7 @@ namespace MonkeyPaste {
     public enum MpUserAccountType {
         None = 0,
         Free,
-        Standard,
+        Basic,
         Unlimited,
     }
 
