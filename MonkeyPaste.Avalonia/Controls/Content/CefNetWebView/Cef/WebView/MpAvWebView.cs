@@ -57,13 +57,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
+#if CEFNET_WV || OUTSYS_WV
+        public void OpenDevTools() {
+#if !DEBUG
+            return;
+#endif
 #if OUTSYS_WV
-        public void OpenDevTools() =>
             ShowDeveloperTools();
-#elif CEFNET_WV
-        public void OpenDevTools() =>
+            return;
+#endif
+#if CEFNET_WV
             base.ShowDevTools();
+            return;
+#endif
+        }
 #endif
 
         #region MpAvIWebViewBindingResponseHandler Implemention
@@ -268,6 +275,13 @@ namespace MonkeyPaste.Avalonia {
             base.OnDocumentTitleChanged(e);
             DocumentTitle = e.Title;
         }
+        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
+            base.OnPointerReleased(e);
+            if (!e.IsMiddleRelease(this)) {
+                return;
+            }
+            OpenDevTools();
+        }
 
 #if CEFNET_WV
         protected override WebViewGlue CreateWebViewGlue() {
@@ -281,9 +295,11 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
-            if (e.IsMiddleDown(this)) {
-                this.ShowDevTools();
+            if (!e.IsRightPress(this) ||
+                e.KeyModifiers != KeyModifiers.Control) {
+                return;
             }
+            OpenDevTools();
         }
 
 

@@ -12,3 +12,8 @@ html[data-app-update-view] div.navbar__inner {
     /* hide search BOX (can't get to container) */
     display: none;
 }
+
+html[data-app-update-view] nav {
+    /* hide search BOX (can't get to container) */
+    display: none;
+}

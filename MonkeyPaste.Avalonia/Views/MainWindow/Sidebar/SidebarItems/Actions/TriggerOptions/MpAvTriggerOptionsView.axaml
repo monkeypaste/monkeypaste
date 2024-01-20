@@ -130,6 +130,19 @@
                     Value="{DynamicResource ThemeAccent2BgColor}" />
         </Style>
 
+        <Style Selector="Button#DeleteTriggerButton[IsEnabled=false]">
+            <Setter Property="local:MpAvShowDisabledTooltipExtension.ShowOnDisabled"
+                    Value="True" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView Classes="warning"
+                                               ToolTipText="{x:Static local:UiStrings.CommonReadOnlyElmDisabledToolTip}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <Grid ColumnDefinitions="85,Auto,85,Auto,85"
           x:DataType="local:MpAvTriggerActionViewModelBase"
@@ -183,6 +196,7 @@
 
         <Button x:Name="DeleteTriggerButton"
                 Grid.Column="4"
+                IsEnabled="{Binding CanDelete}"
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DeleteThisTriggerCommand}"
                 CommandParameter="{Binding $self}"

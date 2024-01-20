@@ -109,16 +109,22 @@
 
                 <!--  SIDEBAR SPLITTER  -->
 
-                <GridSplitter x:Name="SidebarGridSplitter"
-                              Grid.Column="1"
-                              ResizeDirection="Columns"
-                              HorizontalAlignment="Right"
-                              VerticalAlignment="Stretch"
-                              IsVisible="False"
-                              Classes.sidebarSplitter="True"
-                              Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                              Classes.vertical="{Binding !IsVerticalOrientation}"
-                              Classes.horizontal="{Binding IsVerticalOrientation}" />
+                <local:MpAvMovableGridSplitter x:Name="SidebarGridSplitter"
+                                               Grid.Column="1"
+                                               ResizeDirection="Columns"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Stretch"
+                                               IsVisible="False"
+                                               Classes.sidebarSplitter="True"
+                                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                               Classes.vertical="{Binding !IsVerticalOrientation}"
+                                               Classes.horizontal="{Binding IsVerticalOrientation}"
+                                               local:MpAvPointerCommandExtension.IsEnabled="True"
+                                               local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                               local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetSelectedSidebarSplitterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                               local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}"
+                                               local:MpAvPointerCommandExtension.RightPressCommand="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                               local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
 
                 <!--  CONTENT TRAY CONTAINER  -->
 

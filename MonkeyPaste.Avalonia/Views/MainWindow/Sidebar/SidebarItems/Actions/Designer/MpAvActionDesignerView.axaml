@@ -71,11 +71,11 @@
 
         <!--  ZOOM THUMB  -->
 
-        <Style Selector="Slider /template/ Thumb">
+        <Style Selector="Slider#DesignerZoomSlider /template/ Thumb">
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat=' {0:P}'}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat=' {0:P0}'}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -218,6 +218,7 @@
 
                     <Button x:Name="ShowDesignerWindowButton"
                             Grid.Column="4"
+                            ToolTip.Placement="Left"
                             Classes="noBg noHoverBg defaultButton outline outlineOver"
                             Command="{Binding ShowDesignerWindowCommand}"
                             IsVisible="{Binding !IsWindowOpen}">

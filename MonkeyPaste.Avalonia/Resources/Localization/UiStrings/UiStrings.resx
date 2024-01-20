@@ -1064,7 +1064,7 @@ Would you like to go do that now?</value>
     <value>Plain Text</value>
   </data>
   <data name="CommonFloatWindowLabel" xml:space="preserve">
-    <value>Float</value>
+    <value>Open in window</value>
   </data>
   <data name="LinkNavigateToolTipText" xml:space="preserve">
     <value>Control + Click to follow...</value>
@@ -2129,8 +2129,8 @@ Clipboard listening is: {0}</value>
   <data name="TriggerAnnTriggerLabel" xml:space="preserve">
     <value>Annotate Trigger</value>
   </data>
-  <data name="SearchDisabeledCriteriaTooltip" xml:space="preserve">
-    <value>Pre-Loaded Filters are read-only. Duplicate to alter.</value>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Pre-Loaded elements are read-only. Duplicate to alter.</value>
   </data>
   <data name="PluginAnonymousAuthor" xml:space="preserve">
     <value>Anonymous</value>

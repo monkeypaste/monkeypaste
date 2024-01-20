@@ -1860,17 +1860,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSize GetCurrentDefaultPinTrayRatio() {
             MpSize p_ratio = new MpSize(1, 1);
-            //double pin_tray_var_dim_ratio = 0.95;
-            //if (!IsQueryTrayEmpty) {
-            //    if (IsPinTrayEmpty) {
-            //        pin_tray_var_dim_ratio = 0.1;
-            //    } else {
-            //        pin_tray_var_dim_ratio = 0.5;
-            //    }
-            //}
-            //if (!MpAvTagTrayViewModel.Instance.IsAnyTagActive) {
-            //    pin_tray_var_dim_ratio = 0.5d;
-            //}
             double pin_tray_var_dim_ratio = 0.5;
 
             if (ListOrientation == Orientation.Vertical) {
@@ -2351,19 +2340,21 @@ namespace MonkeyPaste.Avalonia {
                     ScrollToAnchor();
                     break;
                 case MpMessageType.SelectedSidebarItemChangeBegin:
-                    SetScrollAnchor();
+                    //SetScrollAnchor();
                     break;
                 case MpMessageType.SelectedSidebarItemChangeEnd:
-                    ScrollToAnchor();
-                    break;
-                case MpMessageType.SidebarItemSizeChangeBegin:
-                    SetScrollAnchor();
-                    break;
-                case MpMessageType.SidebarItemSizeChanged:
+                    //ScrollToAnchor();
                     RefreshQueryTrayLayout();
                     break;
+                case MpMessageType.SidebarItemSizeChangeBegin:
+                    //SetScrollAnchor();
+                    break;
+                case MpMessageType.SidebarItemSizeChanged:
+                    //RefreshQueryTrayLayout();
+                    break;
                 case MpMessageType.SidebarItemSizeChangeEnd:
-                    ScrollToAnchor();
+                    //ScrollToAnchor();
+                    RefreshQueryTrayLayout();
                     break;
                 // LAYOUT CHANGE
                 case MpMessageType.PinTrayResizeBegin:

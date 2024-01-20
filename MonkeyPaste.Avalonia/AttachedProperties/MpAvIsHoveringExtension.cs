@@ -261,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
             rt.Angle = rt.Angle.Wrap(0, 360);
             //MpConsole.WriteLine($"Brush angle: {rt.Angle}");
 
-            c.Redraw();
+            c.InvalidateAll();
         }
     }
 

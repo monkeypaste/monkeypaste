@@ -128,7 +128,7 @@
         <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
@@ -374,6 +374,13 @@
                           Color="{DynamicResource ThemeInteractiveColor}"
                           BlurRadius="0"
                           Opacity="0.0" />
+
+        <DropShadowEffect x:Key="ThemeBlackDropShadow"
+                          OffsetX="1"
+                          OffsetY="1"
+                          Color="{DynamicResource ThemeBlackColor}"
+                          BlurRadius="3"
+                          Opacity="0.8" />
 
         <DropShadowEffect x:Key="ThemeDropShadow"
                           OffsetX="1"

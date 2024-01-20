@@ -1,15 +1,12 @@
 ﻿
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Linq;
-using HorizontalAlignment = Avalonia.Layout.HorizontalAlignment;
-using VerticalAlignment = Avalonia.Layout.VerticalAlignment;
 #if ANDROID
 using Android.Content;
 #endif
@@ -116,7 +113,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIHasDevTools Implementation
-        public void OpenDevTools() {
+        public virtual void OpenDevTools() {
+#if DEBUG
             if (PlatformHandle is not MpIOffscreenRenderSourceHost osrsh ||
                     osrsh.RenderSource is not MpIHaveLog hl) {
                 return;
@@ -126,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
                 title: DataContext == null ? "NULL" : DataContext.ToString(),
                 body: hl.LogText,
                 maxShowTimeMs: -1).FireAndForgetSafeAsync();
+#endif
 
         }
         #endregion

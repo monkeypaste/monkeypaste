@@ -60,6 +60,9 @@
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
+            <TabControl.Resources>
+                <Thickness x:Key="TabItemMargin">0,0,0,0</Thickness>
+            </TabControl.Resources>
 
             <!--  WHATS NEW TAB  -->
 
@@ -74,11 +77,13 @@
                                    Text="{x:Static local:UiStrings.AccountWhatsNewTabName}" />
                     </Grid>
                 </TabItem.Header>
+                <local:MpAvClipBorder CornerRadius="15">
 
-                <local:MpAvWebPageView HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch"
-                                       Background="{DynamicResource ThemeInteractiveBgColor}"
-                                       Address="{Binding CurrentUrl, Source={x:Static local:MpAvWhatsNewViewModel.Instance}}" />
+                    <local:MpAvWebPageView HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           Background="{DynamicResource ThemeInteractiveBgColor}"
+                                           Address="{Binding CurrentUrl, Source={x:Static local:MpAvWhatsNewViewModel.Instance}}" />
+                </local:MpAvClipBorder>
 
             </TabItem>
 

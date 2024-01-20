@@ -1457,8 +1457,24 @@ namespace MonkeyPaste.Avalonia {
              }, () => {
                  return !IsMainWindowLoading;
              });
+        public MpIAsyncCommand OrientWindowLeftCommand => new MpAsyncCommand(
+            async () => {
+                await CycleOrientationCommand.ExecuteAsync(MpMainWindowOrientationType.Left);
+            });
+        public MpIAsyncCommand OrientWindowRightCommand => new MpAsyncCommand(
+            async () => {
+                await CycleOrientationCommand.ExecuteAsync(MpMainWindowOrientationType.Right);
+            });
+        public MpIAsyncCommand OrientWindowTopCommand => new MpAsyncCommand(
+            async () => {
+                await CycleOrientationCommand.ExecuteAsync(MpMainWindowOrientationType.Top);
+            });
+        public MpIAsyncCommand OrientWindowBottomCommand => new MpAsyncCommand(
+            async () => {
+                await CycleOrientationCommand.ExecuteAsync(MpMainWindowOrientationType.Bottom);
+            });
 
-        public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
+        public MpIAsyncCommand<object> CycleOrientationCommand => new MpAsyncCommand<object>(
             async (dirStrOrEnumArg) => {
                 while (MpAvMainView.Instance == null) {
                     await Task.Delay(100);

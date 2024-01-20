@@ -15,11 +15,33 @@
                        DataContext="{x:Static local:MpAvSubscriptionPurchaseViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSubscriptionView">
     <local:MpAvUserControl.Resources>
+        <LinearGradientBrush x:Key="RainbowBrush_test" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="Red" />
+                <GradientStop Offset="0.14" Color="Orange" />
+                <GradientStop Offset="0.28" Color="Yellow" />
+                <GradientStop Offset="0.42" Color="Green" />
+                <GradientStop Offset="0.56" Color="Blue" />
+                <GradientStop Offset="0.7" Color="Indigo" />
+                <GradientStop Offset="0.8" Color="Violet" />
+                <GradientStop Offset="0.94" Color="Red" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+        <sys:Double x:Key="SubLbiBg_opacity">0.25</sys:Double>
+        <SolidColorBrush x:Key="SubLbiBg_hover" Color="{DynamicResource ThemeAccent1Color}" Opacity="{StaticResource SubLbiBg_opacity}" />
+        <SolidColorBrush x:Key="SubLbiBg_selected" Color="{DynamicResource ThemeWhiteColor}" Opacity="{StaticResource SubLbiBg_opacity}" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  ACCOUNT TYPE LBI  -->
         <Style Selector="ListBox#AccountTypeListBox > ListBoxItem"
                x:DataType="local:MpAvSubscriptionItemViewModel">
+            <Setter Property="local:MpAvMutableClassesExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
+                    Value="waddup" />
             <Setter Property="IsVisible"
                     Value="{Binding IsVisible}" />
             <Setter Property="Cursor"
@@ -28,11 +50,18 @@
                     Value="7" />
             <Setter Property="BorderThickness"
                     Value="0" />
+            <Setter Property="Margin"
+                    Value="10" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
             <Setter Property="Transitions">
                 <Setter.Value>
                     <Transitions>
                         <TransformOperationsTransition Property="RenderTransform"
-                                                       Duration="0:0:.075" />
+                                                       Duration="0:0:0.2" />
+                        <BrushTransition Property="Background"
+                                         Duration="0:0:0.25"
+                                         Easing="SineEaseOut" />
                     </Transitions>
                 </Setter.Value>
             </Setter>
@@ -42,6 +71,17 @@
             <Setter Property="RenderTransform"
                     Value="scale(0.98)" />
         </Style>
+
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:pointerover">
+            <Setter Property="Background"
+                    Value="{DynamicResource SubLbiBg_hover}" />
+        </Style>
+
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:selected">
+            <Setter Property="Background"
+                    Value="{DynamicResource SubLbiBg_selected}" />
+        </Style>
+
 
         <!--  OUTER BORDER  -->
         <Style Selector="Border#OuterBorder">
@@ -54,9 +94,11 @@
         <Style Selector="Border#OuterBorder.unlimited">
             <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
                     Value="True" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource RainbowBrush_test}" />
         </Style>
 
-        <Style Selector="ListBoxItem:pointerover:not(:selected) Border#OuterBorder">
+        <!--<Style Selector="ListBoxItem:pointerover:not(:selected) Border#OuterBorder">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
@@ -71,10 +113,12 @@
                     Value="{DynamicResource ThemeAccent3Color}" />
         </Style>
 
-        <Style Selector="ListBoxItem:not(:selected) Border#OuterBorder.unlimited">
+        <Style Selector="Border#OuterBorder.unlimited">
+            <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
+                    Value="True" />
             <Setter Property="BorderBrush"
-                    Value="{StaticResource RainbowBrush}" />
-        </Style>
+                    Value="{StaticResource RainbowBrush_test}" />
+        </Style>-->
 
         <!--  ICON BORDER  -->
         <Style Selector="ListBox#AccountTypeListBox > ListBoxItem Border.acctIcon">
@@ -165,6 +209,7 @@
             <!--  ACCT MONTLY TOGGLE  -->
             <ToggleSwitch x:Name="MonthlyToggleButton"
                           Grid.Row="0"
+                          Margin="0,0,0,10"
                           Classes="defaultButton"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
@@ -194,7 +239,8 @@
                     <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
-                    <Thickness x:Key="ListBoxItemPadding">0,1,5,10</Thickness>
+                    <!--<Thickness x:Key="ListBoxItemPadding">0,1,5,10</Thickness>-->
+                    <Thickness x:Key="ListBoxItemPadding">0,0,0,0</Thickness>
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -202,6 +248,7 @@
                                  ClipToBounds="False">
                             <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
                             <Border x:Name="OuterBorder"
+                                    Effect="{DynamicResource ThemeBlackDropShadow}"
                                     Height="85"
                                     Padding="10,0,10,0"
                                     Classes.pulse="{Binding DoFocusPulse}"

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
@@ -235,6 +236,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         #endregion
 
         #region Commands
@@ -297,6 +299,19 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
+        public ICommand ResetSelectedSidebarSplitterCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not MpAvMovableGridSplitter mgs) {
+                    return;
+                }
+
+                var mwvm = MpAvMainWindowViewModel.Instance;
+                double dw = mwvm.IsHorizontalOrientation ?
+                    SelectedItem.DefaultSidebarWidth - SelectedItem.SidebarWidth : 0;
+                double dh = mwvm.IsHorizontalOrientation ?
+                    0 : SelectedItem.DefaultSidebarHeight - SelectedItem.SidebarHeight;
+                mgs.ApplyDelta(new Vector(dw, dh));
+            });
 
         #endregion
     }

@@ -418,6 +418,22 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.ResetSelectionZoom,
                             MpAvApplicationCommand.Instance.ResetSelectionZoomCommand
                         },
+                        {
+                            MpShortcutType.OrientMainWindowLeft,
+                            MpAvMainWindowViewModel.Instance.OrientWindowLeftCommand
+                        },
+                        {
+                            MpShortcutType.OrientMainWindowRight,
+                            MpAvMainWindowViewModel.Instance.OrientWindowRightCommand
+                        },
+                        {
+                            MpShortcutType.OrientMainWindowTop,
+                            MpAvMainWindowViewModel.Instance.OrientWindowTopCommand
+                        },
+                        {
+                            MpShortcutType.OrientMainWindowBottom,
+                            MpAvMainWindowViewModel.Instance.OrientWindowBottomCommand
+                        },
                     };
                 }
                 return _appCommandLookup;

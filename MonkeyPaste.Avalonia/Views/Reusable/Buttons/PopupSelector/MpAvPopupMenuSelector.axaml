@@ -87,11 +87,10 @@
                     Classes="popupCaret iconButton"
                     BorderThickness="1"
                     VerticalAlignment="Center"
-                    CornerRadius="10"
+                    CornerRadius="{Binding $parent[Button].CornerRadius}"
                     Margin="0,0,0,0"
                     Cursor="Hand"
-                    Height="25"
-                    Width="25">
+                    Padding="5">
                 <PathIcon Foreground="White"
                           Width="15"
                           Height="15"

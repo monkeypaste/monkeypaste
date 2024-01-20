@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public string DisabledInputTooltip =>
-            CanAlter ? string.Empty : UiStrings.SearchDisabeledCriteriaTooltip;
+            CanAlter ? string.Empty : UiStrings.CommonReadOnlyElmDisabledToolTip;
         public bool IsAnyDragging =>
             Items.Any(x => x.IsDragging);
         public bool IsCriteriaWindowOpen { get; set; }

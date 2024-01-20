@@ -2509,6 +2509,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Orient Main Window Bottom.
+        /// </summary>
+        public static string MpShortcutType_OrientMainWindowBottom {
+            get {
+                return ResourceManager.GetString("MpShortcutType_OrientMainWindowBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orient Main Window Left.
+        /// </summary>
+        public static string MpShortcutType_OrientMainWindowLeft {
+            get {
+                return ResourceManager.GetString("MpShortcutType_OrientMainWindowLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orient Main Window Right.
+        /// </summary>
+        public static string MpShortcutType_OrientMainWindowRight {
+            get {
+                return ResourceManager.GetString("MpShortcutType_OrientMainWindowRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orient Main Window Top.
+        /// </summary>
+        public static string MpShortcutType_OrientMainWindowTop {
+            get {
+                return ResourceManager.GetString("MpShortcutType_OrientMainWindowTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste Copy Item.
         /// </summary>
         public static string MpShortcutType_PasteCopyItem {

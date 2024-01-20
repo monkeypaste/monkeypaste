@@ -2479,7 +2479,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Float.
+        ///   Looks up a localized string similar to Open in window.
         /// </summary>
         public static string CommonFloatWindowLabel {
             get {
@@ -2619,6 +2619,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonReadLabel {
             get {
                 return ResourceManager.GetString("CommonReadLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre-Loaded elements are read-only. Duplicate to alter..
+        /// </summary>
+        public static string CommonReadOnlyElmDisabledToolTip {
+            get {
+                return ResourceManager.GetString("CommonReadOnlyElmDisabledToolTip", resourceCulture);
             }
         }
         
@@ -5492,15 +5501,6 @@ namespace MonkeyPaste.Avalonia {
         public static string SearchCustomJoinHeaderLabel {
             get {
                 return ResourceManager.GetString("SearchCustomJoinHeaderLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pre-Loaded Filters are read-only. Duplicate to alter..
-        /// </summary>
-        public static string SearchDisabeledCriteriaTooltip {
-            get {
-                return ResourceManager.GetString("SearchDisabeledCriteriaTooltip", resourceCulture);
             }
         }
         

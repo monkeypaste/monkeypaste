@@ -51,10 +51,10 @@ namespace MonkeyPaste.Avalonia {
                             new string[] {"e22faafd-4313-441a-b361-16910fc7e9d3","Control+D", MpShortcutType.Duplicate.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","Home", MpShortcutType.ScrollToHome.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","End", MpShortcutType.ScrollToEnd.ToString(), MpRoutingType.Internal.ToString()},
-                            new string[] {"9b0ca09a-5724-4004-98d2-f5ef8ae02055","Control+Up", MpShortcutType.WindowSizeUp.ToString(), MpRoutingType.Internal.ToString()},
-                            new string[] {"39a6194e-37e3-4d37-a9f4-254ed83157f2","Control+Down", MpShortcutType.WindowSizeDown.ToString(), MpRoutingType.Internal.ToString()},
-                            new string[] {"6cc03ef0-3b33-4b94-9191-0d751e6b7fb6","Control+Left", MpShortcutType.WindowSizeLeft.ToString(), MpRoutingType.Internal.ToString()},
-                            new string[] {"c4ac1629-cdf0-4075-94af-8f934b014452","Control+Right", MpShortcutType.WindowSizeRight.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] {"9b0ca09a-5724-4004-98d2-f5ef8ae02055","Control+Shift+Up", MpShortcutType.WindowSizeUp.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] {"39a6194e-37e3-4d37-a9f4-254ed83157f2", "Control+Shift+Down", MpShortcutType.WindowSizeDown.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] {"6cc03ef0-3b33-4b94-9191-0d751e6b7fb6", "Control+Shift+Left", MpShortcutType.WindowSizeLeft.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] {"c4ac1629-cdf0-4075-94af-8f934b014452", "Control+Shift+Right", MpShortcutType.WindowSizeRight.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"30c813a0-d466-4ae7-b75e-82680b4542fc","PageUp", MpShortcutType.PreviousPage.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"09df97ea-f786-48d9-9112-a60266df6586","PageDown", MpShortcutType.NextPage.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] {"a39ac0cb-41e4-47b5-b963-70e388dc156a","Control+H", MpShortcutType.FindAndReplaceSelectedItem.ToString(), MpRoutingType.Internal.ToString()},
@@ -72,6 +72,10 @@ namespace MonkeyPaste.Avalonia {
                             new string[] { "3fe88feb-10a4-4634-abd7-7fa1cec13924", "Control+=", MpShortcutType.ZoomInOnSelection.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "25c56dfa-2564-4dc1-85b4-16a658f4c8f2", "Control+-", MpShortcutType.ZoomOutOnSelection.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "384f3883-680c-4d2b-bd95-d2ed029ddc3d", "Control+0", MpShortcutType.ResetSelectionZoom.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "e4068ad7-e494-4c93-b850-a4296dfd4fb4", "Control+Down", MpShortcutType.OrientMainWindowBottom.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "cb53db09-d19d-41d1-96bb-1e74606516b4", "Control+Up", MpShortcutType.OrientMainWindowTop.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "73a4cfff-8cf9-456a-9e91-06c61bb160e2", "Control+Left", MpShortcutType.OrientMainWindowLeft.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "3df9acbe-1acf-4d1b-ba36-936369b1936f", "Control+Right", MpShortcutType.OrientMainWindowRight.ToString(), MpRoutingType.Internal.ToString()},
                     };
                 }
                 return _defaultShortcutDefinitions;
