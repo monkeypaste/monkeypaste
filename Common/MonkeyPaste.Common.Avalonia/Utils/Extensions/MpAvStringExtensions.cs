@@ -1,4 +1,5 @@
 ﻿using System;
+
 #if WINDOWS
 
 using MonkeyPaste.Common.Wpf;

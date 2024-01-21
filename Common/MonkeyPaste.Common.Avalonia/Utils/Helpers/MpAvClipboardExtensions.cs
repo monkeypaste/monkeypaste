@@ -92,16 +92,18 @@ namespace MonkeyPaste.Common.Avalonia {
             //    return result;
             //}
             try {
-                object result = await cb.GetDataAsync(format);
+                object result = await cb.GetDataAsync(format).TimeoutAfter(TimeSpan.FromSeconds(1));
                 CloseClipboard();
                 return result;
             }
             catch (SerializationException ex) {
                 MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
+                CloseClipboard();
                 return null;
             }
             catch (COMException) {
                 if (retryCount <= 0) {
+                    CloseClipboard();
                     return null;
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
@@ -110,6 +112,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             catch (AccessViolationException avex) {
                 MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", avex);
+                CloseClipboard();
                 return null;
             }
         }

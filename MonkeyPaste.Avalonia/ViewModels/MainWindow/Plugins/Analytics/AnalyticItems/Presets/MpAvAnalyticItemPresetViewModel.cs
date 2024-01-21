@@ -216,7 +216,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
+        public string DataGridPresetExecuteToolTip {
+            get {
+                if (string.IsNullOrEmpty(Parent.CannotExecuteTooltip)) {
+                    return UiStrings.CommonAnalyzeButtonLabel;
+                }
+                return Parent.CannotExecuteTooltip;
+            }
+        }
         //public string ResetOrDeleteLabel => $"{(CanDelete ? "Delete" : "Reset")} '{LabelText}'";
         #endregion
 
@@ -224,7 +231,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyBusy =>
             Items.Any(x => x.IsAnyBusy) || IsBusy;
-
+        public bool CanDataGridPresetExecute =>
+            Parent != null && Parent.CanAnalyzerExecute;
         public bool IsExecuting { get; set; }
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?

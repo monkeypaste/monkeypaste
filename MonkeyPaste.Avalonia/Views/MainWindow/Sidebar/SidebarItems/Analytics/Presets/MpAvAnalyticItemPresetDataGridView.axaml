@@ -66,6 +66,21 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--  EXECUTE BUTTON  -->
+
+        <Style Selector="Button#ExecutePresetButton Image">
+            <Setter Property="IsEnabled"
+                    Value="False" />
+            <Setter Property="Source"
+                    Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}" />
+        </Style>
+        <Style Selector="Button#ExecutePresetButton.canexecute Image">
+            <Setter Property="IsEnabled"
+                    Value="True" />
+            <Setter Property="Source"
+                    Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
+        </Style>
+
         <!--  RESET/DELETE BUTTON  -->
 
         <Style Selector="Button#ResetOrDeleteButton:not(.canDelete) Image"
@@ -148,16 +163,17 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
 
                                 <Grid ClipToBounds="True"
+                                      Background="{StaticResource HitTestableTransparent}"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch">
+
                                     <local:MpAvMarqueeTextBox local:MpAvIsFocusedExtension.IsEnabled="True"
                                                               local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
-                                                              AutoMarquee="{Binding IsSelected}"
                                                               MinHeight="20"
                                                               FontSize="14"
                                                               EditOnFocus="False"
-                                                              DropShadowBrush="Transparent"
-                                                              ReadOnlyForeground="Black"
+                                                              DropShadowBrush="{StaticResource HitTestableTransparent}"
+                                                              ReadOnlyForeground="{DynamicResource ThemeBlackColor}"
                                                               IsReadOnly="{Binding IsLabelReadOnly, Mode=TwoWay}"
                                                               VerticalAlignment="Center"
                                                               HorizontalAlignment="Stretch"
@@ -283,34 +299,18 @@
                                             Header="Analyze">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                <Button Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        IsEnabled="{Binding !Parent.IsBusy}"
+                                <Button x:Name="ExecutePresetButton"
+                                        Classes="defaultButton noBg noHoverBg outlineOver square"
+                                        Classes.canexecute="{Binding CanDataGridPresetExecute}"
                                         local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="True"
                                         Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
+                                    <ToolTip.Tip>
+                                        <local:MpAvToolTipView ToolTipText="{Binding DataGridPresetExecuteToolTip}"
+                                                               Classes.warning="{Binding !CanDataGridPresetExecute}" />
+                                    </ToolTip.Tip>
                                     <Grid>
-                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}">
-                                            <Image.IsVisible>
-                                                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="!Parent.CanAnalyzerExecute" />
-                                                    <Binding Path="!Parent.IsBusy" />
-                                                </MultiBinding>
-                                            </Image.IsVisible>
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="{Binding Parent.CannotExecuteTooltip}" />
-                                            </ToolTip.Tip>
-                                        </Image>
-                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}">
-                                            <Image.IsVisible>
-                                                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="Parent.CanAnalyzerExecute" />
-                                                    <Binding Path="!Parent.IsBusy" />
-                                                </MultiBinding>
-                                            </Image.IsVisible>
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
-                                            </ToolTip.Tip>
-                                        </Image>
-                                        <local:MpAvBusySpinnerView IsVisible="{Binding Parent.IsBusy}"
+                                        <Image IsVisible="{Binding !IsExecuting}" />
+                                        <local:MpAvBusySpinnerView IsVisible="{Binding IsExecuting}"
                                                                    HorizontalAlignment="Stretch"
                                                                    VerticalAlignment="Stretch" />
                                     </Grid>
@@ -327,22 +327,13 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="DuplicateButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        IsEnabled="{Binding !Parent.IsBusy}"
                                         Command="{Binding DuplicateThisPresetCommand}">
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDuplicateLabel}" />
                                     </ToolTip.Tip>
-                                    <Grid DataContext="{Binding Parent}"
-                                          x:DataType="local:MpAvAnalyticItemViewModel">
-                                        <Image IsVisible="{Binding !IsBusy}"
-                                               Width="25"
-                                               Height="25"
-                                               Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource SheepImage}}" />
-                                        <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
-                                                                   VerticalAlignment="Stretch"
-                                                                   IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}" />
-                                    </Grid>
-
+                                    <Image Width="25"
+                                           Height="25"
+                                           Source="{Binding Source={StaticResource SheepImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -357,7 +348,7 @@
                                 <!--  NOTE cmd parameter set to req format in trans style, null in sidebar  -->
                                 <Button x:Name="ResetOrDeleteButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        IsEnabled="{Binding !Parent.IsBusy}"
+                                        IsEnabled="{Binding !IsExecuting}"
                                         Command="{Binding ResetOrDeleteThisPresetCommand}">
                                     <Classes.canDelete>
                                         <MultiBinding Converter="{x:Static BoolConverters.And}">

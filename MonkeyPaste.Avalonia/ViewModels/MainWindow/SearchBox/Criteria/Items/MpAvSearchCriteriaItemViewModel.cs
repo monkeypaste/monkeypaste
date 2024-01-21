@@ -484,39 +484,6 @@ namespace MonkeyPaste.Avalonia {
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
         }
 
-        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentTypeSpecificOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
-            // PATH: /Root/Content/TypeSpecific
-
-            var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpContentTypeOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
-
-            for (int i = 0; i < labels.Length; i++) {
-                var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
-                ovm.Label = labels[i];
-                switch ((MpContentTypeOptionType)i) {
-                    case MpContentTypeOptionType.Text:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                        ovm.FilterValue = MpContentQueryBitFlags.TextType;
-                        ovm.ItemsOptionType = typeof(MpTextOptionType);
-                        ovm.Items = GetTextOptionViewModel(ovm);
-                        break;
-                    case MpContentTypeOptionType.Image:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                        ovm.FilterValue = MpContentQueryBitFlags.ImageType;
-                        ovm.ItemsOptionType = typeof(MpImageOptionType);
-                        ovm.Items = GetImageContentOptionViewModel(ovm);
-                        break;
-                    case MpContentTypeOptionType.Files:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                        ovm.FilterValue = MpContentQueryBitFlags.FileType;
-                        ovm.ItemsOptionType = typeof(MpFileContentOptionType);
-                        ovm.Items = GetFileContentOptionViewModel(ovm);
-                        break;
-                }
-                iovml.Add(ovm);
-            }
-            return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
-        }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
             // PATH: /Root/Content
@@ -532,16 +499,30 @@ namespace MonkeyPaste.Avalonia {
                         ovm.ItemsOptionType = typeof(MpContentTypeOptionType);
                         ovm.Items = GetContentTypeOptionViewModel(ovm);
                         break;
-                    case MpContentOptionType.Content:
+
+                    case MpContentOptionType.Text:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.TextType;
+                        ovm.ItemsOptionType = typeof(MpTextOptionType);
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                    case MpContentOptionType.Images:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.ImageType;
+                        ovm.ItemsOptionType = typeof(MpImageOptionType);
+                        ovm.Items = GetImageContentOptionViewModel(ovm);
+                        break;
+                    case MpContentOptionType.Files:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.FileType;
+                        ovm.ItemsOptionType = typeof(MpFileContentOptionType);
+                        ovm.Items = GetFileContentOptionViewModel(ovm);
+                        break;
+                    case MpContentOptionType.AnyContent:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.Content;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);
-                        break;
-                    case MpContentOptionType.TypeSpecific:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                        ovm.ItemsOptionType = typeof(MpContentTypeOptionType);
-                        ovm.Items = GetContentTypeSpecificOptionViewModel(ovm);
                         break;
                     case MpContentOptionType.Title:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;

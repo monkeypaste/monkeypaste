@@ -1,22 +1,13 @@
 ﻿using Avalonia.Input;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
-
-
-#if WINDOWS
-using MonkeyPaste.Common.Wpf;
-using static MonkeyPaste.Common.Avalonia.MpAvDataObjectPInvokes;
-
-#endif
 
 namespace MonkeyPaste.Common.Avalonia {
-
     public class MpAvDataObject : MpPortableDataObject, IDataObject {
         #region Statics       
 
@@ -36,6 +27,25 @@ namespace MonkeyPaste.Common.Avalonia {
             return mpdo;
         }
         #endregion
+
+        #region Interfaces
+
+        #region Avalonia.Input.IDataObject Implementation
+
+        IEnumerable<string> IDataObject.GetDataFormats() {
+            return DataFormatLookup.Select(x => x.Key);
+        }
+
+        bool IDataObject.Contains(string dataFormat) {
+            return ContainsData(dataFormat);
+        }
+        object IDataObject.Get(string dataFormat) {
+            return GetData(dataFormat);
+        }
+
+        #endregion
+        #endregion
+
         public MpAvDataObject() : base() { }
         public MpAvDataObject(string format, object data) : base(format, data) { }
         public MpAvDataObject(Dictionary<string, object> items) : base(items) { }
@@ -188,105 +198,6 @@ namespace MonkeyPaste.Common.Avalonia {
             // TODO should add unicode, oem, etc. here for greater compatibility
             await Task.Delay(1);
         }
-
-
-        // private  uint CF_BITMAP = 0;
-#pragma warning disable CA1416 // Validate platform compatibility
-        public void SetBitmap(byte[] bytes) {
-            if (!OperatingSystem.IsWindows()) {
-                return;
-            }
-#if WINDOWS
-            //if(CF_BITMAP == 0) {
-            //    CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
-            //}
-
-            //if (bitmap == null)
-            //    throw new ArgumentNullException(nameof(bitmap));
-
-            //// Convert from Avalonia Bitmap to System Bitmap
-            //var memoryStream = new MemoryStream(1000000);
-            //bitmap.Save(memoryStream); // this returns a png from Skia (we could save/load it from the system bitmap to convert it to a bmp first, but this seems to work well already)
-
-            var systemBitmap = new System.Drawing.Bitmap(new MemoryStream(bytes));
-            //var systemBitmap = MpWpfClipoardImageHelper.GetSysDrawingBitmap(bytes);
-
-            var hBitmap = systemBitmap.GetHbitmap();
-
-            var screenDC = GetDC(IntPtr.Zero);
-
-            var sourceDC = CreateCompatibleDC(screenDC);
-            var sourceBitmapSelection = SelectObject(sourceDC, hBitmap);
-
-            var destDC = CreateCompatibleDC(screenDC);
-            var compatibleBitmap = CreateCompatibleBitmap(screenDC, systemBitmap.Width, systemBitmap.Height);
-
-            var destinationBitmapSelection = SelectObject(destDC, compatibleBitmap);
-
-            BitBlt(
-                destDC,
-                0,
-                0,
-                systemBitmap.Width,
-                systemBitmap.Height,
-                sourceDC,
-                0,
-                0,
-                0x00CC0020); // SRCCOPY
-
-            try {
-                //WinApi.OpenClipboard(IntPtr.Zero);
-                //WinApi.EmptyClipboard();
-
-                //IntPtr result = SetClipboardData(CF_BITMAP, compatibleBitmap);
-
-                //if (result == IntPtr.Zero) {
-                //    int errno = Marshal.GetLastWin32Error();
-                //}
-
-                SetData(MpPortableDataFormats.WinBitmap, compatibleBitmap);
-            }
-            catch (Exception) {
-
-            }
-            finally {
-                WinApi.CloseClipboard();
-            }
-#endif
-        }
-#pragma warning restore CA1416 // Validate platform compatibility
-
-
-
-        #region Avalonia.Input.IDataObject Implementation
-
-        IEnumerable<string> IDataObject.GetDataFormats() {
-            return DataFormatLookup.Select(x => x.Key);
-        }
-
-        bool IDataObject.Contains(string dataFormat) {
-            return ContainsData(dataFormat);
-        }
-
-        //string IDataObject.GetText() {
-        //    return GetData(MpPortableDataFormats.Text) as string;
-        //}
-
-        //IEnumerable<string> IDataObject.GetFileNames() {
-
-        //    if (GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> files) {
-        //        return files;
-        //    }
-
-        //    return null;
-        //}
-
-        object IDataObject.Get(string dataFormat) {
-            return GetData(dataFormat);
-        }
-
-        #endregion
-
     }
 
     internal static partial class MpAvDataObjectPInvokes {

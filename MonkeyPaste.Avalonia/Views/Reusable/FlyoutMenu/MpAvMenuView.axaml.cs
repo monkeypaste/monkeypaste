@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void Init() {
-            // first context menu open is a lil slow, i 'think' doing this makes it a lil faster :/ 
+            // first context menu open is a lil slow, i 'think' doing this makes it a lil faster :/opy 
             _cm = new MpAvMenuView();
         }
         public static void CloseMenu() {

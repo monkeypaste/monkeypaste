@@ -1131,11 +1131,17 @@
   <data name="MpContentOptionType_Type" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="MpContentOptionType_Content" xml:space="preserve">
-    <value>Content</value>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>Text</value>
   </data>
-  <data name="MpContentOptionType_TypeSpecific" xml:space="preserve">
-    <value>Type Specific</value>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>Any Content</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
     <value>Title</value>

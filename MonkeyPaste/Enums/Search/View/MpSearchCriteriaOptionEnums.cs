@@ -23,8 +23,10 @@ namespace MonkeyPaste {
     public enum MpContentOptionType {
         None = 0,
         Type,
-        Content,
-        TypeSpecific,
+        Text,
+        Images,
+        Files,
+        AnyContent,
         Title,
         Annotation,
         Color

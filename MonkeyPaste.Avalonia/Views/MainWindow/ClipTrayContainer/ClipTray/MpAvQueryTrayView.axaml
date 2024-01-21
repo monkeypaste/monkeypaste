@@ -180,7 +180,7 @@
         <Border x:Name="QueryTrayEmptyContainer"
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
+                VerticalAlignment="Center"
                 IsHitTestVisible="False"
                 Background="Transparent">
             <Border.IsVisible>

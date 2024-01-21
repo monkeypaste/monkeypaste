@@ -25,15 +25,21 @@
                     Value="SemiBold" />
         </Style>
 
-        <Style Selector="TextBox.colorTextBox">
+        <Style Selector="TextBox.valid.colorTextBox:not(:empty)">
             <Setter Property="Foreground"
                     Value="{Binding Value, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}" />
         </Style>
 
-        <Style Selector="TextBox.colorTextBox /template/ Border#PART_BorderElement"
+        <Style Selector="TextBox.valid.colorTextBox:not(:empty) /template/ Border#PART_BorderElement"
                x:DataType="local:MpAvSearchCriteriaOptionViewModel">
             <Setter Property="Background"
                     Value="{Binding Value, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}, ConverterParameter=#FFFFFF}" />
+
+        </Style>
+
+        <Style Selector="TextBox.invalid">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
 
         </Style>
     </local:MpAvUserControl.Styles>
@@ -104,6 +110,7 @@
                                  Watermark="{Binding Label, StringFormat='\{0\}...'}"
                                  Classes="alterOnly dnd"
                                  Classes.valid="{Binding IsValid}"
+                                 Classes.invalid="{Binding !IsValid}"
                                  Classes.colorTextBox="{Binding IsColorOption}"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.DelayMs="500"
@@ -178,7 +185,6 @@
                         <local:MpAvSliderParameterView Width="100"
                                                        Height="30"
                                                        Classes="alterOnly"
-                                                       Background="Silver"
                                                        HasTextInput="False"
                                                        IsSliding="{Binding IsValueChanging, Mode=TwoWay}" />
                     </DockPanel>

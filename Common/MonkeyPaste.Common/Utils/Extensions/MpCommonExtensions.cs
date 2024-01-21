@@ -25,6 +25,9 @@ namespace MonkeyPaste.Common {
         #region Collections
         public static void AddDisposable(this IDisposable disp, IList<IDisposable> list) {
             if (disp == null || list == null) {
+                if (list == null) {
+                    MpDebug.Break($"List should exist");
+                }
                 return;
             }
             list.Add(disp);
@@ -528,8 +531,8 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Data
-        public static bool HasValue(this double value) {
-            return !Double.IsNaN(value) && !Double.IsInfinity(value);
+        public static bool HasValue(this double value, bool is_zero_value = true) {
+            return !Double.IsNaN(value) && !Double.IsInfinity(value) && (is_zero_value ? true : value != 0);
         }
 
         public static int ByteCount(this object obj) {

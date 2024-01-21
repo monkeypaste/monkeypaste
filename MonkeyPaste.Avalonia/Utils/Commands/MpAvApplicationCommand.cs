@@ -247,6 +247,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DecreaseFocusCommand => new MpCommand(
             () => {
+                if (MpAvDoDragDropWrapper.IsAnyDragging) {
+                    return;
+                }
                 if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
                     MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(MpMainWindowHideType.Force);
                     return;

@@ -598,6 +598,9 @@ namespace MonkeyPaste.Avalonia {
                     // hacky way to refresh execute button for some cases...
                     UpdateCanExecute();
                     break;
+                case nameof(CanAnalyzerExecute):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanDataGridPresetExecute)));
+                    break;
             }
         }
         private void UpdatePresetSortOrder(bool fromModel = false) {
@@ -722,7 +725,7 @@ namespace MonkeyPaste.Avalonia {
                 string accept_text =
                     string.Format(
                         UiStrings.AnalyzerCannotExecuteMessage,
-                        exec_aipvm,
+                        exec_aipvm.Label,
                         string.Join(",", InputFormatFlags.All().Select(x => x.EnumToUiString())));
                 sb.AppendLine(accept_text);
             }
@@ -811,7 +814,6 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetPresetCommand => new MpAsyncCommand<object>(
             async (presetVmArg) => {
-                MpConsole.WriteLine("Resetting...");
                 IsBusy = true;
 
                 MpAvAnalyticItemPresetViewModel aipvm = null;

@@ -1,9 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -24,15 +28,20 @@ namespace MonkeyPaste.Avalonia {
             //var sv = this.FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
             //sv.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
 
-            InitDragDrop();
         }
 
+        protected override void OnLoaded(RoutedEventArgs e) {
+            base.OnLoaded(e);
+            InitDragDrop();
+        }
         #region Drag Drop
+
         private void InitDragDrop() {
             var clb = this.FindControl<ListBox>("SearchCriteriaListBox");
             clb.EnableItemsControlAutoScroll();
 
             DragDrop.SetAllowDrop(clb, true);
+
             clb.AddHandler(DragDrop.DragEnterEvent, SearchCriteriaListBox_DragEnter);
             clb.AddHandler(DragDrop.DragOverEvent, SearchCriteriaListBox_DragOver);
             clb.AddHandler(DragDrop.DragLeaveEvent, SearchCriteriaListBox_DragLeave);
@@ -41,7 +50,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void SearchCriteriaListBox_DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"Drag Enter");
-
+            SearchCriteriaListBox_DragOver(sender, e);
+        }
+        private void SearchCriteriaListBox_DragLeave(object sender, DragEventArgs e) {
+            MpConsole.WriteLine($"Drag Leave");
+            ResetDragOvers();
         }
         private void SearchCriteriaListBox_DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"Drag Over");
@@ -94,10 +107,6 @@ namespace MonkeyPaste.Avalonia {
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = false);
             }
         }
-        private void SearchCriteriaListBox_DragLeave(object sender, DragEventArgs e) {
-            MpConsole.WriteLine($"Drag Leave");
-            ResetDragOvers();
-        }
         private async void SearchCriteriaListBox_Drop(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"Drag Drop");
 
@@ -114,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
             }
             int drag_idx = drag_vm.SortOrderIdx;
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
-            var resorted_items = scicvm.SortedItems.ToList();
+            var resorted_items = new ObservableCollection<MpAvSearchCriteriaItemViewModel>(scicvm.SortedItems);
 
             if (is_copy) {
                 var clone_sci = await drag_vm.SearchCriteriaItem.CloneDbModelAsync();
@@ -133,28 +142,40 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.Items.Add(clone_scivm);
                 resorted_items.Insert(drop_idx, clone_scivm);
             } else {
-
+                int drop_idx = -1;
                 var drag_over_top_item = scicvm.Items.FirstOrDefault(x => x.IsDragOverTop);
                 if (drag_over_top_item != null) {
-                    resorted_items.Move(drag_idx, drag_over_top_item.SortOrderIdx);
+                    drop_idx = drag_over_top_item.SortOrderIdx;
+                    if (drop_idx > drag_idx) {
+                        // adj for existing item
+                        drop_idx = Math.Max(0, drop_idx - 1);
+                    }
                 } else {
                     //tail drop
                     var drag_over_bottom_item = scicvm.Items.FirstOrDefault(x => x.IsDragOverBottom);
                     if (drag_over_bottom_item != null) {
-                        resorted_items.Move(drag_idx, drag_over_bottom_item.SortOrderIdx);
+                        drop_idx = drag_over_bottom_item.SortOrderIdx;
                     } else {
                         // flag no drop
                         resorted_items = null;
                     }
                 }
-
+                if (drop_idx >= 0) {
+                    resorted_items.Move(drag_idx, drop_idx);
+                }
             }
+            ResetDragOvers();
             if (resorted_items != null) {
                 resorted_items.ForEach((x, idx) => x.SortOrderIdx = idx);
                 scicvm.OnPropertyChanged(nameof(scicvm.SortedItems));
+                Dispatcher.UIThread.Post(async () => {
+                    await scicvm.SaveQueryCommand.ExecuteAsync();
+                    if (scicvm.IsSavedQuery) {
+                        await scicvm.InitializeAsync(scicvm.QueryTagId, false);
+                    }
+                });
             }
 
-            ResetDragOvers();
         }
 
         #region Dnd Helpers

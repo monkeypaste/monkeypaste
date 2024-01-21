@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvMarqueeTextBox : TextBox, MpIOverrideRender, MpITextDocumentContainer {
 
         #region Private Variables
+        private bool _isAnimating = false;
         private bool _unloaded;
         private FormattedText _ft;
         private MpSize _ftSize;
@@ -252,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region TailPadding AvaloniaProperty
 
-        private double _tailPadding = 30.0d;
+        private double _tailPadding = 15.0d;
         public double TailPadding {
             get => _tailPadding;
             set => SetAndRaise(TailPaddingProperty, ref _tailPadding, value);
@@ -264,13 +265,13 @@ namespace MonkeyPaste.Avalonia {
                 nameof(TailPadding),
                 o => o.TailPadding,
                 (o, v) => o.TailPadding = v,
-                30.0d
+                15.0d
             );
         #endregion
 
         #region MaxVelocity AvaloniaProperty
 
-        private double _maxVelocity = -1.5d;
+        private double _maxVelocity = -1.0d;
         public double MaxVelocity {
             get => _maxVelocity;
             set => SetAndRaise(MaxVelocityProperty, ref _maxVelocity, value);
@@ -282,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(MaxVelocity),
                 o => o.MaxVelocity,
                 (o, v) => o.MaxVelocity = v,
-                -1.5
+                -1.0
             );
 
         #endregion
@@ -664,6 +665,22 @@ namespace MonkeyPaste.Avalonia {
             _tb_mp = e.GetClientMousePoint(this);
             AnimateAsync().FireAndForgetSafeAsync();
         }
+        protected override void OnPointerExited(PointerEventArgs e) {
+            base.OnPointerExited(e);
+            this.Cursor = new Cursor(StandardCursorType.Arrow);
+            if (NavigateUriCommand != null && IsReadOnly) {
+                this.Redraw();
+            }
+            Dispatcher.UIThread.Post(async () => {
+                // BUG somehow when the img is wrapping it thinks it exits
+                // so waiting for it to reenter or if actually did exit then trigger 
+                // reset
+                await Task.Delay(1_000);
+                if (!this.IsPointerOver) {
+                    _tb_mp = null;
+                }
+            });
+        }
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
 
@@ -704,14 +721,6 @@ namespace MonkeyPaste.Avalonia {
                     svm.IsSelected = true;
                 }
             }
-        }
-        protected override void OnPointerExited(PointerEventArgs e) {
-            base.OnPointerExited(e);
-            this.Cursor = new Cursor(StandardCursorType.Arrow);
-            if (NavigateUriCommand != null && IsReadOnly) {
-                this.Redraw();
-            }
-            _tb_mp = null;
         }
 
         protected override void OnPointerMoved(PointerEventArgs e) {
@@ -827,7 +836,7 @@ namespace MonkeyPaste.Avalonia {
             _bmpSize = GetScaledTextSize(out _ftSize);
             _offsetX1 = 0;
             if (CanMarquee()) {
-                _offsetX2 = _bmpSize.Width + TailPadding;
+                _offsetX2 = _ftSize.Width + TailPadding;
             } else {
                 _offsetX2 = 0;
             }
@@ -1023,10 +1032,14 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task AnimateAsync() {
+            if (_isAnimating) {
+                return;
+            }
+            _isAnimating = true;
             while (true) {
 
                 if (!CanMarquee()) {
-                    return;
+                    break;
                 }
 
                 //double bmp_width = _marqueeBitmap.Size.Width;
@@ -1041,7 +1054,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (AutoMarquee) {
                     if (_tb_mp != null) {
-                        AutoMarquee = false;
+                        //AutoMarquee = false;
                     } else {
                         velMultiplier = 1.0d;
                         isReseting = false;
@@ -1088,7 +1101,7 @@ namespace MonkeyPaste.Avalonia {
 
                         _curLoopWaitMs = 0;
                         _distTraveled = 0;
-                        return;
+                        break;
                     }
                 }
 
@@ -1120,6 +1133,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await Task.Delay(_delayMs);
             }
+            _isAnimating = false;
         }
 
         private MpSize GetScaledTextSize(out MpSize ftSize) {

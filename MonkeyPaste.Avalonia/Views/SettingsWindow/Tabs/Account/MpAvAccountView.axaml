@@ -66,7 +66,7 @@
 
             <!--  WHATS NEW TAB  -->
 
-            <TabItem IsSelected="False">
+            <TabItem IsSelected="True">
                 <TabItem.Header>
                     <Grid Classes="tab"
                           ColumnDefinitions="Auto,*">
@@ -90,7 +90,7 @@
 
             <!--  SUBSCRIPTION TAB  -->
 
-            <TabItem IsSelected="True">
+            <TabItem IsSelected="False">
                 <TabItem.Header>
                     <Grid Classes="tab"
                           ColumnDefinitions="Auto,*">
