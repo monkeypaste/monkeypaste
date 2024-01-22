@@ -228,4 +228,31 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>無題</value>
   </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>テキスト（マイム）</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (モズ)</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>画像(png)</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>文章</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (マイム)</value>
+  </data>
 </root>

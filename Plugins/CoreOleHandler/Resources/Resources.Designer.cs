@@ -106,6 +106,24 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Csv.
+        /// </summary>
+        public static string CsvFormatLabel {
+            get {
+                return ResourceManager.GetString("CsvFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        public static string FilesFormatLabel {
+            get {
+                return ResourceManager.GetString("FilesFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (requires Rtf format to be enabled and is only for supported platforms).
         /// </summary>
         public static string Html2RtfHint {
@@ -120,6 +138,15 @@ namespace CoreOleHandler {
         public static string Html2RtfLabel {
             get {
                 return ResourceManager.GetString("Html2RtfLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Html.
+        /// </summary>
+        public static string HtmlFormatLabel {
+            get {
+                return ResourceManager.GetString("HtmlFormatLabel", resourceCulture);
             }
         }
         
@@ -268,6 +295,33 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Html (mime).
+        /// </summary>
+        public static string MimeHtmlFormatLabel {
+            get {
+                return ResourceManager.GetString("MimeHtmlFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text (mime).
+        /// </summary>
+        public static string MimeTextFormatLabel {
+            get {
+                return ResourceManager.GetString("MimeTextFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url (moz).
+        /// </summary>
+        public static string MozUrlFormatLabel {
+            get {
+                return ResourceManager.GetString("MozUrlFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Format &apos;{0}&apos; had empty or transparent data and was blocked.
         /// </summary>
         public static string NtfEmptyImgText {
@@ -367,6 +421,15 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image (png).
+        /// </summary>
+        public static string PngFormatLabel {
+            get {
+                return ResourceManager.GetString("PngFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (requires Html format to be enabled and is only for supported platforms).
         /// </summary>
         public static string Rtf2HtmlHint {
@@ -381,6 +444,24 @@ namespace CoreOleHandler {
         public static string Rtf2HtmlLabel {
             get {
                 return ResourceManager.GetString("Rtf2HtmlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rtf.
+        /// </summary>
+        public static string RtfFormatLabel {
+            get {
+                return ResourceManager.GetString("RtfFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text.
+        /// </summary>
+        public static string TextFormatLabel {
+            get {
+                return ResourceManager.GetString("TextFormatLabel", resourceCulture);
             }
         }
         

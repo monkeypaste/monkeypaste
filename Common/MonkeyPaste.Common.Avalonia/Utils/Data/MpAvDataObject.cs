@@ -141,15 +141,15 @@ namespace MonkeyPaste.Common.Avalonia {
                 // TODO this should only be for gnome based linux
 
                 if (ContainsData(MpPortableDataFormats.Files) &&
-                    !ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
+                    !ContainsData(MpPortableDataFormats.MimeGnomeFiles) &&
                     GetData(MpPortableDataFormats.Files) is IEnumerable<string> files &&
                     string.Join(Environment.NewLine, files) is string av_files_str) {
                     // ensure cef style text is in formats
-                    SetData(MpPortableDataFormats.LinuxGnomeFiles, av_files_str);
+                    SetData(MpPortableDataFormats.MimeGnomeFiles, av_files_str);
                 }
-                if (ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
+                if (ContainsData(MpPortableDataFormats.MimeGnomeFiles) &&
                     !ContainsData(MpPortableDataFormats.Files) &&
-                    GetData(MpPortableDataFormats.LinuxGnomeFiles) is string gn_files_str &&
+                    GetData(MpPortableDataFormats.MimeGnomeFiles) is string gn_files_str &&
                     gn_files_str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) is IEnumerable<string> gn_files
                     ) {
                     // ensure avalonia style text is in formats

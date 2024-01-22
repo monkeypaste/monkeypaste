@@ -14,6 +14,7 @@
     <None Remove="manifest.json" />
     <None Remove="manifest_windows.json" />
     <None Remove="Resources\Images\icon.png" />
+    <None Remove="Resources\Images\png.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +42,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\png.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images\rtf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -90,7 +94,7 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) != 'MAC' Or $(BuildOs) != 'WINDOWS'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID' And !$(DefineConstants.Contains('AUX'))">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>
@@ -110,7 +114,7 @@
     <RemoveDir ContinueOnError="true" Directories="$(TargetDatTempDir)" />
   </Target>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'WINDOWS'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'WINDOWS' And !$(DefineConstants.Contains('AUX'))">
     <Exec Command="$(BuildScriptsDir)\bundle_plugin.bat CoreOleHandler $(TargetDir) $(TargetDatDir) $(CoreOleGuid)" />
   </Target>
 </Project>

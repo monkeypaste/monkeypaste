@@ -21,15 +21,26 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
 #else
             "Release";
 #endif
+        const string BUILD_OS =
+#if WINDOWS
+            "WINDOWS";
+#else
+            "";
+#endif
+
 
         const string README_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/README.md";
         const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
-        const string PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
         const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
+        const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
+
+        const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
 
         static string[] PluginNames = [
             "ChatGpt",
             "ComputerVision",
+            "CoreAnnotator",
+            "CoreOleHandler",
             "FileConverter",
             "ImageAnnotator",
             "MinimalExample",
@@ -37,6 +48,11 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             "TextToSpeech",
             "TextTranslator",
             "WebSearch"
+        ];
+
+        static string[] PrivatePackagePlugins = [
+            "CoreAnnotator",
+            "CoreOleHandler",
         ];
 
         //ledger-local.json
@@ -117,11 +133,14 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "obj"));
 
             // perform publish and output to ledger proj/packages_* dir
+            //string args = $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
+            string args = $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={BUILD_CONFIG} /property:DefineConstants=AUX%3B{BUILD_OS} -restore";
+
             (int exit_code, string proc_output) =
                 RunProcess(
                     file: "dotnet",
                     dir: proj_dir,
-                    args: $"publish --configuration {BUILD_CONFIG} --output {publish_dir}");
+                    args: args);
 
             if (exit_code != 0) {
                 MpConsole.WriteLine("");
@@ -173,7 +192,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                                 MpCommonHelpers.GetSolutionDir(),
                                 "Plugins",
                                 Path.GetFileNameWithoutExtension(manifest.packageUrl.ToPathFromUri()));
-                manifest.packageUrl = PushReleaseToGitHub(manifest, proj_dir);
+                manifest.packageUrl = PushReleaseToRemote(manifest, proj_dir);
                 if (manifest.packageUrl == null) {
                     // didn't upload
                     continue;
@@ -185,7 +204,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             }
             return ledger.SerializeObject(true).ToPrettyPrintJson();
         }
-        static string PushReleaseToGitHub(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
+        static string PushReleaseToRemote(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
             string plugin_name = Path.GetFileName(proj_dir);
             string local_package_uri = manifest.packageUrl;
             string version = manifest.version;
@@ -194,6 +213,12 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             string target_tag_name = $"v{version}";
             string target_package_file_name = $"{target_tag_name}.zip";
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
+
+            if (PrivatePackagePlugins.Contains(plugin_name)) {
+                // TODO would be nice to be able to ssh onto server and push core plugins
+                // but for now must be handled manually
+                return GetRemotePackageUrl(plugin_name, manifest.guid, target_tag_name);
+            }
 
             MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
             (int exit_code, string proc_output) = RunProcess(
@@ -231,7 +256,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                     manifest.version = $"{verParts[0]}.{verParts[1]}.{minor_rev + 1}";
                 }
                 // if first fail use failed version
-                var new_ver_result = PushReleaseToGitHub(manifest, proj_dir, initial_failed_ver ?? version);
+                var new_ver_result = PushReleaseToRemote(manifest, proj_dir, initial_failed_ver ?? version);
                 return new_ver_result;
 
             } else if (exit_code == 0 && initial_failed_ver != null) {
@@ -255,7 +280,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 return null;
             }
 
-            string github_release_uri = string.Format(PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
+            string github_release_uri = string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
             MpConsole.WriteLine($"{plugin_name} remote DONE");
             return github_release_uri;
         }
@@ -302,6 +327,13 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             proc.Close();
             proc.Dispose();
             return (exit_code, proc_output);
+        }
+
+        static string GetRemotePackageUrl(string plugin_name, string plugin_guid, string target_tag_name) {
+            if (PrivatePackagePlugins.Contains(plugin_name)) {
+                return string.Format(PRIVATE_PACKAGE_URL_FORMAT, plugin_guid, target_tag_name);
+            }
+            return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
         }
     }
 }

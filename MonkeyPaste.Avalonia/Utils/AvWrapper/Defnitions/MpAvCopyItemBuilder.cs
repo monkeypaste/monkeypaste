@@ -393,7 +393,7 @@ namespace MonkeyPaste.Avalonia {
                 var actual_formats = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
                 // linux doesn't case non-html formats the same as windows so mapping them here
                 bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
-                                    actual_formats.Contains(MpPortableDataFormats.LinuxGnomeFiles);
+                                    actual_formats.Contains(MpPortableDataFormats.MimeGnomeFiles);
                 if (isLinuxFileList) {
                     // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
                     // and is beyond support for the clipboard plugin right now so..

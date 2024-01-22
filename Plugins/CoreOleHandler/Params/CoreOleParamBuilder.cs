@@ -1,6 +1,4 @@
-﻿using MonkeyPaste.Common;
-
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 
 namespace CoreOleHandler {
     public class CoreOleParamBuilder : MpISupportHeadlessClipboardComponentFormat {
@@ -9,20 +7,11 @@ namespace CoreOleHandler {
         string PluginGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         string IconDir => @".\Resources\Images";
 
-        (string, string, int, string)[] _formats = new (string, string, int, string)[] {
-                (MpPortableDataFormats.Text,"Text",DEF_MAX_TEXT,"text.png"),
-                (MpPortableDataFormats.MimeText,"Text (web)",DEF_MAX_TEXT,"text.png"),
-                (MpPortableDataFormats.Rtf,"Rtf",DEF_MAX_TEXT,"rtf.png"),
-                (MpPortableDataFormats.Xhtml,"Html",-1,"html.png"),
-                (MpPortableDataFormats.Html,"Html (web)",-1,"html.png"),
-                (MpPortableDataFormats.LinuxSourceUrl,"Uri",-1,"html.png"),
-                (MpPortableDataFormats.Image,"Png",-1,"bitmap.png"),
-                (MpPortableDataFormats.Csv,"Csv",DEF_MAX_TEXT,"csv.png"),
-                (MpPortableDataFormats.Files,"Files",-1,"files.png"),
-                //("x-special/gnome-copied-files","Files (Linux)"),
-        };
+        (string, string, int, string)[] _formats;
         public MpClipboardComponent GetFormats(MpHeadlessComponentFormatRequest request) {
             CoreOleHelpers.SetCulture(request);
+            // create format models AFTER culture set 
+            _formats = GetFormatModels();
 
             return new MpClipboardComponent() {
                 readers = _formats.Select(x => GetFormat(x.Item1, true)).ToList(),
@@ -30,9 +19,24 @@ namespace CoreOleHandler {
             };
         }
 
+        private (string, string, int, string)[] GetFormatModels() {
+            return new (string, string, int, string)[] {
+                (MpPortableDataFormats.Text,Resources.TextFormatLabel,DEF_MAX_TEXT,"text.png"),
+                (MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),
+                (MpPortableDataFormats.Rtf,Resources.RtfFormatLabel,DEF_MAX_TEXT,"rtf.png"),
+                (MpPortableDataFormats.Xhtml,Resources.HtmlFormatLabel,-1,"html.png"),
+                (MpPortableDataFormats.Html,Resources.MimeHtmlFormatLabel,-1,"html.png"),
+                (MpPortableDataFormats.MimeMozUrl,Resources.MozUrlFormatLabel,-1,"html.png"),
+                (MpPortableDataFormats.Image,Resources.PngFormatLabel,-1,"png.png"),
+                (MpPortableDataFormats.Csv,Resources.CsvFormatLabel,DEF_MAX_TEXT,"csv.png"),
+                (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
+                //("x-special/gnome-copied-files","Files (Linux)"),
+        };
+        }
+
         private MpClipboardHandlerFormat GetFormat(string format, bool isReader) {
             var hf = new MpClipboardHandlerFormat() {
-                formatGuid = $"{PluginGuid}-{format}-{(isReader ? Resources.CommonReadLabel.ToUpper() : Resources.CommonWriteLabel.ToUpper())}",
+                formatGuid = $"{PluginGuid}-{format}-{(isReader ? "READ" : "WRITE")}",
                 iconUri = Path.Combine(IconDir, $"{_formats.FirstOrDefault(x => x.Item1 == format).Item4}"),
                 formatName = format,
                 displayName = _formats.FirstOrDefault(x => x.Item1 == format).Item2,

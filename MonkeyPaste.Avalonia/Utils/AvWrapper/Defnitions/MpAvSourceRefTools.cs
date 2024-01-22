@@ -253,8 +253,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private string FindSourceUrl(MpAvDataObject avdo) {
             string cb_html_or_fragment = null;
-            if (avdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
-                       avdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
+            if (avdo.ContainsData(MpPortableDataFormats.MimeMozUrl) &&
+                       avdo.GetData(MpPortableDataFormats.MimeMozUrl) is byte[] url_bytes &&
                        url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
                 // on linux html is not in fragment format like windows and firefox supports this format
                 // but chrome doesn't

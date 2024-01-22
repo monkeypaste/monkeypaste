@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 using MonkeyPaste.Common.Plugin;
@@ -336,12 +337,16 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+        public static event EventHandler<(bool, object)> OnFormatPresetEnabledChanged;
+        #endregion
+
         #region Constructors
 
         public MpAvClipboardFormatPresetViewModel(MpAvHandledClipboardFormatViewModel parent) : base(parent) {
             PropertyChanged += MpClipboardFormatPresetViewModel_PropertyChanged;
+            OnFormatPresetEnabledChanged += MpAvClipboardFormatPresetViewModel_OnFormatPresetIsEnabledToggled;
         }
-
 
         #endregion
 
@@ -430,55 +435,114 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        private void MpAvClipboardFormatPresetViewModel_OnFormatPresetIsEnabledToggled(object sender, (bool wasEnabled, object args) e) {
+            if (e.IsDefault() ||
+                !e.wasEnabled ||
+                sender is not MpAvClipboardFormatPresetViewModel cfpvm ||
+                cfpvm.FormatName != FormatName ||
+                cfpvm.IsReader != IsReader ||
+                cfpvm.PresetId == PresetId) {
+                if (sender is MpAvClipboardFormatPresetViewModel cfpvm2 && cfpvm2.FormatName == FormatName && cfpvm2.IsReader == IsReader) {
+
+                }
+                return;
+            }
+            // only get here if event trigger from matching format preset griup that was enabled and isn't this preset
+
+            if (e.args == null) {
+                // default format change
+
+                // only 1 preset per format
+                IsEnabled = false;
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+
+                MpAvAppViewModel avm = e.args as MpAvAppViewModel;
+
+                if (avm == null &&
+                    e.args is MpPortableProcessInfo pi) {
+                    avm = await MpAvAppCollectionViewModel.Instance.AddOrGetAppByProcessInfoAsync(pi);
+                }
+                if (avm == null) {
+                    return;
+                }
+
+                bool is_enabled = avm.OleFormatInfos.GetAppOleFormatInfoByPresetId(PresetId) != null;
+
+                if (is_enabled) {
+                    // format exists, remove
+                    await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
+                }
+
+            });
+
+        }
+
+        private async Task<bool?> ToggleIsEnabledAsync(object args) {
+            if (args == null) {
+                // default enable toggle
+                bool will_enable = !IsEnabled;
+                if (will_enable) {
+                    // NOTE when enabling to true disable all other
+                    // presets w/ same io and format types
+                    MpAvClipboardHandlerCollectionViewModel.Instance
+                    .AllPresets
+                    .Where(x => x.IsReader == IsReader && x.FormatName == FormatName)
+                    .ForEach(x => x.IsEnabled = x == this);
+                } else {
+                    IsEnabled = false;
+                }
+                return IsEnabled;
+            }
+            // app preset toggle
+
+            MpAvAppViewModel avm = args as MpAvAppViewModel;
+
+            if (avm == null &&
+                args is MpPortableProcessInfo pi) {
+                avm = await MpAvAppCollectionViewModel.Instance.AddOrGetAppByProcessInfoAsync(pi);
+            }
+            if (avm == null) {
+                MpDebug.Break($"Error toggling preset for arg '{args}'");
+                return null;
+            }
+
+
+            if (avm.OleFormatInfos.IsDefault) {
+                // when avm is default that means it has NO formats stored so re-create
+                // currently state before 'toggling'
+
+                await avm.OleFormatInfos.CreateDefaultInfosAsync();
+
+                MpDebug.Assert(!avm.OleFormatInfos.IsDefault, $"app '{avm}' should have non-default ole at this point");
+            }
+
+
+            if (avm.OleFormatInfos.GetAppOleFormatInfoByPresetId(PresetId) is MpAvAppOlePresetViewModel aofivm) {
+                // format exists, remove
+                await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
+                return false;
+            }
+            // enabling format
+            await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(PresetId);
+            return true;
+        }
         #endregion
 
         #region Commands
 
         public MpIAsyncCommand<object> TogglePresetIsEnabledCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args == null) {
-                    // default enable toggle
-                    bool will_enable = !IsEnabled;
-                    if (will_enable) {
-                        // NOTE when enabling to true disable all other
-                        // presets w/ same io and format types
-                        MpAvClipboardHandlerCollectionViewModel.Instance
-                        .AllPresets
-                        .Where(x => x.IsReader == IsReader && x.FormatName == FormatName)
-                        .ForEach(x => x.IsEnabled = x == this);
-                    } else {
-                        IsEnabled = false;
-                    }
-                    return;
-                }
-                // app preset toggle
+                bool? was_enabled = await ToggleIsEnabledAsync(args);
 
-                bool cur_def_enabled = IsEnabled;
-                MpAvAppViewModel avm = args as MpAvAppViewModel;
-
-                if (avm == null &&
-                    args is MpPortableProcessInfo pi) {
-                    avm = await MpAvAppCollectionViewModel.Instance.AddOrGetAppByProcessInfoAsync(pi);
-                }
-                MpDebug.Assert(avm != null, $"Error toggling preset for arg '{args}'");
-
-                if (avm.OleFormatInfos.IsDefault) {
-                    // when avm is default that means it has NO formats stored so re-create
-                    // currently state before 'toggling'
-
-                    await avm.OleFormatInfos.CreateDefaultInfosAsync();
-
-                    MpDebug.Assert(!avm.OleFormatInfos.IsDefault, $"app '{avm}' should have non-default ole at this point");
-                }
-
-
-                if (avm.OleFormatInfos.GetAppOleFormatInfoByPresetId(PresetId) is MpAvAppOlePresetViewModel aofivm) {
-                    // format exists, remove
-                    await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
+                if (was_enabled.HasValue) {
+                    // only cmd invoked preset issues toggle event
+                    OnFormatPresetEnabledChanged?.Invoke(this, (was_enabled.Value, args));
                 } else {
-                    await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(PresetId);
+                    // error creating/fetching app vm
                 }
-
             });
 
         public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(

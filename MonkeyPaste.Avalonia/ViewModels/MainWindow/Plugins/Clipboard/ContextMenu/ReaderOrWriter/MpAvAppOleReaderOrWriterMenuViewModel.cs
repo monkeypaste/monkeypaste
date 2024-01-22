@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
             IsReader ? UiStrings.CommonReadLabel : UiStrings.CommonWriteLabel;
 
         public override object IconSourceObj =>
-            IsReader ? "GlassesImage" : "PenImage";
+            IsReader ? new object[] { MpSystemColors.cyan1, "GlassesImage" } : new object[] { MpSystemColors.orange1, "PenImage" };
 
         #endregion
 

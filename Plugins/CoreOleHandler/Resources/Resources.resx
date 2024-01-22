@@ -134,11 +134,20 @@
   <data name="CommonWriteLabel" xml:space="preserve">
     <value>Write</value>
   </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>Csv</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Files</value>
+  </data>
   <data name="Html2RtfHint" xml:space="preserve">
     <value>When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (requires Rtf format to be enabled and is only for supported platforms)</value>
   </data>
   <data name="Html2RtfLabel" xml:space="preserve">
     <value>Convert To Rtf</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
   </data>
   <data name="IgnoredDirsHint" xml:space="preserve">
     <value>These directories will not be read from clipboard or drag-and-drop data.</value>
@@ -188,6 +197,15 @@
   <data name="MaxCharsLabel" xml:space="preserve">
     <value>Max Characters</value>
   </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Text (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>Url (moz)</value>
+  </data>
   <data name="NtfEmptyImgText" xml:space="preserve">
     <value>Format '{0}' had empty or transparent data and was blocked</value>
     <comment>Clipboard Format</comment>
@@ -224,11 +242,20 @@
   <data name="PluginTags" xml:space="preserve">
     <value>Core, Clipboard, Drag and Drop, Text, Rtf, Rich Text, Html, Csv, Image, Png, Jpg, Jpeg, Link</value>
   </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Image (png)</value>
+  </data>
   <data name="Rtf2HtmlHint" xml:space="preserve">
     <value>When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (requires Html format to be enabled and is only for supported platforms)</value>
   </data>
   <data name="Rtf2HtmlLabel" xml:space="preserve">
     <value>Convert To Html</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Text</value>
   </data>
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>

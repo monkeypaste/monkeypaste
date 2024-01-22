@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
-using Avalonia.Platform;
 using Avalonia.Threading;
 
 namespace CefNet
@@ -170,6 +169,12 @@ namespace CefNet
 
 				Environment.ExitCode = e.ApplicationExitCode;
 				return e.ApplicationExitCode;
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine($"TopLevel lifetime exception: {ex}");
+				Debugger.Break();
+				return 1;
 			}
 			finally
 			{

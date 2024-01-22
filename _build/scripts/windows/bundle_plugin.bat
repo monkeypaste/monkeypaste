@@ -1,4 +1,3 @@
-rem @echo off
 set back="%cd%"
 
 set PLUGIN_NAME="%1"
@@ -20,6 +19,4 @@ move /y %PLUGIN_GUID%.zip %DAT_DIR%
 
 rd /s /q %TEMP_DIR%
 
-
 cd %back%
-rem exit 0

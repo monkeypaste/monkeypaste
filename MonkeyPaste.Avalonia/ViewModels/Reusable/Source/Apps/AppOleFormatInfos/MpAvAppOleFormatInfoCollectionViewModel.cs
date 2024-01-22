@@ -102,6 +102,20 @@ namespace MonkeyPaste.Avalonia {
             return aisvm;
         }
 
+        public async Task<MpAvAppOlePresetViewModel> AddAppOlePresetViewModelByPresetIdAsync(int presetId) {
+            if (Items.FirstOrDefault(x => x.PresetId == presetId) is { } dup_aofivm) {
+                return dup_aofivm;
+            }
+            // NOTE ignoreFormat ignored for create, update after (but before adding)
+            // TODO this and drop widget save preset do same thing, should combine...
+            MpAppOlePreset new_aofi = await MpAppOlePreset.CreateAsync(
+                    appId: Parent.AppId,
+                    presetId: presetId);
+            var aofivm = await CreateAppOlePresetViewModel(new_aofi);
+            Items.Add(aofivm);
+
+            return aofivm;
+        }
         public async Task RemoveAppOlePresetViewModelByPresetIdAsync(int presetId) {
             if (Items.FirstOrDefault(x => x.PresetId == presetId) is not MpAvAppOlePresetViewModel aopvm) {
                 return;
@@ -123,43 +137,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpAvAppOlePresetViewModel> AddAppOlePresetViewModelByPresetIdAsync(int presetId) {
-
-            // NOTE ignoreFormat ignored for create, update after (but before adding)
-            // TODO this and drop widget save preset do same thing, should combine...
-            MpAppOlePreset new_aofi = await MpAppOlePreset.CreateAsync(
-                    appId: Parent.AppId,
-                    presetId: presetId);
-            if (Items.FirstOrDefault(x => x.AppOlePresetId == new_aofi.Id)
-                    is MpAvAppOlePresetViewModel aopvm) {
-                // preset is dup
-                MpDebug.Break($"app ole items and db out of sync");
-                return aopvm;
-            } else {
-                MpDebug.Assert(!new_aofi.WasDupOnCreate, $"app ole items and db out of sync");
-            }
-            var aofivm = await CreateAppOlePresetViewModel(new_aofi);
-
-            if (aofivm.IsReaderAppPreset) {
-                if (aofivm.IsReaderNoOp) {
-                    MpDebug.Assert(Readers.Count == 0, $"No op reader error, all readers should be removed before adding no op");
-                } else if (IsReadersOnlyNoOp) {
-                    // remove no op reader
-                    await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpReader.PresetId);
-                }
-            } else {
-                if (aofivm.IsWriterNoOp) {
-                    MpDebug.Assert(Writers.Count == 0, $"No op writer error, all writers should be removed before adding no op");
-                } else if (IsWritersOnlyNoOp) {
-                    // remove no op writer
-                    await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpWriter.PresetId);
-                }
-            }
-            Items.Add(aofivm);
-
-            return aofivm;
-
-        }
         public bool IsFormatEnabledByPresetId(int presetId) {
             if (presetId == 2) {
 

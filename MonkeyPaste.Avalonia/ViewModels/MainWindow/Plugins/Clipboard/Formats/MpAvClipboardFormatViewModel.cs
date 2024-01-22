@@ -78,36 +78,6 @@ namespace MonkeyPaste.Avalonia {
                         return hfvm.HandledFormatIconId;
                     }
                 }
-                //string keyStr = "FormatImage";
-                //switch (FormatName) {
-                //    case MpPortableDataFormats.Files:
-                //        keyStr = "Files" + keyStr;
-                //        break;
-                //    case MpPortableDataFormats.Rtf:
-                //        keyStr = "Rtf" + keyStr;
-                //        break;
-                //    case MpPortableDataFormats.MimeText:
-                //    case MpPortableDataFormats.Text3:
-                //    case MpPortableDataFormats.Text2:
-                //    case MpPortableDataFormats.Text:
-                //        keyStr = "Text" + keyStr;
-                //        break;
-                //    case MpPortableDataFormats.Html:
-                //    case MpPortableDataFormats.Xhtml:
-                //        keyStr = "Html" + keyStr;
-                //        break;
-                //    case MpPortableDataFormats.Csv:
-                //        keyStr = "Csv" + keyStr;
-                //        break;
-                //    case MpPortableDataFormats.Image:
-                //        keyStr = "Bitmap" + keyStr;
-                //        break;
-                //    default:
-                //        keyStr = "QuestionMarkImage";
-                //        break;
-                //}
-
-
                 return "QuestionMarkImage";
             }
         }

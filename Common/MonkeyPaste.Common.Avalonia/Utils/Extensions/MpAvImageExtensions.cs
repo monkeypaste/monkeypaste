@@ -10,6 +10,8 @@ using System.Text;
 namespace MonkeyPaste.Common.Avalonia {
 
     public static class MpAvImageExtensions {
+        static object _getPixelsLock = new object();
+        static object _tintLock = new object();
         #region Converters        
 
         public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0, string tint_hex_color = "") {
@@ -90,32 +92,43 @@ namespace MonkeyPaste.Common.Avalonia {
                 // don't change image if tint is transparent
                 return bmp;
             }
-            var pixels = GetPixels(bmp);
-            using (var memoryStream = new MemoryStream()) {
-                bmp.Save(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
-                using (var lockedBitmap = writeableBitmap.Lock()) {
-                    byte* bmpPtr = (byte*)lockedBitmap.Address;
-                    int width = writeableBitmap.PixelSize.Width;
-                    int height = writeableBitmap.PixelSize.Height;
+            MpConsole.WriteLine($"[Tint] Unsafe BEGIN ", true);
 
-                    for (int row = 0; row < height; row++) {
-                        for (int col = 0; col < width; col++) {
-                            PixelColor c = pixels[col, row];
-                            if (c.Alpha > 0) {
-                                c = tintPixelColor;
-                                if (!retainAlpha) {
-                                    c.Alpha = 255;
+            var pixels = GetPixels(bmp);
+            try {
+                lock (_tintLock) {
+                    using (var memoryStream = new MemoryStream()) {
+                        bmp.Save(memoryStream);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                        using (var lockedBitmap = writeableBitmap.Lock()) {
+                            byte* bmpPtr = (byte*)lockedBitmap.Address;
+                            int width = writeableBitmap.PixelSize.Width;
+                            int height = writeableBitmap.PixelSize.Height;
+
+                            for (int row = 0; row < height; row++) {
+                                for (int col = 0; col < width; col++) {
+                                    PixelColor c = pixels[col, row];
+                                    if (c.Alpha > 0) {
+                                        c = tintPixelColor;
+                                        if (!retainAlpha) {
+                                            c.Alpha = 255;
+                                        }
+                                    } else {
+                                        c = new PixelColor();
+                                    }
+                                    bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);
                                 }
-                            } else {
-                                c = new PixelColor();
                             }
-                            bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);
                         }
+                        MpConsole.WriteLine($"[Tint] Unsafe END ", false, true);
+                        return writeableBitmap.ToAvBitmap(quality);
                     }
                 }
-                return writeableBitmap.ToAvBitmap(quality);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Tint error. ", ex);
+                return bmp;
             }
         }
 
@@ -140,6 +153,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpSize(Math.Round(src.Width * rnd), Math.Round(src.Height * rnd));
         }
         public static unsafe string ToAsciiImage(this Bitmap bmpSrc) {
+            MpConsole.WriteLine($"[ToAsciiImage] Unsafe BEGIN ", true);
             // since this doesn't create accurate images in text (
             MpSize size = bmpSrc.PixelSize.ToPortableSize(1).ResizeKeepAspect(100, 100);
             // FIX SCALE ISSUE
@@ -166,6 +180,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         }
                         sb.AppendLine();
                     }
+                    MpConsole.WriteLine($"[ToAsciiImage] Unsafe END ", false, true);
                     return sb.ToString();
                 }
             }
@@ -233,35 +248,44 @@ namespace MonkeyPaste.Common.Avalonia {
             if (bmp == null) {
                 return true;
             }
-            var pixels = GetPixels(bmp);
-            using (var memoryStream = new MemoryStream()) {
-                bmp.Save(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
-                using (var lockedBitmap = writeableBitmap.Lock()) {
-                    byte* bmpPtr = (byte*)lockedBitmap.Address;
-                    int width = writeableBitmap.PixelSize.Width;
-                    int height = writeableBitmap.PixelSize.Height;
+            MpConsole.WriteLine($"[IsTransparent] Unsafe BEGIN ", true);
+            try {
+                var pixels = GetPixels(bmp);
+                using (var memoryStream = new MemoryStream()) {
+                    bmp.Save(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                    using (var lockedBitmap = writeableBitmap.Lock()) {
+                        byte* bmpPtr = (byte*)lockedBitmap.Address;
+                        int width = writeableBitmap.PixelSize.Width;
+                        int height = writeableBitmap.PixelSize.Height;
 
-                    for (int row = 0; row < height; row++) {
-                        for (int col = 0; col < width; col++) {
-                            PixelColor c = pixels[col, row];
-                            if (c.Alpha > min_alpha) {
-                                return false;
+                        for (int row = 0; row < height; row++) {
+                            for (int col = 0; col < width; col++) {
+                                PixelColor c = pixels[col, row];
+                                if (c.Alpha > min_alpha) {
+                                    MpConsole.WriteLine($"[IsTransparent] Unsafe END ", false, true);
+                                    return false;
+                                }
                             }
                         }
                     }
+                    MpConsole.WriteLine($"[IsTransparent] Unsafe END ", true);
+                    return true;
                 }
-                return true;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"IsTansprent error. ", ex);
+                return false;
             }
         }
         #endregion
 
         #region Read/Write
-        static object _unsafeLock = new object();
         public static unsafe PixelColor[,] GetPixels(this Bitmap bitmap) {
 
-            lock (_unsafeLock) {
+            MpConsole.WriteLine($"[GetPixels] Unsafe BEGIN ", true);
+            lock (_getPixelsLock) {
                 using (var memoryStream = new MemoryStream()) {
                     try {
                         bitmap.Save(memoryStream);
@@ -291,6 +315,7 @@ namespace MonkeyPaste.Common.Avalonia {
                             }
                         }
 
+                        MpConsole.WriteLine($"[GetPixels] Unsafe END ", false, true);
                         return pixels;
                     }
                     catch (Exception ex) {
@@ -301,12 +326,14 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 
         }
-        public static unsafe byte* PutPixel(WriteableBitmap bitmap, PixelColor pixel, byte* bmpPtr) {
+        private static unsafe byte* PutPixel(WriteableBitmap bitmap, PixelColor pixel, byte* bmpPtr) {
+            //MpConsole.WriteLine($"[PutPixel] Unsafe BEGIN ", true);
             *bmpPtr++ = pixel.Blue;
             *bmpPtr++ = pixel.Green;
             *bmpPtr++ = pixel.Red;
             *bmpPtr++ = pixel.Alpha;
 
+            //MpConsole.WriteLine($"[PutPixel] Unsafe END ", false, true);
             return bmpPtr;
         }
 

@@ -228,4 +228,31 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>无标题</value>
   </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>网页</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>文本（哑剧）</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>网址（莫兹）</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>图片（png）</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html（哑剧）</value>
+  </data>
 </root>

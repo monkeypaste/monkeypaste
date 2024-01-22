@@ -35,9 +35,9 @@ namespace MonkeyPaste.Common.Plugin {
 
             // linux
 
-            LinuxSourceUrl,
-            LinuxGnomeFiles,
-            LinuxUriList, 
+            MimeMozUrl,
+            MimeGnomeFiles,
+            MimeUriList, 
 
             // avalonia
 
@@ -94,11 +94,6 @@ namespace MonkeyPaste.Common.Plugin {
         public const string WinXhtml = "HTML Format";
         public const string WinFileDrop = "FileDrop";
 
-        // Linux Formats
-        public const string LinuxSourceUrl = "text/x-moz-url-priv";
-        public const string LinuxUriList = "text/uri-list";
-        public const string LinuxGnomeFiles = "x-special/gnome-copied-files";
-
         // Mac Formats
         public const string MacRtf1 = "public.rtf";
         public const string MacRtf2 = "com.apple.flat-rtfd";
@@ -131,17 +126,23 @@ namespace MonkeyPaste.Common.Plugin {
         //public const string CefUnicodeUrl = "UniformResourceLocatorW";
         public const string CefAsciiUrl = "UniformResourceLocator";
 
+        // mime formats
         public const string MimeHtml = "text/html";
         public const string MimeText = "text/plain";
         public const string MimeJson = "application/json";
 
+        public const string MimeMozUrl = "text/x-moz-url-priv";
+        public const string MimeUriList = "text/uri-list";
+        // Linux (gnome) only
+        public const string MimeGnomeFiles = "x-special/gnome-copied-files";
+
         // Runtime formats
 
         public const string Text =
-#if WINDOWS
-            WinText;
-#elif MAC
+#if MAC
             MacText1;
+#else
+            WinText;
 #endif
 
         public const string Text2 =
@@ -205,7 +206,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         // internal
 
-        public const string INTERNAL_SOURCE_URI_LIST_FORMAT = LinuxUriList;
+        public const string INTERNAL_SOURCE_URI_LIST_FORMAT = MimeUriList;
 
         public const string INTERNAL_CONTENT_ID_FORMAT = "Mp Internal Content";
         public const string INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT = "Mp Internal Partial Content";
