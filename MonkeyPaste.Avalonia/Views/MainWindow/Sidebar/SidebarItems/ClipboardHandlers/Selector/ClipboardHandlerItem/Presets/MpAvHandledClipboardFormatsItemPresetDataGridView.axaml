@@ -108,7 +108,7 @@
                 <DataGrid x:Name="ClipboardFormatPresetDatagrid"
                           MinWidth="300"
                           IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
-                          ItemsSource="{Binding Items}"
+                          ItemsSource="{Binding SortedItems}"
                           SelectedItem="{Binding SelectedItem}"
                           SelectionMode="Single"
                           HeadersVisibility="None"

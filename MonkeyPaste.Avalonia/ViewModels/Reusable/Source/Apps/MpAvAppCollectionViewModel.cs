@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvAppViewModel> CustomClipboardFormatItems =>
             FilteredExternalItems
-            .Where(x => !x.OleFormatInfos.IsDefault);
+            .Where(x => x.HasCustomOle);
 
         public IEnumerable<MpAvAppViewModel> RejectedItems =>
             FilteredExternalItems
@@ -141,6 +141,18 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             return aivm.OleFormatInfos;
+        }
+
+        public async Task<MpAvAppViewModel> AddOrGetAppByArgAsync(object arg) {
+            // NOTE arg should only process info or an app
+            if (arg is MpPortableProcessInfo ppi) {
+                var result = await AddOrGetAppByProcessInfoAsync(ppi);
+                return result;
+            }
+            if (arg is MpAvAppViewModel avm) {
+                return avm;
+            }
+            return null;
         }
 
         public async Task<MpAvAppViewModel> AddOrGetAppByProcessInfoAsync(MpPortableProcessInfo ppi) {
@@ -360,7 +372,7 @@ namespace MonkeyPaste.Avalonia {
                         await cs.DeleteFromDatabaseAsync();
                         break;
                     case "formats":
-                        await avm.OleFormatInfos.RemoveAllCustomInfoAsync();
+                        await avm.OleFormatInfos.RemoveCustomInfosCommand.ExecuteAsync();
                         break;
                     case "rejects":
                         await avm.ToggleIsRejectedCommand.ExecuteAsync();
@@ -373,7 +385,7 @@ namespace MonkeyPaste.Avalonia {
                         _ = await MpAppClipboardShortcuts.CreateAsync(appId: avm.AppId);
                         break;
                     case "formats":
-                        await avm.OleFormatInfos.CreateDefaultInfosAsync();
+                        await avm.OleFormatInfos.CreateDefaultInfosCommand.ExecuteAsync();
                         break;
                     case "rejects":
                         await avm.ToggleIsRejectedCommand.ExecuteAsync();

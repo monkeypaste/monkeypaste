@@ -123,7 +123,7 @@
             <DataGrid x:Name="PresetDataGrid"
                       Grid.Row="0"
                       IsReadOnly="False"
-                      ItemsSource="{Binding Items}"
+                      ItemsSource="{Binding SortedItems}"
                       SelectedItem="{Binding SelectedItem}"
                       SelectionMode="Single"
                       HeadersVisibility="None"

@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
-                var subItems = Items.Where(x => !x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
+                var subItems = SortedItems.Where(x => !x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
                 if (subItems.Count > 0) {
                     subItems.Add(new MpAvMenuItemViewModel() { IsSeparator = true });
                 }
@@ -87,8 +87,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public IEnumerable<MpAvMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
-
+        public IEnumerable<MpAvAnalyticItemPresetViewModel> SortedItems =>
+            Items.OrderBy(x => x.SortOrderIdx);
+        public IEnumerable<MpAvMenuItemViewModel> QuickActionPresetMenuItems => SortedItems.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
         #endregion        
 
         #region Appearance
@@ -378,6 +379,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            await UpdatePresetSortOrderAsync();
+
             if (MpPluginLoader.UpdatedPluginGuids.Contains(PluginGuid)) {
                 // show plugin updated ntf
                 Mp.Services.NotificationBuilder
@@ -566,7 +569,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            UpdatePresetSortOrder();
+            UpdatePresetSortOrderAsync().FireAndForgetSafeAsync();
         }
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -603,12 +606,16 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-        private void UpdatePresetSortOrder(bool fromModel = false) {
+        private async Task UpdatePresetSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
-                Items.Sort(x => x.SortOrderIdx);
+                OnPropertyChanged(nameof(SortedItems));
             } else {
-                foreach (var aipvm in Items) {
-                    aipvm.SortOrderIdx = Items.IndexOf(aipvm);
+                var sil = SortedItems.ToList();
+                for (int i = 0; i < sil.Count; i++) {
+                    sil[i].SortOrderIdx = i;
+                }
+                while (sil.Any(x => x.HasModelChanged)) {
+                    await Task.Delay(50);
                 }
             }
         }

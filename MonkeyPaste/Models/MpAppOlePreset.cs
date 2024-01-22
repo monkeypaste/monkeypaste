@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpAppOlePreset : MpDbModelBase {
         #region Constants
-        public const int NO_OP_READER_ID = -1;
-        public const int NO_OP_WRITER_ID = -2;
         #endregion
 
         #region Columns
@@ -38,14 +36,6 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-
-        [Ignore]
-        public bool IsNoOpReader =>
-            PresetId == NO_OP_READER_ID;
-
-        [Ignore]
-        public bool IsNoOpWriter =>
-            PresetId == NO_OP_WRITER_ID;
 
         #endregion
 

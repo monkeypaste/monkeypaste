@@ -135,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
         private static void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 //case MpMessageType.ItemDragBegin:
-                case MpMessageType.ClipboardPresetsChanged:
+                case MpMessageType.ClipboardPresetEnabledChanged:
                     ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
                     break;
             }

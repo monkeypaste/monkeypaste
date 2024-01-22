@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvClipTrayViewModel.Instance.UpdatePasteInfoMessageCommand.Execute(MenuArg);
 
                 if (MenuArg is MpAvAppViewModel avm) {
-                    avm.OleFormatInfos.InitializeAsync(avm.AppId).FireAndForgetSafeAsync();
+                    // avm.OleFormatInfos.InitializeAsync(avm.AppId).FireAndForgetSafeAsync();
                 }
                 return;
             }

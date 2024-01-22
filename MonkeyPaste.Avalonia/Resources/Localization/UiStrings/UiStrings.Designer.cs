@@ -5829,6 +5829,28 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This app currently matches default clipboard reader presets and formats. 
+        ///
+        ///Enabling or disabling default reader presets (from the Clipboard sidebar) will NOT affect this configuration. Only unlisted apps follow the default setup..
+        /// </summary>
+        public static string SettingsInteropAppOleDefaultReaderTooltip {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleDefaultReaderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This app currently matches default clipboard writer presets and formats. 
+        ///
+        ///Enabling or disabling default writer presets (from the Clipboard sidebar) will NOT affect this configuration. Only unlisted apps follow the default setup..
+        /// </summary>
+        public static string SettingsInteropAppOleDefaultWriterTooltip {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleDefaultWriterTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit....
         /// </summary>
         public static string SettingsInteropAppOleFormatButtonPointerOverLabel {

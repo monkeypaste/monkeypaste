@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleRootMenuViewModel : MpAvAppOleMenuViewModelBase {
-
         #region Properties
 
         #region Overrides
@@ -32,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAppOleRootMenuViewModel(object menuArg) : this(menuArg, "full") { }
         public MpAvAppOleRootMenuViewModel(object menuArg, string show_type) : base(null) {
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+
             MenuArg = menuArg;
 
             List<MpAvIMenuItemViewModel> items = null;
@@ -84,6 +85,18 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             return null;
+        }
+        #endregion
+
+        #region Private Methods
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ClipboardPresetEnabledChanged:
+                    // update all checks after enabled change
+                    SubItems.OfType<MpAvAppOleMenuViewModelBase>().ForEach(x => x.RefreshChecks(false));
+                    break;
+            }
         }
         #endregion
     }

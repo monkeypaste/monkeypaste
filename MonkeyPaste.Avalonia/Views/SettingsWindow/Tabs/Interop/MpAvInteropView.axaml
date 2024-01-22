@@ -88,7 +88,7 @@
                                Text="{x:Static local:UiStrings.SettingsInteropFormatsHeaderTitle}" />
 
                     <local:MpAvToolTipHintView IsHtml="True"
-                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
+                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
 
@@ -166,9 +166,17 @@
 
                                                     <local:MpAvOleFormatStripView Classes="read"
                                                                                   Cursor="Hand"
-                                                                                  IsVisible="{Binding !IsVisible, ElementName=NoopOleReaderButton}"
                                                                                   HorizontalAlignment="Center"
-                                                                                  DataContext="{Binding Readers}" />
+                                                                                  DataContext="{Binding Readers}">
+                                                        <local:MpAvOleFormatStripView.IsVisible>
+                                                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                                <Binding Path="!IsVisible"
+                                                                         ElementName="NoopOleReaderButton" />
+                                                                <Binding Path="!IsVisible"
+                                                                         ElementName="DefaultOleReaderButton" />
+                                                            </MultiBinding>
+                                                        </local:MpAvOleFormatStripView.IsVisible>
+                                                    </local:MpAvOleFormatStripView>
 
                                                     <!--  READER NOOP BUTTON  -->
 
@@ -196,6 +204,33 @@
                                                                                    ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleNoopReaderTooltip}" />
                                                         </ToolTip.Tip>
                                                         <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
+                                                    </DropDownButton>
+
+                                                    <!--  READER DEFAULT BUTTON  -->
+
+                                                    <DropDownButton x:Name="DefaultOleReaderButton"
+                                                                    Classes="oleFormatButton"
+                                                                    IsVisible="{Binding IsReaderDefault}"
+                                                                    HorizontalAlignment="Center"
+                                                                    Command="{Binding ShowOleFormatMenuCommand}"
+                                                                    CommandParameter="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                        <DropDownButton.Resources>
+                                                            <SolidColorBrush x:Key="ButtonForeground">Blue</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBorderBrush">Blue</SolidColorBrush>
+
+                                                            <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">White</SolidColorBrush>
+
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Blue</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+
+                                                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+                                                        </DropDownButton.Resources>
+                                                        <ToolTip.Tip>
+                                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleDefaultReaderTooltip}" />
+                                                        </ToolTip.Tip>
+                                                        <TextBlock Text="{x:Static local:UiStrings.CommonDefaultLabel}" />
                                                     </DropDownButton>
 
                                                 </Grid>
@@ -226,9 +261,17 @@
 
                                                     <local:MpAvOleFormatStripView Classes="write"
                                                                                   Cursor="Hand"
-                                                                                  IsVisible="{Binding !IsVisible, ElementName=NoopOleWriterButton}"
                                                                                   HorizontalAlignment="Center"
-                                                                                  DataContext="{Binding Writers}" />
+                                                                                  DataContext="{Binding Writers}">
+                                                        <local:MpAvOleFormatStripView.IsVisible>
+                                                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                                <Binding Path="!IsVisible"
+                                                                         ElementName="NoopOleWriterButton" />
+                                                                <Binding Path="!IsVisible"
+                                                                         ElementName="DefaultOleWriterButton" />
+                                                            </MultiBinding>
+                                                        </local:MpAvOleFormatStripView.IsVisible>
+                                                    </local:MpAvOleFormatStripView>
 
                                                     <!--  WRITER NOOP BUTTON  -->
 
@@ -258,6 +301,32 @@
                                                         <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
                                                     </DropDownButton>
 
+                                                    <!--  WRITER DEFAULT BUTTON  -->
+
+                                                    <DropDownButton x:Name="DefaultOleWriterButton"
+                                                                    Classes="oleFormatButton"
+                                                                    IsVisible="{Binding IsWriterDefault}"
+                                                                    HorizontalAlignment="Center"
+                                                                    Command="{Binding ShowOleFormatMenuCommand}"
+                                                                    CommandParameter="{Binding $self, ConverterParameter=write, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                        <DropDownButton.Resources>
+                                                            <SolidColorBrush x:Key="ButtonForeground">Blue</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBorderBrush">Blue</SolidColorBrush>
+
+                                                            <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">White</SolidColorBrush>
+
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Blue</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+
+                                                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+                                                        </DropDownButton.Resources>
+                                                        <ToolTip.Tip>
+                                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleDefaultWriterTooltip}" />
+                                                        </ToolTip.Tip>
+                                                        <TextBlock Text="{x:Static local:UiStrings.CommonDefaultLabel}" />
+                                                    </DropDownButton>
                                                 </Grid>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -313,8 +382,8 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropShortcutsHeaderTitle}" />
                     <local:MpAvToolTipHintView Classes="expander header warning"
-                                                   IsHtml="True"
-                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                               IsHtml="True"
+                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -375,7 +444,7 @@
                                                             Spacing="5">
                                                     <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
                                                     <local:MpAvToolTipHintView IsHtml="True"
-                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
+                                                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -397,7 +466,7 @@
                                                             Spacing="5">
                                                     <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
                                                     <local:MpAvToolTipHintView IsHtml="True"
-                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -461,8 +530,8 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropRejectedHeaderTitle}" />
                     <local:MpAvToolTipHintView Classes="expander header warning"
-                                                   IsHtml="True"
-                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
+                                               IsHtml="True"
+                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -593,7 +662,7 @@
                                 <TextBlock Classes="expander header"
                                            Text="{x:Static local:UiStrings.SettingsInteropRejectedUrlsHeaderLabel}" />
                                 <local:MpAvToolTipHintView Classes="expander header warning"
-                                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropUrlHintText}" />
+                                                           ToolTipText="{x:Static local:UiStrings.SettingsInteropUrlHintText}" />
                             </StackPanel>
                         </Expander.Header>
                         <Expander.Content>

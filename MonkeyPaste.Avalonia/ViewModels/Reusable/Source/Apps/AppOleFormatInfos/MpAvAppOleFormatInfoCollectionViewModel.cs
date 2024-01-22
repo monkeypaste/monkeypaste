@@ -29,35 +29,64 @@ namespace MonkeyPaste.Avalonia {
         public IList<MpAvAppOlePresetViewModel> Writers =>
             Items.Where(x => x.IsWriterAppPreset).ToList();
 
-        MpAvAppOlePresetViewModel NoOpReader =>
-            Readers.FirstOrDefault(x => x.IsReaderNoOp);
-
-        MpAvAppOlePresetViewModel NoOpWriter =>
-            Writers.FirstOrDefault(x => x.IsWriterNoOp);
         #endregion
 
         #region State
         // NOTE Default means no special settings for this app,
         // uses whatever presets and params are enabled in cb sidebar
-        public bool IsDefault =>
-            IsReaderDefault && IsWriterDefault;
-        public bool IsReaderDefault =>
-            Readers.Count == 0;
-        public bool IsWriterDefault =>
-            Writers.Count == 0;
+        public bool IsCustom =>
+            Parent != null && Parent.HasCustomOle;
+
+        public bool IsDefault {
+            get {
+                if (!IsCustom) {
+                    return true;
+                }
+                return IsReaderDefault && IsWriterDefault;
+
+            }
+        }
+        public bool IsReaderDefault {
+            get {
+                if (!IsCustom) {
+                    return true;
+                }
+                return
+                    !Readers
+                    .Select(x => x.PresetId)
+                    .Difference(
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                        .EnabledReaders
+                        .Select(x => x.PresetId))
+                    .Any();
+            }
+        }
+        public bool IsWriterDefault {
+            get {
+                if (!IsCustom) {
+                    return true;
+                }
+                return
+                    !Writers
+                    .Select(x => x.PresetId)
+                    .Difference(
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                        .EnabledWriters
+                        .Select(x => x.PresetId))
+                    .Any();
+            }
+        }
 
         // NOTE NoOp is primarily used to differentiate
         // a default app with one that has NO formats to read/write repectively
         // primarily used during deselect all but can also be intended i guess
         public bool IsAllNoOp =>
-            IsReadersOnlyNoOp && IsWritersOnlyNoOp;
+            !IsDefault && Items.Count == 0;
         public bool IsReadersOnlyNoOp =>
-            Readers.Count == 1 &&
-            NoOpReader != null;
+            IsCustom && Readers.Count == 0;
 
         public bool IsWritersOnlyNoOp =>
-            Writers.Count == 1 &&
-            NoOpWriter != null;
+            IsCustom && Writers.Count == 0;
 
         public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsBusy);
@@ -103,6 +132,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpAvAppOlePresetViewModel> AddAppOlePresetViewModelByPresetIdAsync(int presetId) {
+            if (IsDefault) {
+                await CreateDefaultInfosCommand.ExecuteAsync();
+            }
+
             if (Items.FirstOrDefault(x => x.PresetId == presetId) is { } dup_aofivm) {
                 return dup_aofivm;
             }
@@ -120,69 +153,43 @@ namespace MonkeyPaste.Avalonia {
             if (Items.FirstOrDefault(x => x.PresetId == presetId) is not MpAvAppOlePresetViewModel aopvm) {
                 return;
             }
-            // NOTE if this is the last info for the app and it is NOT
-            // the no op then it will NEED the no op.
-            // no op is removed by toggling relativeRoot from false in menu cmd
-            bool isReader = aopvm.IsReaderAppPreset;
-            bool needs_no_op =
-                Items
-                .Where(x => x.IsReaderAppPreset == isReader && !x.IsNoOpReaderOrWriter)
-                .Count() == 1;
 
             await aopvm.AppOlePreset.DeleteFromDatabaseAsync();
             Items.Remove(aopvm);
-            if (needs_no_op) {
-                // make sure no op is present for continuing
-                await AddAppOlePresetViewModelByPresetIdAsync(isReader ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID);
-            }
         }
 
         public bool IsFormatEnabledByPresetId(int presetId) {
-            if (presetId == 2) {
-
-            }
-            return GetAppOleFormatInfoByPresetId(presetId) != null;
-        }
-        public MpAvAppOlePresetViewModel GetAppOleFormatInfoByPresetId(int presetId) {
-            if (Items == null) {
-                return null;
-            }
-            return Items.FirstOrDefault(x => x.PresetId == presetId);
-        }
-        public async Task CheckForCustomDefaultAsync() {
-            if (IsDefault || IsAllNoOp) {
-                return;
-            }
-            bool is_unique =
-                Items
-                .Select(x => x.PresetId)
-                .Difference(MpAvClipboardHandlerCollectionViewModel.Instance.EnabledFormats.Select(x => x.PresetId))
-                .Any();
-            if (is_unique) {
-                return;
-            }
-            // app settings have gone back to current default state, remove all so its clearly default and treated as such
-            await Task.WhenAll(Items.Select(x => x.AppOlePreset.DeleteFromDatabaseAsync()));
-            Items.Clear();
+            return Items.Any(x => x.PresetId == presetId);
         }
 
-        public async Task CreateDefaultInfosAsync() {
-            var default_preset_ids =
-                        MpAvClipboardHandlerCollectionViewModel.Instance
-                        .EnabledFormats
-                        .Select(x => x.PresetId);
+        public async Task<bool> SetIsEnabledAsync(int preset_id, bool is_enabled) {
+            if (preset_id <= 0) {
+                return is_enabled;
+            }
 
-            // CRITICAL SECTION
-            // when avm becomes non-default and enabled presets are stored 
-            // this should only happen ONCE so toggling in parallel is BAD
-            foreach (var preset_id in default_preset_ids) {
+            if (is_enabled) {
                 await AddAppOlePresetViewModelByPresetIdAsync(preset_id);
+            } else {
+                await RemoveAppOlePresetViewModelByPresetIdAsync(preset_id);
             }
+            return IsFormatEnabledByPresetId(preset_id);
         }
 
-        public async Task RemoveAllCustomInfoAsync() {
-            await Task.WhenAll(Items.Select(x => x.AppOlePreset.DeleteFromDatabaseAsync()));
-            Items.Clear();
+        public bool ValidateAppOleInfos() {
+            // NOTE unused just for diagnostics
+            var dup_readers =
+                Readers
+                .GroupBy(x => x.ClipboardPresetViewModel.FormatName)
+                .Where(x => x.Count() > 1);
+            var dup_writers =
+                Writers
+                .GroupBy(x => x.ClipboardPresetViewModel.FormatName)
+                .Where(x => x.Count() > 1);
+            bool is_valid = !dup_readers.Any() && !dup_writers.Any();
+            if (!is_valid) {
+                MpDebug.Break($"Dup formats detected");
+            }
+            return is_valid;
         }
         #endregion
 
@@ -235,35 +242,52 @@ namespace MonkeyPaste.Avalonia {
 
         private void RefreshOleStateProps() {
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(IsDefault));
             OnPropertyChanged(nameof(IsReaderDefault));
             OnPropertyChanged(nameof(IsWriterDefault));
             OnPropertyChanged(nameof(IsReadersOnlyNoOp));
             OnPropertyChanged(nameof(IsWritersOnlyNoOp));
             OnPropertyChanged(nameof(Readers));
             OnPropertyChanged(nameof(Writers));
-
         }
-
         #endregion
 
         #region Commands
 
-        public MpIAsyncCommand<object> ToggleFormatEnabledCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                int presetId = 0;
+        public MpIAsyncCommand CreateDefaultInfosCommand => new MpAsyncCommand(
+            async () => {
+                Parent.HasCustomOle = true;
+                await Task.Delay(50);
+                while (Parent.HasModelChanged) {
+                    await Task.Delay(100);
+                }
 
-                if (args is MpAvClipboardFormatPresetViewModel cfpvm) {
-                    presetId = cfpvm.PresetId;
-                } else if (args is bool isReaderNoOp) {
-                    presetId = isReaderNoOp ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID;
+                var default_preset_ids =
+                            MpAvClipboardHandlerCollectionViewModel.Instance
+                            .EnabledFormats
+                            .Select(x => x.PresetId);
+
+                // CRITICAL SECTION
+                // when avm becomes non-default and enabled presets are stored 
+                // this should only happen ONCE so toggling in parallel is BAD
+                foreach (var preset_id in default_preset_ids) {
+                    await AddAppOlePresetViewModelByPresetIdAsync(preset_id);
                 }
-                if (GetAppOleFormatInfoByPresetId(presetId) is MpAvAppOlePresetViewModel aofivm) {
-                    // remove preset
-                    await RemoveAppOlePresetViewModelByPresetIdAsync(presetId);
-                } else {
-                    //add preset
-                    await AddAppOlePresetViewModelByPresetIdAsync(presetId);
+            }, () => {
+                return !IsCustom;
+            });
+
+        public MpIAsyncCommand RemoveCustomInfosCommand => new MpAsyncCommand(
+            async () => {
+                Parent.HasCustomOle = false;
+                await Task.Delay(50);
+                while (Parent.HasModelChanged) {
+                    await Task.Delay(100);
                 }
+                await Task.WhenAll(Items.Select(x => x.AppOlePreset.DeleteFromDatabaseAsync()));
+                Items.Clear();
+            }, () => {
+                return IsCustom;
             });
 
         public ICommand ShowOleFormatMenuCommand => new MpCommand<object>(

@@ -172,6 +172,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool HasCustomOle {
+            get {
+                if (App == null) {
+                    return false;
+                }
+                return App.HasOleFormats;
+            }
+            set {
+                if (HasCustomOle != value) {
+                    App.HasOleFormats = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(HasCustomOle));
+                }
+            }
+        }
+
         public int ClipboardShortcutsId { get; private set; }
         public MpApp App { get; set; }
 
@@ -201,6 +217,11 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IconId));
 
             await OleFormatInfos.InitializeAsync(AppId);
+
+            if (!HasCustomOle) {
+                // if formats exist HasCustomOle should be true
+                MpDebug.Assert(OleFormatInfos.Items.Count == 0, $"Ole format mismatch for {this}");
+            }
 
             MpAppClipboardShortcuts aps = await MpDataModelProvider.GetAppClipboardShortcutsAsync(AppId);
             ClipboardShortcutsId = aps == null ? 0 : aps.Id;
@@ -295,6 +316,11 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.DoSelectedPulse));
                     }
                     MpAvThemeViewModel.Instance.HandlePulse(this);
+                    break;
+                case nameof(HasCustomOle):
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.CustomClipboardFormatItems));
+                    }
                     break;
             }
         }

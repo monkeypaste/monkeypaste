@@ -1,5 +1,4 @@
-﻿using DynamicData;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -116,10 +115,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region View Models
-
-        //public MpITreeItemViewModel ParentTreeItem => Parent;
-
-        //public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> SortedItems =>
+                    Items.OrderBy(x => x.SortOrderIdx);
 
         #endregion
 
@@ -294,6 +291,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            await UpdatePresetSortOrderAsync();
+
             IsBusy = false;
         }
 
@@ -381,8 +380,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
-
         private void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdatePresetSortOrderAsync().FireAndForgetSafeAsync(this);
         }
@@ -423,15 +420,14 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task UpdatePresetSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
-                Items.Sort(x => x.SortOrderIdx);
+                OnPropertyChanged(nameof(SortedItems));
             } else {
-                foreach (var aipvm in Items) {
-                    aipvm.SortOrderIdx = Items.IndexOf(aipvm);
+                var sil = SortedItems.ToList();
+                for (int i = 0; i < sil.Count; i++) {
+                    sil[i].SortOrderIdx = i;
                 }
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    foreach (var pvm in Items) {
-                        await pvm.Preset.WriteToDatabaseAsync();
-                    }
+                while (sil.Any(x => x.HasModelChanged)) {
+                    await Task.Delay(50);
                 }
             }
         }
@@ -467,6 +463,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+
         #endregion
 
         #region Commands

@@ -42,9 +42,18 @@ namespace MonkeyPaste {
         [Column("fk_MpUserDeviceId")]
         public int UserDeviceId { get; set; }
 
+        [Column("b_HasOleFormatsEntry")]
+        public int HasOleFormatsEntryVal { get; set; } = 0;
+
         #endregion
 
         #region Properties
+
+        [Ignore]
+        public bool HasOleFormats {
+            get => HasOleFormatsEntryVal == 1;
+            set => HasOleFormatsEntryVal = value ? 1 : 0;
+        }
 
         [Ignore]
         public bool IsAppRejected {
@@ -105,6 +114,7 @@ namespace MonkeyPaste {
             int iconId = 0,
             int appUserDeviceId = 0,
             string guid = "",
+            bool hasOleFormats = false,
             bool suppressWrite = false) {
             if (appPath.IsNullOrEmpty()) {
                 throw new Exception("App must have path");
@@ -124,6 +134,12 @@ namespace MonkeyPaste {
                     dupApp.IconId = iconId;
                     await dupApp.WriteToDatabaseAsync();
                 }
+
+                if (dupApp.HasOleFormats != hasOleFormats) {
+                    // this means app icon has changed (probably from an update)
+                    dupApp.HasOleFormats = hasOleFormats;
+                    await dupApp.WriteToDatabaseAsync();
+                }
                 dupApp.WasDupOnCreate = true;
                 return dupApp;
             }
@@ -141,6 +157,7 @@ namespace MonkeyPaste {
                 AppPath = appPath.ToLower(),
                 AppName = appName,
                 Arguments = arguments,
+                HasOleFormats = hasOleFormats,
                 IconId = iconId,
                 UserDeviceId = appUserDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : appUserDeviceId
             };

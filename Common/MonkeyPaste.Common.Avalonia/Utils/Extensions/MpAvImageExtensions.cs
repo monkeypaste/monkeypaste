@@ -92,7 +92,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // don't change image if tint is transparent
                 return bmp;
             }
-            MpConsole.WriteLine($"[Tint] Unsafe BEGIN ", true);
+            //MpConsole.WriteLine($"[Tint] Unsafe BEGIN ", true);
 
             var pixels = GetPixels(bmp);
             try {
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Common.Avalonia {
                                 }
                             }
                         }
-                        MpConsole.WriteLine($"[Tint] Unsafe END ", false, true);
+                        //MpConsole.WriteLine($"[Tint] Unsafe END ", false, true);
                         return writeableBitmap.ToAvBitmap(quality);
                     }
                 }
@@ -153,7 +153,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpSize(Math.Round(src.Width * rnd), Math.Round(src.Height * rnd));
         }
         public static unsafe string ToAsciiImage(this Bitmap bmpSrc) {
-            MpConsole.WriteLine($"[ToAsciiImage] Unsafe BEGIN ", true);
+            //MpConsole.WriteLine($"[ToAsciiImage] Unsafe BEGIN ", true);
             // since this doesn't create accurate images in text (
             MpSize size = bmpSrc.PixelSize.ToPortableSize(1).ResizeKeepAspect(100, 100);
             // FIX SCALE ISSUE
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         }
                         sb.AppendLine();
                     }
-                    MpConsole.WriteLine($"[ToAsciiImage] Unsafe END ", false, true);
+                    //MpConsole.WriteLine($"[ToAsciiImage] Unsafe END ", false, true);
                     return sb.ToString();
                 }
             }
@@ -248,7 +248,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (bmp == null) {
                 return true;
             }
-            MpConsole.WriteLine($"[IsTransparent] Unsafe BEGIN ", true);
+            //MpConsole.WriteLine($"[IsTransparent] Unsafe BEGIN ", true);
             try {
                 var pixels = GetPixels(bmp);
                 using (var memoryStream = new MemoryStream()) {
@@ -264,13 +264,13 @@ namespace MonkeyPaste.Common.Avalonia {
                             for (int col = 0; col < width; col++) {
                                 PixelColor c = pixels[col, row];
                                 if (c.Alpha > min_alpha) {
-                                    MpConsole.WriteLine($"[IsTransparent] Unsafe END ", false, true);
+                                    //MpConsole.WriteLine($"[IsTransparent] Unsafe END ", false, true);
                                     return false;
                                 }
                             }
                         }
                     }
-                    MpConsole.WriteLine($"[IsTransparent] Unsafe END ", true);
+                    //MpConsole.WriteLine($"[IsTransparent] Unsafe END ", true);
                     return true;
                 }
             }
@@ -284,7 +284,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Read/Write
         public static unsafe PixelColor[,] GetPixels(this Bitmap bitmap) {
 
-            MpConsole.WriteLine($"[GetPixels] Unsafe BEGIN ", true);
+            //MpConsole.WriteLine($"[GetPixels] Unsafe BEGIN ", true);
             lock (_getPixelsLock) {
                 using (var memoryStream = new MemoryStream()) {
                     try {
@@ -315,7 +315,7 @@ namespace MonkeyPaste.Common.Avalonia {
                             }
                         }
 
-                        MpConsole.WriteLine($"[GetPixels] Unsafe END ", false, true);
+                        //MpConsole.WriteLine($"[GetPixels] Unsafe END ", false, true);
                         return pixels;
                     }
                     catch (Exception ex) {
@@ -327,13 +327,13 @@ namespace MonkeyPaste.Common.Avalonia {
 
         }
         private static unsafe byte* PutPixel(WriteableBitmap bitmap, PixelColor pixel, byte* bmpPtr) {
-            //MpConsole.WriteLine($"[PutPixel] Unsafe BEGIN ", true);
+            ////MpConsole.WriteLine($"[PutPixel] Unsafe BEGIN ", true);
             *bmpPtr++ = pixel.Blue;
             *bmpPtr++ = pixel.Green;
             *bmpPtr++ = pixel.Red;
             *bmpPtr++ = pixel.Alpha;
 
-            //MpConsole.WriteLine($"[PutPixel] Unsafe END ", false, true);
+            ////MpConsole.WriteLine($"[PutPixel] Unsafe END ", false, true);
             return bmpPtr;
         }
 

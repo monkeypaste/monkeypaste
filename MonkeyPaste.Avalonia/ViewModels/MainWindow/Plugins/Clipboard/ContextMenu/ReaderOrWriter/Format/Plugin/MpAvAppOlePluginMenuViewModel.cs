@@ -78,9 +78,8 @@ namespace MonkeyPaste.Avalonia {
 
             var items =
                 format_handler
-                .Items
+                .SortedItems
                 .Select(x => new MpAvAppOlePresetMenuViewModel(this, x))
-                .OrderBy(x => x.Header)
                 .Cast<MpAvIMenuItemViewModel>()
                 .ToList();
 

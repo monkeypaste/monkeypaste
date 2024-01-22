@@ -19,21 +19,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IsReaderAppPreset =>
-            IsReaderNoOp ?
-                true :
-                ClipboardPresetViewModel == null ?
+            ClipboardPresetViewModel == null ?
                     false :
                     ClipboardPresetViewModel.IsReader;
 
         public bool IsWriterAppPreset =>
-            IsWriterNoOp ?
-                true :
-                ClipboardPresetViewModel == null ?
+           ClipboardPresetViewModel == null ?
                     false :
                     ClipboardPresetViewModel.IsWriter;
-
-        public bool IsNoOpReaderOrWriter =>
-            IsReaderNoOp || IsWriterNoOp;
         #endregion
 
         #region Appearance
@@ -42,22 +35,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public bool IsReaderNoOp {
-            get {
-                if (AppOlePreset == null) {
-                    return false;
-                }
-                return AppOlePreset.IsNoOpReader;
-            }
-        }
-        public bool IsWriterNoOp {
-            get {
-                if (AppOlePreset == null) {
-                    return false;
-                }
-                return AppOlePreset.IsNoOpWriter;
-            }
-        }
         public int PresetId {
             get {
                 if (AppOlePreset == null) {

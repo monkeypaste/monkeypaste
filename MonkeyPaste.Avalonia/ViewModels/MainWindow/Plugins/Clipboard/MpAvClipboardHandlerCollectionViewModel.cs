@@ -434,9 +434,6 @@ namespace MonkeyPaste.Avalonia {
             IsLoaded = true;
             IsBusy = false;
         }
-
-
-
         public MpAvClipboardFormatPresetViewModel FindFormatPreset(string pluginGuid, string formatName, bool isReader) {
             return
                 AllPresets.FirstOrDefault(x =>
@@ -444,7 +441,22 @@ namespace MonkeyPaste.Avalonia {
                     x.IsReader == isReader &&
                     x.ClipboardFormat.formatName.ToLower() == formatName.ToLower());
         }
-
+        public bool ValidateAppOleInfos() {
+            // NOTE unused just for diagnostics
+            var dup_readers =
+                EnabledReaders
+                .GroupBy(x => x.FormatName)
+                .Where(x => x.Count() > 1);
+            var dup_writers =
+                EnabledWriters
+                .GroupBy(x => x.FormatName)
+                .Where(x => x.Count() > 1);
+            bool is_valid = !dup_readers.Any() && !dup_writers.Any();
+            if (!is_valid) {
+                MpDebug.Break($"Dup formats detected");
+            }
+            return is_valid;
+        }
 
         #endregion
 

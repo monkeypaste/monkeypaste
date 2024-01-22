@@ -2660,4 +2660,14 @@ You can restart now and complete the update by re-installing, ignore this and up
   <data name="AccountUnlimitedLabel" xml:space="preserve">
     <value>Unlimited</value>
   </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>This app currently matches default clipboard reader presets and formats. 
+
+Enabling or disabling default reader presets (from the Clipboard sidebar) will NOT affect this configuration. Only unlisted apps follow the default setup.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>This app currently matches default clipboard writer presets and formats. 
+
+Enabling or disabling default writer presets (from the Clipboard sidebar) will NOT affect this configuration. Only unlisted apps follow the default setup.</value>
+  </data>
 </root>

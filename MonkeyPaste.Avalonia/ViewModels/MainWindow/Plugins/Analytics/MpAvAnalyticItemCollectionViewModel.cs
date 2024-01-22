@@ -359,7 +359,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Items.FirstOrDefault(x => x.PluginGuid == guid) is { } aivm) {
                     RemoveAnalyzerReferencesAsync(aivm, false).FireAndForgetSafeAsync();
                 }
-            }
+            })
         }
 
         private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(string plugin_guid) {
