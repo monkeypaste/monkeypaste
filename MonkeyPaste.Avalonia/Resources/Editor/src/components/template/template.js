@@ -403,30 +403,33 @@ function setTemplateElementColor(telm, tcolor) {
 }
 
 function setTemplateProperty_internal(tguid, tproperty, tpropertyValue) {
+    let sup_guid = null;
     let did_property_change = false;
     var telms = getTemplateElements(tguid);
     for (var i = 0; i < telms.length; i++) {
         var telm = telms[i];
-        if (telm.getAttribute('templateGuid') == tguid) {
-            if (telm.getAttribute(tproperty) == tpropertyValue) {
-                continue;
-            }
-            if (tproperty == 'templateText' &&
-                telm.getAttribute('templateType') == 'datetime') {
-                // supress content change for datetime tick update
-                globals.SuppressContentChangedNtf = true;
-            }
-            did_property_change = true;
-
-            telm.setAttribute(tproperty, tpropertyValue);
-            if (tproperty == 'templateName') {
-                setTemplateElementText(telm, tpropertyValue);
-            } else if (tproperty == 'templateColor') {
-                setTemplateElementColor(telm, tpropertyValue)
-            }            
+        if (telm.getAttribute('templateGuid') != tguid ||
+            telm.getAttribute(tproperty) == tpropertyValue) {
+            continue;
         }
+        if (tproperty == 'templateText' &&
+            telm.getAttribute('templateType') == 'datetime') {
+            // supress content change for datetime tick update
+            sup_guid = suppressTextChanged();
+        }
+        did_property_change = true;
+
+        telm.setAttribute(tproperty, tpropertyValue);
+        if (tproperty == 'templateName') {
+            setTemplateElementText(telm, tpropertyValue);
+        } else if (tproperty == 'templateColor') {
+            setTemplateElementColor(telm, tpropertyValue)
+        }  
     }
-    globals.SuppressContentChangedNtf = false;
+    if (sup_guid) {
+        unsupressTextChanged(sup_guid);
+    }
+
     if (!did_property_change) {
         return false;
     }
@@ -458,7 +461,8 @@ function setTemplateState(tguid, tstate) {
 }
 
 function setTemplatePasteValue(tguid, ttext) {
-    return setTemplateProperty_internal(tguid, 'templateText', ttext);
+    let result = setTemplateProperty_internal(tguid, 'templateText', ttext);
+    return result;
 }
 
 function setAllTemplateData(tguid, t) {
@@ -938,6 +942,8 @@ function insertTemplate(range, t, fromDropDown, source = 'api') {
 }
 
 function focusTemplate(ftguid) {
+    let sup_guid = suppressTextChanged();
+
     if (isShowingPasteToolbar()) {
         // only mark template as visited after it loses focus
         let old_ftguid = getFocusTemplateGuid();
@@ -955,6 +961,7 @@ function focusTemplate(ftguid) {
     }
 
     if (ftguid == null) {
+        unsupressTextChanged(sup_guid);
         return;
     }
     clearTemplateFocus();
@@ -978,7 +985,7 @@ function focusTemplate(ftguid) {
             showEditTemplateToolbar(isNew);
         }
     }
-   
+    unsupressTextChanged(sup_guid);   
 }
 
 
@@ -992,7 +999,7 @@ function updateLocalTemplatesFromDb() {
             let all_local_defs = getTemplateDefs();
             let db_defs_to_update = all_shared_defs.filter(x => all_local_defs.every(y => y.templateGuid != x.templateGuid));
 
-            globals.SuppressContentChangedNtf = true;
+            let sup_guid = suppressTextChanged();
 
             for (var i = 0; i < db_defs_to_update.length; i++) {
                 let db_def = db_defs_to_update[i];
@@ -1006,7 +1013,7 @@ function updateLocalTemplatesFromDb() {
                 setTemplateData(local_def.templateGuid, db_def.templateData);
 			}
 
-            globals.SuppressContentChangedNtf = false;
+            unsupressTextChanged(sup_guid);
 
             if (db_defs_to_update.length > 0) {
                 onContentChanged_ntf();

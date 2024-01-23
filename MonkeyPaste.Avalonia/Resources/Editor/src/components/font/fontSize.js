@@ -7,7 +7,6 @@ function initFontSizes() {
 
 
 function registerFontSizes() {
-
     if (Quill === undefined) {
         /// host load error case
         debugger;
@@ -41,6 +40,26 @@ function getFontSizeDropDownElement() {
     }
     return ff_opt_elms[0];
 }
+
+function getFontSizeAtDocIdx(docIdx, fallbackToDefault = true) {
+    let insert_range = { index: docIdx, length: 1 };
+    while (isDocIdxLineEnd(insert_range.index) || isDocIdxLineStart(insert_range.index)) {
+        // keep backtracking until non block extent idx found
+        insert_range.index = Math.max(insert_range.index - 1, 0);
+        if (insert_range.index == 0) {
+            break;
+        }
+    }
+    let curFormat = getFormatForDocRange(insert_range);
+    if (curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0) {
+        curFontSize = parseInt(curFormat.size) + 'px';
+        return curFontSize;
+    }
+    if (fallbackToDefault) {
+        return globals.DefaultFontSize;
+    }
+    return null;
+}
 // #endregion Getters
 
 // #region Setters
@@ -55,7 +74,15 @@ function isFontSizeDropDownOpen() {
 // #endregion State
 
 // #region Actions
+function setSelectionFontSize(fs) {
+    let sel = getDocSelection();
+    if (!sel) {
+        return;
+    }
+    formatDocRange(sel, { size: fs }, 'user');
 
+    updateFontSizePickerToSelection(fs, sel);
+}
 function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
     if (globals.IsFontSizePickerOpen) {
         return;
@@ -64,8 +91,7 @@ function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
     sel = sel ? sel : getDocSelection();
     let curFontSize = forcedSize;
     if (curFontSize == null) {
-        let curFormat = globals.quill.getFormat(sel);
-        curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size) + 'px' : globals.DefaultFontSize;
+        curFontSize = getFontSizeAtDocIdx(sel.index);
     }
     let fontSizeFound = false;
 
@@ -92,12 +118,45 @@ function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
     }
 
 }
+
+function hideFontSizeDropDown() {
+    window.removeEventListener('mousedown', onTempFontSizeWindowClick);
+    getFontSizeToolbarElement().classList.remove('ql-expanded');
+    updateScrollBarSizeAndPositions();
+}
 // #endregion Actions
 
 // #region Event Handlers
 
 function onFontSizeToolbarElementClick(e) {
+    let size_item_elms = Array.from(document.querySelectorAll('span.ql-size .ql-picker-item'));
+    size_item_elms.forEach(x => addClickOrKeyClickEventListener(x, onFontSizeItemClick,true));
+    //window.addEventListener('mousedown', onTempFontSizeWindowClick, true);
+
     updateScrollBarSizeAndPositions();
+}
+
+function onFontSizeItemClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!e.currentTarget || !e.currentTarget.hasAttribute('data-value')) {
+        return;
+    }
+    let fs = e.currentTarget.getAttribute('data-value');
+    // hide picker
+    hideFontSizeDropDown();
+
+    setSelectionFontSize(fs);
+
+    log(fs);
+}
+
+function onTempFontSizeWindowClick(e) {
+    if (e.offsetX > e.target.clientWidth || e.offsetY > e.target.clientHeight) {
+        // mouse down over scroll element
+        return;
+    }
+    hideFontSizeDropDown();
 }
 
 // #endregion Event Handlers

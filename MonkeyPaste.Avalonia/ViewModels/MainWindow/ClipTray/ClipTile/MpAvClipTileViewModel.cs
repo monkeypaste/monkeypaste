@@ -2129,11 +2129,12 @@ namespace MonkeyPaste.Avalonia {
                 while (IsBusy) {
                     await Task.Delay(100);
                 }
+                if (IsWindowOpen) {
+                    // close was canceled
+                    return false;
+                }
             }
-            if (IsWindowOpen) {
-                // close was canceled
-                return false;
-            }
+
             await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
             MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
 

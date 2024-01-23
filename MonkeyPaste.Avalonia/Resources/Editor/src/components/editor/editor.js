@@ -353,6 +353,48 @@ function disableSubSelection(fromHost = false) {
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
 
+function suppressTextChanged(guid = null) {
+	guid = guid == null ? generateGuid() : guid;
+	let was_found = false;
+	let stcs = globals.SuppressTextChangeStack;
+	for (var i = 0; i < stcs.length; i++) {
+		if (stcs[i].guid != guid) {
+			continue;
+		}
+		stcs[i].time = Date.now();
+		was_found = true;
+		break;
+	}
+	if (!was_found) {
+		stcs.push({ guid: guid, time: Date.now() });
+	}
+	globals.SuppressTextChangeStack = stcs;
+	return guid;
+}
+function unsupressTextChanged(guid) {
+	if (!guid) {
+		debugger;
+	}
+	// this is a workaround because often quill doesn't 'emit' text change
+	// immediatly and will happen AFTER unsupressing so this waits a few cycles before unsetting
+
+	delay(300)
+		.then(() => {
+			let stcs = [];
+			for (var i = 0; i < globals.SuppressTextChangeStack.length; i++) {
+				if (globals.SuppressTextChangeStack[i].guid == guid) {
+					continue;
+				}
+				stcs.push(globals.SuppressTextChangeStack[i]);
+			}
+			globals.SuppressTextChangeStack = stcs;
+	});		
+}
+
+function isTextChangeSupressed() {
+	let result = globals.SuppressTextChangeStack.length > 0;
+	return result;
+}
 // #endregion Actions
 
 // #region Event Handlers
@@ -382,7 +424,7 @@ function onEditorSelChanged(range, oldRange, source) {
 	return;
 }
 function onEditorTextChanged(delta, oldDelta, source) {
-	if (globals.SuppressContentChangedNtf) {
+	if (isTextChangeSupressed()) {
 		return;
 	}
 	log('editor text changed');
@@ -401,7 +443,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	loadLinkHandlers(true);
 	populateFindReplaceResults();
 
-	let suppress_text_change_ntf = globals.SuppressContentChangedNtf;
+	let suppress_text_change_ntf = isTextChangeSupressed();
 
 	if (globals.IsLoaded &&
 		!suppress_text_change_ntf &&		

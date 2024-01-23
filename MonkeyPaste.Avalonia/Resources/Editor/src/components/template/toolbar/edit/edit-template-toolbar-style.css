@@ -25,7 +25,7 @@
 
 #templateNameTextArea {
     margin: unset;
-    margin-top: 7px;
+    align-self: center;
     margin-left: 10px;
     overflow: hidden;
     padding: unset;

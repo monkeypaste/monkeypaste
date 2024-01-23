@@ -1,6 +1,6 @@
 var UiStrings = {
 	EditorAppendCloseLabel: `Finish appending`,
-	EditorAppendInlineModelLabel: `Enable Paragraph`,
+	EditorAppendInlineModeLabel: `Enable Paragraph`,
 	EditorAppendLineModeLabel: `Enable Inline`,
 	EditorAppendManualModeLabel: `Toggle manual`,
 	EditorAppendNonManualModeLabel: `Toggle manual`,

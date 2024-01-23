@@ -1722,6 +1722,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To append you must unpause the clipboard listener (System Tray-&gt;Resume)..
+        /// </summary>
+        public static string AppendCannotActivateText {
+            get {
+                return ResourceManager.GetString("AppendCannotActivateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append Unavailable.
+        /// </summary>
+        public static string AppendCannotActivateTitle {
+            get {
+                return ResourceManager.GetString("AppendCannotActivateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Normal clipboard behavior has been restored.
         /// </summary>
         public static string AppendDeactivatedText {
@@ -2958,9 +2976,9 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Enable Paragraph.
         /// </summary>
-        public static string EditorAppendInlineModelLabel {
+        public static string EditorAppendInlineModeLabel {
             get {
-                return ResourceManager.GetString("EditorAppendInlineModelLabel", resourceCulture);
+                return ResourceManager.GetString("EditorAppendInlineModeLabel", resourceCulture);
             }
         }
         

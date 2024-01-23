@@ -6,17 +6,28 @@ const { themes } = require('prism-react-renderer');
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
+const local = true;//process.env.NODE_ENV == 'local';
+
+const siteUrl = local ?
+  "https://localhost" :
+  "https://monkeypaste.com";
+
+const baseUrl = local ?
+  "/docs/build" :
+  "/";
+
+const downloadUrl = local ?
+  "/blog" :
+  "/download";
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'MonkeyPaste',
   staticDirectories: ['static'],
   tagline: '(coming soon!)',
   favicon: 'img/favicon.ico',
-
-  url: "https://localhost",
-  baseUrl: "/docs/build",
-  // url: "https://monkeypaste.com",
-  // baseUrl: "/",
+  url: siteUrl,
+  baseUrl: baseUrl,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -98,7 +109,7 @@ const config = {
           { to: '/blog', label: 'Blog', position: 'left' },
           { to: '/blog', label: 'About', position: 'left' },
           { to: 'https://www.monkeypaste.com/forum', label: 'Forums', position: 'right' },
-          { to: '/download', label: 'Download', position: 'right' },
+          { to: downloadUrl, label: 'Download', position: 'right' },
           {
             href: 'https://github.com/monkeypaste',
             label: 'GitHub',

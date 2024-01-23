@@ -249,7 +249,7 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
     let ftguid = force_ftguid;
     if (!ftguid) {
         // either from template click or editor selection
-        updatePasteTemplateValues();
+        //updatePasteTemplateValues();
 
         ftguid = getFocusTemplateGuid(true);
         if (!ftguid) {
@@ -334,11 +334,13 @@ function updatePasteValueHint(ft) {
     }
 }
 function updatePasteTemplateValues() {
+    let sup_guid = suppressTextChanged();
     let tl = getTemplateDefs();
     for (var i = 0; i < tl.length; i++) {
         let t = tl[i];
         setTemplatePasteValue(t.templateGuid, getTemplatePasteValue(t));
     }
+    unsupressTextChanged(sup_guid);
 }
 
 function updatePasteElementInteractivity() {

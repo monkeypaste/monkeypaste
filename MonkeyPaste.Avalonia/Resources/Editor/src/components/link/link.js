@@ -26,13 +26,16 @@ function loadLinkHandlers(fromTextChanged) {
         link_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
 
         if (link_elm.getAttribute('href') == 'about:blank') {
-            if (!isNullOrUndefined(fromTextChanged) && fromTextChanged) {
-                globals.SuppressContentChangedNtf = true;
-            }
             link_elm.setAttribute('href', 'javascript:;');
             if (!isNullOrUndefined(fromTextChanged) && fromTextChanged) {
-                globals.SuppressContentChangedNtf = false;
+                let sup_guid = suppressTextChanged();
+
+                link_elm.setAttribute('href', 'javascript:;');
+
+                unsupressTextChanged(sup_guid);
+                continue;
             }
+            link_elm.setAttribute('href', 'javascript:;');
         }
     }
 }

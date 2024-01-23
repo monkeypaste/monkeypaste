@@ -262,6 +262,15 @@ function findRangeFontFamilyDataValue(range) {
     }
     return getFontFamilyDataValue(sel_ff_str.split(',')[0].replaceAll('"',''));
 }
+
+function hideFontFamilyDropDown() {
+    window.removeEventListener('mousedown', onTempFontFamilyWindowClick);
+    const picker_elm = getFontFamilyToolbarSelector();// getAncestorByClassName(e.target, 'ql-picker-options');
+    if (!picker_elm) {
+        return;
+    }
+    picker_elm.classList.add('hidden');
+}
 // #endregion Actions
 
 // #region Event Handlers
@@ -274,6 +283,7 @@ function onFontPickerItemClick(e) {
         return;
     }
     setDocRangeFontFamily(sel, ff_dv);
+    hideFontFamilyDropDown();
     updateFontFamilyPickerToSelection();
 }
 
@@ -292,11 +302,6 @@ function onTempFontFamilyWindowClick(e) {
         // mouse down over scroll element
         return;
     }
-    const picker_elm = getFontFamilyToolbarSelector();// getAncestorByClassName(e.target, 'ql-picker-options');
-    if (!picker_elm) {
-        return;
-    }
-    picker_elm.classList.add('hidden');
-    window.removeEventListener('mousedown', onTempFontFamilyWindowClick);
+    hideFontFamilyDropDown();
 }
 // #endregion Event Handlers

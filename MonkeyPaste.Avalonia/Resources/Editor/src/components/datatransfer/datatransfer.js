@@ -145,11 +145,7 @@ function performDataTransferOnContent(
         return;
     }
 
-    let wasTextChangeSuppressed = globals.SuppressContentChangedNtf;
-    if (!globals.SuppressContentChangedNtf) {
-        // NOTE don't unflag textchange ntf if currently set (should be wrapped somewhere) only flag if needed
-        globals.SuppressContentChangedNtf = true;
-    }
+    let sup_guid = suppressTextChanged();
 
     // REFRESH DELTA LOG
 
@@ -211,10 +207,7 @@ function performDataTransferOnContent(
     // clear delta tracker to mark end of transaction
     clearLastDelta()
 
-    if (wasTextChangeSuppressed) {
-        globals.SuppressContentChangedNtf = false;
-    }
-
+    unsupressTextChanged(sup_guid);
 }
 
 

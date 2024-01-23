@@ -3488,26 +3488,22 @@ namespace MonkeyPaste.Avalonia {
                  int unpinned_ciid = unpinned_ctvm.CopyItemId;
                  int unpinned_ctvm_idx = PinnedItems.IndexOf(unpinned_ctvm);
 
-                 if (unpinned_ctvm.IsWindowOpen) {
-                     bool was_closed = await unpinned_ctvm.ClosePopoutAsync();
-                     if (!PinnedItems.Contains(unpinned_ctvm)) {
-                         // not sure whats going on but this becomes
-                         // an extra trail of exec when items removed so cancel if gone
-                         return;
-                     }
-                     if (!was_closed) {
-                         // cancel unpin
-                         return;
-                     }
-                 }
+
                  PinOpCopyItemId = unpinned_ctvm.CopyItemId;
 
                  PinnedItems.Remove(unpinned_ctvm);
+                 if (unpinned_ctvm.IsWindowOpen) {
+                     bool was_closed = await unpinned_ctvm.ClosePopoutAsync();
+                     if (!was_closed) {
+                         // cancel unpin (must be appending)
+                         return;
+                     }
+                 }
                  unpinned_ctvm.IsContentReadOnly = true;
 
-                 if (!IsAnyTilePinned) {
-                     ObservedPinTrayScreenWidth = 0;
-                 }
+                 //if (!IsAnyTilePinned) {
+                 //    ObservedPinTrayScreenWidth = 0;
+                 //}
 
                  OnPropertyChanged(nameof(PinnedItems));
                  OnPropertyChanged(nameof(IsAnyTilePinned));
@@ -4603,6 +4599,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsAppPausedCommand => new MpCommand(
             () => {
                 IsIgnoringClipboardChanges = !IsIgnoringClipboardChanges;
+            }, () => {
+                if (IsAnyAppendMode && !IsIgnoringClipboardChanges) {
+                    // no change if appending
+                    return false;
+                }
+                return true;
             });
 
         public ICommand ToggleRightClickPasteCommand => new MpCommand(
@@ -5044,6 +5046,16 @@ namespace MonkeyPaste.Avalonia {
 
             if (was_append_already_enabled) {
                 return;
+            }
+
+            if (IsIgnoringClipboardChanges) {
+                // ntf append won't work w/o clipboard listener
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                    msgType: MpNotificationType.Message,
+                    title: UiStrings.AppendCannotActivateTitle,
+                    body: UiStrings.AppendCannotActivateText,
+                    iconSourceObj: "WarningImage",
+                    maxShowTimeMs: 10_000).FireAndForgetSafeAsync();
             }
 
             MpMessenger.SendGlobal(MpMessageType.AppendModeActivated);

@@ -503,7 +503,7 @@ function removeFileItemByAnchorElement(a_elm) {
 	}
 	// NOTE remove item before content change so host receives updated list
 	globals.FileListItems.splice(row_idx, 1);
-	globals.SuppressContentChangedNtf = true;
+	let sup_guid = suppressTextChanged();
 	globals.quill.enable(true);
 
 	let btm = getBetterTableModule(true);
@@ -515,7 +515,7 @@ function removeFileItemByAnchorElement(a_elm) {
 	globals.quill.enable(false);
 
 	//createFileList();
-	globals.SuppressContentChangedNtf = false;
+	unsupressTextChanged(sup_guid);
 	onContentChanged_ntf();
 }
 

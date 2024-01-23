@@ -206,7 +206,7 @@ function onTemplateClick(e) {
     }
 
     let drag_dist = getMouseDragDist();
-    if (!drag_dist || drag_dist > 5) {
+    if (drag_dist > 5) {
         // avoid false clicks since this is mouse up handler...
         return;
     }

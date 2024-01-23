@@ -1,8 +1,3 @@
-
-
-
-
-
 // #region Globals
 
 // #endregion Globals

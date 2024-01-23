@@ -21,7 +21,7 @@ function getMouseDragDist() {
 		isPoint(globals.WindowMouseDownLoc)) {
 		return dist(globals.WindowMouseLoc, globals.WindowMouseDownLoc)
 	}
-	return null;
+	return 0;
 }
 function getClientMousePos(e) {
 	if (!e || !e.clientX || !e.clientY) {

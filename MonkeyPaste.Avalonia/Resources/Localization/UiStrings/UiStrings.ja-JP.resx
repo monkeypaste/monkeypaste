@@ -453,7 +453,7 @@
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>追加を終了する</value>
   </data>
-  <data name="EditorAppendInlineModelLabel" xml:space="preserve">
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
     <value>段落を有効にする</value>
   </data>
   <data name="EditorAppendLineModeLabel" xml:space="preserve">

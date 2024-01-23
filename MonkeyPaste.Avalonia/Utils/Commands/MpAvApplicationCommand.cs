@@ -77,7 +77,10 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpIShortcutCommandViewModel focus_vm = null;
 
-                var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return;
+                }
+
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvTagTileViewModel>(out var ttvm)) {
                     focus_vm = ttvm;
                 } else if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
@@ -89,6 +92,8 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(focus_vm);
+            }, () => {
+                return MpAvFocusManager.Instance.IsTextInputControlFocused;
             });
 
         public ICommand OpenPopoutCommand => new MpCommand(
@@ -192,33 +197,6 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             });
         public ICommand PasteSelectionCommand => new MpCommand(
-             () => {
-                 var fc = MpAvFocusManager.Instance.FocusElement as Control;
-                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
-                     MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.Execute(null);
-                     return;
-                 }
-
-                 if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
-                     avm.PasteActionCommand.Execute(null);
-                     return;
-                 }
-             },
-            () => {
-
-                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
-                    return false;
-                }
-                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {
-                    return MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.CanExecute(null);
-                }
-                if (fc.TryGetSelfOrAncestorDataContext<MpAvActionViewModelBase>(out var avm)) {
-                    return avm.PasteActionCommand.CanExecute(null);
-                }
-                return false;
-            });
-
-        public ICommand DecraseFocusCommand => new MpCommand(
              () => {
                  var fc = MpAvFocusManager.Instance.FocusElement as Control;
                  if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out _)) {

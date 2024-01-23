@@ -150,7 +150,7 @@ function getFormatAtDocIdx(docIdx) {
 	return globals.quill.getFormat(docIdx, 0);
 }
 function getFormatForDocRange(docRange) {
-	return globals.quill.getFormat(docRange);
+	return globals.quill.getFormat({ index: docRange.index, length: Math.max(docRange.length,1) });
 }
 
 // #endregion Getters
@@ -217,8 +217,21 @@ function quillFindBlotOffset(elm, bubble = false) {
 }
 
 function formatDocRange(range, format, source = 'api') {
-	globals.quill.formatText(range.index, range.length, format, source);
+	if (range.length == 0) {
+		// BUG quill ignores format changes on 0 length ranges.
+		// This inserts an invisible character at the index so the range becomes 1
+		let word_range = getWordRangeFromDocIdx(range.index);
+		if (word_range) {
+			formatDocRange(word_range, format, source);
+			return;
+		}
+	}
+	globals.quill.formatText(range.index, Math.max(range.length,1), format, source);
 }
+function formatSelection(format, value, source = 'api') {
+	globals.quill.format(format, value, source);
+}
+
 
 function replaceFormatInDocRange(range, format, source = 'api') {
 
@@ -246,10 +259,6 @@ function replaceFormatAtDocIdx(docIdx, format, source = 'api') {
 		replaced_format[new_keys[i]] = format[new_keys[i]];
 	}
 	formatDocRange(doc_idx_range, replaced_format, source);
-}
-
-function formatSelection(format, value, source = 'api') {
-	globals.quill.format(format, value, source);
 }
 
 function insertText(docIdx, text, source = 'api', decodeTemplates = false) {

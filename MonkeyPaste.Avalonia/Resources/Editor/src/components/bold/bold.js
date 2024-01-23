@@ -42,18 +42,21 @@ function isSelHeadBold() {
 // #region Actions
 
 function setBoldToolbarButtonToggleState(isToggled) {
-	let b_svg_path_elms = Array.from(getBoldToolbarElement().querySelectorAll('path'));
-	b_svg_path_elms.forEach(x => isToggled ? x.classList.add('toggled') : x.classList.remove('toggled'));
+	if (isToggled) {
+		getBoldToolbarElement().classList.add('toggled');
+	} else {
+		getBoldToolbarElement().classList.remove('toggled');
+	}
 }
 
 function toggleSelectionBoldState() {
 	let sel = getDocSelection();
-	if (!sel || sel.length == 0) {
+	if (!sel) {
 		return;
 	}
 	let is_toggled = !isSelHeadBold();
-
 	formatDocRange(sel, { bold: is_toggled },'user');
+
 	setBoldToolbarButtonToggleState(is_toggled);
 }
 

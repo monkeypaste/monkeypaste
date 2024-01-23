@@ -151,7 +151,7 @@ function showTemplateToolbarContextMenu() {
                     continue;
                 }
                 // get all templates for type
-                let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
+                let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.templateType.toLowerCase());
 
                 tmi.submenu = [];
                 // bind existing template creates to menu items

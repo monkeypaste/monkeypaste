@@ -120,24 +120,6 @@ function getLineEndDocIdx(docIdx) {
 	return docIdx;
 }
 
-function getLineIdx(docIdx) {
-	// NOTE below doesn't work like doc's say it returns the same docIdx given for lineIdx (at least for 1 line content) maybe since this is dev 2.0 quill
-	//let line_blot = quill.getLine(docIdx);
-	//return line_blot ? line_blot[1] : -1;
-
-	let docLength = getDocLength();
-	let cur_line_idx = 0;
-	for (var i = 0; i < docLength; i++) {
-		let line_start_doc_idx = getLineStartDocIdx(i);
-		let line_end_doc_idx = getLineEndDocIdx(i);
-		if (docIdx >= line_start_doc_idx && docIdx <= line_end_doc_idx) {
-			return cur_line_idx;
-		}
-		i = line_end_doc_idx + 1;
-	}
-	return -1;
-}
-
 function getLineDocRange(lineIdx) {
 	lineIdx = lineIdx < 0 ? 0 : lineIdx >= getLineCount() ? getLineCount() - 1 : lineIdx;
 	let docIdx = 0;
@@ -243,6 +225,38 @@ function getLineRect(lineIdx, snapToEditor = true) {
 	return line_rect;
 }
 
+function getWordRangeFromDocIdx(docIdx) {
+	let s_idx = getWordStartDocIdxFromDocIdx(docIdx);
+	let e_idx = getWordEndDocIdxFromDocIdx(docIdx);
+	if (s_idx < 0 || e_idx < 0) {
+		return null;
+	}
+	return { index: s_idx, length: Math.max(0, e_idx - s_idx + 1) };
+}
+function getWordStartDocIdxFromDocIdx(docIdx) {
+	let idx = docIdx;
+	while (idx > 0) {
+		let cur_char = getText({ index: idx -1, length: 1 });
+		if (cur_char == ' ' || cur_char == '\n') {
+			return idx;
+		}
+		idx--;
+	}
+	return -1
+}
+function getWordEndDocIdxFromDocIdx(docIdx) {
+	let idx = docIdx;
+	let len = getDocLength();
+	while (idx < len - 1) {
+		let cur_char = getText({ index: idx  + 1, length: 1 });
+		if (cur_char == ' ' || cur_char == '\n') {			
+			return idx;
+		}
+		idx++;
+	}
+	return -1
+}
+
 function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true, inflateEmptyRange = true) {
 	range = cleanDocRange(range);
 
@@ -288,20 +302,6 @@ function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true,
 		range_rects.push(cur_line_rect);
 	}
 	return range_rects;
-}
-
-function getLineIdxAndRectFromPoint(p) {
-	let lineCount = getLineCount();
-	let blockIdx = getBlockIdxFromPoint(p);
-	let start_line_idx = getLineIdx(blockIdx); //0;
-	for (var i = start_line_idx; i < lineCount; i++) {
-		let line_rect = getLineRect(i);
-		if (isPointInRect(line_rect, p)) {
-			return [i, line_rect];
-		}
-	}
-
-	return null;
 }
 
 function getBlockIdxFromPoint(p) {

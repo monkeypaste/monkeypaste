@@ -604,6 +604,7 @@
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\Editor\images\delete.png" />
+    <None Remove="Resources\Editor\index2.html" />
     <None Remove="Resources\Editor\lib\jquery-context-menus\src\context-menu.css" />
     <None Remove="resources\editor\ribbon.html" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
@@ -1761,6 +1762,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Resources\Editor\index2.html">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
     <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>

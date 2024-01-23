@@ -119,7 +119,9 @@ function updateDateTimeTemplateToOptionChange() {
     }
     setTemplateData(ft.templateGuid, ft.templateData);
     let new_ft_pv = getFormattedDateTime(null, ft.templateData);
+    let sup_guid = suppressTextChanged();
     setTemplatePasteValue(ft.templateGuid, new_ft_pv);
+    unsupressTextChanged(sup_guid);
 }
 // #endregion Actions
 

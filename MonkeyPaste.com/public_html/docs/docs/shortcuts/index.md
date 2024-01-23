@@ -3,7 +3,6 @@ sidebar_position: 4
 ---
 # Shortcuts
 
-
 ## Managing Shortcuts
 All available shortcuts can be found in the *Settings->Shortcuts* menu. 
 

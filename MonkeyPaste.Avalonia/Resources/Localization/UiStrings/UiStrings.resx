@@ -487,7 +487,7 @@
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Finish appending</value>
   </data>
-  <data name="EditorAppendInlineModelLabel" xml:space="preserve">
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
     <value>Enable Paragraph</value>
   </data>
   <data name="EditorAppendLineModeLabel" xml:space="preserve">
@@ -2669,5 +2669,11 @@ Enabling or disabling default reader presets (from the Clipboard sidebar) will N
     <value>This app currently matches default clipboard writer presets and formats. 
 
 Enabling or disabling default writer presets (from the Clipboard sidebar) will NOT affect this configuration. Only unlisted apps follow the default setup.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>To append you must unpause the clipboard listener (System Tray-&gt;Resume).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Append Unavailable</value>
   </data>
 </root>

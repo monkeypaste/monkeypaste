@@ -42,12 +42,15 @@ function isSelHeadItalic() {
 // #region Actions
 
 function setItalicToolbarButtonToggleState(isToggled) {
-	let i_svg_path_elms = Array.from(getItalicToolbarElement().querySelectorAll('line'));
-	i_svg_path_elms.forEach(x => isToggled ? x.classList.add('toggled') : x.classList.remove('toggled'));
+	if (isToggled) {
+		getItalicToolbarElement().classList.add('toggled');
+	} else {
+		getItalicToolbarElement().classList.remove('toggled');
+	}
 }
 function toggleSelectionItalicState() {
 	let sel = getDocSelection();
-	if (!sel || sel.length == 0) {
+	if (!sel) {
 		return;
 	}
 	let is_toggled = !isSelHeadItalic();

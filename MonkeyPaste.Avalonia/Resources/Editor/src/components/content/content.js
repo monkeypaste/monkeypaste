@@ -20,6 +20,7 @@ async function loadContentAsync(
 	}
 	// NOTE only called fromHost (or tester which calls _ext)
 	globals.IsLoadingContent = true;
+	updateEditorPlaceholderText();
 
 	let is_reload = contentHandle == globals.ContentHandle;
 	let was_sub_sel_enabled = null;
@@ -143,6 +144,7 @@ async function loadContentAsync(
 	}
 
 	globals.IsLoadingContent = false;
+	setEditorPlaceholderText('');
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
 }

@@ -1,6 +1,6 @@
 var UiStrings = {
 	EditorAppendCloseLabel: `完成追加`,
-	EditorAppendInlineModelLabel: `启用段落`,
+	EditorAppendInlineModeLabel: `启用段落`,
 	EditorAppendLineModeLabel: `启用内联`,
 	EditorAppendManualModeLabel: `切换手动`,
 	EditorAppendNonManualModeLabel: `切换手动`,
