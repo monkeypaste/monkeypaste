@@ -1,6 +1,6 @@
 {
-  "title": "File Converter",
-  "description": "Allows files to be translated into images or text content types",
+  "title": "%Title%",
+  "description": "%Description%",
   "version": "1.0.2",
   "author": "Monkey",
   "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
@@ -8,7 +8,7 @@
   "projectUrl": "https://github.com/monkeypaste/FileConverter",
   "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
   "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
-  "tags": "Core,Text,Image,File,Converter,File to text,File to image",
+  "tags": "%Tags%",
   "packageType": "Dll",
   "analyzer": {
     "inputType": {
@@ -20,7 +20,7 @@
     },
     "parameters": [
       {
-        "label": "File to convert",
+        "label": "%FileLabel%",
         "description": "",
         "controlType": "TextBox",
         "unitType": "RawDataContentQuery",
@@ -33,20 +33,20 @@
         ]
       },
       {
-        "label": "Output Type",
-        "description": "Only .png or .txt right now",
+        "label": "%OutputLabel%",
+        "description": "%OutputDescription%",
         "controlType": "ComboBox",
         "unitType": "PlainText",
         "isRequired": true,
         "paramId": 2,
         "values": [
           {
-            "label": "Text",
+            "label": "%TextLabel%",
             "value": "Text",
             "isDefault": true
           },
           {
-            "label": "Image",
+            "label": "%ImageLabel%",
             "value": "Image"
           }
         ]
@@ -55,9 +55,9 @@
     "presets": [
       {
         "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
-        "label": "Convert to Text",
+        "label": "%TextPresetLabel%",
         "iconUri": "text.png",
-        "description": "Attempts to convert provided file to plain text",
+        "description": "%TextPresetDescription%",
         "values": [
           {
             "paramId": 2,
@@ -68,8 +68,8 @@
       {
         "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
         "iconUri": "image.png",
-        "label": "Convert to Image",
-        "description": "Attempts to convert provided file to in-memory image",
+        "label": "%ImagePresetLabel%",
+        "description": "%ImagePresetDescription%",
         "values": [
           {
             "paramId": 2,

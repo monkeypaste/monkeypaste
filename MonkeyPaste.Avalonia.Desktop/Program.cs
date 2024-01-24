@@ -23,7 +23,14 @@ namespace MonkeyPaste.Avalonia {
 
         [STAThread]
         public static void Main(string[] args) {
-            if (args.Contains("--wait-for-attach")) {
+            bool is_debug =
+#if DEBUG
+                true;
+#else
+                false;
+#endif
+
+            if (args.Contains(App.WAIT_FOR_DEBUG_ARG) || (args.Contains(App.RESTART_ARG) && is_debug)) {
                 Console.WriteLine("Attach debugger and use 'Set next statement'");
                 while (true) {
                     Thread.Sleep(100);

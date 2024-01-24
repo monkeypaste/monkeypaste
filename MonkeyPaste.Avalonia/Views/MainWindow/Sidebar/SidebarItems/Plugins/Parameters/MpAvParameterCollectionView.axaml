@@ -196,10 +196,10 @@
                                  x:DataType="pcl:MpILabelTextViewModel" />
                         <Binding>
                             <Binding.Source>
-                                <sys:String>' Has No Settings</sys:String>
+                                <sys:String>'</sys:String>
                             </Binding.Source>
                         </Binding>
-
+                        <Binding Source="{x:Static local:UiStrings.AnalyzerEmptyParamText}" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

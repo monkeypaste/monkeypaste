@@ -21,6 +21,7 @@ namespace ComputerVision {
 
         ComputerVisionAnnotator _annotator = new ComputerVisionAnnotator();
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
+
             NameValueCollection query = HttpUtility.ParseQueryString(string.Empty);
 
             if (req.GetParamValue<List<string>>(PARAM_ID_VISUAL_FEATURES) is { } features &&
@@ -41,7 +42,7 @@ namespace ComputerVision {
             var resp = new MpAnalyzerPluginResponseFormat();
             if (req.GetParamValue<string>(PARAM_ID_API_REGION_URL) is not string region_url ||
                 !Uri.IsWellFormedUriString(region_url, UriKind.Absolute)) {
-                resp.invalidParams.Add(PARAM_ID_API_REGION_URL, "Please provide a valid Region Url");
+                resp.invalidParams.Add(PARAM_ID_API_REGION_URL, Resources.RegionError);
                 return resp;
             }
             string subscriptionKey = req.GetParamValue<string>(PARAM_ID_API_KEY);
@@ -77,6 +78,8 @@ namespace ComputerVision {
             return resp;
         }
         public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
+            Resources.Culture = new System.Globalization.CultureInfo(request.culture);
+
             return new MpAnalyzerComponent() {
                 inputType = new MpPluginInputFormat() {
                     image = true
@@ -84,47 +87,41 @@ namespace ComputerVision {
                 outputType = new MpPluginOutputFormat() {
                     imageAnnotation = true
                 },
-                presets = new List<MpPresetFormat>() {
-                    new MpPresetFormat() {
-                        guid = "9c8a40a5-7e2a-4600-b8dc-12611174c8c7",
-                        label = "Multi-select test 1",
-                        values = new List<MpPresetValueFormat>() {
-                            new MpPresetValueFormat(
-                                PARAM_ID_VISUAL_FEATURES,
-                                string.Join(
-                                    ",",
-                                    new[]{
-                                        ComputerVisionFeatureType.Description.ToString(),
-                                        ComputerVisionFeatureType.Categories.ToString()})),
-                            new MpPresetValueFormat(PARAM_ID_DETAILS,ComputerDetailType.Landmarks.ToString()),
-                        }
-                    }
-                },
                 parameters = new List<MpParameterFormat>() {
                     new MpParameterFormat() {
-                        label = "Visual Features",
+                        label = Resources.FeaturesLabel,
                         controlType = MpParameterControlType.MultiSelectList,
                         unitType = MpParameterValueUnitType.PlainText,
                         values =
-                            typeof(ComputerVisionFeatureType)
-                            .GetEnumNames()
-                            .Select(x=>new MpParameterValueFormat() {
+                            new string[] {
+                                Resources.Adult,
+                                Resources.Brands,
+                                Resources.Categories,
+                                Resources.Color,
+                                Resources.Descrip,
+                                Resources.Faces,
+                                Resources.Objects,
+                                Resources.Taggs,
+                            }
+                            .Select((x,idx)=>new MpParameterValueFormat() {
                                 label = x,
-                                value = x.ToLower(),
+                                value = ((ComputerVisionFeatureType)idx).ToString().ToLower(),
                                 isDefault = true
                             }).ToList(),
                         paramId = PARAM_ID_VISUAL_FEATURES,
                     },
                     new MpParameterFormat() {
-                        label = "Details",
+                        label = Resources.DetailsLabel,
                         controlType = MpParameterControlType.MultiSelectList,
                         unitType = MpParameterValueUnitType.PlainText,
                         values =
-                            typeof(ComputerDetailType)
-                            .GetEnumNames()
-                            .Select(x=>new MpParameterValueFormat() {
+                            new string[] {
+                                Resources.Celebrities,
+                                Resources.Landmarks
+                            }
+                            .Select((x,idx)=>new MpParameterValueFormat() {
                                 label = x,
-                                value = x.ToLower(),
+                                value = ((ComputerDetailType)idx).ToString().ToLower(),
                                 isDefault = true
                             }).ToList(),
                         paramId = PARAM_ID_DETAILS,
@@ -133,8 +130,8 @@ namespace ComputerVision {
                         isExecuteParameter = true,
                         isSharedValue = true,
                         isRequired = true,
-                        label = "Region",
-                        description = "The region associated with your Azure Computer Vision account.",
+                        label = Resources.RegionLabel,
+                        description = Resources.RegionDescription,
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainText,
                         paramId = PARAM_ID_API_REGION_URL,
@@ -143,8 +140,8 @@ namespace ComputerVision {
                         isExecuteParameter = true,
                         isSharedValue = true,
                         isRequired = true,
-                        label = "Subscription Key",
-                        description = "Your Azure Computer Vision API Key.",
+                        label = Resources.KeyLabel,
+                        description = Resources.KeyDescription,
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainText,
                         paramId = PARAM_ID_API_KEY,
@@ -152,7 +149,7 @@ namespace ComputerVision {
                     new MpParameterFormat() {
                         isExecuteParameter = true,
                         controlType = MpParameterControlType.Hyperlink,
-                        value = new MpParameterValueFormat(SIGNUP_URL,"Sign Up",true),
+                        value = new MpParameterValueFormat(SIGNUP_URL,Resources.SignUpLabel,true),
                         paramId = PARAM_ID_SIGNUP,
                     },
                     new MpParameterFormat() {

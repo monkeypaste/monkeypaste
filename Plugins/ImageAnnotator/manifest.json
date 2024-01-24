@@ -1,6 +1,6 @@
 {
-  "title": "Image Annotator",
-  "description": "A local, lightweight object detector trained on 80 different types of things.",
+  "title": "%Title%",
+  "description": "%Description%",
   "version": "1.0.2",
   "author": "Monkey",
   "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
@@ -9,7 +9,7 @@
   "packageUrl": "https://github.com/monkeypaste/ImageAnnotator/releases/download/v1.0.0/ImageAnnotator.zip",
   "iconUri": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/icon.png",
   "packageType": "Dll",
-  "tags": "Image Detection, Annotation, Image, AI, Text",
+  "tags": "%Tags%",
   "analyzer": {
     "inputType": {
       "image": true
@@ -19,8 +19,8 @@
     },
     "parameters": [
       {
-        "label": "Confidence",
-        "description": "A value between 0 and 1 to filter detected accuracy",
+        "label": "%ConfLabel%",
+        "description": "%ConfDescription%",
         "controlType": "Slider",
         "unitType": "Decimal",
         "minimum": 0,

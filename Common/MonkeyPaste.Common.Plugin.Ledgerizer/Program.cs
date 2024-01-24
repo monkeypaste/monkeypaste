@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Avalonia;
+using MonkeyPaste.Common.Plugin.Localizer;
 using System.Diagnostics;
 using System.IO.Compression;
 
@@ -11,8 +12,11 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         static bool DO_REMOTE_PACKAGING = false;
         static bool FORCE_REPLACE_REMOTE_TAG = false;
 
-        static bool DO_LOCAL_VERSIONS = true;
+        static bool DO_LOCAL_VERSIONS = false;
         static bool DO_REMOTE_VERSIONS = false;
+
+        static bool DO_LOCAL_INDEX = true;
+        static bool DO_REMOTE_INDEX = false;
 
 
         const string BUILD_CONFIG =
@@ -27,8 +31,6 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
 #else
             "";
 #endif
-
-
         const string README_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/README.md";
         const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
         const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
@@ -67,55 +69,141 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 MpLedgerConstants.LEDGER_PROJ_DIR,
                 MpLedgerConstants.REMOTE_LEDGER_NAME);
 
+        static string ManifestPrefix = "manifest";
+        static string ManifestExt = "json";
+        static string ManifestFileName = ManifestPrefix + "." + ManifestExt;
 
+        static List<string> CulturesFound { get; set; } = [];
         static void Main(string[] args) {
             Console.WriteLine("Press any key to ledgerize!");
             Console.ReadKey();
             Console.WriteLine("Starting...");
-            if (DO_LOCAL_PACKAGING) {
-                MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
-            }
 
-            MpManifestLedger ledger = new MpManifestLedger();
-            foreach (var plugin_name in PluginNames) {
-                string plugin_manifest_path = Path.Combine(
-                        MpCommonHelpers.GetSolutionDir(),
-                        "Plugins",
-                        plugin_name,
-                        "manifest.json");
-                string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
-                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
-
-                string plugin_proj_dir = Path.GetDirectoryName(plugin_manifest_path);
-                string local_package_uri = PackPlugin(plugin_proj_dir, plugin_manifest.guid);
-                if (local_package_uri == null) {
-                    continue;
+            if (DO_LOCAL_PACKAGING || DO_REMOTE_PACKAGING) {
+                if (DO_LOCAL_PACKAGING) {
+                    MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
                 }
-                plugin_manifest.packageUrl = local_package_uri;
-                ledger.manifests.Add(plugin_manifest);
-            }
 
-            if (DO_LOCAL_PACKAGING) {
-                // write ledger-local.js
-                MpConsole.WriteLine($"Local ledger written to: {MpFileIo.WriteTextToFile(
-                    MpLedgerConstants.LOCAL_LEDGER_URI.ToPathFromUri(),
-                    ledger.SerializeObject(true).ToPrettyPrintJson())}", true);
-            }
-            if (DO_REMOTE_PACKAGING) {
-                MpConsole.WriteLine($"Remote ledger written to: {MpFileIo.WriteTextToFile(
-                    MpLedgerConstants.REMOTE_LEDGER_URI.ToPathFromUri(),
-                    PublishRemote(ledger))}", true);
+                MpManifestLedger ledger = new MpManifestLedger();
+                foreach (var plugin_name in PluginNames) {
+                    string plugin_proj_dir = GetPluginProjDir(plugin_name);
+                    string plugin_manifest_path = Path.Combine(
+                            plugin_proj_dir,
+                            ManifestFileName);
+
+                    string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
+                    MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
+
+                    string local_package_uri = PackPlugin(plugin_proj_dir, plugin_manifest.guid);
+                    if (local_package_uri == null) {
+                        continue;
+                    }
+                    plugin_manifest.packageUrl = local_package_uri;
+                    ledger.manifests.Add(plugin_manifest);
+                }
+
+                if (DO_LOCAL_PACKAGING) {
+                    // write ledger-local.js
+                    MpConsole.WriteLine($"Local ledger written to: {MpFileIo.WriteTextToFile(
+                        MpLedgerConstants.LOCAL_INV_LEDGER_URI.ToPathFromUri(),
+                        ledger.SerializeObject(true).ToPrettyPrintJson())}", true);
+
+                }
+                if (DO_REMOTE_PACKAGING) {
+                    MpConsole.WriteLine($"Remote ledger written to: {MpFileIo.WriteTextToFile(
+                        MpLedgerConstants.REMOTE_INV_LEDGER_URI.ToPathFromUri(),
+                        PublishRemote())}", true);
+                }
             }
             if (DO_LOCAL_VERSIONS) {
-                UpdateVersions(ledger, false);
+                UpdateVersions(false);
             }
             if (DO_REMOTE_VERSIONS) {
-                UpdateVersions(ledger, true);
+                UpdateVersions(true);
             }
+
+            if (DO_LOCAL_INDEX) {
+                CreateIndex(false);
+            }
+            if (DO_REMOTE_INDEX) {
+                CreateIndex(true);
+            }
+
+
             MpConsole.WriteLine("Done.. press key to finish", true);
             Console.ReadLine();
         }
 
+        #region Localizing
+        static void CreateIndex(bool is_remote) {
+            MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} Cultures...", true);
+            string inv_code = "";
+
+            List<string> found_cultures = [];
+            // find all distinct cultures
+            foreach (var plugin_name in PluginNames) {
+                string plugin_proj_dir = GetPluginProjDir(plugin_name);
+                if (MpLocalizationHelpers.GetAvailableCultures(plugin_proj_dir, file_name_prefix: ManifestPrefix, inv_code: inv_code) is { } cil) {
+                    var to_add = cil.Where(x => !found_cultures.Contains(x.Name) && !string.IsNullOrEmpty(x.Name)).Select(x => x.Name);
+                    found_cultures.AddRange(to_add);
+                }
+            }
+
+            // recreate invariant ledger
+            var ledger = GetInvLedger(is_remote);
+
+            // create localized ledger for each distinct culture in /Cultures dir
+            foreach (string cc in found_cultures) {
+                var culture_manifests = new List<MpManifestFormat>();
+                foreach (string plugin_name in PluginNames) {
+                    // find closest culture for each plugin and create that manifest
+                    var culture_manifest = GetLocalizedManifest(plugin_name, cc, inv_code);
+                    if (ledger.manifests.FirstOrDefault(x => x.guid == culture_manifest.guid) is { } ledger_manifest) {
+                        // use inv ledger packageUrl
+                        culture_manifest.packageUrl = ledger_manifest.packageUrl;
+                    }
+
+                    culture_manifests.Add(culture_manifest);
+                }
+                var culture_ledger = new MpManifestLedger() {
+                    manifests = culture_manifests
+                };
+                // save ledger to /Cultures dir
+                string culture_ledger_file_name =
+                    $"{MpLedgerConstants.LEDGER_PREFIX}{(is_remote ? string.Empty : MpLedgerConstants.LOCAL_SUFFIX)}.{cc}.{MpLedgerConstants.LEDGER_EXT}";
+                string culture_ledger_path = Path.Combine(
+                    MpLedgerConstants.LOCAL_CULTURES_DIR_URI.ToPathFromUri(),
+                    culture_ledger_file_name);
+                MpFileIo.WriteTextToFile(culture_ledger_path, culture_ledger.SerializeObject(omitNulls: true).ToPrettyPrintJson());
+                MpConsole.WriteLine(culture_ledger_path);
+            }
+
+            MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} index...", true);
+            // create index of all written cultures
+            string ledger_index_file_name = is_remote ?
+                MpLedgerConstants.REMOTE_LEDGER_INDEX_NAME :
+                MpLedgerConstants.LOCAL_LEDGER_INDEX_NAME;
+            string ledger_index_path = Path.Combine(
+                MpLedgerConstants.LEDGER_PROJ_DIR,
+                ledger_index_file_name);
+            MpFileIo.WriteTextToFile(ledger_index_path, found_cultures.SerializeObject().ToPrettyPrintJson());
+            MpConsole.WriteLine(ledger_index_path);
+        }
+
+        static MpManifestFormat GetLocalizedManifest(string plugin_name, string culture, string inv_code) {
+            string plugin_proj_dir = GetPluginProjDir(plugin_name);
+            string resolved_cultre = MpLocalizationHelpers.FindClosestCultureCode(culture, plugin_proj_dir, file_name_prefix: ManifestPrefix, inv_code: inv_code);
+            string localized_manifest_path = Path.Combine(
+                plugin_proj_dir,
+                $"{ManifestPrefix}.{resolved_cultre}.{ManifestExt}").Replace("..", ".");
+            MpDebug.Assert(localized_manifest_path.IsFile(), $"ERror can't find manifest {localized_manifest_path}");
+            return MpFileIo.ReadTextFromFile(localized_manifest_path).DeserializeObject<MpManifestFormat>();
+        }
+
+
+        #endregion
+
+        #region Packaging
         static string PackPlugin(string proj_dir, string guid) {
             string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
             string plugin_name = Path.GetFileName(proj_dir);
@@ -186,7 +274,8 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             return output_path.ToFileSystemUriFromPath();
         }
 
-        static string PublishRemote(MpManifestLedger ledger) {
+        static string PublishRemote() {
+            var ledger = GetInvLedger(true);
             foreach (var manifest in ledger.manifests) {
                 string proj_dir = Path.Combine(
                                 MpCommonHelpers.GetSolutionDir(),
@@ -263,12 +352,12 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 // new rev works, update local manifest to match
 
                 // NOTE avoiding full re-write since manifest can be subclass, just replacing version...
-                string manifest_json = MpFileIo.ReadTextFromFile(Path.Combine(proj_dir, "manifest.json"));
+                string manifest_json = MpFileIo.ReadTextFromFile(Path.Combine(proj_dir, ManifestFileName));
                 string old_ver_json = $"\"version\": \"{initial_failed_ver}\"";
                 string new_ver_json = $"\"version\": \"{version}\"";
                 if (manifest_json.Contains(old_ver_json)) {
                     manifest_json = manifest_json.Replace(old_ver_json, new_ver_json);
-                    MpFileIo.WriteTextToFile(Path.Combine(proj_dir, "manifest.json"), manifest_json);
+                    MpFileIo.WriteTextToFile(Path.Combine(proj_dir, ManifestFileName), manifest_json);
                 } else {
                     MpConsole.WriteLine($"Error! Could not find old ver string '{old_ver_json}' trying to replace with '{new_ver_json}' in plugin '{proj_dir}'");
                 }
@@ -285,7 +374,18 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             return github_release_uri;
         }
 
-        static void UpdateVersions(MpManifestLedger ledger, bool is_remote) {
+        static string GetRemotePackageUrl(string plugin_name, string plugin_guid, string target_tag_name) {
+            if (PrivatePackagePlugins.Contains(plugin_name)) {
+                return string.Format(PRIVATE_PACKAGE_URL_FORMAT, plugin_guid, target_tag_name);
+            }
+            return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
+        }
+        #endregion
+
+        #region Version
+
+        static void UpdateVersions(bool is_remote) {
+            MpManifestLedger ledger = GetInvLedger(is_remote);
             bool is_done = false;
 
             _ = Task.Run(async () => {
@@ -312,6 +412,23 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             }
 
         }
+        #endregion
+
+        #region Helpers
+        static MpManifestLedger GetInvLedger(bool is_remote) {
+            string inv_ledger_path = Path.Combine(
+                MpLedgerConstants.LEDGER_PROJ_DIR,
+                is_remote ?
+                MpLedgerConstants.REMOTE_LEDGER_NAME :
+                MpLedgerConstants.LOCAL_LEDGER_NAME);
+            return MpFileIo.ReadTextFromFile(inv_ledger_path).DeserializeObject<MpManifestLedger>();
+        }
+        static string GetPluginProjDir(string plugin_name) {
+            return Path.Combine(
+                        MpCommonHelpers.GetSolutionDir(),
+                        "Plugins",
+                        plugin_name);
+        }
         static (int, string) RunProcess(string file, string dir, string args) {
             var proc = new Process();
             proc.StartInfo.FileName = file;
@@ -328,12 +445,6 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             proc.Dispose();
             return (exit_code, proc_output);
         }
-
-        static string GetRemotePackageUrl(string plugin_name, string plugin_guid, string target_tag_name) {
-            if (PrivatePackagePlugins.Contains(plugin_name)) {
-                return string.Format(PRIVATE_PACKAGE_URL_FORMAT, plugin_guid, target_tag_name);
-            }
-            return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
-        }
+        #endregion
     }
 }

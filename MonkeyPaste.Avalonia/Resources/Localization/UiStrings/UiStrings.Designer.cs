@@ -1614,6 +1614,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Has No Settings.
+        /// </summary>
+        public static string AnalyzerEmptyParamText {
+            get {
+                return ResourceManager.GetString("AnalyzerEmptyParamText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter Values.
         /// </summary>
         public static string AnalyzerExecuteParamNtfTitle {
@@ -7363,6 +7372,30 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeSkipButtonLabel {
             get {
                 return ResourceManager.GetString("WelcomeSkipButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Be aware I only speak English and MonkeyPaste has been translated to your language. 
+        ///
+        ///If you encounter any spelling or grammatical mistakes try not to take offense. 
+        ///
+        ///If you would like to help improve the translation we would love to hear from you! 
+        ///
+        ///feedback@monkeypaste.com.
+        /// </summary>
+        public static string WelcomeTranslatedMessage {
+            get {
+                return ResourceManager.GetString("WelcomeTranslatedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation Concerns.
+        /// </summary>
+        public static string WelcomeTranslatedTitle {
+            get {
+                return ResourceManager.GetString("WelcomeTranslatedTitle", resourceCulture);
             }
         }
     }

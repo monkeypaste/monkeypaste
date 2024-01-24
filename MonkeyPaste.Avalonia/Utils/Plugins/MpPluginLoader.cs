@@ -876,7 +876,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             string manifest_dir = Path.GetDirectoryName(inv_manifest_path);
-            string man_culture_code = MpLocalizationHelpers.ResolveMissingCulture(
+            string man_culture_code = MpLocalizationHelpers.FindClosestCultureCode(
                 culture_code: Mp.Services.UserCultureInfo.CultureCode,
                 dir: manifest_dir,
                 file_name_prefix: MANIFEST_FILE_NAME_PREFIX);
@@ -899,4 +899,5 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
     }
+
 }

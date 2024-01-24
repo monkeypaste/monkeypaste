@@ -48,6 +48,23 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CustomToolNamespace>ImageAnnotator</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Update="manifest_w_persistant_props_example.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>

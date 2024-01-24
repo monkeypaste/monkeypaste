@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Linq;
 
@@ -36,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
             double offsetY =
                 MpAvWindowManager.ToastNotifications
                 .Where(x => x.OpenDateTime < time_for_this)
-                .Sum(x => (x.Bounds.Height + pad) * primaryScreen.Scaling);
+                .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
 #if MAC
             y += offsetY;
 #else
@@ -86,8 +87,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private static Size GetWindowSize(Window w, double fallback_w = 350, double fallbach_h = 150) {
+            double th = GetWindowTitleHeight(w);
+            MpConsole.WriteLine($"Window title height: {th}px");
             if (w.Width > 0 && w.Height > 0) {
-                double th = GetWindowTitleHeight(w);
                 return new Size(w.Width, w.Height + th);
             }
             double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : fallback_w;
@@ -95,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
             if (w.DataContext is MpAvMessageNotificationViewModel mnvm) {
                 width = 350;// mnvm.MessageWindowFixedWidth;
             }
-            return new Size(width, height + GetWindowTitleHeight(w));
+            return new Size(width, height + th);
         }
 
         private static double GetWindowTitleHeight(Window w) {

@@ -11,6 +11,8 @@ namespace ImageAnnotator {
         const string PARAM_ID_CONTENT = "img64";
 
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
+            Resources.Culture = new System.Globalization.CultureInfo(req.culture);
+
             double confidence = req.GetParamValue<double>(PARAM_ID_CONFIDENCE);
             string imgBase64 = req.GetParamValue<string>(PARAM_ID_CONTENT);
 
@@ -25,7 +27,7 @@ namespace ImageAnnotator {
                         var result = await _scorer.DetectAsync(img);
                         // filter and convert predictions to annotations
                         var rootNode = new MpAnnotationNodeFormat() {
-                            label = $"Image Annotations",
+                            label = Resources.AnnLabel,
                             children = result.Boxes
                                 .Where(x => x.Confidence >= confidence)
                                 .Select(x => new MpImageAnnotationNodeFormat() {
@@ -38,7 +40,7 @@ namespace ImageAnnotator {
                                     bottom = x.Bounds.Y + x.Bounds.Height
                                 }).Cast<MpAnnotationNodeFormat>().ToList()
                         };
-                        rootNode.body = $"{rootNode.children.Count} objects detected";
+                        rootNode.body = string.Format(Resources.BodyText, rootNode.children.Count);
 
                         return new MpAnalyzerPluginResponseFormat() {
                             dataObjectLookup = new Dictionary<string, object> {

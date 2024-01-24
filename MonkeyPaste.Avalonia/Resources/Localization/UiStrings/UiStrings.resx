@@ -2676,4 +2676,19 @@ Enabling or disabling default writer presets (from the Clipboard sidebar) will N
   <data name="AppendCannotActivateTitle" xml:space="preserve">
     <value>Append Unavailable</value>
   </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Has No Settings</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Be aware I only speak English and MonkeyPaste has been translated to your language. 
+
+If you encounter any spelling or grammatical mistakes try not to take offense. 
+
+If you would like to help improve the translation we would love to hear from you! 
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Translation Concerns</value>
+  </data>
 </root>

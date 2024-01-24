@@ -9,6 +9,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public enum MpWelcomePageType {
         Greeting,
+        Translation,
         Account,
         LoginLoad,
         GestureProfile,
@@ -62,6 +63,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public MpAvWelcomeOptionGroupViewModel TranslationViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel GreetingViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel AccountViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel LoginLoadViewModel { get; set; }
@@ -76,6 +78,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_items == null) {
                     _items = new[] {
+                        TranslationViewModel,
                         GreetingViewModel,
                         AccountViewModel,
                         LoginLoadViewModel,
@@ -252,11 +255,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void InitWelcomeItems() {
+
+
             #region Greeting
             GreetingViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Greeting) {
                 SplashIconSourceObj = "AppImage",
                 Title = UiStrings.WelcomeGreetingTitle,
                 Caption = UiStrings.WelcomeGreetingCaption,
+            };
+            #endregion
+
+            #region Translation
+            TranslationViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Translation) {
+                NeedsSkip = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name == "en-US",
+                Caption = UiStrings.WelcomeTranslatedMessage,
+                Title = UiStrings.WelcomeTranslatedTitle
             };
             #endregion
 

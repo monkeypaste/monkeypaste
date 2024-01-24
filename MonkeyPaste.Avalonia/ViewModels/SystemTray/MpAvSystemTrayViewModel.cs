@@ -1,7 +1,5 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -562,7 +560,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(
             async () => {
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
+                //await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
+                //MpAvImageExtensions.Test();
+                MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true).FireAndForgetSafeAsync();
             });
 
         #endregion

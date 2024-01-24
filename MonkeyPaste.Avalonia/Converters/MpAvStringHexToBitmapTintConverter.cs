@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         private static Dictionary<object, Dictionary<string, Bitmap>> _tintCache { get; set; } = new Dictionary<object, Dictionary<string, Bitmap>>();
 
-        private bool IS_DYNAMIC_TINT_ENABLED = true;
+        public static bool IS_DYNAMIC_TINT_ENABLED = true;
 
         public static readonly MpAvStringHexToBitmapTintConverter Instance = new();
 

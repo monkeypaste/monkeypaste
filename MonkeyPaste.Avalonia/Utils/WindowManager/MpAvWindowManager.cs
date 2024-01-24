@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
             AllWindows.OfType<MpAvNotificationWindow>().ToList();
 
         public static IReadOnlyList<MpAvWindow> ToastNotifications =>
-            Notifications.Where(x => x.Classes.Contains("toast")).ToList();
+            AllWindows.Where(x => x.Classes.Contains("toast")).ToList();
 
         public static bool IsAnyActive =>
             ActiveWindow != null;
@@ -123,7 +123,11 @@ namespace MonkeyPaste.Avalonia {
         public static void CloseAll() {
             var wc = AllWindows.Count;
             for (int i = 0; i < wc; i++) {
-                AllWindows[0].Close();
+                if (AllWindows.Any()) {
+                    AllWindows[0].Close();
+                } else {
+                    return;
+                }
             }
         }
         public static MpAvWindow LocateWindow(MpPoint gmp) {

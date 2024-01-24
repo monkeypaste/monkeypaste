@@ -40,9 +40,21 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
             return cl;
         }
 
-        public static string ResolveMissingCulture(string culture_code, string dir, string file_name_prefix = default) {
+        public static string FindClosestCultureCode(string culture_code, string[] cultures) {
             CultureInfo closest_info = CultureInfo.InvariantCulture;
-            var acl = GetAvailableCultures(dir, file_name_prefix);
+            var acl = cultures.Select(x => new CultureInfo(x));
+            foreach (var ac in acl) {
+                if (GetSelfOrAncestorByCode(ac, culture_code) is CultureInfo match) {
+                    closest_info = match;
+                    break;
+                }
+            }
+            return closest_info.Name;
+        }
+
+        public static string FindClosestCultureCode(string culture_code, string dir, string file_name_prefix = default, string inv_code = "en-US") {
+            CultureInfo closest_info = CultureInfo.InvariantCulture;
+            var acl = GetAvailableCultures(dir, file_name_prefix, inv_code);
             foreach (var ac in acl) {
                 if (GetSelfOrAncestorByCode(ac, culture_code) is CultureInfo match) {
                     closest_info = match;

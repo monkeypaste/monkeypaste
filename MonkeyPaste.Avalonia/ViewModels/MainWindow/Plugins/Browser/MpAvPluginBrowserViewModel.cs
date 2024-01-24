@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common.Plugin.Localizer;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,10 +31,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        static string LEDGER_URI =>
-            MpLedgerConstants.USE_LOCAL_LEDGER ?
-                MpLedgerConstants.LOCAL_LEDGER_URI :
-                MpLedgerConstants.REMOTE_LEDGER_URI;
 
 
         private static MpAvPluginBrowserViewModel _instance;
@@ -184,13 +181,51 @@ namespace MonkeyPaste.Avalonia {
             RecentPluginSearches = await MpAvPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpAvPrefViewModel.Instance.RecentPluginSearchTexts), st);
         }
 
-        private async Task<IEnumerable<MpManifestFormat>> GetRemoteManifests() {
-            string ledger_json = await MpFileIo.ReadTextFromUriAsync(LEDGER_URI);
-            var ledger = MpJsonExtensions.DeserializeObject<MpManifestLedger>(ledger_json);
-            if (ledger == null || ledger.manifests == null) {
-                return Array.Empty<MpManifestFormat>();
+        private async Task<IEnumerable<MpManifestFormat>> GetRemoteManifestsAsync() {
+            try {
+                string ledger_uri = await GetLocalizedLedgerUriAsync();
+                string ledger_json = await MpFileIo.ReadTextFromUriAsync(ledger_uri);
+                var ledger = ledger_json.DeserializeObject<MpManifestLedger>();
+                if (ledger == null || ledger.manifests == null) {
+                    return Array.Empty<MpManifestFormat>();
+                }
+                return ledger.manifests;
             }
-            return ledger.manifests;
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading ledger. ", ex);
+                return new List<MpManifestFormat>();
+            }
+        }
+        private async Task<string> GetLocalizedLedgerUriAsync() {
+            string ledger_index_uri = MpLedgerConstants.USE_LOCAL_LEDGER ?
+                MpLedgerConstants.LOCAL_LEDGER_INDEX_URI :
+                MpLedgerConstants.REMOTE_LEDGER_INDEX_URI;
+
+            // read ledger index
+            string ledger_index_json = await MpFileIo.ReadTextFromUriAsync(ledger_index_uri);
+            var avail_cultures = ledger_index_json.DeserializeObject<List<string>>();
+
+            // find closest culture
+            string cc = MpLocalizationHelpers.FindClosestCultureCode(
+                MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
+                avail_cultures.ToArray());
+
+            // init ledger uri to inv
+            string ledger_uri = MpLedgerConstants.USE_LOCAL_LEDGER ?
+                MpLedgerConstants.LOCAL_INV_LEDGER_URI :
+                MpLedgerConstants.REMOTE_INV_LEDGER_URI;
+            if (!string.IsNullOrEmpty(cc)) {
+                // localized ledger exists
+                string cultures_base_uri = MpLedgerConstants.USE_LOCAL_LEDGER ?
+                    MpLedgerConstants.LOCAL_CULTURES_DIR_URI :
+                    MpLedgerConstants.REMOTE_CULTURES_DIR_URI;
+                string ledger_prefix = MpLedgerConstants.USE_LOCAL_LEDGER ?
+                    MpLedgerConstants.LOCAL_LEDGER_PREFIX :
+                    MpLedgerConstants.REMOTE_LEDGER_PREFIX;
+
+                ledger_uri = $"{cultures_base_uri}/{ledger_prefix}.{cc}.{MpLedgerConstants.LEDGER_EXT}";
+            }
+            return ledger_uri;
         }
         public void OpenPluginBrowserWindow(string selectedGuid) {
             if (IsWindowOpen) {
@@ -246,7 +281,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task CreateAllItemsAsync() {
             Items.Clear();
             AllManifests.Clear();
-            AllManifests.AddRange(await GetRemoteManifests());
+            AllManifests.AddRange(await GetRemoteManifestsAsync());
             AllManifests.AddRange(MpPluginLoader.PluginManifestLookup.Select(x => x.Value));
 
             foreach (var mf in AllManifests.OrderBy(x => x.title).GroupBy(x => x.guid)) {

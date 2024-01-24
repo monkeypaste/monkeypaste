@@ -1,6 +1,6 @@
 {
-  "title": "Web Search",
-  "description": "Uses default uri handler to search for selection",
+  "title": "%Title%",
+  "description": "%Description%",
   "version": "1.0.2",
   "author": "Monkey",
   "guid": "56241e2d-84bd-4f12-b7fd-14911f24cf35",
@@ -9,15 +9,15 @@
   "packageUrl": "https://github.com/monkeypaste/WebSearch/releases/download/v1.0.0/WebSearch.zip",
   "iconUri": "https://raw.githubusercontent.com/monkeypaste/WebSearch/master/icon.png ",
   "packageType": "Dll",
-  "tags": "Core,Google,Bing,DuckDuckGo,Yandex,Yahoo,Text,Search",
+  "tags": "%Tags%",
   "analyzer": {
     "inputType": {
       "text": true
     },
     "parameters": [
       {
-        "label": "Search Uri",
-        "description": "The Snippet to detect",
+        "label": "%SearchLabel%",
+        "description": "%SearchDescription%",
         "controlType": "TextBox",
         "unitType": "UriEscapedPlainTextContentQuery",
         "paramId": 1,

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.Collections;
+﻿using System.Collections;
 using System.Globalization;
 using System.Resources.NetStandard;
+using System.Text.RegularExpressions;
 
 namespace MonkeyPaste.Common.Plugin.Localizer {
     internal class Program {
@@ -36,22 +36,24 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
             invariant_resource_path = invariant_resource_path.Replace("\"", string.Empty);
 
             string templated_manifest_json = MpFileIo.ReadTextFromFile(templated_manifest_path);
-            MpPluginFormat templated_manifest = MpJsonExtensions.DeserializeObject<MpPluginFormat>(templated_manifest_json);
+
             var lang_codes = string.IsNullOrWhiteSpace(target_lang_code) ?
                 MpLocalizationHelpers.GetAvailableCultures(
                     Path.GetDirectoryName(invariant_resource_path),
                     Path.GetFileNameWithoutExtension(invariant_resource_path))
                 .Select(x => x.Name) :
                 new string[] { target_lang_code };
+
             foreach (string lang_code in lang_codes) {
-                LocalizeManifest(templated_manifest, lang_code);
+                //LocalizeManifest(templated_manifest, lang_code);
+                LocalizeManifest(templated_manifest_json, lang_code);
             }
             Console.WriteLine($"Success");
 
             Environment.Exit(0);
         }
 
-        private static string LocalizeManifest(MpPluginFormat templated_manifest, string lang_code) {
+        private static string LocalizeManifest(string templated_manifest_json, string lang_code) {
             MpPluginFormat localized_manifest = new MpPluginFormat();
 
             var localized_name_parts = new string[] {
@@ -66,22 +68,17 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
 
             string resx_path = localized_resource_path.IsFile() ? localized_resource_path : invariant_resource_path;
             using ResXResourceReader resx_reader = new ResXResourceReader(resx_path);
-            foreach (var pi in typeof(MpPluginFormat).GetProperties()) {
-                object localized_value = null;
-                if (pi.GetValue(templated_manifest) is not string val ||
-                    !val.StartsWith(RESOURCE_KEY_OPEN_TOKEN) ||
-                    !val.EndsWith(RESOURCE_KEY_CLOSE_TOKEN)) {
-                    // unkeyed or non-string property
-                    localized_value = pi.GetValue(templated_manifest);
-                } else {
-                    // paramValue is "%ResourceKeyName%"
-                    string key = val.Replace(RESOURCE_KEY_OPEN_TOKEN, string.Empty).Replace(RESOURCE_KEY_CLOSE_TOKEN, string.Empty);
-                    localized_value = GetResourceValue(resx_reader, key);
+            var mc = Regex.Matches(templated_manifest_json, "%.*%");
+            string localized_json = templated_manifest_json;
+            foreach (Match m in mc) {
+                foreach (Group mg in m.Groups) {
+                    foreach (Capture c in mg.Captures) {
+                        string key = c.Value.Replace(RESOURCE_KEY_OPEN_TOKEN, string.Empty).Replace(RESOURCE_KEY_CLOSE_TOKEN, string.Empty);
+                        string localized_value = GetResourceValue(resx_reader, key) as string;
+                        localized_json = localized_json.Replace(c.Value, localized_value);
+                    }
                 }
-
-                localized_manifest.SetPropertyValue(pi.Name, localized_value);
             }
-
 
             var output_name_parts = new string[] {
                 Path.GetFileNameWithoutExtension(templated_manifest_path),
@@ -95,11 +92,7 @@ namespace MonkeyPaste.Common.Plugin.Localizer {
 
             MpFileIo.WriteTextToFile(
                 output_path,
-                JsonConvert.SerializeObject(
-                        localized_manifest,
-                        new JsonSerializerSettings() {
-                            NullValueHandling = NullValueHandling.Ignore
-                        }).ToPrettyPrintJson());
+                localized_json);
             Console.WriteLine(output_path);
             return output_path;
         }

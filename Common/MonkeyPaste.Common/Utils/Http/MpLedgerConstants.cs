@@ -2,8 +2,21 @@
     public static class MpLedgerConstants {
         public static bool USE_LOCAL_LEDGER => true;
 
-        public const string REMOTE_LEDGER_NAME = "ledger.json";
-        public const string LOCAL_LEDGER_NAME = "ledger-local.json";
+        public const string CULTURE_DIR_NAME = "Cultures";
+        public const string LEDGER_PREFIX = "ledger";
+        public const string LEDGER_EXT = "json";
+        public const string LOCAL_SUFFIX = "-local";
+        public const string INDEX_SUFFIX = "-index";
+
+
+        public const string REMOTE_LEDGER_PREFIX = $"{LEDGER_PREFIX}";
+        public const string LOCAL_LEDGER_PREFIX = $"{LEDGER_PREFIX}{LOCAL_SUFFIX}";
+
+        public const string REMOTE_LEDGER_NAME = $"{REMOTE_LEDGER_PREFIX}.{LEDGER_EXT}";
+        public const string LOCAL_LEDGER_NAME = $"{LOCAL_LEDGER_PREFIX}.{LEDGER_EXT}";
+
+        public const string REMOTE_LEDGER_INDEX_NAME = $"{LEDGER_PREFIX}{INDEX_SUFFIX}.{LEDGER_EXT}";
+        public const string LOCAL_LEDGER_INDEX_NAME = $"{LEDGER_PREFIX}{LOCAL_SUFFIX}{INDEX_SUFFIX}.{LEDGER_EXT}";
 
         public const string LEDGER_PROJ_DIR = "C:/Users/tkefauver/Source/Repos/MonkeyPaste/Common/Ledger";
 
@@ -19,10 +32,21 @@
                 RELEASE_PACKAGES_DIR;
 #endif
 
-        public static string LOCAL_LEDGER_URI =>
+        public static string LOCAL_CULTURES_DIR_URI =>
+            $"file:///{LEDGER_PROJ_DIR}/{CULTURE_DIR_NAME}";
+        public static string REMOTE_CULTURES_DIR_URI =>
+            $"https://raw.githubusercontent.com/monkeypaste/ledger/master/{CULTURE_DIR_NAME}";
+
+        public static string LOCAL_LEDGER_INDEX_URI =>
+            $"file:///{LEDGER_PROJ_DIR}/{LOCAL_LEDGER_INDEX_NAME}";
+        public static string REMOTE_LEDGER_INDEX_URI =>
+            $"https://raw.githubusercontent.com/monkeypaste/ledger/master/{REMOTE_LEDGER_INDEX_NAME}";
+
+        public static string LOCAL_INV_LEDGER_URI =>
             $"file:///{LEDGER_PROJ_DIR}/{LOCAL_LEDGER_NAME}";
-        public static string REMOTE_LEDGER_URI =>
+        public static string REMOTE_INV_LEDGER_URI =>
             $"https://raw.githubusercontent.com/monkeypaste/ledger/master/{REMOTE_LEDGER_NAME}";
+
 
     }
 }

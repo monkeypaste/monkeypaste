@@ -8,6 +8,7 @@ namespace WebSearch {
     public class WebSearch : MpIAnalyzeComponent {
         const string URI_PARAM_ID = "1";
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
+            Resources.Culture = new System.Globalization.CultureInfo(req.culture);
             if (req != null &&
                 req.GetParamValue<string>(URI_PARAM_ID) is string uri) {
                 try {
@@ -22,7 +23,7 @@ namespace WebSearch {
                         userNotifications = new[] {
                             new MpUserNotification() {
                                 NotificationType = MpPluginNotificationType.PluginResponseError,
-                                Title = "Web Search Error",
+                                Title = Resources.ErrorLabel,
                                 Body = ex.Message,
                                 Detail = uri,
                                 IconSourceObj = MpBase64Images.Error

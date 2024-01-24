@@ -238,15 +238,15 @@ function enableReadOnly(fromHost = false) {
 	}
 
 	hideAllToolbars();
-	disableSubSelection();
+	//disableSubSelection();
 
 	getEditorContainerElement().classList.remove('editable');
-	getEditorContainerElement().classList.remove('sub-select');
-	getEditorContainerElement().classList.add('no-select');
+	//getEditorContainerElement().classList.remove('sub-select');
+	//getEditorContainerElement().classList.add('no-select');
 
 	scrollToHome();
 	updateAllElements();
-	disableTemplateSubSelection();
+	//disableTemplateSubSelection();
 
 	drawOverlay();
 
@@ -327,10 +327,6 @@ function disableSubSelection(fromHost = false) {
 		}
 		return;
 	}
-	//if (!isSubSelectionEnabled()) {
-	//	log('disableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
-	//	return;
-	//}
 
 	resetSelection();
 
@@ -343,6 +339,7 @@ function disableSubSelection(fromHost = false) {
 	hideAnnotations();
 	hidePasteToolbar();
 	clearTableSelectionStates();
+	disableTemplateSubSelection();
 
 	updateAllElements();
 	drawOverlay();

@@ -107,8 +107,8 @@ const config = {
             label: 'Docs',
           },
           { to: '/blog', label: 'Blog', position: 'left' },
-          { to: '/blog', label: 'About', position: 'left' },
-          { to: 'https://www.monkeypaste.com/forum', label: 'Forums', position: 'right' },
+          { to: '/about', label: 'About', position: 'left' },
+          { to: 'https://www.monkeypaste.com/forum', label: 'Forum', position: 'right' },
           { to: downloadUrl, label: 'Download', position: 'right' },
           {
             href: 'https://github.com/monkeypaste',

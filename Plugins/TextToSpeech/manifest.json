@@ -1,6 +1,6 @@
 {
-  "title": "Text to speech",
-  "description": "Speaks provided text",
+  "title": "%Title%",
+  "description": "%Description%",
   "version": "1.0.3",
   "author": "Monkey",
   "guid": "26436e84-392e-4038-a99c-0abe92b843bd",
@@ -8,5 +8,5 @@
   "projectUrl": "https://github.com/monkeypaste/TextToSpeech",
   "iconUri": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/icon.png",
   "packageType": "Dll",
-  "tags": "Core,Audio,Accessibility,Speech,Text"
+  "tags": "%Tags%"
 }

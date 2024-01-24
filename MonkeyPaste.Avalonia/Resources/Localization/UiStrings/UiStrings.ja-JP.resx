@@ -2517,4 +2517,40 @@
   <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
     <value>(エラーあり)</value>
   </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>事前ロードされた要素は読み取り専用です。</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>限定</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>ストレージ</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>ごみ</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>無制限</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>このアプリは現在、デフォルトのクリップボード リーダーのプリセットと形式に一致しています。</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>このアプリは現在、デフォルトのクリップボード ライターのプリセットと形式に一致しています。</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>追加するには、クリップボード リスナーの一時停止を解除する必要があります (システム トレイ -&gt; 再開)。</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>追加は利用できません</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value>設定がありません</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>私は英語のみを話し、MonkeyPaste はあなたの言語に翻訳されていることに注意してください。</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>翻訳に関する懸念</value>
+  </data>
 </root>

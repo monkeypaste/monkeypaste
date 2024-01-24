@@ -10,6 +10,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -21,10 +22,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        public const string MULTI_TOUCH_ARG = "multitouch";
-        public const string LOGIN_LOAD_ARG = "loginload";
-        public const string RESTART_ARG = "restarted";
-        public const string TRACE_ARG = "trace";
+        public const string MULTI_TOUCH_ARG = "--multitouch";
+        public const string LOGIN_LOAD_ARG = "--loginload";
+        public const string RESTART_ARG = "--restarted";
+        public const string TRACE_ARG = "--trace";
+        public const string WAIT_FOR_DEBUG_ARG = "--wait-for-attach";
 
         #endregion
 
@@ -120,6 +122,11 @@ namespace MonkeyPaste.Avalonia {
         }
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
+#if DEBUG
+            if (!Debugger.IsAttached) {
+
+            }
+#endif
 #if DESKTOP
             MpAvLogSink.Init();
 #endif
@@ -128,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
             MpAvAppRestarter.RemoveRestartTask();
+
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 #if CEFNET_WV

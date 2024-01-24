@@ -1481,6 +1481,7 @@ namespace MonkeyPaste.Avalonia {
                     pow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 } else {
                     pow.WindowStartupLocation = WindowStartupLocation.Manual;
+                    pow.Classes.Add("toast");
                     pow.Position = MpAvWindowPositioner.GetSystemTrayWindowPosition(pow);
                 }
                 // NOTE only silent lock for pop out

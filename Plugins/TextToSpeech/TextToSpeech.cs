@@ -24,13 +24,16 @@ namespace TextToSpeech {
             return null;
         }
         public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
+            Resources.Culture = new System.Globalization.CultureInfo(request.culture);
+
             return new MpAnalyzerComponent() {
                 inputType = new MpPluginInputFormat() {
                     text = true
                 },
                 parameters = new List<MpParameterFormat>() {
                     new MpParameterFormat() {
-                        label = "Text to say",
+                        isVisible = false,
+                        label = Resources.TextLabel,
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
                         paramId = TEXT_PARAM_ID,

@@ -83,9 +83,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
-            MpAvPrefViewModel.Instance.CurrentCultureCode = "en-US";
             string culture_name = MpAvPrefViewModel.Instance.CurrentCultureCode;
             SetCultureCommand.Execute(culture_name);
+
         }
         #endregion
 
@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!LangLookup.ContainsKey(culture_code)) {
                     // exact culture not available (can occur on initial startup using system default)
                     // fallback to parent or default
-                    culture_code = MpLocalizationHelpers.ResolveMissingCulture(culture_code, UiStringDir);
+                    culture_code = MpLocalizationHelpers.FindClosestCultureCode(culture_code, UiStringDir);
                 }
                 CurrentCulture = new CultureInfo(culture_code);
                 MpConsole.WriteLine($"Culture set to: {CurrentCulture}");

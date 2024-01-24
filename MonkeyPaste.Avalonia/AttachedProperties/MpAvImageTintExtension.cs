@@ -1,22 +1,16 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.LogicalTree;
-using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvImageTintExtension {
-        private static Dictionary<int, string> _tintLookup = new Dictionary<int, string>();
-        private static Dictionary<int, bool> _isTintingLookup = new Dictionary<int, bool>();
         static MpAvImageTintExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             TintProperty.Changed.AddClassHandler<Control>((x, y) => HandleTintChanged(x, y));
@@ -110,6 +104,9 @@ namespace MonkeyPaste.Avalonia {
         private static void UpdateTint(object element) {
             // element can be an image or container control
             // where all child images will be tinted
+            if (!MpAvStringHexToBitmapTintConverter.IS_DYNAMIC_TINT_ENABLED) {
+                return;
+            }
 
             if (element is Control c &&
                 c.GetSelfAndLogicalDescendants().OfType<Image>() is IEnumerable<Image> imgl &&

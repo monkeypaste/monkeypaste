@@ -1,0 +1,49 @@
+{
+  "title": "Qr Code Generator",
+  "description": "Converts text to a QR code",
+  "version": "1.0.2",
+  "author": "Monkey",
+  "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/QrCoder",
+  "packageUrl": "https://github.com/monkeypaste/QrCoder/releases/download/v1.0.0/QrCoder.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/icon.png",
+  "packageType": "Dll",
+  "tags": "Core, Qr Code, Text, Image, Link, Converter",
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "image": true
+    },
+    "parameters": [
+      {
+        "label": "Content for Converter",
+        "description": "The snippet to convert",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "Title prefix",
+        "description": "Makes Qr code title based on source clips title",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{Title}"
+          }
+        ]
+      }
+    ]
+  }
+}

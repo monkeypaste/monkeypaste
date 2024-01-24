@@ -2517,4 +2517,40 @@
   <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
     <value>（有错误）</value>
   </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>预加载元素是只读的。</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>有限的</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>贮存</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>垃圾</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>无限</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>该应用程序当前匹配默认的剪贴板阅读器预设和格式。</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>该应用程序当前匹配默认的剪贴板编写器预设和格式。</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>要追加，您必须取消暂停剪贴板侦听器（系统托盘-&gt;恢复）。</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>追加不可用</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value>没有设置</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>请注意，我只会说英语，MonkeyPaste 已翻译成您的语言。</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>翻译问题</value>
+  </data>
 </root>
