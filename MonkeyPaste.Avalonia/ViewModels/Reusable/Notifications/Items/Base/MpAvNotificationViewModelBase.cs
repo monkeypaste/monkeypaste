@@ -588,6 +588,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CloseNotificationCommand => new MpCommand<object>(
             (args) => {
                 bool force = args is string argStr && argStr == "User";
+                if (force) {
+                    DialogResult = MpNotificationDialogResultType.Dismiss;
+                }
                 HideNotification(force);
                 //IsClosing = false;
             });

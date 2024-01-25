@@ -58,10 +58,7 @@ if (is_post_request()) {
 }
 
 if ($errors) {
-    if (CAN_TEST) {
-        printerr($errors);
-    }
-    exit_w_error("param error");
+    exit_w_errors($errors);
 }
 
 $account = find_account_by_username($inputs['username']);

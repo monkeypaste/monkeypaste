@@ -987,7 +987,7 @@ namespace MonkeyPaste.Avalonia {
                 w.Hide();
             }
             IsMainWindowVisible = false;
-            MpConsole.WriteLine("CLOSE WINDOW DONE");
+            //MpConsole.WriteLine("CLOSE WINDOW DONE");
         }
         private async Task AnimateMainWindowAsync(MpRect endRect) {
             // close 0.12 20
@@ -1432,7 +1432,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await ResetMainWindowAnimationStateAsync();
 
-                MpConsole.WriteLine("Closing Main Window");
+                //MpConsole.WriteLine("Closing Main Window");
                 IsMainWindowClosing = true;
                 //}
                 if (AnimateShowWindow) {

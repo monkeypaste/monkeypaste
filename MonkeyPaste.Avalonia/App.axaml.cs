@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             _isShuttingDown = true;
-            MpConsole.WriteLine($"App shutdown called ({(int)code}). Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
+            MpConsole.WriteLine($"App shutdown called Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
             //MpConsole.ShutdownLog();
             if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 MpAvWindowManager.CloseAll();

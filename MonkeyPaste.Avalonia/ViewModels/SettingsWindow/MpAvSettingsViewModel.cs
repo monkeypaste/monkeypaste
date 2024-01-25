@@ -1329,13 +1329,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
                     UpdateFilters();
                     break;
-                case nameof(IsWindowOpen):
-                    MpConsole.WriteLine($"Settings window: {(IsWindowOpen ? "OPEN" : "CLOSED")}");
-                    break;
-
-                case nameof(IsWindowActive):
-                    MpConsole.WriteLine($"Settings window: {(IsWindowActive ? "ACTIVE" : "INACTIVE")}");
-                    break;
             }
         }
 
@@ -1377,8 +1370,10 @@ namespace MonkeyPaste.Avalonia {
             void Sw_Opened(object sender, EventArgs e) {
                 sw.Activate();
                 if (sw.Content is MpAvSettingsView sv &&
-                    sv.FindControl<Control>("FilterTextBox") is { } ftb) {
+                    sv.FindControl<Control>("FilterBox") is { } fb &&
+                    fb.GetVisualDescendant<TextBox>() is { } ftb) {
                     // focus filter box by default
+                    //ftb.TrySetFocusAsync().FireAndForgetSafeAsync();
                     ftb.Focus();
                 }
             }

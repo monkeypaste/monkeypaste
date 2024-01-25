@@ -57,5 +57,9 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        public override string ToString() {
+            return $" ({NotificationType}) '{Title}': '{Body}'";
+        }
+
     }
 }

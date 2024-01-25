@@ -286,7 +286,7 @@ namespace MonkeyPaste.Common.Plugin {
             // pretty sure registering is only needed for win32 c++ but just keeping it
             int id = _registrar == null ? 0 : _registrar.RegisterFormat(format);
             _formatLookup.Add(format);
-            MpConsole.WriteLine($"Successfully registered format name:'{format}' id:{id}");
+            //MpConsole.WriteLine($"Successfully registered format name:'{format}' id:{id}");
         }
 
         public static void UnregisterDataFormat(string format) {

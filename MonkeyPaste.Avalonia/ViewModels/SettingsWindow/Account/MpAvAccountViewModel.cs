@@ -590,8 +590,8 @@ namespace MonkeyPaste.Avalonia {
             var status_args = new Dictionary<string, string>() {
                     {nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername },
                     {nameof(MpAvPrefViewModel.Instance.AccountEmail),MpAvPrefViewModel.Instance.AccountEmail },
-                    {nameof(MpAvPrefViewModel.Instance.AccountType),MpAvPrefViewModel.Instance.AccountType.EnumToUiString() },
-                    {nameof(MpAvPrefViewModel.Instance.AccountBillingCycleType), BillingCycleType.EnumToUiString() },
+                    {nameof(MpAvPrefViewModel.Instance.AccountTypeStr),MpAvPrefViewModel.Instance.AccountType.EnumToUiString() },
+                    {nameof(MpAvPrefViewModel.Instance.AccountBillingCycleTypeStr), BillingCycleType.EnumToUiString() },
                     {nameof(MpAvPrefViewModel.Instance.AccountNextPaymentDateTime), NextPaymentDisplayValue },
                 };
 

@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
             RemoveRestartTask();
 
             int start_delay_ms = 1_000;
-            int dur_ms = 30_000;
+            int dur_ms = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
             var st = DateTime.Now + TimeSpan.FromMilliseconds(start_delay_ms);
             var et = st + TimeSpan.FromMilliseconds(dur_ms);
             try {
@@ -31,11 +31,7 @@ namespace MonkeyPaste.Avalonia {
                 td.Actions.Add(ea);
 
                 TaskService.Instance.RootFolder.RegisterTaskDefinition(RestartTaskPath, td);
-                MpConsole.WriteLine("Restart scheduled");
-                MpConsole.WriteLine("Between:");
-                MpConsole.WriteLine(st.ToString());
-                MpConsole.WriteLine("And:");
-                MpConsole.WriteLine(et.ToString());
+                MpConsole.WriteLine($"Restart scheduled. Between {st} and {et}");
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error creating restart task from task path: '{RestartTaskPath}'", ex);

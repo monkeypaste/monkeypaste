@@ -294,7 +294,7 @@ namespace MonkeyPaste.Avalonia {
                 // attempt to localized manifest
                 string localized_manifest_path = ResolveManifestPath(inv_manifest_path);
                 bool success = await LoadPluginAsync(localized_manifest_path);
-                MpConsole.WriteLine($"Plugin manifest at path: '{localized_manifest_path}' Load:{success.ToTestResultLabel()}");
+                MpConsole.WriteLine($"Load:{success.ToTestResultLabel()} from manifest: '{localized_manifest_path}' ");
             }
         }
         private static async Task CheckAndInstallCorePluginsAsync() {

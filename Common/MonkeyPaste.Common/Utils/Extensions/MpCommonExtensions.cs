@@ -627,30 +627,21 @@ namespace MonkeyPaste.Common {
             }
 
             Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-            object safeValue;
+            object safeValue = null;
             try {
-                //if (t.IsEnum && newValue is string newEnumKey) {
-                //    // from https://stackoverflow.com/a/15855966/105028
-                //    //newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newEnumKey, t);
-                //    try {
-                //        object enumVal = Enum.Parse(t, newEnumKey, true);
-                //        newValue = enumVal;
-                //    }
-                //    catch (Exception ex) {
-                //        MpConsole.WriteTraceLine($"Error converting string '{newEnumKey}' to enum type '{t}'");
-                //    }
-                //}
-                safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"SetPropertyValue conversion error. ", ex);
-                safeValue = newValue;
-            }
-            try {
+                if (t.IsEnum) {
+                    safeValue = newValue.ToEnum(t);
+                } else if (t == typeof(DateTime) && newValue.ParseOrConvertToDateTime(null) is DateTime newDt) {
+                    safeValue = newDt;
+                } else if (t == typeof(DateTime?)) {
+                    safeValue = newValue.ParseOrConvertToDateTime(null);
+                } else {
+                    safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
+                }
                 propertyInfo.SetValue(obj, safeValue, null);
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"SetPropertyValue set paramValue error. ", ex);
+                MpConsole.WriteTraceLine($"SetPropertyValue error. Obj: '{obj}' Prop: '{propertyPath}' Safe Val: '{safeValue}' New Val: '{newValue}'", ex);
             }
         }
         #endregion

@@ -68,10 +68,7 @@ if (is_get_request()) {
     [$inputs, $errors] = filter($_GET, $fields);
 
     if ($errors) {
-        if (CAN_TEST) {
-            printerr($errors);
-        }
-        exit_w_error("param error");
+        exit_w_errors($errors);
     }
 
     $account = find_resetable_account($inputs['reset_code'], $inputs['email']);

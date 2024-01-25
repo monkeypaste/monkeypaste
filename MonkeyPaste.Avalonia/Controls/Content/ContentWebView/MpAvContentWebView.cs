@@ -1254,7 +1254,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 }
             }
-            MpConsole.WriteLine($"waited for domload: {sw.ElapsedMilliseconds}ms");
+            //MpConsole.WriteLine($"waited for domload: {sw.ElapsedMilliseconds}ms");
 #else
             await Task.Delay(1);
 #endif

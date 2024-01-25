@@ -207,29 +207,38 @@ namespace MonkeyPaste.Avalonia {
                     if (!CanSaveOrCancel || IsBusy) {
                         break;
                     }
-                    Dispatcher.UIThread.Post(async () => {
-                        IsBusy = true;
-                        while (MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                            // when slider scrubbing get random errors writing to file
-                            await Task.Delay(100);
-                        }
-                        var to_save = Items.Where(x => x.HasModelChanged).ToList();
-                        to_save.ForEach(x => x.SaveCurrentValueCommand.Execute("skip model save"));
-                        foreach (var pvm in to_save) {
-                            try {
-                                MpAvPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
-                            }
-                            catch (Exception ex) {
-                                MpConsole.WriteTraceLine($"Pref update error", ex);
-                            }
-                        }
-                        IsBusy = false;
-                    });
+                    WriteChangesAsync().FireAndForgetSafeAsync(this);
                     break;
             }
         }
 
         #endregion
+
+        #region Private Methods
+        private async Task WriteChangesAsync() {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(WriteChangesAsync);
+                return;
+            }
+            IsBusy = true;
+            while (MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                // when slider scrubbing get random errors writing to file
+                await Task.Delay(100);
+            }
+            var to_save = Items.Where(x => x.HasModelChanged).ToList();
+            to_save.ForEach(x => x.SaveCurrentValueCommand.Execute("skip model save"));
+            foreach (var pvm in to_save) {
+                try {
+                    MpAvPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Pref update error", ex);
+                }
+            }
+            IsBusy = false;
+        }
+        #endregion
+
 
         #region Commands
         #endregion

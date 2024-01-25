@@ -483,6 +483,7 @@ namespace MonkeyPaste.Avalonia {
                     // non-user check, already notified
                     return;
                 }
+
                 LastNotfiedVersion = UpToDateAppVersion;
                 var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.UpdateAvailable,

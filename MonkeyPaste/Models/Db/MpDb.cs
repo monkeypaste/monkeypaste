@@ -610,7 +610,7 @@ namespace MonkeyPaste {
                     MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
                 }
             }
-            MpConsole.WriteLine($"Db Async WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
+            //MpConsole.WriteLine($"Db Async WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
         }
 
         private static void CreateConnection(

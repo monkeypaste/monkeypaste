@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Plugin;
 using System;
 using System.Linq;
 
@@ -88,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private static Size GetWindowSize(Window w, double fallback_w = 350, double fallbach_h = 150) {
             double th = GetWindowTitleHeight(w);
-            MpConsole.WriteLine($"Window title height: {th}px");
+            //MpConsole.WriteLine($"Window title height: {th}px");
             if (w.Width > 0 && w.Height > 0) {
                 return new Size(w.Width, w.Height + th);
             }

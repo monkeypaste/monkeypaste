@@ -104,9 +104,7 @@ namespace MonkeyPaste.Avalonia {
                 OwnerObj = owner
             };
 
-            MpConsole.WriteLine($"Notification balloon set to:", true);
-            MpConsole.WriteLine($"\tmsg: '{body}'");
-            MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
+            MpConsole.WriteLine($"[NTF]: {nf}", true, true);
 
             MpNotificationDialogResultType result = await ShowNotificationAsync(nf);
             return result;

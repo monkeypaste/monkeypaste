@@ -382,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsLoggingEnabled { get; set; }
 
         public bool LoadOnLogin { get; set; } = false;
-        public string LastLoadedVersion { get; set; }
+        public string LastLoadedVersion { get; set; } = "1.0.0";
 
         #endregion
 

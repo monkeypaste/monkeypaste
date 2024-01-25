@@ -145,12 +145,12 @@ namespace MonkeyPaste.Avalonia {
                 return string.Empty;
             }
             if (_getProcessMeths == null) {
-                _getProcessMeths = new Func<nint, string>[] {
+                _getProcessMeths = [
                     GetProcessPath3,
                     GetProcessPath4,
                     GetProcessPath1,
                     GetProcessPath2,
-                };
+                ];
             }
 
 
@@ -161,13 +161,13 @@ namespace MonkeyPaste.Avalonia {
                         return process_path;
                     }
                     if (!string.IsNullOrEmpty(process_path)) {
-                        MpConsole.WriteLine($"GetProcessMethod{(meth_idx + 1)} is gave invalid process path: '{process_path}'");
+                        MpConsole.WriteLine($"GetProcessPath{(meth_idx + 1)} returned invalid process path: '{process_path}' for handle: '{hWnd}'");
                     } else {
-                        MpConsole.WriteLine($"GetProcessMethod{(meth_idx + 1)} couldn't find process path");
+                        MpConsole.WriteLine($"GetProcessPath{(meth_idx + 1)} couldn't find process path for handle: '{hWnd}'");
                     }
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"GetProcessPath error on method #{_getProcessMeths.IndexOf(getMeth)}.", ex);
+                    MpConsole.WriteTraceLine($"GetProcessPath{(meth_idx + 1)} error for handle: '{hWnd}'", ex);
                 }
             }
 

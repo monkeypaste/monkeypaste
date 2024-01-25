@@ -7378,7 +7378,7 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Be aware I only speak English and MonkeyPaste has been translated to your language. 
         ///
-        ///If you encounter any spelling or grammatical mistakes try not to take offense. 
+        ///If you encounter any spelling or grammatical mistakes try not to take offense. All versions ship with English as well so if you speak English you can change the language to it at anytime after this setup (Settings-&gt;Preferences-&gt;International).
         ///
         ///If you would like to help improve the translation we would love to hear from you! 
         ///

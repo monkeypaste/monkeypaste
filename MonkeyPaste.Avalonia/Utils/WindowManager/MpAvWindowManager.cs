@@ -435,7 +435,7 @@ namespace MonkeyPaste.Avalonia {
                         cy: 0,
                         uFlags: flags);
                 if (!success) {
-                    MpConsole.WriteLine($"Failed to set topmost for windown '{w}'");
+                    //MpConsole.WriteLine($"Failed to set topmost for windown '{w}'");
                 }
             }
 #else

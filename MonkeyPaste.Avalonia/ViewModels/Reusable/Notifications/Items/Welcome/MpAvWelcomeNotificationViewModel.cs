@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -164,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeNotificationViewModel() : base() {
             MpDebug.Assert(_instance == null, "Only 1 welcome vm should be created");
             _instance = this;
-            MpConsole.WriteLine("Greeting vm created");
+            //MpConsole.WriteLine("Greeting vm created");
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             //InitWelcomeItems();
         }
