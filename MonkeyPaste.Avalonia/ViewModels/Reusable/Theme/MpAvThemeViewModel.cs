@@ -421,9 +421,9 @@ namespace MonkeyPaste.Avalonia {
             // 9, 10, 11
 
             // when theme CHANGED from default/light to dark or vice versa swap most/least darkest gray references
-            string dark_gray = MpSystemColors.dimgray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true);
-            string med_gray = MpSystemColors.gray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true);
-            string light_gray = MpSystemColors.lightgray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true);
+            string dark_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true); //MpSystemColors.dimgray.RemoveHexAlpha();
+            string med_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true); //MpSystemColors.gray.RemoveHexAlpha();
+            string light_gray = MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true); //MpSystemColors.lightgray.RemoveHexAlpha();
             if (tt == MpThemeType.Light) {
                 palette.AddRange(new[] { dark_gray, med_gray, light_gray });
             } else {

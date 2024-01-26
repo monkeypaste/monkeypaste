@@ -56,7 +56,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
     <NoWarn>$(NoWarn);NU1702</NoWarn>
-    <EntryPointProjectUniqueName>..\MonkeyPaste.Avalonia.Desktop\MonkeyPaste.Avalonia.Desktop.csproj</EntryPointProjectUniqueName>
+    <EntryPointProjectUniqueName>..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj</EntryPointProjectUniqueName>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
@@ -163,7 +163,7 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Avalonia.Desktop\MonkeyPaste.Avalonia.Desktop.csproj" />
+    <ProjectReference Include="..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreOleGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />

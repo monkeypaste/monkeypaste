@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
     public static class MpAvImageExtensions {
         static object _getPixelsLock = new object();
-        static object _tintLock = new object();
+        public static object TintLock = new object();
         #region Converters        
 
         public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0, string tint_hex_color = "") {
@@ -97,7 +97,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
             //var pixels = GetPixels(bmp);
             try {
-                lock (_tintLock) {
+                lock (TintLock) {
                     using (var memoryStream = new MemoryStream()) {
                         bmp.Save(memoryStream);
                         memoryStream.Seek(0, SeekOrigin.Begin);

@@ -1,4 +1,4 @@
-taskkill /f /im "MonkeyPaste.Avalonia.Desktop.exe"
+taskkill /f /im "MonkeyPaste.Desktop.exe"
 
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\bin\"
@@ -18,8 +18,8 @@ rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Common\MonkeyPaste.Comm
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Common\MonkeyPaste.Common.Wpf\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Common\MonkeyPaste.Common.Wpf\bin\"
 
-rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\obj\"
-rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\bin\"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Desktop\obj\"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Desktop\bin\"
 
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\bin\"

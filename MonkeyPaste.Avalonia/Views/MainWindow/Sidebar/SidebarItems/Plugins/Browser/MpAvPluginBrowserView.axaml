@@ -326,10 +326,12 @@
         <GridSplitter x:Name="ListDetailSplitter"
                       Grid.Row="1"
                       Grid.Column="1"
-                      Width="1"
-                      Background="Transparent"
                       HorizontalAlignment="Stretch"
-                      Classes="vertical" />
+                      Classes="vertical pluginBrowserSplitter">
+            <GridSplitter.RenderTransform>
+                <TranslateTransform X="5" />
+            </GridSplitter.RenderTransform>
+        </GridSplitter>
 
     </Grid>
 </local:MpAvUserControl>

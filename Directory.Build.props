@@ -74,7 +74,7 @@
     <Tfm>10.0.22621.0</Tfm>
     <MainTargetFramework>$(DefaultFramework)-windows$(Tfm)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
+    <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
@@ -89,7 +89,7 @@
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
     <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
+    <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseCefNet>true</UseCefNet>
     <CefPlatformRelDir>cef\cef_linux</CefPlatformRelDir>
@@ -101,7 +101,7 @@
     <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <CommonTargetFramework>$(DefaultFramework)</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
+    <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>true</UseOutSysCef>
     <PlatformShortName>mac</PlatformShortName>

@@ -22,7 +22,7 @@ namespace MonkeyPaste.Common {
         //                MpDebug.Break();
         //            }
         //            string exe_name = MpCommonTools.Services.OsInfo.IsDesktop ?
-        //                "MonkeyPaste.Avalonia.Desktop" :
+        //                "MonkeyPaste.Desktop" :
         //                "MonkeyPaste.Avalonia.Android";
         //            exe_name += ext;
         //            return Path.Combine(GetExecutingDir(), exe_name);

@@ -227,14 +227,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return ledger_uri;
         }
-        public void OpenPluginBrowserWindow(string selectedGuid) {
-            if (IsWindowOpen) {
-                if (WindowState == WindowState.Minimized) {
-                    WindowState = WindowState.Normal;
-                }
-                return;
-            }
-
+        private MpAvWindow CreatePluginBrowserWindow(string selectedGuid) {
             MpAvWindow pbw = new MpAvWindow() {
                 Width = 800,
                 Height = 500,
@@ -275,6 +268,17 @@ namespace MonkeyPaste.Avalonia {
                     }
                 };
             }
+            return pbw;
+        }
+        public void OpenPluginBrowserWindow(string selectedGuid) {
+            if (IsWindowOpen) {
+                if (WindowState == WindowState.Minimized) {
+                    WindowState = WindowState.Normal;
+                }
+                return;
+            }
+
+            var pbw = CreatePluginBrowserWindow(selectedGuid);
             pbw.Show();
             OnPropertyChanged(nameof(IsWindowOpen));
         }

@@ -396,7 +396,8 @@ namespace MonkeyPaste.Avalonia {
             if (fromModel) {
                 Items.Sort(x => x.SortOrderIdx);
             } else {
-                Items.ToList().ForEach((x, idx) => x.SortOrderIdx = idx);
+                // NOTE all criterias are + 1 to account for simple criteria
+                Items.ToList().ForEach((x, idx) => x.SortOrderIdx = (idx + 1));
                 while (Items.ToList().Any(x => x.IsBusy)) {
                     await Task.Delay(100);
                 }

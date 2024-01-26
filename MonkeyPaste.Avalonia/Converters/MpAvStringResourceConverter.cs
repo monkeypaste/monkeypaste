@@ -42,7 +42,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             try {
-                //var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
                 using (var asset = AssetLoader.OpenAndGetAssembly(uri).stream) {
                     asset.Seek(0, SeekOrigin.Begin);
 

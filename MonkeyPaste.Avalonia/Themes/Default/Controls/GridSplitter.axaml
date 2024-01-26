@@ -51,17 +51,34 @@
         <Setter Property="Width"
                 Value="2.5" />
     </Style>
+    <!--  SIDEBAR SPLITTER  -->
     <Style Selector="GridSplitter.sidebarSplitter">
         <Setter Property="Background"
                 Value="{DynamicResource SidebarGridSplitterBrush}" />
     </Style>
+    <!--  CLIPTRAY SPLITTER  -->
     <Style Selector="GridSplitter.clipTraySplitter">
         <Setter Property="Background"
                 Value="{DynamicResource ClipTrayGridSplitterBrush}" />
     </Style>
+
     <Style Selector="GridSplitter:pointerover, GridSplitter:pressed">
         <Setter Property="Background"
                 Value="{DynamicResource HoverDefaultGridSplitterBgBrush}" />
+    </Style>
+    <!--  PLUGIN BROWSER SPLITTER  -->
+
+    <Style Selector=":is(Window) > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <Style Selector=":is(Window) > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter:pointerover">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeDarkColor}" />
+    </Style>
+    <Style Selector=":is(Window).dark > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter:pointerover">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeLightColor}" />
     </Style>
 
 </Styles>

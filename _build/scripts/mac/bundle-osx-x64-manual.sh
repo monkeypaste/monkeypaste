@@ -2,7 +2,7 @@
 INFO_PLIST="Info.plist"
 ICON_FILE="MyIcon.icns"
 
-PROJECT_DIR="/Users/tkefauver/mp/MonkeyPaste.Avalonia.Desktop"
+PROJECT_DIR="/Users/tkefauver/mp/MonkeyPaste.Desktop"
 PROJECT_TARGET_DIR="$PROJECT_DIR/bin/Debug/net8.0/osx-x64"
 PUBLISH_DIR="$PROJECT_TARGET_DIR/publish/"
 
@@ -31,4 +31,4 @@ cp "$ICON_FILE" "$APP_PATH/Contents/Resources/$ICON_FILE"
 cp -a "$PUBLISH_DIR" "$APP_PATH/Contents/MacOS"
 
 chmod +x "$APP_TARGET_PATH/CefGlueBrowserProcess/Xilium.CefGlue.BrowserProcess"
-chmod +x "$APP_TARGET_PATH/MonkeyPaste.Avalonia.Desktop"
+chmod +x "$APP_TARGET_PATH/MonkeyPaste.Desktop"

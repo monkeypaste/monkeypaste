@@ -10,5 +10,5 @@ fi
 ./bundle-osx-x64.sh
 ./bundle-plugins.sh
 
-cd "/Users/tkefauver/mp/MonkeyPaste.Avalonia.Desktop/bin/x64/Debug/net8.0/osx-x64/publish/MonkeyPaste.app/Contents/MacOS/"
-./MonkeyPaste.Avalonia.Desktop --wait-for-attach
+cd "/Users/tkefauver/mp/MonkeyPaste.Desktop/bin/x64/Debug/net8.0/osx-x64/publish/MonkeyPaste.app/Contents/MacOS/"
+./MonkeyPaste.Desktop --wait-for-attach

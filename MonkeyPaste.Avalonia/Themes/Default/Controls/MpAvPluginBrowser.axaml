@@ -11,4 +11,5 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeDarkColor}" />
     </Style>
+
 </Styles>

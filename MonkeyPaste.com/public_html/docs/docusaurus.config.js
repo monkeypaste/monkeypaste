@@ -16,9 +16,8 @@ const baseUrl = local ?
   "/docs/build" :
   "/";
 
-const downloadUrl = local ?
-  "/blog" :
-  "/download";
+var aboutUrl = "/blog";
+var downloadUrl = "/blog";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -60,6 +59,22 @@ const config = {
           // Remove this to remove the "edit this page" links.
           //editUrl:
           //  'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        },
+        pages: {
+          path: 'src/pages',
+          routeBasePath: '',
+          include: ['**/*.{js,jsx,ts,tsx,md,mdx}'],
+          exclude: [
+            '**/_*.{js,jsx,ts,tsx,md,mdx}',
+            '**/_*/**',
+            '**/*.test.{js,jsx,ts,tsx}',
+            '**/__tests__/**',
+          ],
+          mdxPageComponent: '@theme/MDXPage',
+          // remarkPlugins: [require('./my-remark-plugin')],
+          rehypePlugins: [],
+          beforeDefaultRemarkPlugins: [],
+          beforeDefaultRehypePlugins: [],
         },
         theme: {
           customCss:
@@ -107,7 +122,7 @@ const config = {
             label: 'Docs',
           },
           { to: '/blog', label: 'Blog', position: 'left' },
-          { to: '/about', label: 'About', position: 'left' },
+          { to: aboutUrl, label: 'About', position: 'left' },
           { to: 'https://www.monkeypaste.com/forum', label: 'Forum', position: 'right' },
           { to: downloadUrl, label: 'Download', position: 'right' },
           {
