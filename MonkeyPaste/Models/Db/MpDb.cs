@@ -719,7 +719,8 @@ namespace MonkeyPaste {
         }
 
         private static async Task CreateViewsAsync() {
-            await _connectionAsync.ExecuteAsync(@"
+            await _connectionAsync.ExecuteAsync(
+                string.Format(@"
 CREATE VIEW MpContentQueryView as
 SELECT 
 	pk_MpCopyItemId as RootId,
@@ -738,7 +739,7 @@ SELECT
 				(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
 		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
 			then 
-				'https://localhost?type=copyItem&id=' || MpTransactionSource.fk_SourceObjId
+				'{0}' || MpTransactionSource.fk_SourceObjId
 		else NULL
 	end as SourcePath,
 	case 
@@ -816,7 +817,10 @@ FROM
 	MpCopyItem
 LEFT JOIN MpDataObjectItem ON MpDataObjectItem.fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId
 LEFT JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
-LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
+LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId",
+//https://localhost?type=copyItem&id=
+Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
+);
 
         }
 

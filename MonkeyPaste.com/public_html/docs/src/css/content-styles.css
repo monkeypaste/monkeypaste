@@ -11,6 +11,21 @@ img.figure {
 }
 
 p:has(.thumb),
+p.dl-btn,
 p:has(.figure) {
     text-align: center;
+}
+
+p.dl-btn img {
+    width: 300px;
+    margin-right: 30px;
+}
+
+p.dl-btn {
+    margin-top: 10%;
+    margin-bottom: 3%;
+}
+
+img.coming-soon {
+    width: 475px;
 }

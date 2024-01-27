@@ -16,9 +16,6 @@ const baseUrl = local ?
   "/docs/build" :
   "/";
 
-var aboutUrl = "/blog";
-var downloadUrl = "/blog";
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'MonkeyPaste',
@@ -27,12 +24,8 @@ const config = {
   favicon: 'img/favicon.ico',
   url: siteUrl,
   baseUrl: baseUrl,
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Monkey LLC', // Usually your GitHub org/user name.
-  projectName: 'MonkeyPaste', // Usually your repo name.
-
+  organizationName: 'Monkey LLC',
+  projectName: 'MonkeyPaste',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
@@ -55,10 +48,6 @@ const config = {
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          //editUrl:
-          //  'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         pages: {
           path: 'src/pages',
@@ -92,6 +81,14 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      announcementBar: {
+        id: 'under_constuction',
+        content:
+          'MonkeyPaste is under <b>heavy</b> construction! Check back often for more updates!!!',
+        backgroundColor: '#ffff00',
+        textColor: '#000000',
+        isCloseable: true,
+      },
       zoom: {
         selector: '.markdown img',
         background: {
@@ -122,9 +119,9 @@ const config = {
             label: 'Docs',
           },
           { to: '/blog', label: 'Blog', position: 'left' },
-          { to: aboutUrl, label: 'About', position: 'left' },
+          { to: '/about', label: 'About', position: 'left' },
           { to: 'https://www.monkeypaste.com/forum', label: 'Forum', position: 'right' },
-          { to: downloadUrl, label: 'Download', position: 'right' },
+          { to: '/download', label: 'Download', position: 'right' },
           {
             href: 'https://github.com/monkeypaste',
             label: 'GitHub',
@@ -165,8 +162,20 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Blog',
                 to: '/blog',
+                label: 'Blog',
+              },
+              {
+                to: '/about',
+                label: 'About'
+              },
+              {
+                to: 'https://www.monkeypaste.com/forum',
+                label: 'Forum'
+              },
+              {
+                to: '/download',
+                label: 'Download'
               },
               {
                 label: 'GitHub',

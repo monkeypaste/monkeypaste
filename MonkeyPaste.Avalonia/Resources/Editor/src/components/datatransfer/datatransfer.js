@@ -48,7 +48,7 @@ function isInternalDataTransfer(dt) {
     if (!isString(dt_url_data)) {
         return false;
     }
-    const is_internal = dt_url_data.toLowerCase().startsWith(globals.LOCAL_HOST_DOMAIN);
+    const is_internal = dt_url_data.toLowerCase().startsWith(globals.INTERNAL_SOURCE_BASE_URI);
     log('drop url: ' + dt_url_data);
     return is_internal;
 }

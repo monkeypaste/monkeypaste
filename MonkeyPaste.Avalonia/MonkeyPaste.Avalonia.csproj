@@ -509,6 +509,7 @@
     <None Remove="Assets\Images\rate.png" />
     <None Remove="Assets\Images\read.png" />
     <None Remove="Assets\Images\recyclebin.png" />
+    <None Remove="Assets\Images\recyclebin2.png" />
     <None Remove="Assets\Images\Remove.png" />
     <None Remove="Assets\Images\rename.png" />
     <None Remove="Assets\Images\replace.png" />

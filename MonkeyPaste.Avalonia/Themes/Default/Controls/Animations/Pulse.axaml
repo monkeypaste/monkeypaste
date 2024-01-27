@@ -6,14 +6,14 @@
         <SolidColorBrush x:Key="FocusPulseBgBrush1" Color="{DynamicResource ThemeAccent5Color}" Opacity="1" />
         <SolidColorBrush x:Key="FocusPulseBgBrush2" Color="{DynamicResource ThemeAccent5Color}" Opacity="0" />
         <sys:TimeSpan x:Key="PulseDur">0:0:0.5</sys:TimeSpan>
-      <IterationCount x:Key="PulseCount">6</IterationCount>
+        <IterationCount x:Key="PulseCount">6</IterationCount>
     </Styles.Resources>
 
     <Style Selector=":is(TemplatedControl).pulse">
         <!--  NOTE total dur needs to match theme vm value (notice iteraction counts 4)  -->
         <Style.Animations>
             <Animation Duration="{StaticResource PulseDur}"
-                       FillMode="Forward"
+                       FillMode="None"
                        IterationCount="{StaticResource PulseCount}">
                 <KeyFrame Cue="0%">
                     <Setter Property="Background"
@@ -30,7 +30,7 @@
         <!--  NOTE total dur needs to match theme vm value (notice iteraction counts 4)  -->
         <Style.Animations>
             <Animation Duration="{StaticResource PulseDur}"
-                       FillMode="Forward"
+                       FillMode="None"
                        IterationCount="{StaticResource PulseCount}">
                 <KeyFrame Cue="0%">
                     <Setter Property="Background"

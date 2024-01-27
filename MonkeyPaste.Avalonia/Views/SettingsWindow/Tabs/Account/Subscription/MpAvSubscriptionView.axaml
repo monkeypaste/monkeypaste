@@ -75,7 +75,6 @@
         <Style Selector="local|MpAvClipBorder#OuterBorder.unlimited">
             <Setter Property="BorderBrush">
                 <Setter.Value>
-
                     <LinearGradientBrush SpreadMethod="Repeat" TransformOrigin="0%,0%" StartPoint="0%,0%" EndPoint="100%,100%">
                         <LinearGradientBrush.GradientStops>
                             <GradientStop Offset="0" Color="Red" />
@@ -309,7 +308,7 @@
                                         <Border Margin="0"
                                                 Classes="badge"
                                                 IsVisible="{Binding MatchesAccount}"
-                                                Padding="0,3,0,0"
+                                                Padding="0,0,0,0"
                                                 Classes.active="{Binding !IsExpired, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                                                 Classes.expired="{Binding IsExpired, Source={x:Static local:MpAvAccountViewModel.Instance}}">
                                             <TextBlock />
@@ -414,6 +413,7 @@
 
                                     <!--  RATE  -->
                                     <TransitioningContentControl Grid.Column="3"
+                                                                 HorizontalAlignment="Right"
                                                                  VerticalAlignment="Center"
                                                                  Content="{Binding IsMonthlyEnabled}">
                                         <TransitioningContentControl.PageTransition>

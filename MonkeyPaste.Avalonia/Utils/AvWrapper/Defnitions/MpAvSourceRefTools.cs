@@ -10,19 +10,28 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSourceRefTools : MpISourceRefTools {
-        public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
+        // TODO? this should probably become device guid...
+        const string INTERNAL_SOURCE_DOMAIN = "localhost";
+        public string InternalSourceBaseUri => $"{MpThisAppProtocolTools.PROTOCOL_NAME}://{INTERNAL_SOURCE_DOMAIN}";
+
+        public string ContentItemQueryUriPrefix =>
+            $"{InternalSourceBaseUri}?type=copyItem&id=";
+
+        public MpAvSourceRefTools() {
+            MpThisAppProtocolTools.Init();
+        }
         public bool IsInternalUrl(string url) {
             if (string.IsNullOrEmpty(url)) {
                 return false;
             }
-            return url.ToLower().StartsWith(INTERNAL_SOURCE_DOMAIN);
+            return url.ToLower().StartsWith(InternalSourceBaseUri);
         }
         public bool IsExternalSource(MpISourceRef sr) {
             if (sr is MpApp app) {
                 return app.Id != MpDefaultDataModelTools.ThisAppId;
             }
             if (sr is MpUrl url) {
-                return !url.UrlPath.StartsWith(MpAvSourceRefTools.INTERNAL_SOURCE_DOMAIN);
+                return !url.UrlPath.StartsWith(InternalSourceBaseUri);
             }
             return false;
         }
@@ -72,7 +81,6 @@ namespace MonkeyPaste.Avalonia {
             var result = await MpDataModelProvider.GetSourceRefBySourceTypeAndSourceIdAsync(ref_tuple.Item1, ref_tuple.Item2);
             return result;
         }
-
         public async Task<MpApp> FetchOrCreateAppRefAsync(MpPortableProcessInfo ppi) {
             MpApp app_ref = null;
             if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
@@ -96,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Tuple<MpTransactionSourceType, int> ParseUriForSourceRef(string uri) {
             Tuple<MpTransactionSourceType, int> no_match_result = new Tuple<MpTransactionSourceType, int>(MpTransactionSourceType.None, 0);
-            if (!uri.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
+            if (!uri.StartsWith(InternalSourceBaseUri.ToLower())) {
                 return no_match_result;
             }
             if (!uri.Contains("?")) {
@@ -306,7 +314,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public string ConvertToInternalUrl(MpTransactionSourceType sourceType, int sourceId) {
 
-            return $"{INTERNAL_SOURCE_DOMAIN}?type={sourceType.ToString()}&id={sourceId}";
+            return $"{InternalSourceBaseUri}?type={sourceType.ToString()}&id={sourceId}";
         }
         public string ConvertToAbsolutePath(MpISourceRef sr) {
             if (sr is MpApp app) {
@@ -316,18 +324,6 @@ namespace MonkeyPaste.Avalonia {
                 return url.UrlPath;
             }
             return ConvertToInternalUrl(sr);
-        }
-        public string ParseRefArgs(string ref_url) {
-            if (string.IsNullOrEmpty(ref_url)) {
-                return null;
-            }
-            if (ref_url.SplitNoEmpty("&").FirstOrDefault(x => x.StartsWith("args")) is string queryArg
-                && !string.IsNullOrEmpty(queryArg) &&
-                string.Join("=", queryArg.Split("=").Skip(1)) is string base64ArgStr &&
-                !string.IsNullOrEmpty(base64ArgStr)) {
-                return base64ArgStr.ToStringFromBase64();
-            }
-            return null;
         }
         public byte[] ToUrlAsciiBytes(MpISourceRef sr) {
             // for clipboard storage as CefAsciiBytes format

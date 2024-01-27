@@ -1134,6 +1134,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
+            if (e.Data.KeyCode == KeyCode.VcUndefined) {
+                return;
+            }
             //MpConsole.WriteLine($" [HOOK KEY] {e.RawEvent}");
             if (Mp.Services.KeyStrokeSimulator.IsSimulatingKey(e.Data.KeyCode)) {
                 MpConsole.WriteLine($"Hook ignoring simkey '{e.Data.KeyCode}' PRESS");
@@ -1198,6 +1201,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+            if (e.Data.KeyCode == KeyCode.VcUndefined) {
+                return;
+            }
             if (Mp.Services.KeyStrokeSimulator.IsSimulatingKey(e.Data.KeyCode)) {
                 MpConsole.WriteLine($"Hook ignoring simkey '{e.Data.KeyCode}' RELEASE");
                 return;

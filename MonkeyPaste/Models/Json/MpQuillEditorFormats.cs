@@ -22,6 +22,7 @@ namespace MonkeyPaste {
         public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage {
+        public string internalSourceBaseUri { get; set; }
         public int minLogLevel { get; set; }
         public bool isDebug { get; set; }
         public string defaultFontFamily { get; set; }

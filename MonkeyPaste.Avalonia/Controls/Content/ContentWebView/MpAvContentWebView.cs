@@ -1099,6 +1099,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
+                internalSourceBaseUri = Mp.Services.SourceRefTools.InternalSourceBaseUri,
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,
                 isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,

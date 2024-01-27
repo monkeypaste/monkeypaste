@@ -130,9 +130,9 @@
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow,
-featuring an intuitive and low-profile interface that supports images, files and text. Designed for flexibility, with an ever-growing community-driven libray of plugins.
+featuring an intuitive and low-profile interface that supports text, files and images. Designed for flexibility, with an ever-growing community-driven libray of plugins.
 
-It began as an experiment by an engineer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Control+C that would 'add to' instead 
+It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Control+C that would 'add to' instead 
 of 'replace' what was on the clipboard. And the experiment worked, eureka! The little tool was very handy. This entrigued the engineer with more ideas and more experiments that 
 now has become "MonkeyPaste". 
 
@@ -140,14 +140,14 @@ As the desktop is to your files, MonkeyPaste intends to be to your clipboard. It
 any application or format of content. Control+C and Control+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
 wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Control+C.
 
-I am that engineer mentioned above and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
+I am that programmer mentioned above and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
 I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation that NONE of the (very) personal information that can arise on 
 your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
   </data>
   <data name="StoreFeatures" xml:space="preserve">
     <value>● Simple and friendly interface 
 ● Horizontal/vertical layouts, list/grid view and multi-monitor support
-● Both light &amp; dark themes are completely dynamic, any color you want
+● Both light &amp; dark themes are completely dynamic
 
 ● Optimized for performance and stressed tested with 1,000,000s of clips.
 ● Anytime search, just start typing
@@ -169,13 +169,13 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
 ● Sophisticated clip tracking, sources and usage
 ● Enhanced support for Firefox and Chromium-based browsers (Chrome, Edge, Brave)
 
-● Works with rich text (tables, lists, links, etc.) from Html or RTF no problem 
+● Works with rich text (tables, lists, links, etc.)
 ● Fully-featured clip editor with find/replace and highlighting
 ● Store your images in the secure database, ready to use as files anytime on-demand just drag-and-drop!
 
 ● Powerful text templating for quick, dynamic pasting from your snippet collection
 
-● Trigger &amp; Action designer (WYSIWYG) for custom automations and action chaining
+● Trigger &amp; Action designer for custom automations and action chaining
 
 ● Simple to use and extend plugin system for both analyzing clips or read/write any format to your clipboard
 ● Built-in plugin browser with an ever-growing community-driven library of plugins 

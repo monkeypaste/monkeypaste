@@ -326,7 +326,7 @@
                         Classes="butttonsContainer"
                         DockPanel.Dock="Bottom"
                         Orientation="Horizontal"
-                        HorizontalAlignment="Center">
+                        HorizontalAlignment="Right">
                 <!--  RATE APP  -->
                 <Button Classes="iconBtn"
                         Padding="0"
@@ -371,7 +371,7 @@
                     <Border Classes="innerBtnBorder"
                             Background="Blue">
                         <StackPanel>
-                            <Image Source="{Binding Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
+                            <Image Source="{Binding Source={StaticResource ReadImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
                             <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}" />
                         </StackPanel>
                     </Border>

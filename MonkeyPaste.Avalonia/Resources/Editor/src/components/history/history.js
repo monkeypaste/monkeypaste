@@ -16,7 +16,7 @@ function getLastTextChangedDataTransferMessage(label = 'Edited') {
 		dataItems: [
 			{
 				format: globals.URI_LIST_FORMAT,
-				data: JSON.stringify([`${globals.LOCAL_HOST_DOMAIN}/?type=CopyItem&handle=${globals.ContentHandle}`])
+				data: JSON.stringify([`${globals.INTERNAL_SOURCE_BASE_URI}/?type=CopyItem&handle=${globals.ContentHandle}`])
 			}
 		]
 	};

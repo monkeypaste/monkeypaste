@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvBoolToDoubleConverter : IValueConverter {
         public static readonly MpAvBoolToDoubleConverter Instance = new();
 

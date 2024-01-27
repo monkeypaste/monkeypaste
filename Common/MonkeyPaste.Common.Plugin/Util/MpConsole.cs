@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Plugin {
     public static class MpConsole {
@@ -53,6 +52,9 @@ namespace MonkeyPaste.Common.Plugin {
             //Trace.Listeners.Add(pi.ConsoleTraceListener);
             //}
             if (IsLogEnabled) {
+                if (IsFileInUse(LogFilePath)) {
+                    return;
+                }
                 try {
                     if (File.Exists(LogFilePath)) {
                         File.Delete(LogFilePath);
@@ -154,58 +156,21 @@ namespace MonkeyPaste.Common.Plugin {
         private static bool CanLog(MpLogLevel level) {
             return (int)level >= (int)MinLogLevel;
         }
+
+        static bool IsFileInUse(string path) {
+            if (!File.Exists(path)) {
+                return false;
+            }
+            try {
+                using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.ReadWrite)) {
+                    fs.Close();
+                }
+            }
+            catch {
+                return true;
+            }
+            return false;
+        }
         #endregion
-    }
-
-    public static class MpCli {
-        public static string CmdExe => Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-                    "System32",
-                    "cmd.exe");
-        static string DefFileName =>
-            CmdExe;
-        static string DefWorkingDir =>
-            Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        public static (int, string) Run(
-            string file = default,
-            string dir = default,
-            string args = default) {
-            var proc = CreateProcess(file, dir, args);
-            proc.Start();
-            string proc_output = proc.StandardOutput.ReadToEnd();
-
-            proc.WaitForExit();
-            int exit_code = proc.ExitCode;
-            proc.Close();
-            proc.Dispose();
-            return (exit_code, proc_output);
-        }
-
-        public static async Task<(int, string)> RunAsync(
-            string file = default,
-            string dir = default,
-            string args = default) {
-            var proc = CreateProcess(file, dir, args);
-            proc.Start();
-            string proc_output = await proc.StandardOutput.ReadToEndAsync();
-            proc.WaitForExit();
-            int exit_code = proc.ExitCode;
-            proc.Close();
-            proc.Dispose();
-            return (exit_code, proc_output);
-        }
-
-        private static Process CreateProcess(
-            string file = default,
-            string dir = default,
-            string args = default) {
-            var proc = new Process();
-            proc.StartInfo.FileName = file ?? DefFileName;
-            proc.StartInfo.WorkingDirectory = dir ?? DefWorkingDir;
-            proc.StartInfo.Arguments = args;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            return proc;
-        }
     }
 }

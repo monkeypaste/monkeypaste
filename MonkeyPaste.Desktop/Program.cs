@@ -5,64 +5,82 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.IO;
 using MonkeyPaste.Common.Plugin;
-
-
 #if CEFNET_WV
 using CefNet;
 #endif
 
 namespace MonkeyPaste.Avalonia {
     internal class Program {
-        static bool CLEAR_STORAGE = false;
-        static bool LOCALIZE_ONLY = false;
+        const string THIS_APP_GUID = "252C6489-DFF3-4CFF-A419-7D3770461FFE";
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
 
         [STAThread]
         public static void Main(string[] args) {
-            bool is_debug =
-#if DEBUG
-                true;
-#else
-                false;
+            App.Args = args;
+
+            WaitForDebug(args);
+            HandleSingleInstanceLaunch(args);
+        }
+
+        // Avalonia configuration, don't remove; also used by visual designer.
+        static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+            //.With(new Win32PlatformOptions { UseWgl = true })
+            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
+            //.With(new Win32PlatformOptions {
+            //    UseWgl = true,
+            //    AllowEglInitialization = true
+            //})
+            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
+            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
+            //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
+
+            .UsePlatformDetect()
+            //.WithInterFont()
+            .UseReactiveUI()
+                .LogToTrace()// LogEventLevel.Verbose)
+                ;
+        static void HandleSingleInstanceLaunch(object[] args) {
+#if CEFNET_WV
+            // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
+            MpAvCefNetApplication.Init();
 #endif
+            // from https://stackoverflow.com/a/19128246/105028
 
-            if (args.Contains(App.WAIT_FOR_DEBUG_ARG) || (args.Contains(App.RESTART_ARG) && is_debug)) {
-                Console.WriteLine("Attach debugger and use 'Set next statement'");
-                while (true) {
-                    Thread.Sleep(100);
-                    if (Debugger.IsAttached)
-                        break;
-                }
-            }
-            if (CLEAR_STORAGE) {
-                // NOTE use this when local storage folder won't go away
-                string path1 = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "MonkeyPaste");
-                string path2 = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "MonkeyPaste_DEBUG");
-                bool success1 = MpFileIo.DeleteDirectory(path1);
-                bool success2 = MpFileIo.DeleteDirectory(path2);
-                Console.WriteLine($"Deleted '{path1}': {success1.ToTestResultLabel()}");
-                Console.WriteLine($"Deleted '{path2}': {success2.ToTestResultLabel()}");
-            }
+            // get application GUID as defined in AssemblyInfo.cs
+            //string appGuid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
+            //string appGuid = THIS_APP_GUID;
 
-            if (LOCALIZE_ONLY) {
-                MpAvCurrentCultureViewModel.SetAllCultures(new System.Globalization.CultureInfo("zh-CN"));
-                return;
-            }
+            //// unique id for global mutex - Global prefix means it is global to the machine
+            //string mutexId = string.Format("Global\\{{{0}}}", appGuid);
 
+            //using (var mutex = new Mutex(false, mutexId)) {
+            //    try {
+            //        if (!mutex.WaitOne(0, false)) {
+            //            //signal existing app via named pipes
+
+            //            MpNamedPipe<string>.Send(MpNamedPipeTypes.SourceRef, "test");
+            //            //MpNamedPipe<string>.Send(MpNamedPipeTypes.SourceRef, args == null ? string.Empty : string.Join(Environment.NewLine,args));
+
+            //            Environment.Exit(0);
+            //        } else {
+            // handle protocol with this instance   
+            BuildAndLaunch(args);
+
+            //        }
+            //    }
+            //    finally {
+            //        mutex.ReleaseMutex();
+            //    }
+            //}
+        }
+        private static void BuildAndLaunch(object[] args) {
             Exception top_level_ex = null;
             try {
 
-#if CEFNET_WV
-                MpAvCefNetApplication.Init();
-#endif
                 //App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
 #if CEFNET_WV
@@ -92,26 +110,22 @@ namespace MonkeyPaste.Avalonia {
 
             }
         }
-
-        // Avalonia configuration, don't remove; also used by visual designer.
-        public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
-            //.With(new Win32PlatformOptions { UseWgl = true })
-            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
-            //.With(new Win32PlatformOptions {
-            //    UseWgl = true,
-            //    AllowEglInitialization = true
-            //})
-            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
-            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
-            //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
-
-            .UsePlatformDetect()
-            //.WithInterFont()
-            .UseReactiveUI()
-                .LogToTrace()// LogEventLevel.Verbose)
-                ;
-
+        private static void WaitForDebug(object[] args) {
+            bool is_debug =
+#if DEBUG
+                true;
+#else
+                false;
+#endif
+            if (args.Contains(App.WAIT_FOR_DEBUG_ARG) || (args.Contains(App.RESTART_ARG) && is_debug)) {
+                Console.WriteLine("Attach debugger and use 'Set next statement'");
+                while (true) {
+                    Thread.Sleep(100);
+                    if (Debugger.IsAttached)
+                        break;
+                }
+            }
+        }
 
     }
 }

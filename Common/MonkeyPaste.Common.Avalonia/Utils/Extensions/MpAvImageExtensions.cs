@@ -84,6 +84,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
         public static unsafe Bitmap? Tint(this Bitmap bmp, string hexColor, bool retainAlpha = true, int quality = 100) {
+            // safe tint? https://github.com/AvaloniaUI/Avalonia/discussions/13610#discussioncomment-7576208
+            // https://github.com/AvaloniaUI/Avalonia/issues/11742#issuecomment-1872919760
+            // https://stackoverflow.com/a/77027282/105028
             if (bmp == null) {
                 return null;
             }

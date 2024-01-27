@@ -13,16 +13,16 @@ namespace MonkeyPaste.Common {
         public static void Break(object args = null, bool silent = false, bool asException = false, MpLogLevel level = MpLogLevel.Debug) {
             if (args != null) {
                 MpConsole.WriteLine(
-                    line: args.ToString(),
+                    line: args.ToStringOrEmpty(),
                     level: level);
             }
             if (silent) {
                 return;
             }
             if (asException) {
-                throw new Exception(args.ToString());
+                throw new Exception(args.ToStringOrEmpty());
             }
-            BreakAll(true, true, args.ToString());
+            BreakAll(true, true, args.ToStringOrEmpty());
         }
         public static void BreakAll(bool pre = true, bool post = false, string msg = default) {
 #if DEBUG

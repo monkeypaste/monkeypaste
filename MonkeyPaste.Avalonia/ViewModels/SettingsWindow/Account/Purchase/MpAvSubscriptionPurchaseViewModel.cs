@@ -39,11 +39,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IsSubscriptionPanelVisible { get; set; } = true;
         public bool IsMonthlyEnabled { get; set; } = false;
         public bool IsStoreAvailable { get; private set; }
 
-
+        public bool IsSubscriptionTabSelected { get; set; } = true
         #endregion
 
         #region Model
@@ -218,6 +217,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand NavigateToBuyUpgradeCommand => new MpAsyncCommand(
             async () => {
                 // open/activate settings window and select acct tab...
+
                 await MpAvSettingsViewModel.Instance
                 .ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Account);
 
@@ -229,7 +229,9 @@ namespace MonkeyPaste.Avalonia {
                     // no store available
                     return;
                 }
+                await Task.Delay(300);
                 // flag unlimited yearly to pulse
+                IsSubscriptionTabSelected = true;
                 IsMonthlyEnabled = false;
                 SelectedItem = UnlimitedItem;
                 UnlimitedItem.DoFocusPulse = true;

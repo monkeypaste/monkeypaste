@@ -57,6 +57,7 @@
         <!--  UPGRADE INFO THING  -->
         <TabControl x:Name="RightPaneTabControl"
                     TabStripPlacement="Bottom"
+                    SelectedIndex="{Binding IsSubscriptionTabSelected, ConverterParameter=1|0, Mode=TwoWay, Converter={x:Static local:MpAvBoolToIntConverter.Instance}, Source={x:Static local:MpAvSubscriptionPurchaseViewModel.Instance}}"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
@@ -66,7 +67,7 @@
 
             <!--  WHATS NEW TAB  -->
 
-            <TabItem IsSelected="True">
+            <TabItem>
                 <TabItem.Header>
                     <Grid Classes="tab"
                           ColumnDefinitions="Auto,*">
@@ -90,7 +91,7 @@
 
             <!--  SUBSCRIPTION TAB  -->
 
-            <TabItem IsSelected="False">
+            <TabItem>
                 <TabItem.Header>
                     <Grid Classes="tab"
                           ColumnDefinitions="Auto,*">
