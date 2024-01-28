@@ -131,7 +131,7 @@
     <value>Confidence</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>A local, lightweight object detector trained on 80 different types of things.</value>
+    <value>A totally free, local and lightweight object detector trained on 80 different types of things.</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Image Detection, Annotation, Image, AI, Text</value>

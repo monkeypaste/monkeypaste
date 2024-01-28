@@ -1,7 +1,7 @@
 {
   "title": "Core Text Annotator",
   "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "description": "Provides basic hyperlink support for text based content",
   "author": "Monkey",
   "projectUrl": "https://www.monkeypaste.com",

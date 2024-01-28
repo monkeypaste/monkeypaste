@@ -1,7 +1,7 @@
 {
   "title": "Process Automator",
   "description": "Runs a local application w/ configurable command-line arguments that can be static or by content properties.",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "credits": "Somebody",
   "guid": "700cab70-96e8-4cf3-9f49-def66c35b623",
   "iconUrl": "https://findicons.com/files/icons/127/sleek_xp_software/300/command_prompt.png",

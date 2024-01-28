@@ -1,7 +1,7 @@
 {
   "title": "网络搜索",
   "description": "使用默认 uri 处理程序来搜索选择",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "56241e2d-84bd-4f12-b7fd-14911f24cf35",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/WebSearch/master/README.md",

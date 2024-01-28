@@ -61,7 +61,6 @@ namespace MonkeyPaste.Avalonia {
             "graph.png",
             "html.png",
             "info.png",
-            //"jigsaw.png",
             "joystickative.png",
             "joystickative2.png",
             "keyboardcolor.png",
@@ -424,7 +423,7 @@ namespace MonkeyPaste.Avalonia {
             // when theme CHANGED from default/light to dark or vice versa swap most/least darkest gray references
             string dark_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true); //MpSystemColors.dimgray.RemoveHexAlpha();
             string med_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true); //MpSystemColors.gray.RemoveHexAlpha();
-            string light_gray = MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true); //MpSystemColors.lightgray.RemoveHexAlpha();
+            string light_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true); //MpSystemColors.lightgray.RemoveHexAlpha();
             if (tt == MpThemeType.Light) {
                 palette.AddRange(new[] { dark_gray, med_gray, light_gray });
             } else {

@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.Parent.IsPinTrayDragOver = IsPinTrayTagView();
 
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            var link_type = GetTreeLinkType(e.GetPosition(this));
+            MpTreeLinkOpType link_type = GetTreeLinkType(e.GetPosition(this));
             bool is_drop_valid = IsDropValid(e.Data, is_copy, link_type);
 
             if (BindingContext.IsContentDragOverTag) {

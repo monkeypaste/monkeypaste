@@ -58,6 +58,7 @@ While testing, this is a minimal `manifest.json`:
 | title | Any name is fine but it must have one |✅|✅|
 | guid | An RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens |✅|✅|
 | version | The default is 1.0.0 but setting blank is not valid. A major, minor, patch format is required. |❌|✅|
+| publishedAppVersion | The version of MonkeyPaste the plugin is published with. This can be found in the *System Tray->About* menu. A major, minor, patch format is required. |❌|✅|
 | packageUrl | Only needed when publishing. A url to a zip compressed file (.zip) of this projects build output |❌|✅|
 
 :::tip Guid Generator

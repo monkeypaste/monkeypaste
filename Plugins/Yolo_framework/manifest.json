@@ -1,7 +1,7 @@
 {
   "title": "Yolo",
   "description": "local image analysis",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "credits": "Thomas Kefauver",
   "guid": "f0988931-c39a-4ea4-b39a-32346c23094b",
   "iconUri": "icon.png",

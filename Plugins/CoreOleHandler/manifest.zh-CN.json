@@ -1,7 +1,7 @@
 {
   "title": "核心剪贴板处理程序",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "description": "处理默认剪贴板格式",
   "author": "Monkey",
   "projectUrl": "https://www.monkeypaste.com",

@@ -1,7 +1,7 @@
 {
   "title": "Hex Color Formatter",
   "description": "Scans content for hex colors (3 and/or 4 channels) and highlights background with a link to an editor",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "credits": "Somebody",
   "guid": "f7e66100-ea62-4209-ab58-b2915bcedcad",
   "iconUri": "color-palette.png",

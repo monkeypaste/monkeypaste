@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public static class MpLedgerConstants {
-        public static bool USE_LOCAL_LEDGER => true;
+        public static bool USE_LOCAL_LEDGER => false;
 
         public const string CULTURE_DIR_NAME = "Cultures";
         public const string LEDGER_PREFIX = "ledger";
@@ -41,6 +41,11 @@
             $"file:///{LEDGER_PROJ_DIR}/{LOCAL_LEDGER_INDEX_NAME}";
         public static string REMOTE_LEDGER_INDEX_URI =>
             $"https://raw.githubusercontent.com/monkeypaste/ledger/master/{REMOTE_LEDGER_INDEX_NAME}";
+
+        public static string LOCAL_INV_LEDGER_PATH =>
+            $"{LEDGER_PROJ_DIR}/{LOCAL_LEDGER_NAME}";
+        public static string REMOTE_INV_LEDGER_PATH =>
+            $"{LEDGER_PROJ_DIR}/{REMOTE_LEDGER_NAME}";
 
         public static string LOCAL_INV_LEDGER_URI =>
             $"file:///{LEDGER_PROJ_DIR}/{LOCAL_LEDGER_NAME}";

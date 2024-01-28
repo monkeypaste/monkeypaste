@@ -1,7 +1,7 @@
 {
   "title": "计算机视觉",
   "description": "提供有关给定图像的描述性信息",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "56024047-fe88-412d-aa65-1878ff088879",
   "packageType": "Dll",

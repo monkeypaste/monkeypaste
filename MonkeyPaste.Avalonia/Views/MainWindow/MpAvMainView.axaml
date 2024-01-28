@@ -44,7 +44,7 @@
                                                   HorizontalContentAlignment="Stretch"
                                                   VerticalContentAlignment="Stretch">
                     <local:MpAvSidebarButtonGroupView.Background>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                     </local:MpAvSidebarButtonGroupView.Background>
                 </local:MpAvSidebarButtonGroupView>
 

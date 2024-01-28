@@ -1,7 +1,7 @@
 {
   "title": "Speech Synthesizer",
   "description": "Converts text to audio",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "author": "Monkey LLC",
   "guid": "a0fd9559-5512-4fdb-99a4-fe92015ab81d",
   "projectUrl": "https://www.monkeypaste.com",

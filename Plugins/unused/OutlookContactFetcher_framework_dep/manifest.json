@@ -1,7 +1,7 @@
 {
   "title": "Microsoft Outlook Contacts Fetcher",
   "description": "If Outlook is installed on your device, this will fetch your contacts for template automation",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "credits": "Somebody",
   "guid": "6c374981-ee44-40d1-ab3f-c2dd04aafe25",
   "iconUri": "contact_icon.png",

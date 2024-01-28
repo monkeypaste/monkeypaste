@@ -16,7 +16,9 @@ namespace MonkeyPaste.Avalonia {
             }
             // get all preset values from db
             var param_db_values = await MpDataModelProvider.GetAllParameterHostValuesAsync(hostType, paramHostId);
-
+            if (pluginHost.ComponentFormat.parameters == null) {
+                return param_db_values;
+            }
             // loop through plugin formats parameters and add or replace (if found in db) the preset values
             foreach (MpParameterFormat paramFormat in pluginHost.ComponentFormat.parameters) {
                 if (paramFormat.isValueDeferred) {

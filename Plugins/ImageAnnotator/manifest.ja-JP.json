@@ -1,7 +1,7 @@
 {
   "title": "画像アノテーター",
   "description": "80 種類の異なる物体についてトレーニングされた、ローカルの軽量物体検出器。",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/README.md",

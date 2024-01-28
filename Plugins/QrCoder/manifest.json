@@ -1,7 +1,7 @@
 {
   "title": "%Title%",
   "description": "%Description%",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",

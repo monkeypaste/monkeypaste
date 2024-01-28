@@ -189,7 +189,9 @@ namespace MonkeyPaste.Avalonia {
                 if (ledger == null || ledger.manifests == null) {
                     return Array.Empty<MpManifestFormat>();
                 }
-                return ledger.manifests;
+                // TODO (should try to avoid creating this problem but in case) filter plugins published before some breaking app
+                // version here too
+                return ledger.manifests.Where(x => MpPluginLoader.ValidatePluginDependencies(x));
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error reading ledger. ", ex);
@@ -328,6 +330,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowPluginBrowserCommand => new MpCommand(
             () => {
+                if (MpAvThisAppVersionViewModel.Instance.IsOutOfDate) {
+                    MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpAvAccountTools.Instance.ThisProductUri);
+                    return;
+                }
                 OpenPluginBrowserWindow(null);
             });
         #endregion

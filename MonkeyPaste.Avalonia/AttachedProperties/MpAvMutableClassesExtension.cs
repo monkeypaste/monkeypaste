@@ -34,8 +34,8 @@ namespace MonkeyPaste.Avalonia {
                 string.Empty);
         private static void HandleMutableClassesChanged(Control attached_control, AvaloniaPropertyChangedEventArgs e) {
             if (!GetIsEnabled(attached_control) ||
-                e.OldValue.ToStringOrEmpty().SplitNoEmpty("|") is not { } old_classes ||
-                    e.NewValue.ToStringOrEmpty().SplitNoEmpty("|") is not { } new_classes) {
+                e.OldValue.ToStringOrEmpty().SplitNoEmpty(" ") is not { } old_classes ||
+                    e.NewValue.ToStringOrEmpty().SplitNoEmpty(" ") is not { } new_classes) {
                 return;
             }
             foreach (string old_class in old_classes) {

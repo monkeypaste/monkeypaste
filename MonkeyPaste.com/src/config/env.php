@@ -13,5 +13,5 @@ if (file_exists(__DIR__ . '/.local')) {
     define('DB_PASSWORD', ',)dlyPb@w0h&');
     define('DB_NAME', 'monkeypa_mp');
     define('APP_URL', 'https://www.monkeypaste.com');
-    define('CAN_TEST', true);
+    define('CAN_TEST', false);
 }

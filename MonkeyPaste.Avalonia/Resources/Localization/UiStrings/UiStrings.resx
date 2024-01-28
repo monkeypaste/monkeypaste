@@ -2691,4 +2691,7 @@ feedback@monkeypaste.com</value>
   <data name="WelcomeTranslatedTitle" xml:space="preserve">
     <value>Translation Concerns</value>
   </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>You need to update MonkeyPaste in order to use this feature.</value>
+  </data>
 </root>

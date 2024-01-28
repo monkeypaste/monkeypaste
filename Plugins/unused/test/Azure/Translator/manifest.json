@@ -1,7 +1,7 @@
 ﻿{
   "title": "Azure Language Translator",
   "description": "Translation of written text from specified or auto-detected language",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "credits": "Somebody",
   "guid": "c80163e4-66b6-4845-ba11-de182b9f8a62",
   "iconUri": "logo.png",

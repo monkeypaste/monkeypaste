@@ -26,9 +26,9 @@ namespace MonkeyPaste.Common.Plugin {
         /// </summary>
         public string guid { get; set; }
         /// <summary>
-        /// The major, minor, patch version. The default is "1.0.0"
+        /// The major, minor, build, revision info for this plugin. The default is "1.0.0.0". It is only required when publishing your plugin for public use.
         /// </summary>
-        public string version { get; set; } = "1.0.0";
+        public string version { get; set; } = "1.0.0.0";
         /// <summary>
         /// A brief summary of what the plugin does. It cannot be more than 1024 characters.
         /// </summary>
@@ -71,6 +71,10 @@ namespace MonkeyPaste.Common.Plugin {
         /// <b>Note:</b> For best usability this should be an absolute uri
         /// </summary>
         public string iconUri { get; set; }
+        /// <summary>
+        /// The version of MonkeyPaste this plugin was published with
+        /// </summary>
+        public string publishedAppVersion { get; set; }
 
         /// <summary>
         /// The default type is <see cref="MpPluginPackageType.Dll"/>. All other types are currently experimental.
@@ -86,7 +90,7 @@ namespace MonkeyPaste.Common.Plugin {
         /// <summary>
         /// Any requirements that cannot be included in this plugins bundle to operate
         /// </summary>
-        public List<MpPluginDependency> dependencies { get; set; }
+        public List<MpPluginDependency> dependencies { get; set; } = [];
 
         /// <summary>
         /// When set to <see cref="MpPluginDebugMode.Debug"/>, during startup the application will wait for you to attach a debugger to the main application process, called MonkeyPaste*<br/><br/>

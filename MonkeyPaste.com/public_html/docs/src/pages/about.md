@@ -6,4 +6,4 @@ hide_table_of_contents: true
 
 # About
 
-I'm good!
+MonkeyPaste and Monkey LLC. are both owned and operated by Thomas Kefauver. A programmer from Virigina, USA.

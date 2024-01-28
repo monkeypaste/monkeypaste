@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowAboutWindowCommand => new MpCommand(
             () => {
                 if (string.IsNullOrEmpty(CreditsHtml)) {
-                    CreditsHtml = MpFileIo.ReadTextFromFile(Mp.Services.PlatformInfo.TermsPath);
+                    CreditsHtml = MpFileIo.ReadTextFromFile(Mp.Services.PlatformInfo.CreditsPath);
                 }
                 if (IsWindowOpen) {
                     if (IsWindowActive) {

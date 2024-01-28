@@ -25,6 +25,7 @@ namespace MonkeyPaste.Common {
 
         string EditorPath { get; }
         string TermsPath { get; }
+        string CreditsPath { get; }
 
         TraceListener ConsoleTraceListener { get; }
 

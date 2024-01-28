@@ -610,6 +610,7 @@
     <None Remove="resources\editor\ribbon.html" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
+    <None Remove="Resources\Legal\credits.html" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1404,8 +1405,12 @@
     <Folder Include="Resources\Legal\"/>-->
     
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
+    
+    <Content Include="Resources\Legal\credits.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
 
-    <Content Include="Resources\Legal\terms\terms.html">
+    <Content Include="Resources\Legal\terms.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -1750,7 +1755,6 @@
 
   <ItemGroup>
     <Folder Include="Utils\Plugins\Headless\" />
-    <Folder Include="ViewModels\SystemTray\Version\" />
   </ItemGroup>
 
   <ItemGroup>

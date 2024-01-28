@@ -33,4 +33,53 @@
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeAccent5Color}" />
     </Style>
+
+    <!--  PLUGIN BROWSER BUTTON  -->
+    <Style Selector="Button.showsPluginBrowser">
+        <Setter Property="Width"
+                Value="30" />
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="Command"
+                Value="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}" />
+        <Setter Property="local:MpAvMutableClassesExtension.IsEnabled"
+                Value="True" />
+        <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
+                Value="defaultButton noBg noHoverBg outline outlineOver square" />
+        <Setter Property="Content">
+            <Setter.Value>
+                <Template>
+                    <Grid>
+                        <Image Width="25"
+                               Height="25"
+                               Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                        <Border x:Name="OutOfDateBadge"
+                                Classes="badge"
+                                Width="15"
+                                Height="15"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                IsVisible="{Binding IsOutOfDate, Source={x:Static local:MpAvThisAppVersionViewModel.Instance}}" />
+
+                    </Grid>
+
+                </Template>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ToolTip.Tip">
+            <Setter.Value>
+                <Template>
+                    <Grid>
+                        <local:MpAvToolTipView x:Name="OutOfDateToolTipView"
+                                               Classes="warning"
+                                               IsVisible="{Binding IsOutOfDate, Source={x:Static local:MpAvThisAppVersionViewModel.Instance}}"
+                                               ToolTipText="{x:Static local:UiStrings.CommonOutOfDateTooltip}" />
+                        <local:MpAvToolTipView IsVisible="{Binding !IsVisible, ElementName=OutOfDateToolTipView}"
+                                               ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
+                    </Grid>
+                </Template>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
 </Styles>

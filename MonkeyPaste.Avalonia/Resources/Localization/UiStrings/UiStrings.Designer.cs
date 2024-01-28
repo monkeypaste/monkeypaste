@@ -2641,6 +2641,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You need to update MonkeyPaste in order to use this feature..
+        /// </summary>
+        public static string CommonOutOfDateTooltip {
+            get {
+                return ResourceManager.GetString("CommonOutOfDateTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste.
         /// </summary>
         public static string CommonPasteOpLabel {

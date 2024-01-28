@@ -1,7 +1,7 @@
 {
   "title": "文本注释器",
   "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "description": "为基于文本的内容提供基本的超链接支持",
   "author": "Monkey",
   "projectUrl": "https://www.monkeypaste.com",

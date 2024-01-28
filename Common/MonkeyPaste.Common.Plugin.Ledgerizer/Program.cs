@@ -6,17 +6,18 @@ using System.IO.Compression;
 namespace MonkeyPaste.Common.Plugin.Ledgerizer {
     internal class Program {
         const string VERSION_PHRASE = "Im the big T pot check me out";
+        static string VERSION => "1.0.7.0";
 
-        static bool DO_LOCAL_PACKAGING = true;
+        static bool DO_LOCAL_PACKAGING = false;
 
-        static bool DO_REMOTE_PACKAGING = false;
-        static bool FORCE_REPLACE_REMOTE_TAG = false;
+        static bool DO_REMOTE_PACKAGING = true;
+        static bool FORCE_REPLACE_REMOTE_TAG = true;
 
         static bool DO_LOCAL_VERSIONS = false;
-        static bool DO_REMOTE_VERSIONS = false;
+        static bool DO_REMOTE_VERSIONS = true;
 
-        static bool DO_LOCAL_INDEX = true;
-        static bool DO_REMOTE_INDEX = false;
+        static bool DO_LOCAL_INDEX = false;
+        static bool DO_REMOTE_INDEX = true;
 
 
         const string BUILD_CONFIG =
@@ -45,7 +46,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             "CoreOleHandler",
             "FileConverter",
             "ImageAnnotator",
-            "MinimalExample",
+            //"MinimalExample",
             "QrCoder",
             "TextToSpeech",
             "TextTranslator",
@@ -55,6 +56,10 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         static string[] PrivatePackagePlugins = [
             "CoreAnnotator",
             "CoreOleHandler",
+        ];
+
+        static string[] LedgerIgnoredPlugins = [
+            "MinimalExample"
         ];
 
         //ledger-local.json
@@ -79,41 +84,17 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             Console.ReadKey();
             Console.WriteLine("Starting...");
 
-            if (DO_LOCAL_PACKAGING || DO_REMOTE_PACKAGING) {
-                if (DO_LOCAL_PACKAGING) {
-                    MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
-                }
+            ProcessAll();
 
-                MpManifestLedger ledger = new MpManifestLedger();
-                foreach (var plugin_name in PluginNames) {
-                    string plugin_proj_dir = GetPluginProjDir(plugin_name);
-                    string plugin_manifest_path = Path.Combine(
-                            plugin_proj_dir,
-                            ManifestFileName);
-
-                    string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
-                    MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
-
-                    string local_package_uri = PackPlugin(plugin_proj_dir, plugin_manifest.guid);
-                    if (local_package_uri == null) {
-                        continue;
-                    }
-                    plugin_manifest.packageUrl = local_package_uri;
-                    ledger.manifests.Add(plugin_manifest);
-                }
-
-                if (DO_LOCAL_PACKAGING) {
-                    // write ledger-local.js
-                    MpConsole.WriteLine($"Local ledger written to: {MpFileIo.WriteTextToFile(
-                        MpLedgerConstants.LOCAL_INV_LEDGER_URI.ToPathFromUri(),
-                        ledger.SerializeObject(true).ToPrettyPrintJson())}", true);
-
-                }
-                if (DO_REMOTE_PACKAGING) {
-                    MpConsole.WriteLine($"Remote ledger written to: {MpFileIo.WriteTextToFile(
-                        MpLedgerConstants.REMOTE_INV_LEDGER_URI.ToPathFromUri(),
-                        PublishRemote())}", true);
-                }
+            MpConsole.WriteLine("Done.. press key to finish", true);
+            Console.ReadLine();
+        }
+        static void ProcessAll() {
+            if (DO_LOCAL_PACKAGING) {
+                PublishLocal();
+            }
+            if (DO_REMOTE_PACKAGING) {
+                PublishRemote();
             }
             if (DO_LOCAL_VERSIONS) {
                 UpdateVersions(false);
@@ -121,17 +102,12 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             if (DO_REMOTE_VERSIONS) {
                 UpdateVersions(true);
             }
-
             if (DO_LOCAL_INDEX) {
                 CreateIndex(false);
             }
             if (DO_REMOTE_INDEX) {
                 CreateIndex(true);
             }
-
-
-            MpConsole.WriteLine("Done.. press key to finish", true);
-            Console.ReadLine();
         }
 
         #region Localizing
@@ -160,6 +136,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                     var culture_manifest = GetLocalizedManifest(plugin_name, cc, inv_code);
                     if (ledger.manifests.FirstOrDefault(x => x.guid == culture_manifest.guid) is { } ledger_manifest) {
                         // use inv ledger packageUrl
+                        culture_manifest.publishedAppVersion = VERSION;
                         culture_manifest.packageUrl = ledger_manifest.packageUrl;
                     }
 
@@ -204,7 +181,22 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         #endregion
 
         #region Packaging
+        static void WriteLedger(MpManifestLedger ledger, bool is_remote) {
+            // filter any ledger ignored plugins (minimal example)
+            //var output_ledger = new MpManifestLedger() {
+            //    manifests =
+            //}
+            string output_path = is_remote ?
+                MpLedgerConstants.REMOTE_INV_LEDGER_PATH :
+                MpLedgerConstants.LOCAL_INV_LEDGER_PATH;
+
+            MpFileIo.WriteTextToFile(
+                    output_path,
+                    ledger.SerializeObject(true).ToPrettyPrintJson());
+            MpConsole.WriteLine($"{(is_remote ? "REMOTE" : "LOCAL")} ledger written to: {output_path}", true);
+        }
         static string PackPlugin(string proj_dir, string guid) {
+            // returns zip uri to use for local packageUrl
             string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
             string plugin_name = Path.GetFileName(proj_dir);
             string output_path = Path.Combine(root_pack_dir, $"{plugin_name}.zip");
@@ -274,7 +266,33 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             return output_path.ToFileSystemUriFromPath();
         }
 
-        static string PublishRemote() {
+        static void PublishLocal() {
+            MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
+
+            MpManifestLedger ledger = new MpManifestLedger();
+            foreach (var plugin_name in PluginNames) {
+                string plugin_proj_dir = GetPluginProjDir(plugin_name);
+                string plugin_manifest_path = Path.Combine(
+                        plugin_proj_dir,
+                        ManifestFileName);
+
+                string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
+                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
+
+                string local_package_uri = PackPlugin(plugin_proj_dir, plugin_manifest.guid);
+                if (local_package_uri == null) {
+                    continue;
+                }
+                plugin_manifest.publishedAppVersion = VERSION;
+                plugin_manifest.packageUrl = local_package_uri;
+                ledger.manifests.Add(plugin_manifest);
+            }
+            // write ledger-local.js
+            WriteLedger(ledger, false);
+        }
+        static void PublishRemote() {
+            // returns the complete remote ledger
+
             var ledger = GetInvLedger(true);
             foreach (var manifest in ledger.manifests) {
                 string proj_dir = Path.Combine(
@@ -291,7 +309,8 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
                 manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
             }
-            return ledger.SerializeObject(true).ToPrettyPrintJson();
+
+            WriteLedger(ledger, true);
         }
         static string PushReleaseToRemote(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
             string plugin_name = Path.GetFileName(proj_dir);

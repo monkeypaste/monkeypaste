@@ -46,6 +46,7 @@ namespace MonkeyPaste.Avalonia {
         public static string PLUGIN_BACKUP_FOLDER_NAME => ".backup";
         public static string PLUGIN_UPDATES_FOLDER_NAME => ".updates";
         public static string DAT_FOLDER_NAME => "dat";
+        public static string MIN_APP_VERSION => "0.0.0";
 
         public static string CoreClipboardHandlerGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         public static string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
@@ -235,22 +236,17 @@ namespace MonkeyPaste.Avalonia {
             }
             return (count, pub_dt);
         }
-        #endregion
 
-        #region Private Methods
-        private static void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.MainWindowLoadComplete:
-                    UpdatedPluginGuids.Clear();
-                    break;
-            }
-        }
-        private static bool ValidatePluginDependencies(MpRuntimePlugin plugin) {
+        public static bool ValidatePluginDependencies(MpManifestFormat plugin) {
             if (plugin == null) {
                 return false;
             }
             if (plugin.dependencies == null) {
                 return true;
+            }
+            if (plugin.publishedAppVersion != null && plugin.publishedAppVersion.ToVersion() < MIN_APP_VERSION.ToVersion()) {
+                // hopefully never needed but good to have
+                return false;
             }
             var this_os_dep = new MpPluginDependency() {
                 type = MpPluginDependencyType.os,
@@ -277,6 +273,16 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             return true;
+        }
+        #endregion
+
+        #region Private Methods
+        private static void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.MainWindowLoadComplete:
+                    UpdatedPluginGuids.Clear();
+                    break;
+            }
         }
         private static async Task LoadAllPluginsAsync() {
             Plugins.Clear();

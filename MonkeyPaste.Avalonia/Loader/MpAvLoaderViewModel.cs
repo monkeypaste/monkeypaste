@@ -134,6 +134,7 @@ namespace MonkeyPaste.Avalonia {
             IsCoreLoaded = true;
             MpConsole.WriteLine("Core load complete");
 #if DEBUG
+            MpConsole.WriteLine($"App Version: '{Mp.Services.ThisAppInfo.ThisAppProductVersion}'");
             MpConsole.WriteLine($"Pref Password: '{MpAvPrefViewModel.arg1}'");
             MpConsole.WriteLine($"Backup Pref Password: '{MpAvPrefViewModel.arg3}'");
             MpConsole.WriteLine($"Db Password: '{MpAvPrefViewModel.arg2}'");
@@ -181,6 +182,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpAvAppCollectionViewModel), UiStrings.LoaderAppLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvUrlCollectionViewModel), UiStrings.LoaderUrlLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvSystemTrayViewModel), UiStrings.LoaderSysTrayLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvThisAppVersionViewModel), UiStrings.LoaderSysTrayLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvClipTileSortFieldViewModel), UiStrings.LoaderSortLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvClipTileSortDirectionViewModel), UiStrings.LoaderDirLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvSearchBoxViewModel), UiStrings.LoaderSearchLabel),

@@ -1,7 +1,7 @@
 {
   "title": "コアクリップボードハンドラ",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "description": "デフォルトのクリップボード形式を処理します",
   "author": "Monkey",
   "projectUrl": "https://www.monkeypaste.com",

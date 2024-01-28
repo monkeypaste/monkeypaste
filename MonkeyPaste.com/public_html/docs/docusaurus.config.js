@@ -20,7 +20,7 @@ const baseUrl = local ?
 const config = {
   title: 'MonkeyPaste',
   staticDirectories: ['static'],
-  tagline: '(coming soon!)',
+  tagline: 'Clipboard, Evolved.',
   favicon: 'img/favicon.ico',
   url: siteUrl,
   baseUrl: baseUrl,
@@ -141,23 +141,23 @@ const config = {
               },
             ],
           },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/monkeypaste',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/monkeypaste',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/monkeypaste',
-              },
-            ],
-          },
+          // {
+          //   title: 'Community',
+          //   items: [
+          //     {
+          //       label: 'Stack Overflow',
+          //       href: 'https://stackoverflow.com/questions/tagged/monkeypaste',
+          //     },
+          //     {
+          //       label: 'Discord',
+          //       href: 'https://discordapp.com/invite/monkeypaste',
+          //     },
+          //     {
+          //       label: 'Twitter',
+          //       href: 'https://twitter.com/monkeypaste',
+          //     },
+          //   ],
+          // },
           {
             title: 'More',
             items: [
@@ -180,6 +180,23 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/monkeypaste',
+              },
+            ],
+          },
+          {
+            title: 'Legal',
+            items: [
+              {
+                to: '/legal/privacy',
+                label: 'Privacy',
+              },
+              {
+                to: '/legal/terms',
+                label: 'Terms',
+              },
+              {
+                to: '/legal/credits',
+                label: 'Credits',
               },
             ],
           },

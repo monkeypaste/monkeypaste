@@ -232,7 +232,13 @@ namespace MonkeyPaste.Avalonia {
         }
         public virtual string TermsPath {
             get {
-                return Path.Combine(ExecutingDir, "Resources", "Legal", "terms", "terms.html");
+                return Path.Combine(ExecutingDir, "Resources", "Legal", "terms.html");
+            }
+        }
+
+        public virtual string CreditsPath {
+            get {
+                return Path.Combine(ExecutingDir, "Resources", "Legal", "credits.html");
             }
         }
         public virtual string HelpPath {

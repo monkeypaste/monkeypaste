@@ -31,24 +31,12 @@
 
                             <Label Classes="h1"
                                    Content="{x:Static local:UiStrings.AnalyzerSelectorLabel}" />
-
                             <!--  SHOW BROWSER BUTTON  -->
                             <Button x:Name="ShowPluginBrowserButton"
                                     DockPanel.Dock="Right"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
-                                    Width="30"
-                                    Height="30"
-                                    Classes="defaultButton noBg noHoverBg outline outlineOver square"
-                                    Command="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}">
-                                <ToolTip.Tip>
-                                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
-                                </ToolTip.Tip>
-                                <Image Width="25"
-                                       Height="25"
-                                       Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-
-                            </Button>
+                                    Classes="showsPluginBrowser" />
                         </Grid>
                         <Border Classes="labelUnderline" />
                         <Border Classes="iconLabelComboBox"

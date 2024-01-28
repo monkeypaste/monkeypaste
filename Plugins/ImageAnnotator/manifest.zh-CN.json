@@ -1,7 +1,7 @@
 {
   "title": "图像注释器",
   "description": "本地轻量级物体检测器，接受过 80 种不同类型物体的训练。",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/README.md",

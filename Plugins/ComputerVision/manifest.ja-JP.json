@@ -1,7 +1,7 @@
 {
   "title": "コンピュータビジョン",
   "description": "特定の画像に関する説明情報を提供します",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "56024047-fe88-412d-aa65-1878ff088879",
   "packageType": "Dll",

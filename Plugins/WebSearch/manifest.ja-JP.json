@@ -1,7 +1,7 @@
 {
   "title": "ウェブ検索",
   "description": "デフォルトの URI ハンドラーを使用して選択範囲を検索します",
-  "version": "1.0.2",
+  "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "56241e2d-84bd-4f12-b7fd-14911f24cf35",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/WebSearch/master/README.md",

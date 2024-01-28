@@ -42,6 +42,8 @@ namespace MonkeyPaste {
 
         MainWindowLoadComplete,
 
+        VersionInfoChanged,
+
         StartupComplete,
 
         ShortcutAssignmentActivated,

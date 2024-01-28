@@ -68,24 +68,17 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         protected MpAvViewModelBase() : base() {
-            //Activator = new ViewModelActivator();
-            //this.WhenActivated((CompositeDisposable disposables) => {
-            //    /* handle activation */
-            //    Disposable
-            //        .Create(() => { /* handle deactivation */ })
-            //        .DisposeWith(disposables);
-            //});
-        }
-
-        protected MpAvViewModelBase(object parent) : this() {
-            ParentObj = parent;
-
             MpDb.OnItemAdded += Instance_OnItemAdded;
             MpDb.OnItemUpdated += Instance_OnItemUpdated;
             MpDb.OnItemDeleted += Instance_OnItemDeleted;
             MpDb.SyncAdd += Instance_SyncAdd;
             MpDb.SyncUpdate += Instance_SyncUpdate;
             MpDb.SyncDelete += Instance_SyncDelete;
+        }
+
+        protected MpAvViewModelBase(object parent) : this() {
+            ParentObj = parent;
+
         }
 
         #endregion

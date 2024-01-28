@@ -5,7 +5,8 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>0</ApplicationVersionPatch>
+    <ApplicationVersionPatch>7</ApplicationVersionPatch>
+    <!-- NOTE this app version MUST match MpThisAppInfo.ProductVersion and is used for mac bundle and ledgerizer only -->
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch)</ApplicationVersion>
    </PropertyGroup>
   
@@ -71,7 +72,7 @@
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <MainTargetFramework>$(DefaultFramework)-windows$(Tfm)</MainTargetFramework>
-    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;WAP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->

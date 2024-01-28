@@ -1,7 +1,7 @@
 ﻿{
   "title": "Azure Computer Vision",
   "description": "Provides descriptive information about a given image",
-  "version": "1.0.0",
+  "version": "1.0.0.0",
   "credits": "Microsoft",
   "guid": "34cbd44d-dc32-4bf6-a3b6-efc7bafea22c",
   "iconUri": "logo.png",

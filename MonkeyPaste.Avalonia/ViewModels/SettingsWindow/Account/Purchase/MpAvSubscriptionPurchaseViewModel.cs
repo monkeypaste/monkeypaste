@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMonthlyEnabled { get; set; } = false;
         public bool IsStoreAvailable { get; private set; }
 
-        public bool IsSubscriptionTabSelected { get; set; } = true
+        public bool IsSubscriptionTabSelected { get; set; } = true;
         #endregion
 
         #region Model
