@@ -18,7 +18,7 @@
         -->
         <local:MpAvToolTipHintView DockPanel.Dock="Right"
                                    VerticalAlignment="Top"
-                                   ToolTipText="{x:Static local:UiStrings.ToolTipHintLinkTooltip}"
+                                   ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ToolTipHintLinkTooltip}"
                                    Classes="link"
                                    CommandParameter="Filters" />
         <StackPanel DockPanel.Dock="Left"
@@ -35,7 +35,7 @@
                     IsEnabled="{Binding !IsQuerying, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                     Command="{Binding RefreshSearchCommand}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadeRefreshTooltipText}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeadeRefreshTooltipText}" />
                 </ToolTip.Tip>
                 <Grid>
                     <Image IsVisible="{Binding $parent.IsEnabled}"
@@ -54,7 +54,7 @@
                     Command="{Binding DuplicateQueryCommand}">
 
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDuplicateLabel}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDuplicateLabel}" />
                 </ToolTip.Tip>
                 <Image DockPanel.Dock="Left"
                        Source="{Binding Source={StaticResource CopyImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
@@ -69,7 +69,7 @@
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
 
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeaderDismissButtonLabel}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeaderDismissButtonLabel}" />
                 </ToolTip.Tip>
                 <Image DockPanel.Dock="Left"
                        Source="{Binding Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
@@ -83,7 +83,7 @@
                     Command="{Binding OpenCriteriaWindowCommand}">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                           ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadePopoutTooltipText}" />
+                                           ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeadePopoutTooltipText}" />
                 </ToolTip.Tip>
                 <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
@@ -102,7 +102,7 @@
                 </Button.IsVisible>
 
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSaveLabel}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSaveLabel}" />
                 </ToolTip.Tip>
                 <Image DockPanel.Dock="Left"
                        Source="{Binding Source={StaticResource SaveImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />

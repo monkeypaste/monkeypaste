@@ -121,7 +121,7 @@
                Margin="0"
                HorizontalAlignment="Left"
                Classes="h1"
-               Content="{x:Static local:UiStrings.TriggerActionLabel}" />
+               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggerActionLabel}" />
         <Border Grid.Row="1"
                 IsVisible="False"
                 Classes="labelUnderline"

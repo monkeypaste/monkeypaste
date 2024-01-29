@@ -117,7 +117,7 @@
                        VerticalAlignment="Center" />
                 <TextBlock Grid.Row="1"
                            ClipToBounds="False"
-                           Text="{x:Static local:UiStrings.CommonCancelLabel}" />
+                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonCancelLabel}" />
             </Grid>
         </Button>
 
@@ -137,7 +137,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
                 <TextBlock Grid.Row="1"
-                           Text="{x:Static local:UiStrings.CommonSaveLabel}" />
+                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSaveLabel}" />
             </Grid>
         </Button>
 
@@ -177,11 +177,21 @@
         <Border HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 MinWidth="50"
-                IsVisible="{Binding Items, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 Background="Transparent">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="Items"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                             ConverterParameter="flip" />
+                    <Binding Path="DataContext"
+                             ElementName="PluginParameterListBox"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Border.IsVisible>
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        TextWrapping="WrapWithOverflow"
+                       IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, ConverterParameter=flip}"
                        TextAlignment="Center"
                        FontSize="14"
                        Classes="disabled">
@@ -199,7 +209,8 @@
                                 <sys:String>'</sys:String>
                             </Binding.Source>
                         </Binding>
-                        <Binding Source="{x:Static local:UiStrings.AnalyzerEmptyParamText}" />
+                        <Binding Source="{x:Static local:R.U}"
+                                 Path="CurrentUiStrings.AnalyzerEmptyParamText" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

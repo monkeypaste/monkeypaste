@@ -29,9 +29,10 @@ namespace MonkeyPaste.Avalonia {
             string enum_key = GetEnumKey(value);
 
             if (EnumUiStrings.ResourceManager.GetString(enum_key, MpAvCurrentCultureViewModel.Instance.CurrentCulture) is not string enum_ui_string) {
-
-                MpDebug.Break($"Missing enum key '{enum_key}'");
-                return string.Empty;
+                if (!enum_key.ToLower().EndsWith("_none")) {
+                    MpDebug.Break($"Missing enum key '{enum_key}'");
+                }
+                return noneText;
             }
             return enum_ui_string;
         }
@@ -58,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (key.SplitNoEmpty("_") is string[] key_parts &&
                 key_parts.Length == 2 &&
-                MpAvEnumToUiStringResourceConverter.UiEnums.FirstOrDefault(x => x.Name == key_parts[0]) is Type enum_type &&
+                MpAvEnumUiStringResourceConverter.UiEnums.FirstOrDefault(x => x.Name == key_parts[0]) is Type enum_type &&
                     key_parts[1].ToEnum(enum_type) is object enum_val) {
                 return enum_val;
             }

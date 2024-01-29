@@ -8,16 +8,16 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         const string VERSION_PHRASE = "Im the big T pot check me out";
         static string VERSION => "1.0.7.0";
 
-        static bool DO_LOCAL_PACKAGING = false;
+        static bool DO_LOCAL_PACKAGING = true;
 
-        static bool DO_REMOTE_PACKAGING = true;
-        static bool FORCE_REPLACE_REMOTE_TAG = true;
+        static bool DO_REMOTE_PACKAGING = false;
+        static bool FORCE_REPLACE_REMOTE_TAG = false;
 
         static bool DO_LOCAL_VERSIONS = false;
-        static bool DO_REMOTE_VERSIONS = true;
+        static bool DO_REMOTE_VERSIONS = false;
 
-        static bool DO_LOCAL_INDEX = false;
-        static bool DO_REMOTE_INDEX = true;
+        static bool DO_LOCAL_INDEX = true;
+        static bool DO_REMOTE_INDEX = false;
 
 
         const string BUILD_CONFIG =
@@ -213,8 +213,9 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "obj"));
 
             // perform publish and output to ledger proj/packages_* dir
-            //string args = $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
-            string args = $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={BUILD_CONFIG} /property:DefineConstants=AUX%3B{BUILD_OS} -restore";
+            string args = PrivatePackagePlugins.Contains(plugin_name) ?
+                $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={BUILD_CONFIG} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
+                $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
 
             (int exit_code, string proc_output) =
                 RunProcess(

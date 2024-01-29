@@ -75,7 +75,7 @@
                                Height="15"
                                Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                         <TextBlock Grid.Column="1"
-                                   Text="{x:Static local:UiStrings.AccountWhatsNewTabName}" />
+                                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountWhatsNewTabName}" />
                     </Grid>
                 </TabItem.Header>
                 <local:MpAvClipBorder CornerRadius="15"
@@ -99,7 +99,7 @@
                                Height="15"
                                Source="{Binding Source={StaticResource BananasImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                         <TextBlock Grid.Column="1"
-                                   Text="{x:Static local:UiStrings.AccountSubscriptionTabName}" />
+                                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountSubscriptionTabName}" />
                     </Grid>
                 </TabItem.Header>
 

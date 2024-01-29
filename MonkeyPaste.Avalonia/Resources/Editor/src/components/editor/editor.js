@@ -95,7 +95,16 @@ function getEditorVisibleHeight() {
 function setEditorZoom(scale) {
 	// scale should be 0-3ish number
 	scale = isNullOrUndefined(scale) ? 1 : scale;
-	let zoom_val = parseFloat(scale) * 100;
+	let scale_val = parseFloat(scale);
+	let is_custom = scale_val != 1;
+	if (is_custom) {
+		// update img content selector to not clamp size
+		getEditorContainerElement().classList.add('custom-zoom');
+	} else {
+		getEditorContainerElement().classList.remove('custom-zoom');
+	}
+
+	let zoom_val = scale_val * 100;
 	setElementComputedStyleProp(document.body, '--editorzoom', zoom_val +'%');
 }
 function setEditorPlaceholderText(text) {

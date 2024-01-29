@@ -15,11 +15,11 @@
     <local:MpAvUserControl.Styles>
         <Style Selector="ToggleButton#IsFilterWritersToggleButton:checked">
             <Setter Property="Content"
-                    Value="{x:Static local:UiStrings.ClipboardPluginFormatTypeWritersLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginFormatTypeWritersLabel}" />
         </Style>
         <Style Selector="ToggleButton#IsFilterWritersToggleButton">
             <Setter Property="Content"
-                    Value="{x:Static local:UiStrings.ClipboardPluginFormatTypeReadersLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginFormatTypeReadersLabel}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Stretch"
@@ -40,7 +40,7 @@
                         <Grid>
 
                             <Label Classes="h1"
-                                   Content="{x:Static local:UiStrings.ClipboardPluginHandlersHeader}" />
+                                   Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginHandlersHeader}" />
 
                             <!--  SHOW BROWSER BUTTON  -->
                             <Button x:Name="ShowPluginBrowserButton"
@@ -71,7 +71,7 @@
 
                         <Label Classes="h1"
                                Margin="0,20,0,0"
-                               Content="{x:Static local:UiStrings.ClipboardPluginFormatsHeader}" />
+                               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginFormatsHeader}" />
 
                         <Border Classes="labelUnderline" />
 
@@ -112,8 +112,8 @@
                                                   Margin="10,0,0,0"
                                                   FontWeight="SemiBold"
                                                   IsChecked="{Binding IsFilterForWriters, Mode=TwoWay}"
-                                                  OnContent="{x:Static local:UiStrings.ClipboardPluginFormatTypeWritersLabel}"
-                                                  OffContent="{x:Static local:UiStrings.ClipboardPluginFormatTypeReadersLabel}" />
+                                                  OnContent="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginFormatTypeWritersLabel}"
+                                                  OffContent="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginFormatTypeReadersLabel}" />
                                 </Grid>
 
 
@@ -137,7 +137,7 @@
                         DataContext="{Binding SelectedPresetViewModel}">
                     <StackPanel Orientation="Vertical">
                         <Label Classes="h1"
-                               Content="{x:Static local:UiStrings.CommonSettingsTitle}" />
+                               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSettingsTitle}" />
                         <Border Classes="labelUnderline" />
 
                         <TransitioningContentControl Content="{Binding}">

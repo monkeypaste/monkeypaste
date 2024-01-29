@@ -570,6 +570,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdatePresetSortOrderAsync().FireAndForgetSafeAsync();
+            OnPropertyChanged(nameof(SortedItems));
         }
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

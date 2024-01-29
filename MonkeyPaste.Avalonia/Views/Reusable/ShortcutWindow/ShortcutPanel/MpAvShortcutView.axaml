@@ -150,7 +150,7 @@
                            Margin="10,0,10,0"
                            FontStyle="Italic"
                            TextWrapping="WrapWithOverflow"
-                           Text="{x:Static local:UiStrings.ShortcutRecordLabel}"
+                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRecordLabel}"
                            Foreground="Black" />
 
             </DockPanel>

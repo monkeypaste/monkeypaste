@@ -18,7 +18,7 @@
   </local:MpAvUserControl.Styles>-->
     <Border Classes="paramBorder"
             Classes.empty="{Binding KeyString, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-        <local:MpAvShortcutView EmptyText="{x:Static local:UiStrings.ShortcutAssignEmptyLabel}"
+        <local:MpAvShortcutView EmptyText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignEmptyLabel}"
                                 RecordCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                                 RecordCommandParameter="{Binding}" />
     </Border>

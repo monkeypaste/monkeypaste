@@ -13,7 +13,14 @@
     <None Remove="manifest.json" />
     <None Remove="yandexIcon.png" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Content Include="Resources\Resources.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="manifest.*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="bingIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

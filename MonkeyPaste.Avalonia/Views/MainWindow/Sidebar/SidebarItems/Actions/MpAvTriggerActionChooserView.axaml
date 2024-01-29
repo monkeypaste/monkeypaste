@@ -82,7 +82,7 @@
                                            VerticalAlignment="Top"
                                            Classes="h1"
                                            Margin="0"
-                                           Content="{x:Static local:UiStrings.SidebarTriggersToolTip}" />
+                                           Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarTriggersToolTip}" />
 
                                     <!--  ADD TRIGGER BUTTON  -->
 
@@ -94,7 +94,7 @@
                                             Command="{Binding ShowTriggerSelectorMenuCommand}"
                                             CommandParameter="{Binding $self}">
                                         <ToolTip.Tip>
-                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.TriggersAddNewTriggerToolTip}" />
+                                            <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggersAddNewTriggerToolTip}" />
                                         </ToolTip.Tip>
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddGreenImage}}"
                                                Margin="5"

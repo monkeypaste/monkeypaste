@@ -197,7 +197,7 @@
                         <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                         <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                     </Button.Resources>
-                    <TextBlock Text="{x:Static local:UiStrings.WelcomeSkipButtonLabel}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeSkipButtonLabel}" />
                 </Button>
 
                 <!--  PROGRESS MARKERS  -->
@@ -237,7 +237,7 @@
                             Classes="defaultButton textOnlyButton navButton"
                             Command="{Binding SelectPrevPageCommand}">
 
-                        <TextBlock Text="{x:Static local:UiStrings.WelcomePreviousButtonLabel}" />
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomePreviousButtonLabel}" />
                     </Button>
                     <Button Classes="defaultButton textOnlyButton navButton"
                             IsVisible="{Binding !IsVisible, ElementName=FinishButton}"
@@ -251,7 +251,7 @@
                             <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                             <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                         </Button.Resources>
-                        <TextBlock Text="{x:Static local:UiStrings.WelcomeNextButtonLabel}" />
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeNextButtonLabel}" />
                     </Button>
 
                     <Button x:Name="FinishButton"
@@ -268,7 +268,7 @@
                             <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                             <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                         </Button.Resources>
-                        <TextBlock Text="{x:Static local:UiStrings.WelcomeDoneButtonLabel}" />
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeDoneButtonLabel}" />
                     </Button>
                 </StackPanel>
             </Grid>

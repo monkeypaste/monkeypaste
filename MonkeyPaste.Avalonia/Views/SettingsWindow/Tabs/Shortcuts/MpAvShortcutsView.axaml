@@ -42,7 +42,7 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.CommonApplicationLabel}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonApplicationLabel}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -69,7 +69,7 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource GlobeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsShortcutsGlobalCommandHeaderText}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsShortcutsGlobalCommandHeaderText}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -95,7 +95,7 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsShortcutsCustomCommandHeaderText}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsShortcutsCustomCommandHeaderText}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>

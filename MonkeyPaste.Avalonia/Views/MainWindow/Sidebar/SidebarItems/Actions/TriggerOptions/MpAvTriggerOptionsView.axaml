@@ -61,7 +61,7 @@
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
                                    Source="{Binding Source={StaticResource PauseImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-                            <TextBlock Text="{x:Static local:UiStrings.TriggerPauseButtonLabel}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggerPauseButtonLabel}" />
                         </DockPanel>
                     </Template>
                 </Setter.Value>
@@ -76,7 +76,7 @@
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
                                    Source="{Binding Source={StaticResource PlayImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-                            <TextBlock Text="{x:Static local:UiStrings.TriggerResumeButtonLabel}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggerResumeButtonLabel}" />
                         </DockPanel>
                     </Template>
                 </Setter.Value>
@@ -137,7 +137,7 @@
                 <Setter.Value>
                     <Template>
                         <local:MpAvToolTipView Classes="warning"
-                                               ToolTipText="{x:Static local:UiStrings.CommonReadOnlyElmDisabledToolTip}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonReadOnlyElmDisabledToolTip}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -187,7 +187,7 @@
                 Grid.Column="2"
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DuplicateTriggerCommand}"
-                Content="{x:Static local:UiStrings.CommonDuplicateLabel}" />
+                Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDuplicateLabel}" />
 
         <Border Grid.Column="3"
                 Classes="splitter" />
@@ -200,7 +200,7 @@
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DeleteThisTriggerCommand}"
                 CommandParameter="{Binding $self}"
-                Content="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}" />
     </Grid>
 
 </local:MpAvUserControl>

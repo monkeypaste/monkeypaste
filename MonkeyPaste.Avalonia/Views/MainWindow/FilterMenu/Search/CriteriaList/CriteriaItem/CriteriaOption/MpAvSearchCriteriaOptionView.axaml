@@ -81,12 +81,12 @@
                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
                                       IsVisible="{Binding IsCheckable}"
                                       Classes="alterOnly"
-                                      Content="{x:Static local:UiStrings.SearchCaseSensitiveLabel}" />
+                                      Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCaseSensitiveLabel}" />
                             <!--  WHOLE WORD CHECKBOX  -->
                             <CheckBox IsChecked="{Binding IsChecked2, Mode=TwoWay}"
                                       IsVisible="{Binding IsCheckable}"
                                       Classes="alterOnly"
-                                      Content="{x:Static local:UiStrings.SearchWholeWordLabel}" />
+                                      Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchWholeWordLabel}" />
 
                             <!--  Color picker  -->
                             <Button x:Name="ColorPickerButton"
@@ -171,10 +171,10 @@
                         <StackPanel Orientation="Horizontal"
                                     DockPanel.Dock="Left"
                                     Margin="7,0,5,0">
-                            <Label Content="{x:Static local:UiStrings.SearchThresholdLabel}"
+                            <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchThresholdLabel}"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center" />
-                            <local:MpAvToolTipHintView ToolTipText="{x:Static local:UiStrings.SearchColorDistanceToolTipText}" />
+                            <local:MpAvToolTipHintView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchColorDistanceToolTipText}" />
 
                         </StackPanel>
 

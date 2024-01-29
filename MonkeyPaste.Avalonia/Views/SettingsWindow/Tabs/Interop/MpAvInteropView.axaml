@@ -85,10 +85,10 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource ClipboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsInteropFormatsHeaderTitle}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropFormatsHeaderTitle}" />
 
                     <local:MpAvToolTipHintView IsHtml="True"
-                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
 
@@ -102,7 +102,7 @@
                                     CommandParameter="{Binding $self, ConverterParameter=formats, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
                             <Image Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                            <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
+                            <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAddAppButtonLabel}" />
                         </DockPanel>
                     </DropDownButton>
 
@@ -130,7 +130,7 @@
                                     </DataGridTemplateColumn>
 
                                     <!--  APP NAME  -->
-                                    <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
+                                    <DataGridTemplateColumn Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppNameHeaderLabel}"
                                                             CanUserSort="True"
                                                             SortMemberPath="AppDisplayName"
                                                             Width="150">
@@ -151,7 +151,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
-                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppReadHeaderLabel}" />
+                                                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppReadHeaderLabel}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -201,9 +201,9 @@
                                                         </DropDownButton.Resources>
                                                         <ToolTip.Tip>
                                                             <local:MpAvToolTipView Classes="warning"
-                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleNoopReaderTooltip}" />
+                                                                                   ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleNoopReaderTooltip}" />
                                                         </ToolTip.Tip>
-                                                        <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
+                                                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
                                                     </DropDownButton>
 
                                                     <!--  READER DEFAULT BUTTON  -->
@@ -228,9 +228,9 @@
                                                             <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
                                                         </DropDownButton.Resources>
                                                         <ToolTip.Tip>
-                                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleDefaultReaderTooltip}" />
+                                                            <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleDefaultReaderTooltip}" />
                                                         </ToolTip.Tip>
-                                                        <TextBlock Text="{x:Static local:UiStrings.CommonDefaultLabel}" />
+                                                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDefaultLabel}" />
                                                     </DropDownButton>
 
                                                 </Grid>
@@ -246,7 +246,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
-                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppWriteHeaderLabel}" />
+                                                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppWriteHeaderLabel}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -296,9 +296,9 @@
                                                         </DropDownButton.Resources>
                                                         <ToolTip.Tip>
                                                             <local:MpAvToolTipView Classes="warning"
-                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleNoopWriterTooltip}" />
+                                                                                   ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleNoopWriterTooltip}" />
                                                         </ToolTip.Tip>
-                                                        <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
+                                                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
                                                     </DropDownButton>
 
                                                     <!--  WRITER DEFAULT BUTTON  -->
@@ -323,9 +323,9 @@
                                                             <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
                                                         </DropDownButton.Resources>
                                                         <ToolTip.Tip>
-                                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleDefaultWriterTooltip}" />
+                                                            <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppOleDefaultWriterTooltip}" />
                                                         </ToolTip.Tip>
-                                                        <TextBlock Text="{x:Static local:UiStrings.CommonDefaultLabel}" />
+                                                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDefaultLabel}" />
                                                     </DropDownButton>
                                                 </Grid>
                                             </DataTemplate>
@@ -335,7 +335,7 @@
 
                                     <!--  DELETE BUTTON  -->
                                     <DataGridTemplateColumn Width="Auto"
-                                                            Header="{x:Static local:UiStrings.CommonDeleteLabel}"
+                                                            Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}"
                                                             CanUserSort="False"
                                                             CanUserResize="False">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -355,7 +355,7 @@
                             </DataGrid>
                             <TextBlock IsVisible="{Binding CustomClipboardFormatItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                        Classes="emptyTextBlock"
-                                       Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}" />
                         </Grid>
                     </local:MpAvClipBorder>
                 </DockPanel>
@@ -380,10 +380,10 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsInteropShortcutsHeaderTitle}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropShortcutsHeaderTitle}" />
                     <local:MpAvToolTipHintView Classes="expander header warning"
                                                IsHtml="True"
-                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -396,7 +396,7 @@
                                     CommandParameter="{Binding $self, ConverterParameter=shortcuts, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
                             <Image Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                            <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
+                            <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAddAppButtonLabel}" />
                         </DockPanel>
                     </DropDownButton>
 
@@ -422,7 +422,7 @@
                                     </DataGridTemplateColumn>
 
                                     <!--  APP NAME  -->
-                                    <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
+                                    <DataGridTemplateColumn Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppNameHeaderLabel}"
                                                             CanUserSort="True"
                                                             SortMemberPath="AppDisplayName"
                                                             Width="0.3*">
@@ -442,9 +442,9 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
-                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
+                                                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
                                                     <local:MpAvToolTipHintView IsHtml="True"
-                                                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
+                                                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -464,9 +464,9 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
                                                             Spacing="5">
-                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
+                                                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
                                                     <local:MpAvToolTipHintView IsHtml="True"
-                                                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.HeaderTemplate>
@@ -483,7 +483,7 @@
 
                                     <!--  DELETE BUTTON  -->
                                     <DataGridTemplateColumn Width="Auto"
-                                                            Header="{x:Static local:UiStrings.CommonDeleteLabel}"
+                                                            Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}"
                                                             CanUserSort="False"
                                                             CanUserResize="False">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -503,7 +503,7 @@
                             </DataGrid>
                             <TextBlock IsVisible="{Binding CustomClipboardShortcutItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                        Classes="emptyTextBlock"
-                                       Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}" />
                         </Grid>
                     </local:MpAvClipBorder>
                 </DockPanel>
@@ -528,10 +528,10 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource ShieldImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsInteropRejectedHeaderTitle}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropRejectedHeaderTitle}" />
                     <local:MpAvToolTipHintView Classes="expander header warning"
                                                IsHtml="True"
-                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppRejectHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
@@ -557,7 +557,7 @@
                                 <Image Classes="expander header icon"
                                        Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                                 <TextBlock Classes="expander header"
-                                           Text="{x:Static local:UiStrings.SettingsInteropRejectedAppsHeaderLabel}" />
+                                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropRejectedAppsHeaderLabel}" />
                             </StackPanel>
                         </Expander.Header>
                         <Expander.Content>
@@ -571,7 +571,7 @@
                                                 CommandParameter="{Binding $self, ConverterParameter=rejects, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                                     <DockPanel>
                                         <Image Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                        <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
+                                        <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAddAppButtonLabel}" />
                                     </DockPanel>
                                 </DropDownButton>
 
@@ -596,7 +596,7 @@
                                                 </DataGridTemplateColumn>
 
                                                 <!--  APP NAME  -->
-                                                <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
+                                                <DataGridTemplateColumn Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAppNameHeaderLabel}"
                                                                         CanUserSort="True"
                                                                         SortMemberPath="AppDisplayName"
                                                                         Width="*">
@@ -611,7 +611,7 @@
 
                                                 <!--  DELETE BUTTON  -->
                                                 <DataGridTemplateColumn Width="Auto"
-                                                                        Header="{x:Static local:UiStrings.CommonDeleteLabel}"
+                                                                        Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}"
                                                                         CanUserSort="False"
                                                                         CanUserResize="False">
                                                     <DataGridTemplateColumn.CellTemplate>
@@ -631,7 +631,7 @@
                                         </DataGrid>
                                         <TextBlock IsVisible="{Binding RejectedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                    Classes="emptyTextBlock"
-                                                   Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                                                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}" />
                                     </Grid>
                                 </local:MpAvClipBorder>
                             </DockPanel>
@@ -660,9 +660,9 @@
                                 <Image Classes="expander header icon"
                                        Source="{Binding Source={StaticResource GlobeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                                 <TextBlock Classes="expander header"
-                                           Text="{x:Static local:UiStrings.SettingsInteropRejectedUrlsHeaderLabel}" />
+                                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropRejectedUrlsHeaderLabel}" />
                                 <local:MpAvToolTipHintView Classes="expander header warning"
-                                                           ToolTipText="{x:Static local:UiStrings.SettingsInteropUrlHintText}" />
+                                                           ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropUrlHintText}" />
                             </StackPanel>
                         </Expander.Header>
                         <Expander.Content>
@@ -677,7 +677,7 @@
                                     <DockPanel>
                                         <Image DockPanel.Dock="Left"
                                                Source="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                        <Label Content="{x:Static local:UiStrings.SettingsInteropAddUrlButtonLabel}" />
+                                        <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropAddUrlButtonLabel}" />
                                     </DockPanel>
                                 </Button>
 
@@ -699,7 +699,7 @@
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
-                                                <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropUrlNameHeaderLabel}"
+                                                <DataGridTemplateColumn Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropUrlNameHeaderLabel}"
                                                                         CanUserSort="True"
                                                                         SortMemberPath="UrlPath"
                                                                         Width="*">
@@ -716,7 +716,7 @@
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
-                                                <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropUrlDomainHeaderLabel}"
+                                                <DataGridTemplateColumn Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropUrlDomainHeaderLabel}"
                                                                         CanUserSort="True"
                                                                         SortMemberPath="UrlDomainPath"
                                                                         Width="Auto">
@@ -739,7 +739,7 @@
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal"
                                                                         Spacing="5">
-                                                                <TextBlock Text="{x:Static local:UiStrings.SettingsInteropUrlBlockUrlHeaderLabel}" />
+                                                                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropUrlBlockUrlHeaderLabel}" />
 
                                                             </StackPanel>
                                                         </DataTemplate>
@@ -754,7 +754,7 @@
                                                 <DataGridTemplateColumn Width="120"
                                                                         CanUserResize="False"
                                                                         SortMemberPath="IsDomainRejected"
-                                                                        Header="{x:Static local:UiStrings.SettingsInteropUrlBlockDomainHeaderLabel}">
+                                                                        Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropUrlBlockDomainHeaderLabel}">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate DataType="local:MpAvUrlViewModel">
                                                             <CheckBox Command="{Binding ToggleIsDomainRejectedCommand}"
@@ -767,7 +767,7 @@
 
                                         <TextBlock IsVisible="{Binding FilteredItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                    Classes="emptyTextBlock"
-                                                   Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                                                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}" />
                                     </Grid>
                                 </local:MpAvClipBorder>
                             </DockPanel>

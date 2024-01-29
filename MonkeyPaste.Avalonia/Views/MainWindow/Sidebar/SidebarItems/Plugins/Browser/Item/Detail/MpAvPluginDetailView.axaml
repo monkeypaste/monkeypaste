@@ -80,7 +80,7 @@
         </Style>
         <Style Selector="SelectableTextBlock#PublishedTextBlock.unpublished">
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.PluginUnpublishedLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginUnpublishedLabel}" />
 
         </Style>
 
@@ -147,7 +147,7 @@
                         Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                         CommandParameter="{Binding PluginDonateUri}"
                         IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                    <TextBlock Text="{x:Static local:UiStrings.PluginBrowserDonateLabel}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDonateLabel}" />
                 </Button>
             </StackPanel>
 
@@ -177,7 +177,7 @@
 
             <!--  DESCRIPTION  -->
             <SelectableTextBlock Grid.Row="3"
-                                 Text="{x:Static local:UiStrings.PluginBrowserDescriptionLabel}"
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDescriptionLabel}"
                                  Classes="detailLabel" />
             <SelectableTextBlock Grid.Row="4"
                                  Grid.ColumnSpan="3"
@@ -189,7 +189,7 @@
             <SelectableTextBlock Grid.Row="5"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserInstallsLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserInstallsLabel}" />
             <SelectableTextBlock Grid.Row="5"
                                  Grid.Column="2"
                                  Classes="detailInfo"
@@ -199,7 +199,7 @@
             <SelectableTextBlock Grid.Row="6"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserVersionLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserVersionLabel}" />
             <SelectableTextBlock Grid.Row="6"
                                  Grid.Column="2"
                                  Classes="detailInfo"
@@ -209,7 +209,7 @@
             <SelectableTextBlock Grid.Row="7"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserCreditsLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserCreditsLabel}" />
             <SelectableTextBlock Grid.Row="7"
                                  Grid.Column="2"
                                  Classes="detailInfo"
@@ -220,14 +220,14 @@
                                  Grid.Column="0"
                                  Classes="detailLabel"
                                  IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                 Text="{x:Static local:UiStrings.PluginBrowserLicenseLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserLicenseLabel}" />
             <local:MpAvMarqueeTextBox Grid.Row="8"
                                       Grid.Column="2"
                                       Classes="detailInfo link"
                                       VerticalAlignment="Bottom"
                                       NavigateUriRequiredKeyString="{x:Null}"
                                       IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                      Text="{x:Static local:UiStrings.PluginBrowserSeeLicenseLinkText}"
+                                      Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserSeeLicenseLinkText}"
                                       NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                       NavigateUriCommandParameter="{Binding PluginLicenseUrl}">
                 <ToolTip.Tip>
@@ -239,7 +239,7 @@
             <SelectableTextBlock Grid.Row="9"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserPublishedLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserPublishedLabel}" />
             <SelectableTextBlock x:Name="PublishedTextBlock"
                                  Grid.Row="9"
                                  Grid.Column="2"
@@ -250,7 +250,7 @@
             <SelectableTextBlock Grid.Row="10"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserProjectUrlLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserProjectUrlLabel}" />
             <local:MpAvMarqueeTextBox Grid.Row="10"
                                       Grid.Column="2"
                                       Classes="detailInfo link"
@@ -264,12 +264,12 @@
             <SelectableTextBlock Grid.Row="11"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReportAbuseLabel}" />
             <local:MpAvMarqueeTextBox Grid.Row="11"
                                       Grid.Column="2"
                                       Classes="detailInfo link"
                                       VerticalAlignment="Bottom"
-                                      Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLinkText}"
+                                      Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReportAbuseLinkText}"
                                       NavigateUriRequiredKeyString="{x:Null}"
                                       NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                       NavigateUriCommandParameter="{Binding PluginAbuseUrl}">
@@ -282,7 +282,7 @@
             <SelectableTextBlock Grid.Row="12"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserTagsLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserTagsLabel}" />
             <SelectableTextBlock Grid.Row="12"
                                  Grid.Column="2"
                                  Classes="detailInfo"
@@ -292,7 +292,7 @@
             <SelectableTextBlock Grid.Row="13"
                                  Grid.Column="0"
                                  Classes="detailLabel"
-                                 Text="{x:Static local:UiStrings.PluginBrowserDependenciesLabel}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDependenciesLabel}" />
 
             <TreeView Grid.Row="13"
                       Grid.Column="2"
@@ -323,7 +323,7 @@
                 <Expander.Header>
                     <SelectableTextBlock Classes="detailLabel"
                                          Margin="0"
-                                         Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
+                                         Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReadMeLabel}" />
                 </Expander.Header>
                 <Expander.Content>
                     <Grid>

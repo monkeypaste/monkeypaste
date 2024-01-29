@@ -177,7 +177,7 @@
     <value>Drag Bananas Up Here!</value>
   </data>
   <data name="WelcomeDragToOpenTitle" xml:space="preserve">
-    <value>Drag - to - Open</value>
+    <value>Drag-to-Open</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
     <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings -&gt; Shortcuts' menu.</value>
@@ -231,7 +231,7 @@
     <value>Scroll Up Here!</value>
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
-    <value>Scroll - to - Open</value>
+    <value>Scroll-to-Open</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
@@ -279,7 +279,7 @@
     <value>Uninstall</value>
   </data>
   <data name="QueryTrayEmptyText" xml:space="preserve">
-    <value>{0} has no results.</value>
+    <value>'{0}' has no results.</value>
     <comment>Collection Name</comment>
   </data>
   <data name="QueryTrayNoSelection" xml:space="preserve">
@@ -2241,7 +2241,9 @@ Clipboard listening is: {0}</value>
     <value>Delete All Content</value>
   </data>
   <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
-    <value>Are you SURE you want to delete ALL your clips?!
+    <value>Are you SURE you want to delete 
+ALL your clips?!
+
 *This operation CANNOT be undone!</value>
   </data>
   <data name="NtfRateAppText" xml:space="preserve">

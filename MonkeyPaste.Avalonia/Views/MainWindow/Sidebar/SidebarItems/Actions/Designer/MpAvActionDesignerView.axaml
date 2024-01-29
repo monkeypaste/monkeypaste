@@ -197,7 +197,7 @@
                     <ToggleButton x:Name="ShowGridToggleButton"
                                   Grid.Column="0"
                                   Classes="defaultButton textOnlyButton outline outlineOver"
-                                  Content="{x:Static local:UiStrings.TriggerDesignerToggleGridLabel}"
+                                  Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggerDesignerToggleGridLabel}"
                                   IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
                                   IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   IsThreeState="False" />
@@ -209,7 +209,7 @@
                             Grid.Column="2"
                             Classes="defaultButton textOnlyButton outline outlineOver"
                             Command="{Binding ResetDesignerViewCommand}"
-                            Content="{x:Static local:UiStrings.CommonResetLabel}" />
+                            Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonResetLabel}" />
 
                     <Border Grid.Column="3"
                             IsVisible="{Binding !IsWindowOpen}" />
@@ -223,7 +223,7 @@
                             IsVisible="{Binding !IsWindowOpen}">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                                   ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadePopoutTooltipText}" />
+                                                   ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeadePopoutTooltipText}" />
                         </ToolTip.Tip>
                         <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </Button>

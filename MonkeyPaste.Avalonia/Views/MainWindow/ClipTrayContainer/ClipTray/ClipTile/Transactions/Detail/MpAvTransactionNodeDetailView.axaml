@@ -69,7 +69,7 @@
 
                     <!--  EMPTY LABEL  -->
                     <DataTemplate x:Key="EmptyDetailTemplate">
-                        <TextBlock Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}" />
                     </DataTemplate>
                 </local:MpAvTransactionNodeDetailTemplateSelector>
             </ContentControl.DataTemplates>

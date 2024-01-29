@@ -420,7 +420,7 @@
                                          local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                          local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                          local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
+                                         Watermark="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsSearchWatermark}" />
 
                         <!--<TextBox x:Name="FilterBox"
                                  MinWidth="150"
@@ -434,7 +434,7 @@
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                  local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                                 Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />-->
+                                 Watermark="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsSearchWatermark}" />-->
 
 
                         <!--  CLEAR FILTER BUTTON  -->
@@ -467,7 +467,7 @@
                         Classes="defaultButton textOnlyButton footer"
                         Margin="10"
                         DockPanel.Dock="Left"
-                        Content="{x:Static local:UiStrings.PrefRestoreDefaultsLabel}"
+                        Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PrefRestoreDefaultsLabel}"
                         Command="{Binding RestoreDefaultsCommand}" />
             </DockPanel>
         </Border>

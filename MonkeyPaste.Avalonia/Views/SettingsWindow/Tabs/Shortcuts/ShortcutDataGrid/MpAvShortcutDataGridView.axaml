@@ -20,7 +20,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonResetLabel}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonResetLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -29,7 +29,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -55,7 +55,7 @@
 
                     <!--  SHORTCUT TYPE LABEL  -->
 
-                    <DataGridTemplateColumn Header="{x:Static local:UiStrings.ShortcutDataGridActionHeader}"
+                    <DataGridTemplateColumn Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutDataGridActionHeader}"
                                             CanUserSort="True"
                                             SortMemberPath="ShortcutDisplayName"
                                             Width="0.5*">
@@ -81,8 +81,8 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
-                                    <TextBlock Text="{x:Static local:UiStrings.ShortcutDataGridRoutingHeader}" />
-                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
+                                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutDataGridRoutingHeader}" />
+                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
@@ -108,8 +108,8 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
-                                    <TextBlock Text="{x:Static local:UiStrings.ShortcutDataGridShortcutHeader}" />
-                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{x:Static local:UiStrings.ShortcutGestureRulesHint}" />
+                                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutDataGridShortcutHeader}" />
+                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutGestureRulesHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
@@ -145,7 +145,7 @@
             </DataGrid>
             <TextBlock IsVisible="{Binding ., ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                        Classes="emptyTextBlock"
-                       Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}" />
         </Grid>
 
     </local:MpAvClipBorder>

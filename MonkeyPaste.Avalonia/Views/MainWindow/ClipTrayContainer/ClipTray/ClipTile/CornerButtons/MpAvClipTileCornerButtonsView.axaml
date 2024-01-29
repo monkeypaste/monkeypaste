@@ -146,7 +146,7 @@
             </ToggleButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                       ToolTipText="{x:Static local:UiStrings.ClipTileTogglePinnedLabel}" />
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTogglePinnedLabel}" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource PinImage}">
             </Image>
@@ -161,7 +161,7 @@
                 IsVisible="{Binding !IsWindowOpen}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                       ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonFloatWindowLabel}" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource OpenImage}" />
 
@@ -194,7 +194,7 @@
             </ToggleButton.IsVisible>
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleContentReadOnly, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                       ToolTipText="{x:Static local:UiStrings.ClipTileToggleEditLabel}" />
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileToggleEditLabel}" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource EditImage}" />
         </ToggleButton>

@@ -132,7 +132,7 @@
                           IsChecked="{Binding IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSettingsTitle}"
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSettingsTitle}"
                                            InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource CogSvg}" />
@@ -146,7 +146,7 @@
                           CommandParameter="{Binding $self}"
                           Classes="noBg noHoverBg">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.MainWindowTitleLockLabel}"
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleLockLabel}"
                                            InputGestureText="{Binding ., ConverterParameter=ToggleMainWindowLocked, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource LockOutlineSvg}" />
@@ -169,7 +169,7 @@
                     </MultiBinding>
                 </Button.IsVisible>
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonMinimizeWindowLabel}"
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonMinimizeWindowLabel}"
                                            InputGestureText="{Binding ., ConverterParameter=HideMainWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
                 <Border x:Name="MinimizeBorder"
@@ -218,7 +218,7 @@
                           ToolTip.ShowDelay="0">
                 <PathIcon Data="{StaticResource GridLayoutSvg}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.MainWindowTitleToggleGridLayoutToolTip}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleToggleGridLayoutToolTip}" />
                     </ToolTip.Tip>
                 </PathIcon>
             </ToggleButton>
@@ -233,7 +233,7 @@
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.MainWindowTitleCycleOrientationToolTip}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleCycleOrientationToolTip}" />
                 </ToolTip.Tip>
 
                 <PathIcon Data="{StaticResource RotateCcwSvg}" />

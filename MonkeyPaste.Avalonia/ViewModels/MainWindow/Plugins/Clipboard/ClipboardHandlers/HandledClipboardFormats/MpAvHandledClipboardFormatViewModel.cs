@@ -382,6 +382,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdatePresetSortOrderAsync().FireAndForgetSafeAsync(this);
+            OnPropertyChanged(nameof(SortedItems));
         }
 
         private void MpHandledClipboardFormatViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

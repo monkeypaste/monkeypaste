@@ -60,8 +60,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-
-
         <!--  QUERY TRAY  -->
         <Border x:Name="QueryTrayContainerBorder"
                 Grid.Row="0"

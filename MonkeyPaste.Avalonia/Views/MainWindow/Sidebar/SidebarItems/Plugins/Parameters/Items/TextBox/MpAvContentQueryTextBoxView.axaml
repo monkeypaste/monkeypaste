@@ -167,7 +167,7 @@
                 </ToggleButton.IsVisible>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                           ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
+                                           ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonFloatWindowLabel}" />
                 </ToolTip.Tip>
 
                 <Image Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />

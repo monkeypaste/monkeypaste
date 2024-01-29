@@ -125,7 +125,7 @@
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="0">
             <DockPanel>
-                <Label Content="{x:Static local:UiStrings.SettingsAccountTabLabel}" />
+                <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsAccountTabLabel}" />
                 <Image Source="{Binding Source={StaticResource UserColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
@@ -140,7 +140,7 @@
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="1">
             <DockPanel>
-                <Label Content="{x:Static local:UiStrings.SettingsPrefTabLabel}" />
+                <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsPrefTabLabel}" />
                 <Image Source="{Binding Source={StaticResource SlidersColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
@@ -155,7 +155,7 @@
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="2">
             <DockPanel>
-                <Label Content="{x:Static local:UiStrings.SettingsInteropTabLabel}" />
+                <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsInteropTabLabel}" />
                 <Image Source="{Binding Source={StaticResource ClipboardImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
@@ -170,7 +170,7 @@
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="3">
             <DockPanel>
-                <Label Content="{x:Static local:UiStrings.SettingsShortcutTabLabel}" />
+                <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsShortcutTabLabel}" />
                 <Image Source="{Binding Source={StaticResource KeyboardColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>

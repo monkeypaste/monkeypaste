@@ -137,7 +137,7 @@
                                          local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                          local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                          local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
-                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
+                                         Watermark="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsSearchWatermark}" />
 
 
                         <!--  CLEAR FILTER BUTTON  -->
@@ -162,7 +162,7 @@
                         Command="{Binding PerformFilterCommand}"
                         CommandParameter="Click">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonRefreshTooltip}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRefreshTooltip}" />
                     </ToolTip.Tip>
                     <Grid>
                         <Image IsVisible="{Binding $parent.IsEnabled}"
@@ -211,7 +211,7 @@
                         Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
                         CommandParameter="Plugins">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.PluginsHelpTooltip}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginsHelpTooltip}" />
                     </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                 </Button>
@@ -221,7 +221,7 @@
                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                         Command="{Binding OpenPluginFolderCommand}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.PluginBrowserOpenPluginFolder}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserOpenPluginFolder}" />
                     </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource FolderOutlineImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                 </Button>
@@ -275,7 +275,7 @@
                    Grid.Row="1"
                    Grid.Column="0"
                    FontSize="24"
-                   Text="{x:Static local:UiStrings.CommonEmptyListText}"
+                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}"
                    Classes="disabled emptyOverlayText">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">

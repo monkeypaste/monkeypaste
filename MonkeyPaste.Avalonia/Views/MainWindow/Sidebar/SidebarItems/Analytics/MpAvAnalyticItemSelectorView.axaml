@@ -30,7 +30,7 @@
                         <Grid>
 
                             <Label Classes="h1"
-                                   Content="{x:Static local:UiStrings.AnalyzerSelectorLabel}" />
+                                   Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AnalyzerSelectorLabel}" />
                             <!--  SHOW BROWSER BUTTON  -->
                             <Button x:Name="ShowPluginBrowserButton"
                                     DockPanel.Dock="Right"
@@ -64,7 +64,7 @@
                             </ComboBox>
                         </Border>
                         <Label Classes="h1"
-                               Content="{x:Static local:UiStrings.AnalyzerPresetGridTitle}" />
+                               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AnalyzerPresetGridTitle}" />
                         <Border Classes="labelUnderline" />
                         <Border Margin="0,0,0,0"
                                 HorizontalAlignment="Stretch"
@@ -83,7 +83,7 @@
                         DataContext="{Binding SelectedPresetViewModel}">
                     <StackPanel Orientation="Vertical">
                         <Label Classes="h1"
-                               Content="{x:Static local:UiStrings.CommonSettingsTitle}" />
+                               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSettingsTitle}" />
                         <Border Classes="labelUnderline" />
 
                         <TransitioningContentControl Content="{Binding}">

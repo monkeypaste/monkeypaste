@@ -50,7 +50,7 @@
               HorizontalAlignment="Center"
               VerticalAlignment="Center">
             <!--  OFFLINE LABEL  -->
-            <TextBlock Text="{x:Static local:UiStrings.CommonConnectionFailedCaption}"
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonConnectionFailedCaption}"
                        Classes="emptyOverlayText" />
             <!--  RETRY BUTTON  -->
             <Button x:Name="RetryButton"
@@ -60,7 +60,7 @@
                 <Button.Resources>
                     <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
                 </Button.Resources>
-                <TextBlock Text="{x:Static local:UiStrings.CommonRetryLabel}" />
+                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRetryLabel}" />
             </Button>
         </Grid>
 
@@ -69,7 +69,7 @@
               RowDefinitions="Auto,*"
               HorizontalAlignment="Center"
               VerticalAlignment="Center">
-            <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}"
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonBusyLabel}"
                        Classes="emptyOverlayText" />
             <local:MpAvBusySpinnerView Grid.Row="1"
                                        HorizontalAlignment="Center"

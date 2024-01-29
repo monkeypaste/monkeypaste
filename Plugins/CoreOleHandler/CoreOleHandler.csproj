@@ -9,7 +9,14 @@
     <Platforms>$(DefaultPlatforms)</Platforms>
     <!--<EnableDynamicLoading>true</EnableDynamicLoading>-->
   </PropertyGroup>
-
+  <ItemGroup>
+    <Content Include="Resources\Resources.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="manifest.*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <None Remove="manifest.json" />
     <None Remove="manifest_windows.json" />

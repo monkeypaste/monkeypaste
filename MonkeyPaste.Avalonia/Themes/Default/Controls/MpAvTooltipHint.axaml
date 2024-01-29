@@ -39,7 +39,7 @@
         <Setter Property="Cursor"
                 Value="Hand" />
         <Setter Property="ToolTipText"
-                Value="{x:Static local:UiStrings.ToolTipHintLinkTooltip}" />
+                Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ToolTipHintLinkTooltip}" />
         <Setter Property="Command"
                 Value="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}" />
     </Style>

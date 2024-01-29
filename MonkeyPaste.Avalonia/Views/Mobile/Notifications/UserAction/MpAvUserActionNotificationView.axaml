@@ -268,7 +268,7 @@
                                                     IsVisible="{Binding CanRemember}">
                                             <Label Foreground="White"
                                                    VerticalAlignment="Center"
-                                                   Content="{x:Static local:UiStrings.CommonRememberLabel}" />
+                                                   Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRememberLabel}" />
                                             <CheckBox x:Name="RememberCheckbox"
                                                       IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
                                         </StackPanel>
@@ -338,7 +338,7 @@
                             Background="Blue">
                         <StackPanel>
                             <Image Source="{Binding Source={StaticResource StarYellowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
-                            <TextBlock Text="{x:Static local:UiStrings.SysTrayRateAppLabel}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SysTrayRateAppLabel}" />
                         </StackPanel>
                     </Border>
                 </Button>
@@ -353,7 +353,7 @@
                             Background="Green">
                         <StackPanel>
                             <Image Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
-                            <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountUpgradeButtonText}" />
                         </StackPanel>
                     </Border>
                 </Button>
@@ -372,7 +372,7 @@
                             Background="Blue">
                         <StackPanel>
                             <Image Source="{Binding Source={StaticResource ReadImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
-                            <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountLearnMoreButtonText}" />
                         </StackPanel>
                     </Border>
                 </Button>
@@ -388,71 +388,71 @@
                             Background="Blue">
                         <StackPanel>
                             <Image Source="{Binding Source={StaticResource DownCloudImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=whitesmoke}" />
-                            <TextBlock Text="{x:Static local:UiStrings.NtfUpdateButtonLabel}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfUpdateButtonLabel}" />
                         </StackPanel>
                     </Border>
                 </Button>
                 <!--  REMOVE BUTTON  -->
-                <Button Content="{x:Static local:UiStrings.CommonRemoveLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRemoveLabel}"
                         IsVisible="{Binding ShowDeleteButton}"
                         Command="{Binding DeleteCommand}" />
                 <!--  Reset Shared, Reset Unshared, Reset All  -->
-                <Button Content="{x:Static local:UiStrings.NtfResetPresetSharedButtonLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfResetPresetSharedButtonLabel}"
                         IsVisible="{Binding ShowResetPresetButtons}"
                         Command="{Binding ResetPresetCommand}"
                         CommandParameter="shared" />
-                <Button Content="{x:Static local:UiStrings.NtfResetPresetUnsharedButtonLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfResetPresetUnsharedButtonLabel}"
                         IsVisible="{Binding ShowResetPresetButtons}"
                         Command="{Binding ResetPresetCommand}"
                         CommandParameter="unshared" />
-                <Button Content="{x:Static local:UiStrings.NtfResetPresetAllButtonLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfResetPresetAllButtonLabel}"
                         IsVisible="{Binding ShowResetPresetButtons}"
                         Command="{Binding ResetPresetCommand}"
                         CommandParameter="all" />
                 <!--  RESTART BUTTON  -->
-                <Button Content="{x:Static local:UiStrings.NtfUserActionRestartButtonLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfUserActionRestartButtonLabel}"
                         IsVisible="{Binding ShowRestartButton}"
                         Command="{Binding RestartCommand}" />
                 <!--  RESTART NOW, LATER  -->
-                <Button Content="{x:Static local:UiStrings.NtfRestartNowButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfRestartNowButtonText}"
                         IsVisible="{Binding ShowRestartNowButton}"
                         Command="{Binding RestartCommand}" />
-                <Button Content="{x:Static local:UiStrings.NtfRestartLaterButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.NtfRestartLaterButtonText}"
                         IsVisible="{Binding ShowLaterButton}"
                         Command="{Binding CancelCommand}" />
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
-                <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UserActionIgnoreButtonText}"
                         IsVisible="{Binding ShowIgnoreButton}"
                         Command="{Binding IgnoreCommand}" />
                 <Button x:Name="RetryButton"
-                        Content="{x:Static local:UiStrings.UserActionRetryButtonText}"
+                        Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UserActionRetryButtonText}"
                         IsVisible="{Binding ShowRetryButton}"
                         Command="{Binding RetryCommand}" />
                 <Button x:Name="FixButton"
-                        Content="{x:Static local:UiStrings.UserActionFixButtonText}"
+                        Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UserActionFixButtonText}"
                         IsVisible="{Binding ShowFixButton}"
                         VerticalAlignment="Top"
                         Command="{Binding FixWrapperCommand}" />
-                <Button Content="{x:Static local:UiStrings.UserActionShutdownButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UserActionShutdownButtonText}"
                         IsVisible="{Binding ShowShutdownButton}"
                         Command="{Binding ShutdownCommand}" />
                 <!--  Yes, No, Cancel or Ok, Cancel States  -->
-                <Button Content="{x:Static local:UiStrings.CommonYesButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonYesButtonText}"
                         IsDefault="{Binding ShowYesButton}"
                         Command="{Binding YesCommand}"
                         IsVisible="{Binding ShowYesButton}" />
-                <Button Content="{x:Static local:UiStrings.CommonNoButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonNoButtonText}"
                         Command="{Binding NoCommand}"
                         IsVisible="{Binding ShowNoButton}" />
-                <Button Content="{x:Static local:UiStrings.CommonOkLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonOkLabel}"
                         IsDefault="{Binding ShowOkButton}"
                         Command="{Binding OkCommand}"
                         IsVisible="{Binding ShowOkButton}" />
-                <Button Content="{x:Static local:UiStrings.UserActionSubmitButtonText}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UserActionSubmitButtonText}"
                         IsDefault="{Binding ShowSubmitButton}"
                         Command="{Binding SubmitCommand}"
                         IsVisible="{Binding ShowSubmitButton}" />
-                <Button Content="{x:Static local:UiStrings.CommonCancelLabel}"
+                <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonCancelLabel}"
                         Command="{Binding CancelCommand}"
                         IsVisible="{Binding ShowCancelButton}" />
             </StackPanel>

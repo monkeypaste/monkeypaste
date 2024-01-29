@@ -178,11 +178,11 @@
             <Setter Property="Foreground"
                     Value="Black" />
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.AccountExpiredLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountExpiredLabel}" />
         </Style>
         <Style Selector="Border.badge.active TextBlock">
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.AccountActiveLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountActiveLabel}" />
         </Style>
 
         <!--  ACCOUNT INFO INLINES  -->
@@ -201,21 +201,21 @@
             <Setter Property="Foreground"
                     Value="Gold" />
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.AccountLimitedLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountLimitedLabel}" />
         </Style>
         <Style Selector="Run.unlimited">
             <Setter Property="Foreground"
                     Value="Lime" />
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.AccountUnlimitedLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountUnlimitedLabel}" />
         </Style>
         <Style Selector="Run.storage">
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.AccountStorageLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountStorageLabel}" />
         </Style>
         <Style Selector="Run.trash">
             <Setter Property="Text"
-                    Value="{x:Static local:UiStrings.AccountTrashLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountTrashLabel}" />
         </Style>
         <Style Selector="Run.cap">
             <Setter Property="Foreground"
@@ -245,8 +245,8 @@
                           VerticalAlignment="Center"
                           IsChecked="{Binding IsMonthlyEnabled, Mode=TwoWay, FallbackValue=True, TargetNullValue=True}"
                           FontWeight="SemiBold"
-                          OnContent="{x:Static local:UiStrings.AccountMonthlyLabel}"
-                          OffContent="{x:Static local:UiStrings.AccountYearlyLabel}" />
+                          OnContent="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountMonthlyLabel}"
+                          OffContent="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountYearlyLabel}" />
 
             <!--  SUBSCRIPTION ITEMS  -->
 
@@ -500,7 +500,7 @@
                            Margin="5"
                            VerticalAlignment="Center"
                            Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
-                    <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountUpgradeButtonText}"
                                FontSize="20"
                                VerticalAlignment="Center"
                                Foreground="White"
@@ -520,7 +520,7 @@
                     <Binding Path="!IsStoreAvailable" />
                 </MultiBinding>
             </Grid.IsVisible>
-            <TextBlock Text="{x:Static local:UiStrings.CommonConnectionFailedCaption}"
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonConnectionFailedCaption}"
                        Classes="emptyOverlayText" />
             <Button Grid.Row="1"
                     Classes="defaultButton textOnlyButton"
@@ -530,7 +530,7 @@
                 <Button.Resources>
                     <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
                 </Button.Resources>
-                <TextBlock Text="{x:Static local:UiStrings.CommonRetryLabel}" />
+                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRetryLabel}" />
             </Button>
         </Grid>
 
@@ -539,7 +539,7 @@
               IsVisible="{Binding IsBusy}"
               HorizontalAlignment="Center"
               VerticalAlignment="Center">
-            <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}"
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonBusyLabel}"
                        Classes="emptyOverlayText" />
             <local:MpAvBusySpinnerView Grid.Row="1"
                                        HorizontalAlignment="Center"

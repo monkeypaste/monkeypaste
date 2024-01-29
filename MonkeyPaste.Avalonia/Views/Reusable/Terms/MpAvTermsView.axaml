@@ -59,14 +59,14 @@
                                     Spacing="5">
                             <TextBlock FontWeight="SemiBold"
                                        Text="{Binding PackageName}" />
-                            <TextBlock Text="{x:Static local:UiStrings.TermsAuthorsInlineText}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TermsAuthorsInlineText}" />
                             <TextBlock Text="{Binding Author}" />
                         </StackPanel>
                         <!--  LICENSE LINK  -->
                         <Button Classes="link"
                                 Command="{Binding OpenFileUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                 CommandParameter="{Binding LicenseUri}">
-                            <TextBlock Text="{x:Static local:UiStrings.TermsViewLicenseButtonText}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TermsViewLicenseButtonText}" />
                         </Button>
                     </StackPanel>
                 </DataTemplate>
@@ -101,7 +101,7 @@
                 <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
                 <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
             </Button.Resources>
-            <TextBlock Text="{x:Static local:UiStrings.TermsNoButtonText}" />
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TermsNoButtonText}" />
         </Button>
 
         <!--  YES BUTTON  -->
@@ -124,7 +124,7 @@
                 <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                 <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
             </Button.Resources>
-            <TextBlock Text="{x:Static local:UiStrings.TermsYesButtonText}" />
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TermsYesButtonText}" />
         </Button>
 
     </Grid>

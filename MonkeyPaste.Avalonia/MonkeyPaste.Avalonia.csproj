@@ -1650,6 +1650,7 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="Markdig" Version="0.34.0" />
+    <PackageReference Include="MrMeeseeks.ResXToViewModelGenerator" Version="69.0.33" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
@@ -1754,6 +1755,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\Localization\Gen\" />
     <Folder Include="Utils\Plugins\Headless\" />
   </ItemGroup>
 

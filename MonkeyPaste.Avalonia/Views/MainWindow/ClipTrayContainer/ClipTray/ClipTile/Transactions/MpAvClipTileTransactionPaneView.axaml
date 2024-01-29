@@ -116,13 +116,13 @@
                           CommandParameter="{Binding $self}"
                           IsChecked="{Binding IsPlainTextView, Mode=OneWay}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.ClipTileTransactionTogglePlainTextLabel}" />
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransactionTogglePlainTextLabel}" />
                 </ToolTip.Tip>
                 <Image Width="20"
                        Height="20"
                        Source="{Binding Source={StaticResource TextFormatImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </ToggleButton>
-            <TextBlock Text="{x:Static local:UiStrings.ClipTileTransactionAnnotationTitle}"
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransactionAnnotationTitle}"
                        Foreground="{DynamicResource ThemeInteractiveColor}"
                        Margin="5,0,0,0"
                        FontSize="20"
@@ -177,7 +177,7 @@
                                     Command="{Binding DeleteThisTransactionCommand}"
                                     IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}">
                                 <ToolTip.Tip>
-                                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}" />
                                 </ToolTip.Tip>
                                 <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                             </Button>
@@ -236,14 +236,14 @@
                     <!--  SOURCE TAB  -->
 
                     <TabItem x:Name="SourceTabItem"
-                             Header="{x:Static local:UiStrings.ClipTileTransSourcesTabHeader}"
+                             Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransSourcesTabHeader}"
                              IsVisible="{Binding Sources, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                         <local:MpAvTransactionSourcesView Classes="tabItem" />
                     </TabItem>
 
                     <!--  INPUT TAB  -->
 
-                    <TabItem Header="{x:Static local:UiStrings.ClipTileTransInputTabHeader}"
+                    <TabItem Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransInputTabHeader}"
                              x:DataType="local:MpAvTransactionItemViewModel"
                              IsVisible="{Binding Request, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                         <local:MpAvTransactionItemView Classes="tabItem"
@@ -252,7 +252,7 @@
 
                     <!--  OUTPUT TAB  -->
 
-                    <TabItem Header="{x:Static local:UiStrings.ClipTileTransOutputTabHeader}"
+                    <TabItem Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransOutputTabHeader}"
                              IsVisible="{Binding Response, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                         <local:MpAvTransactionItemView Classes="tabItem"
                                                        DataContext="{Binding Response}" />

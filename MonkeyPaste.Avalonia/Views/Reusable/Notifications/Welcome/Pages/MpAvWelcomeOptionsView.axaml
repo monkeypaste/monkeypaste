@@ -259,8 +259,8 @@
                       IsVisible="{Binding IsAccountOptSelected}"
                       IsChecked="{Binding IsAccountMonthlyChecked, Mode=TwoWay}"
                       FontWeight="SemiBold"
-                      OnContent="{x:Static local:UiStrings.AccountMonthlyLabel}"
-                      OffContent="{x:Static local:UiStrings.AccountYearlyLabel}" />
+                      OnContent="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountMonthlyLabel}"
+                      OffContent="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountYearlyLabel}" />
 
         <!--  OPTION BUTTONS  -->
 
@@ -372,7 +372,7 @@
                           Command="{Binding ToggleGestureDemoCommand, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
                           Classes="try">
                 <DockPanel>
-                    <TextBlock Text="{x:Static local:UiStrings.WelcomeScrollToOpenTryButtonLabel}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeScrollToOpenTryButtonLabel}" />
                     <Image />
                 </DockPanel>
             </ToggleButton>
@@ -392,7 +392,7 @@
                     </MultiBinding>
                 </Border.IsVisible>
                 <DockPanel>
-                    <TextBlock Text="{x:Static local:UiStrings.WelcomeDragToOpenDragSourceLabel}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeDragToOpenDragSourceLabel}" />
                     <Image x:Name="DragImage"
                            PointerPressed="DragImage_PointerPressed"
                            Classes="shake"
@@ -416,7 +416,7 @@
                                        RememberPassword="{Binding RememberDbPassword}"
                                        AutoFilledPassword="{Binding AutoFillPassword}"
                                        ConfirmedPassword="{Binding DbPassword}"
-                                       RememberTooltip="{x:Static local:UiStrings.WelcomeRememberDbPasswordTooltip}"
+                                       RememberTooltip="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeRememberDbPasswordTooltip}"
                                        IsPasswordValid="{Binding IsDbPasswordValid}" />
         </Border>
 

@@ -73,9 +73,9 @@
                         <local:MpAvToolTipView x:Name="OutOfDateToolTipView"
                                                Classes="warning"
                                                IsVisible="{Binding IsOutOfDate, Source={x:Static local:MpAvThisAppVersionViewModel.Instance}}"
-                                               ToolTipText="{x:Static local:UiStrings.CommonOutOfDateTooltip}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonOutOfDateTooltip}" />
                         <local:MpAvToolTipView IsVisible="{Binding !IsVisible, ElementName=OutOfDateToolTipView}"
-                                               ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AnalyzeBrowsePluginsToolTip}" />
                     </Grid>
                 </Template>
             </Setter.Value>

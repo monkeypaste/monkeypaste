@@ -17,7 +17,7 @@
                 <Setter.Value>
                     <Template>
                         <local:MpAvToolTipView IsVisible="{Binding IsCustomColorButton}"
-                                               ToolTipText="{x:Static local:UiStrings.ColorPaletteCustomColorToolTip}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ColorPaletteCustomColorToolTip}" />
                     </Template>
                 </Setter.Value>
             </Setter>

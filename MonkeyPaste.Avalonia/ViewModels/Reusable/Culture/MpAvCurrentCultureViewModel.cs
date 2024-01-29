@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -24,11 +26,23 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvCurrentCultureViewModel _instance;
         public static MpAvCurrentCultureViewModel Instance => _instance ?? (_instance = new MpAvCurrentCultureViewModel());
 
-        public static bool SetAllCultures(CultureInfo ci) {
+        public bool SetAllCultures(CultureInfo ci) {
+            var pre_def_titles = new string[] {
+                string.Empty,
+                UiStrings.ClipTileDefTitleTextPrefix,
+                UiStrings.ClipTileDefTitleImagePrefix,
+                UiStrings.ClipTileDefTitleFilesPrefix
+            };
+
             UiStrings.Culture = ci;
             EnumUiStrings.Culture = ci;
 
-            bool needs_restart1 = MpAvEnumToUiStringResourceConverter.CheckEnumUiStrings();
+            var lastOption = R.U.CurrentOption;
+            R.U.CurrentOption = R.U.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
+            if (R.U.CurrentOption != lastOption && Mp.Services.StartupState.IsReady) {
+                RefreshUiAsync(pre_def_titles).FireAndForgetSafeAsync();
+            }
+            bool needs_restart1 = MpAvEnumUiStringResourceConverter.CheckEnumUiStrings();
             bool needs_restart2 = MpAvEditorUiStringBuilder.CheckJsUiStrings();
             return needs_restart1 || needs_restart2;
         }
@@ -63,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
         public string UiStringDir {
             get {
                 return Path.Combine(
-                Path.GetDirectoryName(typeof(MpAvEnumToUiStringResourceConverter).Assembly.Location),
+                Path.GetDirectoryName(typeof(MpAvEnumUiStringResourceConverter).Assembly.Location),
                 "Resources",
                 "Localization",
                 "UiStrings");
@@ -101,6 +115,44 @@ namespace MonkeyPaste.Avalonia {
             return $"{culture.NativeName}";
         }
 
+        private async Task RefreshUiAsync(string[] pre_def_titles) {
+            MpAvTagTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.TagName)));
+            MpAvTriggerCollectionViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.Label)));
+            MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.ForEach(x => x.OnPropertyChanged(nameof(x.Label)));
+            MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
+
+            var post_def_titles = new string[] {
+                string.Empty,
+                UiStrings.ClipTileDefTitleTextPrefix,
+                UiStrings.ClipTileDefTitleImagePrefix,
+                UiStrings.ClipTileDefTitleFilesPrefix
+            };
+            var def_title_regex = pre_def_titles.Select(x => new Regex($"^{x}[0-9]*$")).ToArray();
+            foreach (var ctvm in MpAvClipTrayViewModel.Instance.AllActiveItems) {
+                var cur_regex = def_title_regex[(int)ctvm.CopyItemType];
+                if (!cur_regex.IsMatch(ctvm.CopyItemTitle)) {
+                    continue;
+                }
+                int num_idx = -1;
+                for (int i = 0; i < ctvm.CopyItemTitle.Length; i++) {
+                    if (ctvm.CopyItemTitle[i] >= '0' && ctvm.CopyItemTitle[i] <= '9') {
+                        num_idx = i;
+                        break;
+                    }
+                }
+                if (num_idx < 0) {
+                    continue;
+                }
+                ctvm.CopyItemTitle = $"{post_def_titles[(int)ctvm.CopyItemType]}{ctvm.CopyItemTitle.Substring(num_idx)}";
+            }
+
+            while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            await MpAvClipTrayViewModel.Instance.DisposeAndReloadAllCommand.ExecuteAsync();
+
+
+        }
 
         #endregion
 
@@ -127,6 +179,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (needs_restart) {
                     // NOTE only triggered in debug
+
                     Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Culture Data changed");
                 }
             });

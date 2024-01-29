@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
             return uiStr.UiStringToEnum(enumType);
         }
     }
-    public static class MpAvEnumToUiStringResourceConverter {
+    public static class MpAvEnumUiStringResourceConverter {
         #region Private Variables
         #endregion
 
@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
         static string ActualEnumUiResxResourcePath =>
             Path.Combine(
                 MpCommonHelpers.GetSolutionDir(),
-                typeof(MpAvEnumToUiStringResourceConverter).Assembly.GetName().Name,
+                typeof(MpAvEnumUiStringResourceConverter).Assembly.GetName().Name,
                 "Resources",
                 "Localization",
                 "Enums",

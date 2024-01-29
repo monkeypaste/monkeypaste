@@ -2716,6 +2716,11 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
             OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
             EmptyQueryTrayText = GetEmptyQueryTrayText();
+
+            MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.IsAnyTagActive));
+            MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.LastSelectedActiveItem));
+            MpAvSearchCriteriaItemCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive));
+            MpAvSearchCriteriaItemCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvSearchCriteriaItemCollectionViewModel.Instance.IsPendingQuery));
         }
 
         #region Scroll Offset

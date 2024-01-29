@@ -143,12 +143,12 @@
             <!--  ROUTING LABEL/HINT  -->
             <StackPanel Orientation="Horizontal"
                         Spacing="5">
-                <TextBlock Text="{x:Static local:UiStrings.ShortcutRoutingTypeLabel}"
+                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeLabel}"
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
                 <local:MpAvToolTipHintView Classes="info"
                                                IsHtml="true"
-                                               ToolTipText="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeHint}" />
             </StackPanel>
             <!--  ROUTING COMBOBOX  -->
             <ComboBox x:Name="RoutingSelectorComboBox"
@@ -166,12 +166,12 @@
                     HorizontalAlignment="Center">
             <local:MpAvToolTipHintView Classes="warning"
                                            VerticalAlignment="Center"
-                                           ToolTipText="{x:Static local:UiStrings.ShortcutAssignGlobalHint}" />
+                                           ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignGlobalHint}" />
             <TextBlock FontSize="16"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource ThemeInteractiveColor}"
                        FontWeight="SemiBold"
-                       Text="{x:Static local:UiStrings.ShortcutAssignGlobalLabel}" />
+                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignGlobalLabel}" />
 
         </StackPanel>
 
@@ -188,7 +188,7 @@
                 <local:MpAvShortcutView IsVisible="{Binding !IsEmpty}" />
                 <Border Classes="empty"
                         IsVisible="{Binding IsEmpty}">
-                    <TextBlock Text="{x:Static local:UiStrings.ShortcutAssignRecordLabel}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignRecordLabel}" />
                 </Border>
             </Grid>
         </Border>
@@ -258,10 +258,10 @@
                     Classes="defaultButton textOnlyButton"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding $self}"
-                    Content="{x:Static local:UiStrings.CommonCancelLabel}" />
+                    Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonCancelLabel}" />
             <Button DockPanel.Dock="Right"
                     Classes="defaultButton textOnlyButton"
-                    Content="{x:Static local:UiStrings.CommonOkLabel}"
+                    Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonOkLabel}"
                     Command="{Binding OkCommand}"
                     CommandParameter="{Binding $self}" />
 

@@ -88,7 +88,7 @@
                 <TextBlock DockPanel.Dock="Right"
                            FontWeight="SemiBold"
                            Classes="alterOnly"
-                           Text="{x:Static local:UiStrings.SearchCustomJoinHeaderLabel}"
+                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCustomJoinHeaderLabel}"
                            Margin="5,0,0,0"
                            VerticalAlignment="Center" />
                 <ComboBox Classes="criteriaComboBox joinComboBox alterOnly"
@@ -115,7 +115,7 @@
                         Command="{Binding AddNextCriteriaItemCommand}">
 
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaAddRowTooltip}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaAddRowTooltip}" />
                     </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
@@ -127,7 +127,7 @@
                         Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg alterOnly"
                         Command="{Binding RemoveThisCriteriaItemCommand}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaRemoveRowTooltip}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaRemoveRowTooltip}" />
                     </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
@@ -141,7 +141,7 @@
                         IsVisible="{Binding !IsJoinPanelVisible}"
                         Command="{Binding SelectCustomNextJoinTypeCommand}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaJoinTypeTooltip}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaJoinTypeTooltip}" />
                     </ToolTip.Tip>
                     <Image Source="{Binding ., Source={StaticResource Dots3x1Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>

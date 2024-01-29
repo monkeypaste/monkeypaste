@@ -2262,7 +2262,9 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you SURE you want to delete ALL your clips?!
+        ///   Looks up a localized string similar to Are you SURE you want to delete 
+        ///ALL your clips?!
+        ///
         ///*This operation CANNOT be undone!.
         /// </summary>
         public static string ClipTrayDeleteAllMessageText {
@@ -5451,7 +5453,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has no results..
+        ///   Looks up a localized string similar to &apos;{0}&apos; has no results..
         /// </summary>
         public static string QueryTrayEmptyText {
             get {
@@ -7160,7 +7162,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drag - to - Open.
+        ///   Looks up a localized string similar to Drag-to-Open.
         /// </summary>
         public static string WelcomeDragToOpenTitle {
             get {
@@ -7358,7 +7360,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll - to - Open.
+        ///   Looks up a localized string similar to Scroll-to-Open.
         /// </summary>
         public static string WelcomeScrollToOpenTitle {
             get {

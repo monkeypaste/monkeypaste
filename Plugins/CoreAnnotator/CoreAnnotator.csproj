@@ -13,6 +13,14 @@
     <EmbeddedResource Remove="Html\**" />
     <None Remove="Html\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Resources.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="manifest.*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="AvCoreAnnotatorPlugin_html.cs" />

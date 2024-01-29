@@ -77,7 +77,7 @@
                       IsChecked="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleAutoCopyModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AppModeToggleLeftClickCopyHint}"
+                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AppModeToggleLeftClickCopyHint}"
                                        InputGestureText="{Binding ., ConverterParameter=ToggleAutoCopyMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseLeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -91,7 +91,7 @@
                       IsChecked="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleRightClickPasteCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AppModeToggleRightClickPasteHint}"
+                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AppModeToggleRightClickPasteHint}"
                                        InputGestureText="{Binding ., ConverterParameter=ToggleRightClickPasteMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseRightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -106,7 +106,7 @@
                       IsChecked="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleIsDropWidgetEnabledCommand, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.DropWidgetMouseModeToolTip}" />
+                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.DropWidgetMouseModeToolTip}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseFilledBaseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>

@@ -373,7 +373,7 @@
                         <InlineCollection>
                             <Run Foreground="{DynamicResource ThemeAccent2Color}"
                                  FontWeight="Bold"
-                                 Text="{x:Static local:UiStrings.ClipTilePinPlaceHolderLabelPrefix}" />
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTilePinPlaceHolderLabelPrefix}" />
                             <Run Text="{Binding PinPlaceholderLabel, StringFormat='\'{0}\'', Mode=OneWay}" />
                         </InlineCollection>
                     </TextBlock.Inlines>

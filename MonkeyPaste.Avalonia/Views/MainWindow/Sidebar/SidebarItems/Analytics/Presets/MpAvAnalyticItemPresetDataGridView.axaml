@@ -52,7 +52,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSaveLabel}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSaveLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -61,7 +61,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEditLabel}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEditLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -97,7 +97,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonResetLabel}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonResetLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -106,7 +106,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -208,7 +208,7 @@
                                               IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
 
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEditLabel}" />
+                                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEditLabel}" />
                                     </ToolTip.Tip>
                                     <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource EditImage}}" />
                                 </ToggleButton>
@@ -227,7 +227,7 @@
                                               IsChecked="{Binding IsQuickAction, Mode=OneWay}">
 
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeQuickActionToolTip}" />
+                                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AnalyzeQuickActionToolTip}" />
                                     </ToolTip.Tip>
                                     <Grid>
                                         <Image x:Name="StarOutline"
@@ -329,7 +329,7 @@
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
                                         Command="{Binding DuplicateThisPresetCommand}">
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDuplicateLabel}" />
+                                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDuplicateLabel}" />
                                     </ToolTip.Tip>
                                     <Image Width="25"
                                            Height="25"
@@ -381,7 +381,7 @@
                     <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddGreenImage}}"
                            DockPanel.Dock="Left" />
                     <TextBlock DockPanel.Dock="Right"
-                               Text="{x:Static local:UiStrings.CommonAddPresetButtonLabel}" />
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonAddPresetButtonLabel}" />
                 </DockPanel>
             </Button>
         </Grid>

@@ -97,7 +97,7 @@ namespace ImageAnnotator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A totally free, local and lightweight object detector trained on 80 different types of things..
+        ///   Looks up a localized string similar to A totally free, local and lightweight object detector trained on 80 different types of objects..
         /// </summary>
         public static string Description {
             get {

@@ -48,7 +48,7 @@
                                                 Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
                                             <DockPanel>
                                                 <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand, Source={StaticResource ExecuteImage}}" />
-                                                <TextBlock Text="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
+                                                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonAnalyzeButtonLabel}" />
                                             </DockPanel>
                                         </Button>
 
@@ -65,7 +65,7 @@
                                             IsVisible="{Binding CanRestore}"
                                             Command="{Binding RestoreRequestPresetValuesCommand}">
                                         <ToolTip.Tip>
-                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.ClipTransResetParamsByTransTooltip}" />
+                                            <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTransResetParamsByTransTooltip}" />
                                         </ToolTip.Tip>
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand, Source={StaticResource ResetImage}}" />
 
