@@ -64,6 +64,7 @@
 <a href="https://dribbble.com/asammunir?ref=svgrepo.com" target="_blank">Asam Munir</a> in CC Attribution License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/> 
 <a href="https://dribbble.com/strayguy?ref=svgrepo.com" target="_blank">Jack Liu</a> in PD License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/> 
 <a href="https://github.com/googlefonts/noto-emoji?ref=svgrepo.com" target="_blank">Googlefonts</a> in Apache License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/> 
+<a href="https://www.freepik.com/free-photo/jungle-forest-view-tropical-trees-generative-ai_39657349.htm#query=jungle%20wallpaper&position=12&from_view=keyword&track=ais&uuid=126c7818-6bba-4f84-9f20-c85e3955e616">Image by pvproductions</a> on Freepik<br/>
 
 ## Everything Else
 Thomas Kefauver via Monkey LLC.

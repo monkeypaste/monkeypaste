@@ -90,7 +90,7 @@ const config = {
         isCloseable: true,
       },
       zoom: {
-        selector: '.markdown img',
+        selector: '.markdown img, .examples img',
         background: {
           light: 'rgb(255, 255, 255)',
           dark: 'rgb(50, 50, 50)'

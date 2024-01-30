@@ -9,3 +9,29 @@
   height: 200px;
   width: 200px;
 }
+
+.examples {
+  margin-top: 2rem;
+  display: block;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.exampleImg {
+  align-self: center;
+  max-height: 150px;
+  height: auto;
+  width: 100%;
+}
+
+.examples hr {
+  background-color: transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-image: linear-gradient(to right, transparent, gray, transparent) 1;
+}
+
+.examples p {
+  /* max-width: 100px; */
+}
