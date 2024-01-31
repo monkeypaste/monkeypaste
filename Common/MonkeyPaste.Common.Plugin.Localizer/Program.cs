@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System.Collections;
 using System.Globalization;
 using System.Resources.NetStandard;
 using System.Text.RegularExpressions;
 
-namespace MonkeyPaste.Common.Plugin.Localizer {
+namespace Localizer {
     internal class Program {
         const string RESOURCE_KEY_OPEN_TOKEN = "%";
         const string RESOURCE_KEY_CLOSE_TOKEN = "%";

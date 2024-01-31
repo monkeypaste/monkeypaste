@@ -1,6 +1,8 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace TextToSpeech {
@@ -14,7 +16,7 @@ namespace TextToSpeech {
                 req.GetParamValue<string>(TEXT_PARAM_ID) is not string text) {
                 return null;
             }
-            (int code, string output) = await MpCli.RunAsync(
+            (int code, string output) = await RunAsync(
                 args: $"/c start /min \"\" powershell -windowstyle Hidden -executionpolicy bypass -Command \"Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}');\"");
             if (code != 0) {
                 return new MpAnalyzerPluginResponseFormat() {
@@ -23,6 +25,7 @@ namespace TextToSpeech {
             }
             return null;
         }
+
         public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
             Resources.Culture = new System.Globalization.CultureInfo(request.culture);
 
@@ -46,5 +49,42 @@ namespace TextToSpeech {
                 }
             };
         }
+
+        #region Cli Helpers
+        string CmdExe => Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+                    "System32",
+                    "cmd.exe");
+        string DefFileName =>
+            CmdExe;
+        string DefWorkingDir =>
+            Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        async Task<(int, string)> RunAsync(
+            string file = default,
+            string dir = default,
+            string args = default) {
+            var proc = CreateProcess(file, dir, args);
+            proc.Start();
+            string proc_output = await proc.StandardOutput.ReadToEndAsync();
+            proc.WaitForExit();
+            int exit_code = proc.ExitCode;
+            proc.Close();
+            proc.Dispose();
+            return (exit_code, proc_output);
+        }
+
+        Process CreateProcess(
+            string file = default,
+            string dir = default,
+            string args = default) {
+            var proc = new Process();
+            proc.StartInfo.FileName = file ?? DefFileName;
+            proc.StartInfo.WorkingDirectory = dir ?? DefWorkingDir;
+            proc.StartInfo.Arguments = args;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            return proc;
+        }
+        #endregion
     }
 }

@@ -12,6 +12,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
         Classes="notificationWindow resizable userAction"
+        Classes.textbox="{Binding ShowTextBox}"
         Classes.params="{Binding HasParams}"
         Classes.reset="{Binding ShowResetPresetButtons}">
     <local:MpAvUserActionNotificationView />

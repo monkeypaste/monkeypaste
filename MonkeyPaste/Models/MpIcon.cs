@@ -184,7 +184,7 @@ namespace MonkeyPaste {
                 HexColor3 = MpColorHelpers.GetRandomHexColor();
                 HexColor4 = MpColorHelpers.GetRandomHexColor();
                 HexColor5 = MpColorHelpers.GetRandomHexColor();
-            } else {
+            } else if (img != null) {
                 var borderImage64Str = iconBuilder.CreateBorder(img.ImageBase64, DEFAULT_ICON_BORDER_SCALE, @"#FFFFFFFF");
                 if (IconBorderImageId == 0) {
                     var bimg = await MpDbImage.Create(borderImage64Str);

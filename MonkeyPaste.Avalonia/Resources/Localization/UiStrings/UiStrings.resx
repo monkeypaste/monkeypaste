@@ -183,7 +183,7 @@
     <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings -&gt; Shortcuts' menu.</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
-    <value>All global shortcuts will be marked as local so you can configure them yourself later.</value>
+    <value>All global shortcuts will be disabled so you can set them up yourself later.</value>
   </data>
   <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
     <value>MonkeyPaste's clipboard shortcuts will be available in all applications.</value>

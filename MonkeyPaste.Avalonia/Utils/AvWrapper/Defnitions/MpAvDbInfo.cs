@@ -19,29 +19,42 @@ namespace MonkeyPaste.Avalonia {
 
         public string DbPath =>
             Path.Combine(DbDir, DbFileName);
-
-        private string _dbPassword;
         public string DbPassword {
             get {
-                if (string.IsNullOrEmpty(_dbPassword)) {
+                if (string.IsNullOrEmpty(DbPassword2)) {
+                    return DbPassword1;
+                }
+                return (DbPassword1 + DbPassword2).CheckSum();
+            }
+        }
+
+        public string DbPassword1 {
+            get {
+                if (DbCreateDateTime == null) {
+                    DbCreateDateTime = new FileInfo(DbPath).CreationTimeUtc;
+                }
+                return DbCreateDateTime.Value.ToTickChecksum();
+            }
+        }
+
+        private string _dbPassword2;
+        public string DbPassword2 {
+            get {
+                if (string.IsNullOrEmpty(_dbPassword2)) {
                     if (MpAvPrefViewModel.Instance.RememberedDbPassword != null) {
                         return MpAvPrefViewModel.Instance.RememberedDbPassword;
                     }
-                    if (DbCreateDateTime == null) {
-                        DbCreateDateTime = new FileInfo(DbPath).CreationTimeUtc;
-                    }
-                    return DbCreateDateTime.Value.ToTickChecksum();
                 }
-                return _dbPassword;
+                return _dbPassword2;
             }
             private set {
-                if (_dbPassword != value) {
-                    _dbPassword = value;
+                if (_dbPassword2 != value) {
+                    _dbPassword2 = value;
                 }
             }
         }
         public bool HasUserDefinedPassword =>
-            !string.IsNullOrEmpty(_dbPassword);
+            !string.IsNullOrEmpty(DbPassword2);
 
         public DateTime? DbCreateDateTime {
             get =>
@@ -52,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public void SetPassword(string pwd, bool remember) {
             MpAvPrefViewModel.Instance.RememberedDbPassword = remember ? pwd : null;
-            DbPassword = pwd;
+            DbPassword2 = pwd;
         }
 
         public string EnterPasswordTitle =>

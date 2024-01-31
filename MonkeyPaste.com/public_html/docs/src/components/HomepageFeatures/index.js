@@ -128,6 +128,12 @@ export default function HomepageFeatures() {
         <img src={require('/img/ss/logo_and_slogan.png').default} width="500" />
       </p>
 
+      <p align="center">
+        <video id="teaserVid" controls height="300">
+          <source src={require('/videos/teaser.mp4').default} />
+        </video>
+      </p>
+
       <section className={styles.examples}>
         <div className="container">
           <div className="row">

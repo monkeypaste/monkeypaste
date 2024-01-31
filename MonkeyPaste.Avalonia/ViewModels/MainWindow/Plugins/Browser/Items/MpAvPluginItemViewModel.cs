@@ -437,6 +437,9 @@ namespace MonkeyPaste.Avalonia {
                 if (PluginFormat is MpRuntimePlugin pf) {
                     return pf.ManifestDir;
                 }
+                if (MpPluginLoader.PluginGuidLookup.TryGetValue(PluginGuid, out var rp)) {
+                    return rp.ManifestDir;
+                }
                 return string.Empty;
 
             }

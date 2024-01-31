@@ -1,7 +1,10 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 
-namespace MonkeyPaste.Common.Plugin.Localizer {
+namespace MonkeyPaste.Common {
     public static class MpLocalizationHelpers {
         public static IEnumerable<CultureInfo> GetAvailableCultures(string dir, string file_name_prefix = default, string inv_code = "en-US") {
             List<CultureInfo> cl = new List<CultureInfo>();

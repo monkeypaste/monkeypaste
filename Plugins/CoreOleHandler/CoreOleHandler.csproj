@@ -121,7 +121,7 @@
     <RemoveDir ContinueOnError="true" Directories="$(TargetDatTempDir)" />
   </Target>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'WINDOWS' And !$(DefineConstants.Contains('AUX'))">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'WINDOWS' And !$(DefineConstants.Contains('AUX')) And False">
     <Exec Command="$(BuildScriptsDir)\bundle_plugin.bat CoreOleHandler $(TargetDir) $(TargetDatDir) $(CoreOleGuid)" />
   </Target>
 </Project>

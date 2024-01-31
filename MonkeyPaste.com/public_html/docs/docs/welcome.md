@@ -4,13 +4,6 @@ sidebar_position: 1
 
 # Welcome 
 
-<p align="center">
-  <video controls height="300">
-    <source src={require('/videos/teaser.mp4').default} />
-  </video>
-</p>
-
-
 Welcome to the documentation for MonkeyPaste, a clipboard automation and productivity tool. With MonkeyPaste, the clipboard becomes an enriched and organized asset in your workflow.
 
 ## Supported Platforms

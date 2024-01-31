@@ -152,13 +152,17 @@ namespace MonkeyPaste {
                 string key_query = $"PRAGMA key = '{old_password}'";
                 var key_result = await QueryScalarAsync<object>(key_query);
                 bool is_clearing_pwd = string.IsNullOrEmpty(new_password);
+                string new_key = new_password;
                 if (is_clearing_pwd) {
                     // user cleared db password
                     // Null DbInfo pwd to activate default
                     Mp.Services.DbInfo.SetPassword(null, remember);
-                    new_password = Mp.Services.DbInfo.DbPassword;
+                    new_key = Mp.Services.DbInfo.DbPassword1;
+                } else {
+                    new_key = (Mp.Services.DbInfo.DbPassword1 + new_password).CheckSum();
                 }
-                string rekey_query = $"PRAGMA rekey = '{new_password}'";
+
+                string rekey_query = $"PRAGMA rekey = '{new_key}'";
                 var rekey_result = await QueryScalarAsync<object>(rekey_query);
                 if (!is_clearing_pwd) {
                     // set new pwd
@@ -472,7 +476,6 @@ namespace MonkeyPaste {
                 using (File.Create(dbPath)) { }
                 dbInfo.DbCreateDateTime = new FileInfo(dbPath).CreationTimeUtc;
             }
-            string dbPass = dbInfo.DbPassword;
 
             await CreateConnectionAsync(dbPath);
 
@@ -507,6 +510,9 @@ namespace MonkeyPaste {
 #if WINDOWS
                 await InitDbSettingsAsync();
 #endif
+            } else if (!connect_success) {
+                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.DbAuthFailed, "db auth failed");
+                return null;
             }
             return success;
         }
@@ -592,6 +598,7 @@ namespace MonkeyPaste {
                     }
                     if (string.IsNullOrEmpty(dbPass)) {
                         dbPass = Mp.Services.DbInfo.DbPassword;
+
                     }
                     var cs = GetConnectionString(dbPath, dbPass);
                     if (cs == null) {

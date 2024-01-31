@@ -5,15 +5,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <DefineConstants>$(DefineConstants);AUX;</DefineConstants>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common.Plugin.Localizer\Localizer.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
-
 </Project>

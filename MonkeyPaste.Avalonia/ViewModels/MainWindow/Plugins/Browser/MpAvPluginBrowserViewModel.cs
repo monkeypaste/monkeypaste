@@ -4,7 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Plugin.Localizer;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

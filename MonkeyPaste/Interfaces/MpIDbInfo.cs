@@ -7,6 +7,9 @@ namespace MonkeyPaste {
         string DbDir { get; }
         string DbPath { get; }
         string DbPassword { get; }
+        string DbPassword1 { get; }
+        string DbPassword2 { get; }
+
         bool HasUserDefinedPassword { get; }
 
         string EnterPasswordTitle { get; }

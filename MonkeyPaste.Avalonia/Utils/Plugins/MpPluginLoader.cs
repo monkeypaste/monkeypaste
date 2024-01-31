@@ -3,7 +3,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Plugin.Localizer;
+
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -286,9 +286,9 @@ namespace MonkeyPaste.Avalonia {
         }
         private static async Task LoadAllPluginsAsync() {
             Plugins.Clear();
-            if (Mp.Services.StartupState.IsInitialStartup) {
-                await CheckAndInstallCorePluginsAsync();
-            }
+            //if (Mp.Services.StartupState.IsInitialStartup) {
+            await CheckAndInstallCorePluginsAsync();
+            //}
 
             if (!Directory.Exists(PluginRootDir)) {
                 MpConsole.WriteLine("Plugin folder missing from: " + PluginRootDir, level: MpLogLevel.Error);
@@ -566,6 +566,9 @@ namespace MonkeyPaste.Avalonia {
                         continue;
                     }
                     foreach (var preset in presetHost.presets) {
+                        if (string.IsNullOrEmpty(preset.guid)) {
+                            continue;
+                        }
                         var dup_preset_guid_plugins = Plugins.Where(x => x != plugin && x.PresetHosts.Any(y => y.presets != null && y.presets.Any(z => z.guid == preset.guid)));
                         if (!dup_preset_guid_plugins.Any()) {
                             continue;

@@ -7189,7 +7189,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All global shortcuts will be marked as local so you can configure them yourself later..
+        ///   Looks up a localized string similar to All global shortcuts will be disabled so you can set them up yourself later..
         /// </summary>
         public static string WelcomeGestureProfileDescription1 {
             get {

@@ -6,12 +6,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using MonkeyPaste.Common.Plugin;
+using System.IO;
+
 #if CEFNET_WV
 using CefNet;
 #endif
 
 namespace MonkeyPaste.Avalonia {
     internal class Program {
+        static bool CLEAR_STORAGE = false;
         const string THIS_APP_GUID = "252C6489-DFF3-4CFF-A419-7D3770461FFE";
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -46,6 +49,17 @@ namespace MonkeyPaste.Avalonia {
                 .LogToTrace()// LogEventLevel.Verbose)
                 ;
         static void HandleSingleInstanceLaunch(object[] args) {
+            if (CLEAR_STORAGE) {
+                // NOTE use this when local storage folder won't go away
+                string path1 = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "MonkeyPaste");
+#if DEBUG
+                path1 += "_DEBUG";
+#endif
+                bool success1 = MpFileIo.DeleteDirectory(path1);
+                Console.WriteLine($"Deleted '{path1}': {success1.ToTestResultLabel()}");
+            }
 #if CEFNET_WV
             // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
             MpAvCefNetApplication.Init();

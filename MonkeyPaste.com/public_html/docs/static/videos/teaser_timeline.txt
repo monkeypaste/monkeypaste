@@ -1,0 +1,13 @@
+0:00 Intro
+0:09 Drag & Drop Images
+0:23 Object Detection w/ Image Annotator Plugin
+0:39 File Append Copy & Pasting
+1:10 Mixed media (text & image) copying
+1:37 Text editing & integrated paste (into Notepad++)
+1:50 Adding dynamic regions w/ Text Templates
+2:48 Quick Search & match navigation
+3:07 Advanced Search & query stacking
+4:10 Trigger & Action Designer
+5:50 Installing & using a plugin (Qr Code Generator)
+6:35 Block, inline and split-block on-the-fly text drop
+7:32 Quick Preview of Settings & Shortcut Editor

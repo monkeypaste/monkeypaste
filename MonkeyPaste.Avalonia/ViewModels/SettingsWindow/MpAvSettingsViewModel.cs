@@ -1832,7 +1832,7 @@ namespace MonkeyPaste.Avalonia {
                             if (!result) {
                                 return;
                             }
-                            Mp.Services.DbInfo.SetPassword(Mp.Services.DbInfo.DbPassword, false);
+                            Mp.Services.DbInfo.SetPassword(Mp.Services.DbInfo.DbPassword2, false);
                             SetupPasswordButtons();
 
                             break;

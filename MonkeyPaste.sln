@@ -72,11 +72,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalExample", "Plugins\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAnnotator", "Plugins\ImageAnnotator\ImageAnnotator.csproj", "{90176F3E-02B4-424C-A654-D91B1D1D378F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Plugin.Localizer", "Common\MonkeyPaste.Common.Plugin.Localizer\MonkeyPaste.Common.Plugin.Localizer.csproj", "{969D99E5-9576-4E1D-8E9E-08E6495C963C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localizer", "Common\MonkeyPaste.Common.Plugin.Localizer\Localizer.csproj", "{969D99E5-9576-4E1D-8E9E-08E6495C963C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextToSpeech", "Plugins\TextToSpeech\TextToSpeech.csproj", "{3DAB2B62-FDFA-4CE9-AA1F-21272214FEE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Plugin.Ledgerizer", "Common\MonkeyPaste.Common.Plugin.Ledgerizer\MonkeyPaste.Common.Plugin.Ledgerizer.csproj", "{FAD6E9CC-5AD5-41E3-B18C-CEACBBD71CFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ledgerizer", "Common\MonkeyPaste.Common.Plugin.Ledgerizer\Ledgerizer.csproj", "{FAD6E9CC-5AD5-41E3-B18C-CEACBBD71CFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ledger", "Common\Ledger\Ledger.csproj", "{2130A973-3591-4D13-BF61-A5B5B48D5B9F}"
 EndProject
@@ -1481,13 +1481,13 @@ Global
 		{F3A6C52C-1C44-4123-BFE6-0FA5BD99BCFE} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
-		RESX_ExcelExportMode = Text
 		RESX_ConfirmAddLanguageFile = False
+		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
 	EndGlobalSection
 EndGlobal

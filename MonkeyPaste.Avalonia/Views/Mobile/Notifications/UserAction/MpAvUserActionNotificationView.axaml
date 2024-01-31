@@ -64,6 +64,26 @@
                     Value="Center" />
         </Style>
 
+        <!--  TEXT INPUT  -->
+        <Style Selector="Border#TextInputContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="Border#TextInputContainer.invalid">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView Classes="error"
+                                               ToolTipText="{Binding ValidationText}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!--  MESSAGE WRAPPING  -->
         <Style Selector="ScrollViewer#BodyScrollViewer">
             <Setter Property="HorizontalScrollBarVisibility"
@@ -175,9 +195,15 @@
                 <ScrollViewer x:Name="BodyScrollViewer"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto"
-                              Classes.singleline="{Binding Body, Converter={x:Static local:MpAvStringToIsSingleLineConverter.Instance}}"
                               AllowAutoHide="False"
                               Margin="0,5,5,5">
+                    <Classes.singleline>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="Body"
+                                     Converter="{x:Static local:MpAvStringToIsSingleLineConverter.Instance}" />
+                            <Binding Path="!ShowTextBox" />
+                        </MultiBinding>
+                    </Classes.singleline>
 
                     <ContentControl HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
@@ -239,12 +265,10 @@
 
                                     <!--  TEXTBOX (Optional)  -->
 
-                                    <Grid Grid.Row="2"
-                                          Grid.Column="1"
-                                          IsVisible="{Binding ShowTextBox}"
-                                          RowDefinitions="Auto,Auto">
-                                        <Border BorderThickness="2"
-                                                BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+                                    <Grid RowDefinitions="Auto,Auto">
+                                        <Border x:Name="TextInputContainer"
+                                                BorderThickness="2"
+                                                Classes.invalid="{Binding !IsInputValid}"
                                                 Background="{DynamicResource ThemeInteractiveBgColor}"
                                                 Margin="0,0,5,3"
                                                 CornerRadius="7"
@@ -263,12 +287,12 @@
                                                      Text="{Binding BoundInputText, Mode=TwoWay}" />
                                         </Border>
                                         <StackPanel Grid.Row="1"
-                                                    Spacing="2"
+                                                    Spacing="5"
                                                     Orientation="Horizontal"
                                                     IsVisible="{Binding CanRemember}">
-                                            <Label Foreground="White"
-                                                   VerticalAlignment="Center"
-                                                   Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRememberLabel}" />
+                                            <TextBlock Foreground="White"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRememberLabel}" />
                                             <CheckBox x:Name="RememberCheckbox"
                                                       IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
                                         </StackPanel>

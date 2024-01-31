@@ -1,24 +1,41 @@
 ﻿using MonkeyPaste.Avalonia;
-using MonkeyPaste.Common.Plugin.Localizer;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Diagnostics;
 using System.IO.Compression;
 
-namespace MonkeyPaste.Common.Plugin.Ledgerizer {
+namespace Ledgerizer {
+    [Flags]
+    enum MpLedgerizerFlags : long {
+        None = 0,
+        DO_LOCAL_PACKAGING = 1L << 1,
+        DO_REMOTE_PACKAGING = 1L << 2,
+        FORCE_REPLACE_REMOTE_TAG = 1L << 3,
+        DO_LOCAL_VERSIONS = 1L << 4,
+        DO_REMOTE_VERSIONS = 1L << 5,
+        DO_LOCAL_INDEX = 1L << 6,
+        DO_REMOTE_INDEX = 1L << 7,
+        MOVE_CORE_TO_DAT = 1L << 8,
+    }
     internal class Program {
         const string VERSION_PHRASE = "Im the big T pot check me out";
         static string VERSION => "1.0.7.0";
 
-        static bool DO_LOCAL_PACKAGING = true;
 
-        static bool DO_REMOTE_PACKAGING = false;
-        static bool FORCE_REPLACE_REMOTE_TAG = false;
+        static MpLedgerizerFlags LEDGERIZER_FLAGS = MpLedgerizerFlags.MOVE_CORE_TO_DAT;
 
-        static bool DO_LOCAL_VERSIONS = false;
-        static bool DO_REMOTE_VERSIONS = false;
+        static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
 
-        static bool DO_LOCAL_INDEX = true;
-        static bool DO_REMOTE_INDEX = false;
+        static bool DO_REMOTE_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_PACKAGING);
+        static bool FORCE_REPLACE_REMOTE_TAG = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG);
 
+        static bool DO_LOCAL_VERSIONS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_VERSIONS);
+        static bool DO_REMOTE_VERSIONS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_VERSIONS);
+
+        static bool DO_LOCAL_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_INDEX);
+        static bool DO_REMOTE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_INDEX);
+
+        static bool MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_CORE_TO_DAT);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -39,7 +56,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
 
         const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
 
-        static string[] PluginNames = [
+        static string[] PluginNames => [
             "ChatGpt",
             "ComputerVision",
             "CoreAnnotator",
@@ -53,7 +70,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             "WebSearch"
         ];
 
-        static string[] PrivatePackagePlugins = [
+        static string[] CorePlugins => [
             "CoreAnnotator",
             "CoreOleHandler",
         ];
@@ -63,20 +80,20 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         ];
 
         //ledger-local.json
-        static string LocalLedgerPath =
+        static string LocalLedgerPath =>
             Path.Combine(
                 MpLedgerConstants.LEDGER_PROJ_DIR,
                 MpLedgerConstants.LOCAL_LEDGER_NAME);
 
         //ledger.json
-        static string RemoteLedgerPath =
+        static string RemoteLedgerPath =>
             Path.Combine(
                 MpLedgerConstants.LEDGER_PROJ_DIR,
                 MpLedgerConstants.REMOTE_LEDGER_NAME);
 
         static string ManifestPrefix = "manifest";
         static string ManifestExt = "json";
-        static string ManifestFileName = ManifestPrefix + "." + ManifestExt;
+        static string ManifestFileName => ManifestPrefix + "." + ManifestExt;
 
         static List<string> CulturesFound { get; set; } = [];
         static void Main(string[] args) {
@@ -108,7 +125,37 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             if (DO_REMOTE_INDEX) {
                 CreateIndex(true);
             }
+            if (MOVE_CORE_TO_DAT) {
+                MoveCoreToDat();
+            }
         }
+
+        #region Move Core 
+        static void MoveCoreToDat() {
+            string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
+            MpConsole.WriteLine($"Moving core plugins to dat STARTED", true);
+
+            foreach (string core_plugin_name in CorePlugins) {
+                string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
+                if (!core_plugin_zip_path.IsFile()) {
+                    MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
+                    continue;
+                }
+                if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
+                    MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
+                    continue;
+                }
+
+                string target_dat_path = Path.Combine(MpCommonHelpers.GetTargetDatDir(), $"{core_mf.guid}.zip");
+                if (!MpCommonHelpers.GetTargetDatDir().IsDirectory()) {
+                    MpFileIo.CreateDirectory(MpCommonHelpers.GetTargetDatDir());
+                }
+                MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
+                MpConsole.WriteLine(target_dat_path);
+            }
+            MpConsole.WriteLine($"Moving core plugins to dat DONE", false, true);
+        }
+        #endregion
 
         #region Localizing
         static void CreateIndex(bool is_remote) {
@@ -213,7 +260,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "obj"));
 
             // perform publish and output to ledger proj/packages_* dir
-            string args = PrivatePackagePlugins.Contains(plugin_name) ?
+            string args = CorePlugins.Contains(plugin_name) ?
                 $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={BUILD_CONFIG} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
                 $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
 
@@ -323,7 +370,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
             string target_package_file_name = $"{target_tag_name}.zip";
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
 
-            if (PrivatePackagePlugins.Contains(plugin_name)) {
+            if (CorePlugins.Contains(plugin_name)) {
                 // TODO would be nice to be able to ssh onto server and push core plugins
                 // but for now must be handled manually
                 return GetRemotePackageUrl(plugin_name, manifest.guid, target_tag_name);
@@ -395,7 +442,7 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
         }
 
         static string GetRemotePackageUrl(string plugin_name, string plugin_guid, string target_tag_name) {
-            if (PrivatePackagePlugins.Contains(plugin_name)) {
+            if (CorePlugins.Contains(plugin_name)) {
                 return string.Format(PRIVATE_PACKAGE_URL_FORMAT, plugin_guid, target_tag_name);
             }
             return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
@@ -442,6 +489,15 @@ namespace MonkeyPaste.Common.Plugin.Ledgerizer {
                 MpLedgerConstants.REMOTE_LEDGER_NAME :
                 MpLedgerConstants.LOCAL_LEDGER_NAME);
             return MpFileIo.ReadTextFromFile(inv_ledger_path).DeserializeObject<MpManifestLedger>();
+        }
+        static MpManifestFormat ReadPluginManifestFromProjDir(string plugin_name) {
+            string plugin_proj_dir = GetPluginProjDir(plugin_name);
+            string plugin_manifest_path = Path.Combine(
+                    plugin_proj_dir,
+                    ManifestFileName);
+
+            string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
+            return plugin_manifest_text.DeserializeObject<MpManifestFormat>();
         }
         static string GetPluginProjDir(string plugin_name) {
             return Path.Combine(
