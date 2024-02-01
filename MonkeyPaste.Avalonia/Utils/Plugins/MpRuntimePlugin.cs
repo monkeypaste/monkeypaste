@@ -111,7 +111,18 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [JsonIgnore]
-        public string ManifestPath { get; set; }
+        private string _manifestPath;
+        public string ManifestPath {
+            get => _manifestPath;
+            set {
+                if (ManifestPath != value) {
+                    if (string.IsNullOrEmpty(value)) {
+
+                    }
+                    _manifestPath = value;
+                }
+            }
+        }
 
         [JsonIgnore]
         public string ManifestDir =>

@@ -6,12 +6,12 @@ using System.Resources.NetStandard;
 using System.Text.RegularExpressions;
 
 namespace Localizer {
-    internal class Program {
+    public class Program {
         const string RESOURCE_KEY_OPEN_TOKEN = "%";
         const string RESOURCE_KEY_CLOSE_TOKEN = "%";
 
-        static string templated_manifest_path, invariant_resource_path, target_lang_code, output_dir;
         static void Main(string[] args) {
+            string templated_manifest_path = default, invariant_resource_path = default, target_lang_code = default, output_dir = default;
             if (args == null || args.Length < 2) {
                 Console.WriteLine("Enter templated manifest path:");
                 templated_manifest_path = Console.ReadLine();
@@ -31,16 +31,16 @@ namespace Localizer {
                 target_lang_code = args.Length > 2 ? args[2] : CultureInfo.CurrentCulture.Name;
                 output_dir = args.Length > 3 ? args[3] : null;
             }
-            output_dir = string.IsNullOrWhiteSpace(output_dir) ? Path.GetDirectoryName(templated_manifest_path) : output_dir;
+            output_dir = string.IsNullOrWhiteSpace(output_dir) ?
+                Path.Combine(Path.GetDirectoryName(templated_manifest_path), "Resources") :
+                output_dir;
 
             output_dir = output_dir.Replace("\"", string.Empty);
             templated_manifest_path = templated_manifest_path.Replace("\"", string.Empty);
             invariant_resource_path = invariant_resource_path.Replace("\"", string.Empty);
 
-            string templated_manifest_json = MpFileIo.ReadTextFromFile(templated_manifest_path);
-
             var lang_codes = string.IsNullOrWhiteSpace(target_lang_code) ?
-                MpLocalizationHelpers.GetAvailableCultures(
+                MpLocalizationHelpers.FindCulturesInDirectory(
                     Path.GetDirectoryName(invariant_resource_path),
                     Path.GetFileNameWithoutExtension(invariant_resource_path))
                 .Select(x => x.Name) :
@@ -48,14 +48,17 @@ namespace Localizer {
 
             foreach (string lang_code in lang_codes) {
                 //LocalizeManifest(templated_manifest, lang_code);
-                LocalizeManifest(templated_manifest_json, lang_code);
+                LocalizeManifest(invariant_resource_path, templated_manifest_path, lang_code, output_dir);
             }
             Console.WriteLine($"Success");
 
             Environment.Exit(0);
         }
 
-        private static string LocalizeManifest(string templated_manifest_json, string lang_code) {
+        public static string LocalizeManifest(string invariant_resource_path, string templated_manifest_path, string lang_code, string output_dir) {
+
+
+            string templated_manifest_json = MpFileIo.ReadTextFromFile(templated_manifest_path);
             MpPluginFormat localized_manifest = new MpPluginFormat();
 
             var localized_name_parts = new string[] {

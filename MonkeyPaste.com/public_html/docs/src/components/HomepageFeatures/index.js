@@ -10,7 +10,7 @@ const FeatureList = [
     description: (
       <>
         Focus on what matters and get things done quicker with our low-profile
-        layout designed to minimize the steps between A and B so you stay flowing.
+        layout, designed to minimize the steps between A and B so you stay flowing.
       </>
     ),
   },
@@ -30,7 +30,7 @@ const FeatureList = [
     description: (
       <>
         Built to grow using a simple plugin system that allows developers
-        to <a href="./docs/plugin-development">easily extend</a> and users to pick the features they want with point-and-click ease.
+        to <a href="./docs/plugins/plugin-development">easily extend</a> and users to pick the features they want with point-and-click ease.
       </>
     ),
   },

@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, string> LangLookup {
             get {
                 if (_langLookup == null) {
-                    var cl = MpLocalizationHelpers.GetAvailableCultures(UiStringDir);
+                    var cl = MpLocalizationHelpers.FindCulturesInDirectory(UiStringDir);
                     _langLookup = cl.ToDictionary(x => x.Name, x => GetCultureDisplayValue(x));
                 }
                 return _langLookup;

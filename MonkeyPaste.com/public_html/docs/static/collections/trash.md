@@ -13,7 +13,7 @@ Clips can be moved to the trash in a few ways:
 - Pressing the <kbd>Del</kbd> key on a selected clip or via 
 - The **Trash** button found in a selected clip's context menu (right-click or hold on mobile) 
 - Drag-and-dropping a clip onto the *Trash* collection
-- Automatically occurs as part of [content recycling](account/index#capacity-limits)
+- Automatically occurs as part of [content recycling](account/index#content-limits)
 
 :::tip
 Selected clips can skip the trash and be permanently deleted using the <kbd>Control</kbd>+<kbd>Del</kbd> shortcut.

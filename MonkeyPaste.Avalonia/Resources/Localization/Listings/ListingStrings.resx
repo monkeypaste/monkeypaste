@@ -133,21 +133,21 @@
 featuring an intuitive and low-profile interface that supports text, files and images. Designed for flexibility, with an ever-growing community-driven libray of plugins.
 
 It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Control+C that would 'add to' instead 
-of 'replace' what was on the clipboard. And the experiment worked, eureka! The little tool was very handy. This entrigued the engineer with more ideas and more experiments that 
+of 'replace' what was on the clipboard. And the experiment worked, eureka! The little tool was very handy. This entrigued the programmer with more ideas and more experiments, that 
 now has become "MonkeyPaste". 
 
 As the desktop is to your files, MonkeyPaste intends to be to your clipboard. Its a suite of tools carefully designed to seemlessly integrate and interoperate with 
 any application or format of content. Control+C and Control+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
 wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Control+C.
 
-I am that programmer mentioned above and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
-I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation that NONE of the (very) personal information that can arise on 
+I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
+I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
 your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
   </data>
   <data name="StoreFeatures" xml:space="preserve">
     <value>● Simple and friendly interface 
 ● Horizontal/vertical layouts, list/grid view and multi-monitor support
-● Both light &amp; dark themes are completely dynamic
+● Both light &amp; dark themes are completely dynamic, use any color you want
 
 ● Optimized for performance and stressed tested with 1,000,000s of clips.
 ● Anytime search, just start typing
@@ -182,6 +182,9 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
 ● Automate everything with plugin presets, stash and use your any of your AI prompts or commands with ease
 
 ● More platforms and features coming soon! We're just gettings started 🎉</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Note! Screen shots are only examples. The app you install has been translated to this language.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>With this subscription you will receive:

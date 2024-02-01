@@ -97,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
         Dictionary<MpHelpLinkType, string> OnlineHelpUriLookup => new() {
             {MpHelpLinkType.None, $"{MpServerConstants.DOCS_BASE_URL}/welcome" },
             {MpHelpLinkType.Plugins, $"{MpServerConstants.DOCS_BASE_URL}/plugins" },
-            {MpHelpLinkType.ContentLimits, $"{MpServerConstants.DOCS_BASE_URL}/account/#content-limits" },
+            {MpHelpLinkType.ContentLimits, $"{MpServerConstants.DOCS_BASE_URL}/account/#limits" },
             {MpHelpLinkType.Collections, $"{MpServerConstants.DOCS_BASE_URL}/collections/" },
             {MpHelpLinkType.Tags, $"{MpServerConstants.DOCS_BASE_URL}/collections/tags" },
             {MpHelpLinkType.Groups, $"{MpServerConstants.DOCS_BASE_URL}/collections/groups" },

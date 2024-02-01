@@ -16,13 +16,19 @@ namespace Ledgerizer {
         DO_LOCAL_INDEX = 1L << 6,
         DO_REMOTE_INDEX = 1L << 7,
         MOVE_CORE_TO_DAT = 1L << 8,
+        LOCALIZE_MANIFESTS = 1L << 9,
     }
     internal class Program {
+        static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
         const string VERSION_PHRASE = "Im the big T pot check me out";
         static string VERSION => "1.0.7.0";
 
 
-        static MpLedgerizerFlags LEDGERIZER_FLAGS = MpLedgerizerFlags.MOVE_CORE_TO_DAT;
+        static MpLedgerizerFlags LEDGERIZER_FLAGS =
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.DO_LOCAL_INDEX
+            //| MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
 
@@ -36,6 +42,8 @@ namespace Ledgerizer {
         static bool DO_REMOTE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_INDEX);
 
         static bool MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_CORE_TO_DAT);
+
+        static bool LOCALIZE_MANIFESTS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCALIZE_MANIFESTS);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -62,6 +70,7 @@ namespace Ledgerizer {
             "CoreAnnotator",
             "CoreOleHandler",
             "FileConverter",
+            "GoogleLiteTextTranslator",
             "ImageAnnotator",
             //"MinimalExample",
             "QrCoder",
@@ -128,7 +137,11 @@ namespace Ledgerizer {
             if (MOVE_CORE_TO_DAT) {
                 MoveCoreToDat();
             }
+            if (LOCALIZE_MANIFESTS) {
+                LocalizeManifests();
+            }
         }
+
 
         #region Move Core 
         static void MoveCoreToDat() {
@@ -158,6 +171,37 @@ namespace Ledgerizer {
         #endregion
 
         #region Localizing
+        static void LocalizeManifests() {
+            foreach (string plugin_name in PluginNames) {
+                LocalizeManifest(plugin_name);
+            }
+        }
+        static void LocalizeManifest(string plugin_name) {
+            // when plugin has Resources/Resources.resx, presume manifest is templated
+            // and create localized manifests of all Resources.<culture> in /Resources
+            // otherwise ignore
+            string plugin_res_dir = GetPluginResourcesDir(plugin_name);
+            string invariant_resource_path = Path.Combine(plugin_res_dir, "Resources.resx");
+            if (!plugin_res_dir.IsDirectory() || !invariant_resource_path.IsFile()) {
+                return;
+            }
+            string inv_mf_path =
+                Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName);
+
+            string templated_manifest_json = MpFileIo.ReadTextFromFile(inv_mf_path);
+
+            var lang_codes = MpLocalizationHelpers.FindCulturesInDirectory(
+                    dir: plugin_res_dir,
+                    file_name_prefix: "Resources");
+
+            foreach (string lang_code in lang_codes.Where(x => !x.IsInvariant()).Select(x => x.Name)) {
+                Localizer.Program.LocalizeManifest(invariant_resource_path, inv_mf_path, lang_code, plugin_res_dir);
+            }
+        }
+
+        #endregion
+
+        #region Index
         static void CreateIndex(bool is_remote) {
             MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} Cultures...", true);
             string inv_code = "";
@@ -165,8 +209,12 @@ namespace Ledgerizer {
             List<string> found_cultures = [];
             // find all distinct cultures
             foreach (var plugin_name in PluginNames) {
-                string plugin_proj_dir = GetPluginProjDir(plugin_name);
-                if (MpLocalizationHelpers.GetAvailableCultures(plugin_proj_dir, file_name_prefix: ManifestPrefix, inv_code: inv_code) is { } cil) {
+                string plugin_cultures_dir = GetPluginResourcesDir(plugin_name);
+                if (plugin_cultures_dir == null) {
+                    // no resources dir
+                    continue;
+                }
+                if (MpLocalizationHelpers.FindCulturesInDirectory(plugin_cultures_dir, file_name_prefix: ManifestPrefix, inv_code: inv_code) is { } cil) {
                     var to_add = cil.Where(x => !found_cultures.Contains(x.Name) && !string.IsNullOrEmpty(x.Name)).Select(x => x.Name);
                     found_cultures.AddRange(to_add);
                 }
@@ -215,12 +263,20 @@ namespace Ledgerizer {
         }
 
         static MpManifestFormat GetLocalizedManifest(string plugin_name, string culture, string inv_code) {
-            string plugin_proj_dir = GetPluginProjDir(plugin_name);
-            string resolved_cultre = MpLocalizationHelpers.FindClosestCultureCode(culture, plugin_proj_dir, file_name_prefix: ManifestPrefix, inv_code: inv_code);
-            string localized_manifest_path = Path.Combine(
-                plugin_proj_dir,
-                $"{ManifestPrefix}.{resolved_cultre}.{ManifestExt}").Replace("..", ".");
-            MpDebug.Assert(localized_manifest_path.IsFile(), $"ERror can't find manifest {localized_manifest_path}");
+            string plugin_proj_cultures_dir = GetPluginResourcesDir(plugin_name);
+            string localized_manifest_path = Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName);
+            if (plugin_proj_cultures_dir != null) {
+                string resolved_cultre = MpLocalizationHelpers.FindClosestCultureCode(
+                culture, plugin_proj_cultures_dir,
+                file_name_prefix: ManifestPrefix,
+                inv_code: inv_code);
+                if (!string.IsNullOrEmpty(resolved_cultre)) {
+                    localized_manifest_path = Path.Combine(
+                    plugin_proj_cultures_dir,
+                    $"{ManifestPrefix}.{resolved_cultre}.{ManifestExt}").Replace("..", ".");
+                    MpDebug.Assert(localized_manifest_path.IsFile(), $"ERror can't find manifest {localized_manifest_path}");
+                }
+            }
             return MpFileIo.ReadTextFromFile(localized_manifest_path).DeserializeObject<MpManifestFormat>();
         }
 
@@ -331,7 +387,9 @@ namespace Ledgerizer {
                 if (local_package_uri == null) {
                     continue;
                 }
+                // set pub app version for all plugins
                 plugin_manifest.publishedAppVersion = VERSION;
+                // set package uri to output of local packaging
                 plugin_manifest.packageUrl = local_package_uri;
                 ledger.manifests.Add(plugin_manifest);
             }
@@ -505,6 +563,15 @@ namespace Ledgerizer {
                         "Plugins",
                         plugin_name);
         }
+        static string GetPluginResourcesDir(string plugin_name) {
+            string res_dir = Path.Combine(
+                GetPluginProjDir(plugin_name), "Resources");
+            if (!res_dir.IsDirectory()) {
+                return null;
+            }
+            return res_dir;
+        }
+
         static (int, string) RunProcess(string file, string dir, string args) {
             var proc = new Process();
             proc.StartInfo.FileName = file;

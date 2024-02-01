@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
                     throw new MpUserNotifiedException($"Error downloading plugin. Please try again later.");
                 }
                 if (FindInvariantManifestPaths(install_dir) is not { } inv_manifests ||
-                    ResolveManifestPath(inv_manifests.FirstOrDefault()) is not string manifest_path) {
+                    ResolveLocalizedManifestPath(inv_manifests.FirstOrDefault()) is not string manifest_path) {
                     return false;
                 }
                 bool success = await LoadPluginAsync(manifest_path, silentInstall);
@@ -298,7 +298,7 @@ namespace MonkeyPaste.Avalonia {
             var inv_manifest_paths = FindInvariantManifestPaths(PluginRootDir);
             foreach (var inv_manifest_path in inv_manifest_paths) {
                 // attempt to localized manifest
-                string localized_manifest_path = ResolveManifestPath(inv_manifest_path);
+                string localized_manifest_path = ResolveLocalizedManifestPath(inv_manifest_path);
                 bool success = await LoadPluginAsync(localized_manifest_path);
                 MpConsole.WriteLine($"Load:{success.ToTestResultLabel()} from manifest: '{localized_manifest_path}' ");
             }
@@ -337,23 +337,24 @@ namespace MonkeyPaste.Avalonia {
                 try {
                     string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
                     plugin = JsonConvert.DeserializeObject<MpRuntimePlugin>(manifestStr);
-                    plugin.ManifestPath = manifestPath;
+                    plugin.ManifestPath = ResolveInvManifestPath(manifestPath);
+
 
                     if (!ValidatePluginDependencies(plugin)) {
-                        await DetachPluginByManifestPathAsync(manifestPath);
+                        await DetachPluginByManifestPathAsync(plugin.ManifestPath);
                         return false;
                     }
 
-                    bool isValid = ValidatePluginManifest(plugin, manifestPath);
+                    bool isValid = ValidatePluginManifest(plugin, plugin.ManifestPath);
                 }
                 catch (Exception ex) {
                     var invalid_or_malformed_json_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,
-                            body: string.Format(UiStrings.PluginErrManifestText, manifestPath, ex.Message),
+                            body: string.Format(UiStrings.PluginErrManifestText, plugin.ManifestPath, ex.Message),
                             retryAction: retryFunc,
-                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
+                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(plugin.ManifestPath)));
                     if (invalid_or_malformed_json_result == MpNotificationDialogResultType.Ignore) {
-                        await DetachPluginByManifestPathAsync(manifestPath);
+                        await DetachPluginByManifestPathAsync(plugin.ManifestPath);
                         return false;
                     }
                     needsFixing = true;
@@ -392,7 +393,7 @@ namespace MonkeyPaste.Avalonia {
                                 MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand.Execute(false);
                             }
                         }
-                        await MpAvPluginAssemblyHelpers.LoadComponentsAsync(manifestPath, plugin);
+                        await MpAvPluginAssemblyHelpers.LoadComponentsAsync(plugin.ManifestPath, plugin);
                         ValidatePluginComponents(plugin);
                     }
                     catch (Exception ex) {
@@ -400,9 +401,9 @@ namespace MonkeyPaste.Avalonia {
                                 notificationType: MpNotificationType.InvalidPlugin,
                                 body: ex.Message,
                                 retryAction: retryFunc,
-                                fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
+                                fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(plugin.ManifestPath)));
                         if (ivalid_plugin_component_result == MpNotificationDialogResultType.Ignore) {
-                            await DetachPluginByManifestPathAsync(manifestPath);
+                            await DetachPluginByManifestPathAsync(plugin.ManifestPath);
                             return false;
                         }
                         needsFixing = true;
@@ -879,24 +880,42 @@ namespace MonkeyPaste.Avalonia {
                 return new List<string>();
             }
         }
-        private static string ResolveManifestPath(string inv_manifest_path) {
+        private static string ResolveInvManifestPath(string some_manifest_path) {
+            if (Path.GetDirectoryName(some_manifest_path).EndsWith("Resources")) {
+                // cultured manifest path
+                string inv_manifest_path = Path.Combine(
+                    Path.GetDirectoryName(Path.GetDirectoryName(some_manifest_path)),
+                    MANIFEST_INVARIANT_FILE_NAME);
+                if (inv_manifest_path.IsFile()) {
+                    return inv_manifest_path;
+                }
+                throw new FileNotFoundException("Plugin error, no invariant manifest found");
+            }
+            return some_manifest_path;
+        }
+        private static string ResolveLocalizedManifestPath(string inv_manifest_path) {
             // find closest manifest culture matching users culture
             if (!inv_manifest_path.IsFile()) {
                 return null;
             }
+            string localized_manifest_path = inv_manifest_path;
             string manifest_dir = Path.GetDirectoryName(inv_manifest_path);
-            string man_culture_code = MpLocalizationHelpers.FindClosestCultureCode(
-                culture_code: Mp.Services.UserCultureInfo.CultureCode,
-                dir: manifest_dir,
-                file_name_prefix: MANIFEST_FILE_NAME_PREFIX);
+            string res_dir = Path.Combine(manifest_dir, "Resources");
+            if (res_dir.IsDirectory()) {
+                string man_culture_code = MpLocalizationHelpers.FindClosestCultureCode(
+                    target_culture_code: Mp.Services.UserCultureInfo.CultureCode,
+                    dir: res_dir,
+                    file_name_prefix: MANIFEST_FILE_NAME_PREFIX);
 
-            string localized_manifest_file_name =
-                $"{MANIFEST_FILE_NAME_PREFIX}.{man_culture_code}.{MANIFEST_FILE_EXT}";
+                string localized_manifest_file_name =
+                    $"{MANIFEST_FILE_NAME_PREFIX}.{man_culture_code}.{MANIFEST_FILE_EXT}".Replace("..", ".");
 
-            string localized_manifest_path =
-                Path.Combine(
-                    manifest_dir,
-                    localized_manifest_file_name);
+                localized_manifest_path =
+                    Path.Combine(
+                        res_dir,
+                        localized_manifest_file_name);
+            }
+
 
             if (localized_manifest_path.IsFile()) {
                 return localized_manifest_path;
