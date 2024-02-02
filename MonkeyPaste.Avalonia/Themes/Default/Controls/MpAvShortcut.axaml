@@ -18,6 +18,10 @@
         <Setter Property="Padding"
                 Value="3,1" />
     </Style>
+    <Style Selector="local|MpAvShortcutLabel.tt Border#KeyContainer">
+        <Setter Property="Padding"
+                Value="0,1" />
+    </Style>
 
     <Style Selector="local|MpAvShortcutLabel.menuItemGesture TextBlock">
         <Setter Property="FontSize"

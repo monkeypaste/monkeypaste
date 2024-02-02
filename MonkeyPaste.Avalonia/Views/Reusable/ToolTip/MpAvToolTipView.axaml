@@ -40,7 +40,7 @@
             <local:MpAvShortcutLabel Margin="5,0,0,0"
                                      HorizontalAlignment="Right"
                                      VerticalAlignment="Center"
-                                     Classes="menuItemGesture"
+                                     Classes="tt menuItemGesture"
                                      DockPanel.Dock="Right"
                                      KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}" />
             <Grid>

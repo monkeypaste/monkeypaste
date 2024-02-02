@@ -2383,6 +2383,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Pin Tray.
+        /// </summary>
+        public static string MpShortcutType_ClearPinTray {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ClearPinTray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Selection.
         /// </summary>
         public static string MpShortcutType_CopySelection {

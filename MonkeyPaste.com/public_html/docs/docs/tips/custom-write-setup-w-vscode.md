@@ -25,6 +25,6 @@ At this point, clicking 'Paste' will paste **nothing** since all write formats a
 The menu should now look something like below and only text will be pasted or dropped into VS Code:
 
 <p align="center">
-  <img src={require('/img/ole_format_button_write_menu_text_button.png').default}/>  
+  <img src={require('/img/ole_format_button_write_menu_text_button.png').default} width="300"/>  
 </p>  
 

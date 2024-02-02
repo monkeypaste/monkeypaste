@@ -2696,4 +2696,7 @@ feedback@monkeypaste.com</value>
   <data name="CommonOutOfDateTooltip" xml:space="preserve">
     <value>You need to update MonkeyPaste in order to use this feature.</value>
   </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Shortcut Unset</value>
+  </data>
 </root>

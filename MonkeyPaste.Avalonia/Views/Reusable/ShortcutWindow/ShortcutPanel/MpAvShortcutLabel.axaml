@@ -22,7 +22,7 @@
         </ItemsControl.IsVisible>
         <ItemsControl.Resources>
             <Thickness x:Key="ListBoxItemPadding">
-                5,0,5,0
+                0,0,0,0
             </Thickness>
             <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
             <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>

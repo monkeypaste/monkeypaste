@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import HomepageCarousel from '@site/src/components/HomepageCarousel';
 
 import styles from './index.module.css';
 
@@ -35,6 +36,10 @@ export default function Home() {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <p align="center">
+          <img src={require('/img/ss/logo_and_slogan.png').default} width="500" />
+        </p>
+        <HomepageCarousel />
       </main>
     </Layout>
   );

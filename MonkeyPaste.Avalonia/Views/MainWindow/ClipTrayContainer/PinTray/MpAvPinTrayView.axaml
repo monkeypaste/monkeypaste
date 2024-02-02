@@ -139,7 +139,8 @@
                         IsEnabled="{Binding !IsPinTrayBusy}"
                         Command="{Binding UnpinAllCommand}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PinTrayUnpinAllLabel}" />
+                        <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ClearPinTray, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PinTrayUnpinAllLabel}" />
                     </ToolTip.Tip>
                     <Button.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.Or}">

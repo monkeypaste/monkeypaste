@@ -20,14 +20,14 @@ const baseUrl = local ?
 const config = {
   title: 'MonkeyPaste',
   staticDirectories: ['static'],
-  tagline: 'Clipboard, Evolved.',
+  tagline: 'Clipboard Evolved.',
   favicon: 'img/favicon.ico',
   url: siteUrl,
   baseUrl: baseUrl,
   organizationName: 'Monkey LLC',
   projectName: 'MonkeyPaste',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenMarkdownLinks: 'throw',
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -88,6 +88,10 @@ const config = {
         backgroundColor: '#ffff00',
         textColor: '#000000',
         isCloseable: true,
+      },
+      tableOfContents: {
+        minHeadingLevel: 2,
+        maxHeadingLevel: 5,
       },
       zoom: {
         selector: '.markdown img, .examples img',

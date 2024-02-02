@@ -1,6 +1,3 @@
----
-sidebar_position: 1
----
 # Tags
 Tags are way to classify clips by their content. Clips are not restricted to any one tag. You can link a clip to any tag you like. 
 

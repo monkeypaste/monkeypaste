@@ -6222,6 +6222,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shortcut Unset.
+        /// </summary>
+        public static string ShortcutGestureEmptyText {
+            get {
+                return ResourceManager.GetString("ShortcutGestureEmptyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, Meta / Win depending on platform)..
         /// </summary>
         public static string ShortcutGestureRulesHint {

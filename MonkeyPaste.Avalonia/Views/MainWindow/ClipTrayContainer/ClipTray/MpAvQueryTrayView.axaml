@@ -227,18 +227,6 @@
                 MaxWidth="{Binding Bounds.Width, ElementName=QueryTrayContainerBorder}"
                 x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
-            <Border.MaxHeight>
-                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                              ConverterParameter="*">
-                    <Binding Path="Bounds.Height"
-                             ElementName="QueryTrayContainerBorder" />
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>0.75</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                </MultiBinding>
-            </Border.MaxHeight>
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="IsExpanded" />

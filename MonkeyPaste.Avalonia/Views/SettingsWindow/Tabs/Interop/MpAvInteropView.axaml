@@ -48,15 +48,13 @@
         </Style>
 
         <!--  PULSE ROW  -->
-        <Style Selector="DataGrid#OleFormatsDataGrid DataGridRow">
-            <Setter Property="local:MpAvMutableClassesExtension.IsEnabled"
-                    Value="True" />
-            <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
-                    Value="" />
+        <Style Selector="DataGrid#OleFormatsDataGrid DataGridRow:not(:selected)">
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToRemove"
+                    Value="pulse" />
 
         </Style>
         <Style Selector="DataGrid#OleFormatsDataGrid.pulse-selection DataGridRow:selected">
-            <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
                     Value="pulse" />
 
         </Style>

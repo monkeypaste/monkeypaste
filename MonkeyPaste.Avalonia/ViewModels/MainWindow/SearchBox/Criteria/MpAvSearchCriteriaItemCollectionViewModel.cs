@@ -173,6 +173,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvSearchCriteriaItemCollectionViewModel() : base(null) {
+            MpDebug.Assert(_instance == null, "SearchCriteria singleton already created");
             PropertyChanged += MpAvSearchCriteriaItemCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
@@ -544,8 +545,6 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
             (args) => {
-                // NOTE only called from tag tray when query tag is selected
-                // instead of query change ntf
                 int queryTagId = 0;
                 if (args is int tagId) {
                     queryTagId = tagId;
@@ -555,17 +554,19 @@ namespace MonkeyPaste.Avalonia {
                 // but are the selected tag treat search as from
                 // all until selected tag is changed
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
-            }, (args) => {
-                if (IsPendingQuery) {
-                    return false;
-                }
-                if (args is int tagId) {
-                    if (tagId == QueryTagId) {
-                        return false;
-                    }
-                }
-                return true;
-            });
+            }//,
+            //(args) => {
+            //    if (IsPendingQuery) {
+            //        return false;
+            //    }
+            //    if (args is int tagId) {
+            //        if (tagId == QueryTagId) {
+            //            return false;
+            //        }
+            //    }
+            //    return true;
+            //}
+            );
 
         public ICommand ExpandCriteriaFromDragEnterCommand => new MpCommand(
             () => {

@@ -434,6 +434,10 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.OrientMainWindowBottom,
                             MpAvMainWindowViewModel.Instance.OrientWindowBottomCommand
                         },
+                        {
+                            MpShortcutType.ClearPinTray,
+                            MpAvClipTrayViewModel.Instance.UnpinAllCommand
+                        },
                     };
                 }
                 return _appCommandLookup;

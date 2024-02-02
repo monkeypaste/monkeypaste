@@ -23,10 +23,6 @@
         <!--  ACCOUNT TYPE LBI  -->
         <Style Selector="ListBox#AccountTypeListBox > ListBoxItem"
                x:DataType="local:MpAvSubscriptionItemViewModel">
-            <Setter Property="local:MpAvMutableClassesExtension.IsEnabled"
-                    Value="True" />
-            <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
-                    Value="waddup" />
             <Setter Property="IsVisible"
                     Value="{Binding IsVisible}" />
             <Setter Property="Cursor"

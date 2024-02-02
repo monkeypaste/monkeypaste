@@ -42,9 +42,7 @@
                 Value="30" />
         <Setter Property="Command"
                 Value="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}" />
-        <Setter Property="local:MpAvMutableClassesExtension.IsEnabled"
-                Value="True" />
-        <Setter Property="local:MpAvMutableClassesExtension.MutableClasses"
+        <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
                 Value="defaultButton noBg noHoverBg outline outlineOver square" />
         <Setter Property="Content">
             <Setter.Value>
