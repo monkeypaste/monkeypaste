@@ -3,12 +3,15 @@ import clsx from 'clsx';
 import styles from './styles.module.css';
 import { useHistory, useLocation } from '@docusaurus/router';
 
+var idx = -1;
 
 const ExampleList = [
   {
     imgSrc: require('@site/static/img/ss/win/ss1.png').default,
     description: (
       <>
+        <br />
+        <br />
         ● <a href="./docs/triggers">Trigger & Action designer</a> for custom automations and action chaining
       </>
     ),
@@ -17,6 +20,8 @@ const ExampleList = [
     imgSrc: require('@site/static/img/ss/win/ss5.png').default,
     description: (
       <>
+        <br />
+        <br />
         ● Ever-growing collection of <a href="https://github.com/monkeypaste/ledger">community-driven plugins</a><br />
       </>
     ),
@@ -36,6 +41,7 @@ const ExampleList = [
     imgSrc: require('@site/static/img/ss/win/ss2.png').default,
     description: (
       <>
+        <br />
         ● Simple and friendly interface<br />
         ● Horizontal/vertical layouts, list/grid view and multi-monitor support<br />
         ● Both light & dark themes are completely dynamic<br />
@@ -46,6 +52,8 @@ const ExampleList = [
     imgSrc: require('@site/static/img/ss/win/ss4.png').default,
     description: (
       <>
+        <br />
+        <br />
         ● Optional 2-factor password protection<br />
       </>
     ),
@@ -53,15 +61,37 @@ const ExampleList = [
 ];
 
 function Example({ imgSrc, description }) {
+  // return (
+  //   <div className={styles.example}>
+  //     <div className={clsx('row row--6')}>
+  //       <div class="text--center padding-horiz--md">
+  //         <img src={imgSrc} className={styles.exampleImg} role="img" />
+  //       </div>
+  //       <div class="text--left padding-horiz--md">
+  //         <p>{description}</p>
+  //       </div>
+  //     </div>
+  //     <hr />
+  //   </div>
+  // );
+
+  idx++;
+  if (idx % 2 == 0) {
+    return (
+      <div className={styles.exampleContainer}>
+        <div className={styles.example}>
+          <div><img src={imgSrc} role="img" /></div>
+          <div><p>{description}</p></div>
+        </div>
+        <hr />
+      </div>
+    );
+  }
   return (
-    <div class="examples">
-      <div className={clsx('row row--6')}>
-        <div class="text--center padding-horiz--md">
-          <img src={imgSrc} className={styles.exampleImg} role="img" />
-        </div>
-        <div class="text--left padding-horiz--md">
-          <p>{description}</p>
-        </div>
+    <div className={styles.exampleContainer}>
+      <div className={styles.example}>
+        <p>{description}</p>
+        <img src={imgSrc} role="img" />
       </div>
       <hr />
     </div>
@@ -71,11 +101,13 @@ function Example({ imgSrc, description }) {
 export default function HomepageCarousel() {
   return (
     <section className={styles.examples}>
+      <hr />
       <p align="center">
         <video id="teaserVid" controls height="300">
           <source src={require('/videos/teaser.mp4').default} />
         </video>
       </p>
+      <hr />
       <div className="container">
         <div className="row">
           {ExampleList.map((props, idx) => (

@@ -159,7 +159,27 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //    }
         //}
+        protected override async Task PerformActionAsync(object arg) {
+            if (!ValidateStartAction(arg)) {
+                return;
+            }
+            MpAvActionOutput input = GetInput(arg) ?? new MpAvTriggerInput();
+            if (input.CopyItem == null) {
+                MpCopyItem input_ci = null;
+                var sctvm = MpAvClipTrayViewModel.Instance.SelectedItem;
+                if (sctvm == null || !sctvm.IsFocusWithin) {
+                    if (Mp.Services.ClipboardMonitor.LastClipboardDataObject is { } lcdo) {
+                        input_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(lcdo, false, MpDataObjectSourceType.ShortcutTrigger);
 
+                    }
+                } else if (sctvm != null) {
+                    input_ci = sctvm.CopyItem;
+                }
+
+                input.CopyItem = input_ci;
+            }
+            await FinishActionAsync(input);
+        }
         #endregion
 
         #region Private Methods

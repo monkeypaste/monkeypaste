@@ -99,6 +99,7 @@ namespace MonkeyPaste.Avalonia {
                     mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, new MpPortableProcessInfo(Mp.Services.PlatformInfo.OsFileManagerPath));
                     break;
                 case MpDataObjectSourceType.PluginResponse:
+                case MpDataObjectSourceType.ShortcutTrigger:
                     // always remove external source
                     remove_ext = true;
                     break;

@@ -3,9 +3,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -24,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+        public bool IsDevToolsOpen { get; set; }
 
         #region InputGestureText Property
         public string InputGestureText {
@@ -97,7 +100,16 @@ namespace MonkeyPaste.Avalonia {
                 IsVisible = false;
                 return;
             }
+#if DEBUG
+            if (TopLevel.GetTopLevel(this) is TopLevel tl) {
+                tl.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
+            }
+#endif
             this.EffectiveViewportChanged += MpAvToolTipView_EffectiveViewportChanged;
+
+            if (MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown && !IsDevToolsOpen) {
+                //SetupDevTools();
+            }
         }
 
         private void MpAvToolTipView_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
@@ -105,6 +117,55 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
+        private void SetupDevTools() {
+            Dispatcher.UIThread.Post(async () => {
+                IsDevToolsOpen = true;
+
+                await Task.Delay(1000);
+
+                async Task ShowDevToolsAsync() {
+                    PopupRoot root;
+                    Control hc;
+                    while (true) {
+                        if (!IsDevToolsOpen) {
+                            return;
+                        }
+                        if (TopLevel.GetTopLevel(this) is not PopupRoot pr ||
+                            GetHostControl() is not Control host) {
+                            await Task.Delay(50);
+                            continue;
+                        }
+                        root = pr;
+                        hc = host;
+                        break;
+                    }
+                    while (MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown) {
+                        await Task.Delay(100);
+                    }
+                    this.Focusable = true;
+                    this.Focus();
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("F12");
+
+                    while (true) {
+                        if (!IsDevToolsOpen) {
+                            return;
+                        }
+                        if (ToolTip.GetIsOpen(hc)) {
+                            await Task.Delay(50);
+                            if (MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
+                                IsDevToolsOpen = false;
+                            }
+                            continue;
+                        }
+                        ToolTip.SetIsOpen(hc, true);
+                        ShowDevToolsAsync().FireAndForgetSafeAsync();
+                        return;
+                    }
+                }
+                await ShowDevToolsAsync();
+
+            });
+        }
         private Control GetHostControl() {
             if (TopLevel.GetTopLevel(this) is not TopLevel tl ||
                 tl.Parent is not Control host_control) {

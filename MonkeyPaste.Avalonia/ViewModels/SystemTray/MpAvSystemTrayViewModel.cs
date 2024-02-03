@@ -1,4 +1,6 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -431,8 +433,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                MpAvClipTrayViewModel.Instance.ClearAllSelection();
-
+                //MpAvClipTrayViewModel.Instance.ClearAllSelection();
+                Mp.Services.DataObjectTools
+                .WriteToClipboardAsync(
+                    new MpAvDataObject(MpPortableDataFormats.Text, MpAvDocusaurusHelpers.GetShortcutsMarkdown()), true).FireAndForgetSafeAsync();
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(

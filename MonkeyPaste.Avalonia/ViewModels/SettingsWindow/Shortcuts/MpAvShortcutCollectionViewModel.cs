@@ -188,6 +188,12 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public ObservableCollection<MpAvShortcutViewModel> FilteredItems { get; private set; } = new ObservableCollection<MpAvShortcutViewModel>();
 
+        public IEnumerable<MpAvShortcutViewModel> AppItems =>
+            Items.Where(x => !x.IsGlobal && !x.IsCustom)
+                    .OrderBy(x => x.ShortcutDisplayName);
+        public IEnumerable<MpAvShortcutViewModel> GlobalItems =>
+             Items.Where(x => x.IsGlobal && !x.IsCustom)
+                     .OrderBy(x => x.ShortcutDisplayName);
         public IEnumerable<MpAvShortcutViewModel> FilteredAppItems =>
             FilteredItems
             .Where(x => !x.CanBeGlobalShortcut && !x.IsCustom);

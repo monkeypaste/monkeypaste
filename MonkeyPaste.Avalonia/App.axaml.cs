@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnFrameworkInitializationCompleted();
 
 #if DEBUG && DESKTOP
-            //this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
+            this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
 #endif
         }
 

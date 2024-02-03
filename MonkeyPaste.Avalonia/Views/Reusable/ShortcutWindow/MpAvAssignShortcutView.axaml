@@ -107,34 +107,30 @@
     </local:MpAvUserControl.Styles>
     <StackPanel Background="{DynamicResource ThemeGrayAccent3Color}">
         <!--  HEADER ROW  -->
-        <DockPanel Grid.Row="0"
-                   HorizontalAlignment="Center">
-            <!--  HEADER ICON  -->
-            <Border DockPanel.Dock="Left"
-                    Classes="squareByWidth"
-                    IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                    CornerRadius="10"
-                    Margin="3"
-                    BorderThickness="0"
-                    BorderBrush="White">
-                <Image Height="20"
-                       Width="20"
+        <StackPanel Margin="20,20,20,5"
+                    Spacing="3">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="5">
+                <!--  HEADER ICON  -->
+                <Image Height="25"
+                       Width="25"
+                       IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                        Stretch="Uniform"
                        Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-            </Border>
-            <!--  HEADER TITLE  -->
-            <TextBlock HorizontalAlignment="Stretch"
-                       VerticalAlignment="Center"
-                       TextAlignment="Center"
-                       TextDecorations="Underline"
-                       FontStyle="Normal"
-                       FontWeight="Bold"
-                       Margin="15"
-                       FontSize="24"
-                       Foreground="{DynamicResource ThemeInteractiveColor}"
-                       TextWrapping="WrapWithOverflow"
-                       Text="{Binding ShortcutDisplayName}" />
-        </DockPanel>
+                <!--  HEADER TITLE  -->
+                <TextBlock HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           FontStyle="Normal"
+                           FontWeight="Bold"
+                           FontSize="24"
+                           Foreground="{DynamicResource ThemeInteractiveColor}"
+                           TextWrapping="WrapWithOverflow"
+                           Text="{Binding ShortcutDisplayName}" />
+            </StackPanel>
+            <Border Classes="labelUnderline center" />
+        </StackPanel>
 
         <!--  ROUTING SELECTOR  -->
         <DockPanel Grid.Row="1"
@@ -147,8 +143,8 @@
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
                 <local:MpAvToolTipHintView Classes="info"
-                                               IsHtml="true"
-                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeHint}" />
+                                           IsHtml="true"
+                                           ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeHint}" />
             </StackPanel>
             <!--  ROUTING COMBOBOX  -->
             <ComboBox x:Name="RoutingSelectorComboBox"
@@ -165,8 +161,8 @@
                     IsVisible="{Binding IsGlobal}"
                     HorizontalAlignment="Center">
             <local:MpAvToolTipHintView Classes="warning"
-                                           VerticalAlignment="Center"
-                                           ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignGlobalHint}" />
+                                       VerticalAlignment="Center"
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignGlobalHint}" />
             <TextBlock FontSize="16"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource ThemeInteractiveColor}"
@@ -188,7 +184,10 @@
                 <local:MpAvShortcutView IsVisible="{Binding !IsEmpty}" />
                 <Border Classes="empty"
                         IsVisible="{Binding IsEmpty}">
-                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignRecordLabel}" />
+                    <TextBlock Foreground="{DynamicResource ThemeInteractiveColor}"
+                               FontStyle="Italic"
+                               FontWeight="DemiBold"
+                               Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutAssignRecordLabel}" />
                 </Border>
             </Grid>
         </Border>

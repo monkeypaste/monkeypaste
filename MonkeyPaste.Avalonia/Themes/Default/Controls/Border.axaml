@@ -9,6 +9,13 @@
             <GradientStop Offset="0.75" Color="Transparent" />
         </LinearGradientBrush>
 
+        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_light_center" StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="0.33" Color="{DynamicResource ThemeWhiteColor}" />
+            <GradientStop Offset="0.66" Color="{DynamicResource ThemeWhiteColor}" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </LinearGradientBrush>
+
         <LinearGradientBrush x:Key="UnderlineFadeOutBrush_long_light" StartPoint="0%,0%" EndPoint="100%,0%">
             <GradientStop Offset="0" Color="{DynamicResource ThemeWhiteColor}" />
             <GradientStop Offset="0.9" Color="Transparent" />
@@ -20,6 +27,10 @@
     <Style Selector="Border.labelUnderline">
         <Setter Property="Background"
                 Value="{StaticResource UnderlineFadeOutBrush_light}" />
+    </Style>
+    <Style Selector="Border.labelUnderline.center">
+        <Setter Property="Background"
+                Value="{StaticResource UnderlineFadeOutBrush_light_center}" />
     </Style>
 
     <Style Selector="Border.labelUnderline">

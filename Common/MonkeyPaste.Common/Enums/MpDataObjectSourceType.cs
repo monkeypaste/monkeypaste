@@ -11,6 +11,7 @@
         PluginResponse,
         FolderWatcher,
         AppendEnabled,
-        ClipboardWatcher
+        ClipboardWatcher,
+        ShortcutTrigger
     }
 }
