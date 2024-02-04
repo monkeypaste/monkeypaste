@@ -51,34 +51,59 @@ namespace MonkeyPaste.Avalonia {
             }
             return curVal;
         }
-        public static async Task<object> QueryPropertyAsync(
+        public static async Task<string> QueryPropertyAsync(
             MpCopyItem ci,
             MpContentQueryPropertyPathType queryPathType,
             object last_output_args) {
             if (ci == null) {
                 return null;
             }
+            string result = null;
             switch (queryPathType) {
                 case MpContentQueryPropertyPathType.None:
                     return null;
                 case MpContentQueryPropertyPathType.LastOutput:
-                    return QueryLastOutput(last_output_args);
+                    result = QueryLastOutput(last_output_args);
+                    break;
+                case MpContentQueryPropertyPathType.ItemRawData:
+                    result = ci.GetPropertyValue(MpContentQueryPropertyPathType.ItemData.ToString()) as string;
+                    break;
                 case MpContentQueryPropertyPathType.ItemData:
+                    result = ci.ItemData;
+                    break;
                 case MpContentQueryPropertyPathType.ItemType:
+                    result = ci.ItemType.ToString();
+                    break;
                 case MpContentQueryPropertyPathType.Title:
+                    result = ci.Title;
+                    break;
                 case MpContentQueryPropertyPathType.CopyDateTime:
+                    result = ci.CopyDateTime.ToString();
+                    break;
                 case MpContentQueryPropertyPathType.CopyCount:
+                    result = ci.CopyCount.ToString();
+                    break;
                 case MpContentQueryPropertyPathType.PasteCount:
-                    return ci.GetPropertyValue(queryPathType.ToString());
-                case MpContentQueryPropertyPathType.SourceDeviceType:
-                    var deviceTypeInt = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<int>(ci.Id, queryPathType.ToString());
-                    return (MpUserDeviceType)deviceTypeInt;
+                    result = ci.PasteCount.ToString();
+                    break;
                 default:
+                    string col_name = queryPathType.ToString().Replace("Source", string.Empty);
+                    switch (queryPathType) {
+                        case MpContentQueryPropertyPathType.SourceUrl:
+                        case MpContentQueryPropertyPathType.SourceUrlDomain:
+                            col_name = "UrlPath";
+                            break;
+                    }
                     //UrlPath,UrlTitle,UrlDomainPath,AppPath,AppName,SourceDeviceName,SourceDeviceType
-                    var resultStr = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<string>(ci.Id, queryPathType.ToString());
-                    return resultStr;
+                    result = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<string>(ci.Id, col_name);
+                    if (queryPathType == MpContentQueryPropertyPathType.SourceUrlDomain &&
+                        Uri.IsWellFormedUriString(result, UriKind.Absolute)) {
+                        result = MpUrlHelpers.GetUrlDomain(result);
+                    }
+                    break;
 
             }
+            return result.ToStringOrDefault();
         }
 
         public static string GetQueryToken(MpContentQueryPropertyPathType cqppt) {
@@ -107,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
             if (prf != null && !string.IsNullOrWhiteSpace(json_path_query)) {
                 return MpJsonPathProperty.Query(prf, json_path_query);
             } else if (ao.OutputData != null) {
-                return ao.OutputData.ToString();
+                return ao.OutputData.SerializeObject().ToPrettyPrintJson();
             }
             return null;
         }
@@ -125,6 +150,7 @@ namespace MonkeyPaste.Avalonia {
                 var decoded_vals = curVal.ToListFromCsv(csvProps);
                 var decoded_val_results = new List<string>();
                 foreach (var decoded_val in decoded_vals) {
+                    // recurse for each multi value
                     string decoded_val_result = await GetParameterQueryResultAsync(MpParameterControlType.TextBox, decoded_val, ci, asRawData, uriEscaped, last_output_args);
                     decoded_val_results.Add(decoded_val_result);
                 }
@@ -139,11 +165,12 @@ namespace MonkeyPaste.Avalonia {
                 if (curVal.Contains(pptToken)) {
                     string contentValue = await QueryPropertyAsync(ci, ppt, last_output_args) as string;
 
-                    if (!asRawData) {
+                    // take '{ItemRawData}' into account, even when unit is PlainTextContentQuery
+                    bool is_result_plain_text = !asRawData && ppt != MpContentQueryPropertyPathType.ItemRawData;
+                    if (is_result_plain_text) {
                         contentValue = await GetParameterRequestValueAsync(controlType, MpParameterValueUnitType.PlainText, contentValue, ci, last_output_args);
                         if (uriEscaped) {
                             try {
-
                                 contentValue = Uri.EscapeDataString(contentValue);
                             }
                             catch (Exception ex) {

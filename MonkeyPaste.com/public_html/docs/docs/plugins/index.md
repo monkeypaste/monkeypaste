@@ -37,3 +37,24 @@ Check out the [VS Code Setup walkthrough](docs/tips/custom-write-setup-w-vscode.
   <img src={require('/img/plugin_browser_button.png').default} width="300"/>  
 </p>  
 The *plugin browser* can be accessed from the *analyzer sidebar* by click the 🧩 button found to the right of the *analzyer selector* drop-down.
+<p class="figure" align="left">
+<img src={require('/img/auto_tag_plugin_browser.png').default} width="300" />
+</p>
+
+## Resetting Credentials and API Keys
+
+For plugins with *shared* parameters, like [ChatGpt](https://www.github.com/monkeypaste/ChatGPT) or [Azure Computer Vision](https://www.github.com/monkeypaste/ComputerVision) you can reset/clear them from the *Analyzer Preset Table* by clicking the **Reset** button:
+
+<p class="figure" align="left">
+<img src={require('/img/reset_param_button.png').default} width="300" />
+</p>
+
+Now you'll see the *Reset Option Dialog*. Click **Reset Shared** to clear:
+
+<p class="figure" align="left">
+<img src={require('/img/reset_param_dialog.png').default} width="300" />
+</p>
+After the *shared* parameters are cleared when you run the analyzer again you will now see the *shared/execute parameter* notification so you can use different data:
+<p class="figure" align="left">
+<img src={require('/img/exec_param_ntf.png').default} width="300" />
+</p>

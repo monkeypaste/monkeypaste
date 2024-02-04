@@ -1734,7 +1734,7 @@
   <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
     <value>自動コピー選択モード: {0}</value>
   </data>
-  <data name="MouseModeChangeNtfTitle" xml:space="preserve">
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
     <value>モードが変更されました</value>
   </data>
   <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">

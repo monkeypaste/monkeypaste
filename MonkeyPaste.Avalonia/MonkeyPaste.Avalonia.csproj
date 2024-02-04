@@ -360,6 +360,7 @@
     <None Remove="Assets\Images\binocularstilted.png" />
     <None Remove="Assets\Images\bitmap.png" />
     <None Remove="Assets\Images\bolt.png" />
+    <None Remove="Assets\Images\books.png" />
     <None Remove="Assets\Images\boxcorners.png" />
     <None Remove="Assets\Images\brain.png" />
     <None Remove="Assets\Images\brainwhite.png" />
@@ -473,6 +474,7 @@
     <None Remove="Assets\Images\lines_x2_horiz_vert_arrows.png" />
     <None Remove="Assets\Images\lines_x3_horiz.png" />
     <None Remove="Assets\Images\lock.png" />
+    <None Remove="Assets\Images\log.png" />
     <None Remove="Assets\Images\login.png" />
     <None Remove="Assets\Images\manual.png" />
     <None Remove="Assets\Images\megaphone.png" />
@@ -781,6 +783,9 @@
     <AvaloniaResource Include="Assets\Images\bell.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\books.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -863,6 +868,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\lifepreserver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\log.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\login.png">

@@ -1857,6 +1857,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mode Changed.
+        /// </summary>
+        public static string AppModeChangeNtfTitle {
+            get {
+                return ResourceManager.GetString("AppModeChangeNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Copy Mode will trigger a copy command every time the mouse is released..
         /// </summary>
         public static string AppModeToggleLeftClickCopyHint {
@@ -1880,6 +1889,24 @@ namespace MonkeyPaste.Avalonia {
         public static string ChangeLogWindowTitle {
             get {
                 return ResourceManager.GetString("ChangeLogWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard listener disabled.
+        /// </summary>
+        public static string ClipboardListenerDisabledText {
+            get {
+                return ResourceManager.GetString("ClipboardListenerDisabledText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard listener enabled.
+        /// </summary>
+        public static string ClipboardListenerEnabledText {
+            get {
+                return ResourceManager.GetString("ClipboardListenerEnabledText", resourceCulture);
             }
         }
         
@@ -3810,15 +3837,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MouseModeAutoCopyNtfText {
             get {
                 return ResourceManager.GetString("MouseModeAutoCopyNtfText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mode Changed.
-        /// </summary>
-        public static string MouseModeChangeNtfTitle {
-            get {
-                return ResourceManager.GetString("MouseModeChangeNtfTitle", resourceCulture);
             }
         }
         

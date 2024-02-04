@@ -318,6 +318,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (var core_guid in CorePluginGuids) {
+                if (Path.Combine(PluginRootDir, core_guid).IsDirectory()) {
+                    // if guid dir exists, assume core plugin exists
+                    continue;
+                }
                 string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
                 MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
                 _ = await InstallPluginAsync(core_guid, core_plugin_zip_path.ToFileSystemUriFromPath(), true);

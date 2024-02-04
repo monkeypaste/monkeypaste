@@ -139,14 +139,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool HasInputFilter => !string.IsNullOrWhiteSpace(CompareFilterText);
-
-        public bool IsItemTypeCompare => ComparePropertyPathType == MpContentQueryPropertyPathType.ItemType;
-
-        public bool IsLastOutputCompare => ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput;
-
-
         public bool IsCompareTypeRegex => ComparisonOperatorType == MpComparisonOperatorType.Regex;
 
         #endregion
@@ -202,30 +194,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-        //Arg2
-        //public MpCopyItemType ContentItemType {
-        //    get {
-        //        if (Action == null) {
-        //            return 0;
-        //        }
-        //        if (ComparePropertyPathType != MpContentQueryPropertyPathType.ItemType) {
-        //            return 0;
-        //        }
-        //        if (string.IsNullOrWhiteSpace(Arg2)) {
-        //            return MpCopyItemType.None;
-        //        }
-        //        return Arg2.ToEnum<MpCopyItemType>();
-        //    }
-        //    set {
-        //        if (ContentItemType != paramValue) {
-        //            Arg2 = paramValue.ToString();
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(ContentItemType));
-        //        }
-        //    }
-        //}
-
         public string CompareData {
             get {
                 if (ArgLookup.TryGetValue(COMPARE_TEXT_PARAM_ID, out var param_vm) &&
@@ -329,15 +297,15 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             int focus_arg_num = 0;
+
             // TODO compare validation will only be needed for last output but not sure, need use case
-            if (!CompareData.IsNullEmptyWhitespaceOrAlphaNumeric()) {
-                var cdpvm = ArgLookup[COMPARE_TEXT_PARAM_ID];
-                //cdpvm.ValidationMessage = "Compare Value can only be letters, numbers or spaces";
-                cdpvm.ValidationMessage = UiStrings.ActionConditionalValidation1;
-                cdpvm.OnPropertyChanged(nameof(cdpvm.IsValid));
-                ValidationText = cdpvm.ValidationMessage;
-                focus_arg_num = ActionArgs.IndexOf(cdpvm);
-            }
+            //if (!CompareData.IsNullEmptyWhitespaceOrAlphaNumeric()) {
+            //    var cdpvm = ArgLookup[COMPARE_TEXT_PARAM_ID];
+            //    cdpvm.ValidationMessage = UiStrings.ActionConditionalValidation1;
+            //    cdpvm.OnPropertyChanged(nameof(cdpvm.IsValid));
+            //    ValidationText = cdpvm.ValidationMessage;
+            //    focus_arg_num = ActionArgs.IndexOf(cdpvm);
+            //}
             if (!IsValid) {
                 ShowValidationNotification(focus_arg_num);
             }
@@ -389,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine(CompareData);
                 MpConsole.WriteTraceLine(ex);
 
-                ValidationText = $"Error performing action '{FullName}': {ex}";
+                ValidationText = $"Error performing action '{FullName}': {ex.Message}";
                 ShowValidationNotification();
             }
             return null;

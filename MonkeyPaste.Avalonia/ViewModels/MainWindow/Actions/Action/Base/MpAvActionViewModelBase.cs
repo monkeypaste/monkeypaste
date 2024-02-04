@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpTriggerType.ClipAdded:
                         return "ClipboardImage";
                     case MpTriggerType.ClipTagged:
-                        return "TagImage";
+                        return "BooksImage";
                     case MpTriggerType.FileSystemChanged:
                         return "FolderImage";
                     case MpTriggerType.Shortcut:
@@ -110,11 +110,11 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Trigger:
                     switch (tt) {
                         case MpTriggerType.Shortcut:
-                            return MpSystemColors.dodgerblue2;
+                            return MpSystemColors.cyan1;
                         case MpTriggerType.ClipAdded:
-                            return MpSystemColors.forestgreen;
+                            return MpSystemColors.purple2;
                         case MpTriggerType.ClipTagged:
-                            return MpSystemColors.bisque3;
+                            return MpSystemColors.orange2;
                         case MpTriggerType.FileSystemChanged:
                             return MpSystemColors.coral3;
                         case MpTriggerType.MonkeyCopyShortcut:
@@ -1636,8 +1636,15 @@ namespace MonkeyPaste.Avalonia {
                 // store trigger child state for move
                 await RootTriggerActionViewModel.SetChildRestoreStateAsync();
 
+                if (ParentActionViewModel != null) {
+                    ParentActionViewModel.UnregisterTrigger(this);
+                }
+
                 ParentActionId = new_parent_id;
 
+                if (ParentActionViewModel != null) {
+                    ParentActionViewModel.RegisterTrigger(this);
+                }
                 await Task.Delay(50);
                 while (IsBusy) {
                     await Task.Delay(100);
@@ -1662,7 +1669,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine(avdo.ToString());
             },
             () => {
-                return !IsTrigger;
+                return !IsTrigger && !MpAvFocusManager.Instance.IsTextInputControlFocused;
             });
 
         public ICommand CutActionCommand => new MpAsyncCommand(
@@ -1679,7 +1686,7 @@ namespace MonkeyPaste.Avalonia {
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
             },
             () => {
-                return !IsTrigger;
+                return !IsTrigger && !MpAvFocusManager.Instance.IsTextInputControlFocused;
             });
 
         public ICommand PasteActionCommand => new MpAsyncCommand(
@@ -1702,7 +1709,7 @@ namespace MonkeyPaste.Avalonia {
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
             },
             () => {
-                return CanPaste;
+                return CanPaste && !MpAvFocusManager.Instance.IsTextInputControlFocused;
             });
 
         #endregion

@@ -18,6 +18,12 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static void FireWithPriorityAndForgetSafeAsync(this Task task, MpDispatcherPriority? priority, MpIErrorHandler handler = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+            MpCommonTools.Services.MainThreadMarshal.RunOnMainThreadAsync(
+                    () => task.FireAndForgetSafeAsync(handler, callerName, callerFilePath, lineNum),
+                    priority: priority.Value);
+        }
+
         public static async Task TimeoutAfter(this Task task, TimeSpan timeout, Func<bool> timeout_callback = null) {
             using (var timeoutCancellationTokenSource = new CancellationTokenSource()) {
                 var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));

@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvMarqueeTextBox : TextBox, MpIOverrideRender, MpITextDocumentContainer {
 
         #region Private Variables
+        private object _drawReadOnlyLock = new object();
         private bool _isAnimating = false;
         private bool _unloaded;
         private FormattedText _ft;
@@ -944,16 +945,24 @@ namespace MonkeyPaste.Avalonia {
             return delta_x;
         }
         private void DrawReadOnlyText(DrawingContext ctx, IBrush fg, Point offset, bool showHighlight) {
-            if (showHighlight &&
+            lock (_drawReadOnlyLock) {
+                if (showHighlight &&
                 HighlightRanges != null &&
-                HighlightRanges.Count > 0) {
-                var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, ActiveHighlightIdx, HighlightRanges.ToArray());
-                var gl = brl.Select(x => _ft.BuildHighlightGeometry(offset, x.Value.StartIdx, x.Value.Count));
-                gl.ForEach((x, idx) => ctx.DrawGeometry(brl[idx].Key, null, x));
-            }
+                HighlightRanges.Any()) {
+                    var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, ActiveHighlightIdx, HighlightRanges.ToArray());
+                    foreach (var br_kvp in brl) {
+                        if (br_kvp.Key is not IBrush brush) {
+                            continue;
+                        }
+                        var g = _ft.BuildHighlightGeometry(offset, br_kvp.Value.StartIdx, br_kvp.Value.Count);
+                        ctx.DrawGeometry(brush, null, g);
+                    }
 
-            _ft.SetForegroundBrush(fg);
-            ctx.DrawText(_ft, offset);
+                }
+
+                _ft.SetForegroundBrush(fg);
+                ctx.DrawText(_ft, offset);
+            }
         }
 
         private KeyValuePair<IBrush, MpTextRange>[] GetAllBrushes(

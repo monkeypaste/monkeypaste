@@ -1810,7 +1810,7 @@ Clipboard listening is: {0}</value>
     <value>Auto Copy Selection Mode: {0}</value>
     <comment>On or off</comment>
   </data>
-  <data name="MouseModeChangeNtfTitle" xml:space="preserve">
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
     <value>Mode Changed</value>
   </data>
   <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
@@ -2698,5 +2698,11 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutGestureEmptyText" xml:space="preserve">
     <value>Shortcut Unset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Clipboard listener disabled</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Clipboard listener enabled</value>
   </data>
 </root>

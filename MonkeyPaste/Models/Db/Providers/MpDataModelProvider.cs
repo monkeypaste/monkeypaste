@@ -120,11 +120,12 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpContentQueryView_simple (PropertyPath Queries)
+        #region MpContentQueryView (PropertyPath Queries)
 
-        public static async Task<T> GetSortableCopyItemViewPropertyAsync<T>(int ciid, string propertyName) {
-            string query = "select ? from MpContentQueryView_simple where pk_MpCopyItemId=?";
-            var result = await MpDb.QueryScalarAsync<T>(query, propertyName, ciid);
+        public static async Task<T> GetSortableCopyItemViewPropertyAsync<T>(int ciid, string columnName) {
+            // NOTE select columns CANNOT be parameterized
+            string query = $"select {columnName} from MpContentQueryView where RootId=? and {columnName} is not NULL limit 1";
+            var result = await MpDb.QueryScalarAsync<T>(query, ciid);
             return result;
         }
 

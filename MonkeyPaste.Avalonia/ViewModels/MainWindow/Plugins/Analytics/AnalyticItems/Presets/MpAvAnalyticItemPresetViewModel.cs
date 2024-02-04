@@ -625,12 +625,14 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 await Parent.PerformAnalysisCommand.ExecuteAsync(this);
 
-            }, () => {
-                if (Parent == null) {
-                    return false;
-                }
-                return Parent.PerformAnalysisCommand.CanExecute(this);
-            });
+            }
+            //, () => {
+            //    if (Parent == null) {
+            //        return false;
+            //    }
+            //    return Parent.PerformAnalysisCommand.CanExecute(this);
+            //}
+            );
         public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(
             () => {
                 IsLabelReadOnly = !IsLabelReadOnly;

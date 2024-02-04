@@ -37,11 +37,17 @@ namespace MonkeyPaste.Avalonia {
             UiStrings.Culture = ci;
             EnumUiStrings.Culture = ci;
 
-            var lastOption = R.U.CurrentOption;
             R.U.CurrentOption = R.U.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
-            if (R.U.CurrentOption != lastOption && Mp.Services.StartupState.IsReady) {
-                RefreshUiAsync(pre_def_titles).FireAndForgetSafeAsync();
+            R.E.CurrentOption = R.E.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
+#if DEBUG
+            // NOTE all below is just experiment to automate localized screenshots
+            var lastOption = R.U.CurrentOption;
+            if (R.U.CurrentOption != lastOption &&
+                Mp.Services.StartupState.IsReady) {
+                // user changed language after startup
+                RefreshUiAsync(pre_def_titles).FireWithPriorityAndForgetSafeAsync(priority: MpDispatcherPriority.Background);
             }
+#endif
             bool needs_restart1 = MpAvEnumUiStringResourceConverter.CheckEnumUiStrings();
             bool needs_restart2 = MpAvEditorUiStringBuilder.CheckJsUiStrings();
             return needs_restart1 || needs_restart2;
@@ -97,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
+            MpAvPrefViewModel.Instance.CurrentCultureCode = "en-US";
             string culture_name = MpAvPrefViewModel.Instance.CurrentCultureCode;
             SetCultureCommand.Execute(culture_name);
 
@@ -120,6 +127,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvTriggerCollectionViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.Label)));
             MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.ForEach(x => x.OnPropertyChanged(nameof(x.Label)));
             MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
+            MpAvShortcutCollectionViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.ShortcutDisplayName)));
 
             var post_def_titles = new string[] {
                 string.Empty,
@@ -150,8 +158,6 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             await MpAvClipTrayViewModel.Instance.DisposeAndReloadAllCommand.ExecuteAsync();
-
-
         }
 
         #endregion

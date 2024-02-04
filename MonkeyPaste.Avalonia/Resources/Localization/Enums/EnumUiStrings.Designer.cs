@@ -592,24 +592,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to App Name.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_AppName {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_AppName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to App Path.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_AppPath {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_AppPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Copy Count.
         /// </summary>
         public static string MpContentQueryPropertyPathType_CopyCount {
@@ -637,6 +619,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item Raw Data.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_ItemRawData {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_ItemRawData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item Type.
         /// </summary>
         public static string MpContentQueryPropertyPathType_ItemType {
@@ -651,15 +642,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpContentQueryPropertyPathType_LastOutput {
             get {
                 return ResourceManager.GetString("MpContentQueryPropertyPathType_LastOutput", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last Paste Date Time.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_LastPasteDateTime {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_LastPasteDateTime", resourceCulture);
             }
         }
         
@@ -682,6 +664,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source App Name.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_SourceAppName {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_SourceAppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source App Path.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_SourceAppPath {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_SourceAppPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source Device Name.
         /// </summary>
         public static string MpContentQueryPropertyPathType_SourceDeviceName {
@@ -700,38 +700,38 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source Url.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_SourceUrl {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_SourceUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Url Domain.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_SourceUrlDomain {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_SourceUrlDomain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Url Title.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_SourceUrlTitle {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_SourceUrlTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string MpContentQueryPropertyPathType_Title {
             get {
                 return ResourceManager.GetString("MpContentQueryPropertyPathType_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Url Domain Path.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_UrlDomainPath {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_UrlDomainPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Url Path.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_UrlPath {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_UrlPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Url Title.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_UrlTitle {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_UrlTitle", resourceCulture);
             }
         }
         
@@ -2181,6 +2181,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpSettingsFrameType_Login {
             get {
                 return ResourceManager.GetString("MpSettingsFrameType_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logs.
+        /// </summary>
+        public static string MpSettingsFrameType_Logs {
+            get {
+                return ResourceManager.GetString("MpSettingsFrameType_Logs", resourceCulture);
             }
         }
         

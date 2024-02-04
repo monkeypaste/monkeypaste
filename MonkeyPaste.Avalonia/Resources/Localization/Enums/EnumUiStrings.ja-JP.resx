@@ -1170,4 +1170,16 @@
   <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
     <value>選択範囲をリセット</value>
   </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- 選んでください -</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>文章</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
 </root>

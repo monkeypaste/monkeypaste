@@ -4602,10 +4602,19 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem != null;
             });
 
-        public ICommand ToggleIsAppPausedCommand => new MpCommand(
-            () => {
+        public ICommand ToggleIsAppPausedCommand => new MpCommand<object>(
+            (args) => {
                 IsIgnoringClipboardChanges = !IsIgnoringClipboardChanges;
-            }, () => {
+                if (args != null) {
+                    // sys tray click
+                    return;
+                }
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                    title: UiStrings.AppModeChangeNtfTitle,
+                    body: IsIgnoringClipboardChanges ? UiStrings.ClipboardListenerDisabledText : UiStrings.ClipboardListenerEnabledText,
+                    iconSourceObj: IsIgnoringClipboardChanges ? "PauseImage" : "PlayImage",
+                    msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
+            }, (args) => {
                 if (IsAnyAppendMode && !IsIgnoringClipboardChanges) {
                     // no change if appending
                     return false;
@@ -4618,7 +4627,7 @@ namespace MonkeyPaste.Avalonia {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
                 OnPropertyChanged(nameof(RightClickPasteSysTrayIconSourceObj));
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    title: UiStrings.MouseModeChangeNtfTitle,
+                    title: UiStrings.AppModeChangeNtfTitle,
                     body: string.Format(UiStrings.MouseModeRightClickPasteNtfText, IsRightClickPasteMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsRightClickPasteMode ? MpMessageType.RightClickPasteEnabled : MpMessageType.RightClickPasteDisabled);
@@ -4630,7 +4639,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(AutoCopySysTrayIconSourceObj));
 
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    title: UiStrings.MouseModeChangeNtfTitle,
+                    title: UiStrings.AppModeChangeNtfTitle,
                     body: string.Format(UiStrings.MouseModeAutoCopyNtfText, IsAutoCopyMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsAutoCopyMode ? MpMessageType.AutoCopyEnabled : MpMessageType.AutoCopyDisabled);

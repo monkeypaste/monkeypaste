@@ -47,9 +47,22 @@ Actions always have **one** *input* and **some number** of *outputs* where it pe
 There are ***no restrictions*** or any *scheduling system* in place for action chains (*yet*) and if you branch your chain (adding **more than one** child action to an action) you may get inconsistent results. After a branch there's no telling *when* some action will modify an input or *any guarentees* that some processing has completed on another branch. 
 :::
 
+
 ### Last Output
-Some actions add data to the *chain of execution* which is referred to as **Last Output**. 
+<p class="figure">
+  <img src={require('/img/last_output.png').default} width="250"/>  
+</p>
+Some actions add data to the *chain of execution* which is referred to as *Last Output*. 
 
-The output may be a **new clip** like from the [Qr Coder Plugin](https://github.com/monkeypaste/QrCoder) which generates a QR code based on its **source clip**. 
+*Last output* can be a **new clip** like from the [Qr Coder Plugin](https://github.com/monkeypaste/QrCoder) which generates a QR code based on its **source clip** or *Last Output* can be some type of **annotation** about its parent action's **output** which is the case for the [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) that outputs formatted information about the objects that it detected.
 
-Or **Last Output** can be some type of **annotation** about the parent action's **input** which is the case for the [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) that outputs formatted information about the objects that it detected.
+
+## Designer Shapes
+<p class="figure">
+  <img src={require('/img/designer_shapes.png').default} width="250"/>  
+</p>
+The shapes for triggers and actions can help you understand how they work. 
+- *Triggers* are **circles** and only have input from a *trigger event*. 
+- *Condtional* actions are **diamonds** and their *condition* must evaluate to **true** for their child actions to **continue**.
+- *All other* actions are squares and will always pass their **input** (with the result of their action) as **output** to their child actions.
+

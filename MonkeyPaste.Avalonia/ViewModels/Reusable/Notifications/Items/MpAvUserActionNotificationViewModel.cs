@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         public override bool CanPin => true;
 
         public override bool ShowOptionsButton =>
-            //NotificationType == MpNotificationType.RateApp ||
+            NotificationType == MpNotificationType.AlertAction ||
             NotificationType == MpNotificationType.UpdateAvailable ||
             NotificationType == MpNotificationType.ContentCapReached ||
             NotificationType == MpNotificationType.TrashCapReached ||

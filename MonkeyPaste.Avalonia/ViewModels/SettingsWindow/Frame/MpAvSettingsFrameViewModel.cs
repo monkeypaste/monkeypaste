@@ -68,6 +68,8 @@ namespace MonkeyPaste.Avalonia {
                         return "AppShellImage";
                     case MpSettingsFrameType.Password:
                         return "LockImage";
+                    case MpSettingsFrameType.Logs:
+                        return "LogImage";
                     default:
                         return string.Empty;
                 }

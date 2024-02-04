@@ -18,6 +18,7 @@
         TopScreenEdgeGestures, //2
         Shortcuts, //1
         System, //3
-        Password
+        Password,
+        Logs
     }
 }

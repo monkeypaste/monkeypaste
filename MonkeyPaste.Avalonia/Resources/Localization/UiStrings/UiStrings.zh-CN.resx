@@ -1734,7 +1734,7 @@
   <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
     <value>自动复制选择模式：{0}</value>
   </data>
-  <data name="MouseModeChangeNtfTitle" xml:space="preserve">
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
     <value>模式已改变</value>
   </data>
   <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">

@@ -613,7 +613,8 @@ namespace MonkeyPaste.Common {
             if (prop_info == null) {
                 return null;
             }
-            return prop_info.GetValue(obj);
+            object result = prop_info.GetValue(obj);
+            return result;
         }
 
 

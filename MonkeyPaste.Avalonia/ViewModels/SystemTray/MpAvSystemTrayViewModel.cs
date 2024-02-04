@@ -67,6 +67,7 @@ namespace MonkeyPaste.Avalonia {
                             IconPropPath = nameof(MpAvClipTrayViewModel.Instance.PlayOrPauseIconResoureKey),
                             CommandSrcObj = MpAvClipTrayViewModel.Instance,
                             CommandPath = nameof(MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand),
+                            CommandParameter = "Click",
                             //ShortcutArgs = new object[] { MpShortcutType.ToggleListenToClipboard },
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleListenToClipboard),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)

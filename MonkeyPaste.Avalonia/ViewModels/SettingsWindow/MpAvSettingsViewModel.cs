@@ -785,14 +785,6 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = UiStrings.PrefEnableLoggingLabel,
-                                            description = MpAvToolTipHintView.WARN_PREFIX + UiStrings.PrefEnableLoggingHint,
-                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.IsLoggingEnabled.ToString(),true)
-                                        },
-                                        new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
@@ -828,6 +820,34 @@ namespace MonkeyPaste.Avalonia {
                                                 new MpParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup.ToString()
+                                                }
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Logs) {
+                            PluginFormat = new MpRuntimePlugin() {
+                                headless = new MpHeadlessComponent() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.PrefEnableLoggingLabel,
+                                            description = MpAvToolTipHintView.WARN_PREFIX + UiStrings.PrefEnableLoggingHint,
+                                            value = new MpParameterValueFormat(MpAvPrefViewModel.Instance.IsLoggingEnabled.ToString(),true)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ShowLogsFolder.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = UiStrings.PrefShowLogsFolderLabel,
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = UiStrings.PrefShowLogsFolderBtnText,
+                                                    value = MpRuntimePrefParamType.ShowLogsFolder.ToString()
                                                 }
                                             }
                                         },
@@ -897,7 +917,19 @@ namespace MonkeyPaste.Avalonia {
                                                 //        paramValue = x
                                                 //    })
                                                 //.ToList()
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ClearRecentSearches.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = UiStrings.PrefClearSearchesLabel,
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = UiStrings.PrefClearSearchesButtonText,
+                                                    value = MpRuntimePrefParamType.ClearRecentSearches.ToString()
+                                                }
+                                            }
+                                        },
                                     }
                                 }
                             }
@@ -968,7 +1000,19 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpAvPrefViewModel.Instance.ShowContentTitles.ToString()
                                                 }
                                             }
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.DeleteAllContent.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = UiStrings.PrefDeleteAllLabel,
+                                            values = new List<MpParameterValueFormat>() {
+                                                new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = UiStrings.PrefDeleteAllButtonText,
+                                                    value = MpRuntimePrefParamType.DeleteAllContent.ToString()
+                                                }
+                                            }
+                                        },
                                     }
                                 }
                             }
@@ -1082,30 +1126,6 @@ namespace MonkeyPaste.Avalonia {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.ClearRecentSearches.ToString(),
-                                            controlType = MpParameterControlType.Button,
-                                            label = UiStrings.PrefClearSearchesLabel,
-                                            values = new List<MpParameterValueFormat>() {
-                                                new MpParameterValueFormat() {
-                                                    isDefault = true,
-                                                    label = UiStrings.PrefClearSearchesButtonText,
-                                                    value = MpRuntimePrefParamType.ClearRecentSearches.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.ShowLogsFolder.ToString(),
-                                            controlType = MpParameterControlType.Button,
-                                            label = UiStrings.PrefShowLogsFolderLabel,
-                                            values = new List<MpParameterValueFormat>() {
-                                                new MpParameterValueFormat() {
-                                                    isDefault = true,
-                                                    label = UiStrings.PrefShowLogsFolderBtnText,
-                                                    value = MpRuntimePrefParamType.ShowLogsFolder.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetNtf.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefRestorNtfLabel,
@@ -1141,18 +1161,6 @@ namespace MonkeyPaste.Avalonia {
                                                     isDefault = true,
                                                     label = UiStrings.CommonResetLabel,
                                                     value = MpRuntimePrefParamType.ResetPluginCache.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.DeleteAllContent.ToString(),
-                                            controlType = MpParameterControlType.Button,
-                                            label = UiStrings.PrefDeleteAllLabel,
-                                            values = new List<MpParameterValueFormat>() {
-                                                new MpParameterValueFormat() {
-                                                    isDefault = true,
-                                                    label = UiStrings.PrefDeleteAllButtonText,
-                                                    value = MpRuntimePrefParamType.DeleteAllContent.ToString()
                                                 }
                                             }
                                         },

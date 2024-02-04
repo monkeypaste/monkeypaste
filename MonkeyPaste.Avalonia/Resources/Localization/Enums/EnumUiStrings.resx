@@ -442,32 +442,32 @@
   <data name="MpContentQueryPropertyPathType_ItemData" xml:space="preserve">
     <value>Item Data</value>
   </data>
+  <data name="MpContentQueryPropertyPathType_ItemRawData" xml:space="preserve">
+    <value>Item Raw Data</value>
+  </data>
   <data name="MpContentQueryPropertyPathType_ItemType" xml:space="preserve">
     <value>Item Type</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_AppPath" xml:space="preserve">
-    <value>App Path</value>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>Source App Path</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_AppName" xml:space="preserve">
-    <value>App Name</value>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>Source App Name</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_UrlPath" xml:space="preserve">
-    <value>Url Path</value>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>Source Url</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_UrlTitle" xml:space="preserve">
-    <value>Url Title</value>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>Source Url Title</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_UrlDomainPath" xml:space="preserve">
-    <value>Url Domain Path</value>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>Source Url Domain</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
     <value>Copy Date Time</value>
-  </data>
-  <data name="MpContentQueryPropertyPathType_LastPasteDateTime" xml:space="preserve">
-    <value>Last Paste Date Time</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
     <value>Copy Count</value>
@@ -654,6 +654,9 @@
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>Logs</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
     <value>Browse</value>

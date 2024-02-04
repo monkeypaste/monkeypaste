@@ -80,7 +80,7 @@ function Example({ imgSrc, description }) {
     return (
       <div className={styles.exampleContainer}>
         <div className={styles.example}>
-          <div><img src={imgSrc} role="img" /></div>
+          <div class="examples"><img src={imgSrc} role="img" /></div>
           <div><p>{description}</p></div>
         </div>
         <hr />

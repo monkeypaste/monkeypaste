@@ -38,6 +38,7 @@ Sequences are a series of key strokes instead of just one combination to trigger
 So to keep the system stable I needed to pick one or the other and decided there's more advantages to *Override* since you likely won't have **that** many global shortcuts to deal with and it ensures they'll 'always' work. 
 ::::::
 
+
 ## Reference
 
 ### Editor (read-only)

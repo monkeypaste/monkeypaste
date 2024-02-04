@@ -1,6 +1,3 @@
----
-sidebar_position: 5
----
 # Templates
 
 Text templates are special regions of text clips that allow you to *reuse* a clip like a **snippet**. 
