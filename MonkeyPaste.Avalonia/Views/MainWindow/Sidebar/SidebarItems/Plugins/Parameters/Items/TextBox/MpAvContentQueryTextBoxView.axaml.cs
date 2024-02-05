@@ -1,9 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
@@ -38,7 +35,10 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
-            IsPopOut = this.Parent is Window;
+            if (TopLevel.GetTopLevel(this) is not { } tl) {
+                return;
+            }
+            IsPopOut = tl.Classes.Contains("popout");
             //if (!IsPopOut) {
             //    return;
             //}

@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_PATH_PARAM_ID,
                                 description = UiStrings.ActionCondInPropHint,
-                                value = new MpParameterValueFormat(MpContentQueryPropertyPathType.ItemData.ToQueryFragmentString(),true)
+                                value = new MpParameterValueFormat(MpContentQueryPropertyPathType.ClipText.ToQueryFragmentString(),true)
                             },
                             new MpParameterFormat() {
                                 label = UiStrings.ActionCondNotLabel,
@@ -265,6 +265,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
             MpAvActionOutput ao = GetInput(arg);
@@ -291,8 +292,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }
@@ -306,6 +307,12 @@ namespace MonkeyPaste.Avalonia {
             //    ValidationText = cdpvm.ValidationMessage;
             //    focus_arg_num = ActionArgs.IndexOf(cdpvm);
             //}
+
+            if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput &&
+                !IsParentActionSupportLastOutput &&
+                ParentActionViewModel != null) {
+                ValidationText = string.Format(UiStrings.ActionCondLastOutputUnavailableInvalidText, ParentActionViewModel.Label);
+            }
             if (!IsValid) {
                 ShowValidationNotification(focus_arg_num);
             }

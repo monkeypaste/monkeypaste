@@ -70,6 +70,44 @@ namespace CoreAnnotator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These are the only currency symbols that will be annotated..
+        /// </summary>
+        public static string CurrencyTypesDescription {
+            get {
+                return ResourceManager.GetString("CurrencyTypesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency Symbols.
+        /// </summary>
+        public static string CurrencyTypesLabel {
+            get {
+                return ResourceManager.GetString("CurrencyTypesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the format that will be used to annotate currencies found in the text with links. 
+        ///
+        ///The {0} is the placeholder for the currency..
+        /// </summary>
+        public static string CurrencyUrlDescription {
+            get {
+                return ResourceManager.GetString("CurrencyUrlDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency Link.
+        /// </summary>
+        public static string CurrencyUrlLabel {
+            get {
+                return ResourceManager.GetString("CurrencyUrlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All text annotations are enabled.
         /// </summary>
         public static string DefAnnHint {
@@ -106,11 +144,49 @@ namespace CoreAnnotator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled options will be found in the clip text and converted into hyperlinks when necessary..
+        /// </summary>
+        public static string OptionsDescription {
+            get {
+                return ResourceManager.GetString("OptionsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string OptionsLabel {
+            get {
+                return ResourceManager.GetString("OptionsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone Number.
         /// </summary>
         public static string PhoneLabel {
             get {
                 return ResourceManager.GetString("PhoneLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the format that will be used to annotate phone numbers found in the text with links. 
+        ///
+        ///The {0} is the placeholder for the phone number..
+        /// </summary>
+        public static string PhoneUrlDescription {
+            get {
+                return ResourceManager.GetString("PhoneUrlDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone Number Link.
+        /// </summary>
+        public static string PhoneUrlLabel {
+            get {
+                return ResourceManager.GetString("PhoneUrlLabel", resourceCulture);
             }
         }
         

@@ -35,7 +35,7 @@
         /// <summary>
         /// A string substitution value replacing "{query_key_name_here>}" with the query result from some clip as <b>plain text</b>.<br/> 
         /// Possible query key names are all <see cref="MpContentQueryPropertyPathType"/> keys. <br/><br/>
-        /// <b>Example: </b>When paired with <see cref="MpParameterControlType.TextBox"/> the text box is given a query-field selector in the UI to simplify creating a content query. A useful hidden parameter may be a <see cref="MpParameterControlType.TextBox"/> with <see cref="MpParameterValueUnitType.PlainTextContentQuery"/> and setting the default value to '{ItemData}' to then always receive the plain text of the input clip.<br/><br/>
+        /// <b>Example: </b>When paired with <see cref="MpParameterControlType.TextBox"/> the text box is given a query-field selector in the UI to simplify creating a content query. A useful hidden parameter may be a <see cref="MpParameterControlType.TextBox"/> with <see cref="MpParameterValueUnitType.PlainTextContentQuery"/> and setting the default value to '{ClipText}' to then always receive the plain text of the input clip.<br/><br/>
         /// <b>Note: </b>Text outside of curly braces or curly braces without a matching <see cref="MpContentQueryPropertyPathType"/> will be treated as plain text.<br/><br/>
         /// </summary>
         PlainTextContentQuery,

@@ -48,7 +48,8 @@ namespace MonkeyPaste.Avalonia {
             if (value is object[] valParts) {
                 hex = valParts.FirstOrDefault(x => x.ToStringOrEmpty().IsStringHexOrNamedColor()).ToStringOrDefault();
                 imgResourceObj = valParts.FirstOrDefault(x => x.ToStringOrDefault() != hex);
-                return Convert(imgResourceObj, null, new[] { "force", hex }, null);
+                //return Convert(imgResourceObj, null, new[] { "force", hex }, null);
+                return Convert(imgResourceObj, targetType, hex, culture);
             }
             bool ignore_color_imgs = true;
             if (parameter is object[] paramParts2 &&

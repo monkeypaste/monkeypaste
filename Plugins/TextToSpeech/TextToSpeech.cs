@@ -42,7 +42,7 @@ namespace TextToSpeech {
                         paramId = TEXT_PARAM_ID,
                         values = new List<MpParameterValueFormat>() {
                             new MpParameterValueFormat() {
-                                value = "{ItemData}"
+                                value = "{ClipText}"
                             }
                         }
                     },

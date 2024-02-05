@@ -67,5 +67,6 @@
 <a href="https://www.freepik.com/free-photo/jungle-forest-view-tropical-trees-generative-ai_39657349.htm#query=jungle%20wallpaper&position=12&from_view=keyword&track=ais&uuid=126c7818-6bba-4f84-9f20-c85e3955e616">Image by pvproductions</a> on Freepik<br/>
 <a href="https://github.com/vmware/clarity-assets?ref=svgrepo.com" target="_blank">Vmware</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
 <a href="https://github.com/vscode-icons/vscode-icons?ref=svgrepo.com" target="_blank">Vscode Icons</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
+<a href="https://github.com/twbs/icons?ref=svgrepo.com" target="_blank">Bootstrap</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
 ## Everything Else
 Thomas Kefauver via Monkey LLC.

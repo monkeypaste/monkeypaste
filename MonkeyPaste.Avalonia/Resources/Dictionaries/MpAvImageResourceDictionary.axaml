@@ -114,8 +114,7 @@
     <sys:String x:Key="SelectionImage">avares://MonkeyPaste.Avalonia/Assets/Images/selection.png</sys:String>
     <sys:String x:Key="BringToFrontImage">avares://MonkeyPaste.Avalonia/Assets/Images/bringToFront.png</sys:String>
     <sys:String x:Key="SendToBackImage">avares://MonkeyPaste.Avalonia/Assets/Images/sendToBack.png</sys:String>
-    <sys:String x:Key="JoystickImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystick2.png</sys:String>
-    <sys:String x:Key="HotkeyActiveImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystickactive2.png</sys:String>
+    <sys:String x:Key="JoystickImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystick.png</sys:String>
     <sys:String x:Key="PasteToAppImage">avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png</sys:String>
     <sys:String x:Key="BullsEyeImage">avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png</sys:String>
     <sys:String x:Key="TagImage">avares://MonkeyPaste.Avalonia/Assets/Images/tag.png</sys:String>

@@ -120,7 +120,7 @@
     </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            MinHeight="130"
+            MinHeight="100"
             BorderThickness="7"
             Padding="3,5,10,5"
             BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
@@ -184,7 +184,7 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Bottom"
                             BorderThickness="0"
-                            Background="{DynamicResource ThemeWhiteColor}"
+                            Background="{StaticResource UnderlineFadeOutBrush_long_light}"
                             Height="1" />
                 </StackPanel>
 
@@ -489,7 +489,8 @@
                                      HorizontalAlignment="Right"
                                      IsVisible="{Binding ShowOptionsButton}"
                                      Command="{Binding ShowOptionsPopupCommand}"
-                                     CommandParameter="{Binding $self}" />
+                                     CommandParameter="{Binding $self}"
+                                     Foreground="{DynamicResource ThemeWhiteColor}" />
         </Grid>
     </Border>
 </local:MpAvUserControl>

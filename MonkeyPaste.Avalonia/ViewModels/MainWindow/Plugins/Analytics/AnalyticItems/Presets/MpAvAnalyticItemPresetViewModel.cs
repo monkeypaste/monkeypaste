@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIAsyncCollectionObject,
         MpIMenuItemViewModel,
-        MpIIconResource,
+        MpIIconResourceViewModel,
         MpIUserIconViewModel,
         MpIContentTypeDependant,
         MpIShortcutCommandViewModel,
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIIconResource Implementation
+        #region MpIIconResourceViewModel Implementation
 
         object MpIIconResource.IconResourceObj =>
             IconId;
@@ -602,6 +602,9 @@ namespace MonkeyPaste.Avalonia {
                         IsLabelTextBoxFocused = true;
                         IsSelected = true;
                     }
+                    break;
+                case nameof(Label):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.FullLabel)));
                     break;
             }
         }

@@ -132,6 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
 
@@ -172,8 +173,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }

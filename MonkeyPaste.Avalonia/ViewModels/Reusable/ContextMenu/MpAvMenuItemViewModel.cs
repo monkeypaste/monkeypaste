@@ -1,6 +1,5 @@
 ﻿using Avalonia.Media;
 using MonkeyPaste.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -334,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     return IconResourceKey;
                 }
-                if (IconHexStr.IsStringHexColor()) {
+                if (IconHexStr.IsStringHexOrNamedColor()) {
                     return IconHexStr;
                 }
                 return null;
@@ -343,7 +342,7 @@ namespace MonkeyPaste.Avalonia {
                 if (value is int iconId) {
                     IconId = iconId;
                 } else if (value is string valStr) {
-                    if (valStr.IsStringHexColor()) {
+                    if (valStr.IsStringHexOrNamedColor()) {
                         IconHexStr = valStr;
                     } else if (valStr.IsStringImageResourcePathOrKey()) {
                         IconResourceKey = valStr;
@@ -354,6 +353,10 @@ namespace MonkeyPaste.Avalonia {
                         IconHexStr = null;
                         IconResourceKey = null;
                     }
+                } else if (value is object[] valParts) {
+                    IconId = 0;
+                    IconHexStr = valParts.OfType<string>().FirstOrDefault(x => x.IsStringHexOrNamedColor());
+                    IconResourceKey = valParts.OfType<string>().FirstOrDefault(x => x != IconHexStr);
                 } else {
                     IconId = 0;
                     IconHexStr = null;

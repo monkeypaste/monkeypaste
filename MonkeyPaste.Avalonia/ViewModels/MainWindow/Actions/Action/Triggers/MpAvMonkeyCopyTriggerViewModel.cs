@@ -48,6 +48,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
             if (arg is not MpAvActionOutput ao || ao.CopyItem != null) {

@@ -65,13 +65,11 @@ namespace MonkeyPaste.Avalonia {
                 case MpContentQueryPropertyPathType.LastOutput:
                     result = QueryLastOutput(last_output_args);
                     break;
-                case MpContentQueryPropertyPathType.ItemRawData:
-                    result = ci.GetPropertyValue(MpContentQueryPropertyPathType.ItemData.ToString()) as string;
-                    break;
-                case MpContentQueryPropertyPathType.ItemData:
+                case MpContentQueryPropertyPathType.RawClipData:
+                case MpContentQueryPropertyPathType.ClipText:
                     result = ci.ItemData;
                     break;
-                case MpContentQueryPropertyPathType.ItemType:
+                case MpContentQueryPropertyPathType.ClipType:
                     result = ci.ItemType.ToString();
                     break;
                 case MpContentQueryPropertyPathType.Title:
@@ -158,15 +156,15 @@ namespace MonkeyPaste.Avalonia {
             }
 
             for (int i = 1; i < Enum.GetNames(typeof(MpContentQueryPropertyPathType)).Length; i++) {
-                // example content query: '{Title} is a story about {ItemData}'
+                // example content query: '{Title} is a story about {ClipText}'
                 MpContentQueryPropertyPathType ppt = (MpContentQueryPropertyPathType)i;
                 string pptToken = GetQueryToken(ppt);
 
                 if (curVal.Contains(pptToken)) {
                     string contentValue = await QueryPropertyAsync(ci, ppt, last_output_args) as string;
 
-                    // take '{ItemRawData}' into account, even when unit is PlainTextContentQuery
-                    bool is_result_plain_text = !asRawData && ppt != MpContentQueryPropertyPathType.ItemRawData;
+                    // take '{RawClipData}' into account, even when unit is PlainTextContentQuery
+                    bool is_result_plain_text = !asRawData && ppt != MpContentQueryPropertyPathType.RawClipData;
                     if (is_result_plain_text) {
                         contentValue = await GetParameterRequestValueAsync(controlType, MpParameterValueUnitType.PlainText, contentValue, ci, last_output_args);
                         if (uriEscaped) {

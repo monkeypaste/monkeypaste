@@ -439,14 +439,14 @@
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value> </value>
   </data>
-  <data name="MpContentQueryPropertyPathType_ItemData" xml:space="preserve">
-    <value>Item Data</value>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>Clip Text</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_ItemRawData" xml:space="preserve">
-    <value>Item Raw Data</value>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>Raw Clip Data</value>
   </data>
-  <data name="MpContentQueryPropertyPathType_ItemType" xml:space="preserve">
-    <value>Item Type</value>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>Clip Type</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
     <value>Title</value>

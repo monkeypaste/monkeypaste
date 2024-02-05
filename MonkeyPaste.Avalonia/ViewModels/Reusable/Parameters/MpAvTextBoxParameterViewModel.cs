@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
@@ -25,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvMenuItemViewModel PopupMenuViewModel =>
             MpAvContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                 AddContentPropertyPathCommand,
-                IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
+                IsActionParameterAllowLastOutput ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
 
         public bool IsPopupMenuOpen { get; set; }
 
@@ -214,6 +216,29 @@ namespace MonkeyPaste.Avalonia {
                 Content = new MpAvContentQueryTextBoxView(),
                 Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
             };
+
+            #region Window Bindings
+            if (Parent is MpIIconResourceViewModel irvm) {
+                pow.Bind(
+                    Window.IconProperty,
+                    new Binding() {
+                        Source = irvm,
+                        Path = nameof(irvm.IconResourceObj),
+                        Converter = MpAvIconSourceObjToBitmapConverter.Instance,
+                    });
+            }
+            if (Parent is MpILabelTextViewModel ltvm) {
+                pow.Bind(
+                Window.TitleProperty,
+                    new Binding() {
+                        Source = this,
+                        Path = nameof(FullLabel),
+                        Converter = MpAvStringToWindowTitleConverter.Instance
+                    });
+            }
+            #endregion
+
+            pow.Classes.Add("popout");
             return pow;
         }
 

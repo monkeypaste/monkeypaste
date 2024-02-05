@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIUserIconViewModel,
-        MpILabelText,
+        MpILabelTextViewModel,
         MpITreeItemViewModel,
         MpAvIParameterCollectionViewModel {
 
@@ -427,6 +427,9 @@ namespace MonkeyPaste.Avalonia {
                             HasModelChanged = false;
                         });
                     }
+                    break;
+                case nameof(Label):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.FullLabel)));
                     break;
             }
         }

@@ -66,11 +66,11 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpContentQueryPropertyGroupType GetPropertyGroupType(MpContentQueryPropertyPathType cqppt) {
             switch (cqppt) {
-                case MpContentQueryPropertyPathType.ItemData:
-                case MpContentQueryPropertyPathType.ItemRawData:
+                case MpContentQueryPropertyPathType.ClipText:
+                case MpContentQueryPropertyPathType.RawClipData:
                 case MpContentQueryPropertyPathType.LastOutput:
                     return MpContentQueryPropertyGroupType.Root;
-                case MpContentQueryPropertyPathType.ItemType:
+                case MpContentQueryPropertyPathType.ClipType:
                 case MpContentQueryPropertyPathType.Title:
                     return MpContentQueryPropertyGroupType.Meta;
                 case MpContentQueryPropertyPathType.SourceAppName:

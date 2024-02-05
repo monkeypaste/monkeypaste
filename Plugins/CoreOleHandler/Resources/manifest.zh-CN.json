@@ -1,13 +1,12 @@
 {
   "title": "核心剪贴板处理程序",
-  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
-  "version": "1.0.0.0",
   "description": "处理默认剪贴板格式",
+  "version": "1.0.0.0",
   "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "tags": "核心、剪贴板、拖放、文本、Rtf、富文本、Html、Csv、图像、Png、Jpg、Jpeg、链接",
   "iconUri": "/Resources/Images/icon.png",
-  "packageType": "Dll",
+  "tags": "核心、剪贴板、拖放、文本、Rtf、富文本、Html、Csv、图像、Png、Jpg、Jpeg、链接",
   "pluginType": "Clipboard",
-  "debugMode": "None"
+  "packageType": "Dll"
 }

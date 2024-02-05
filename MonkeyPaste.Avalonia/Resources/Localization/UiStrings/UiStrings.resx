@@ -117,13 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GestureProfileGlobal" xml:space="preserve">
-    <value>All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime.</value>
-    <comment>#PLATFORM# Override not supported on linux</comment>
-  </data>
-  <data name="GestureProfileInternal" xml:space="preserve">
-    <value>No global shortcuts are enabled by default. </value>
-  </data>
   <data name="ProductDescription" xml:space="preserve">
     <value>The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential.</value>
   </data>
@@ -134,11 +127,14 @@
     <value>Restore your existing account...</value>
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
-    <value>Content and trash are limited to {0} and {1} clips respectively.</value>
+    <value>Content and trash are 
+limited to {0} and {1} 
+clips respectively.</value>
     <comment>Description formats all use same format from content cap, trash cap, standard cap</comment>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
     <value>Allows up to {2} clips of content and unlimited trash storage. </value>
+    <comment>Number</comment>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
     <value>Unrestricted and unlimited content and trash storage.</value>
@@ -168,10 +164,10 @@
     <value>When enabled, dragging from any application to the top of the screen will reveal MonkeyPaste to easily drop content into MonkeyPaste.</value>
   </data>
   <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
-    <value>Enabling the 'lock' in the top left of the main window will still allow dropping into MonkeyPaste.</value>
+    <value>Enabling the 'lock' in the top left of the main window will still allow dropping onto MonkeyPaste.</value>
   </data>
   <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
+    <value>More window preferences are available from the 'Settings-&gt;Preferences -&gt;Window' menu.</value>
   </data>
   <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
     <value>Drag Bananas Up Here!</value>
@@ -180,7 +176,7 @@
     <value>Drag-to-Open</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
-    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings -&gt; Shortcuts' menu.</value>
+    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;Shortcuts' menu.</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
     <value>All global shortcuts will be disabled so you can set them up yourself later.</value>
@@ -222,7 +218,7 @@
     <value>Left-clicking the taskbar icon will still open MonkeyPaste.</value>
   </data>
   <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
+    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
     <value>Easy Right?</value>
@@ -234,7 +230,7 @@
     <value>Scroll-to-Open</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Drop it here!</value>
@@ -274,6 +270,7 @@
   </data>
   <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
     <value>Are you sure you want to remove '{0}' and all its presets and shortcuts?</value>
+    <comment>Plugin Title</comment>
   </data>
   <data name="PluginBrowserUninstallLabel" xml:space="preserve">
     <value>Uninstall</value>
@@ -334,10 +331,14 @@
     <value>Save</value>
   </data>
   <data name="AccountNextRemoveToolTipText" xml:space="preserve">
-    <value>Next to delete! Upgrade to avoid.</value>
+    <value>Next to delete! 
+
+Upgrade to avoid.</value>
   </data>
   <data name="AccountNextTrashToolTipText" xml:space="preserve">
-    <value>Next to trash! Upgrade to avoid.</value>
+    <value>Next to trash! 
+
+Upgrade to avoid.</value>
   </data>
   <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
     <value>Files</value>
@@ -424,7 +425,7 @@
     <value>Shortcut</value>
   </data>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
-    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, Meta / Win depending on platform).</value>
+    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, ⌘/Win depending on platform).</value>
   </data>
   <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
     <value>&lt;ul&gt;
@@ -473,16 +474,16 @@
     <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>&lt;p&gt;yy = short year&lt;/p&gt;&lt;p&gt;yyyy = long year&lt;/p&gt;&lt;p&gt;M = month (1-12)&lt;/p&gt;&lt;p&gt;MM = month (01-12)&lt;/p&gt;&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;&lt;p&gt;d = day (1 - 31)&lt;/p&gt;&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;&lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;&lt;p&gt;H = hour in day (0-23)&lt;/p&gt;&lt;p&gt;HH = hour in day (00-23)&lt;/p&gt;&lt;p&gt;mm = minute&lt;/p&gt;&lt;p&gt;ss = second&lt;/p&gt;&lt;p&gt;SSS = milliseconds&lt;/p&gt;&lt;p&gt;a = AM/PM marker&lt;/p&gt;&lt;p&gt;p = a.m./p.m. marker&lt;/p&gt;</value>
+    <value>yy = short year&lt;br/&gt;yyyy = long year&lt;br/&gt;M = month (1-12)&lt;br/&gt;MM = month (01-12)&lt;br/&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;br/&gt;MMMM = long month (January, February ... December)&lt;br/&gt;d = day (1 - 31)&lt;br/&gt;dd = day (01 - 31)&lt;br/&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;br/&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;br/&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = hour in am/pm (00-12)&lt;br/&gt;H = hour in day (0-23)&lt;br/&gt;HH = hour in day (00-23)&lt;br/&gt;mm = minute&lt;br/&gt;ss = second&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</value>
   </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system - wide.&lt;/p&gt;</value>
+    <value>The current date and/or time will be substituted for DateTime templates when they are pasted.</value>
   </data>
   <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;</value>
+    <value>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Finish appending</value>
@@ -500,7 +501,7 @@
     <value>Toggle manual</value>
   </data>
   <data name="EditorAppendPauseLabel" xml:space="preserve">
-    <value>Pause appending to clipboard</value>
+    <value>Pause append</value>
   </data>
   <data name="EditorAppendPostLabel" xml:space="preserve">
     <value>Toggle Before</value>
@@ -509,7 +510,7 @@
     <value>Toggle Before</value>
   </data>
   <data name="EditorAppendResumeLabel" xml:space="preserve">
-    <value>Resume appending to clipboard</value>
+    <value>Resume append</value>
   </data>
   <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
     <value>Append...</value>
@@ -525,6 +526,7 @@
   </data>
   <data name="NotificationOptionHideAllLabel" xml:space="preserve">
     <value>Hide all '{0}' notifications</value>
+    <comment>Notification Type</comment>
   </data>
   <data name="NotificationOptionHideLabel" xml:space="preserve">
     <value>Dismiss</value>
@@ -590,7 +592,7 @@
     <value>Domain</value>
   </data>
   <data name="SettingsInteropUrlHintText" xml:space="preserve">
-    <value>Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(</value>
+    <value>Source url recognition is dependant on how clipboard friendly the host application is so rejection cannot be guaranteed</value>
   </data>
   <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
     <value>Url</value>
@@ -599,7 +601,9 @@
     <value>Websites</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
-    <value>Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.</value>
+    <value>Some MonkeyPaste features use keyboard automation to simulate 'Copy' events in other applications. 
+
+Add and/or select the app with the unique copy shortcut (like a console or shell for example) to ensure those features function properly.</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
     <value>Copy Shortcut</value>
@@ -611,7 +615,11 @@
     <value>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
-    <value>&lt;p&gt;Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.&lt;/p&gt;&lt;p&gt;Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)&lt;/p&gt;</value>
+    <value>Many MonkeyPaste features use keyboard automation to interact with other applications.
+
+Some applications (like some consoles or shells for example) may have a non-default paste shortcut. 
+
+To ensure proper interoperability, record those shortcuts for that application here.</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
     <value>Paste Shortcut</value>
@@ -639,6 +647,7 @@
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
     <value>Would you also like to remove all {0} clips from '{1}'</value>
+    <comment>Number, Application Name</comment>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
     <value>Remove Clips?</value>
@@ -659,10 +668,10 @@
     <value>Are you sure you want to remove custom formats for {0}?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag - and - drop into MonkeyPaste</value>
+    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste</value>
   </data>
   <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. Automated paste or drag - and - drop from MonkeyPaste will have no affect (its empty data).</value>
+    <value>There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data).</value>
   </data>
   <data name="ShortcutsResetNtfMsg" xml:space="preserve">
     <value>Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.</value>
@@ -708,12 +717,13 @@
   </data>
   <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
     <value>This combination conflicts with '{0}' which will be cleared if saved.</value>
+    <comment>Shortcut Display Name</comment>
   </data>
   <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
     <value>A shortcut must be provided.</value>
   </data>
   <data name="ShortcutAssignGlobalHint" xml:space="preserve">
-    <value>This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications.</value>
+    <value>This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough (or change the 'Routing Type') to not conflict with shortcuts from other applications.</value>
   </data>
   <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
     <value>Global</value>
@@ -779,7 +789,8 @@
     <value>Login</value>
   </data>
   <data name="AccountLoginFailedText" xml:space="preserve">
-    <value>Check your connection and try again.</value>
+    <value>Check your connection 
+and try again.</value>
   </data>
   <data name="AccountLogoutButtonText" xml:space="preserve">
     <value>Log out</value>
@@ -827,10 +838,19 @@
     <value>Free {0} - Day Trial</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
-    <value>There was a problem performing your purchase. Checking your connection and settings may help. Would you like to try again?</value>
+    <value>There was a problem performing 
+your purchase. 
+
+Checking your connection and 
+settings may help. 
+
+Would you like to try again?</value>
   </data>
   <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
-    <value>Your account has been upgraded to {0}/{1}.</value>
+    <value>Your account has been successfully
+upgraded to:
+
+ {0}/{1}</value>
     <comment>Subscription Type, Billing Cycle</comment>
   </data>
   <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
@@ -894,30 +914,51 @@ options menu above.</value>
   </data>
   <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
     <value>{0} is invalid</value>
-    <comment>Label</comment>
+    <comment>Parameter Label</comment>
   </data>
   <data name="ParameterInvalidLengthCaption" xml:space="preserve">
     <value>{0} must be at least {1} characters</value>
-    <comment>Label, number</comment>
+    <comment>Parameter Label, number</comment>
   </data>
   <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
     <value>{0} can only be {1} character</value>
-    <comment>Label, number</comment>
+    <comment>Parameter Label, number</comment>
   </data>
   <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
     <value>Paste to: '{0}'</value>
     <comment>Application Name</comment>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please update your payment information.</value>
+    <value>The payment for your {0} 
+subscription was due {1} 
+and has not been received. 
+
+Please update your 
+payment information.</value>
     <comment>Subscription Type, Date</comment>
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please connect to the internet on the device with your subscription and restart in order to continue using your {0} plan</value>
+    <value>The payment for your {0} 
+subscription was due {1} 
+and has not been received. 
+
+Please connect to the 
+internet on the device 
+with your subscription and 
+restart in order to continue 
+using your {0} plan.</value>
     <comment>Subscription Type, Date</comment>
   </data>
   <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please open MonkeyPaste on the device with your subscription and restart to continue using your {0} plan.</value>
+    <value>The payment for your {0} 
+subscription was due {1} 
+and has not been received. 
+
+Please open or restart 
+MonkeyPaste on the device 
+with your subscription to 
+continue using your 
+{0} plan.</value>
     <comment>Subscription Type, Date</comment>
   </data>
   <data name="AccountExpiredNtfTitle" xml:space="preserve">
@@ -927,12 +968,22 @@ options menu above.</value>
     <value>Note</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>Microsoft Store doesn't allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. 
+    <value>Microsoft Store doesn't allow tier 
+changes to subscription addons. 
+
+You must cancel your 
+{0}/{1} plan yourself 
+or you will be charged for both. 
+
 Would you like to go do that now?</value>
     <comment>Old Subscription Type, Old Billing Cycle</comment>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
-    <value>Your password has been reset. Please check your email and follow the link to change your password.</value>
+    <value>Your password has been reset. 
+
+Please check your email and 
+follow the link to change 
+your password.</value>
   </data>
   <data name="AccountLoginWindowTitle" xml:space="preserve">
     <value>Login</value>
@@ -950,10 +1001,10 @@ Would you like to go do that now?</value>
     <value>I Decline</value>
   </data>
   <data name="TermsOutroAppText" xml:space="preserve">
-    <value>By clicking "I Accept", you agree to the license terms for this application. If you do not agree to the terms, click "I Decline".</value>
+    <value>Clicking "I Accept" means that you agree to the license terms for this application. If you do not agree to the terms, click "I Decline".</value>
   </data>
   <data name="TermsOutroPluginText" xml:space="preserve">
-    <value>By clicking "I Accept", you agree to the license terms for the package(s) listed above. If you do not agree to the terms, click "I Decline".</value>
+    <value>Clicking "I Accept" means that you agree to the license terms for the plugin(s) listed above. If you do not agree to the terms, click "I Decline".</value>
   </data>
   <data name="TermsViewLicenseButtonText" xml:space="preserve">
     <value>View License</value>
@@ -983,7 +1034,8 @@ Would you like to go do that now?</value>
     <value>Password</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>Your subscription is now set to {0}/{1}.</value>
+    <value>Your subscription is 
+now set to {0}/{1}.</value>
     <comment>Subscription Type, Billing Cycle</comment>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
@@ -1032,7 +1084,7 @@ Would you like to go do that now?</value>
     <value>Expired</value>
   </data>
   <data name="NtfLoaderTitle" xml:space="preserve">
-    <value>LOADING</value>
+    <value>Loading</value>
   </data>
   <data name="CommonDisabledLabel" xml:space="preserve">
     <value>Disabled</value>
@@ -1068,10 +1120,10 @@ Would you like to go do that now?</value>
     <value>Open in window</value>
   </data>
   <data name="LinkNavigateToolTipText" xml:space="preserve">
-    <value>Control + Click to follow...</value>
+    <value>Click + Control to follow...</value>
   </data>
   <data name="LinkNavigateToolTipText2" xml:space="preserve">
-    <value>Alt + Click to follow...</value>
+    <value>Click + Alt to follow...</value>
   </data>
   <data name="PinTrayEmptyLabel" xml:space="preserve">
     <value>Pin or Drop any media here!</value>
@@ -1080,7 +1132,9 @@ Would you like to go do that now?</value>
     <value>Clear</value>
   </data>
   <data name="SearchColorDistanceToolTipText" xml:space="preserve">
-    <value>Thresholds above 0 will provide fuzzy color matching using Euclidean distance in the RGBA colorspace. For example, if red (#FF0000) is the search term and black (#000000) is a pixel in an image then the color distance will be 255. Black to white distance is the maximum possible at 510, including an alpha channel</value>
+    <value>Thresholds above 0 will provide fuzzy color matching using Euclidean distance in the RGBA colorspace. 
+
+For example, if red (#FF0000) is the search term and black (#000000) is a pixel in an Image Clip, then the color distance will be 255. Black to white distance is the maximum possible of 510, including an alpha channel</value>
   </data>
   <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
     <value>all of the following are true</value>
@@ -1226,7 +1280,7 @@ Would you like to go do that now?</value>
     <comment>Folder Path, Folder Path, Error Details</comment>
   </data>
   <data name="PrefAutoSearchHint" xml:space="preserve">
-    <value>Text typed will be automatically applied to a search when no text control is focused.</value>
+    <value>Text typed will be automatically applied to a search when no text box is focused.</value>
   </data>
   <data name="PrefAutoSearchLabel" xml:space="preserve">
     <value>Auto Search Input</value>
@@ -1253,7 +1307,7 @@ Would you like to go do that now?</value>
     <value>Content Font Size</value>
   </data>
   <data name="PrefDestFormatHint" xml:space="preserve">
-    <value>When true, external content inserted into a clip will use the clips rich formatting and not the source content.</value>
+    <value>When true, external content inserted into a clip will use the clips formatting and not what's available from the source.</value>
   </data>
   <data name="PrefDestFormatLabel" xml:space="preserve">
     <value>Paste, drop or append with destination formatting</value>
@@ -1274,13 +1328,13 @@ Would you like to go do that now?</value>
     <value>Hide Capacity Watermarks</value>
   </data>
   <data name="PrefIgnoreAppendsHint" xml:space="preserve">
-    <value>When new clipboard content is appended it will not be tracked</value>
+    <value>When new clipboard content is appended it will not be tracked as a new clip</value>
   </data>
   <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
     <value>Ignore Appends</value>
   </data>
   <data name="PrefIgnoreDupHint" xml:space="preserve">
-    <value>When duplicate is detected on clipboard, it will be staged from original source and not added redundantly.</value>
+    <value>When the clipboard matches an existing clip, that clip will be used instead of creating a new one</value>
   </data>
   <data name="PrefIgnoreDupLabel" xml:space="preserve">
     <value>Ignore New Duplicates</value>
@@ -1310,7 +1364,7 @@ Would you like to go do that now?</value>
     <value>Show Behavior</value>
   </data>
   <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
-    <value>Monkey Paste will be revealed by performing a scroll gesture on the top edge of your monitor</value>
+    <value>The main window will be revealed by performing a scroll gesture on the top edge of your monitor</value>
   </data>
   <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
     <value>Show on top screen scroll</value>
@@ -1319,13 +1373,13 @@ Would you like to go do that now?</value>
     <value>Notification Volume</value>
   </data>
   <data name="PrefPasteHistoryHint" xml:space="preserve">
-    <value>This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing application specific keyboard paste command.</value>
+    <value>This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing a application specific keyboard paste command in 'Settings-&gt;Copy &amp; Paste-&gt;Shortcuts'.</value>
   </data>
   <data name="PrefPasteHistoryLabel" xml:space="preserve">
     <value>Paste History</value>
   </data>
   <data name="PrefPinTrayCapacityHint" xml:space="preserve">
-    <value>Large or many staged items can consume significant memory. removal follows a first-in-first-out policy</value>
+    <value>Too many pinned clips (like browser tabs) can consume significant memory. removal is by first-in-first-out</value>
   </data>
   <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
     <value>Pin Capacity</value>
@@ -1337,15 +1391,22 @@ Would you like to go do that now?</value>
     <value>Recent Text Limit</value>
   </data>
   <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
-    <value>Are you sure you want to restore default preferences? This cannot be undone!
+    <value>Are you sure you want to 
+restore default preferences? 
+
+This cannot be undone!
+
 *The application will restart once complete.</value>
   </data>
   <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
     <value>Are you sure you want to reset all notifications?
+
 *This cannot be undone!</value>
   </data>
   <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).</value>
+    <value>Monkey Paste sets the clipboard (overrides) when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. 
+
+Total restoration cannot be guaranteed and may reduce performance or even crash MonkeyPaste depending on the source of the data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Reset Clipboard after Monkey Pasting</value>
@@ -1379,7 +1440,7 @@ Would you like to go do that now?</value>
     <value>Restore Notifications</value>
   </data>
   <data name="PrefRichContentHint" xml:space="preserve">
-    <value>(Enabling can be quite slow) Disabling formatted will reduce memory consumption but will disable some advanced features, such as: templates, annotations and find/replace</value>
+    <value>(Enabling can be rather slow) Disabling formatted will reduce memory consumption but will inhibit some advanced features, such as: append, templates, annotations and find/replace</value>
   </data>
   <data name="PrefRichContentLabel" xml:space="preserve">
     <value>Rich Content</value>
@@ -1400,7 +1461,7 @@ Would you like to go do that now?</value>
     <value>Show Titles</value>
   </data>
   <data name="PrefShowWindowOnDragHint" xml:space="preserve">
-    <value>This helps fluidly allow dropping data into Monkey paste from another application without extra fumbling with window placement by dragging data to the top of the screen which will activate Monkey Paste and allow drop.</value>
+    <value>When enabled, dragging from any application to the top of the screen will reveal MonkeyPaste to easily drop content into MonkeyPaste.</value>
   </data>
   <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
     <value>Show on drag to top of screen</value>
@@ -1424,7 +1485,7 @@ Would you like to go do that now?</value>
     <value>Select</value>
   </data>
   <data name="PrefThemeColorHint" xml:space="preserve">
-    <value>Caution! Palette colors are decided by math not eyes! So please be careful as some color and style combinations may not have proper contrast for readability.</value>
+    <value>Caution! Other palette colors are chosen using math not eyes! So be aware some color and style combinations may not have proper contrast for readability.</value>
   </data>
   <data name="PrefThemeColorLabel" xml:space="preserve">
     <value>Theme Color</value>
@@ -1433,7 +1494,7 @@ Would you like to go do that now?</value>
     <value>Theme Style</value>
   </data>
   <data name="PrefTrashCycleHint" xml:space="preserve">
-    <value>Automatic trash cleanup will occur on startup at the set interval. It is not required but definitely don't let it get too large! Overall performance and CPU usage will have an impact if it becomes large ie. over 100 items lets say...</value>
+    <value>Automatic trash cleanup will occur on startup at the set interval. </value>
   </data>
   <data name="PrefTrashCycleLabel" xml:space="preserve">
     <value>Trash Cleanup</value>
@@ -1454,7 +1515,7 @@ Would you like to go do that now?</value>
     <value>Used in advanced file search for non preset file kinds</value>
   </data>
   <data name="PrefUserFileExtLabel" xml:space="preserve">
-    <value>User - Defined Search Extensions</value>
+    <value>User-Defined Search Extensions</value>
   </data>
   <data name="ClipTileFindReplaceHeader" xml:space="preserve">
     <value>Find and Replace...</value>
@@ -1645,7 +1706,7 @@ Would you like to go do that now?</value>
     <comment>Url</comment>
   </data>
   <data name="AddUrlNtfErrorText" xml:space="preserve">
-    <value>Url must be in valid format.</value>
+    <value>Url must be in a valid format.</value>
   </data>
   <data name="AddUrlNtfText" xml:space="preserve">
     <value>Enter full url:</value>
@@ -1697,7 +1758,7 @@ Would you like to go do that now?</value>
     <value>Manual</value>
   </data>
   <data name="AppendManualNtfText" xml:space="preserve">
-    <value>Appends added where you select</value>
+    <value>Append to your current selection.</value>
   </data>
   <data name="AppendManualNtfTitle" xml:space="preserve">
     <value>Manual Append Mode Activated</value>
@@ -1718,7 +1779,7 @@ Would you like to go do that now?</value>
     <value>Are you sure you want to finish appending?</value>
   </data>
   <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
-    <value>Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?</value>
+    <value>Editing in compatability mode will remove all rich formatting. Are you sure you wish to modify this?</value>
   </data>
   <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
     <value>Data Degradation Warning</value>
@@ -1764,7 +1825,9 @@ Would you like to go do that now?</value>
     <value>Date Time</value>
   </data>
   <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
-    <value>Are you sure you want to delete ALL usages of '{0}'? This cannot be undone.</value>
+    <value>Are you sure you want to delete ALL usages of '{0}'? 
+
+This cannot be undone!</value>
     <comment>Template Name</comment>
   </data>
   <data name="EditorTemplateDynamicName" xml:space="preserve">
@@ -1933,7 +1996,7 @@ Clipboard listening is: {0}</value>
     <value>Language</value>
   </data>
   <data name="ActionSetClipboardHint" xml:space="preserve">
-    <value>Set Clipboard - sets the clipboard to the input clip</value>
+    <value>Sets the clipboard to the input clip.</value>
   </data>
   <data name="ActionAlertAlertSound" xml:space="preserve">
     <value>Alert</value>
@@ -1945,7 +2008,7 @@ Clipboard listening is: {0}</value>
     <value>Chime</value>
   </data>
   <data name="ActionAlertHint" xml:space="preserve">
-    <value>Alert - Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring 'Conditional' actions. Alerts have no affect on their input.</value>
+    <value>General purpose sound and/or system tray message alerts. Alert action's have no affect on their input.</value>
   </data>
   <data name="ActionAlertMessageLabel" xml:space="preserve">
     <value>Message</value>
@@ -1984,13 +2047,13 @@ Clipboard listening is: {0}</value>
     <value>Analyzer</value>
   </data>
   <data name="ActionAnalyzerHint" xml:space="preserve">
-    <value>Analyzer - Processes triggered content or previous action output using a selected plugin.</value>
+    <value>Processes its input clip using the assigned Analyzer Preset.</value>
   </data>
   <data name="ActionClassifyActionHint" xml:space="preserve">
     <value>Input content is linked to the selected collection</value>
   </data>
   <data name="ActionClassifyHint" xml:space="preserve">
-    <value>Classifier - Adds input content to the selected tag.</value>
+    <value>Links its input clip to the assigned Tag Collection.</value>
   </data>
   <data name="ActionClassifyLabel" xml:space="preserve">
     <value>Tag</value>
@@ -2011,13 +2074,17 @@ Clipboard listening is: {0}</value>
     <value>Input Filter</value>
   </data>
   <data name="ActionCondInPropHint" xml:space="preserve">
-    <value>What's evaluated for this condition in the action chain. All values come from the initial input to the trigger, except for 'Last Output'. 'Last Output' will scrape the previous action's output with this condition. So for example if the previous action was an image object detector on a picture of a cat, the output to be compared here in that case would be the word 'cat'. In practice however the output will be JSON or XML annotation markup where these other properties can be used to isolate the comparision data for this condition.</value>
+    <value>The clip property used for this Conditional. 
+
+The 'Last Output' property is currently only supported when this Conditional is a child of an Analyzer action and the provided data will vary depending on the output of the parent Analyzer. 
+
+For troubleshooting, attach an 'Alert Action' to this Conditional's parent and set the Alert's 'Message' parameter to match this Input Property. This will allow to review the actual data being used for this Conditional.</value>
   </data>
   <data name="ActionCondInPropLabel" xml:space="preserve">
     <value>Input Property</value>
   </data>
   <data name="ActionConditionalHint" xml:space="preserve">
-    <value>Conditional - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.</value>
+    <value>Performs a text comparision on the input clip or previous action output. When comparision fails (its not a match) no child actions will be executed. So it acts like a logical gate.</value>
   </data>
   <data name="ActionCondOpHint" xml:space="preserve">
     <value>All true or false operations where child actions will only execute if the result is true.</value>
@@ -2029,22 +2096,22 @@ Clipboard listening is: {0}</value>
     <value>All</value>
   </data>
   <data name="ActionContentAddHint" xml:space="preserve">
-    <value>Content Added - Triggered when content of the selected type is added</value>
+    <value>Triggered when a clip of the selected type is added to the system in any way (clipboard, drag-and-drop, analyzer generated or duplicated).</value>
   </data>
   <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
-    <value>Only execute this trigger if clipboard is new and not been already copied and processed. This is independant of any preferene setting of whether new content is ignored or not.</value>
+    <value>Only execute this trigger if input clip is new and not a duplicate. This is independant of any preference setting of whether new content is ignored or not.</value>
   </data>
   <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
     <value>Ignore Duplicate</value>
   </data>
   <data name="ActionContentAddTriggerHint" xml:space="preserve">
-    <value>Content (not meeting rejection criteria) of this type will trigger this action.</value>
+    <value>Only clips of this type will trigger this action.</value>
   </data>
   <data name="ActionContentTaggedHint" xml:space="preserve">
-    <value>Content Classified - Triggered when content is added to the selected collection</value>
+    <value>Links its input clip to the assigned Tag Collection.</value>
   </data>
   <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
-    <value>Triggered when content is added to the selected collection</value>
+    <value>Triggered when a clip is linked to the specified Tag Collection.</value>
   </data>
   <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
     <value>Collection</value>
@@ -2056,25 +2123,25 @@ Clipboard listening is: {0}</value>
     <value>Delay</value>
   </data>
   <data name="ActionDelayHint" xml:space="preserve">
-    <value>Delay - Priarily used in conjunction with the 'Repeat' Action for polling remote sources or aid with long running operations.</value>
+    <value>(Experimental) Primarily used in conjunction with the Repeater Action for polling remote sources or aid with long running operations.</value>
   </data>
   <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
-    <value>When left blank, the content will use its title as the file name.</value>
+    <value>When left blank, the output file will use the input clip's title as the file name.</value>
   </data>
   <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
     <value>Custom Name</value>
   </data>
   <data name="ActionFileWriteDirHint" xml:space="preserve">
-    <value>The directory where input content will be written.</value>
+    <value>The directory where the file will be written.</value>
   </data>
   <data name="ActionFileWriteDirLabel" xml:space="preserve">
     <value>Directory</value>
   </data>
   <data name="ActionFileWriterHint" xml:space="preserve">
-    <value>File Writer - Saves input to the selected folder.</value>
+    <value>Saves input to the selected folder.</value>
   </data>
   <data name="ActionFolderWatcherHint" xml:space="preserve">
-    <value>Folder Changed - Triggered when a folders content changes. The output will be a new content item of the file or folder that has changed along with the type of change.</value>
+    <value>Triggered when the selected folder's content changes. The output will be a new or existing (when the Ignore Duplicates preference is enabled) File Clip of the file or folder that has changed along with the type of change as its last output.</value>
   </data>
   <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
     <value>Events</value>
@@ -2085,15 +2152,6 @@ Clipboard listening is: {0}</value>
   <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
     <value>Ignore Duplicate</value>
   </data>
-  <data name="ActionKeySimActionHint" xml:space="preserve">
-    <value>Recorded key combinations will be simulated in the foreground application.</value>
-  </data>
-  <data name="ActionKeySimActionLabel" xml:space="preserve">
-    <value>Keys to simulate</value>
-  </data>
-  <data name="ActionKeySimHint" xml:space="preserve">
-    <value>"Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether.</value>
-  </data>
   <data name="ActionRepeatCountHint" xml:space="preserve">
     <value>A value of 0 will repeat parent action indefinitely</value>
   </data>
@@ -2101,16 +2159,18 @@ Clipboard listening is: {0}</value>
     <value>Repeat Count</value>
   </data>
   <data name="ActionRepeatDelayHint" xml:space="preserve">
-    <value>The amount of time in milliseconds waited once parent action completes</value>
+    <value>The amount of time in milliseconds to wait once parent action completes</value>
   </data>
   <data name="ActionRepeatDelayLabel" xml:space="preserve">
     <value>Repeat Delay</value>
   </data>
   <data name="ActionRepeaterHint" xml:space="preserve">
-    <value>Repeater - Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation.</value>
+    <value>(Experimental) Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation.</value>
   </data>
   <data name="ActionShortcutTriggerHint" xml:space="preserve">
-    <value>Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard</value>
+    <value>Triggered by a global shortcut you define. If MonkeyPaste is active it will attempt to use the selected clip (if there is one) as input. Otherwise it will try to use the clipboard as its input.
+
+Note: a Shortcut Trigger will still execute if there is no input to keep it flexible (so it can be a macro trigger etc.) since its not a data-driven event.</value>
   </data>
   <data name="ActionShortcutTriggerLabel" xml:space="preserve">
     <value>Shortcut Trigger</value>
@@ -2131,7 +2191,7 @@ Clipboard listening is: {0}</value>
     <value>Annotate Trigger</value>
   </data>
   <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
-    <value>Pre-Loaded elements are read-only. Duplicate to alter.</value>
+    <value>Built in elements are read-only. Duplicate to alter.</value>
   </data>
   <data name="PluginAnonymousAuthor" xml:space="preserve">
     <value>Anonymous</value>
@@ -2223,7 +2283,7 @@ Clipboard listening is: {0}</value>
   <data name="PrefShowWindowAndLockHint" xml:space="preserve">
     <value>Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi-targeted workflows.
 
-* Note corners are in terms of all your screens, not per monitor.</value>
+* Corners are in terms of all your screens, not per monitor.</value>
   </data>
   <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
     <value>Show Window and Lock</value>
@@ -2241,10 +2301,10 @@ Clipboard listening is: {0}</value>
     <value>Delete All Content</value>
   </data>
   <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
-    <value>Are you SURE you want to delete 
+    <value>Are you sure you want to delete 
 ALL your clips?!
 
-*This operation CANNOT be undone!</value>
+*This operation cannot be undone!</value>
   </data>
   <data name="NtfRateAppText" xml:space="preserve">
     <value>I'm an indy dev please show some support!</value>
@@ -2257,10 +2317,10 @@ ALL your clips?!
     <comment>Plugin Name, Media Formats</comment>
   </data>
   <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
-    <value>Auto Copy Mode will trigger a copy command every time the mouse is released.</value>
+    <value>Auto Copy Mode - simulates a 'Copy' event every time the left mouse button is released.</value>
   </data>
   <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
-    <value>Right Click Paste Mode will SUPPRESS (not available on linux) right mouse click and issue a paste command to the active application.</value>
+    <value>Right Click Paste Mode - simulates a 'Paste' event every time the right mouse button is released</value>
     <comment>#PLATFORM# no suppress on linux</comment>
   </data>
   <data name="CommonPresetLabel" xml:space="preserve">
@@ -2290,7 +2350,7 @@ ALL your clips?!
   </data>
   <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
     <value>Pick a {0}...</value>
-    <comment>Parameter Name</comment>
+    <comment>Parameter Label</comment>
   </data>
   <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
     <value>Not found...</value>
@@ -2300,7 +2360,7 @@ ALL your clips?!
     <comment>Trigger Type</comment>
   </data>
   <data name="ActionCondNotHint" xml:space="preserve">
-    <value>Does Not - When checked the true or false outcome of the condition will be flipped. So for example, a 'Contains' condition will become 'Does Not Contain'.</value>
+    <value>When checked the true or false outcome of the condition will be flipped. So for example, a 'Contains' condition will become 'Does Not Contain'.</value>
   </data>
   <data name="ActionCondNotLabel" xml:space="preserve">
     <value>Does Not</value>
@@ -2315,13 +2375,7 @@ ALL your clips?!
     <value>Pick Match color</value>
   </data>
   <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
-    <value>Monkey Copy Trigger - Simulates a 'Copy' key combination in the active application so this triggers input will be whatever is selected.
-
-This allows you to have some unique action workflow in the background while still behaving like a 'Copy' command in the active application. 
-
-So for example, if you have a text translation plugin available you can select some text, perform a Monkey Copy shortcut, translate the text with an 'Analyze' action and then use the translation in a 'Set Clipboard' action to seamless translate text.
-
-Or another example, you have a 'Dessert Receipes' collection and with a Monkey Copy trigger you can copy a receipe you like with the shortcut and it wil be automatically added to 'Dessert Receipes' by using a 'Classify' action.</value>
+    <value>Like a Shortcut Trigger but when the key combination is pressed, a 'Copy' event will be simulated in the active application so it still works like copy but then the chain of actions attached to the Monkey Copy Trigger will get executed in the background using the simulated copy clipboard data.</value>
   </data>
   <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
     <value>Advanced Filter</value>
@@ -2336,7 +2390,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <value>Create Filter</value>
   </data>
   <data name="ActionSetClipboardContentHint" xml:space="preserve">
-    <value>(Optional) When left empty the clipboard will be set using this actions input. Anything provided here will be treated as plain text only.</value>
+    <value>(Optional) When left empty the clipboard will be set using this action's input. Anything provided here will be treated as plain text only.</value>
   </data>
   <data name="ActionSetClipboardContentLabel" xml:space="preserve">
     <value>Content for clipboard</value>
@@ -2348,7 +2402,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <value>Ignore</value>
   </data>
   <data name="ActionAnalyzeValidation1" xml:space="preserve">
-    <value>No analyzer selection for action '{0}'</value>
+    <value>No analyzer selected for action '{0}'</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionAnalyzeValidation2" xml:space="preserve">
@@ -2371,19 +2425,19 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <value>Compare Value can only be letters, numbers or spaces</value>
   </data>
   <data name="ActionContentTaggedValidation1" xml:space="preserve">
-    <value>No Collection selected for Classify Trigger '{0}'</value>
+    <value>No Tag selected for Clip Tagged Trigger '{0}'</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionContentTaggedValidation2" xml:space="preserve">
-    <value>Collection for Classify Trigger '{0}' not found</value>
+    <value>Tag for Clip Tagged Trigger '{0}' not found</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
-    <value>No folder specified for trigger action '{0}'</value>
+    <value>No watch folder specified for '{0}'</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
-    <value>Folder'{0}' not found for trigger action '{1}'</value>
+    <value>Watch folder '{0}' not found for trigger '{1}'</value>
     <comment>Folder Path, Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation1" xml:space="preserve">
@@ -2391,7 +2445,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation2" xml:space="preserve">
-    <value>File Writer Path '{0}' for Action '{1}' not found.</value>
+    <value>File Writer Path '{0}' for '{1}' not found.</value>
     <comment>File Path, Action Name</comment>
   </data>
   <data name="LoaderTaskbarLabel" xml:space="preserve">
@@ -2401,7 +2455,7 @@ Or another example, you have a 'Dessert Receipes' collection and with a Monkey C
     <value>Learn about plugins</value>
   </data>
   <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
-    <value>Restore THIS analysis settings</value>
+    <value>Restore this analysis configuration</value>
   </data>
   <data name="ChangeLogWindowTitle" xml:space="preserve">
     <value>{0} Change Log</value>
@@ -2459,10 +2513,10 @@ Click here to update to '{0}' 🎉🍾🥳</value>
     <value>Reset Unshared</value>
   </data>
   <data name="ActionAppCommandActionHint" xml:space="preserve">
-    <value>Performs the selected command.</value>
+    <value>Invokes the assigned application action. All Application Command's are stateless and their input clip is ignored.</value>
   </data>
   <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
-    <value>When unchecked and the command cannot fire, the chain of execution will halt. A lot of commands will require some specific application state in order to execute.</value>
+    <value>When unchecked and the command cannot fire, the chain of execution will halt. Many commands will require some specific application state in order to execute.</value>
   </data>
   <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
     <value>Always Continue?</value>
@@ -2579,7 +2633,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>Privacy Policy</value>
   </data>
   <data name="PrefEnableLoggingHint" xml:space="preserve">
-    <value>(Requires restart) When enabled diagnostic information will be stored. This can slow performance and may contain personal information.</value>
+    <value>(Requires restart) When enabled diagnostic information will be logged to file. This can slow performance and may contain personal information.</value>
   </data>
   <data name="PrefEnableLoggingLabel" xml:space="preserve">
     <value>Log to File</value>
@@ -2603,7 +2657,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>Send Feedback or Bug Report</value>
   </data>
   <data name="PrefShowInTaskbarHint" xml:space="preserve">
-    <value>This only hides the main window. All other non-dialog windows always show in taskbar.</value>
+    <value>This only hides the main window. All other non-dialog windows are always shown in taskbar.</value>
   </data>
   <data name="SearchButtonTooltip" xml:space="preserve">
     <value>Search in '{0}'</value>
@@ -2645,7 +2699,7 @@ You can restart now and complete the update by re-installing, ignore this and up
   </data>
   <data name="ParameterInvalidText" xml:space="preserve">
     <value>'{0}' is required</value>
-    <comment>Parameter Name</comment>
+    <comment>Parameter Label</comment>
   </data>
   <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
     <value>(Has Errors)</value>
@@ -2682,9 +2736,9 @@ Enabling or disabling default writer presets (from the Clipboard sidebar) will N
     <value> Has No Settings</value>
   </data>
   <data name="WelcomeTranslatedMessage" xml:space="preserve">
-    <value>Be aware I only speak English and MonkeyPaste has been translated to your language. 
+    <value>I only speak English and MonkeyPaste has been translated into this language. 
 
-If you encounter any spelling or grammatical mistakes try not to take offense. All versions ship with English as well so if you speak English you can change the language to it at anytime after this setup (Settings-&gt;Preferences-&gt;International).
+All versions ship with the English pack so if you speak English you can change the language to it at anytime after this setup (Settings-&gt;Preferences-&gt;International).
 
 If you would like to help improve the translation we would love to hear from you! 
 
@@ -2704,5 +2758,9 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ClipboardListenerEnabledText" xml:space="preserve">
     <value>Clipboard listener enabled</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Parent action '{0}' does not support input property type 'Last Output'</value>
+    <comment>Action Label</comment>
   </data>
 </root>

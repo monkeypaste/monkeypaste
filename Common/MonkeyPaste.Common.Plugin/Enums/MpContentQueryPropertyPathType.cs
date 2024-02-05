@@ -7,15 +7,15 @@
         /// <summary>
         /// The plain text representation of a clip. Images are a base64 encoded string. FileLists are each path separated by line breaks (based on environment)
         /// </summary>
-        ItemData,
+        ClipText,
         /// <summary>
-        /// Only meaningful for Text which is the actual HTML fragment of the clip. Result is the same as <see cref="ItemData"/> for Image or FileList. 
+        /// Only meaningful for Text which is the actual HTML fragment of the clip. Result is the same as <see cref="ClipText"/> for Image or FileList. 
         /// </summary>
-        ItemRawData,
+        RawClipData,
         /// <summary>
         /// The type of clip (Text,Image,FileList)
         /// </summary>
-        ItemType,
+        ClipType,
         /// <summary>
         /// The title for a clip
         /// </summary>

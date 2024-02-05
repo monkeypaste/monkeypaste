@@ -153,6 +153,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
 
@@ -186,12 +187,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpAction action && action.Id == RepeatDelayMs) {
-                Task.Run(ValidateActionAsync);
+                Task.Run(ValidateActionAndDescendantsAsync);
             }
         }
 
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }

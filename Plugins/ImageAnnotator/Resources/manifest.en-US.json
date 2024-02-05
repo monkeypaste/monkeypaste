@@ -1,6 +1,6 @@
 {
   "title": "Image Annotator",
-  "description": "A local, lightweight object detector trained on 80 different types of things.",
+  "description": "A totally free, local and lightweight object detector trained on 80 different types of objects.",
   "version": "1.0.2.0",
   "author": "Monkey",
   "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
@@ -44,7 +44,7 @@
         "paramId": "img64",
         "values": [
           {
-            "value": "{ItemData}"
+            "value": "{ClipText}"
           }
         ]
       }

@@ -221,8 +221,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }

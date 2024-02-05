@@ -120,6 +120,20 @@
   <data name="CurrencyLabel" xml:space="preserve">
     <value>Currency</value>
   </data>
+  <data name="CurrencyTypesDescription" xml:space="preserve">
+    <value>These are the only currency symbols that will be annotated.</value>
+  </data>
+  <data name="CurrencyTypesLabel" xml:space="preserve">
+    <value>Currency Symbols</value>
+  </data>
+  <data name="CurrencyUrlDescription" xml:space="preserve">
+    <value>This is the format that will be used to annotate currencies found in the text with links. 
+
+The {0} is the placeholder for the currency.</value>
+  </data>
+  <data name="CurrencyUrlLabel" xml:space="preserve">
+    <value>Currency Link</value>
+  </data>
   <data name="DefAnnHint" xml:space="preserve">
     <value>All text annotations are enabled</value>
   </data>
@@ -132,8 +146,22 @@
   <data name="HexLabel" xml:space="preserve">
     <value>Hex Color</value>
   </data>
+  <data name="OptionsDescription" xml:space="preserve">
+    <value>Enabled options will be found in the clip text and converted into hyperlinks when necessary.</value>
+  </data>
+  <data name="OptionsLabel" xml:space="preserve">
+    <value>Options</value>
+  </data>
   <data name="PhoneLabel" xml:space="preserve">
     <value>Phone Number</value>
+  </data>
+  <data name="PhoneUrlDescription" xml:space="preserve">
+    <value>This is the format that will be used to annotate phone numbers found in the text with links. 
+
+The {0} is the placeholder for the phone number.</value>
+  </data>
+  <data name="PhoneUrlLabel" xml:space="preserve">
+    <value>Phone Number Link</value>
   </data>
   <data name="PluginDescription" xml:space="preserve">
     <value>Provides basic hyperlink support for text based content</value>

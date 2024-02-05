@@ -140,12 +140,12 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut t && t.Id == ShortcutId) {
                 Dispatcher.UIThread.Post(async () => {
-                    await ValidateActionAsync();
+                    await ValidateActionAndDescendantsAsync();
                 });
             }
         }
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }
@@ -178,6 +178,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
 

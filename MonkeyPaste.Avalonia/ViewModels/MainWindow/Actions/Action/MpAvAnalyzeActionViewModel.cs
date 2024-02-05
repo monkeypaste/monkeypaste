@@ -1,8 +1,5 @@
-﻿using Avalonia.Controls.Documents;
-using Avalonia.Controls.Shapes;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -118,6 +115,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
 
@@ -168,12 +166,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpPreset aip && aip.Id == AnalyticItemPresetId) {
-                Task.Run(ValidateActionAsync);
+                Task.Run(ValidateActionAndDescendantsAsync);
             }
         }
 
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }

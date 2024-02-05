@@ -227,6 +227,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                // seems redundant returning but currently testing always calling finish...
+                await FinishActionAsync(arg);
                 return;
             }
             await FinishActionAsync(arg);
@@ -287,7 +289,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand EnableTriggerCommand => new MpAsyncCommand(
             async () => {
-                await ValidateActionAsync();
+                await ValidateActionAndDescendantsAsync();
                 //if (!IsAllValid) {
                 //    OnPropertyChanged(nameof(IsTriggerEnabled));
                 //    return;

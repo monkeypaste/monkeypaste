@@ -28,4 +28,4 @@ Global shortcut support on Linux is limited to [Passive-mode](shortcuts/index.md
 
 ## Getting Help
 
-If you encounter any issues or bugs with MonkeyPaste, please open a new issue in the at [Issues](https://monkeypaste.com/forum/index.php?board=6.0) or [Bugs](https://monkeypaste.com/forum/index.php?board=5.0) respectively. 
+If you encounter any issues or bugs with MonkeyPaste, please open a new issue in the forum at [Issues](https://monkeypaste.com/forum/index.php?board=6.0) or [Bugs](https://monkeypaste.com/forum/index.php?board=5.0) respectively. 

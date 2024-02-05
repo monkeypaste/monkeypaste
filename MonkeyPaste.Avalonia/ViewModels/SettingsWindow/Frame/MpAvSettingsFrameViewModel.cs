@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsFrameViewModel :
         MpAvViewModelBase,
         MpILabelTextViewModel,
-        MpIIconResource,
+        MpIIconResourceViewModel,
         MpISelectableViewModel,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIIconResource Implementation
+        #region MpIIconResourceViewModel Implementation
         public object IconResourceObj {
             get {
                 switch (FrameType) {

@@ -268,6 +268,7 @@ namespace MonkeyPaste.Avalonia {
         protected override async Task PerformActionAsync(object arg) {
             if (!_isPreviewing) {
                 if (!ValidateStartAction(arg)) {
+                    await FinishActionAsync(arg);
                     return;
                 }
             }

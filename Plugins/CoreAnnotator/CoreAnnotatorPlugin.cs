@@ -5,19 +5,19 @@ using System.Linq;
 
 namespace CoreAnnotator {
     public enum TextAnnotationType {
-        Url,
-        Email,
-        PhoneNumber,
         Currency,
-        HexColor
+        Email,
+        HexColor,
+        PhoneNumber,
+        Url,
     }
     public class CoreAnnotatorPlugin : MpIAnalyzeComponent, MpISupportHeadlessAnalyzerFormat {
-        const int FIRST_FORMAT_IDX = 2;
 
         const string CONTENT_PARAM_ID = "content";
+        const string OPTIONS_PARAM_ID = "options";
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
-            string content_pt = req.GetParamValue(CONTENT_PARAM_ID);
-            if (string.IsNullOrWhiteSpace(content_pt)) {
+            if (req.GetParamValue(CONTENT_PARAM_ID) is not string content_pt ||
+                string.IsNullOrWhiteSpace(content_pt)) {
                 // nothing to annotate
                 return null;
             }
@@ -26,8 +26,9 @@ namespace CoreAnnotator {
 
             // select all checked ann formats
             var formats =
-                req.items.Where(x => x.paramId != CONTENT_PARAM_ID && x.paramValue.ParseOrConvertToBool())
-                .Select(x => Enum.Parse(typeof(TextAnnotationType), x.paramId))
+                req.GetParamValue<List<string>>(OPTIONS_PARAM_ID)
+                //req.items.Where(x => x.paramId != CONTENT_PARAM_ID && x.paramValue.ParseOrConvertToBool())
+                .Select(x => Enum.Parse(typeof(TextAnnotationType), x))
                 .Cast<TextAnnotationType>();
 
             // create delta of all annotation ranges from plain text
@@ -42,7 +43,6 @@ namespace CoreAnnotator {
                 resp.dataObjectLookup.Add(
                     MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT,
                     delta.SerializeObject(omitNulls: true));
-
             }
             // return annotation delta to be applied to request clip
             return resp;
@@ -58,15 +58,17 @@ namespace CoreAnnotator {
                     textAnnotation = true
                 },
                 presets = new List<MpPresetFormat>() {
+                    // NOTE this preset is only needed so its preset.guid is always known
                     new MpPresetFormat() {
                         guid = "a9fa2fbf-025d-4ced-a23b-234085b5ac5f",
                         label = Resources.DefAnnLabel,
                         description = Resources.DefAnnHint,
                         values =
-                            typeof(TextAnnotationType)
-                            .GetEnumNames()
-                            .Select(x=>new MpPresetValueFormat(x, true.ToString()))
-                            .ToList()
+                            new[] {
+                                new MpPresetValueFormat(
+                                    OPTIONS_PARAM_ID,
+                                    typeof(TextAnnotationType).GetEnumNames().ToCsv())
+                            }.ToList()
                     }
                 },
                 parameters = new List<MpParameterFormat>() {
@@ -76,43 +78,22 @@ namespace CoreAnnotator {
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
                         paramId = CONTENT_PARAM_ID,
                         isVisible = false,
-                        value = new MpParameterValueFormat("{ItemData}",true)
+                        value = new MpParameterValueFormat("{ClipText}",true)
                     },
                     new MpParameterFormat() {
-                        label = Resources.UrlLabel,
-                        controlType = MpParameterControlType.CheckBox,
-                        unitType = MpParameterValueUnitType.Bool,
-                        paramId = TextAnnotationType.Url.ToString(),
-                        value = new MpParameterValueFormat(true.ToString(),true)
-                    },
-                    new MpParameterFormat() {
-                        label = Resources.EmailLabel,
-                        controlType = MpParameterControlType.CheckBox,
-                        unitType = MpParameterValueUnitType.Bool,
-                        paramId = TextAnnotationType.Email.ToString(),
-                        value = new MpParameterValueFormat(true.ToString(),true)
-                    },
-                    new MpParameterFormat() {
-                        label = Resources.PhoneLabel,
-                        controlType = MpParameterControlType.CheckBox,
-                        unitType = MpParameterValueUnitType.Bool,
-                        paramId = TextAnnotationType.PhoneNumber.ToString(),
-                        value = new MpParameterValueFormat(true.ToString(),true)
-                    },
-                    new MpParameterFormat() {
-                        label = Resources.CurrencyLabel,
-                        controlType = MpParameterControlType.CheckBox,
-                        unitType = MpParameterValueUnitType.Bool,
-                        paramId = TextAnnotationType.Currency.ToString(),
-                        value = new MpParameterValueFormat(true.ToString(),true)
-                    },
-                    new MpParameterFormat() {
-                        label = Resources.HexLabel,
-                        controlType = MpParameterControlType.CheckBox,
-                        unitType = MpParameterValueUnitType.Bool,
-                        paramId = TextAnnotationType.HexColor.ToString(),
-                        value = new MpParameterValueFormat(true.ToString(),true)
-                    },
+                        label = Resources.OptionsLabel,
+                        description = Resources.OptionsDescription,
+                        controlType = MpParameterControlType.MultiSelectList,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        paramId = OPTIONS_PARAM_ID,
+                        values = new (string,string)[] {
+                            (TextAnnotationType.Currency.ToString(),Resources.CurrencyLabel),
+                            (TextAnnotationType.Email.ToString(),Resources.EmailLabel),
+                            (TextAnnotationType.HexColor.ToString(),Resources.HexLabel),
+                            (TextAnnotationType.PhoneNumber.ToString(),Resources.PhoneLabel),
+                            (TextAnnotationType.Url.ToString(),Resources.UrlLabel),
+                        }.Select(x=>new MpParameterValueFormat(x.Item1,x.Item2,true)).ToList()
+                    }
                 }
             };
         }

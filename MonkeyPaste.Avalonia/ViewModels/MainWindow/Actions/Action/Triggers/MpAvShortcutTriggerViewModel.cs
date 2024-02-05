@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpShortcut s && s.Id == ShortcutId) {
                 // should only be able to occur from settings menu? maybe shouldn't allow
                 //ShortcutId = 0;
-                Task.Run(ValidateActionAsync);
+                Task.Run(ValidateActionAndDescendantsAsync);
             }
         }
 
@@ -161,6 +161,7 @@ namespace MonkeyPaste.Avalonia {
         //}
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
             MpAvActionOutput input = GetInput(arg) ?? new MpAvTriggerInput();

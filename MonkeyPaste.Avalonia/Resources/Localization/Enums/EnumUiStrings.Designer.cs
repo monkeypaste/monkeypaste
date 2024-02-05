@@ -592,6 +592,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clip Text.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_ClipText {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_ClipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clip Type.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_ClipType {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_ClipType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Count.
         /// </summary>
         public static string MpContentQueryPropertyPathType_CopyCount {
@@ -606,33 +624,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpContentQueryPropertyPathType_CopyDateTime {
             get {
                 return ResourceManager.GetString("MpContentQueryPropertyPathType_CopyDateTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Data.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_ItemData {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_ItemData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Raw Data.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_ItemRawData {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_ItemRawData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Type.
-        /// </summary>
-        public static string MpContentQueryPropertyPathType_ItemType {
-            get {
-                return ResourceManager.GetString("MpContentQueryPropertyPathType_ItemType", resourceCulture);
             }
         }
         
@@ -660,6 +651,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpContentQueryPropertyPathType_PasteCount {
             get {
                 return ResourceManager.GetString("MpContentQueryPropertyPathType_PasteCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raw Clip Data.
+        /// </summary>
+        public static string MpContentQueryPropertyPathType_RawClipData {
+            get {
+                return ResourceManager.GetString("MpContentQueryPropertyPathType_RawClipData", resourceCulture);
             }
         }
         

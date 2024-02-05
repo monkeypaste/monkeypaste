@@ -1,15 +1,7 @@
-﻿using Avalonia.Input;
-using Avalonia.Threading;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+﻿using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -114,6 +106,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task PerformActionAsync(object arg) {
             if (!ValidateStartAction(arg)) {
+                await FinishActionAsync(arg);
                 return;
             }
 

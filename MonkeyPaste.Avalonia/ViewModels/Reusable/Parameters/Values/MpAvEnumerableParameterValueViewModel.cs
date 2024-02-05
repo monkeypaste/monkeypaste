@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -31,7 +29,10 @@ namespace MonkeyPaste.Avalonia {
                 Parent.UnitType == MpParameterValueUnitType.RawDataContentQuery ||
                 Parent.UnitType == MpParameterValueUnitType.DelimitedPlainTextContentQuery;
 
-        public bool IsActionParameter { get; set; } = false;
+        public bool IsActionParameter =>
+            Parent != null && Parent.IsActionParameter;
+        public bool IsActionParameterAllowLastOutput =>
+            Parent != null && Parent.IsActionParameterAllowLastOutput;
 
         public string ContentQuery {
             get => Value;
@@ -81,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvMenuItemViewModel PopupMenuViewModel =>
             MpAvContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                 AddContentPropertyPathCommand,
-                IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
+                IsActionParameterAllowLastOutput ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
 
 
         public bool IsPopupMenuOpen { get; set; }

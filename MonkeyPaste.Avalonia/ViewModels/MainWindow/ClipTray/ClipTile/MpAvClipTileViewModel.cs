@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         MpIDraggable,
         MpIAnimatable,
         MpILocatorItem,
-        MpIIconResource,
+        MpIIconResourceViewModel,
         MpIAsyncCollectionObject,
         MpIHighlightTextRangesInfoViewModel,
         MpIWindowHandlesClosingViewModel,

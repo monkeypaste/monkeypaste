@@ -108,7 +108,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
+        public string FullLabel {
+            get {
+                if (Parent is MpILabelTextViewModel ltvm) {
+                    return $"{ltvm.LabelText}[{Label}]";
+                }
+                return Label;
+            }
+        }
         #endregion
 
         #region State
@@ -134,6 +141,15 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsActionParameter =>
             Parent is MpAvActionViewModelBase;
+        public bool IsActionParameterAllowLastOutput {
+            get {
+                if (Parent is not MpAvActionViewModelBase avmb ||
+                    !avmb.IsParentActionSupportLastOutput) {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         public object CurrentTypedValue {
             get {
@@ -615,6 +631,9 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected virtual void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(Label):
+                    OnPropertyChanged(nameof(FullLabel));
+                    break;
                 case nameof(HasModelChanged):
                 case nameof(CurrentValue):
                     MpISaveOrCancelableViewModel socvm = null;

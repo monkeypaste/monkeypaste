@@ -7,11 +7,12 @@ There's a few settings designed to help make the *Free-to-use* mode a bit more u
 By pausing the clipboard listener (by clicking *System Tray->Pause* or <kbd>Control</kbd><kbd>Shift</kbd><kbd>F1</kbd>) a 🎯 icon will appear in the top-right of the *Pin Tray* **when there is something** ***new*** on the clipboard. 
 <p><img class="figure narrow" src={require('/img/free_acct_sug_bullseye_btn.png').default} /></p>
 
+Now the ***only*** time MonkeyPaste will read the clipboard is when you click the 🎯 button or the <kbd>Control</kbd><kbd>Shift</kbd><kbd>F9</kbd> global shortcut.
+
 :::tip Set it in stone
 If you like keeping the *Clipboard Listener* paused, you can uncheck *Settings->Preferences->Listen To Clipboard On Startup* to avoid having to pause it everytime you use MonkeyPaste.
 :::
 
-Now the ***only*** time MonkeyPaste will read the clipboard is when you click the 🎯 button or the <kbd>Control</kbd><kbd>Shift</kbd><kbd>F9</kbd> global shortcut.
 
 ## Capacity Hints & Watermarks
 

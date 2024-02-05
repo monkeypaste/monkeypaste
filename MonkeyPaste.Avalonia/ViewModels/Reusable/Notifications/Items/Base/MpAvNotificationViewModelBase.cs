@@ -196,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.NotificationOptionHideLabel,
-                            IconResourceKey = "ErrorImage",
+                            IconResourceKey = "DeleteImage",
                             Command = CloseNotificationCommand,
                             CommandParameter = "User"
                         },
@@ -565,7 +565,7 @@ namespace MonkeyPaste.Avalonia {
                     dc: PopupMenuViewModel,
                     showByPointer: false,
                     placementMode: PlacementMode.Left,
-                    popupAnchor: PopupAnchor.None);
+                    popupAnchor: PopupAnchor.Top);
             });
         public ICommand ResetAllNotificationsCommand => new MpCommand(
              () => {

@@ -158,7 +158,7 @@ namespace ComputerVision {
                         label = "Source Content",
                         controlType = MpParameterControlType.TextBox,
                         unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                        value = new MpParameterValueFormat("{ItemData}",true),
+                        value = new MpParameterValueFormat("{ClipText}",true),
                         paramId = PARAM_ID_CONTENT,
                     },
                 }

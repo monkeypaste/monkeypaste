@@ -36,7 +36,7 @@
         "values": [
           {
             "paramId": 1,
-            "value": "https://www.google.com/search?q={ItemData}"
+            "value": "https://www.google.com/search?q={ClipText}"
           }
         ]
       },
@@ -47,7 +47,7 @@
         "values": [
           {
             "paramId": 1,
-            "value": "https://www.bing.com/search?q={ItemData}"
+            "value": "https://www.bing.com/search?q={ClipText}"
           }
         ]
       },
@@ -58,7 +58,7 @@
         "values": [
           {
             "paramId": 1,
-            "value": "https://duckduckgo.com/?q={ItemData}"
+            "value": "https://duckduckgo.com/?q={ClipText}"
           }
         ]
       },
@@ -69,7 +69,7 @@
         "values": [
           {
             "paramId": 1,
-            "value": "https://yandex.com/search/?text={ItemData}"
+            "value": "https://yandex.com/search/?text={ClipText}"
           }
         ]
       }

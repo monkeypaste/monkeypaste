@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
                         _selector = new MpAvMenuItemHostViewModel(
                             MpAvContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                                 SelectComponentCommand,
-                                IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput }),
+                                IsActionParameterAllowLastOutput ? null : new[] { MpContentQueryPropertyPathType.LastOutput }),
                             (MpContentQueryPropertyPathType)ComponentId);
                     }
                     return _selector;

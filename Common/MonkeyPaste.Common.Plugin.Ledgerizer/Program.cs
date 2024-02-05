@@ -25,9 +25,11 @@ namespace Ledgerizer {
 
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             MpLedgerizerFlags.DO_LOCAL_INDEX
-            //| MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            | MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
+            | MpLedgerizerFlags.LOCALIZE_MANIFESTS
             ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
@@ -116,6 +118,9 @@ namespace Ledgerizer {
             Console.ReadLine();
         }
         static void ProcessAll() {
+            if (LOCALIZE_MANIFESTS) {
+                LocalizeManifests();
+            }
             if (DO_LOCAL_PACKAGING) {
                 PublishLocal();
             }
@@ -136,9 +141,6 @@ namespace Ledgerizer {
             }
             if (MOVE_CORE_TO_DAT) {
                 MoveCoreToDat();
-            }
-            if (LOCALIZE_MANIFESTS) {
-                LocalizeManifests();
             }
         }
 
@@ -172,9 +174,11 @@ namespace Ledgerizer {
 
         #region Localizing
         static void LocalizeManifests() {
+            MpConsole.WriteLine("Localize Manifest...STARTED", true);
             foreach (string plugin_name in PluginNames) {
                 LocalizeManifest(plugin_name);
             }
+            MpConsole.WriteLine("Localize Manifest...DONE", false, true);
         }
         static void LocalizeManifest(string plugin_name) {
             // when plugin has Resources/Resources.resx, presume manifest is templated
@@ -197,6 +201,7 @@ namespace Ledgerizer {
             foreach (string lang_code in lang_codes.Where(x => !x.IsInvariant()).Select(x => x.Name)) {
                 Localizer.Program.LocalizeManifest(invariant_resource_path, inv_mf_path, lang_code, plugin_res_dir);
             }
+            MpConsole.WriteLine("");
         }
 
         #endregion

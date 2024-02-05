@@ -33,8 +33,8 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
-        MpIIconResource,
-        MpILabelText,
+        MpIIconResourceViewModel,
+        MpILabelTextViewModel,
         MpIBoxViewModel,
         MpIMovableViewModel,
         MpIInvokableAction,
@@ -54,15 +54,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region Statics
 
-        public static string GetDefaultActionIconResourceKey(object actionOrTriggerType) {
-            if (actionOrTriggerType is MpAvActionViewModelBase avmb) {
+        public static string GetDefaultActionIconResourceKey(object actionOrTriggerVmOrTriggerType) {
+            if (actionOrTriggerVmOrTriggerType is MpAvActionViewModelBase avmb) {
                 if (avmb is MpAvTriggerActionViewModelBase tvmb) {
-                    actionOrTriggerType = tvmb.TriggerType;
+                    actionOrTriggerVmOrTriggerType = tvmb.TriggerType;
                 } else {
-                    actionOrTriggerType = avmb.ActionType;
+                    actionOrTriggerVmOrTriggerType = avmb.ActionType;
                 }
             }
-            if (actionOrTriggerType is MpTriggerType tt) {
+            if (actionOrTriggerVmOrTriggerType is MpTriggerType tt) {
                 switch (tt) {
                     case MpTriggerType.ClipAdded:
                         return "ClipboardImage";
@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                         return "MonkeyWinkImage";
                 }
             }
-            if (actionOrTriggerType is MpActionType at) {
+            if (actionOrTriggerVmOrTriggerType is MpActionType at) {
                 switch (at) {
                     case MpActionType.Analyze:
                         return "BrainImage";
@@ -104,13 +104,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static string GetActionHexColor(MpActionType actionType, MpTriggerType tt = MpTriggerType.None) {
+            double bright_factor = 0.3;
             switch (actionType) {
                 case MpActionType.None:
                     return MpSystemColors.Transparent;
                 case MpActionType.Trigger:
                     switch (tt) {
                         case MpTriggerType.Shortcut:
-                            return MpSystemColors.cyan1;
+                            return MpSystemColors.cyan2;
                         case MpTriggerType.ClipAdded:
                             return MpSystemColors.purple2;
                         case MpTriggerType.ClipTagged:
@@ -127,23 +128,24 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Classify:
                     return MpSystemColors.tomato1;
                 case MpActionType.SetClipboard:
-                    return MpSystemColors.olivedrab;
+                    return MpColorHelpers.GetLighterHexColor(MpSystemColors.olivedrab, bright_factor);
                 case MpActionType.Conditional:
                     return MpSystemColors.darkturquoise;
                 case MpActionType.Repeater:
-                    return MpSystemColors.steelblue;
+                    return MpColorHelpers.GetLighterHexColor(MpSystemColors.steelblue, bright_factor);
                 case MpActionType.FileWriter:
                     return MpSystemColors.forestgreen;
                 case MpActionType.Delay:
-                    return MpSystemColors.gray53;
+                    return MpSystemColors.orange2;
                 case MpActionType.Alert:
                     return MpSystemColors.royalblue2;
                 case MpActionType.ApplicationCommand:
-                    return MpSystemColors.deeppink4;
+                    return MpColorHelpers.GetLighterHexColor(MpSystemColors.deeppink4, bright_factor);
                 default:
                     throw new Exception($"Unknow action type: '{actionType}'");
             }
         }
+
         #endregion
 
         #region Interfaces
@@ -179,12 +181,12 @@ namespace MonkeyPaste.Avalonia {
 
         bool MpIActionPluginComponent.CanPerformAction(object arg) => ValidateStartAction(arg, false);
 
-        Task MpIActionPluginComponent.ValidateActionAsync() => ValidateActionAsync();
+        Task MpIActionPluginComponent.ValidateActionAsync() => ValidateActionAndDescendantsAsync();
 
         string MpIActionPluginComponent.ValidationText => ValidationText;
         #endregion
 
-        #region MpILabelText Implementation
+        #region MpIPopupMenuViewModel Implementation
 
         public MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedActionIds, bool recursive) {
             return new MpAvMenuItemViewModel() {
@@ -363,8 +365,9 @@ namespace MonkeyPaste.Avalonia {
                         .Select(x =>
                             new MpAvMenuItemViewModel() {
                                 Header = x.EnumToUiString(),
-                                IconResourceKey = GetDefaultActionIconResourceKey(x),
-                                IconTintHexStr = GetActionHexColor(x),
+                                //IconResourceKey = GetDefaultActionIconResourceKey(x),
+                                //IconTintHexStr = GetActionHexColor(x),
+                                IconSourceObj = new object[] { GetActionHexColor(x), GetDefaultActionIconResourceKey(x) },
                                 Command = AddChildActionCommand,
                                 CommandParameter = x
                             }).ToList()
@@ -382,7 +385,8 @@ namespace MonkeyPaste.Avalonia {
                                 .Select(x =>
                                     new MpAvMenuItemViewModel() {
                                         Header = x.Label,
-                                        IconSourceObj = x.IconResourceObj,
+                                        IconResourceKey = GetDefaultActionIconResourceKey(x),
+                                        IconTintHexStr = GetActionHexColor(x.ActionType, x.ActionType == MpActionType.Trigger ? (x as MpAvTriggerActionViewModelBase).TriggerType : MpTriggerType.None),
                                         Command = ChangeParentCommand,
                                         CommandParameter = x.ActionId
                                     });
@@ -552,7 +556,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public bool IsParentActionSupportLastOutput =>
+            ParentActionViewModel is MpAvAnalyzeActionViewModel;
         bool CanPaste { get; set; }
         public bool IsValidating { get; set; }
         public virtual bool AllowNullArg =>
@@ -1170,7 +1175,7 @@ namespace MonkeyPaste.Avalonia {
             throw new Exception("Unknown action input: " + arg.ToString());
         }
 
-        protected virtual async Task ValidateActionAsync() {
+        protected virtual async Task ValidateActionAndDescendantsAsync() {
             if (IsValidating || _isShowingValidationMsg) {
                 return;
             }
@@ -1192,7 +1197,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             //validate children
-            await Task.WhenAll(Children.Select(x => x.ValidateActionAsync()));
+            await Task.WhenAll(Children.Select(x => x.ValidateActionAndDescendantsAsync()));
             // let inheritors perform validation...
             while (Children.Any(x => x.IsValidating)) {
                 await Task.Delay(100);
@@ -1250,6 +1255,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(Label):
+                    ActionArgs.ForEach(x => x.OnPropertyChanged(nameof(x.FullLabel)));
+                    break;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         Parent.SelectActionCommand.Execute(this);
@@ -1272,7 +1280,7 @@ namespace MonkeyPaste.Avalonia {
                             // NOTE only when args change and trigger is active or invalid already, 
                             // invoke validation to avoid unnecessary warnings during create or while
                             // its disabled
-                            ValidateActionAsync().FireAndForgetSafeAsync(this);
+                            ValidateActionAndDescendantsAsync().FireAndForgetSafeAsync(this);
                         }
                     }
                     break;
@@ -1340,7 +1348,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ActionParam_OnValidate(object sender, EventArgs e) {
             Dispatcher.UIThread.Post(() => {
-                ValidateActionAsync().FireAndForgetSafeAsync(this);
+                ValidateActionAndDescendantsAsync().FireAndForgetSafeAsync(this);
             });
         }
 
@@ -1651,6 +1659,8 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
+
+                await ValidateActionAndDescendantsAsync();
             }, (args) => {
                 if (args == null ||
                     this is MpAvTriggerActionViewModelBase) {

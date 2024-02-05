@@ -858,6 +858,9 @@
     <AvaloniaResource Include="Assets\Images\infobw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\joystick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\keyboardcolor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1129,9 +1132,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\jigsaw.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\joystick2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\keyboard.png">

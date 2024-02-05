@@ -96,11 +96,11 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == TagId) {
-                Task.Run(ValidateActionAsync);
+                Task.Run(ValidateActionAndDescendantsAsync);
             }
         }
-        protected override async Task ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAndDescendantsAsync() {
+            await base.ValidateActionAndDescendantsAsync();
             if (!IsValid) {
                 return;
             }
