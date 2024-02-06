@@ -1,0 +1,6 @@
+Field,ID,Type (Type),default,en-US,ja-JP,zh-CN
+Description,2,Text,,"With this subscription you will receive:
+- unlimited capacity
+- device syncing (upon availability)",このサブスクリプションでは、次のものが得られます:,通过此订阅，您将收到：
+Title,4,Text,,Unlimited - Monthly,無制限 - 毎月,无限制 - 每月
+StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,listing_Unlimited_Monthly_1.0.7.0/UnlimitedLogo.png,listing_Unlimited_Monthly_1.0.7.0/UnlimitedLogo.png,listing_Unlimited_Monthly_1.0.7.0/UnlimitedLogo.png

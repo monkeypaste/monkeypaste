@@ -473,7 +473,7 @@ namespace MonkeyPaste {
             bool isNewDb = !File.Exists(dbPath);
 
             if (isNewDb && allowCreate) {
-                using (File.Create(dbPath)) { }
+                MpFileIo.TouchFile(dbPath);
                 dbInfo.DbCreateDateTime = new FileInfo(dbPath).CreationTimeUtc;
             }
 

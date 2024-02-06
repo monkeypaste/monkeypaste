@@ -1,8 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System.Collections;
 using System.Globalization;
-using System.Resources.NetStandard;
 using System.Text.RegularExpressions;
 
 namespace Localizer {
@@ -72,14 +70,14 @@ namespace Localizer {
                 string.Join(".", localized_name_parts));
 
             string resx_path = localized_resource_path.IsFile() ? localized_resource_path : invariant_resource_path;
-            using ResXResourceReader resx_reader = new ResXResourceReader(resx_path);
+            var resx_lookup = MpResxTools.ReadResxFromPath(resx_path);
             var mc = Regex.Matches(templated_manifest_json, "%.*%");
             string localized_json = templated_manifest_json;
             foreach (Match m in mc) {
                 foreach (Group mg in m.Groups) {
                     foreach (Capture c in mg.Captures) {
                         string key = c.Value.Replace(RESOURCE_KEY_OPEN_TOKEN, string.Empty).Replace(RESOURCE_KEY_CLOSE_TOKEN, string.Empty);
-                        string localized_value = GetResourceValue(resx_reader, key) as string;
+                        string localized_value = resx_lookup[key].value;
                         localized_json = localized_json.Replace(c.Value, localized_value);
                     }
                 }
@@ -100,15 +98,6 @@ namespace Localizer {
                 localized_json);
             Console.WriteLine(output_path);
             return output_path;
-        }
-
-        private static object GetResourceValue(ResXResourceReader reader, object key) {
-            foreach (DictionaryEntry d in reader) {
-                if (d.Key.Equals(key)) {
-                    return d.Value;
-                }
-            }
-            return null;
         }
 
     }

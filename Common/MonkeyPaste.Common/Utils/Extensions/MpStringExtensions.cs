@@ -112,6 +112,15 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+        public static int[] IndexOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {
+            List<int> allIndexOf = new List<int>();
+            int index = text.IndexOf(str, comparisonType);
+            while (index != -1) {
+                allIndexOf.Add(index);
+                index = text.IndexOf(str, index + 1, comparisonType);
+            }
+            return allIndexOf.ToArray();
+        }
 
         public static Version ToVersion(this string ver_str) {
             if (string.IsNullOrEmpty(ver_str)) {
@@ -782,16 +791,6 @@ namespace MonkeyPaste.Common {
             return path;
         }
 
-
-        public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {
-            List<int> allIndexOf = new List<int>();
-            int index = text.IndexOf(str, comparisonType);
-            while (index != -1) {
-                allIndexOf.Add(index);
-                index = text.IndexOf(str, index + 1, comparisonType);
-            }
-            return allIndexOf;
-        }
 
         public static string ToMultiLineString(this StringCollection sc) {
             var sb = new StringBuilder();

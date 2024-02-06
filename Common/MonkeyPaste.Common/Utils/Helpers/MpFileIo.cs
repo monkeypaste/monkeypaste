@@ -16,6 +16,34 @@ namespace MonkeyPaste.Common {
 
         public static ReaderWriterLock locker = new ReaderWriterLock();
 
+        public static string TouchFile(this string path) {
+            if (path.IsFileOrDirectory()) {
+                return path;
+            }
+            try {
+                using (File.Create(path)) {
+                    return path;
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error touching file '{path}'.", ex);
+            }
+            return null;
+
+        }
+        public static string TouchDir(this string path) {
+            if (path.IsFileOrDirectory()) {
+                return path;
+            }
+            try {
+                Directory.CreateDirectory(path);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error touching dir '{path}'.", ex);
+            }
+            return null;
+        }
+
         public static string ToFileSystemPath(this Uri uri) {
             if (uri == null ||
                 uri.Scheme != Uri.UriSchemeFile) {
@@ -645,11 +673,14 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static string WriteTextToFile(string filePath, string text) {
+        public static string WriteTextToFile(string filePath, string text, bool overwrite = false) {
             try {
                 if (filePath.ToLower().EndsWith(@".tmp")) {
                     string extension = MpCommonTools.Services.StringTools.DetectStringFileExt(text);
                     filePath = filePath.ToLower().Replace(@".tmp", extension);
+                }
+                if (overwrite && filePath.IsFile()) {
+                    DeleteFile(filePath);
                 }
                 locker.AcquireWriterLock(Timeout.Infinite);
                 File.WriteAllText(filePath, text);

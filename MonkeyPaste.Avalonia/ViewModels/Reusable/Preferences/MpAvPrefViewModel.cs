@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
         public static string arg1 {
             get {
                 if (!PreferencesPath.IsFile()) {
-                    using (File.Create(PreferencesPath)) { }
+                    MpFileIo.TouchFile(PreferencesPath);
                 }
                 return new FileInfo(PreferencesPath).CreationTimeUtc.ToTickChecksum();
             }
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         public static string arg3 {
             get {
                 if (!PreferencesPathBackup.IsFile()) {
-                    using (File.Create(PreferencesPathBackup)) { }
+                    MpFileIo.TouchFile(PreferencesPathBackup);
                 }
                 return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToTickChecksum();
             }

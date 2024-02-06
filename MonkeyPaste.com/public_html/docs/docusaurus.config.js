@@ -6,7 +6,7 @@ const { themes } = require('prism-react-renderer');
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
-const local = true;//process.env.NODE_ENV == 'local';
+const local = false;
 
 const siteUrl = local ?
   "https://localhost" :
@@ -84,8 +84,8 @@ const config = {
       announcementBar: {
         id: 'under_constuction',
         content:
-          'MonkeyPaste is under <b>heavy</b> construction! Check back often for more updates!!!',
-        backgroundColor: '#ffff00',
+          'MonkeyPaste is <b>brand new</b>! Check back often for more updates!!!',
+        backgroundColor: 'gold',
         textColor: '#000000',
         isCloseable: true,
       },
@@ -94,7 +94,7 @@ const config = {
         maxHeadingLevel: 5,
       },
       zoom: {
-        selector: '.markdown img, .examples img',
+        selector: '.markdown img, img.zoom',
         background: {
           light: 'rgb(255, 255, 255)',
           dark: 'rgb(50, 50, 50)'

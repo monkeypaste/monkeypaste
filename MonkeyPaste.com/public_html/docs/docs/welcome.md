@@ -22,7 +22,7 @@ As a nod to Linux and free-for-use software in general, MonkeyPaste will default
 :::
 
 :::info 
-Global shortcut support on Linux is limited to [Passive-mode](shortcuts/index.md#route-types). More info on shortcuts [here](../docs/shortcuts/index.md)
+Global shortcut support on Linux is limited to [Passive-mode](shortcuts/index.md#global-routing-types). More info on shortcuts [here](../docs/shortcuts/index.md)
 :::
 
 

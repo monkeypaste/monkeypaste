@@ -37,7 +37,7 @@ export default function Home() {
       <main>
         <HomepageFeatures />
         <p align="center">
-          <img src={require('/img/ss/logo_and_slogan.png').default} width="500" />
+          <img src={require('/img/ss/logo_and_slogan.png').default} width="256" />
         </p>
         <HomepageCarousel />
       </main>

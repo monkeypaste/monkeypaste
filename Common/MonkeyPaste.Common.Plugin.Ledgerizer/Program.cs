@@ -2,7 +2,9 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO.Compression;
+using System.Text;
 
 namespace Ledgerizer {
     [Flags]
@@ -17,19 +19,38 @@ namespace Ledgerizer {
         DO_REMOTE_INDEX = 1L << 7,
         MOVE_CORE_TO_DAT = 1L << 8,
         LOCALIZE_MANIFESTS = 1L << 9,
+        GEN_ADDON_LISTING = 1L << 10,
+        GEN_PROD_LISTING = 1L << 11,
     }
     internal class Program {
-        static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
+        //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
+        static string MS_STORE_CULTURES_CSV = "ar-SA,ar-AE,ar-BH,ar-DZ,ar-EG,ar-IQ,ar-JO,ar-KW,ar-LB,ar-LY,ar-MA,ar-OM,ar-QA,ar-SY,ar-TN,ar-YE,af-ZA,sq-AL,am-ET,hy-AM,as-IN,az-Arab,az-Arab-AZ,az-Cyrl,az-Cyrl-AZ,az-Latn,az-Latn-AZ,eu-ES,be-BY,bn-BD,bn-IN,bs-Cyrl,bs-Cyrl-BA,bs-Latn,bs-Latn-BA,bg-BG,ca-ES,ca-ES-VALENCIA,chr-Cher,chr-Cher-US,chr-Latn,zh-Hans,zh-CN,zh-Hans-CN,zh-SG,zh-Hans-SG,zh-Hant,zh-HK,zh-MO,zh-TW,zh-Hant-HK,zh-Hant-MO,zh-Hant-TW,hr-HR,hr-BA,cs-CZ,da-DK,prs-AF,prs-Arab,nl-NL,nl-BE,en-AU,en-CA,en-GB,en-IE,en-IN,en-NZ,en-SG,en-US,en-ZA,en-BZ,en-HK,en-ID,en-JM,en-KZ,en-MT,en-MY,en-PH,en-PK,en-TT,en-VN,en-ZW,en-053,en-021,en-029,en-011,en-018,en-014,et-EE,fil-Latn,fil-PH,fi-FI,fr-LU,fr-015,fr-CD,fr-CI,fr-CM,fr-HT,fr-MA,fr-MC,fr-ML,fr-RE,frc-Latn,frp-Latn,fr-155,fr-029,fr-021,fr-011,gl-ES,ka-GE,de-AT,de-CH,de-DE,de-LU,de-LI,el-GR,gu-IN,ha-Latn,ha-Latn-NG,he-IL,hi-IN,hu-HU,is-IS,ig-Latn,ig-NG,id-ID,iu-Cans,iu-Latn,iu-Latn-CA,ga-IE,xh-ZA,zu-ZA,it-IT,it-CH,ja-JP,kn-IN,kk-KZ,km-KH,quc-Latn,qut-GT,qut-Latn,rw-RW,sw-KE,kok-IN,ko-KR,ku-Arab,ku-Arab-IQ,ky-KG,ky-Cyrl,lo-LA,lv-LV,lt-LT,lb-LU,mk-MK,ms-BN,ms-MY,ml-IN,mt-MT,mi-Latn,mi-NZ,mr-IN,mn-Cyrl,mn-Mong,mn-MN,mn-Phag,ne-NP,nb-NO,nn-NO,no-NO,or-IN,fa-IR,pl-PL,pt-BR,pt-PT,pa-Arab,pa-Arab-PK,pa-Deva,pa-IN,quz-BO,quz-EC,quz-PE,ro-RO,ru-RU,gd-GB,gd-Latn,sr-Latn,sr-Latn-CS,sr-Latn-BA,sr-Latn-ME,sr-Latn-RS,sr-Cyrl,sr-Cyrl-BA,sr-Cyrl-CS,sr-Cyrl-ME,sr-Cyrl-RS,nso-ZA,tn-BW,tn-ZA,sd-Arab,sd-Arab-PK,sd-Deva,si-LK,sk-SK,sl-SI,es-CL,es-CO,es-ES,es-MX,es-AR,es-BO,es-CR,es-DO,es-EC,es-GT,es-HN,es-NI,es-PA,es-PE,es-PR,es-PY,es-SV,es-US,es-UY,es-VE,es-019,es-419,sv-SE,sv-FI,tg-Arab,tg-Cyrl,tg-Cyrl-TJ,tg-Latn,ta-IN,tt-Arab,tt-Cyrl,tt-Latn,tt-RU,te-IN,th-TH,ti-ET,tr-TR,tk-Cyrl,tk-Latn,tk-TM,tk-Latn-TR,tk-Cyrl-TR,uk-UA,ur-PK,ug-Arab,ug-CN,ug-Cyrl,ug-Latn,uz-Cyrl,uz-Latn,uz-Latn-UZ,vi-VN,cy-GB,wo-SN,yo-Latn,yo-NG";
+        static List<string> MsStoreCultures =>
+            MS_STORE_CULTURES_CSV.ToListFromCsv();
+
+        static IEnumerable<string> WorkingCultures {
+            get {
+                var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
+                .Where(c => c.GetAncestors().Any())
+                .OrderBy(c => c.DisplayName)
+                .ToArray();
+
+                var common_cultures = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name)).ToArray();
+                return common_cultures.Select(x => x.Name).OrderBy(x => x);
+            }
+        }
+
         const string VERSION_PHRASE = "Im the big T pot check me out";
         static string VERSION => "1.0.7.0";
 
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-            MpLedgerizerFlags.DO_LOCAL_INDEX
-            | MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            MpLedgerizerFlags.GEN_ADDON_LISTING
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_LOCAL_INDEX
+            //| MpLedgerizerFlags.MOVE_CORE_TO_DAT
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-            | MpLedgerizerFlags.LOCALIZE_MANIFESTS
+            //| MpLedgerizerFlags.LOCALIZE_MANIFESTS
             ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
@@ -46,6 +67,9 @@ namespace Ledgerizer {
         static bool MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_CORE_TO_DAT);
 
         static bool LOCALIZE_MANIFESTS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCALIZE_MANIFESTS);
+
+        static bool GEN_ADDON_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_ADDON_LISTING);
+        static bool GEN_PROD_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_PROD_LISTING);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -90,17 +114,6 @@ namespace Ledgerizer {
             "MinimalExample"
         ];
 
-        //ledger-local.json
-        static string LocalLedgerPath =>
-            Path.Combine(
-                MpLedgerConstants.LEDGER_PROJ_DIR,
-                MpLedgerConstants.LOCAL_LEDGER_NAME);
-
-        //ledger.json
-        static string RemoteLedgerPath =>
-            Path.Combine(
-                MpLedgerConstants.LEDGER_PROJ_DIR,
-                MpLedgerConstants.REMOTE_LEDGER_NAME);
 
         static string ManifestPrefix = "manifest";
         static string ManifestExt = "json";
@@ -118,6 +131,9 @@ namespace Ledgerizer {
             Console.ReadLine();
         }
         static void ProcessAll() {
+            if (GEN_ADDON_LISTING) {
+                GenAddOnListings();
+            }
             if (LOCALIZE_MANIFESTS) {
                 LocalizeManifests();
             }
@@ -143,6 +159,146 @@ namespace Ledgerizer {
                 MoveCoreToDat();
             }
         }
+
+        #region Listing
+        static void GenProdListing() {
+            // (short) translation prefix fields:
+            // TeaserCaption
+            // ss1*
+
+            // (long) translation prefix fields:
+            // StoreDescription
+
+            MpConsole.WriteLine($"Generating Product Listings...STARTED", true);
+
+            string listing_dir_name = $"listing_product_{VERSION}";
+
+            var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
+            var line1 = "Field,ID,Type (Type),default".Split(",").ToList();
+            line1.AddRange(ccl.Select(x => x));
+
+            var line2 = "Description,2,Text,".Split(",").ToList();
+            string line2_key = $"StoreDescription";
+
+            var line3 = "Title,4,Text,".Split(",").ToList();
+            string line3_key = $"{plan_name}{cycle_type}Title";
+
+            var line4 = "StoreLogo300x300,602,Relative path (or URL to file in Partner Center),".Split(",").ToList();
+            string logo_file_name = $"{plan_name}Logo.png";
+            string line4_val = $"{listing_dir_name}/{logo_file_name}";
+
+            MpConsole.WriteLine($"Generating Product Listings...DONE", false, true);
+        }
+        static void GenAddOnListings() {
+            MpConsole.WriteLine($"Generating AddOn Listings...STARTED", true);
+            GenAddOnListing("Basic", "Monthly");
+            GenAddOnListing("Basic", "Yearly");
+            GenAddOnListing("Unlimited", "Monthly");
+            GenAddOnListing("Unlimited", "Yearly");
+            MpConsole.WriteLine($"Generating AddOn Listings...DONE", false, true);
+        }
+        static void GenAddOnListing(string plan_name, string cycle_type) {
+            // outputs path to listing file
+
+            //GenEmptyLocalizedListings();
+            string listing_dir_name = $"listing_{plan_name}_{cycle_type}_{VERSION}";
+
+            var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
+            var line1 = "Field,ID,Type (Type),default".Split(",").ToList();
+            line1.AddRange(ccl.Select(x => x));
+
+            var line2 = "Description,2,Text,".Split(",").ToList();
+            string line2_key = $"{plan_name}Description";
+
+            var line3 = "Title,4,Text,".Split(",").ToList();
+            string line3_key = $"{plan_name}{cycle_type}Title";
+
+            var line4 = "StoreLogo300x300,602,Relative path (or URL to file in Partner Center),".Split(",").ToList();
+            string logo_file_name = $"{plan_name}Logo.png";
+            string line4_val = $"{listing_dir_name}/{logo_file_name}";
+
+
+            foreach (string cc in ccl) {
+                string local_listing_path =
+                    Path.Combine(
+                        GetListingDir(),
+                        $"ListingStrings.{cc}.resx");
+                MpDebug.Assert(local_listing_path.IsFile(), $"Error listing for '{cc}' not found: '{local_listing_path}'");
+                var listing_lookup = MpResxTools.ReadResxFromPath(local_listing_path);
+
+                line2.Add(listing_lookup[line2_key].value.ToCsvCell());
+                line3.Add(listing_lookup[line3_key].value.ToCsvCell());
+                line4.Add(line4_val.ToCsvCell());
+            }
+            MpDebug.Assert(line1.Count == line2.Count, "Line 2 mismatch");
+            MpDebug.Assert(line1.Count == line3.Count, "Line 3 mismatch");
+            MpDebug.Assert(line1.Count == line4.Count, "Line 4 mismatch");
+
+
+            string output_dir =
+                Path.Combine(
+                    GetListingDir(),
+                    "imports",
+                    listing_dir_name);
+            MpFileIo.DeleteDirectory(output_dir);
+            MpFileIo.CreateDirectory(output_dir);
+
+            string logo_src_path = Path.Combine(
+                    GetListingDir(),
+                    "img",
+                    logo_file_name);
+            string logo_dst_path = Path.Combine(
+                output_dir,
+                logo_file_name);
+            MpFileIo.CopyFileOrDirectory(logo_src_path, logo_dst_path);
+
+            var sb = new StringBuilder();
+            sb.AppendLine(string.Join(",", line1));
+            sb.AppendLine(string.Join(",", line2));
+            sb.AppendLine(string.Join(",", line3));
+            sb.AppendLine(string.Join(",", line4));
+            string output_path =
+                Path.Combine(
+                    output_dir,
+                    $"{listing_dir_name}.csv");
+            MpFileIo.WriteTextToFile(output_path, sb.ToString(), overwrite: true);
+            MpConsole.WriteLine(output_path);
+        }
+        static void GenEmptyLocalizedListings() {
+            string listing_baseline_path =
+                Path.Combine(
+                    GetListingDir(),
+                    "ListingStrings.resx");
+            var listing_lookup = MpResxTools.ReadResxFromPath(listing_baseline_path);
+            var empty_listing_lookup = listing_lookup.ToDictionary(x => x.Key, x => (string.Empty, x.Value.comment));
+
+            foreach (var cc in WorkingCultures) {
+                string listing_fn = $"ListingStrings.{cc}.resx";
+                string listing_path = Path.Combine(
+                    GetListingDir(),
+                    listing_fn);
+                if (listing_path.IsFile()) {
+                    continue;
+                }
+                if (cc == "en-US") {
+                    MpResxTools.WriteResxToPath(listing_path, listing_lookup);
+                    continue;
+                }
+                MpResxTools.WriteResxToPath(listing_path, empty_listing_lookup);
+            }
+        }
+
+        static string GetListingDir() {
+
+            string listing_dir = Path.Combine(
+                MpCommonHelpers.GetSolutionDir(),
+                "MonkeyPaste.Avalonia",
+                "Resources",
+                "Localization",
+                "Listings");
+            return listing_dir;
+        }
+        #endregion
 
 
         #region Move Core 
@@ -201,7 +357,7 @@ namespace Ledgerizer {
             foreach (string lang_code in lang_codes.Where(x => !x.IsInvariant()).Select(x => x.Name)) {
                 Localizer.Program.LocalizeManifest(invariant_resource_path, inv_mf_path, lang_code, plugin_res_dir);
             }
-            MpConsole.WriteLine("");
+            MpConsole.WriteLine("", stampless: true);
         }
 
         #endregion

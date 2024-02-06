@@ -8,6 +8,15 @@ namespace MonkeyPaste.Common.Plugin {
     public static class MpCsvExtensions {
 
         #region Csv
+        public static string ToCsvCell(this string str, MpCsvFormatProperties csvProps = null) {
+            str = str == null ? string.Empty : str;
+            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
+            if (str.Contains(csvProps.EorSeparator)) {
+                // may only matter for newline EOR but not sure...
+                return $"\"{str}\"";
+            }
+            return str;
+        }
         public static string ToCsv(this IEnumerable<string> strList, MpICustomCsvFormat csvObj) {
             return ToCsv(strList, csvObj.CsvFormat);
         }

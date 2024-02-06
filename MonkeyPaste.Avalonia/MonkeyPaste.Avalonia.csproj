@@ -1707,15 +1707,16 @@
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
   
-  <ItemGroup>
-    <EmbeddedResource Remove="Resources\Localization\UiStrings\ListingStrings.ja-JP.resx" />
-    <EmbeddedResource Remove="Resources\Localization\UiStrings\ListingStrings.resx" />
-  </ItemGroup>
   
   <ItemGroup>
     <None Include="Resources\Localization\Listings\ListingStrings.resx">
       <Generator></Generator>
     </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <Content Include="Resources\Localization\Listings\gen\ListingStrings.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   
   <ItemGroup>

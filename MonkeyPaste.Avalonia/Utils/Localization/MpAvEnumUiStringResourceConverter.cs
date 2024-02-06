@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Resources.NetStandard;
 
 namespace MonkeyPaste.Avalonia {
     public class MpUiStringToEnumConverter : MpIUiStringToEnumConverter {
@@ -145,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private static IEnumerable<KeyValuePair<string, string>> GetCodeAndResxEnumDiffs(string resx_path) {
-            var resx_elu = GetResxEnumsAsLookup(resx_path);
+            var resx_elu = MpResxTools.ReadResxFromPath(resx_path).ToDictionary(x => x.Key, x => x.Value.value);
             var code_elu = GetCodeEnumsAsLookup();
 
             return resx_elu.Difference(code_elu);
@@ -173,41 +172,29 @@ namespace MonkeyPaste.Avalonia {
             return elu;
         }
 
-        private static Dictionary<string, string> GetResxEnumsAsLookup(string resx_path) {
-            var elu = new Dictionary<string, string>();
-            if (!resx_path.IsFile()) {
-                return elu;
-            }
-            // NOTE using reflection not .ResourceManager returns invariant paramValue only but this 
-            // should only run with default culture
-            foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
-                if (pi.GetValue(null) is string val) {
-                    elu.Add(pi.Name, val);
-                }
-            }
-            return elu;
-        }
+        //private static Dictionary<string, string> GetResxEnumsAsLookup(string resx_path) {
+        //    var elu = new Dictionary<string, string>();
+        //    if (!resx_path.IsFile()) {
+        //        return elu;
+        //    }
+        //    // NOTE using reflection not .ResourceManager returns invariant paramValue only but this 
+        //    // should only run with default culture
+        //    foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
+        //        if (pi.GetValue(null) is string val) {
+        //            elu.Add(pi.Name, val);
+        //        }
+        //    }
+        //    return elu;
+        //}
 
 
         private static string CreateEnumResx(string resx_path) {
             try {
-                if (resx_path.IsFile()) {
-                    MpFileIo.DeleteFile(resx_path);
-                    string resx_cs_path = resx_path.Replace(".resx", ".Designer.cs");
-                    MpDebug.Assert(resx_cs_path.IsFile(), $"EnumUi str error, cannot find designer file '{resx_cs_path}'");
-                    // need to remove code file also
-                    MpFileIo.DeleteFile(resx_cs_path);
-                }
-                using MemoryStream ms = new MemoryStream();
-                using ResXResourceWriter oWriter = new ResXResourceWriter(resx_path);
-
                 // NOTES
                 // 1. param enums to labels need to KEEP enum as paramValue NOT label
 
                 var code_elu = GetCodeEnumsAsLookup();
-                code_elu.ForEach(x => oWriter.AddResource(x.Key, x.Value));
-                oWriter.Generate();
-                oWriter.Close();
+                resx_path = MpResxTools.WriteResxToPath(resx_path, code_elu.ToDictionary(x => x.Key, x => (x.Value, string.Empty)));
                 MpConsole.WriteLine($"EnumUiStrings created successfully at path '{resx_path}'");
                 return resx_path;
             }

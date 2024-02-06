@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>通过此订阅，您将收到：</value>
+    <value>このサブスクリプションでは、次のものが得られます:</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>基本 - 每月</value>
+    <value>基本 - 毎月</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>基本 - 每年</value>
+    <value>基本 - 毎年</value>
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste 是一款独一无二的剪贴板管理器、自动化和生产力工具。</value>
+    <value>MonkeyPaste は、他にはないクリップボード マネージャー、自動化および生産性ツールです。</value>
   </data>
   <data name="StoreFeatures" xml:space="preserve">
-    <value>● 简单友好的界面</value>
+    <value>● シンプルでフレンドリーなインターフェース</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>笔记！</value>
+    <value>注記！</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>通过此订阅，您将收到：</value>
+    <value>このサブスクリプションでは、次のものが得られます:</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>无限制 - 每月</value>
+    <value>無制限 - 毎月</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>无限制 - 每年</value>
+    <value>無制限 - 年間</value>
   </data>
 </root>

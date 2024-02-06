@@ -6,8 +6,16 @@ sidebar_position: 2
 To be as accessible as possible **all** features are fully available in the 3 account levels that MonkeyPaste supports. However to monetize this effort while [maintaining your privacy as an upmost precedent](https://www.monkeypaste.com/privacy) MonkeyPaste uses [content *recycling*](#content-recycling) to limit its internal storage based on the account type.
 
 :::tip Linux will be free
-Linux support is coming soon...As a nod to Linux and free-for-use software in general, MonkeyPaste will default to the *'Unlimited'* account plan for **free on all Linux platforms.**
+Linux support is coming soon...As a nod to Linux and free-for-use software in general, MonkeyPaste will default to the *'Unlimited'* account plan for **free on** ***all*** **Linux platforms.**
 :::
+
+## Plans
+
+|Type|Max Clips|Max Trash|
+|---|---|---|
+|Free|5|20|
+|Basic|1000|∞|
+|Unlimited|∞|∞|
 
 ## How to Upgrade
 You can upgrade in the app from the *Settings->Account* tab and selecting *Subscriptions* on the right-hand panel. Then select 'Basic' or (preferred) 'Unlimited' plans. 

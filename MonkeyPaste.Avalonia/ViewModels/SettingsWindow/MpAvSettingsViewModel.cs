@@ -1502,10 +1502,10 @@ namespace MonkeyPaste.Avalonia {
                 if (!log_path.IsFile()) {
                     try {
                         if (!log_dir.IsDirectory()) {
-                            MpFileIo.CreateDirectory(log_dir);
+                            MpFileIo.TouchDir(log_dir);
                         }
                         // create dummy file so if logging is enabled its known immediatly on startup
-                        using (File.Create(Mp.Services.PlatformInfo.LoggingEnabledCheckPath)) { }
+                        MpFileIo.TouchFile(Mp.Services.PlatformInfo.LoggingEnabledCheckPath);
                     }
                     catch { }
                 }

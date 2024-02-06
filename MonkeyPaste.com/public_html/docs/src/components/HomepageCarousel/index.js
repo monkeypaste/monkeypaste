@@ -61,27 +61,13 @@ const ExampleList = [
 ];
 
 function Example({ imgSrc, description }) {
-  // return (
-  //   <div className={styles.example}>
-  //     <div className={clsx('row row--6')}>
-  //       <div class="text--center padding-horiz--md">
-  //         <img src={imgSrc} className={styles.exampleImg} role="img" />
-  //       </div>
-  //       <div class="text--left padding-horiz--md">
-  //         <p>{description}</p>
-  //       </div>
-  //     </div>
-  //     <hr />
-  //   </div>
-  // );
-
   idx++;
   if (idx % 2 == 0) {
     return (
       <div className={styles.exampleContainer}>
-        <div className={styles.example}>
-          <div class="examples"><img src={imgSrc} role="img" /></div>
-          <div><p>{description}</p></div>
+        <div class="example" className={styles.example}>
+          <div><img class="zoom" src={imgSrc} role="img" /></div>
+          <p>{description}</p>
         </div>
         <hr />
       </div>
@@ -89,9 +75,9 @@ function Example({ imgSrc, description }) {
   }
   return (
     <div className={styles.exampleContainer}>
-      <div className={styles.example}>
+      <div class="example" className={styles.example}>
         <p>{description}</p>
-        <img src={imgSrc} role="img" />
+        <div><img class="zoom" src={imgSrc} role="img" /></div>
       </div>
       <hr />
     </div>
