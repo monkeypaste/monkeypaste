@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
-            MpAvPrefViewModel.Instance.CurrentCultureCode = "en-US";
+            //MpAvPrefViewModel.Instance.CurrentCultureCode = "en-US";f
             string culture_name = MpAvPrefViewModel.Instance.CurrentCultureCode;
             SetCultureCommand.Execute(culture_name);
 

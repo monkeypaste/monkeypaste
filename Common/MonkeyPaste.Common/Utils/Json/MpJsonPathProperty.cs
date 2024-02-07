@@ -223,7 +223,7 @@ namespace MonkeyPaste.Common {
                 if (typeof(T) == typeof(double)) {
                     value = (T)(object)Convert.ToDouble(result);
                 } else if (typeof(T) == typeof(bool)) {
-                    value = (T)(object)(result == "1" || result.ToLower() == "true");
+                    value = (T)(object)(result == "1" || result.ToLowerInvariant() == "true");
                 } else if (typeof(T) == typeof(int)) {
                     value = (T)(object)Convert.ToInt32(result);
                 }

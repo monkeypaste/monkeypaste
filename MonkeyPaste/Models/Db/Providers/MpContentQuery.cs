@@ -255,7 +255,7 @@ namespace MonkeyPaste {
         #region Fields
 
         private static bool IsFieldNumeric(this string fieldName) {
-            string low_field_name = fieldName.ToLower();
+            string low_field_name = fieldName.ToLowerInvariant();
             switch (low_field_name) {
                 case "RootId":
                 case "SourceObjId":

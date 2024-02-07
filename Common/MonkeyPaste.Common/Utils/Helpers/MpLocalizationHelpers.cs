@@ -6,6 +6,25 @@ using System.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpLocalizationHelpers {
+        public static string GetFlagEmoji(string culture_code) {
+            /*
+            function getFlagEmoji(countryCode) {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char =>  127397 + char.charCodeAt());
+  return String.fromCodePoint(...codePoints);
+}
+            */
+            // from https://dev.to/jorik/country-code-to-flag-emoji-a21
+            return string.Join(string.Empty,
+                culture_code
+                .SplitNoEmpty("-")
+                .FirstOrDefault()
+                .ToUpperInvariant()
+                .ToCharArray()
+                .Select(x => char.ConvertFromUtf32(0x1f1a5 + (int)x)));
+        }
         public static bool IsInvariant(this CultureInfo ci) {
             return ci != null && ci.Name == string.Empty;
         }

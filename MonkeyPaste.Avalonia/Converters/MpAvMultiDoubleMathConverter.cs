@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
 
         private double Evaluate(string exp, double[] values) {
             // exp: a/(b-c)
-            exp = exp.ToLower();
+            exp = exp.ToLowerInvariant();
             for (int i = 0; i < values.Length; i++) {
                 char varName = System.Convert.ToChar((System.Convert.ToInt32('a') + i));
                 exp = exp.Replace(varName.ToString(), values[i].ToString());

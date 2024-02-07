@@ -835,7 +835,7 @@ and try again.</value>
     <value>Never</value>
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
-    <value>Free {0} - Day Trial</value>
+    <value>Free {0} Day Trial</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
     <value>There was a problem performing 
@@ -1016,7 +1016,7 @@ your password.</value>
     <value>I Accept</value>
   </data>
   <data name="AccountActiveLabel" xml:space="preserve">
-    <value>ACTIVE</value>
+    <value>Active</value>
   </data>
   <data name="AccountOfflineLabel" xml:space="preserve">
     <value>Offline</value>
@@ -2762,5 +2762,23 @@ feedback@monkeypaste.com</value>
   <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
     <value>Parent action '{0}' does not support input property type 'Last Output'</value>
     <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Learn more about about plans</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Clip</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analyzer</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tag</value>
   </data>
 </root>

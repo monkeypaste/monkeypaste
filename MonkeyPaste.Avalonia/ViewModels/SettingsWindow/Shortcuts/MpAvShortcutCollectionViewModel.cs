@@ -1187,7 +1187,7 @@ namespace MonkeyPaste.Avalonia {
                         e.Data.KeyCode.IsAlphaNumeric();
 
                     if (can_auto_search) {
-                        string text_to_pass = ((KeyCode)Mp.Services.KeyDownHelper.Downs[0]).GetKeyLiteral().ToLower();
+                        string text_to_pass = ((KeyCode)Mp.Services.KeyDownHelper.Downs[0]).GetKeyLiteral();
                         MpAvSearchBoxViewModel.Instance.BeginAutoSearchCommand.Execute(text_to_pass);
                     }
                     return can_auto_search;

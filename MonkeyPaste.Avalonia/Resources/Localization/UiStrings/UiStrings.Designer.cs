@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ACTIVE.
+        ///   Looks up a localized string similar to Active.
         /// </summary>
         public static string AccountActiveLabel {
             get {
@@ -247,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Free {0} - Day Trial.
+        ///   Looks up a localized string similar to Free {0} Day Trial.
         /// </summary>
         public static string AccountFreeTrialLabel {
             get {
@@ -6289,6 +6289,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application.
+        /// </summary>
+        public static string ShortcutInternalName {
+            get {
+                return ResourceManager.GetString("ShortcutInternalName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trigger.
+        /// </summary>
+        public static string ShortcutInvokeTriggerName {
+            get {
+                return ResourceManager.GetString("ShortcutInvokeTriggerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clip.
+        /// </summary>
+        public static string ShortcutPasteCopyItemName {
+            get {
+                return ResourceManager.GetString("ShortcutPasteCopyItemName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste &apos;{0}&apos;.
         /// </summary>
         public static string ShortcutPasteTitle {
@@ -6354,6 +6381,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyzer.
+        /// </summary>
+        public static string ShortcutRunAnalyzerName {
+            get {
+                return ResourceManager.GetString("ShortcutRunAnalyzerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run &apos;{0}&apos; Analyzer.
         /// </summary>
         public static string ShortcutRunAnalyzerTitle {
@@ -6368,6 +6404,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ShortcutRunTriggerTitle {
             get {
                 return ResourceManager.GetString("ShortcutRunTriggerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag.
+        /// </summary>
+        public static string ShortcutSelectTagName {
+            get {
+                return ResourceManager.GetString("ShortcutSelectTagName", resourceCulture);
             }
         }
         
@@ -6467,6 +6512,15 @@ namespace MonkeyPaste.Avalonia {
         public static string SourceUnblockLabel {
             get {
                 return ResourceManager.GetString("SourceUnblockLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn more about about plans.
+        /// </summary>
+        public static string SubscriptionLearnMoreLinkText {
+            get {
+                return ResourceManager.GetString("SubscriptionLearnMoreLinkText", resourceCulture);
             }
         }
         

@@ -11,32 +11,52 @@ namespace MonkeyPaste.Common.Plugin {
         public static string ToCsvCell(this string str, MpCsvFormatProperties csvProps = null) {
             str = str == null ? string.Empty : str;
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            if (str.Contains(csvProps.EorSeparator)) {
+            str = str.Replace("\"", "\"\"");
+            if (str.Contains(csvProps.EorSeparator) || str.Contains(csvProps.EocSeparator)) {
                 // may only matter for newline EOR but not sure...
                 return $"\"{str}\"";
             }
             return str;
         }
-        public static string ToCsv(this IEnumerable<string> strList, MpICustomCsvFormat csvObj) {
-            return ToCsv(strList, csvObj.CsvFormat);
-        }
-        public static string ToCsv(this IEnumerable<string> strList, MpCsvFormatProperties csvProps = null) {
-            if (strList == null || !strList.Any()) {
+        public static string ToCsv(this IEnumerable<string> csvList, MpCsvFormatProperties csvProps = null) {
+            if (csvList == null || !csvList.Any()) {
                 return string.Empty;
             }
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
             return
                 string.Join(
                     csvProps.EocSeparator,
-                    strList.Select(x => csvProps.EncodeValue(x)));
+                    csvList.Select(x => csvProps.EncodeValue(x)));
         }
-        public static List<string> ToListFromCsv(this string csvStr, MpICustomCsvFormat csvObj) {
-            return ToListFromCsv(csvStr, csvObj.CsvFormat);
+        public static string ToCsv(this IEnumerable<IEnumerable<string>> csvTable, MpCsvFormatProperties csvProps = null) {
+            if (csvTable == null || !csvTable.Any()) {
+                return string.Empty;
+            }
+            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
+            var sb = new StringBuilder();
+            foreach (var csvRow in csvTable) {
+                sb.Append(csvRow.ToCsv(csvProps));
+                sb.Append(csvProps.EorSeparator);
+            }
+            return sb.ToString();
+        }
+        public static List<List<string>> ToTableFromCsv(this string csvStr, MpCsvFormatProperties csvProps = null) {
+            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
+
+            var rows =
+                csvStr.Split(new string[] { csvProps.EorSeparator }, StringSplitOptions.None);
+            List<List<string>> table = new List<List<string>>();
+            foreach (string rowStr in rows) {
+                string rowStrVal = rowStr ?? string.Empty;
+                var row = rowStrVal.Split(new string[] { csvProps.EocSeparator }, StringSplitOptions.None).Select(x => csvProps.DecodeValue(x)).ToList();
+                table.Add(row);
+            }
+            return table;
         }
         public static List<string> ToListFromCsv(this string csvStr, MpCsvFormatProperties csvProps = null) {
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
             return
-                csvStr.Split(new string[] { csvProps.EocSeparator }, StringSplitOptions.RemoveEmptyEntries)
+                csvStr.Split(new string[] { csvProps.EocSeparator }, StringSplitOptions.None)
                 .Select(x => csvProps.DecodeValue(x))
                 .ToList();
         }
@@ -119,11 +139,15 @@ namespace MonkeyPaste.Common.Plugin {
         public Encoding ValueEncoding { get; set; } = Encoding.UTF8; // default/null resolves to UTF-8 (or tentatively based on locale)
 
         public string EncodeValue(string value) {
+            value = value == null ? string.Empty : value;
             return IsValueBase64 ?
                 Convert.ToBase64String(ValueEncoding.GetBytes(value)) : value;
         }
 
         public string DecodeValue(string value) {
+            if (value == null) {
+                return string.Empty;
+            }
             if (IsValueBase64) {
                 if (!value.IsValueBase64()) {
                     // can occur in multi-value preset value definitions

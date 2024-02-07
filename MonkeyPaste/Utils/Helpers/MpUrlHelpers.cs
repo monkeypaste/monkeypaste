@@ -75,7 +75,7 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(url)) {
                 return false;
             }
-            string url_lwc = url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
+            string url_lwc = url.ToLowerInvariant().Replace("http://", string.Empty).Replace("https://", string.Empty);
             return url_lwc.StartsWith(BLANK_URL);
         }
 
@@ -180,7 +180,7 @@ namespace MonkeyPaste {
                 return false;
             }
             string trimmed_url = url.TrimEnd(new[] { '/', '&', '?' });
-            if (trimmed_url.ToLower().EndsWith(url_domain.ToLower())) {
+            if (trimmed_url.ToLowerInvariant().EndsWith(url_domain.ToLowerInvariant())) {
                 return true;
             }
             return false;
@@ -285,13 +285,13 @@ namespace MonkeyPaste {
             var icon_link_nodes =
                 headNode.ChildNodes
                 .Where(x =>
-                    x.Name.ToLower() == "link" &&
-                    (x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon" ||
-                    x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "shortcut icon"));
+                    x.Name.ToLowerInvariant() == "link" &&
+                    (x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "icon" ||
+                    x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "shortcut icon"));
 
             string icon_uri = null;
             if (icon_link_nodes.Count() > 0) {
-                var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon");
+                var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "icon");
                 if (icon_node != null) {
                     // prefer 'icon' over 'shortcut icon' (i guess)
                     icon_uri = icon_node.GetAttributeValue("href", null);

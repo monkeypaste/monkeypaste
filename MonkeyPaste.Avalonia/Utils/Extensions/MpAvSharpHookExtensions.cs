@@ -287,7 +287,7 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcCapsLock;
             }
 
-            if (Enum.TryParse(typeof(KeyCode), keyStr.StartsWith("Vc") ? keyStr : "Vc" + keyStr.ToUpper(), true, out object? keyCodeObj) &&
+            if (Enum.TryParse(typeof(KeyCode), keyStr.StartsWith("Vc") ? keyStr : "Vc" + keyStr.ToUpperInvariant(), true, out object? keyCodeObj) &&
                keyCodeObj is KeyCode keyCode) {
                 return keyCode;
             }

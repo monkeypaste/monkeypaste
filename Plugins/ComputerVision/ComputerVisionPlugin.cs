@@ -105,7 +105,7 @@ namespace ComputerVision {
                             }
                             .Select((x,idx)=>new MpParameterValueFormat() {
                                 label = x,
-                                value = ((ComputerVisionFeatureType)idx).ToString().ToLower(),
+                                value = ((ComputerVisionFeatureType)idx).ToString().ToLowerInvariant(),
                                 isDefault = true
                             }).ToList(),
                         paramId = PARAM_ID_VISUAL_FEATURES,
@@ -121,7 +121,7 @@ namespace ComputerVision {
                             }
                             .Select((x,idx)=>new MpParameterValueFormat() {
                                 label = x,
-                                value = ((ComputerDetailType)idx).ToString().ToLower(),
+                                value = ((ComputerDetailType)idx).ToString().ToLowerInvariant(),
                                 isDefault = true
                             }).ToList(),
                         paramId = PARAM_ID_DETAILS,

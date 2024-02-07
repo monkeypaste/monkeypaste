@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (valStr.IsFileOrDirectory()) {
-                bool isFilePathIcon = paramParts.Any(x => x.ToLower() == "pathimg");
+                bool isFilePathIcon = paramParts.Any(x => x.ToLowerInvariant() == "pathimg");
                 if (valStr.IsSupportedImageFileType() && !isFilePathIcon) {
                     try {
                         using (var fs = new FileStream(valStr, FileMode.Open)) {

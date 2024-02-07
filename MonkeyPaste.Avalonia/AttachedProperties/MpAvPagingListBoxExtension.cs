@@ -1001,9 +1001,9 @@ namespace MonkeyPaste.Avalonia {
 
                 MpPoint dir = MpPoint.Zero;
                 if (sb.Orientation == Orientation.Horizontal) {
-                    dir.X = rb.Name.ToLower().Contains("down") ? 1 : -1;
+                    dir.X = rb.Name.ToLowerInvariant().Contains("down") ? 1 : -1;
                 } else {
-                    dir.Y = rb.Name.ToLower().Contains("down") ? 1 : -1;
+                    dir.Y = rb.Name.ToLowerInvariant().Contains("down") ? 1 : -1;
                 }
                 double repeat_val = 0;
                 if (rb.Tag is double) {

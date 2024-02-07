@@ -66,15 +66,15 @@ namespace MonkeyPaste.Avalonia {
         }
         public static string ToJsDropEffects(this DragDropEffects dde) {
             if (dde.HasFlag(DragDropEffects.Copy)) {
-                return DragDropEffects.Copy.ToString().ToLower();
+                return DragDropEffects.Copy.ToString().ToLowerInvariant();
             }
             if (dde.HasFlag(DragDropEffects.Move)) {
-                return DragDropEffects.Move.ToString().ToLower();
+                return DragDropEffects.Move.ToString().ToLowerInvariant();
             }
             if (dde.HasFlag(DragDropEffects.Link)) {
-                return DragDropEffects.Link.ToString().ToLower();
+                return DragDropEffects.Link.ToString().ToLowerInvariant();
             }
-            return DragDropEffects.None.ToString().ToLower();
+            return DragDropEffects.None.ToString().ToLowerInvariant();
         }
 
         public static MpQuillDragDropEventMessage SetJsModKeys(this KeyModifiers km, MpQuillDragDropEventMessage msg) {

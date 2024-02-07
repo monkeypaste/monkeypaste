@@ -407,7 +407,7 @@ namespace MonkeyPaste.Avalonia {
                     new_edgies = new[] { sbg.GetVisualDescendants<Button>().LastOrDefault() };
                     break;
             }
-            string edgy_tooltip_class = $"tt_near_{BindingContext.MainWindowOrientationType.ToString().ToLower()}";
+            string edgy_tooltip_class = $"tt_near_{BindingContext.MainWindowOrientationType.ToString().ToLowerInvariant()}";
 
             foreach (var sbc in new_edgies) {
                 sbc.Classes.Add(edgy_tooltip_class);

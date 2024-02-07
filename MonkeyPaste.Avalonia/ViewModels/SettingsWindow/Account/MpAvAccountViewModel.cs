@@ -137,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 sb.AppendLine(line_0);
                 string offline = IsServerAvailable ? string.Empty : $"{UiStrings.AccountOfflineLabel} ";
-                string acct_name = IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
+                string acct_name = !IsUserViewEnabled ? string.Empty : IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
                 string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, WorkingAccountType.EnumToUiString());
                 sb.AppendLine(line_1);
 
@@ -165,6 +165,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsUserViewEnabled { get; set; } = false;
         public bool IsServerAvailable { get; private set; }
 
         public int ContentCapacity =>

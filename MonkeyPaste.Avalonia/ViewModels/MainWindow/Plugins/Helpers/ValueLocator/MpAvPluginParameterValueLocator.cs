@@ -46,7 +46,9 @@ namespace MonkeyPaste.Avalonia {
                             var host_format_preset_val = host_format_preset.values.FirstOrDefault(x => x.paramId.Equals(paramFormat.paramId));
                             if (host_format_preset_val != null) {
                                 // this parameter has a preset paramValue in manifest
-                                paramVal = host_format_preset_val.value.ToListFromCsv(paramFormat.CsvProps).ToCsv(paramFormat.CsvProps);
+                                // NOTE presume multi-value paramValue's defined in preset are NOT base64, only db values are
+                                //paramVal = host_format_preset_val.value.ToListFromCsv(paramFormat.CsvProps).ToCsv(paramFormat.CsvProps);
+                                paramVal = host_format_preset_val.value.ToListFromCsv().ToCsv(paramFormat.CsvProps);
                             }
                         }
                     }

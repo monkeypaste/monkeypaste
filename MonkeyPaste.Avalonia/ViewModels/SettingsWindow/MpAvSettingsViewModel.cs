@@ -59,7 +59,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region CONSTANTS
 
-        public const MpSettingsTabType DEFAULT_SELECTED_TAB = MpSettingsTabType.Account;
         #endregion
 
         #region Statics
@@ -142,6 +141,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpSettingsTabType DefaultSelectedTab {
+            get {
+                if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr)) {
+                    if (MpAvAccountViewModel.Instance.IsFree) {
+                        return MpSettingsTabType.Account;
+                    }
+                    return MpSettingsTabType.Preferences;
+                }
+                return MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr.ToEnum<MpSettingsTabType>();
+            }
+        }
         public bool IsTabButtonVisible0 { get; set; } = true;
         public bool IsTabButtonVisible1 { get; set; } = true;
         public bool IsTabButtonVisible2 { get; set; } = true;
@@ -183,12 +193,12 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
 
         public GridLength AccountColumnWidth =>
-            IsLoginOnly ?
+            IsLoginOnly || !MpAvAccountViewModel.Instance.IsUserViewEnabled ?
                 new GridLength(1, GridUnitType.Star) :
                 new GridLength(0.5, GridUnitType.Star);
 
         public GridLength SubscriptionColumnWidth =>
-            IsLoginOnly ?
+            IsLoginOnly || !MpAvAccountViewModel.Instance.IsUserViewEnabled ?
                 new GridLength(0) :
                 new GridLength(0.5, GridUnitType.Star);
         #endregion
@@ -452,7 +462,7 @@ namespace MonkeyPaste.Avalonia {
                                                 .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
                                                 .OrderBy(x=>x)
                                                 .Select(x=>new MpParameterValueFormat() {
-                                                    isDefault = MpAvThemeViewModel.Instance.DefaultReadOnlyFontFamily.ToLower() == x.ToLower(),
+                                                    isDefault = MpAvThemeViewModel.Instance.DefaultReadOnlyFontFamily.ToLowerInvariant() == x.ToLowerInvariant(),
                                                     value = x
                                                 }).ToList()
                                         },
@@ -468,7 +478,7 @@ namespace MonkeyPaste.Avalonia {
                                                 .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
                                                 .OrderBy(x=>x)
                                                 .Select(x=>new MpParameterValueFormat() {
-                                                    isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLower() == x.ToLower(),
+                                                    isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLowerInvariant() == x.ToLowerInvariant(),
                                                     value = x
                                                 }).ToList()
                                         },
@@ -535,7 +545,7 @@ namespace MonkeyPaste.Avalonia {
                                             values =
                                                 Enum.GetNames(typeof(MpMainWindowShowBehaviorType))
                                                 .Select(x=> new MpParameterValueFormat() {
-                                                    isDefault = MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr.ToLower() == x.ToLower(),
+                                                    isDefault = MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr.ToLowerInvariant() == x.ToLowerInvariant(),
                                                     value = x,
                                                     label = x.ToEnum<MpMainWindowShowBehaviorType>().EnumToUiString()
                                                 }).ToList()
@@ -806,7 +816,7 @@ namespace MonkeyPaste.Avalonia {
                                             values =
                                                 Enum.GetNames(typeof(MpTrashCleanupModeType))
                                                 .Select(x=> new MpParameterValueFormat() {
-                                                    isDefault = MpAvPrefViewModel.Instance.TrashCleanupModeTypeStr.ToLower() == x.ToString().ToLower(),
+                                                    isDefault = MpAvPrefViewModel.Instance.TrashCleanupModeTypeStr.ToLowerInvariant() == x.ToString().ToLowerInvariant(),
                                                     label = x.ToEnum<MpTrashCleanupModeType>().EnumToUiString(),
                                                     value = x
                                                 }).ToList()
@@ -1337,6 +1347,11 @@ namespace MonkeyPaste.Avalonia {
 #endif
                     UpdateFilters();
                     break;
+                case nameof(SelectedTabIdx):
+                    if (SelectedTabIdx >= 0) {
+                        MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr = ((MpSettingsTabType)SelectedTabIdx).ToString();
+                    }
+                    break;
             }
         }
 
@@ -1476,13 +1491,13 @@ namespace MonkeyPaste.Avalonia {
             if (IsBatchUpdate) {
                 return;
             }
-            if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
+            if (_reinitContentParams.Any(x => x.ToLowerInvariant() == e.PropertyName.ToLowerInvariant())) {
                 Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
                     .Where(x => x.GetContentView() != null)
                     .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
             }
 
-            if (_restartContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
+            if (_restartContentParams.Any(x => x.ToLowerInvariant() == e.PropertyName.ToLowerInvariant())) {
                 ShowRestartDialogAsync().FireAndForgetSafeAsync();
             }
         }
@@ -1662,7 +1677,7 @@ namespace MonkeyPaste.Avalonia {
                 if (sfvm.Items == null) {
                     continue;
                 }
-                if (sfvm.Items.FirstOrDefault(x => x.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower())
+                if (sfvm.Items.FirstOrDefault(x => x.ParamId.ToStringOrEmpty().ToLowerInvariant() == paramId.ToLowerInvariant())
                     is MpAvParameterViewModelBase param_vm) {
                     if (frameType != MpSettingsFrameType.None && sfvm.FrameType != frameType) {
                         continue;
@@ -1698,7 +1713,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 Dispatcher.UIThread.VerifyAccess();
 
-                int tab_idx = SelectedTabIdx < 0 ? (int)DEFAULT_SELECTED_TAB : SelectedTabIdx;
+                int tab_idx = SelectedTabIdx < 0 ? (int)DefaultSelectedTab : SelectedTabIdx;
                 string focus_param_id = null;
                 if (args is object[] argParts) {
                     tab_idx = (int)((MpSettingsTabType)argParts[0]);
@@ -1733,7 +1748,7 @@ namespace MonkeyPaste.Avalonia {
                     var tab_kvp = TabLookup.FirstOrDefault(x => x.Value.Contains(focus_tuple.Item1));
                     SelectedTabIdx = TabLookup.IndexOf(tab_kvp);
                 } else {
-                    SelectedTabIdx = (int)DEFAULT_SELECTED_TAB;
+                    SelectedTabIdx = (int)DefaultSelectedTab;
                 }
                 // wait for param to be in view...
                 var param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);

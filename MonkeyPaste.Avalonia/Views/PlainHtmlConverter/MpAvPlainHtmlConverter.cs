@@ -135,9 +135,9 @@ namespace MonkeyPaste.Avalonia {
                 !string.IsNullOrWhiteSpace(src_str)) {
                 string img_base64 = null;
 
-                if (src_str.ToLower().StartsWith("data:image/")) {
+                if (src_str.ToLowerInvariant().StartsWith("data:image/")) {
                     string src_data_str = src_str.Substring("data:image/".Length);
-                    if (src_data_str.ToLower().StartsWith("svg")) {
+                    if (src_data_str.ToLowerInvariant().StartsWith("svg")) {
                         MpDebug.Break($"Need to handle svg img src.");
                     } else {
                         img_base64 = src_data_str.Split(",")[1];
@@ -227,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
 
             var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() {
                 data = htmlDataStr,
-                dataFormatType = inputFormatType.ToString().ToLower(),
+                dataFormatType = inputFormatType.ToString().ToLowerInvariant(),
                 verifyText = verifyPlainText,
                 isBase64 = true
             };

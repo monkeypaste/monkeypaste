@@ -1,7 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -157,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
                             IsBusy = true;
 
                             if (string.IsNullOrWhiteSpace(ShortcutCmdKeyString) ||
-                                ShortcutCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
+                                ShortcutCmdKeyString.ToLowerInvariant() == Mp.Services.PlatformShorcuts.PasteKeys.ToLowerInvariant()) {
                                 if (AppId > 0) {
                                     await ClipboardShortcuts.DeleteFromDatabaseAsync();
                                 }

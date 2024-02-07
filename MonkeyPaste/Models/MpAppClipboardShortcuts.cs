@@ -54,8 +54,8 @@ namespace MonkeyPaste {
 
 
         public override async Task WriteToDatabaseAsync() {
-            if (PasteCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower() ||
-                CopyCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.CopyKeys.ToLower()) {
+            if (PasteCmdKeyString.ToLowerInvariant() == Mp.Services.PlatformShorcuts.PasteKeys.ToLowerInvariant() ||
+                CopyCmdKeyString.ToLowerInvariant() == Mp.Services.PlatformShorcuts.CopyKeys.ToLowerInvariant()) {
                 MpDebug.Break("Redundant assignment error");
             }
             await base.WriteToDatabaseAsync();

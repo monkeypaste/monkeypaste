@@ -1,6 +1,4 @@
 ﻿using Avalonia.Data.Converters;
-using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -13,9 +11,6 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             string hexStr = value.ToHex();
-            if (hexStr != null && (hexStr.ToLower() == "#ff252226" || hexStr.ToLower() == "#252226")) {
-
-            }
             if (hexStr.IsStringHexColor()) {
                 bool flip = false;
                 string contrast_type = "fg";

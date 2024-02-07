@@ -1358,7 +1358,7 @@ namespace MonkeyPaste.Avalonia {
             }
             for (int i = 0; i < hexColors.Count; i++) {
                 // randomize alpha and layer order so its constant but unique for item
-                char let = PublicHandle.ToUpper()[i];
+                char let = PublicHandle.ToUpperInvariant()[i];
                 int seed;
                 if (let <= '9') {
                     seed = (int)(let - '0');

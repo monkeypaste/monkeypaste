@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                 paramParts.Length != 3) {
                 return 0;
             }
-            string op = paramParts[0].ToLower();
+            string op = paramParts[0].ToLowerInvariant();
             double true_val = System.Convert.ToDouble(paramParts[1]);
             double false_val = System.Convert.ToDouble(paramParts[2]);
 

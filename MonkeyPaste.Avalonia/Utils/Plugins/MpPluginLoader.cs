@@ -706,7 +706,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!runtime_dir.IsDirectory()) {
                     return;
                 }
-                new DirectoryInfo(runtime_dir).CopyContents(new DirectoryInfo(plugin_dir), recursive: true, overwrite: false);
+                MpFileIo.CopyContents(runtime_dir, plugin_dir, true, false);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"error moving extra runtimes.", ex);

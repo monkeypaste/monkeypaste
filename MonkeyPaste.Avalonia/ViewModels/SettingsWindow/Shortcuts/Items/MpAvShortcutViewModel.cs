@@ -61,9 +61,8 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             return
-                ShortcutTypeName.ToLower().Contains(filter.ToLower()) ||
                 ShortcutDisplayName.ToLower().Contains(filter.ToLower()) ||
-                RoutingType.ToString().ToLower().Contains(filter.ToLower());
+                RoutingTypeDisplayValue.ToString().ToLower().Contains(filter.ToLower());
         }
 
         #endregion
@@ -154,14 +153,17 @@ namespace MonkeyPaste.Avalonia {
                 if (IsCustom) {
                     switch (ShortcutType) {
                         case MpShortcutType.PasteCopyItem:
-                            return "Clip";
+                            return UiStrings.ShortcutPasteCopyItemName;
                         case MpShortcutType.SelectTag:
-                            return "Tag";
+                            return UiStrings.ShortcutSelectTagName;
                         case MpShortcutType.AnalyzeCopyItemWithPreset:
-                            return "Analyzer";
+                            return UiStrings.ShortcutRunAnalyzerName;
+                        case MpShortcutType.InvokeTrigger:
+                            return UiStrings.ShortcutInvokeTriggerName;
+
                     }
                 }
-                return "Application";
+                return UiStrings.ShortcutInternalName;
             }
         }
         public string SelectedRoutingTypeStr => RoutingType.ToString();

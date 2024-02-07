@@ -14,7 +14,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (str.IsNullOrEmpty()) {
                 return false;
             }
-            return str.ToLower().StartsWith("avares://");
+            return str.ToLowerInvariant().StartsWith("avares://");
         }
         public static bool IsValidUrl(this string str, UriKind kind = UriKind.Absolute) {
             if (string.IsNullOrWhiteSpace(str)) {

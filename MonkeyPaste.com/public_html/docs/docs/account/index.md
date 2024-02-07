@@ -14,7 +14,7 @@ Linux support is coming soon...As a nod to Linux and free-for-use software in ge
 |Type|Max Clips|Max Trash|
 |---|---|---|
 |Free|5|20|
-|Basic|1000|∞|
+|Basic|1,000|∞|
 |Unlimited|∞|∞|
 
 ## How to Upgrade

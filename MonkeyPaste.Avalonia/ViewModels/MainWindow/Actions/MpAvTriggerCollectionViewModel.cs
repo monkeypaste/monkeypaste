@@ -304,7 +304,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
             if (arg2Parts.Length >= 4) {
-                return arg2Parts[3].ToLower() == "true";
+                return arg2Parts[3].ToLowerInvariant() == "true";
             }
             return true;
         }

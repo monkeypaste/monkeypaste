@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
             using (Process proc = Process.GetProcessById((int)pid)) {
                 // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
                 // and if it contains proc.ProcessName return fallback (so choice persists
-                if (_ignoredProcessNames.Contains(proc.ProcessName.ToLower())) {
+                if (_ignoredProcessNames.Contains(proc.ProcessName.ToLowerInvariant())) {
                     //occurs with messageboxes and dialogs
                     //MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
                     return null;

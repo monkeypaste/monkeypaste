@@ -67,7 +67,7 @@ namespace CoreAnnotator {
                             new[] {
                                 new MpPresetValueFormat(
                                     OPTIONS_PARAM_ID,
-                                    typeof(TextAnnotationType).GetEnumNames().ToCsv())
+                                    "Currency,Email,HexColor,PhoneNumber,Url")
                             }.ToList()
                     }
                 },

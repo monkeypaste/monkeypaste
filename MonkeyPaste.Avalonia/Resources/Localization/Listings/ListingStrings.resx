@@ -128,8 +128,36 @@
   <data name="BasicYearlyTitle" xml:space="preserve">
     <value>Basic - Yearly</value>
   </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value>True</value>
+    <comment>@Invariant</comment>
+  </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager copy paste tool utility automation ai monkey</value>
+    <value>clipboard manager</value>
     <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
@@ -150,20 +178,40 @@
   <data name="SearchTerm7" xml:space="preserve">
     <value>automation</value>
   </data>
-  <data name="ss1Caption" xml:space="preserve">
+  <data name="ssCaption1" xml:space="preserve">
     <value>Trigger &amp; Action Designer for custom automations and action chaining</value>
   </data>
-  <data name="ss2Caption" xml:space="preserve">
+  <data name="ssCaption2" xml:space="preserve">
     <value>Horizontal/vertical layouts, list/grid view and multi-monitor support</value>
   </data>
-  <data name="ss3Caption" xml:space="preserve">
+  <data name="ssCaption3" xml:space="preserve">
     <value>Fully-featured clip editor with find/replace, rich text (tables, lists, links, etc.) text templating for quick, dynamic pasting from your snippet collection</value>
   </data>
-  <data name="ss4Caption" xml:space="preserve">
+  <data name="ssCaption4" xml:space="preserve">
     <value>Safe, secure and private local data storage with optional 2-factor password protection</value>
   </data>
-  <data name="ss5Caption" xml:space="preserve">
+  <data name="ssCaption5" xml:space="preserve">
     <value>Built-in plugin browser with an ever-growing community-driven library of plugins</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow,
@@ -180,6 +228,10 @@ wealth of value and meaning you deserve to have available at your fingertips. No
 I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
 I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
 your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Simple and friendly interface with both horizontal/vertical layouts, list/grid view and multi-monitor support</value>
@@ -278,10 +330,22 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
 ● More platforms and features coming soon! We're just gettings started 🎉</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential.</value>
+    <value>The clipboard is a jungle. MonkeyPaste is the KING! Swing from app to app, copying this and pasting that like never before with MonkeyPaste!! A brand-new, cutting edge clipboard and analytic automation tool!!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sample of MonkeyPaste in action!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Installed in this language. English is only for these examples</value>

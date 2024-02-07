@@ -445,7 +445,7 @@ namespace MonkeyPaste.Avalonia {
                 //await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
                 //MpAvImageExtensions.Test();
                 await Task.Delay(1);
-                MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true).FireAndForgetSafeAsync();
+                MpAvSubscriptionPurchaseViewModel.Instance.NavigateToBuyUpgradeCommand.Execute(null);
             });
 
         #endregion

@@ -1483,7 +1483,7 @@ namespace MonkeyPaste.Avalonia {
                 int nextOr = (int)MainWindowOrientationType;
 
                 if (dirStrOrEnumArg is string dirStr) {
-                    bool isCw = dirStr.ToLower() == "cw";
+                    bool isCw = dirStr.ToLowerInvariant() == "cw";
                     nextOr = (int)MainWindowOrientationType + (isCw ? -1 : 1);
 
                     if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {

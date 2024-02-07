@@ -266,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!sound_path.IsFile()) {
                     string sound_file_name = Mp.Services.PlatformResource.GetResource<string>(sound_path_or_key);
                     if (sound_file_name == null ||
-                    _soundPathLookup.Values.FirstOrDefault(x => x.ToLower().EndsWith(sound_file_name.ToLower())) is not string lookup_path ||
+                    _soundPathLookup.Values.FirstOrDefault(x => x.ToLowerInvariant().EndsWith(sound_file_name.ToLowerInvariant())) is not string lookup_path ||
                     !lookup_path.IsFile()) {
                         MpDebug.Break($"Error loading sound from arg '{sound_path_or_key}'");
                         return;

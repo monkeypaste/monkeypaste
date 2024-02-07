@@ -61,7 +61,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ToContrastForegoundColor(this string hex, bool flip = false) {
-            if (hex != null && (hex.ToLower() == "#ff252226" || hex.ToLower() == "#252226")) {
+            if (hex != null && (hex.ToLowerInvariant() == "#ff252226" || hex.ToLowerInvariant() == "#252226")) {
 
             }
             bool is_bright = hex.IsHexStringBright();

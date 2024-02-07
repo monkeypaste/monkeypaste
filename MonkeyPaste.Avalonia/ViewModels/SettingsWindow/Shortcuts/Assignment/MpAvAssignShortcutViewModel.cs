@@ -316,13 +316,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             //iterate over ALL shortcuts
-            string assign_keystr = KeyString.ToLower();
+            string assign_keystr = KeyString.ToLowerInvariant();
             DuplicatedShortcutViewModel =
                 MpAvShortcutCollectionViewModel.Instance.Items
                 .FirstOrDefault(x =>
                     x.ShortcutId != _curShortcutId &&
                     x.KeyList.Count > 0 &&
-                    assign_keystr == x.KeyString.ToLower());
+                    assign_keystr == x.KeyString.ToLowerInvariant());
             if (DuplicatedShortcutViewModel != null) {
                 WarningString = string.Format(
                     UiStrings.ShortcutAssignDuplicateWarning,

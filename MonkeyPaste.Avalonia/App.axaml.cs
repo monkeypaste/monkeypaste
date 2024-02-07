@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static bool HasStartupArg(string arg) {
-            return Args.Any(x => x.ToLower() == arg.ToLower());
+            return Args.Any(x => x.ToLowerInvariant() == arg.ToLowerInvariant());
         }
         #endregion
 

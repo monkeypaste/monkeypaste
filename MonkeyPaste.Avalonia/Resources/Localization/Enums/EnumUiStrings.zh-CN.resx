@@ -1182,4 +1182,58 @@
   <data name="MpContentOptionType_Files" xml:space="preserve">
     <value>文件</value>
   </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>东方主窗口顶部</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>调整主窗口底部方向</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>主窗口向左定向</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>将主窗口定向到右侧</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>透明针托盘</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>剪辑文本</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>原始剪辑数据</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>夹子类型</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>源应用程序路径</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>源应用程序名称</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>来源网址</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>来源网址标题</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>源 URL 域</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>日志</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>夹子</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>基本的</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>任何内容</value>
+  </data>
 </root>

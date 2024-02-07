@@ -1,19 +1,19 @@
 ﻿Field,ID,Type (Type),default,en-us
 Description,2,Text,,Clipboard utility and more
-ReleaseNotes,3,Text,,
+ReleaseNotes,3,Text,,whats_new_stuff
 Title,4,Text,,MonkeyPaste
 ShortTitle,5,Text,,
 SortTitle,6,Text,,
 VoiceTitle,7,Text,,
-ShortDescription,8,Text,,
-DevStudio,9,Text,,
+ShortDescription,8,Text,,short_description
+DevStudio,9,Text,,Thomas Kefauver
 CopyrightTrademarkInformation,12,Text,,
 AdditionalLicenseTerms,13,Text,,
-DesktopScreenshot1,100,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505696868415/listings/1152922700014742556/listingassets/3032943963674949957
-DesktopScreenshot2,101,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505696868415/listings/1152922700014742556/listingassets/3035133607536496155
-DesktopScreenshot3,102,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505696868415/listings/1152922700014742556/listingassets/3053709557548205788
-DesktopScreenshot4,103,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505696868415/listings/1152922700014742556/listingassets/3058231169328637992
-DesktopScreenshot5,104,Relative path (or URL to file in Partner Center),,
+DesktopScreenshot1,100,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3032943963674949957
+DesktopScreenshot2,101,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3035133607536496155
+DesktopScreenshot3,102,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3053709557548205788
+DesktopScreenshot4,103,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3058231169328637992
+DesktopScreenshot5,104,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3007604630692724005
 DesktopScreenshot6,105,Relative path (or URL to file in Partner Center),,
 DesktopScreenshot7,106,Relative path (or URL to file in Partner Center),,
 DesktopScreenshot8,107,Relative path (or URL to file in Partner Center),,
@@ -41,7 +41,7 @@ DesktopScreenshot29,128,Relative path (or URL to file in Partner Center),,
 DesktopScreenshot30,129,Relative path (or URL to file in Partner Center),,
 DesktopScreenshotCaption1,150,Text,,
 DesktopScreenshotCaption2,151,Text,,
-DesktopScreenshotCaption3,152,Text,,
+DesktopScreenshotCaption3,152,Text,,Trigger & Action Designer
 DesktopScreenshotCaption4,153,Text,,
 DesktopScreenshotCaption5,154,Text,,
 DesktopScreenshotCaption6,155,Text,,
@@ -289,13 +289,13 @@ SurfaceHubScreenshotCaption27,576,Text,,
 SurfaceHubScreenshotCaption28,577,Text,,
 SurfaceHubScreenshotCaption29,578,Text,,
 SurfaceHubScreenshotCaption30,579,Text,,
-StoreLogo720x1080,600,Relative path (or URL to file in Partner Center),,
-StoreLogo1080x1080,601,Relative path (or URL to file in Partner Center),,
-StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,
-OverrideLogosForWin10,603,True/False,,False
-StoreLogoOverride150x150,604,Relative path (or URL to file in Partner Center),,
-StoreLogoOverride71x71,605,Relative path (or URL to file in Partner Center),,
-PromoImage1920x1080,606,Relative path (or URL to file in Partner Center),,
+StoreLogo720x1080,600,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3001339648899360497
+StoreLogo1080x1080,601,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3000121595836347979
+StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3043723232723491335
+OverrideLogosForWin10,603,True/False,,True
+StoreLogoOverride150x150,604,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3061917718089192212
+StoreLogoOverride71x71,605,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3021567896828714661
+PromoImage1920x1080,606,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/listings/1152922700014742556/listingassets/3013265311816635890
 PromoImage2400x1200,607,Relative path (or URL to file in Partner Center),,
 XboxBrandedKeyArt584x800,608,Relative path (or URL to file in Partner Center),,
 XboxTitledHero1920x1080,609,Relative path (or URL to file in Partner Center),,
@@ -303,8 +303,8 @@ XboxFeaturedPromo1080x1080,610,Relative path (or URL to file in Partner Center),
 OptionalPromo358x358,611,Relative path (or URL to file in Partner Center),,
 OptionalPromo1000x800,612,Relative path (or URL to file in Partner Center),,
 OptionalPromo414x180,613,Relative path (or URL to file in Partner Center),,
-Feature1,700,Text,,
-Feature2,701,Text,,
+Feature1,700,Text,,feature_1
+Feature2,701,Text,,feature_2
 Feature3,702,Text,,
 Feature4,703,Text,,
 Feature5,704,Text,,
@@ -345,15 +345,15 @@ RecommendedHardwareReq8,857,Text,,
 RecommendedHardwareReq9,858,Text,,
 RecommendedHardwareReq10,859,Text,,
 RecommendedHardwareReq11,860,Text,,
-SearchTerm1,900,Text,,
-SearchTerm2,901,Text,,
+SearchTerm1,900,Text,,search_term_1
+SearchTerm2,901,Text,,search_term_2
 SearchTerm3,902,Text,,
 SearchTerm4,903,Text,,
 SearchTerm5,904,Text,,
 SearchTerm6,905,Text,,
 SearchTerm7,906,Text,,
-TrailerToPlayAtTopOfListing,999,Relative path (or URL to file in Partner Center),,
-Trailer1,1000,Relative path (or URL to file in Partner Center),,
+TrailerToPlayAtTopOfListing,999,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/trailers/3034416431882401591
+Trailer1,1000,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/trailers/3034416431882401591
 Trailer2,1001,Relative path (or URL to file in Partner Center),,
 Trailer3,1002,Relative path (or URL to file in Partner Center),,
 Trailer4,1003,Relative path (or URL to file in Partner Center),,
@@ -368,7 +368,7 @@ Trailer12,1011,Relative path (or URL to file in Partner Center),,
 Trailer13,1012,Relative path (or URL to file in Partner Center),,
 Trailer14,1013,Relative path (or URL to file in Partner Center),,
 Trailer15,1014,Relative path (or URL to file in Partner Center),,
-TrailerTitle1,1020,Text,,
+TrailerTitle1,1020,Text,,Sample of MonkeyPaste in action
 TrailerTitle2,1021,Text,,
 TrailerTitle3,1022,Text,,
 TrailerTitle4,1023,Text,,
@@ -383,7 +383,7 @@ TrailerTitle12,1031,Text,,
 TrailerTitle13,1032,Text,,
 TrailerTitle14,1033,Text,,
 TrailerTitle15,1034,Text,,
-TrailerThumbnail1,1040,Relative path (or URL to file in Partner Center),,
+TrailerThumbnail1,1040,Relative path (or URL to file in Partner Center),,https://developer.microsoft.com/en-us/dashboard/apps/9MZRBMH3JT75/submissions/1152921505697353056/trailers/1152922700015862123/assets/3018983772877750940
 TrailerThumbnail2,1041,Relative path (or URL to file in Partner Center),,
 TrailerThumbnail3,1042,Relative path (or URL to file in Partner Center),,
 TrailerThumbnail4,1043,Relative path (or URL to file in Partner Center),,

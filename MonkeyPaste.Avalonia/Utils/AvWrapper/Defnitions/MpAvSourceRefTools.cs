@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrEmpty(url)) {
                 return false;
             }
-            return url.ToLower().StartsWith(InternalSourceBaseUri);
+            return url.ToLowerInvariant().StartsWith(InternalSourceBaseUri);
         }
         public bool IsExternalSource(MpISourceRef sr) {
             if (sr is MpApp app) {
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Tuple<MpTransactionSourceType, int> ParseUriForSourceRef(string uri) {
             Tuple<MpTransactionSourceType, int> no_match_result = new Tuple<MpTransactionSourceType, int>(MpTransactionSourceType.None, 0);
-            if (!uri.StartsWith(InternalSourceBaseUri.ToLower())) {
+            if (!uri.StartsWith(InternalSourceBaseUri.ToLowerInvariant())) {
                 return no_match_result;
             }
             if (!uri.Contains("?")) {
@@ -124,8 +124,8 @@ namespace MonkeyPaste.Avalonia {
                 ref_param_str
                 .SplitNoEmpty("&")
                 .ToDictionary(
-                    x => x.SplitNoEmpty("=")[0].ToLower(),
-                    x => x.SplitNoEmpty("=")[1].ToLower());
+                    x => x.SplitNoEmpty("=")[0].ToLowerInvariant(),
+                    x => x.SplitNoEmpty("=")[1].ToLowerInvariant());
 
             if (!param_lookup.ContainsKey("type")) {
                 // whats the parameters?

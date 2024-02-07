@@ -16,9 +16,9 @@ namespace MonkeyPaste.Avalonia {
                 if (paramStr == "test") {
 
                 }
-                if (paramStr.ToLower() == "flip") {
+                if (paramStr.ToLowerInvariant() == "flip") {
                     flip = true;
-                } else if (paramStr.ToLower() == "allowzero") {
+                } else if (paramStr.ToLowerInvariant() == "allowzero") {
                     allow_zero = true;
                 }
 

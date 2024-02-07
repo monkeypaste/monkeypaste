@@ -262,12 +262,6 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<List<MpUrl>> GetAllUrlsByDomainNameAsync(string domain) {
-            string query = $"select * from MpUrl where UrlDomainPatn=?";
-            var result = await MpDb.QueryAsync<MpUrl>(query, domain.ToLower());
-            return result;
-        }
-
         #endregion MpUrl
 
         #region MpTransactionSource

@@ -1,6 +1,6 @@
 Field,ID,Type (Type),default,en-US,ja-JP,zh-CN
 Description,2,Text,,"With this subscription you will receive:
-- up to 1,000 clips of content 
-- unlimited trash & archive",このサブスクリプションでは、次のものが得られます:,通过此订阅，您将收到：
+● up to 1,000 clips of content 
+● unlimited trash & archive",このサブスクリプションでは、次のものが得られます:,通过此订阅，您将收到：
 Title,4,Text,,Basic - Yearly,基本 - 毎年,基本 - 每年
 StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png

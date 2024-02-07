@@ -15,6 +15,9 @@ function HomepageHeader() {
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <p align="center">
+          <img src={require('/img/ss/logo_and_slogan.png').default} className="banner-logo" width="128" />
+        </p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -35,10 +38,11 @@ export default function Home() {
       description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <main>
+
         <HomepageFeatures />
-        <p align="center">
+        {/* <p align="center">
           <img src={require('/img/ss/logo_and_slogan.png').default} width="256" />
-        </p>
+        </p> */}
         <HomepageCarousel />
       </main>
     </Layout>

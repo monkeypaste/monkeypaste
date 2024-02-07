@@ -142,7 +142,7 @@
                            HorizontalAlignment="Left"
                            Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                            FontWeight="SemiBold"
-                           Text="{Binding Title}" />
+                           Text="{Binding Title, Converter={x:Static local:MpAvStringToUpperCaseStringConverter.Instance}}" />
                 <Border Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Bottom"

@@ -178,7 +178,7 @@
         </Style>
         <Style Selector="Border.badge.active TextBlock">
             <Setter Property="Text"
-                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountActiveLabel}" />
+                    Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AccountActiveLabel, Converter={x:Static local:MpAvStringToUpperCaseStringConverter.Instance}}" />
         </Style>
 
         <!--  ACCOUNT INFO INLINES  -->
@@ -189,6 +189,11 @@
             <Setter Property="TextWrapping"
                     Value="NoWrap" />
         </Style>
+        <Style Selector="Run.nudge-left">
+            <!--<Setter Property="RenderTransform"
+                    Value="translate(-3px,0)" />-->
+        </Style>
+
         <Style Selector="Run.bullet">
             <Setter Property="Text"
                     Value="● " />
@@ -231,6 +236,16 @@
                     <Binding Path="IsStoreAvailable" />
                 </MultiBinding>
             </Grid.IsVisible>
+            <!--  LEARN MORE LINK  -->
+            <Button x:Name="LearnMoreLinkButton"
+                    Grid.Row="0"
+                    Classes="link"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
+                    CommandParameter="Account">
+                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SubscriptionLearnMoreLinkText}" />
+            </Button>
 
             <!--  ACCT MONTLY TOGGLE  -->
             <ToggleSwitch x:Name="MonthlyToggleButton"
@@ -344,8 +359,9 @@
                                                             <Run Classes="storage" />
                                                             <Run Text="(" />
                                                             <Run Text="{Binding ClipCapCount}"
-                                                                 Classes="cap" />
-                                                            <Run Text=")" />
+                                                                 Classes="cap nudge-left" />
+                                                            <Run Text=")"
+                                                                 Classes="nudge-left" />
                                                             <LineBreak />
                                                             <!--  Trash line  -->
                                                             <Run Classes="bullet" />
@@ -372,8 +388,9 @@
                                                             <Run Classes="storage" />
                                                             <Run Text="(" />
                                                             <Run Text="{Binding ClipCapCount}"
-                                                                 Classes="cap" />
-                                                            <Run Text=")" />
+                                                                 Classes="cap nudge-left" />
+                                                            <Run Text=")"
+                                                                 Classes="nudge-left" />
                                                             <LineBreak />
                                                             <!--  Trash line  -->
                                                             <Run Classes="bullet" />
@@ -438,10 +455,12 @@
                                                             Margin="0"
                                                             Classes="badge trial"
                                                             HorizontalAlignment="Right"
-                                                            Padding="5,3,5,0"
+                                                            VerticalAlignment="Center"
+                                                            Padding="5,1"
                                                             IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                             Background="Crimson">
                                                         <TextBlock Foreground="White"
+                                                                   LineHeight="10"
                                                                    TextWrapping="WrapWithOverflow"
                                                                    Text="{Binding TrialText}" />
                                                     </Border>

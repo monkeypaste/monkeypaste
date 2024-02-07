@@ -65,8 +65,8 @@ function Example({ imgSrc, description }) {
   if (idx % 2 == 0) {
     return (
       <div className={styles.exampleContainer}>
-        <div class="example" className={styles.example}>
-          <div><img class="zoom" src={imgSrc} role="img" /></div>
+        <div className={clsx('example', styles.example)}>
+          <div><img className="zoom" src={imgSrc} role="img" /></div>
           <p>{description}</p>
         </div>
         <hr />
@@ -75,9 +75,9 @@ function Example({ imgSrc, description }) {
   }
   return (
     <div className={styles.exampleContainer}>
-      <div class="example" className={styles.example}>
+      <div className={clsx('example', styles.example)}>
         <p>{description}</p>
-        <div><img class="zoom" src={imgSrc} role="img" /></div>
+        <div><img className="zoom" src={imgSrc} role="img" /></div>
       </div>
       <hr />
     </div>

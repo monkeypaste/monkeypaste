@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             bool flip = false;
-            if (parameter is string paramStr && paramStr.ToLower() == "flip") {
+            if (parameter is string paramStr && paramStr.ToLowerInvariant() == "flip") {
                 flip = true;
             }
             if (value is ICollection collection) {

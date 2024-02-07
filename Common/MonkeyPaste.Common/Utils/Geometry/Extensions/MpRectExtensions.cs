@@ -183,7 +183,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static MpPoint GetCornerByLabel(this MpRect rect, string cornerLabel) {
-            cornerLabel = cornerLabel.ToLower();
+            cornerLabel = cornerLabel.ToLowerInvariant();
             switch (cornerLabel) {
                 case "tl":
                     return rect.TopLeft;
@@ -202,7 +202,7 @@ namespace MonkeyPaste.Common {
                 MpConsole.WriteTraceLine("Error! sidelabel is null or empty");
                 return MpLine.Empty;
             }
-            switch (sideLabel.ToLower()) {
+            switch (sideLabel.ToLowerInvariant()) {
                 case "l":
                     return new MpLine(rect.TopLeft, rect.BottomLeft);
                 case "t":

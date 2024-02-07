@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -117,8 +118,12 @@ namespace MonkeyPaste {
             var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
             if (thisUserDevice == null) {
                 // reset error
-                var test = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
+                var device_check = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
                 MpDebug.Break($"Missing user device '{Mp.Services.ThisDeviceInfo.ThisDeviceGuid}'");
+
+                // BUG sandboxed local storage issues keep hitting this spot, testing using the available guid...
+                thisUserDevice = device_check.FirstOrDefault();
+                Mp.Services.ThisDeviceInfo.ThisDeviceGuid = thisUserDevice == null ? Mp.Services.ThisDeviceInfo.ThisDeviceGuid : thisUserDevice.Guid;
             }
             ThisUserDeviceId = thisUserDevice.Id;
             ThisUserDeviceGuid = thisUserDevice.Guid;
@@ -133,7 +138,7 @@ namespace MonkeyPaste {
                 } else {
                     string stored_exe_name = Path.GetFileName(firstApp.AppPath);
                     string running_exe_name = Path.GetFileName(Mp.Services.PlatformInfo.ExecutingPath);
-                    MpDebug.Assert(stored_exe_name.ToLower() == running_exe_name.ToLower(), $"ThisApp should be Id=1. But path '{firstApp.AppPath}' was found instead");
+                    MpDebug.Assert(stored_exe_name.ToLowerInvariant() == running_exe_name.ToLowerInvariant(), $"ThisApp should be Id=1. But path '{firstApp.AppPath}' was found instead");
                 }
             }
 

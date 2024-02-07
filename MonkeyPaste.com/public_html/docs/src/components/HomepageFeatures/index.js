@@ -10,7 +10,7 @@ const FeatureList = [
     description: (
       <>
         Focus on what matters and get things done quicker with our low-profile
-        layout, designed to minimize the steps between A and B so you stay flowing.
+        layout, designed to minimize the steps between A and B so <b>you stay <em>flowing</em></b>.
       </>
     ),
   },
@@ -19,7 +19,7 @@ const FeatureList = [
     Svg: require('@site/static/svg/fields.svg').default,
     description: (
       <>
-        MonkeyPaste was designed from the ground up to <b>evolve your clipboard </b>
+        MonkeyPaste was designed from the ground up to <b><em>evolve</em> your clipboard </b>
         into a vault for your bookmarks, notes and much more.
       </>
     ),
@@ -29,7 +29,7 @@ const FeatureList = [
     Svg: require('@site/static/svg/trees.svg').default,
     description: (
       <>
-        Built to grow using a simple plugin system that allows developers
+        <b>Built to <em>grow</em></b> using a simple plugin system that allows developers
         to <a href="./docs/plugins/plugin-development">easily extend</a> and users to pick the features they want with point-and-click ease.
       </>
     ),

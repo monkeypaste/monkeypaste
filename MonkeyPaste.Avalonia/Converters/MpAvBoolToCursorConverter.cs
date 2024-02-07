@@ -3,7 +3,6 @@ using Avalonia.Input;
 using MonkeyPaste.Common;
 using System;
 using System.Globalization;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBoolToCursorConverter : IValueConverter {
@@ -16,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
                     paramStr.SplitNoEmpty("|") is string[] paramParts) {
                     string result_part = boolVal ? paramParts[0] : paramParts[1];
                     // for unset return null to not alter cursor
-                    if (result_part.ToLower() == "unset") {
+                    if (result_part.ToLowerInvariant() == "unset") {
                         cursor_type = null;
                     } else {
                         cursor_type = result_part.ToEnum<StandardCursorType>();

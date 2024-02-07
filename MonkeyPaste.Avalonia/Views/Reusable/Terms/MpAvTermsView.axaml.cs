@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         public static async Task<bool> ShowTermsAgreementWindowAsync(MpAvTermsAgreementCollectionViewModel tacvm) {
             var tw = new MpAvWindow() {
-                Width = 400,
+                Width = 425,
                 Height = 250,
                 Topmost = true,
                 ShowInTaskbar = true,

@@ -1106,7 +1106,9 @@ namespace MonkeyPaste.Avalonia {
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpAvPrefViewModel.Instance.IsSpellCheckEnabled,
-                currentTheme = MpAvPrefViewModel.Instance.ThemeType != MpThemeType.Dark ? MpThemeType.Light.ToString().ToLower() : MpThemeType.Dark.ToString().ToLower(),
+                currentTheme =
+                    MpAvPrefViewModel.Instance.ThemeType != MpThemeType.Dark ?
+                        MpThemeType.Light.ToString().ToLowerInvariant() : MpThemeType.Dark.ToString().ToLowerInvariant(),
                 bgOpacity = MpAvPrefViewModel.Instance.GlobalBgOpacity,
                 maxUndo = MpAvPrefViewModel.Instance.MaxUndoLimit,
                 shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64,

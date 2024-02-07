@@ -6,7 +6,7 @@ const { themes } = require('prism-react-renderer');
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
-const local = false;
+const local = true;
 
 const siteUrl = local ?
   "https://localhost" :
@@ -145,23 +145,27 @@ const config = {
               },
             ],
           },
-          // {
-          //   title: 'Community',
-          //   items: [
-          //     {
-          //       label: 'Stack Overflow',
-          //       href: 'https://stackoverflow.com/questions/tagged/monkeypaste',
-          //     },
-          //     {
-          //       label: 'Discord',
-          //       href: 'https://discordapp.com/invite/monkeypaste',
-          //     },
-          //     {
-          //       label: 'Twitter',
-          //       href: 'https://twitter.com/monkeypaste',
-          //     },
-          //   ],
-          // },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/questions/tagged/monkeypaste',
+              },
+              {
+                to: 'https://www.monkeypaste.com/forum',
+                label: 'Forum'
+              },
+              // {
+              //   label: 'Discord',
+              //   href: 'https://discordapp.com/invite/monkeypaste',
+              // },
+              // {
+              //   label: 'Twitter',
+              //   href: 'https://twitter.com/monkeypaste',
+              // },
+            ],
+          },
           {
             title: 'More',
             items: [
@@ -172,10 +176,6 @@ const config = {
               {
                 to: '/about',
                 label: 'About'
-              },
-              {
-                to: 'https://www.monkeypaste.com/forum',
-                label: 'Forum'
               },
               {
                 to: '/download',

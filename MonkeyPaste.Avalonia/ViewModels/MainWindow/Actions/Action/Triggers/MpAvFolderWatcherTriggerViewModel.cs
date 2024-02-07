@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                 // so if thats not the case change handling
                 MpDebug.Break("file watch event type not accounted for in parse");
             }
-            bool is_handled = ChangeTypeNames.Any(x => x.ToLower() == flag_test.ToLower());
+            bool is_handled = ChangeTypeNames.Any(x => x.ToLowerInvariant() == flag_test.ToLowerInvariant());
             MpConsole.WriteLine($"Folder watcher event '{flag_test}' occured for path '{FolderPath}' recursive: {IncludeSubdirectories} handled: {is_handled}");
             if (!is_handled) {
                 // change ignored

@@ -216,15 +216,15 @@ namespace MonkeyPaste.Common {
             string pt = htmlStr.ToPlainText();
             return
                 string.IsNullOrWhiteSpace(pt) ||
-                htmlStr.ToLower() == "<p><br></p>" ||
-                htmlStr.ToLower() == "<p><br/></p>";
+                htmlStr.ToLowerInvariant() == "<p><br></p>" ||
+                htmlStr.ToLowerInvariant() == "<p><br/></p>";
         }
 
         public static bool IsStringImageResourceKey(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
-            if (str.ToLower().EndsWith("image")) {
+            if (str.ToLowerInvariant().EndsWith("image")) {
                 return true;
             }
             return false;
@@ -237,7 +237,7 @@ namespace MonkeyPaste.Common {
             if (str.IsStringImageResourceKey()) {
                 return true;
             }
-            if (str.ToLower().EndsWith("png")) {
+            if (str.ToLowerInvariant().EndsWith("png")) {
                 return true;
             }
             return false;
@@ -280,7 +280,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringUrl(this string str) {
-            if (string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("http")) {
+            if (string.IsNullOrWhiteSpace(str) || !str.ToLowerInvariant().StartsWith("http")) {
                 return false;
             }
             return Uri.IsWellFormedUriString(str, UriKind.Absolute);
@@ -345,12 +345,12 @@ namespace MonkeyPaste.Common {
             }
             if (_resourceNames == null) {
                 //add executing resource names
-                _resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames().Select(x => x.ToLower()).ToList();
+                _resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames().Select(x => x.ToLowerInvariant()).ToList();
                 //add shared resource names
-                _resourceNames.AddRange(Assembly.GetCallingAssembly().GetManifestResourceNames().Select(x => x.ToLower()));
+                _resourceNames.AddRange(Assembly.GetCallingAssembly().GetManifestResourceNames().Select(x => x.ToLowerInvariant()));
             }
 
-            return _resourceNames.Contains(text.ToLower());
+            return _resourceNames.Contains(text.ToLowerInvariant());
         }
         public static bool IsCapitalCaseChar(char let) {
             if (let == default) {
@@ -385,7 +385,7 @@ namespace MonkeyPaste.Common {
                 sb.Append(titleCaseStr[i]);
             }
             string result = sb.ToString();
-            if (result.ToLower() == "none") {
+            if (result.ToLowerInvariant() == "none") {
                 return noneText;
             }
             return result;
@@ -709,7 +709,7 @@ namespace MonkeyPaste.Common {
                 return false;
             }
             string[] image_exts = new string[] { "png", "gif", "jpg", "jpeg", "bmp" };
-            return image_exts.Any(x => x == Path.GetExtension(str).ToLower());
+            return image_exts.Any(x => x == Path.GetExtension(str).ToLowerInvariant());
         }
 
         public static bool IsFile(this string str) {
@@ -760,7 +760,7 @@ namespace MonkeyPaste.Common {
                 return false;
             }
             if (MpCommonTools.Services.PlatformInfo.OsType == MpUserDeviceType.Windows) {
-                return str.ToLower().EndsWith("lnk");
+                return str.ToLowerInvariant().EndsWith("lnk");
             }
             // TODO not sure if symbolic links need to be resolved 
             return false;
@@ -900,7 +900,7 @@ namespace MonkeyPaste.Common {
             if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
-            return MpSystemColors.X11ColorNames.Contains(str.ToLower());
+            return MpSystemColors.X11ColorNames.Contains(str.ToLowerInvariant());
         }
         public static bool IsStringHexOrNamedColor(this string str) {
             return str.IsStringHexColor() || str.IsStringNamedColor();
@@ -917,7 +917,7 @@ namespace MonkeyPaste.Common {
             if (!IsStringNamedColor(str)) {
                 throw new Exception($"'{str}' is not an X11 color name sowwy");
             }
-            var propInfo = typeof(MpSystemColors).GetProperty(str.ToLower());
+            var propInfo = typeof(MpSystemColors).GetProperty(str.ToLowerInvariant());
             return propInfo.GetValue(null) as string;
         }
 
@@ -964,7 +964,7 @@ namespace MonkeyPaste.Common {
             if (string.IsNullOrEmpty(str) || !str.StartsWith("<")) {
                 return false;
             }
-            str = str.ToLower();
+            str = str.ToLowerInvariant();
             foreach (var quillTag in QuillTagNames) {
                 if (str.Contains($"</{quillTag}>")) {
                     return true;
@@ -974,15 +974,15 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringRichHtmlImage(this string str) {
-            if (string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("<p>")) {
+            if (string.IsNullOrWhiteSpace(str) || !str.ToLowerInvariant().StartsWith("<p>")) {
                 return false;
             }
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(str);
             if (htmlDoc.DocumentNode.ChildNodes.Count == 1 &&
-                htmlDoc.DocumentNode.FirstChild.Name.ToLower() == "p" &&
+                htmlDoc.DocumentNode.FirstChild.Name.ToLowerInvariant() == "p" &&
                 htmlDoc.DocumentNode.FirstChild.ChildNodes.Count == 1 &&
-                htmlDoc.DocumentNode.FirstChild.FirstChild.Name.ToLower() == "img") {
+                htmlDoc.DocumentNode.FirstChild.FirstChild.Name.ToLowerInvariant() == "img") {
                 return true;
             }
             return false;

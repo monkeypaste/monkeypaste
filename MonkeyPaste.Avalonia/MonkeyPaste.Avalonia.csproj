@@ -1430,6 +1430,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Localization\Listings\ListingStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ListingStrings.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Localization\UiStrings\UiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1709,8 +1714,13 @@
   
   
   <ItemGroup>
-    <None Include="Resources\Localization\Listings\ListingStrings.resx">
+    <None Include="Resources\Localization\Listings\ListingStrings.en-US.resx">
       <Generator></Generator>
+    </None>
+    <None Include="Resources\Localization\Listings\ListingStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListingStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
     </None>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
@@ -1724,6 +1734,9 @@
   </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
     <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\Localization\Listings\ListingStrings.en-US.resx" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Images\radar.png">

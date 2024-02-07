@@ -123,7 +123,7 @@ namespace CoreOleHandler {
             if (source_type == null) {
                 source_type = "text";
             } else {
-                source_type = source_type.ToLower();
+                source_type = source_type.ToLowerInvariant();
             }
 
             string data_to_write = null;

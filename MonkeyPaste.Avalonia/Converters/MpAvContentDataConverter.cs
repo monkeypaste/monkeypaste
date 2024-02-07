@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             if (value is string valStr) {
                 if (parameter is string paramStr) {
-                    if (paramStr.ToLower() == "plaintext") {
+                    if (paramStr.ToLowerInvariant() == "plaintext") {
                         return Mp.Services.StringTools.ToPlainText(valStr, "html");
                     }
                 }

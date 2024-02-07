@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
             if (value is string) {
                 valueStr = value.ToString();
                 if (parameter is string paramStr) {
-                    isRow = paramStr.ToLower() == "row";
+                    isRow = paramStr.ToLowerInvariant() == "row";
                 }
             }
             return isRow ?

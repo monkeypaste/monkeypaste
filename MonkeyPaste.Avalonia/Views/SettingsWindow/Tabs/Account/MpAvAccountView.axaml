@@ -47,7 +47,28 @@
             <ColumnDefinition Width="{Binding AccountColumnWidth, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
             <ColumnDefinition Width="{Binding SubscriptionColumnWidth, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
         </Grid.ColumnDefinitions>
+        <local:MpAvSubscriptionView Grid.Column="0"
+                                    x:CompileBindings="False"
+                                    IsVisible="{Binding !IsUserViewEnabled, Source={x:Static local:MpAvAccountViewModel.Instance}}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top">
+            <local:MpAvSubscriptionView.Width>
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                              ConverterParameter="*">
+                    <Binding Path="Bounds.Width"
+                             ElementName="AccountOuterContainer" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>0.5</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </local:MpAvSubscriptionView.Width>
+        </local:MpAvSubscriptionView>
+
+        <!--  NOTE BELOW IS FULL VIEW (DISABLED BY IsUserViewEnabled)  -->
         <local:MpAvUserView Grid.Column="0"
+                            IsVisible="{Binding IsUserViewEnabled, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                             Classes.loginonly="{Binding IsLoginOnly, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                             BorderThickness="0,0,1.5,0"
                             HorizontalAlignment="Stretch"
@@ -56,6 +77,7 @@
                             VerticalContentAlignment="Top" />
         <!--  UPGRADE INFO THING  -->
         <TabControl x:Name="RightPaneTabControl"
+                    IsVisible="{Binding IsUserViewEnabled, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                     TabStripPlacement="Bottom"
                     SelectedIndex="{Binding IsSubscriptionTabSelected, ConverterParameter=1|0, Mode=TwoWay, Converter={x:Static local:MpAvBoolToIntConverter.Instance}, Source={x:Static local:MpAvSubscriptionPurchaseViewModel.Instance}}"
                     Grid.Column="1"

@@ -264,7 +264,7 @@ namespace MonkeyPaste.Avalonia {
             if (res_str.EndsWith("Image")) {
                 res_str = Mp.Services.PlatformResource.GetResource<string>(res_str);
             }
-            return _colorImageFileNames.Any(x => res_str.ToLower().EndsWith(x));
+            return _colorImageFileNames.Any(x => res_str.ToLowerInvariant().EndsWith(x));
         }
 
         public void HandlePulse(MpAvIPulseViewModel pvm) {

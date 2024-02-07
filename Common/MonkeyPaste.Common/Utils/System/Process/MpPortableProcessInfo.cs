@@ -10,7 +10,7 @@ namespace MonkeyPaste.Common {
 
         public bool IsValueEqual(MpPortableProcessInfo other) {
             return
-                ProcessPath.ToLower() == other.ProcessPath.ToLower() &&
+                ProcessPath.ToLowerInvariant() == other.ProcessPath.ToLowerInvariant() &&
                 !ArgumentList.Difference(other.ArgumentList).Any();
         }
 

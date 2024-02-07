@@ -63,7 +63,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         case "Right":
                         case "Up":
                         case "Down":
-                            sb.Append("{" + key.ToUpper() + "}");
+                            sb.Append("{" + key.ToUpperInvariant() + "}");
                             //outStr += "{" + key.ToUpper() + "}";
                             break;
                         default:
@@ -77,12 +77,12 @@ namespace MonkeyPaste.Common.Avalonia {
                                 catch (Exception ex) {
                                     MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
                                     //outStr += key.ToUpper();
-                                    sb.Append(key.ToUpper());
+                                    sb.Append(key.ToUpperInvariant());
                                     break;
                                 }
                             } else {
                                 //outStr += key.ToUpper();
-                                sb.Append(key.ToUpper());
+                                sb.Append(key.ToUpperInvariant());
                             }
                             break;
                     }

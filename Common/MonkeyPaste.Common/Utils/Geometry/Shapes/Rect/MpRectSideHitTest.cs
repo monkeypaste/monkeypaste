@@ -20,7 +20,7 @@
             if (string.IsNullOrEmpty(sideLabel)) {
                 return -1;
             }
-            sideLabel = sideLabel.ToLower();
+            sideLabel = sideLabel.ToLowerInvariant();
             if (sideLabel == "l") {
                 return 0;
             }

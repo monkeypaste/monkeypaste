@@ -439,7 +439,7 @@ namespace MonkeyPaste.Avalonia {
                 AllPresets.FirstOrDefault(x =>
                     x.Parent.PluginGuid == pluginGuid &&
                     x.IsReader == isReader &&
-                    x.ClipboardFormat.formatName.ToLower() == formatName.ToLower());
+                    x.ClipboardFormat.formatName.ToLowerInvariant() == formatName.ToLowerInvariant());
         }
         public bool ValidateAppOleInfos() {
             // NOTE unused just for diagnostics

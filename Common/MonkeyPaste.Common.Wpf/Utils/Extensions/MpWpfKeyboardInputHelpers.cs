@@ -42,7 +42,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static Key ConvertStringToKey(string keyStr) {
-            string lks = keyStr.ToLower();
+            string lks = keyStr.ToLowerInvariant();
             if (lks == "control") {
                 return Key.LeftCtrl;
             }
@@ -213,7 +213,7 @@ namespace MonkeyPaste.Common.Wpf {
                         case "Right":
                         case "Up":
                         case "Down":
-                            sb.Append("{" + key.ToUpper() + "}");
+                            sb.Append("{" + key.ToUpperInvariant() + "}");
                             //outStr += "{" + key.ToUpper() + "}";
                             break;
                         default:
@@ -227,12 +227,12 @@ namespace MonkeyPaste.Common.Wpf {
                                 catch (Exception ex) {
                                     Console.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
                                     //outStr += key.ToUpper();
-                                    sb.Append(key.ToUpper());
+                                    sb.Append(key.ToUpperInvariant());
                                     break;
                                 }
                             } else {
                                 //outStr += key.ToUpper();
-                                sb.Append(key.ToUpper());
+                                sb.Append(key.ToUpperInvariant());
                             }
                             break;
                     }

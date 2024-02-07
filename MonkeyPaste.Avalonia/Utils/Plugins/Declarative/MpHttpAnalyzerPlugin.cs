@@ -198,17 +198,17 @@ namespace MonkeyPaste.Avalonia {
             string mediaType = _httpTransactionFormat.request.body.mediaType;
 
             Encoding reqEncoding = Encoding.UTF8;
-            if (_httpTransactionFormat.request.body.encoding.ToUpper() == "UTF8") {
+            if (_httpTransactionFormat.request.body.encoding.ToUpperInvariant() == "UTF8") {
                 reqEncoding = Encoding.UTF8;
             }
             Console.WriteLine("Content-Encoding: " + reqEncoding.ToString());
             Console.WriteLine("Media-Type", mediaType);
             string body = CreatRequestBody();
-            if (mediaType.ToLower() == "application/json") {
+            if (mediaType.ToLowerInvariant() == "application/json") {
                 var sc = new StringContent(body, reqEncoding, mediaType);
                 sc.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
                 return sc;
-            } else if (mediaType.ToLower() == "application/octet-stream") {
+            } else if (mediaType.ToLowerInvariant() == "application/octet-stream") {
                 var bac = new ByteArrayContent(Convert.FromBase64String(body));
                 bac.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
                 return bac;
@@ -221,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
         private string CreatRequestBody() {
             string raw = _httpTransactionFormat.request.body.raw;
             if (!string.IsNullOrEmpty(raw) &&
-               _httpTransactionFormat.request.body.mode.ToLower() == "parameterized") {
+               _httpTransactionFormat.request.body.mode.ToLowerInvariant() == "parameterized") {
                 Regex paramReg = new Regex(_paramRefRegEx, RegexOptions.Compiled | RegexOptions.Multiline);
                 MatchCollection mc = paramReg.Matches(raw);
 

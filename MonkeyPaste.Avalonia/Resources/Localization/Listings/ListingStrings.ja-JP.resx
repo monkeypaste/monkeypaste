@@ -144,4 +144,106 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>無制限 - 年間</value>
   </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>ペースト</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>クリップボードマネージャー</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>道具</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>ユーティリティ</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>オートメーション</value>
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● 水平/垂直レイアウト、リスト/グリッド ビュー、マルチ モニター サポートを備えたシンプルでフレンドリーなインターフェイス</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● 追加モード: コピーはクリップボード上で「置換」ではなく「追加」になります。</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Firefox および Chromium ベースのブラウザ (Chrome、Edge、Brave) のサポートが強化された、洗練されたクリップ トラッキング、ソース、および使用法</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● 検索/置換およびハイライト機能を備えたリッチ テキスト (表、リスト、リンクなど) を備えたフル機能のクリップ エディター</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● 画像を安全なデータベースに保存し、ドラッグ アンド ドロップするだけでいつでもオンデマンドでファイルとして使用できるようになります。</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● スニペット コレクションから迅速かつ動的に貼り付けるための強力なテキスト テンプレート</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● カスタム オートメーションとアクション チェーンのためのトリガー &amp; アクション デザイナー</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● プラグイン システムの使用と拡張が簡単で、クリップの分析やクリップボードへの任意の形式の読み取り/書き込みの両方を行うことができます。</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● 成長を続けるコミュニティ主導のプラグイン ライブラリを備えた組み込みプラグイン ブラウザ</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● プラグイン プリセットですべてを自動化し、AI プロンプトやコマンドを隠して簡単に使用できます</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● さらに多くのプラットフォームと機能が近日公開予定です。</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● 明るいテーマと暗いテーマは両方とも完全に動的で、必要な色を使用できます</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● インターフェース内に統合されたヘルプとヒント。</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>●パフォーマンスを最適化し、100万個のクリップによるストレステストを実施。</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● 検索はいつでも、数十のフィールドにわたるクリップとそのソースに対するシンプルかつ高度なフィルタリングを使用して入力を開始するだけです</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● タグ ツリーでクリップを整理し、再利用可能なフィルタを作成します</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● オプションの 2 要素パスワード保護で常に暗号化された、安全かつプライベートなローカル データ ストレージ (データ収集なし) で、トラッカーからアプリや Web サイトを簡単にブロックできます。</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● 広範なドラッグ アンド ドロップのサポート、カスタム グローバル ショートカット、ルーティング、マウス不要のナビゲーション</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● カスタム マウス モード: 右クリックで貼り付け、左クリックで自動コピー</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>クリップボードはジャングルです。</value>
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>MonkeyPaste のサンプルが動作中!</value>
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>この言語でインストールされています。</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>初回リリース</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>カスタムオートメーションとアクションチェーンのためのトリガー＆アクションデザイナー</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>水平/垂直レイアウト、リスト/グリッド ビュー、マルチモニターのサポート</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>検索/置換、リッチ テキスト (表、リスト、リンクなど) のテキスト テンプレートを備えたフル機能のクリップ エディターにより、スニペット コレクションからすばやく動的に貼り付けることができます。</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>オプションの 2 要素パスワード保護を備えた安全、セキュアなプライベート ローカル データ ストレージ</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>成長を続けるコミュニティ主導のプラグイン ライブラリを備えた組み込みプラグイン ブラウザ</value>
+  </data>
 </root>

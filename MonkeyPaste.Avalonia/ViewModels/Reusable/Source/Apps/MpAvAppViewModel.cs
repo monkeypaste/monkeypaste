@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
             return
                 AppName.ToLower().Contains(filter.ToLower()) ||
                 AppPath.ToLower().Contains(filter.ToLower()) ||
-                OleFormatInfos.Items.Any(x => x.ClipboardPresetViewModel.FormatName.ToLower().Contains(filter.ToLower()));
+                OleFormatInfos.Items.Any(x => x.ClipboardPresetViewModel.FormatName.ToLowerInvariant().Contains(filter.ToLowerInvariant()));
         }
 
         #endregion

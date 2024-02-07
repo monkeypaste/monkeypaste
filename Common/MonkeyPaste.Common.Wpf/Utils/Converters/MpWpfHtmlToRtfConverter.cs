@@ -625,12 +625,12 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static FontFamily GetFontFamily(string classValue) {
-            string defaultFontName = CurrentDefaultFontFamily.ToLower();
+            string defaultFontName = CurrentDefaultFontFamily.ToLowerInvariant();
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
             string fontName = classValue.Replace("ql-font-", string.Empty).Replace("-", " ");
             foreach (var ff in Fonts.SystemFontFamilies) {
-                string ffName = ff.ToString().ToLower();
+                string ffName = ff.ToString().ToLowerInvariant();
                 if (ffName.Contains(fontName)) {
                     closestFontFamily = ff;
                 }
@@ -645,7 +645,7 @@ namespace MonkeyPaste.Common.Wpf {
 
             if (closestFontFamily != null) {
                 //Console.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
-                MpWpfRtfDefaultProperties.Instance.AddFont(closestFontFamily.ToString().ToLower());
+                MpWpfRtfDefaultProperties.Instance.AddFont(closestFontFamily.ToString().ToLowerInvariant());
                 return closestFontFamily;
             }
             Console.WriteLine("Could not find system font: " + fontName);

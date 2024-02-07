@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             string base64 = null;
-            if (path.ToLower().EndsWith("bin") &&
+            if (path.ToLowerInvariant().EndsWith("bin") &&
                 handle != nint.Zero) {
                 // handling weird case of libre office pointing process path to .bin not actual app so using handle here
                 base64 = MpAvWinPathIconHelper.GetIconBase64FromHandle(handle);

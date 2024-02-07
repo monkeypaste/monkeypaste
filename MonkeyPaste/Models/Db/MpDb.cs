@@ -194,7 +194,7 @@ namespace MonkeyPaste {
             }
             return _connectionAsync
                     .TableMappings
-                    .Where(x => x.TableName.ToLower() == tableName.ToLower()).FirstOrDefault();
+                    .Where(x => x.TableName.ToLowerInvariant() == tableName.ToLowerInvariant()).FirstOrDefault();
         }
 
 
@@ -204,7 +204,7 @@ namespace MonkeyPaste {
             }
             TableMapping qtm = null;
             foreach (var tm in _connectionAsync.TableMappings) {
-                if (tm.TableName.ToLower() == tableName.ToLower()) {
+                if (tm.TableName.ToLowerInvariant() == tableName.ToLowerInvariant()) {
                     qtm = tm;
                     break;
                 }

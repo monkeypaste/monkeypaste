@@ -14,14 +14,14 @@ namespace MonkeyPaste.Avalonia {
                 paramStr.SplitNoEmpty("|") is string[] paramParts) {
                 int idx = boolVal ? 0 : 1;
                 string param_val = paramParts[idx];
-                if (param_val.ToLower().EndsWith("*")) {
+                if (param_val.ToLowerInvariant().EndsWith("*")) {
                     if (param_val == "*") {
                         return GridLength.Star;
                     }
                     double star_val = double.Parse(param_val.Replace("*", string.Empty));
                     return new GridLength(star_val, GridUnitType.Star);
                 }
-                if (param_val.ToLower() == "auto") {
+                if (param_val.ToLowerInvariant() == "auto") {
                     return GridLength.Auto;
                 }
                 double pixel_val = double.Parse(param_val);

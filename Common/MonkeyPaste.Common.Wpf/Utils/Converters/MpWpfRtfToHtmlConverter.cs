@@ -88,11 +88,11 @@ namespace MonkeyPaste.Common.Wpf {
                 if (n.NodeType == HtmlNodeType.Text) {
                     continue;
                 }
-                if (_blockTags.Contains(n.Name.ToLower())) {
+                if (_blockTags.Contains(n.Name.ToLowerInvariant())) {
                     foreach (var bkvp in blockAttributes) {
                         n.SetAttributeValue(bkvp.Key, bkvp.Value);
                     }
-                } else if (_inlineTags.Contains(n.Name.ToLower())) {
+                } else if (_inlineTags.Contains(n.Name.ToLowerInvariant())) {
                     foreach (var ikvp in inlineAttributes) {
                         n.SetAttributeValue(ikvp.Key, ikvp.Value);
                     }
@@ -287,7 +287,7 @@ namespace MonkeyPaste.Common.Wpf {
             li_node.SetAttributeValue("data-list", listType);
             li_node.AppendChild(bullet_span);
             foreach (var child in children) {
-                if (child.Name.ToLower() == "p") {
+                if (child.Name.ToLowerInvariant() == "p") {
                     //rtf list items are parents of paragraphs but quills are the direct content
                     child.GetClasses().ForEach(x => li_node.AddClass(x));
                     child.GetAttributes().ForEach(x => li_node.SetAttributeValue(x.Name, x.Value));
@@ -493,7 +493,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static string GetHtmlFont(Span s) {
-            string ff = s.FontFamily.ToString().ToLower().Trim();
+            string ff = s.FontFamily.ToString().ToLowerInvariant().Trim();
             //MpWpfRtfDefaultProperties.Instance.AddFont(ff);
             return ff.Replace(" ", "-");
         }

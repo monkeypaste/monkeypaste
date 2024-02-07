@@ -79,7 +79,7 @@ namespace CoreAnnotator {
                 return null;
             }
             var attr = new MpQuillAttributes() {
-                linkType = annotationRegExType.ToString().ToLower(),
+                linkType = annotationRegExType.ToString().ToLowerInvariant(),
                 link = href
             };
             if (annotationRegExType == TextAnnotationType.HexColor) {

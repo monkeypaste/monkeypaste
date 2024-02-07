@@ -89,13 +89,13 @@ namespace MonkeyPaste.Common {
                 // when ext is not given infer from content
                 forceExt = MpCommonTools.Services.StringTools.DetectStringFileExt(fileData);
             } else {
-                if (forceExt.ToLower().Equals("rtf")) {
+                if (forceExt.ToLowerInvariant().Equals("rtf")) {
                     fileData = MpCommonTools.Services.StringTools.ToRichText(fileData);
-                } else if (forceExt.ToLower().Equals("txt")) {
+                } else if (forceExt.ToLowerInvariant().Equals("txt")) {
                     fileData = MpCommonTools.Services.StringTools.ToPlainText(fileData);
-                } else if (forceExt.ToLower().Equals("csv")) {
+                } else if (forceExt.ToLowerInvariant().Equals("csv")) {
                     fileData = MpCommonTools.Services.StringTools.ToCsv(fileData);
-                } else if (forceExt.ToLower().Equals("html")) {
+                } else if (forceExt.ToLowerInvariant().Equals("html")) {
                     fileData = MpCommonTools.Services.StringTools.ToHtml(fileData);
                 }
             }
@@ -105,9 +105,9 @@ namespace MonkeyPaste.Common {
                 if (fileData.IsFileOrDirectory()) {
                     tfp = fileData;
                 } else if (forceExt == "png" ||
-                           forceExt.ToLower().Equals("bmp") ||
-                           forceExt.ToLower().Equals("jpg") ||
-                           forceExt.ToLower().Equals("jpeg")) {
+                           forceExt.ToLowerInvariant().Equals("bmp") ||
+                           forceExt.ToLowerInvariant().Equals("jpg") ||
+                           forceExt.ToLowerInvariant().Equals("jpeg")) {
                     string tmp_fp = Path.GetTempFileName().Replace(@".tmp", forceExt);
                     tfp = WriteByteArrayToFile(tmp_fp, fileData.ToBytesFromBase64String());
                 } else {
@@ -139,7 +139,7 @@ namespace MonkeyPaste.Common {
                     string tfd = Path.GetDirectoryName(tfp);
                     ofp = ofp.Replace(tfd, forceDir);
                 }
-                if (ofp.ToLower() != tfp.ToLower()) {
+                if (ofp.ToLowerInvariant() != tfp.ToLowerInvariant()) {
                     if (ofp.IsFileOrDirectory() && !overwrite) {
                         if (string.IsNullOrEmpty(forceDir)) {
                             // this means file is going to write to temp folder and to avoid IO or name issues preserve name
@@ -319,6 +319,9 @@ namespace MonkeyPaste.Common {
         public static double ConvertMegaBytesToBytes(long megabytes, int precision = 2) {
             return Math.Round((megabytes * 1024f) * 1024f, precision);
         }
+        public static void CopyContents(string sourceDir, string targetDir, bool recursive = true, bool overwrite = true) {
+            CopyContents(new DirectoryInfo(sourceDir), new DirectoryInfo(targetDir), recursive, overwrite);
+        }
         public static void CopyContents(this DirectoryInfo sourceDir, DirectoryInfo targetDir, bool recursive, bool overwrite) {
             foreach (var file in sourceDir.GetFiles()) {
                 string fp = Path.Combine(targetDir.FullName, file.Name);
@@ -414,7 +417,7 @@ namespace MonkeyPaste.Common {
             }
             string tempDir = Path.GetDirectoryName(Path.GetTempPath());
 
-            bool isTempPath = path.ToLower().StartsWith(tempDir.ToLower());
+            bool isTempPath = path.ToLowerInvariant().StartsWith(tempDir.ToLowerInvariant());
             if (isTempPath) {
                 return true;
             }
@@ -675,9 +678,9 @@ namespace MonkeyPaste.Common {
 
         public static string WriteTextToFile(string filePath, string text, bool overwrite = false) {
             try {
-                if (filePath.ToLower().EndsWith(@".tmp")) {
+                if (filePath.ToLowerInvariant().EndsWith(@".tmp")) {
                     string extension = MpCommonTools.Services.StringTools.DetectStringFileExt(text);
-                    filePath = filePath.ToLower().Replace(@".tmp", extension);
+                    filePath = filePath.ToLowerInvariant().Replace(@".tmp", extension);
                 }
                 if (overwrite && filePath.IsFile()) {
                     DeleteFile(filePath);

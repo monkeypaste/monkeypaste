@@ -10,12 +10,12 @@ namespace MonkeyPaste {
             if (!typeString.Contains(".")) {
                 typeString = "MonkeyPaste." + typeString;
             }
-            if (!typeString.ToLower().StartsWith(@"mpwpfapp") &&
-               !typeString.ToLower().StartsWith(@"monkeypaste")) {
+            if (!typeString.ToLowerInvariant().StartsWith(@"mpwpfapp") &&
+               !typeString.ToLowerInvariant().StartsWith(@"monkeypaste")) {
                 throw new Exception(@"typestring must be from a known namespace");
             }
             try {
-                if (typeString.ToLower().StartsWith(@"mpwpfapp")) {
+                if (typeString.ToLowerInvariant().StartsWith(@"mpwpfapp")) {
                     typeString = typeString.Replace(@"MpWpfApp", @"MonkeyPaste");
                 }
                 var asm = typeof(MpXamStringToSyncObjectTypeConverter).Assembly;

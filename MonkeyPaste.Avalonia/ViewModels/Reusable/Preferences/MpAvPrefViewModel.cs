@@ -375,6 +375,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string TrashCleanupModeTypeStr { get; set; } = MpTrashCleanupModeType.Never.ToString();
 
+        public string LastSelectedSettingsTabTypeStr { get; set; }
         #endregion
 
         #region System

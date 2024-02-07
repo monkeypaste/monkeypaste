@@ -54,12 +54,12 @@ namespace MonkeyPaste.Common {
             }
             var hexColorPropInfo = typeof(MpSystemColors)
                 .GetProperties()
-                .FirstOrDefault(x => x.Name.ToLower() == hexChannelsOrNamedColorStr.ToLower());
+                .FirstOrDefault(x => x.Name.ToLowerInvariant() == hexChannelsOrNamedColorStr.ToLowerInvariant());
 
             if (hexColorPropInfo == null) {
                 hexColorPropInfo = typeof(MpSystemColors)
                 .GetProperties()
-                .FirstOrDefault(x => x.Name.ToLower().StartsWith(hexChannelsOrNamedColorStr.ToLower()));
+                .FirstOrDefault(x => x.Name.ToLowerInvariant().StartsWith(hexChannelsOrNamedColorStr.ToLowerInvariant()));
             }
             if (hexColorPropInfo == null) {
                 MpConsole.WriteTraceLine($"Color named {hexChannelsOrNamedColorStr} not found, returning {fallBack}");
