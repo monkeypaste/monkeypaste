@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Leis an síntiús seo gheobhaidh tú:
+● suas le 1,000 gearrthóg d'ábhar 
+● bruscar neamhtheoranta &amp; cartlann</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Bunúsach - Míosúil</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Bunúsach - Bliantúil</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>cóip</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>greamaigh</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Bainisteoir Gearrthaisce</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>uirlis</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>fóntais</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>uathoibriú</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Dearthóir Gníomhaíochta le haghaidh uathoibriú saincheaptha agus chaining gníomh</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Leagan amach cothrománach / ingearach, amharc liosta / greille agus tacaíocht il-monatóireacht</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Eagarthóir gearrthóg le feiceáil go hiomlán le téacs a aimsiú / a athsholáthar, téacs saibhir (táblaí, liostaí, naisc, etc.) le haghaidh pasting tapa, dinimiciúil ó do bhailiúchán blúire</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Stóráil sonraí áitiúla sábháilte, slán agus príobháideach le cosaint roghnach phasfhocal 2-fhachtóir</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Brabhsálaí breiseán tógtha le leabharlann bhreiseáin atá ag fás i gcónaí faoi thiomáint an phobail</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Is bainisteoir gearrthaisce, uathoibriú agus uirlis táirgiúlachta é MonkeyPaste cosúil le haon cheann eile. Feabhas a chur ar do ghearrthaisce i gcuid saibhrithe agus eagraithe de do shreabhadh oibre,
+ina bhfuil comhéadan iomasach agus ísealphróifíle a thacaíonn le téacs, comhaid agus íomhánna. Deartha le haghaidh solúbthachta, le libray pobal-tiomáinte de bhreiseáin atá ag fás i gcónaí.
+
+Thosaigh sé mar thurgnamh ag ríomhchláraitheoir ar mian leis níos mó ná cóipeáil agus greamaigh amach as an ngearrthaisce. Theastaigh ordú simplí uaidh mar Control +C a chuirfeadh 'leis' ina ionad 
+'ionadaigh' an méid a bhí ar an ngearrthaisce. Agus d'oibrigh an turgnamh, eureka! Bhí an uirlis bheag an-áisiúil. Chuir sé seo isteach ar an ríomhchláraitheoir le níos mó smaointe agus níos mó turgnaimh, 
+anois tar éis éirí "MoncaíPaste". 
+
+Ós rud é go bhfuil an deasc ar do chuid comhad, tá sé i gceist ag MonkeyPaste a bheith ar do ghearrthaisce. Tá a sraith uirlisí deartha go cúramach chun comhtháthú agus idir-inoibritheach gan dealramh le 
+aon chur i bhfeidhm nó formáid inneachair. Tá Rialú + C agus Rialú + V i bhfad níos mó ná aicearraí amháin. Is iad na calafoirt iontrála a roinneann gach iarratas, agus 
+saibhreas luacha agus brí atá tuillte agat a bheith ar fáil ar do mhéar. Ní hamháin gur caitheadh amach é tar éis an chéad Rialú eile +C.
+
+Is mise an ríomhchláraitheoir sin a luadh níos luaithe agus ba mhaith liom go mbeadh gach duine in ann úsáid a bhaint as MonkeyPaste. Mar sin, tá sé agus gach ceann dá ghnéithe go hiomlán saor in aisce le húsáid. 
+Ba mhaith liom freisin go mbraitheann tú compordach á úsáid. Mar sin, geallaim duit, mar an t-aon fhórsa atá taobh thiar dá chruthú, nach bhfuil aon chuid den fhaisnéis phearsanta (an-) a d'fhéadfadh teacht chun cinn ar 
+déantar do ghearrthaisce a rianú nó a stóráil riamh ÁIT AR BITH thar do mheaisín féin. Tréimhse.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Comhéadan simplí agus cairdiúil le leagan amach cothrománach / ingearach, amharc liosta / greille agus tacaíocht il-monatóireacht</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Mód iarcheangailte: Déantar cóipeáil 'cuir leis' in ionad 'ionadaigh' ar an ngearrthaisce. Téacs agus comhaid araon, go hiomlán customizable</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Rianú gearrthóg sofaisticiúla, foinsí agus úsáid le tacaíocht fheabhsaithe do bhrabhsálaithe Firefox agus Cróimiam-bhunaithe (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Eagarthóir gearrthóg lán-feiceáil le téacs saibhir (táblaí, liostaí, naisc, etc.) le aimsiú / athsholáthar agus aibhsiú</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Stóráil do chuid íomhánna sa bhunachar sonraí slán, réidh le húsáid mar chomhaid ag am ar bith ar éileamh ach tarraing-agus-titim!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Templating téacs cumhachtach le haghaidh pasting tapa, dinimiciúil ó do bhailiúchán snippet</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger &amp; Dearthóir Gníomhaíochta le haghaidh uathoibriú saincheaptha agus chaining gníomh</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Simplí a úsáid agus a leathnú córas breiseán don dá clips anailís nó a léamh / scríobh aon fhormáid le do gearrthaisce</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Tógtha-i bhrabhsálaí breiseán le leabharlann pobal-tiomáinte ag fás i gcónaí de plugins</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Uathoibriú gach rud le réamhshocruithe breiseán, stash agus a úsáid do aon cheann de do leideanna AI nó orduithe gan stró</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Tuilleadh ardán agus gnéithe ag teacht go luath! Nílimid ach ag 🎉 tosú</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Tá an dá théama éadrom &amp; dorcha go hiomlán dinimiciúil, bain úsáid as aon dath is mian leat</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Cabhair chomhtháite &amp; leideanna ceart sa chomhéadan. Lámhleabhar, físeáin agus fóram ar líne chun tús a chur leat go léir ar an láithreán gréasáin (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Optamaithe le haghaidh feidhmíochta agus tástáil struis le 1,000,000s de ghearrthóga.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Cuardach am ar bith, ach tús a chlóscríobh ag baint úsáide as an dá simplí &amp; scagadh chun cinn ar gearrthóga agus a bhfoinsí thar an iliomad réimsí</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Eagraigh do ghearrthóga i gcrann clibe agus cruthaigh scagairí in-athúsáidte</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Stóráil sonraí áitiúla sábháilte, slán agus príobháideach (gan bailiú sonraí) criptithe i gcónaí le cosaint roghnach phasfhocal 2-fhachtóir agus bac a chur go héasca ar fheidhmchláir nó ar láithreáin ghréasáin ó do lorgaire</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Tacaíocht fhairsing tarraing-agus-titim, aicearraí domhanda saincheaptha, ródú agus nascleanúint saor ó luch</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Modhanna luiche saincheaptha: greamaigh deaschliceáil agus uathchóip cliceáil ar chlé</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Comhéadan simplí agus cairdiúil 
+● Leagan amach cothrománach / ingearach, amharc liosta / greille agus tacaíocht il-monatóireacht
+● Tá an dá théama éadrom &amp; dorcha go hiomlán dinimiciúil, bain úsáid as aon dath is mian leat
+
+● Cabhair chomhtháite &amp; leideanna ar dheis sa chomhéadan
+● Lámhleabhar cabhrach, físeáin agus fóram chun tús a chur leat go léir ar an láithreán gréasáin (monkeypaste.com/docs)
+
+● Optamaithe le haghaidh feidhmíochta agus tástáil struis le 1,000,000s de ghearrthóga.
+● Cuardach am ar bith, ach tús a chlóscríobh
+● An dá simplí &amp; scagadh chun cinn ar gearrthóga agus a bhfoinsí thar an iliomad réimsí
+● Eagraigh do ghearrthóga i gcrann clibe agus cruthaigh scagairí in-athúsáidte
+
+● Stóráil sonraí áitiúla sábháilte, slán agus príobháideach (gan bailiú sonraí) criptithe i gcónaí
+● Is féidir leat neamhaird a dhéanamh ar ghearrthóga ó fheidhmchláir nó láithreáin ghréasáin ar leith
+● Roghnach cosaint phasfhocal 2-fhachtóir
+
+● Eochracha te saincheaptha domhanda, ródú agus nascleanúint saor ó luch
+● Tacaíocht mhór tarraing-agus-titim
+● Modhanna luiche saincheaptha: greamaigh deaschliceáil agus uathchóip cliceáil ar chlé 
+● Mód iarcheangailte: Déantar cóipeáil 'cuir leis' in ionad 'ionadaigh' ar an ngearrthaisce. Téacs agus comhaid araon, go hiomlán customizable
+
+● Rianú gearrthóg sofaisticiúla, foinsí agus úsáid
+● Tacaíocht fheabhsaithe do bhrabhsálaithe Firefox agus Chromium-bhunaithe (Chrome, Edge, Brave)
+
+● Oibríonn sé le téacs saibhir (táblaí, liostaí, naisc, etc.)
+● Eagarthóir gearrthóg lán-feiceáil le aimsiú / athsholáthar agus aibhsiú
+● Stóráil do chuid íomhánna sa bhunachar sonraí slán, réidh le húsáid mar chomhaid ag am ar bith ar éileamh ach tarraing-agus-titim!
+
+● Templating téacs cumhachtach le haghaidh pasting tapa, dinimiciúil ó do bhailiúchán snippet
+
+● Trigger &amp; Dearthóir Gníomhaíochta le haghaidh uathoibriú saincheaptha agus chaining gníomh
+
+● Simplí a úsáid agus a leathnú córas breiseán don dá clips anailís nó a léamh / scríobh aon fhormáid le do gearrthaisce
+● Tógtha-i bhrabhsálaí breiseán le leabharlann pobal-tiomáinte ag fás i gcónaí de plugins 
+● Uathoibriú gach rud le réamhshocruithe breiseán, stash agus a úsáid do aon cheann de do leideanna AI nó orduithe gan stró
+
+● Tuilleadh ardán agus gnéithe ag teacht go luath! Nílimid ach ag 🎉 tosú</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Dufair is ea an ghearrthaisce. MoncaíPaste Is é an RÍ! Swing ó app go app, chóipeáil seo agus pasting sin cosúil riamh roimhe seo le MoncaíPaste!! Gearrthaisce úrnua, ceannródaíoch agus uirlis uathoibrithe anailíseach!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Sampla de MoncaíPaste i ngníomh!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Suiteáilte sa teanga seo. Níl sa Bhéarla ach na samplaí seo</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Nóta! Níl sna seatanna scáileáin ach samplaí. Aistríodh an méid a shuiteáil tú go dtí an teanga seo.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Leis an síntiús seo gheobhaidh tú:
+● cumas neamhtheoranta
+● sioncronú gléas (ar infhaighteacht)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Gan teorainn - Míosúil</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Gan teorainn - Bliantúil</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Scaoileadh Tosaigh</value>
+  </data>
+</root>

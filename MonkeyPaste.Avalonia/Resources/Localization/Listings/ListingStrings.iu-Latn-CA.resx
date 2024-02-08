@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>taassumunga ilagijaujjutimut piniaqtutit:
+● tikillugu 1,000−mut tikillugu ilulinginnik 
+● kigliqanngittut aktakut tuqquqtaujullu</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>atugajuktuq - taqqitamaat</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>atugajuktuq − arraagutamaat</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>ajjinga</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>paste</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>titirarviksalirijinut aulattiji</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>sanarrutinik</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>uummaqqutilirijikkut</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>imminik aulaniq</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>pijumalirnaqtuq amma qanuiliurutiksaliriji iliqqusikkut imminik aulaniq amma qanuiliurutaujumajut</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>sanimut/nipiliuqsimajut, titiraqsimajut/tautuktut amma amisuulingajut − qaujisarlugit ikajuqtuijjutit</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>atangittiaqłuni - takuksaujuq titiraqsimajunik titiraqtimik nanisiluni/inangiiluni, pitaqattiaqtunik titiraqsimajunik (titiraqsimajut, titiraqsimajut, attatarviit, asingillu) titiraqsimajunik titiraqsimavagiiqtut sukkajumik, uummariktumik aturniarluni aggamut aulattariaqaqtarnik katitausimajunik</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>attarnanngittuq, attarnanngittuq amma nangminiqsurluni nunalingni titiraqsimajut tuqquqsisimavvik isumaqsuutaulluni 2 - isirunnautimut sapummijjutit</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>sanajausimajuq − kannguurutimi qinirutimi − piruqpalliajuq nunalik − aulataulluni uqalimaagaqarvik kanngunaqtunut</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is a clipboard manager, automation and productivity tool suurlu asingaangani. piusigiaqtillugu titirarviksait piusigiarlugu aaqqiksimattiarlunilu ilanga iqqanaijaavit,
+saqqijaaqtittiniq titiraqsimajunik amma attiktumik − unikkausiuluni titiraqsimajunik, tuqquqsimajunik amma ajjinnguanik. sanasimajuq asijjigaksaulluni, piruqpalliatuinnaqłuni nunalik − uqalimaagaqarvik.
+
+pigialauqtuq uukturautaulluni piliriaksalirijimut pijumalluni ajjituinnanginnik ammalu titiraqsimajunik titiraqsimajunik. pijariakittukulungmit angajuqqaamit pijumalauqtuq Ctrl+C−mit 'ilaliutituinnarajaqtanga' 
+'inangiijuq' kisuulauqpa qituttugaujarmi. amma uukturautaulauqtuq, eureka! sanarrutiralaaq aggamut agjaqtaulauqtuq. taanna ilijaulluni piliriaksaliriji isumagijaqarniqsaulluni uukturautiqarniqsaullunilu, 
+maanna "MonkeyPaste". 
+
+qarasaujarmut tuqquqtarnut turaangangmat, MonkeyPaste−kut qituttugaujarnut turaangajumangmata. pilirijjutiksait aaqqiksimattiaqtut ilaliujjijunnattianngiłłutik amma aulattiqatiqattiaqquujillutik 
+qanutuinnaq pinajuutit uvvaluunniit iluliqtangit. Ctrl+C amma Ctrl+V−kut nainniqsauvut. taakkua tulattarviit isirasuutinut tuksirautilimaat, tigumiaqtut 
+pimmariuniqarniq ammalu tukiqaqłuni atuinnaujariaqaravit aggangni. igituinnanngillugu kingullirmi Ctrl+C−nguanikpat.
+
+tainna piliriaq uqausiriqqaujara uattiaru ammalu kikkulimaat qaujijuinnauqugakkit maankipaastimik. taimali tamakkualimaat aturunnattiaqtutik. 
+akaugittiaqpagit aturiaksaq. uqautittiaqpagit, tiliurinituullutit saqqitauninganut, pitaqangittuq (atii) inungmut atausirmut tukisigiarutinit saqqirunnaqtunit 
+qituttugaujait tuqquqtaulauqsimangittuq uvvaluunniit tuqquqtausimasuuq nanituinnattiaq nangminiq ingirrajjutivit ungataanut. qangauninga.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● ajurnanngittut amma tunnganaqtut katinngajut tamainnik sanimut/tautuktumut aaqqiksimajunut, titiraqsimajut/takujaujut amma ajjigiinngittut − nauttiqsurlugit ikajuqtuijjutit</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Append mode: ajjiliurlugu 'ilalugu' 'inangiinngingaarlutit' qituttugaujarmi. tamarmik titiraqsimajut amma tuqquqsimajut, atangittiarlugit aaqqiksimaningit</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● ajurnarujuktunik titiraqsimajunik nanisiniq, pivviujunnaqtut atuqtauvangningillu piusigiaqsimajumik ikajuqtuqtaunirmik qattirijinut ammalu Chromium-mut - tunngaviliit qinirutiit (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● atangirlugu - takuksaujuq titiraqti pitaqattiaqtunik titiraqsimajunik (titiraqsimajut, titiraqsimajut, attatarviit, asingillu) nanisilutik/inangiilutik amma nalunaiqsimalutik</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● tuqqurlugit ajjinnguat pijaujjaiqsimajumi titiraqsimajuni titiraqsimajuni, atuinnaulutik aturiaksaq titiqqaqutigijaulutik qangatuinnattiaq - pijumanituinnarmut − ammalu - katakluni!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● sanngijut titiraqsimajut atuqtaujunnaqtut sukkalijumut, uummarittiaqtumut aggamut aulatarnut katitausimajunit</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● pijumalirnaqtut amma qanuiliurutaujumajut aaqqiksuijit niuviqattaqtunut imminik aulajunik amma qanuiliurutaujunik</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● ajurnanngittuq aturiaksaq uigugiaqsilunilu kapuutinnguanik tamainnut qaujisarniarluni titiraqsimajunik uvvaluunniit uqalimaarlugit/titirarlugit qanutuinnaq aaqqiksimanirijatit qituttugaujarnut</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● sanajaunikut − kasalungajumit qinirutimit - piruqpalliajuq nunalik − uqalimaagaqarvik kanngunaqtunit</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● kisulimaat simiksimatillugit, urrutillugit aturlugillu naliangnituinnaq AI−mut pisititarnik uvvaluunniit angajuqqaarnik ajurnannginniqsautillugit</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● tunngavikkanniit amma ujjirnarningit saqqilaaliqtut! pigiaqpallialitainnaqtugut 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● tamarmik qaumait amma taaqtut pijjutaujut uummarittiaqtut, atuqpaglutit taqsarnik pijumajarnik</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● ilaliujjausimajut ikajurlutit amma pisujugluni. qarasaujakkut uqalimaagat, tarrijaaksat amma katimajjutit pigiaqtainnarilugit ikiaqqivikkut (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● naammanaaqtitaujuq pilirininganut amma taqanarninganut qaujisaqtaunirmut 1,000,000-nginniittunit.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● qangatuinnaq qinirnami, naqittaivallialitainnarlutit aturlutik tamainnik ajurnanngittukulungnik amma piusigiaqsimajunik surujjaikkutinik titiraqsimajunik amma pivvigivaktanginnik 12 ungataaniittunik</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● aaqqiksurlugit quajatit nivinngataanik napaaqtunik aaqqiksilutillu atukkannirunnaqtunik surujjaikkutinik</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● attarnanngittut, pijaujjaiqsimajut amma ilaakkuuqtut nunalingni titiraqsimajut qaujisaqtaunikuit (titiqqanik katiqsuiniq) namunngainnaujanngittut isumaqsuutaullutik 2 - pijjutauluni isirunnautimut sapummijjutit amma simiksisaraittut uvvaluunniit ikiaqqiviit tumissinni</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● aqqummigarjuaqtuq - amma - kataktittiniq, nunarjuaq naiglitiqsimajuq, ingirraniq amma miriarniq − akiqanngittuq tammaukkutiliriniq</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● custom mouse modes: right - naqirlugu paste and left - naqirlugu imminik - ajjinga</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>qituttugaujaq qituttugaujauvuq. MonkeyPaste KING!.-ngujuq! app−mit agjarlugu, tarraliurlugu amma qaangiiluni suurlu monkeyPaste−mit!! nalunaikkutaq - nutaaq, kijjaqtuqsimajuq killinga amma qaujisaratsaliunirmut pilirijjuti!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>uuktuutiujuq MonkeyPaste−mut piliritillugu!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>ilijaujuq tavvani uqausirmit. qallunaatitutuaq taakkunungatuaq uuktuutinut</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>qaujimagit! igalaujannguanut kapijauniit uuktuutituinnauvut. ilisimajasi tukiliuqtausimajut taassumunga uqausirmut.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>taassumunga ilagijaujjutimut piniaqtutit:
+● kigliqanngittut pijunnarnirijaujut
+● uqaluutiralaaq atauttikkuuqtillugu (atuinnauliqtillugu)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>kigliqanngittuq - taqqitamaat</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>kigliqanngittuq − arraagutamaat</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>saqqitaurngarninga</value>
+  </data>
+</root>

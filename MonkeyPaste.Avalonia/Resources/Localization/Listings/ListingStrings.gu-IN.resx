@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>આ સબ્સ્ક્રિપ્શન સાથે તમને પ્રાપ્ત થશે:</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>મૂળભૂત - માસિક</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>મૂળભૂત - વાર્ષિક</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>નકલ</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>પેસ્ટ</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ક્લિપબોર્ડ મેનેજર</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>સાધન</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>ઉપયોગિતા</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>ઓટોમેશન</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>કસ્ટમ ઓટોમેશન અને એક્શન ચેઇનિંગ માટે ટ્રિગર અને એક્શન ડિઝાઇનર</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>હોરિઝોન્ટલ/વર્ટિકલ લેઆઉટ, લિસ્ટ/ગ્રીડ વ્યૂ અને મલ્ટિ-મોનિટર સપોર્ટ</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>તમારા સ્નિપેટ સંગ્રહમાંથી ઝડપી, ગતિશીલ પેસ્ટ કરવા માટે શોધો/બદલો, સમૃદ્ધ ટેક્સ્ટ (કોષ્ટકો, સૂચિ, લિંક્સ, વગેરે) ટેક્સ્ટ ટેમ્પ્લેટિંગ સાથે સંપૂર્ણ - વૈશિષ્ટિકૃત ક્લિપ એડિટર</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>વૈકલ્પિક 2 - પરિબળ પાસવર્ડ સુરક્ષા સાથે સુરક્ષિત, સુરક્ષિત અને ખાનગી સ્થાનિક ડેટા સ્ટોરેજ</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>બિલ્ટ-ઇન પ્લગઇન બ્રાઉઝર સાથે સતત વધતા સમુદાય સાથે - પ્લગિન્સની સંચાલિત લાઇબ્રેરી</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>મંકીપેસ્ટ એ ક્લિપબોર્ડ મેનેજર, ઓટોમેશન અને ઉત્પાદકતા સાધન છે જે અન્ય કોઈ નથી.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● બંને આડા/ઊભી લેઆઉટ, સૂચિ/ગ્રીડ દૃશ્ય અને મલ્ટિ-મોનિટર સપોર્ટ સાથે સરળ અને મૈત્રીપૂર્ણ ઇન્ટરફેસ</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● એપેન્ડ મોડ: કૉપિ કરવાથી ક્લિપબોર્ડ પર 'રિપ્લેસ'ને બદલે 'એડ ટુ' થઈ જાય છે.</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Firefox અને Chromium - આધારિત બ્રાઉઝર્સ (Chrome, Edge, Brave) માટે ઉન્નત સમર્થન સાથે અત્યાધુનિક ક્લિપ ટ્રેકિંગ, સ્ત્રોતો અને ઉપયોગ</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● સંપૂર્ણ - શોધ/બદલો અને હાઇલાઇટિંગ સાથે સમૃદ્ધ ટેક્સ્ટ (કોષ્ટકો, સૂચિ, લિંક્સ, વગેરે) સાથે વૈશિષ્ટિકૃત ક્લિપ એડિટર</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● તમારી છબીઓને સુરક્ષિત ડેટાબેઝમાં સંગ્રહિત કરો, કોઈપણ સમયે ફાઇલ તરીકે ઉપયોગ કરવા માટે તૈયાર - માત્ર ખેંચો - અને - છોડો!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● તમારા સ્નિપેટ સંગ્રહમાંથી ઝડપી, ગતિશીલ પેસ્ટ કરવા માટે શક્તિશાળી ટેક્સ્ટ ટેમ્પ્લેટિંગ</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● કસ્ટમ ઓટોમેશન અને એક્શન ચેઇનિંગ માટે ટ્રિગર અને એક્શન ડિઝાઇનર</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● ક્લિપ્સનું વિશ્લેષણ કરવા અથવા તમારા ક્લિપબોર્ડ પર કોઈપણ ફોર્મેટ વાંચવા/લખવા બંને માટે પ્લગઇન સિસ્ટમનો ઉપયોગ કરવા અને વિસ્તૃત કરવા માટે સરળ</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● બિલ્ટ-ઇન પ્લગઇન બ્રાઉઝર સાથે સતત વધતા સમુદાય સાથે - પ્લગિન્સની સંચાલિત લાઇબ્રેરી</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● પ્લગઇન પ્રીસેટ્સ સાથે દરેક વસ્તુને સ્વચાલિત કરો, સંગ્રહિત કરો અને તમારા કોઈપણ AI સંકેતો અથવા આદેશોનો ઉપયોગ કરો</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● વધુ પ્લેટફોર્મ અને સુવિધાઓ ટૂંક સમયમાં આવી રહી છે!</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● પ્રકાશ અને શ્યામ બંને થીમ સંપૂર્ણપણે ગતિશીલ છે, તમે ઇચ્છો તે કોઈપણ રંગનો ઉપયોગ કરો</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● ઈન્ટરફેસમાં જ એકીકૃત મદદ અને સંકેતો.</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● પ્રદર્શન માટે ઑપ્ટિમાઇઝ અને 1,000,000 ક્લિપ્સ સાથે સ્ટ્રેસ્ડ ટેસ્ટ.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● કોઈપણ સમયે શોધ કરો, ડઝનેક ફીલ્ડ્સ પર ક્લિપ્સ અને તેના સ્ત્રોતો પર સરળ અને અદ્યતન ફિલ્ટરિંગ બંનેનો ઉપયોગ કરીને ટાઇપ કરવાનું શરૂ કરો</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● તમારી ક્લિપ્સને ટેગ ટ્રીમાં ગોઠવો અને ફરીથી વાપરી શકાય તેવા ફિલ્ટર્સ બનાવો</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● સુરક્ષિત, સુરક્ષિત અને ખાનગી સ્થાનિક ડેટા સ્ટોરેજ (કોઈ ડેટા સંગ્રહ નથી) હંમેશા વૈકલ્પિક 2 - પરિબળ પાસવર્ડ સુરક્ષા સાથે એનક્રિપ્ટ થયેલ છે અને તમારા ટ્રેકરમાંથી એપ્લિકેશનો અથવા વેબસાઇટ્સને સરળતાથી અવરોધિત કરે છે</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● વ્યાપક ખેંચો - અને - છોડો સપોર્ટ, કસ્ટમ વૈશ્વિક શૉર્ટકટ્સ, રૂટીંગ અને માઉસ - મફત નેવિગેશન</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● કસ્ટમ માઉસ મોડ્સ: જમણે - પેસ્ટ પર ક્લિક કરો અને ડાબે - સ્વતઃ - કૉપિ પર ક્લિક કરો</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>ક્લિપબોર્ડ એક જંગલ છે.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>ક્રિયામાં મંકીપેસ્ટનો નમૂનો!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>આ ભાષામાં ઇન્સ્ટોલ કરેલ છે.</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>નૉૅધ!</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>આ સબ્સ્ક્રિપ્શન સાથે તમને પ્રાપ્ત થશે:</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>અમર્યાદિત - માસિક</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>અમર્યાદિત - વાર્ષિક</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>પ્રારંભિક પ્રકાશન</value>
+  </data>
+</root>

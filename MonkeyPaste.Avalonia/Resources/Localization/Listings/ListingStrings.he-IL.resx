@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>עם מנוי זה תקבלו:</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>בסיסי - חודשי</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>בסיסי - שנתי</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>עותק</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>לְהַדבִּיק</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>מנהל הלוח</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>כְּלִי</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>תוֹעֶלֶת</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>אוטומציה</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer עבור אוטומציות מותאמות אישית ושרשור פעולה</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>פריסות אופקיות/אנכיות, תצוגת רשימה/רשת ותמיכה בריבוי צגים</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>עורך קליפים כולל עם חיפוש/החלפה, טקסט עשיר (טבלאות, רשימות, קישורים וכו') תבנית טקסט להדבקה מהירה ודינמית מאוסף הקטעים שלך</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם הגנה אופציונלית על בסיס 2 גורמים</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>דפדפן תוספים מובנה עם ספריית תוספים מונעת מקהילה שהולכת וגדלה</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste הוא כלי מנהל לוח, אוטומציה ופרודוקטיביות שאין כמותו.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● ממשק פשוט וידידותי עם פריסות אופקיות/אנכיות, תצוגת רשימה/רשת ותמיכה בריבוי צגים</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● מצב הוסף: העתקה הופכת ל'הוסף ל' במקום 'החלף' בלוח.</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● מעקב אחר קליפים מתוחכמים, מקורות ושימוש עם תמיכה משופרת בדפדפנים מבוססי Firefox ו-Chromium (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● עורך קליפים מלא עם טקסט עשיר (טבלאות, רשימות, קישורים וכו') עם חיפוש/החלפה והדגשה</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● אחסן את התמונות שלך במסד הנתונים המאובטח, מוכן לשימוש כקבצים בכל עת לפי דרישה - פשוט גרור - ושחרר!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● תבנית טקסט רבת עוצמה להדבקה מהירה ודינמית מאוסף הקטעים שלך</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● מעצב Trigger &amp; Action עבור אוטומציות מותאמות אישית ושרשור פעולות</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● מערכת פלאגין פשוטה לשימוש ולהרחבה הן לניתוח קליפים והן לקריאה/כתיבה של כל פורמט ללוח שלכם</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● דפדפן תוספים מובנה עם ספריית תוספים מונעת מקהילה שהולכת וגדלה</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● הפוך הכל לאוטומטי עם קביעות מוגדרות מראש של הפלאגין, שמור והשתמש בכל אחת מההנחיות או הפקודות שלך בינה מלאכותית בקלות</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● פלטפורמות ותכונות נוספות בקרוב!</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● נושאים בהירים וכהים הם דינמיים לחלוטין, השתמשו בכל צבע שתרצו</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● עזרה ורמזים משולבים ישירות בממשק.</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● מותאם לביצועים ונבדק במתח עם 1,000,000 שניות של קליפים.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● בכל עת חיפוש, פשוט התחל להקליד באמצעות סינון פשוט ומתקדם כאחד על קליפים ומקורותיהם על פני עשרות שדות</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● ארגן את הקליפים שלך בעצי תג וצור מסננים הניתנים לשימוש חוזר</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● אחסון נתונים מקומי בטוח, מאובטח ופרטי (ללא איסוף נתונים) מוצפן תמיד עם הגנת סיסמה אופציונלית 2 - גורם וחסימת אפליקציות או אתרים בקלות מהמעקב שלך</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● תמיכה נרחבת בגרירה ושחרור, קיצורי דרך גלובליים מותאמים אישית, ניתוב ועכבר - ניווט חופשי</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● מצבי עכבר מותאמים אישית: לחיצה ימנית - הדבק ושמאלה - לחיצה אוטומטית - העתקה</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>הלוח הוא ג'ונגל.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>דוגמה של MonkeyPaste בפעולה!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>מותקן בשפה זו.</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>הערה!</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>עם מנוי זה תקבלו:</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>ללא הגבלה - חודשי</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>ללא הגבלה - שנתי</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>שיחרור ראשוני</value>
+  </data>
+</root>

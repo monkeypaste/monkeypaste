@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Mit diesem Abonnement erhalten Sie:
+● bis zu 1.000 Clips mit Inhalten
+● Unbegrenzter Papierkorb und Archiv</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Basic – Monatlich</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Basic – Jährlich</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Zwischenablage-Manager</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>Werkzeug</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>Dienstprogramm</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>Automatisierung</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger- und Aktionsdesigner für benutzerdefinierte Automatisierungen und Aktionsverkettung</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Horizontale/vertikale Layouts, Listen-/Rasteransicht und Unterstützung mehrerer Monitore</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Voll ausgestatteter Clip-Editor mit Suchen/Ersetzen, Rich-Text-Textvorlagen (Tabellen, Listen, Links usw.) zum schnellen, dynamischen Einfügen aus Ihrer Snippet-Sammlung</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Sichere und private lokale Datenspeicherung mit optionalem 2-Faktor-Passwortschutz</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Integrierter Plugin-Browser mit einer ständig wachsenden, von der Community betriebenen Plugin-Bibliothek</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste ist ein Zwischenablage-Manager, Automatisierungs- und Produktivitätstool wie kein anderes. Verbessern Sie Ihre Zwischenablage zu einem bereicherten und organisierten Teil Ihres Arbeitsablaufs.
+Mit einer intuitiven und unauffälligen Benutzeroberfläche, die Text, Dateien und Bilder unterstützt. Auf Flexibilität ausgelegt, mit einer ständig wachsenden Community-gesteuerten Plugin-Bibliothek.
+
+Es begann als Experiment eines Programmierers, der mehr wollte als nur das Kopieren und Einfügen aus der Zwischenablage. Er wollte einen einfachen Befehl wie Strg+C, der stattdessen „hinzufügen“ würde
+von „ersetzen“, was sich in der Zwischenablage befand. Und das Experiment hat funktioniert, heureka! Das kleine Werkzeug war sehr praktisch. Dies faszinierte den Programmierer mit mehr Ideen und mehr Experimenten
+ist jetzt zu „MonkeyPaste“ geworden.
+
+Da der Desktop zu Ihren Dateien gehört, soll MonkeyPaste zu Ihrer Zwischenablage gehören. Es handelt sich um eine Suite von Tools, die sorgfältig entwickelt wurden, um sich nahtlos integrieren und interagieren zu lassen
+jede Anwendung oder jedes Inhaltsformat. Strg+C und Strg+V sind viel mehr als nur Tastenkombinationen. Sie sind die Zugangsschnittstellen, die alle Anwendungen gemeinsam nutzen
+Eine Fülle von Werten und Bedeutungen, die Sie verdienen, immer griffbereit zur Verfügung zu haben. Nicht einfach nach dem nächsten Strg+C weggeworfen.
+
+Ich bin der zuvor erwähnte Programmierer und möchte, dass jeder MonkeyPaste nutzen kann. Daher sind die Nutzung und alle seine Funktionen völlig kostenlos.
+Ich möchte auch, dass Sie sich bei der Verwendung wohl fühlen. Daher versichere ich Ihnen, da ich die einzige Kraft hinter der Erstellung bin, dass KEINE der (sehr) persönlichen Informationen, die daraus entstehen können
+Ihre Zwischenablage wird überall außerhalb Ihres eigenen Computers verfolgt oder gespeichert. Zeitraum.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Einfache und benutzerfreundliche Oberfläche mit horizontalen/vertikalen Layouts, Listen-/Rasteransicht und Unterstützung für mehrere Monitore</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Anhängemodus: Beim Kopieren wird in der Zwischenablage „Hinzufügen“ statt „Ersetzen“ angezeigt. Sowohl Text als auch Dateien, vollständig anpassbar</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Ausgefeiltes Clip-Tracking, Quellen und Nutzung mit erweiterter Unterstützung für Firefox- und Chromium-basierte Browser (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Voll ausgestatteter Clip-Editor mit Rich-Text (Tabellen, Listen, Links usw.) mit Suchen/Ersetzen und Hervorheben</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Speichern Sie Ihre Bilder in der sicheren Datenbank und können Sie sie jederzeit bei Bedarf per Drag-and-Drop als Dateien verwenden!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Leistungsstarke Textvorlagen zum schnellen, dynamischen Einfügen aus Ihrer Snippet-Sammlung</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger- und Aktionsdesigner für benutzerdefinierte Automatisierungen und Aktionsverkettung</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Einfach zu verwendendes und erweiterbares Plugin-System zum Analysieren von Clips oder zum Lesen/Schreiben beliebiger Formate in die Zwischenablage</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Integrierter Plugin-Browser mit einer ständig wachsenden, von der Community betriebenen Plugin-Bibliothek</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automatisieren Sie alles mit Plugin-Voreinstellungen, speichern und verwenden Sie Ihre KI-Eingabeaufforderungen oder -Befehle ganz einfach</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Weitere Plattformen und Funktionen folgen in Kürze! Wir fangen gerade erst an 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Sowohl helle als auch dunkle Themen sind völlig dynamisch. Verwenden Sie jede gewünschte Farbe</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integrierte Hilfe und Hinweise direkt in der Benutzeroberfläche. Online-Handbuch, Videos und Forum für den Einstieg – alles auf der Website (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Auf Leistung optimiert und mit 1.000.000 Clips getestet.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Suchen Sie jederzeit und beginnen Sie einfach mit der Eingabe, indem Sie einfache und erweiterte Filter für Clips und deren Quellen in Dutzenden von Feldern verwenden</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Organisieren Sie Ihre Clips in Tag-Bäumen und erstellen Sie wiederverwendbare Filter</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Sichere und private lokale Datenspeicherung (keine Datenerfassung), immer verschlüsselt mit optionalem 2-Faktor-Passwortschutz und blockiert problemlos Apps oder Websites von Ihrem Tracker</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Umfangreiche Drag-and-Drop-Unterstützung, benutzerdefinierte globale Verknüpfungen, Routing und mausfreie Navigation</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Benutzerdefinierte Mausmodi: Einfügen mit der rechten Maustaste und automatisches Kopieren mit der linken Maustaste</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Einfache und benutzerfreundliche Oberfläche
+● Horizontale/vertikale Layouts, Listen-/Rasteransicht und Unterstützung mehrerer Monitore
+● Sowohl helle als auch dunkle Themen sind völlig dynamisch. Verwenden Sie jede gewünschte Farbe
+
+● Integrierte Hilfe und Hinweise direkt in der Benutzeroberfläche
+● Hilfehandbuch, Videos und Forum, um Ihnen den Einstieg zu erleichtern – alles auf der Website (monkeypaste.com/docs)
+
+● Auf Leistung optimiert und mit 1.000.000 Clips getestet.
+● Suchen Sie jederzeit, beginnen Sie einfach mit der Eingabe
+● Einfaches und erweitertes Filtern von Clips und ihren Quellen über Dutzende von Feldern
+● Organisieren Sie Ihre Clips in Tag-Bäumen und erstellen Sie wiederverwendbare Filter
+
+● Sichere und private lokale Datenspeicherung (keine Datenerfassung), immer verschlüsselt
+● Sie können Clips von bestimmten Apps oder Websites ignorieren
+● Optionaler 2-Faktor-Passwortschutz
+
+● Benutzerdefinierte globale Hotkeys, Routing und mausfreie Navigation
+● Umfangreiche Drag-and-Drop-Unterstützung
+● Benutzerdefinierte Mausmodi: Einfügen mit der rechten Maustaste und automatisches Kopieren mit der linken Maustaste
+● Anhängemodus: Beim Kopieren wird in der Zwischenablage „Hinzufügen“ statt „Ersetzen“ angezeigt. Sowohl Text als auch Dateien, vollständig anpassbar
+
+● Ausgefeiltes Clip-Tracking, Quellen und Verwendung
+● Erweiterte Unterstützung für Firefox- und Chromium-basierte Browser (Chrome, Edge, Brave)
+
+● Funktioniert mit Rich Text (Tabellen, Listen, Links usw.)
+● Voll ausgestatteter Clip-Editor mit Suchen/Ersetzen und Hervorheben
+● Speichern Sie Ihre Bilder in der sicheren Datenbank und können Sie sie jederzeit bei Bedarf per Drag-and-Drop als Dateien verwenden!
+
+● Leistungsstarke Textvorlagen zum schnellen, dynamischen Einfügen aus Ihrer Snippet-Sammlung
+
+● Trigger- und Aktionsdesigner für benutzerdefinierte Automatisierungen und Aktionsverkettung
+
+● Einfach zu verwendendes und erweiterbares Plugin-System zum Analysieren von Clips oder zum Lesen/Schreiben beliebiger Formate in die Zwischenablage
+● Integrierter Plugin-Browser mit einer ständig wachsenden, von der Community betriebenen Plugin-Bibliothek
+● Automatisieren Sie alles mit Plugin-Voreinstellungen, speichern und verwenden Sie Ihre KI-Eingabeaufforderungen oder -Befehle ganz einfach
+
+● Weitere Plattformen und Funktionen folgen in Kürze! Wir fangen gerade erst an 🎉</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Die Zwischenablage ist ein Dschungel. MonkeyPaste ist der KÖNIG! Wechseln Sie von App zu App, kopieren Sie dies und fügen Sie das ein wie nie zuvor mit MonkeyPaste!! Eine brandneue, hochmoderne Zwischenablage und ein analytisches Automatisierungstool!!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Probe von MonkeyPaste in Aktion!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>In dieser Sprache installiert. Englisch ist nur für diese Beispiele</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Notiz! Screenshots sind nur Beispiele. Was Sie installieren, wurde in diese Sprache übersetzt.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Mit diesem Abonnement erhalten Sie:
+● unbegrenzte Kapazität
+● Gerätesynchronisierung (je nach Verfügbarkeit)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Unbegrenzt – Monatlich</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Unbegrenzt – Jährlich</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Erstveröffentlichung</value>
+  </data>
+</root>

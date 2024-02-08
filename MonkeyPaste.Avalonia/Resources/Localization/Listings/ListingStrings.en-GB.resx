@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash &amp; archive</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Basic - Monthly</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Basic - Yearly</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>copy</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>paste</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipboard manager</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>tool</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>utility</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>automation</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer for custom automations and action chaining</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Horizontal/vertical layouts, list/grid view and multi-monitor support</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Fully-featured clip editor with find/replace, rich text (tables, lists, links, etc.) text templating for quick, dynamic pasting from your snippet collection</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Safe, secure and private local data storage with optional 2-factor password protection</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Built-in plugin browser with an ever-growing community-driven library of plugins</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organised part of your workflow,
+featuring an intuitive and low-profile interface that supports text, files and images. Designed for flexibility, with an ever-growing community-driven libray of plugins.
+
+It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Control+C that would 'add to' instead 
+of 'replace' what was on the clipboard. And the experiment worked, eureka! The little tool was very handy. This entrigued the programmer with more ideas and more experiments, that 
+now has become "MonkeyPaste". 
+
+As the desktop is to your files, MonkeyPaste intends to be to your clipboard. Its a suite of tools carefully designed to seemlessly integrate and interoperate with 
+any application or format of content. Control+C and Control+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
+wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Control+C.
+
+I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
+I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
+your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Simple and friendly interface with both horizontal/vertical layouts, list/grid view and multi-monitor support</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Append mode: Copying becomes 'add to' instead of 'replace' on the clipboard. Both text and files, fully customisable</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Sophisticated clip tracking, sources and usage with enhanced support for Firefox and Chromium-based browsers (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Fully-featured clip editor with rich text (tables, lists, links, etc.) with find/replace and highlighting</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Store your images in the secure database, ready to use as files anytime on-demand just drag-and-drop!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Powerful text templating for quick, dynamic pasting from your snippet collection</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger &amp; Action designer for custom automations and action chaining</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Simple to use and extend plugin system for both analysing clips or read/write any format to your clipboard</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Built-in plugin browser with an ever-growing community-driven library of plugins</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automate everything with plugin presets, stash and use your any of your AI prompts or commands with ease</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● More platforms and features coming soon! We're just gettings started 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Both light &amp; dark themes are completely dynamic, use any colour you want</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integrated help &amp; hints right in the interface. Online manual, videos and forum to get you started all on the website (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Optimized for performance and stressed tested with 1,000,000s of clips.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Anytime search, just start typing using both simple &amp; advanced filtering on clips and their sources over dozens of fields</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Organize your clips in tag trees and create resusable filters</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Safe, secure and private local data storage (no data collection) always encrypted with optional 2-factor password protection and easily block apps or websites from your tracker</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Extensive drag-and-drop support, custom global shortcuts, routing and mouse-free navigation</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Custom mouse modes: right-click paste and left-click auto-copy</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Simple and friendly interface 
+● Horizontal/vertical layouts, list/grid view and multi-monitor support
+● Both light &amp; dark themes are completely dynamic, use any colour you want
+
+● Integrated help &amp; hints right in the interface
+● Help manual, videos and forum to get you started all on the website (monkeypaste.com/docs)
+
+● Optimized for performance and stressed tested with 1,000,000s of clips.
+● Anytime search, just start typing
+● Both simple &amp; advanced filtering on clips and their sources over dozens of fields
+● Organize your clips in tag trees and create resusable filters
+
+● Safe, secure and private local data storage (no data collection) always encrypted
+● You can ignore clips from specific apps or websites
+● Optional 2-factor password protection
+
+● Custom global hot keys, routing and mouse-free navigation
+● Extensive drag-and-drop support
+● Custom mouse modes: right-click paste and left-click auto-copy 
+● Append mode: Copying becomes 'add to' instead of 'replace' on the clipboard. Both text and files, fully customisable
+
+● Sophisticated clip tracking, sources and usage
+● Enhanced support for Firefox and Chromium-based browsers (Chrome, Edge, Brave)
+
+● Works with rich text (tables, lists, links, etc.)
+● Fully-featured clip editor with find/replace and highlighting
+● Store your images in the secure database, ready to use as files anytime on-demand just drag-and-drop!
+
+● Powerful text templating for quick, dynamic pasting from your snippet collection
+
+● Trigger &amp; Action designer for custom automations and action chaining
+
+● Simple to use and extend plugin system for both analysing clips or read/write any format to your clipboard
+● Built-in plugin browser with an ever-growing community-driven library of plugins 
+● Automate everything with plugin presets, stash and use your any of your AI prompts or commands with ease
+
+● More platforms and features coming soon! We're just gettings started 🎉</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>The clipboard is a jungle. MonkeyPaste is the KING! Swing from app to app, copying this and pasting that like never before with MonkeyPaste!! A brand-new, cutting edge clipboard and analytic automation tool!!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Sample of MonkeyPaste in action!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Installed in this language. English is only for these examples</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Note! Screen shots are only examples. What you install has been translated to this language.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>With this subscription you will receive:
+● unlimited capacity
+● device syncing (upon availability)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Unlimited - Monthly</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Unlimited - Yearly</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Initial Release</value>
+  </data>
+</root>

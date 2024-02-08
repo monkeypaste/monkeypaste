@@ -167,16 +167,16 @@ clips respectively.</value>
     <value>Enabling the 'lock' in the top left of the main window will still allow dropping onto MonkeyPaste.</value>
   </data>
   <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings-&gt;Preferences -&gt;Window' menu.</value>
+    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
   </data>
   <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
     <value>Drag Bananas Up Here!</value>
   </data>
   <data name="WelcomeDragToOpenTitle" xml:space="preserve">
-    <value>Drag-to-Open</value>
+    <value>Drag - to - Open</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
-    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;Shortcuts' menu.</value>
+    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings -&gt; Shortcuts' menu.</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
     <value>All global shortcuts will be disabled so you can set them up yourself later.</value>
@@ -215,10 +215,10 @@ clips respectively.</value>
     <value>When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.</value>
   </data>
   <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
-    <value>Left-clicking the taskbar icon will still open MonkeyPaste.</value>
+    <value>Left - clicking the taskbar icon will still open MonkeyPaste.</value>
   </data>
   <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
     <value>Easy Right?</value>
@@ -227,10 +227,10 @@ clips respectively.</value>
     <value>Scroll Up Here!</value>
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
-    <value>Scroll-to-Open</value>
+    <value>Scroll - to - Open</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop&lt;/p&gt;</value>
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Drop it here!</value>
@@ -425,7 +425,7 @@ Upgrade to avoid.</value>
     <value>Shortcut</value>
   </data>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
-    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, ⌘/Win depending on platform).</value>
+    <value>Gestures must be unique and may only contain one input key.</value>
   </data>
   <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
     <value>&lt;ul&gt;
@@ -451,11 +451,11 @@ Upgrade to avoid.</value>
 			&lt;li&gt;
 				&lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
 			&lt;li&gt;
-				&lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application-level input.&lt;br&gt;
+				&lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non - modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application - level input.&lt;br&gt;
 				This option will guarantee the shortcut is triggered without conflicts to the active application.
 			&lt;/li&gt;
 			&lt;li&gt;
-				&lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non-modifier) for its assignment.&lt;br&gt;
+				&lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) for its assignment.&lt;br&gt;
 				In normal override mode Caps Lock can become &lt;i&gt;stuck on&lt;/i&gt; when pressed in combination with other keys.&lt;br&gt;
 				So no matter what other keys are down, if a &lt;b&gt;Hotkey&lt;/b&gt; shortcut is pressed it will be overriden and prevent it from becoming &lt;i&gt;stuck on&lt;/i&gt;.
 			&lt;/li&gt;
@@ -617,7 +617,7 @@ Add and/or select the app with the unique copy shortcut (like a console or shell
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Many MonkeyPaste features use keyboard automation to interact with other applications.
 
-Some applications (like some consoles or shells for example) may have a non-default paste shortcut. 
+Some applications (like some consoles or shells for example) may have a non - default paste shortcut. 
 
 To ensure proper interoperability, record those shortcuts for that application here.</value>
   </data>
@@ -668,10 +668,10 @@ To ensure proper interoperability, record those shortcuts for that application h
     <value>Are you sure you want to remove custom formats for {0}?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste</value>
+    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag - and - drop into MonkeyPaste</value>
   </data>
   <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data).</value>
+    <value>There is no assigned clipboard formats for this app. Automated paste or drag - and - drop from MonkeyPaste will have no affect (its empty data).</value>
   </data>
   <data name="ShortcutsResetNtfMsg" xml:space="preserve">
     <value>Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.</value>
@@ -723,13 +723,13 @@ To ensure proper interoperability, record those shortcuts for that application h
     <value>A shortcut must be provided.</value>
   </data>
   <data name="ShortcutAssignGlobalHint" xml:space="preserve">
-    <value>This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough (or change the 'Routing Type') to not conflict with shortcuts from other applications.</value>
+    <value>This is a global shortcut. That means it will attempt to execute whenever it is performed. Try to make it unique enough (or change the 'Routing Type') to not conflict with shortcuts from other applications.</value>
   </data>
   <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
     <value>Global</value>
   </data>
   <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
-    <value>Shortcut must contain ONE and only ONE non-modifier key.</value>
+    <value>Shortcut must contain ONE and only ONE non - modifier key.</value>
   </data>
   <data name="ShortcutAssignRecordLabel" xml:space="preserve">
     <value>Press any key to record...</value>
@@ -870,7 +870,7 @@ upgraded to:
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
     <value>Your subscription is now {0}/{1} with {2} content and {3} trash storage. 
-But fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
+But don't worry, no data is lost after downgrading. Only new clips will be evaluated.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
@@ -1120,7 +1120,7 @@ now set to {0}/{1}.</value>
     <value>Open in window</value>
   </data>
   <data name="LinkNavigateToolTipText" xml:space="preserve">
-    <value>Click + Control to follow...</value>
+    <value>Click + Ctrl to follow...</value>
   </data>
   <data name="LinkNavigateToolTipText2" xml:space="preserve">
     <value>Click + Alt to follow...</value>
@@ -1373,19 +1373,19 @@ For example, if red (#FF0000) is the search term and black (#000000) is a pixel 
     <value>Notification Volume</value>
   </data>
   <data name="PrefPasteHistoryHint" xml:space="preserve">
-    <value>This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing a application specific keyboard paste command in 'Settings-&gt;Copy &amp; Paste-&gt;Shortcuts'.</value>
+    <value>This setting will track system - wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing a application specific keyboard paste command in 'Settings -&gt; Copy &amp; Paste -&gt; Shortcuts'.</value>
   </data>
   <data name="PrefPasteHistoryLabel" xml:space="preserve">
     <value>Paste History</value>
   </data>
   <data name="PrefPinTrayCapacityHint" xml:space="preserve">
-    <value>Too many pinned clips (like browser tabs) can consume significant memory. removal is by first-in-first-out</value>
+    <value>Too many pinned clips (like browser tabs) can consume significant memory. removal is by first - in - first - out</value>
   </data>
   <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
     <value>Pin Capacity</value>
   </data>
   <data name="PrefRecentTextLimitHint" xml:space="preserve">
-    <value>This applies to all auto-completable inputs, lower values will improve performance</value>
+    <value>This applies to all auto - completable inputs, lower values will improve performance</value>
   </data>
   <data name="PrefRecentTextLimitLabel" xml:space="preserve">
     <value>Recent Text Limit</value>
@@ -1515,7 +1515,7 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Used in advanced file search for non preset file kinds</value>
   </data>
   <data name="PrefUserFileExtLabel" xml:space="preserve">
-    <value>User-Defined Search Extensions</value>
+    <value>User - Defined Search Extensions</value>
   </data>
   <data name="ClipTileFindReplaceHeader" xml:space="preserve">
     <value>Find and Replace...</value>
@@ -1684,7 +1684,7 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Quit</value>
   </data>
   <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
-    <value>Righ-Click Paste</value>
+    <value>Righ - Click Paste</value>
   </data>
   <data name="TagGroupTypeName" xml:space="preserve">
     <value>Group</value>
@@ -1907,7 +1907,7 @@ Clipboard listening is: {0}</value>
     <value>Trigger</value>
   </data>
   <data name="TriggerRemoveActionText" xml:space="preserve">
-    <value>Would you like to remove all the sub-actions for '{0}'? (Otherwise they will be re-parented to '{1}')</value>
+    <value>Would you like to remove all the sub - actions for '{0}'? (Otherwise they will be re - parented to '{1}')</value>
     <comment>Action Name, Action Name</comment>
   </data>
   <data name="TriggerRemoveActionTitle" xml:space="preserve">
@@ -2096,7 +2096,7 @@ For troubleshooting, attach an 'Alert Action' to this Conditional's parent and s
     <value>All</value>
   </data>
   <data name="ActionContentAddHint" xml:space="preserve">
-    <value>Triggered when a clip of the selected type is added to the system in any way (clipboard, drag-and-drop, analyzer generated or duplicated).</value>
+    <value>Triggered when a clip of the selected type is added to the system in any way (clipboard, drag - and - drop, analyzer generated or duplicated).</value>
   </data>
   <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
     <value>Only execute this trigger if input clip is new and not a duplicate. This is independant of any preference setting of whether new content is ignored or not.</value>
@@ -2170,7 +2170,7 @@ For troubleshooting, attach an 'Alert Action' to this Conditional's parent and s
   <data name="ActionShortcutTriggerHint" xml:space="preserve">
     <value>Triggered by a global shortcut you define. If MonkeyPaste is active it will attempt to use the selected clip (if there is one) as input. Otherwise it will try to use the clipboard as its input.
 
-Note: a Shortcut Trigger will still execute if there is no input to keep it flexible (so it can be a macro trigger etc.) since its not a data-driven event.</value>
+Note: a Shortcut Trigger will still execute if there is no input to keep it flexible (so it can be a macro trigger etc.) since its not a data - driven event.</value>
   </data>
   <data name="ActionShortcutTriggerLabel" xml:space="preserve">
     <value>Shortcut Trigger</value>
@@ -2191,7 +2191,7 @@ Note: a Shortcut Trigger will still execute if there is no input to keep it flex
     <value>Annotate Trigger</value>
   </data>
   <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
-    <value>Built in elements are read-only. Duplicate to alter.</value>
+    <value>Built in elements are read - only. Duplicate to alter.</value>
   </data>
   <data name="PluginAnonymousAuthor" xml:space="preserve">
     <value>Anonymous</value>
@@ -2281,7 +2281,7 @@ Note: a Shortcut Trigger will still execute if there is no input to keep it flex
     <value>Whole Word</value>
   </data>
   <data name="PrefShowWindowAndLockHint" xml:space="preserve">
-    <value>Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi-targeted workflows.
+    <value>Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi - targeted workflows.
 
 * Corners are in terms of all your screens, not per monitor.</value>
   </data>
@@ -2473,7 +2473,7 @@ ALL your clips?!
     <comment>App Version</comment>
   </data>
   <data name="NtfUpToDateTitle" xml:space="preserve">
-    <value>You are all up-to-date!</value>
+    <value>You are all up - to - date!</value>
   </data>
   <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
     <value>Check For Updates...</value>
@@ -2544,7 +2544,7 @@ Click here to update to '{0}' 🎉🍾🥳</value>
   <data name="PluginUpdateErrorText" xml:space="preserve">
     <value>There was an issue updating '{0}'. In order to complete the update you will need to restart and install '{0}' again (don't worry all of your settings will be restored). 
 
-You can restart now and complete the update by re-installing, ignore this and update it later or cancel the update all together and continue using version '{1}'?</value>
+You can restart now and complete the update by re - installing, ignore this and update it later or cancel the update all together and continue using version '{1}'?</value>
     <comment>Plugin Name, Plugin Version</comment>
   </data>
   <data name="PluginUpdateErrorTitle" xml:space="preserve">
@@ -2588,7 +2588,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>Pending</value>
   </data>
   <data name="PluginUninstallPendingTooltip" xml:space="preserve">
-    <value>An uninstallation is pending. Please restart if you would like to re-install.</value>
+    <value>An uninstallation is pending. Please restart if you would like to re - install.</value>
   </data>
   <data name="NtfPluginUninstallPendingText" xml:space="preserve">
     <value>To complete uninstall you will need to restart. Would you like to restart now or later?</value>
@@ -2600,7 +2600,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>Unpublished</value>
   </data>
   <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
-    <value>Auto-generated default preset for '{0}'</value>
+    <value>Auto - generated default preset for '{0}'</value>
     <comment>Preset Label</comment>
   </data>
   <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
@@ -2657,7 +2657,7 @@ You can restart now and complete the update by re-installing, ignore this and up
     <value>Send Feedback or Bug Report</value>
   </data>
   <data name="PrefShowInTaskbarHint" xml:space="preserve">
-    <value>This only hides the main window. All other non-dialog windows are always shown in taskbar.</value>
+    <value>This only hides the main window. All other non - dialog windows are always shown in taskbar.</value>
   </data>
   <data name="SearchButtonTooltip" xml:space="preserve">
     <value>Search in '{0}'</value>
@@ -2727,7 +2727,7 @@ Enabling or disabling default reader presets (from the Clipboard sidebar) will N
 Enabling or disabling default writer presets (from the Clipboard sidebar) will NOT affect this configuration. Only unlisted apps follow the default setup.</value>
   </data>
   <data name="AppendCannotActivateText" xml:space="preserve">
-    <value>To append you must unpause the clipboard listener (System Tray-&gt;Resume).</value>
+    <value>To append you must unpause the clipboard listener (System Tray -&gt; Resume).</value>
   </data>
   <data name="AppendCannotActivateTitle" xml:space="preserve">
     <value>Append Unavailable</value>
@@ -2738,7 +2738,7 @@ Enabling or disabling default writer presets (from the Clipboard sidebar) will N
   <data name="WelcomeTranslatedMessage" xml:space="preserve">
     <value>I only speak English and MonkeyPaste has been translated into this language. 
 
-All versions ship with the English pack so if you speak English you can change the language to it at anytime after this setup (Settings-&gt;Preferences-&gt;International).
+All versions ship with the English pack so if you speak English you can change the language to it at anytime after this setup (Settings -&gt; Preferences -&gt; International).
 
 If you would like to help improve the translation we would love to hear from you! 
 

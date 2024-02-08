@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Windows.Input;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
@@ -15,10 +17,15 @@ namespace MonkeyPaste.Avalonia {
 
     public static class MpAvHtmlStylerExtension {
         static MpAvHtmlStylerExtension() {
-            MpAvThemeViewModel.Instance
+            try {
+                MpAvThemeViewModel.Instance
                 .CustomFontFamilyNames
                 .ForEach(x =>
                     HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+            }
 
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
         }

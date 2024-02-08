@@ -1663,7 +1663,6 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="Markdig" Version="0.34.0" />
-    <PackageReference Include="MrMeeseeks.ResXToViewModelGenerator" Version="69.0.33" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
@@ -1713,30 +1712,13 @@
   </ItemGroup>
   
   
-  <ItemGroup>
-    <None Include="Resources\Localization\Listings\ListingStrings.en-US.resx">
-      <Generator></Generator>
-    </None>
-    <None Include="Resources\Localization\Listings\ListingStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ListingStrings.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-    </None>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <Content Include="Resources\Localization\Listings\gen\ListingStrings.*.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  
   
   <ItemGroup>
     <Compile Remove="Utils\Helpers\MpAvAppleScripts.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
     <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="Resources\Localization\Listings\ListingStrings.en-US.resx" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Images\radar.png">
@@ -1760,9 +1742,6 @@
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.ja-JP.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
 
     <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1770,14 +1749,9 @@
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-
-    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.zh-CN.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Localization\Gen\" />
     <Folder Include="Utils\Plugins\Headless\" />
   </ItemGroup>
 
@@ -1804,5 +1778,11 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 </PropertyGroup>
-
+  
+  <!-- LOCALIZATION RESOURCES-->
+<ItemGroup>
+    <None Include="Resources\Localization\UiStrings\UiStrings.*.resx" />
+    <None Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx" />
+    <None Include="Resources\Localization\Listings" />
+  </ItemGroup>
 </Project>

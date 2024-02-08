@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Con questo abbonamento riceverai:</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Base - Mensile</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Base - Annuale</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>copia</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>impasto</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>gestore degli appunti</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>attrezzo</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>utilità</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>automazione</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer per automazioni personalizzate e concatenamento di azioni</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Layout orizzontali/verticali, visualizzazione elenco/griglia e supporto multi-monitor</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Editor di clip completo di funzionalità con trova/sostituisci, modelli di testo rich text (tabelle, elenchi, collegamenti, ecc.) per incollare rapidamente e dinamicamente dalla raccolta di snippet</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Archiviazione dati locale sicura, protetta e privata con protezione tramite password a 2 fattori opzionale</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Browser plug-in integrato con una libreria di plug-in guidata dalla comunità in continua crescita</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste è un gestore di appunti, uno strumento di automazione e produttività come nessun altro.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Interfaccia semplice e intuitiva con layout orizzontale/verticale, visualizzazione elenco/griglia e supporto multi-monitor</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Modalità Aggiungi: la copia diventa 'aggiungi a' invece di 'sostituisci' negli appunti.</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Tracciamento, fonti e utilizzo sofisticati dei clip con supporto migliorato per i browser basati su Firefox e Chromium (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Editor di clip completo di tutte le funzionalità con rich text (tabelle, elenchi, collegamenti, ecc.) con trova/sostituisci ed evidenziazione</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Archivia le tue immagini nel database sicuro, pronte per essere utilizzate come file in qualsiasi momento: basta trascinarle e rilasciarle su richiesta!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Potenti modelli di testo per incollare in modo rapido e dinamico la tua raccolta di snippet</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Designer di trigger e azioni per automazioni personalizzate e concatenamento di azioni</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Sistema di plug-in semplice da usare ed estendere sia per analizzare clip che per leggere/scrivere qualsiasi formato negli appunti</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Browser plug-in integrato con una libreria di plug-in guidata dalla comunità in continua crescita</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automatizza tutto con le preimpostazioni dei plug-in, archivia e utilizza facilmente qualsiasi suggerimento o comando dell'intelligenza artificiale</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Altre piattaforme e funzionalità in arrivo!</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Entrambi i temi chiaro e scuro sono completamente dinamici, usa qualsiasi colore tu voglia</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Guida e suggerimenti integrati direttamente nell'interfaccia.</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Ottimizzato per le prestazioni e sottoposto a stress test con milioni di clip.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Effettua una ricerca in qualsiasi momento, inizia a digitare utilizzando filtri semplici e avanzati sui clip e sulle relative fonti in decine di campi</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Organizza i tuoi clip in alberi di tag e crea filtri riutilizzabili</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Archiviazione dati locale sicura, protetta e privata (nessuna raccolta dati) sempre crittografata con protezione password a 2 fattori opzionale e blocca facilmente app o siti Web dal tuo tracker</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Ampio supporto drag-and-drop, scorciatoie globali personalizzate, routing e navigazione senza mouse</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Modalità mouse personalizzate: fai clic con il pulsante destro del mouse su Incolla e fai clic con il pulsante sinistro su Copia automatica</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Gli appunti sono una giungla.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Esempio di MonkeyPaste in azione!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Installato in questa lingua.</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Nota!</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Con questo abbonamento riceverai:</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Illimitato - Mensile</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Illimitato - Annuale</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Versione iniziale</value>
+  </data>
+</root>

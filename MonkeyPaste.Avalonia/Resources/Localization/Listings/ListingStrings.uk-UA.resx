@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>З цією підпискою ви отримаєте:
+● до 1 000 кліпів контенту 
+● необмежена кількість сміття та архіву</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Базовий - Щомісячно</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Базовий - Річний</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>копіювати</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>па́ста</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Менеджер буфера обміну</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>інструмент</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>Утиліта</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>автоматизація</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Конструктор тригерів і дій для кастомної автоматизації та ланцюжка дій</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Горизонтальні/вертикальні макети, перегляд списком/сіткою та підтримка кількох моніторів</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Повнофункціональний редактор кліпів із пошуком/заміною, форматованим текстом (таблиці, списки, посилання тощо) для швидкої та динамічної вставки з вашої колекції фрагментів</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Безпечне, надійне та конфіденційне локальне сховище даних з додатковим 2-факторним захистом паролем</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Вбудований плагін-браузер з постійно зростаючою спільнотою бібліотекою плагінів</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste — це менеджер буфера обміну, інструмент автоматизації та продуктивності, як ніхто інший. Перетворення буфера обміну на збагачену та організовану частину робочого процесу,
+Відрізняється інтуїтивно зрозумілим і низькопрофільним інтерфейсом, який підтримує текст, файли та зображення. Розроблений для гнучкості, з постійно зростаючою спільнотою - libray плагінів.
+
+Все почалося як експеримент програміста, який хотів більше, ніж просто скопіювати та вставити з буфера обміну. Йому потрібна була проста команда, подібна до Ctrl+C, яка б замість цього 'add' 
+«замінити» те, що було в буфері обміну. І експеримент спрацював, еврика! Маленький інструмент виявився дуже зручним. Це заінтригувало програміста більшою кількістю ідей та експериментів, що 
+тепер стала "MonkeyPaste". 
+
+Оскільки робочий стіл призначений для ваших файлів, MonkeyPaste має намір бути вашим буфером обміну. Це набір інструментів, ретельно розроблених, щоб, здавалося б, безперешкодно інтегруватися та взаємодіяти з 
+будь-яка програма або формат контенту. Ctrl+C і Ctrl+V — це набагато більше, ніж просто комбінації клавіш. Вони є портами входу, які є спільними для всіх програм, несучи 
+Багатство цінностей і сенсів, які ви заслуговуєте мати під рукою. А не просто викидається після чергового Ctrl+C.
+
+Я програміст, про якого згадувалося раніше, і я хочу, щоб кожен зміг знайти застосування MonkeyPaste. Таким чином, він і всі його функції абсолютно безкоштовні для використання. 
+Я також хочу, щоб вам було комфортно ним користуватися. Тому я запевняю вас, як єдину силу, що стоїть за його створенням, що жодна з (дуже) особистої інформації, яка може виникнути на 
+ваш буфер обміну завжди відстежується або зберігається БУДЬ-ДЕ за межами вашого власного комп'ютера. Період.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Простий і дружній інтерфейс з горизонтальними/вертикальними макетами, переглядом списку/сітки та підтримкою кількох моніторів</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Режим додавання: копіювання стає «додати до» замість «замінити» в буфері обміну. Як текст, так і файли, повністю настроювані</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Складне відстеження кліпів, джерела та використання з розширеною підтримкою браузерів на основі Firefox та Chromium (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Повнофункціональний редактор кліпів з форматованим текстом (таблиці, списки, посилання тощо) з пошуком/заміною та підсвічуванням</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Зберігайте свої зображення в захищеній базі даних, готові до використання як файли в будь-який час - вимагайте, просто перетягніть - і - скиньте!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Потужна шаблонізація тексту для швидкої, динамічної вставки з вашої колекції фрагментів</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Дизайнер тригерів і дій для користувацької автоматизації та ланцюжка дій</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Проста у використанні та розширена система плагінів як для аналізу кліпів, так і для читання/запису будь-якого формату в буфер обміну</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Вбудований плагін-браузер з постійно зростаючою спільнотою - бібліотекою плагінів</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Автоматизуйте все за допомогою пресетів плагінів, зберігайте та з легкістю використовуйте будь-які підказки чи команди штучного інтелекту</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Незабаром з'являться нові платформи та функції! Ми тільки починаємо 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Як світла, так і темна теми повністю динамічні, використовуйте будь-який колір</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Вбудована допомога та підказки прямо в інтерфейсі. Онлайн-посібник, відео та форум для початку роботи – все це на веб-сайті (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Оптимізовано для продуктивності та протестовано на стрес із 1 000 000 кліпів.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● У будь-який час пошуку просто почніть вводити текст, використовуючи як просту, так і розширену фільтрацію кліпів та їх джерел у десятках полів</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Упорядковуйте свої кліпи в дерева тегів і створюйте багаторазові фільтри</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Безпечне, надійне та приватне локальне сховище даних (без збору даних), завжди зашифроване за допомогою додаткового 2-факторного захисту паролем і легко блокує програми чи веб-сайти від вашого трекера</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Широка підтримка перетягування, користувацькі глобальні ярлики, маршрутизація та миша - безкоштовна навігація</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Користувацькі режими миші: праворуч - натисніть вставити, а ліворуч - натисніть авто - копіювання</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Буфер обміну - це джунглі. MonkeyPaste - КОРОЛЬ! Переходьте від програми до програми, копіюючи це та вставляючи це, як ніколи раніше, за допомогою MonkeyPaste!! Абсолютно новий, найсучасніший інструмент автоматизації обміну та аналітики!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Зразок MonkeyPaste в дії!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Встановлено на цій мові. Англійська мова тільки для цих прикладів</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Примітка! Скріншоти – це лише приклади. Те, що ви встановлюєте, було перекладено на цю мову.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>З цією підпискою ви отримаєте:
+● необмежена місткість
+● Синхронізація пристроїв (за наявності)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Безліміт - Щомісяця</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Безліміт - Щорічно</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Початковий випуск</value>
+  </data>
+</root>

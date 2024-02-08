@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Dengan berlangganan ini Anda akan menerima:</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Dasar - Bulanan</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Dasar - Tahunan</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>menyalin</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>tempel</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>manajer papan klip</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>alat</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>kegunaan</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>otomatisasi</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Pemicu &amp; Perancang Tindakan untuk otomatisasi khusus dan rangkaian tindakan</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Tata letak horizontal/vertikal, tampilan daftar/kisi dan dukungan multi-monitor</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Editor klip berfitur lengkap dengan templat teks cari/ganti, teks kaya (tabel, daftar, tautan, dll.) untuk penempelan cepat dan dinamis dari koleksi cuplikan Anda</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Penyimpanan data lokal yang aman, terjamin, dan pribadi dengan perlindungan kata sandi 2 faktor opsional</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Browser plugin bawaan dengan perpustakaan plugin berbasis komunitas yang terus berkembang</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste adalah pengelola papan klip, otomatisasi, dan alat produktivitas yang tiada duanya.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Antarmuka yang sederhana dan ramah dengan tata letak horizontal/vertikal, tampilan daftar/kisi, dan dukungan multi-monitor</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Mode Tambah: Menyalin menjadi 'tambahkan ke' dan bukannya 'ganti' pada papan klip.</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Pelacakan, sumber, dan penggunaan klip yang canggih dengan dukungan yang ditingkatkan untuk browser berbasis Firefox dan Chromium (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Editor klip berfitur lengkap dengan teks kaya (tabel, daftar, tautan, dll.) dengan cari/ganti dan penyorotan</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Simpan gambar Anda di database aman, siap digunakan sebagai file kapan saja sesuai permintaan, cukup drag - and - drop!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Templat teks canggih untuk penempelan cepat dan dinamis dari koleksi cuplikan Anda</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Perancang Pemicu &amp; Tindakan untuk otomatisasi khusus dan rangkaian tindakan</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Sistem plugin yang mudah digunakan dan diperluas untuk menganalisis klip atau membaca/menulis format apa pun ke clipboard Anda</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Browser plugin bawaan dengan perpustakaan plugin berbasis komunitas yang terus berkembang</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Otomatiskan semuanya dengan preset plugin, simpan dan gunakan perintah atau perintah AI Anda dengan mudah</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Lebih banyak platform dan fitur segera hadir!</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Tema terang &amp; gelap sepenuhnya dinamis, gunakan warna apa pun yang Anda inginkan</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Bantuan &amp; petunjuk terintegrasi langsung di antarmuka.</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Dioptimalkan untuk kinerja dan diuji tekanannya dengan 1.000.000 klip.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Pencarian kapan saja, mulailah mengetik menggunakan pemfilteran sederhana &amp; lanjutan pada klip dan sumbernya di puluhan bidang</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Atur klip Anda di pohon tag dan buat filter yang dapat digunakan kembali</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Penyimpanan data lokal yang aman, terjamin, dan pribadi (tidak ada pengumpulan data) selalu dienkripsi dengan perlindungan kata sandi 2 faktor opsional dan dengan mudah memblokir aplikasi atau situs web dari pelacak Anda</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Dukungan seret dan lepas yang ekstensif, pintasan global khusus, perutean, dan navigasi tanpa mouse</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Mode mouse khusus: klik kanan tempel dan klik kiri otomatis - salin</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Papan klip adalah hutan.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Contoh aksi MonkeyPaste!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Dipasang dalam bahasa ini.</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Catatan!</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Dengan berlangganan ini Anda akan menerima:</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Tidak Terbatas - Bulanan</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Tidak Terbatas - Tahunan</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Peluncuran pertama</value>
+  </data>
+</root>

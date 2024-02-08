@@ -109,7 +109,7 @@
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
                                     <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutDataGridShortcutHeader}" />
-                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutGestureRulesHint}" />
+                                    <local:MpAvToolTipHintView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutGestureRulesHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>

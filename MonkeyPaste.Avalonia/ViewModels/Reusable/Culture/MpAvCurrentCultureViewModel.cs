@@ -26,32 +26,6 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvCurrentCultureViewModel _instance;
         public static MpAvCurrentCultureViewModel Instance => _instance ?? (_instance = new MpAvCurrentCultureViewModel());
 
-        public bool SetAllCultures(CultureInfo ci) {
-            var pre_def_titles = new string[] {
-                string.Empty,
-                UiStrings.ClipTileDefTitleTextPrefix,
-                UiStrings.ClipTileDefTitleImagePrefix,
-                UiStrings.ClipTileDefTitleFilesPrefix
-            };
-
-            UiStrings.Culture = ci;
-            EnumUiStrings.Culture = ci;
-
-            R.U.CurrentOption = R.U.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
-            R.E.CurrentOption = R.E.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
-#if DEBUG
-            // NOTE all below is just experiment to automate localized screenshots
-            var lastOption = R.U.CurrentOption;
-            if (R.U.CurrentOption != lastOption &&
-                Mp.Services.StartupState.IsReady) {
-                // user changed language after startup
-                RefreshUiAsync(pre_def_titles).FireWithPriorityAndForgetSafeAsync(priority: MpDispatcherPriority.Background);
-            }
-#endif
-            bool needs_restart1 = MpAvEnumUiStringResourceConverter.CheckEnumUiStrings();
-            bool needs_restart2 = MpAvEditorUiStringBuilder.CheckJsUiStrings();
-            return needs_restart1 || needs_restart2;
-        }
         #endregion
 
         #region Interfaces
@@ -115,6 +89,32 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private bool SetAllCultures(CultureInfo ci) {
+            var pre_def_titles = new string[] {
+                string.Empty,
+                UiStrings.ClipTileDefTitleTextPrefix,
+                UiStrings.ClipTileDefTitleImagePrefix,
+                UiStrings.ClipTileDefTitleFilesPrefix
+            };
+
+            UiStrings.Culture = ci;
+            EnumUiStrings.Culture = ci;
+
+            //            R.U.CurrentOption = R.U.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
+            //            R.E.CurrentOption = R.E.AvailableOptions.FirstOrDefault(x => x.CultureInfo.Name == ci.Name);
+            //#if DEBUG
+            //            // NOTE all below is just experiment to automate localized screenshots
+            //            var lastOption = R.U.CurrentOption;
+            //            if (R.U.CurrentOption != lastOption &&
+            //                Mp.Services.StartupState.IsReady) {
+            //                // user changed language after startup
+            //                RefreshUiAsync(pre_def_titles).FireWithPriorityAndForgetSafeAsync(priority: MpDispatcherPriority.Background);
+            //            }
+            //#endif
+            bool needs_restart1 = MpAvEnumUiStringResourceConverter.CheckEnumUiStrings();
+            bool needs_restart2 = MpAvEditorUiStringBuilder.CheckJsUiStrings();
+            return needs_restart1 || needs_restart2;
+        }
         private string GetCultureDisplayValue(CultureInfo culture) {
             if (culture == CultureInfo.InvariantCulture) {
                 return new CultureInfo("en-US").NativeName;

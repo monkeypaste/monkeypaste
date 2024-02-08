@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>ជាមួយការជាវនេះអ្នកនឹងទទួលបាន៖
+● មាតិការហូតដល់ 1,000 ឈុត 
+● ធុងសំរាមគ្មានដែនកំណត់ &amp; archive</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Basic - ប្រចាំខែ</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Basic - Yearly</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>ចម្លង</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>អតីតកាល</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>កម្មវិធី គ្រប់គ្រង ក្ដារខៀន</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>ឧបករណ៍</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>ឧបករណ៍ ប្រើប្រាស់</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>ស្វ័យប្រវត្តិកម្ម</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; អ្នក រចនា សកម្មភាព សម្រាប់ ការ ស្វ័យ ប្រវត្តិ និង សង្វាក់ សកម្មភាព តាម ទំនៀម ទម្លាប់</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>ប្លង់ Horizontal/vertical, list/grid view and multi - monitor support</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>ពេញលេញ - បាន បង្ហាញ កម្មវិធី និពន្ធ clip ដោយ រក /ជំនួស, អត្ថបទ សម្បូរ បែប (tables, list, links, etc.) text templating for quick, dynamic pasting from your snippet collection</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>សុវត្ថិភាព សុវត្ថិភាព និង ការ ផ្ទុក ទិន្នន័យ ក្នុង ស្រុក ឯកជន ជាមួយ ជម្រើស 2 - ការ ការពារ ពាក្យ សម្ងាត់ កត្តា</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>បាន ស្ថាបនា - នៅ ក្នុង កម្មវិធី រុករក កម្មវិធី ជំនួយ ដែល មាន សហគមន៍ ដែល កំពុង រីក ចម្រើន ជា រៀង រហូត - បណ្ណាល័យ រុញ ច្រាន នៃ កម្មវិធី ជំនួយ</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste គឺជាអ្នកគ្រប់គ្រង clipboard, automation និងឧបករណ៍ផលិតផលដូចគ្មានផ្សេងទៀត. ១. ធ្វើអោយផ្ទាំងឃ្លីបរបស់អ្នកក្លាយជាផ្នែកមួយដែលសម្បូរទៅដោយភាពចម្រុងចម្រើន និងរៀបចំជាផ្នែកមួយនៃលំហូរការងាររបស់អ្នក,
+លក្ខណៈពិសេសនៃចំណុចប្រទាក់ក្នុងនិងទម្រង់ទាបដែលគាំទ្រអត្ថបទឯកសារនិងរូបភាព។ បាន រចនា ឡើង សម្រាប់ ភាព ផ្លាស់ ប្តូរ ជាមួយ នឹង សហគមន៍ ដែល កំពុង រីក ចម្រើន ជា រៀង រហូត - បាន ជំរុញ ឲ្យ មាន ការ លេប នៃ កម្មវិធី ជំនួយ ។
+
+វា បាន ចាប់ ផ្តើម ជា ការ ពិសោធន៍ មួយ ដោយ អ្នក សរសេរ កម្ម វិធី ដែល ចង់ បាន ច្រើន ជាង ច្បាប់ ចម្លង និង បិទ ក្តារ ឈុត ។ គាត់ ចង់ បាន ពាក្យ បញ្ជា សាមញ្ញ មួយ ដូច ជា Ctrl+C ដែល នឹង 'បន្ថែម' ជំនួស វិញ 
+នៃ 'ជំនួស' អ្វី ដែល នៅ លើ ក្ដារខៀន ។ ហើយការពិសោធន៍បានដំណើរការ eureka! ឧបករណ៍ តូចៗ គឺ ងាយ ស្រួល ណាស់ ។ នេះ បាន បញ្ចូល កម្មវិធី ដែល មាន គំនិត និង ការ ពិសោធន៍ បន្ថែម ទៀត ដែល 
+ឥឡូវ នេះ បាន ក្លាយ ជា "MonkeyPaste"។ 
+
+ជាផ្ទៃតុគឺចំពោះឯកសាររបស់អ្នក MonkeyPaste មានបំណងដើម្បីទៅផ្ទាំង clipboard របស់អ្នក។ ឈុត ឧបករណ៍ ដែល បាន រចនា ដោយ ប្រុង ប្រយ័ត្ន ដើម្បី រួមបញ្ចូល និង អន្តរ ប្រតិបត្តិ ការ ដោយ គ្មាន ការ គិត ទុក ជា មួយ 
+កម្មវិធី ឬ ទ្រង់ទ្រាយ នៃ មាតិកា ណា មួយ &amp; # 160; ។ Ctrl+C និង Ctrl+V មាន ច្រើន ជាង គ្រាន់ តែ ជា shortcuts ប៉ុណ្ណោះ។ ពួក គេ ជា ច្រក ចូល នៃ ការ ចែក រំលែក កម្មវិធី ទាំង អស់ ផ្ទុក 
+ទ្រព្យ សម្បត្តិ នៃ តម្លៃ និង អត្ថន័យ ដែល អ្នក សម នឹង ទទួល បាន នៅ ចុង ម្រាម ដៃ របស់ អ្នក ។ មិនគ្រាន់តែបោះចោលបន្ទាប់ពី Ctrl+C បន្តទៀត។
+
+ខ្ញុំ ជា អ្នក សរសេរ កម្មវិធី ដែល បាន លើក ឡើង ពី មុន ហើយ ខ្ញុំ ចង់ ឲ្យ មនុស្ស គ្រប់ គ្នា អាច ស្វែង រក ការ ប្រើប្រាស់ ចេញ ពី MonkeyPaste ។ ដូច្នេះ វា និង លក្ខណៈ ពិសេស ទាំង អស់ របស់ វា គឺ ឥត គិត ថ្លៃ ទាំង ស្រុង ក្នុង ការ ប្រើប្រាស់ ។ 
+ខ្ញុំ ក៏ ចង់ ឲ្យ អ្នក មាន អារម្មណ៍ ស្រួល ក្នុង ការ ប្រើ វា ផង ដែរ ។ ដូច្នេះ ខ្ញុំ ធានា អ្នក ថា ជា កម្លាំង តែ មួយ គត់ នៅ ពី ក្រោយ ការ បង្កើត របស់ វា ដែល គ្មាន ព័ត៌មាន ផ្ទាល់ ខ្លួន ( ច្រើន ណាស់ ) ដែល អាច កើត ឡើង 
+ក្តារ បន្ទះ បន្ទះ របស់ អ្នក ត្រូវ បាន តាមដាន ឬ រក្សា ទុក ANYWHERE ហួស ពី ម៉ាស៊ីន ផ្ទាល់ ខ្លួន របស់ អ្នក ។ រយៈពេល។</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● ចំណុចប្រទាក់សាមញ្ញនិងងាយស្រួលជាមួយទាំងប្លង់ផ្តេក/បញ្ឈរ, list/grid view and multi - monitor support</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● របៀប Append: ការចម្លងទៅជា 'បន្ថែម' ជំនួស 'ជំនួស' នៅលើ clipboard។ ទាំងអត្ថបទនិងឯកសារ, ពេញលេញតាមបំណង</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● ការតាមដានឃ្លីបដ៏ស្មុគស្មាញ ប្រភពនិងការប្រើប្រាស់ជាមួយនឹងការបង្កើនការគាំទ្រសម្រាប់ Firefox និង Chromium - រុករកដែលមានមូលដ្ឋាន (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● ពេញលេញ - featured clip editor with rich text (tables, lists, links, etc.) with find/replace and highlighting</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● រក្សា ទុក រូបភាព របស់ អ្នក នៅ ក្នុង មូលដ្ឋាន ទិន្នន័យ ដែល មាន សុវត្ថិភាព ត្រៀម ខ្លួន ជា ស្រេច ដើម្បី ប្រើ ជា ឯកសារ នៅ ពេល ណា ក៏ បាន - តម្រូវ ការ គ្រាន់ តែ អូស - ហើយ - ទម្លាក់ !</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● អត្ថបទដ៏មានឥទ្ធិពល templating for quick, dynamic pasting from your snippet collection</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger &amp; អ្នក រចនា សកម្មភាព សម្រាប់ ស្វ័យប្រវត្តិ ផ្ទាល់ខ្លួន និង សង្វាក់ សកម្មភាព</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● សាមញ្ញក្នុងការប្រើនិងពង្រីកប្រព័ន្ធជំនួយសម្រាប់ទាំងការវិភាគ clips ឬអាន/សរសេរទ្រង់ទ្រាយណាមួយទៅផ្ទាំង clipboard របស់អ្នក</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● បាន ស្ថាបនា - នៅ ក្នុង កម្មវិធី រុករក កម្មវិធី ជំនួយ ដែល មាន សហគមន៍ ដែល កំពុង រីក ចម្រើន - បណ្ណាល័យ ដែល បាន ជំរុញ ដោយ កម្មវិធី ជំនួយ</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● ស្វ័យប្រវត្ត អ្វីៗទាំងអស់ជាមួយនឹងកម្មវិធីជំនួយ presets, stash និងប្រើណាមួយរបស់អ្នកនៃ AI របស់អ្នក prompts ឬ commands ដែលមានភាពងាយស្រួល</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● វេទិកា និង លក្ខណៈ ពិសេស បន្ថែម ទៀត ដែល នឹង មក ដល់ ក្នុង ពេល ឆាប់ៗ នេះ ! យើង គ្រាន់ តែ ចាប់ ផ្តើម 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● ទាំង ពន្លឺ &amp; ស្បែក ងងឹត មាន ថាមវន្ត ទាំងស្រុង ប្រើ ពណ៌ ណា មួយ ដែល អ្នក ចង់ បាន</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● ជំនួយដែលរួមបញ្ចូល &amp; គន្លឹះត្រឹមត្រូវនៅក្នុងចំណុចប្រទាក់។ សៀវភៅដៃអនឡាញ វីដេអូនិងវេទិកាដើម្បីឲ្យអ្នកចាប់ផ្តើមទាំងអស់នៅលើគេហទំព័រ (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● សុទិដ្ឋិនិយមសម្រាប់ការសម្តែងនិងភាពតានតឹងបានសាកល្បងជាមួយនឹងឈុតចំនួន 1,000,000 ។</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● ពេលណាស្វែងរក, គ្រាន់តែចាប់ផ្តើមវាយដោយប្រើទាំងការត្រងសាមញ្ញ &amp; កម្រិតខ្ពស់នៅលើ clips និងប្រភពរបស់ពួកគេលើវាលរាប់សិប</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● រៀបចំ ឈុត របស់ អ្នក ក្នុង ដើមឈើ tag ហើយ បង្កើត តម្រង ដែល អាច ប្រើ បាន ឡើង វិញ</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● សុវត្ថិភាព សុវត្ថិភាព និង ឯកជន ផ្ទុក ទិន្នន័យ មូលដ្ឋាន (គ្មាន ការ ប្រមូល ទិន្នន័យ) តែង តែ អ៊ិនគ្រីប ជាមួយ ជម្រើស 2 - ការ ការពារ ពាក្យ សម្ងាត់ កត្តា និង កម្មវិធី ឬ គេហទំព័រ ប្លុក យ៉ាង ងាយ ស្រួល ពី កម្មវិធី តាមដាន របស់ អ្នក</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● អូស អូស យ៉ាង ទូលំទូលាយ - និង - ការ គាំទ្រ ទម្លាក់, ផ្លូវកាត់ សកល ផ្ទាល់ ខ្លួន, ផ្លូវ ដើរ និង កណ្ដុរ - ការ រុករក ដោយ ឥត គិត ថ្លៃ</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● របៀប mouse ផ្ទាល់ខ្លួន: ស្តាំ - ចុច paste និង ឆ្វេង - ចុច auto - copy</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>ក្តារខៀនគឺជាព្រៃមួយ។ MonkeyPaste ជាស្តេច! ស្វាងពី app ទៅ app ថតចម្លងនេះ និង pasting ដែលដូចពីមុន មិនដែលជាមួយ MonkeyPaste!! ម៉ាក - ថ្មី កាត់ បន្ទះ បន្ទះ គែម និង ឧបករណ៍ ស្វ័យ ប្រវត្តិ វិភាគ !!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>គំរូនៃ MonkeyPaste ធ្វើសកម្មភាព!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>បាន ដំឡើង ក្នុង ភាសា នេះ ។ ភាសា អង់គ្លេស គឺ សម្រាប់ តែ គំរូ ទាំង នេះ ប៉ុណ្ណោះ</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>ចំណាំ! ការ ថត អេក្រង់ គឺ ជា គំរូ តែ ប៉ុណ្ណោះ &amp; # 160; ។ អ្វី ដែល អ្នក ដំឡើង ត្រូវ បាន បក ប្រែ ទៅ ភាសា នេះ ។</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ជាមួយការជាវនេះអ្នកនឹងទទួលបាន៖
+● សមត្ថភាពគ្មានដែនកំណត់
+● ឧបករណ៍ syncing (ពេលមាន)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>គ្មានដែនកំណត់ - ប្រចាំខែ</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>គ្មានដែនកំណត់ - Yearly</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>ការ ចេញ ផ្សាយ ដំបូង</value>
+  </data>
+</root>

@@ -1,64 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -118,37 +59,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>このサブスクリプションでは、次のものが得られます:</value>
+    <value>このサブスクリプションでは、次のものを受け取ります。
+●最大1,000クリップのコンテンツ
+●無制限のゴミ箱とアーカイブ</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>基本 - 毎月</value>
+    <value>基本 - 月次</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>基本 - 毎年</value>
+    <value>基本 - 年単位</value>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste は、他にはないクリップボード マネージャー、自動化および生産性ツールです。</value>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
   </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● シンプルでフレンドリーなインターフェース</value>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
   </data>
-  <data name="TranslationWarning" xml:space="preserve">
-    <value>注記！</value>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>このサブスクリプションでは、次のものが得られます:</value>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
   </data>
-  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>無制限 - 毎月</value>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
   </data>
-  <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>無制限 - 年間</value>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>コピー</value>
+    <value>写し</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>ペースト</value>
+    <value>糊</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
     <value>クリップボードマネージャー</value>
@@ -157,93 +106,153 @@
     <value>道具</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>ユーティリティ</value>
+    <value>効用</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
     <value>オートメーション</value>
   </data>
-  <data name="StoreFeature1" xml:space="preserve">
-    <value>● 水平/垂直レイアウト、リスト/グリッド ビュー、マルチ モニター サポートを備えたシンプルでフレンドリーなインターフェイス</value>
-  </data>
-  <data name="StoreFeature10" xml:space="preserve">
-    <value>● 追加モード: コピーはクリップボード上で「置換」ではなく「追加」になります。</value>
-  </data>
-  <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox および Chromium ベースのブラウザ (Chrome、Edge、Brave) のサポートが強化された、洗練されたクリップ トラッキング、ソース、および使用法</value>
-  </data>
-  <data name="StoreFeature12" xml:space="preserve">
-    <value>● 検索/置換およびハイライト機能を備えたリッチ テキスト (表、リスト、リンクなど) を備えたフル機能のクリップ エディター</value>
-  </data>
-  <data name="StoreFeature13" xml:space="preserve">
-    <value>● 画像を安全なデータベースに保存し、ドラッグ アンド ドロップするだけでいつでもオンデマンドでファイルとして使用できるようになります。</value>
-  </data>
-  <data name="StoreFeature14" xml:space="preserve">
-    <value>● スニペット コレクションから迅速かつ動的に貼り付けるための強力なテキスト テンプレート</value>
-  </data>
-  <data name="StoreFeature15" xml:space="preserve">
-    <value>● カスタム オートメーションとアクション チェーンのためのトリガー &amp; アクション デザイナー</value>
-  </data>
-  <data name="StoreFeature16" xml:space="preserve">
-    <value>● プラグイン システムの使用と拡張が簡単で、クリップの分析やクリップボードへの任意の形式の読み取り/書き込みの両方を行うことができます。</value>
-  </data>
-  <data name="StoreFeature17" xml:space="preserve">
-    <value>● 成長を続けるコミュニティ主導のプラグイン ライブラリを備えた組み込みプラグイン ブラウザ</value>
-  </data>
-  <data name="StoreFeature18" xml:space="preserve">
-    <value>● プラグイン プリセットですべてを自動化し、AI プロンプトやコマンドを隠して簡単に使用できます</value>
-  </data>
-  <data name="StoreFeature19" xml:space="preserve">
-    <value>● さらに多くのプラットフォームと機能が近日公開予定です。</value>
-  </data>
-  <data name="StoreFeature2" xml:space="preserve">
-    <value>● 明るいテーマと暗いテーマは両方とも完全に動的で、必要な色を使用できます</value>
-  </data>
-  <data name="StoreFeature3" xml:space="preserve">
-    <value>● インターフェース内に統合されたヘルプとヒント。</value>
-  </data>
-  <data name="StoreFeature4" xml:space="preserve">
-    <value>●パフォーマンスを最適化し、100万個のクリップによるストレステストを実施。</value>
-  </data>
-  <data name="StoreFeature5" xml:space="preserve">
-    <value>● 検索はいつでも、数十のフィールドにわたるクリップとそのソースに対するシンプルかつ高度なフィルタリングを使用して入力を開始するだけです</value>
-  </data>
-  <data name="StoreFeature6" xml:space="preserve">
-    <value>● タグ ツリーでクリップを整理し、再利用可能なフィルタを作成します</value>
-  </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● オプションの 2 要素パスワード保護で常に暗号化された、安全かつプライベートなローカル データ ストレージ (データ収集なし) で、トラッカーからアプリや Web サイトを簡単にブロックできます。</value>
-  </data>
-  <data name="StoreFeature8" xml:space="preserve">
-    <value>● 広範なドラッグ アンド ドロップのサポート、カスタム グローバル ショートカット、ルーティング、マウス不要のナビゲーション</value>
-  </data>
-  <data name="StoreFeature9" xml:space="preserve">
-    <value>● カスタム マウス モード: 右クリックで貼り付け、左クリックで自動コピー</value>
-  </data>
-  <data name="StoreShortDescription" xml:space="preserve">
-    <value>クリップボードはジャングルです。</value>
-  </data>
-  <data name="TeaserCaption" xml:space="preserve">
-    <value>MonkeyPaste のサンプルが動作中!</value>
-  </data>
-  <data name="TranslationShortWarning" xml:space="preserve">
-    <value>この言語でインストールされています。</value>
-  </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>初回リリース</value>
-  </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>カスタムオートメーションとアクションチェーンのためのトリガー＆アクションデザイナー</value>
+    <value>Trigger &amp; Action Designerによるカスタム自動化とアクションチェーン</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>水平/垂直レイアウト、リスト/グリッド ビュー、マルチモニターのサポート</value>
+    <value>水平/垂直レイアウト、リスト/グリッドビュー、マルチモニターのサポート</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>検索/置換、リッチ テキスト (表、リスト、リンクなど) のテキスト テンプレートを備えたフル機能のクリップ エディターにより、スニペット コレクションからすばやく動的に貼り付けることができます。</value>
+    <value>検索/置換、リッチテキスト(テーブル、リスト、リンクなど)テキストテンプレートを備えたフル機能のクリップエディタで、スニペットコレクションからすばやく動的に貼り付けることができます。</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>オプションの 2 要素パスワード保護を備えた安全、セキュアなプライベート ローカル データ ストレージ</value>
+    <value>安全、安心、プライベートなローカルデータストレージ、オプションの2要素パスワード保護</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>成長を続けるコミュニティ主導のプラグイン ライブラリを備えた組み込みプラグイン ブラウザ</value>
+    <value>成長を続けるコミュニティ主導のプラグインライブラリを備えたプラグインブラウザを内蔵</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPasteは、他に類を見ないクリップボードマネージャー、自動化および生産性ツールです。クリップボードをワークフローの充実した整理された部分に強化します。
+テキスト、ファイル、画像をサポートする直感的で薄型のインターフェイスを備えています。柔軟性を重視して設計されており、成長を続けるコミュニティ主導のプラグインライブラリを備えています。
+
+これは、クリップボードからコピー&amp;ペーストするだけではないというプログラマーの実験から始まりました。彼は、代わりに Ctrl+C のような単純なコマンドで "追加" したかったのです
+クリップボードにあったものを「置き換える」の。そして実験はうまくいった、エウレカ!小さなツールはとても便利でした。これにより、プログラマーはより多くのアイデアと実験に興味をそそられました。
+現在は「モンキーペースト」となっています。
+
+デスクトップがファイルに対するものであるように、MonkeyPasteはクリップボードに対するものです。その一連のツールは、一見シームレスに統合および相互運用するために慎重に設計されています。
+コンテンツのアプリケーションまたは形式。Ctrl+C と Ctrl+V は単なるショートカットではありません。これらは、すべてのアプリケーションが共有するエントリポートであり、
+あなたがあなたの指先で利用できるに値する価値と意味の豊かさ。次のCtrl+Cの後に捨てられるだけではありません。
+
+私は前述のプログラマーであり、誰もがMonkeyPasteから使用方法を見つけられるようにしたいと考えています。したがって、それとそのすべての機能は完全に無料で使用できます。
+また、快適に使ってもらいたいです。ですから、私は、その作成の背後にある唯一の力として、発生する可能性のある(非常に)個人情報は一切ないことを保証します。
+あなたのクリップボードは、あなた自身のマシン以外のどこにでも追跡または保存されます。時代。</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>●水平/垂直レイアウト、リスト/グリッドビュー、マルチモニターサポートを備えたシンプルでフレンドリーなインターフェイス</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● 追加モード: コピーは、クリップボード上で「置換」ではなく「追加」になります。テキストとファイルの両方、完全にカスタマイズ可能</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Firefox および Chromium ベースのブラウザ(Chrome、Edge、Brave)のサポートを強化した、洗練されたクリップのトラッキング、ソース、使用状況</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>●検索/置換と強調表示を備えたリッチテキスト(テーブル、リスト、リンクなど)を備えたフル機能のクリップエディタ</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>●画像を安全なデータベースに保存し、いつでもファイルとしてすぐに使用できます-オンデマンドでドラッグアンドドロップするだけです!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>●スニペットコレクションからすばやく動的に貼り付けるための強力なテキストテンプレート</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● トリガーおよびアクションデザイナによるカスタム自動化とアクションチェーン</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>●クリップの分析やクリップボードへの任意のフォーマットの読み取り/書き込みの両方のためのプラグインシステムの使用と拡張が簡単</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>●成長し続けるコミュニティ主導のプラグインライブラリを備えた組み込みのプラグインブラウザ</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>●プラグインプリセットですべてを自動化し、AIプロンプトやコマンドを簡単に隠して使用します</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>●より多くのプラットフォームと機能が近日公開されます!まだ始まった🎉ばかりです</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>●明るいテーマと暗いテーマの両方が完全に動的で、好きな色を使用できます</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● インターフェイスに統合されたヘルプとヒント。オンラインマニュアル、ビデオ、フォーラムは、ウェブサイト(monkeypaste.com/docs)ですべて開始します</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>●パフォーマンスが最適化され、1,000,000個のクリップでストレステスト済み。</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>●いつでも検索、数十のフィールドにわたるクリップとそのソースに対して、単純なフィルタリングと高度なフィルタリングの両方を使用して入力を開始するだけです</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>●クリップをタグツリーに整理し、再利用可能なフィルターを作成します</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>●安全、安心、プライベートなローカルデータストレージ(データ収集なし)、オプションの2要素パスワード保護で常に暗号化され、トラッカーからアプリやWebサイトを簡単にブロックします</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>●広範なドラッグ&amp;ドロップのサポート、カスタムグローバルショートカット、ルーティング、マウス-フリーナビゲーション</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>●カスタムマウスモード:右クリック[貼り付け]と左クリック[自動]-コピー</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>クリップボードはジャングルです。MonkeyPasteは王様です!アプリからアプリへとスイングし、これをコピーして、MonkeyPasteでこれまでにないほど貼り付けます!まったく新しい最先端のクリップボードと分析自動化ツール!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>MonkeyPasteのサンプル!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>この言語にインストールされています。英語はこれらの例のみです</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>手記！スクリーンショットは一例です。インストールしたものは、この言語に翻訳されています。</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>このサブスクリプションでは、次のものを受け取ります。
+●無制限の容量
+● デバイスの同期(利用可能な場合)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>無制限 - 月次</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>無制限 - 年単位</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>初版</value>
   </data>
 </root>

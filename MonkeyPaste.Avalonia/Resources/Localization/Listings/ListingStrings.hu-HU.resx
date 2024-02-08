@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Ezzel az előfizetéssel a következőket kapod:</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Alap – havi</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Alap – Évente</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>másolat</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>paszta</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>vágólapkezelő</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>eszköz</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>hasznosság</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>automatizálás</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer egyedi automatizáláshoz és akcióláncoláshoz</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Vízszintes/függőleges elrendezések, lista/rács nézet és több monitoros támogatás</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Teljes értékű klipszerkesztő keresés/csere, formázott szöveg (táblázatok, listák, hivatkozások stb.) szövegsablonokkal a gyors, dinamikus beillesztés érdekében a kivonatgyűjteményből</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Biztonságos, biztonságos és privát helyi adattárolás opcionális 2-faktoros jelszavas védelemmel</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Beépített bővítményböngésző folyamatosan növekvő közösség által vezérelt bővítmények könyvtárával</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>A MonkeyPaste egy olyan vágólapkezelő, automatizálási és termelékenységi eszköz, amely semmihez sem hasonlítható.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Egyszerű és barátságos felület vízszintes/függőleges elrendezéssel, lista/rács nézettel és több monitoros támogatással</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Hozzáfűzés mód: A másolás „hozzáadás” lesz a „csere” helyett a vágólapon.</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Kifinomult klipkövetés, források és használat a Firefox és Chromium alapú böngészők (Chrome, Edge, Brave) fokozott támogatásával</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Teljes értékű klipszerkesztő formázott szöveggel (táblázatok, listák, hivatkozások stb.) kereséssel/cserével és kiemeléssel</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Tárolja képeit a biztonságos adatbázisban, bármikor készen áll a fájlként való használatra – igény szerint csak húzza – és dobja le!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Hatékony szövegsablonok a gyors, dinamikus beillesztéshez a részletgyűjteményből</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger &amp; Action tervező egyéni automatizáláshoz és műveletláncoláshoz</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Egyszerűen használható és bővíthető bővítményrendszer klipek elemzéséhez vagy bármilyen formátum olvasásához/írásához a vágólapra</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Beépített bővítményböngésző folyamatosan növekvő közösség által vezérelt bővítménykönyvtárral</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automatizáljon mindent előre beépülő modulokkal, tárolja el, és könnyedén használja bármelyik AI promptját vagy parancsát</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● További platformok és funkciók hamarosan!</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Mind a világos, mind a sötét témák teljesen dinamikusak, bármilyen színt használhat</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integrált súgó és tippek közvetlenül a felületen.</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Teljesítményre optimalizált, és 1 000 000 klippel tesztelték.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Bármikor kereshet, egyszerűen kezdjen el gépelni a klipek és forrásaik egyszerű és speciális szűrésével több tucat mezőben.</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Rendezze klipjeit címkefákba, és hozzon létre újrafelhasználható szűrőket</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Biztonságos, biztonságos és privát helyi adattárolás (nincs adatgyűjtés) mindig titkosítva az opcionális kétfaktoros jelszavas védelemmel, és egyszerűen blokkolja az alkalmazásokat vagy webhelyeket a nyomkövetőből</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Széleskörű fogd és vidd támogatás, egyéni globális parancsikonok, útválasztás és egér – ingyenes navigáció</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Egyéni egérmódok: jobb gombbal kattintson a beillesztésre és balra kattintás az automatikus másolásra</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>A vágólap egy dzsungel.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Minta MonkeyPaste működés közben!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Ezen a nyelven telepítve.</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Jegyzet!</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Ezzel az előfizetéssel a következőket kapod:</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Korlátlan - havonta</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Korlátlan - Évente</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Első kiadás</value>
+  </data>
+</root>

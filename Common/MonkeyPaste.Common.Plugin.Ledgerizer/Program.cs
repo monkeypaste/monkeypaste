@@ -19,8 +19,9 @@ namespace Ledgerizer {
         DO_REMOTE_INDEX = 1L << 7,
         MOVE_CORE_TO_DAT = 1L << 8,
         LOCALIZE_MANIFESTS = 1L << 9,
-        GEN_ADDON_LISTING = 1L << 10,
-        GEN_PROD_LISTING = 1L << 11,
+        GEN_EMPTY_RESX = 1L << 10,
+        GEN_ADDON_LISTING = 1L << 11,
+        GEN_PROD_LISTING = 1L << 12,
     }
     internal class Program {
         //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
@@ -30,12 +31,22 @@ namespace Ledgerizer {
 
         static IEnumerable<string> WorkingCultures {
             get {
+                // get cultures resx tool supports
                 var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .Where(c => c.GetAncestors().Any())
                 .OrderBy(c => c.DisplayName)
                 .ToArray();
 
-                var common_cultures = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name)).ToArray();
+                // get azure langs
+                var azure_langs = new (string, string)[] {
+                    ("Afrikaans-Afrikaans","af"),("Amharic-አማርኛ","am"),("Arabic-العربية","ar"),("Assamese-অসমীয়া","as"),("Azerbaijani-Azərbaycan","az"),("Bashkir-Bashkir","ba"),("Bulgarian-Български","bg"),("Bangla-বাংলা","bn"),("Tibetan-བོད་སྐད་","bo"),("Bosnian-Bosnian","bs"),("Catalan-Català","ca"),("Czech-Čeština","cs"),("Welsh-Cymraeg","cy"),("Danish-Dansk","da"),("German-Deutsch","de"),("Divehi-ދިވެހިބަސް","dv"),("Greek-Ελληνικά","el"),("English-English","en"),("Spanish-Español","es"),("Estonian-Eesti","et"),("Persian-فارسی","fa"),("Finnish-Suomi","fi"),("Filipino-Filipino","fil"),("Fijian-NaVosaVakaviti","fj"),("French-Français","fr"),("French(Canada)-Français(Canada)","fr-CA"),("Irish-Gaeilge","ga"),("Gujarati-ગુજરાતી","gu"),("Hebrew-עברית","he"),("Hindi-हिन्दी","hi"),("Croatian-Hrvatski","hr"),("HaitianCreole-HaitianCreole","ht"),("Hungarian-Magyar","hu"),("Armenian-Հայերեն","hy"),("Indonesian-Indonesia","id"),("Inuinnaqtun-Inuinnaqtun","ikt"),("Icelandic-Íslenska","is"),("Italian-Italiano","it"),("Inuktitut-ᐃᓄᒃᑎᑐᑦ","iu"),("Inuktitut(Latin)-Inuktitut(Latin)","iu-Latn"),("Japanese-日本語","ja"),("Georgian-ქართული","ka"),("Kazakh-ҚазақТілі","kk"),("Khmer-ខ្មែរ","km"),("Kurdish(Northern)-Kurdî(Bakur)","kmr"),("Kannada-ಕನ್ನಡ","kn"),("Korean-한국어","ko"),("Kurdish(Central)-Kurdî(Navîn)","ku"),("Kyrgyz-Kyrgyz","ky"),("Lao-ລາວ","lo"),("Lithuanian-Lietuvių","lt"),("Latvian-Latviešu","lv"),("Chinese(Literary)-中文(文言文)","lzh"),("Malagasy-Malagasy","mg"),("Māori-TeReoMāori","mi"),("Macedonian-Македонски","mk"),("Malayalam-മലയാളം","ml"),("Mongolian(Cyrillic)-Mongolian(Cyrillic)","mn-Cyrl"),("Mongolian(Traditional)-ᠮᠣᠩᠭᠣᠯᠬᠡᠯᠡ","mn-Mong"),("Marathi-मराठी","mr"),("Malay-Melayu","ms"),("Maltese-Malti","mt"),("HmongDaw-HmongDaw","mww"),("Myanmar(Burmese)-မြန်မာ","my"),("Norwegian-NorskBokmål","nb"),("Nepali-नेपाली","ne"),("Dutch-Nederlands","nl"),("Odia-ଓଡ଼ିଆ","or"),("QuerétaroOtomi-Hñähñu","otq"),("Punjabi-ਪੰਜਾਬੀ","pa"),("Polish-Polski","pl"),("Dari-دری","prs"),("Pashto-پښتو","ps"),("Portuguese(Brazil)-Português(Brasil)","pt"),("Portuguese(Portugal)-Português(Portugal)","pt-PT"),("Romanian-Română","ro"),("Russian-Русский","ru"),("Slovak-Slovenčina","sk"),("Slovenian-Slovenščina","sl"),("Samoan-GaganaSāmoa","sm"),("Albanian-Shqip","sq"),("Serbian(Cyrillic)-Српски(ћирилица)","sr-Cyrl"),("Serbian(Latin)-Srpski(latinica)","sr-Latn"),("Swedish-Svenska","sv"),("Swahili-Kiswahili","sw"),("Tamil-தமிழ்","ta"),("Telugu-తెలుగు","te"),("Thai-ไทย","th"),("Tigrinya-ትግር","ti"),("Turkmen-TürkmenDili","tk"),("Klingon(Latin)-Klingon(Latin)","tlh-Latn"),("Klingon(pIqaD)-Klingon(pIqaD)","tlh-Piqd"),("Tongan-LeaFakatonga","to"),("Turkish-Türkçe","tr"),("Tatar-Татар","tt"),("Tahitian-ReoTahiti","ty"),("Uyghur-ئۇيغۇرچە","ug"),("Ukrainian-Українська","uk"),("Urdu-اردو","ur"),("Uzbek(Latin)-Uzbek(Latin)","uz"),("Vietnamese-TiếngViệt","vi"),("YucatecMaya-YucatecMaya","yua"),("Cantonese(Traditional)-粵語(繁體)","yue"),("ChineseSimplified-中文(简体)","zh-Hans"),("ChineseTraditional-繁體中文(繁體)","zh-Hant")
+                };
+                // get ms store cultures resx tool AND azure supports
+                var common_cultures_before = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name)).ToList();
+                var common_cultures = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name) && azure_langs.Any(y => x.Name.ToLower().StartsWith(y.Item2.ToLower()))).ToList();
+
+                string diffs = string.Join(",", common_cultures_before.Select(x => x.Name).Difference(common_cultures.Select(x => x.Name)).ToList());
+
                 return common_cultures.Select(x => x.Name).OrderBy(x => x);
             }
         }
@@ -45,11 +56,12 @@ namespace Ledgerizer {
 
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            MpLedgerizerFlags.GEN_ADDON_LISTING |
-            MpLedgerizerFlags.GEN_PROD_LISTING |
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-            MpLedgerizerFlags.DO_LOCAL_INDEX
-            | MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            MpLedgerizerFlags.GEN_EMPTY_RESX
+            //MpLedgerizerFlags.GEN_ADDON_LISTING |
+            //MpLedgerizerFlags.GEN_PROD_LISTING |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_LOCAL_INDEX
+            //MpLedgerizerFlags.MOVE_CORE_TO_DAT
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             //| MpLedgerizerFlags.LOCALIZE_MANIFESTS
             ;
@@ -71,6 +83,8 @@ namespace Ledgerizer {
 
         static bool GEN_ADDON_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_ADDON_LISTING);
         static bool GEN_PROD_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_PROD_LISTING);
+
+        static bool GEN_EMPTY_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EMPTY_RESX);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -132,6 +146,10 @@ namespace Ledgerizer {
             Console.ReadLine();
         }
         static void ProcessAll() {
+            var test = WorkingCultures;
+            if (GEN_EMPTY_RESX) {
+                GenAllEmptyLocalizedResx();
+            }
             if (GEN_ADDON_LISTING) {
                 GenAddOnListings();
             }
@@ -817,30 +835,6 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpFileIo.WriteTextToFile(output_path, sb.ToString(), overwrite: true);
             MpConsole.WriteLine(output_path);
         }
-        static void GenEmptyLocalizedListings() {
-            string listing_baseline_path =
-                Path.Combine(
-                    GetListingDir(),
-                    "ListingStrings.resx");
-            var listing_lookup = MpResxTools.ReadResxFromPath(listing_baseline_path);
-            var empty_listing_lookup = listing_lookup.ToDictionary(x => x.Key, x => (string.Empty, x.Value.comment));
-
-            foreach (var cc in WorkingCultures) {
-                string listing_fn = $"ListingStrings.{cc}.resx";
-                string listing_path = Path.Combine(
-                    GetListingDir(),
-                    listing_fn);
-                if (listing_path.IsFile()) {
-                    continue;
-                }
-                if (cc == "en-US") {
-                    MpResxTools.WriteResxToPath(listing_path, listing_lookup);
-                    continue;
-                }
-                MpResxTools.WriteResxToPath(listing_path, empty_listing_lookup);
-            }
-        }
-
         static string GetListingDir() {
 
             string listing_dir = Path.Combine(
@@ -912,6 +906,58 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpConsole.WriteLine("", stampless: true);
         }
 
+        static void GenAllEmptyLocalizedResx() {
+            List<string> all_ref_resxs =
+            [
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "Listings",
+                    "ListingStrings.resx"),
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "Enums",
+                    "EnumUiStrings.resx"),
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "UiStrings",
+                    "UiStrings.resx"),
+                .. PluginNames.Select(x =>
+                    Path.Combine(
+                        GetPluginProjDir(x),
+                        "Resources",
+                        "Resources.resx")),
+            ];
+
+            foreach (string ref_resx_path in all_ref_resxs) {
+                var resx_lookup = MpResxTools.ReadResxFromPath(ref_resx_path);
+                var empty_lookup = resx_lookup.ToDictionary(x => x.Key, x => (string.Empty, string.Empty));
+                string ref_resx_dir = Path.GetDirectoryName(ref_resx_path);
+                string localized_resx_file_name_format = $"{Path.GetFileNameWithoutExtension(ref_resx_path)}.{{0}}.resx";
+                foreach (var cc in WorkingCultures) {
+                    string empty_localized_resx_path = Path.Combine(
+                        ref_resx_dir,
+                        string.Format(localized_resx_file_name_format, cc));
+                    MpFileIo.DeleteFile(empty_localized_resx_path);
+                    if (ref_resx_dir.Contains("Plugins")) {
+                        MpFileIo.DeleteFile(Path.Combine(
+                            Path.GetDirectoryName(empty_localized_resx_path), $"manifest.{cc}.json"));
+                    }
+                    var lookup_to_write = cc == "en-US" ? resx_lookup : empty_lookup;
+                    MpResxTools.WriteResxToPath(empty_localized_resx_path, lookup_to_write);
+                    MpConsole.WriteLine(empty_localized_resx_path);
+                }
+            }
+
+        }
         #endregion
 
         #region Index

@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Selle tellimusega saate:
+● kuni 1,000 sisuklippi 
+● piiramatu prügikast ja arhiiv</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Põhiline - igakuine</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Põhiline - aastane</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>koopia</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>Kleebi</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>lõikelaua haldur</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>tööriist</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>kasulikkus</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>automatiseerimine</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Kohandatud automatiseerimiste ja toimingute aheldamise jaoks mõeldud päästiku- ja toimingukujundaja</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Horisontaalsed/vertikaalsed paigutused, loendi-/ruudustikuvaade ja mitme kuvari tugi</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Täisfunktsionaalne klipiredaktor koos otsimise/asendamise, RTF-teksti (tabelid, loendid, lingid jne) tekstiga, mis ahvatleb kiireks ja dünaamiliseks kleepimiseks teie katkendikogust</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Turvaline, turvaline ja privaatne kohalik andmesalvestus koos valikulise 2-faktorilise paroolikaitsega</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Sisseehitatud pistikprogrammide brauser koos üha kasvava kogukonnapõhise pistikprogrammide teegiga</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste on lõikelaua haldur, automatiseerimise ja tootlikkuse tööriist nagu ükski teine. lõikelaua täiustamine töövoo rikastatud ja korrastatud osaks,
+Sisaldab intuitiivset ja madala profiiliga liidest, mis toetab teksti, faile ja pilte. Loodud paindlikkuse tagamiseks koos üha kasvava kogukonnapõhise pistikprogrammide kaaluga.
+
+See algas programmeerija eksperimendina, kes soovis enamat kui lihtsalt lõikepuhvrist kopeerida ja kleepida. Ta tahtis lihtsat käsku nagu Control+C, mis selle asemel "lisanduks" 
+"asendada" see, mis oli lõikelaual. Ja eksperiment töötas, eureka! Väike tööriist oli väga mugav. See intrigeeris programmeerijat rohkemate ideede ja eksperimentidega, et 
+nüüd on saanud "MonkeyPaste". 
+
+Kuna töölaud on teie failide jaoks, kavatseb MonkeyPaste olla teie lõikelaual. See on tööriistade komplekt, mis on hoolikalt kavandatud näiliselt integreerima ja koostalitlema 
+mis tahes rakendus või sisuvorming. Control+C ja Control+V on palju enamat kui lihtsalt otseteed. Need on sisenemissadamad, mida kõik rakendused jagavad, kandes 
+väärtuse ja tähenduse rikkus, mida sa väärid, et see oleks sinu käeulatuses. Mitte lihtsalt ära visatud pärast järgmist Control+C.
+
+Olen see varem mainitud programmeerija ja tahan, et kõik saaksid MonkeyPaste'ist kasutust leida. Nii et seda ja kõiki selle funktsioone on täiesti tasuta kasutada. 
+Samuti tahan, et tunneksite end seda kasutades mugavalt. Nii et ma kinnitan teile, olles ainus jõud selle loomise taga, et MITTE ÜKSKI (väga) isiklik teave, mis võib tekkida 
+teie lõikelauda jälgitakse või salvestatakse alati kõikjal väljaspool teie enda masinat. Perioodi.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Lihtne ja sõbralik liides nii horisontaalsete / vertikaalsete paigutuste, loendi / ruudustiku vaate kui ka mitme monitori toega</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Lisamisrežiim: kopeerimine muutub lõikepuhvris "asenda" asemel "lisamiseks". Nii tekst kui ka failid, täielikult kohandatavad</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Keerukas klippide jälgimine, allikad ja kasutamine koos täiustatud toega Firefoxile ja Chromiumi-põhistele brauseritele (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Täisfunktsionaalne klipiredaktor rikkaliku tekstiga (tabelid, loendid, lingid jne) koos leidmise/asendamise ja esiletõstmisega</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Salvestage oma pildid turvalisse andmebaasi, mis on valmis kasutamiseks failidena igal ajal nõudmisel, lihtsalt lohistage!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Võimas tekst, mis ahvatleb kiireks ja dünaamiliseks kleepimiseks teie katkendikogust</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Kohandatud automatiseerimiste ja toimingute aheldamise päästiku- ja toimingukujundaja</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Lihtne kasutada ja laiendada pistikprogrammi süsteemi nii klippide analüüsimiseks kui ka lõikelauale mis tahes vormingu lugemiseks / kirjutamiseks</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Sisseehitatud pistikprogrammi brauser koos üha kasvava kogukonnapõhise pistikprogrammide raamatukoguga</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automatiseerige kõik pistikprogrammide eelseadetega, pange paika ja kasutage hõlpsalt oma AI viipasid või käske</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Varsti on tulemas rohkem platvorme ja funktsioone! Me alles alustame 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Nii heledad kui ka tumedad teemad on täiesti dünaamilised, kasutage mis tahes soovitud värvi</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integreeritud abi ja vihjed otse liideses. Veebipõhine juhend, videod ja foorum, mis aitavad teil veebisaidil kõike alustada (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Optimeeritud jõudluse jaoks ja stressitestitud 1 000 000 klambriga.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Igal ajal hakake lihtsalt tippima, kasutades nii klippide kui ka nende allikate lihtsat ja täiustatud filtreerimist kümnetel väljadel</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Korraldage oma klipid sildipuudesse ja looge elustatavad filtrid</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Ohutu, turvaline ja privaatne kohalik andmesalvestus (andmete kogumine puudub), mis on alati krüpteeritud valikulise 2-faktorilise paroolikaitsega ja blokeerib rakendused või veebisaidid hõlpsalt teie jälgijast</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Ulatuslik pukseerimistugi, kohandatud globaalsed otseteed, marsruutimine ja hiirevaba navigeerimine</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Kohandatud hiirerežiimid: paremklõpsake kleepimist ja vasakklõpsake automaatset kopeerimist</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Lihtne ja sõbralik liides 
+● Horisontaalsed / vertikaalsed paigutused, loendi / ruudustiku vaade ja mitme monitori tugi
+● Nii heledad kui ka tumedad teemad on täiesti dünaamilised, kasutage mis tahes soovitud värvi
+
+● Integreeritud abi ja vihjed otse liideses
+● Abijuhend, videod ja foorum, mis aitavad teil veebisaidil kõike alustada (monkeypaste.com/docs)
+
+● Optimeeritud jõudluse jaoks ja stressitestitud 1 000 000 klambriga.
+● Igal ajal otsige lihtsalt tippimist
+● Nii lihtne kui ka täiustatud klippide ja nende allikate filtreerimine kümnetel väljadel
+● Korraldage oma klipid sildipuudesse ja looge elustatavad filtrid
+
+● Ohutu, turvaline ja privaatne kohalik andmesalvestus (andmete kogumine puudub) on alati krüpteeritud
+● Võite ignoreerida konkreetsete rakenduste või veebisaitide klippe
+● Valikuline 2-faktoriline paroolikaitse
+
+● Kohandatud globaalsed kiirklahvid, marsruutimine ja hiirevaba navigeerimine
+● Ulatuslik pukseerimistugi
+● Kohandatud hiirerežiimid: paremklõpsake kleepimist ja vasakklõpsake automaatset kopeerimist 
+● Lisamisrežiim: kopeerimine muutub lõikepuhvris "asenda" asemel "lisamiseks". Nii tekst kui ka failid, täielikult kohandatavad
+
+● Keerukas klippide jälgimine, allikad ja kasutamine
+● Firefoxi ja Chromiumi-põhiste brauserite täiustatud tugi (Chrome, Edge, Brave)
+
+● Töötab rikkaliku tekstiga (tabelid, loendid, lingid jne)
+● Täisfunktsionaalne klipiredaktor koos otsimise/asendamise ja esiletõstmisega
+● Salvestage oma pildid turvalisse andmebaasi, mis on valmis kasutamiseks failidena igal ajal nõudmisel, lihtsalt lohistage!
+
+● Võimas tekst, mis ahvatleb kiireks ja dünaamiliseks kleepimiseks teie katkendikogust
+
+● Kohandatud automatiseerimiste ja toimingute aheldamise päästiku- ja toimingukujundaja
+
+● Lihtne kasutada ja laiendada pistikprogrammi süsteemi nii klippide analüüsimiseks kui ka lõikelauale mis tahes vormingu lugemiseks / kirjutamiseks
+● Sisseehitatud pistikprogrammi brauser koos üha kasvava kogukonnapõhise pistikprogrammide raamatukoguga 
+● Automatiseerige kõik pistikprogrammide eelseadetega, pange paika ja kasutage hõlpsalt oma AI viipasid või käske
+
+● Varsti on tulemas rohkem platvorme ja funktsioone! Me alles alustame 🎉</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Lõikelaud on džungel. MonkeyPaste on KUNINGAS! Kiikuge rakendusest rakendusse, kopeerige see ja kleepige see nagu kunagi varem MonkeyPaste'iga !! Uhiuus tipptasemel lõikelaud ja analüütiline automatiseerimistööriist!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>MonkeyPaste näidis tegevuses!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Paigaldatud sellesse keelde. Inglise keel on ainult nende näidete jaoks</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Märkus! Kuvatõmmised on ainult näited. See, mida installite, on tõlgitud sellesse keelde.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Selle tellimusega saate:
+● piiramatu võimsus
+● Seadme sünkroonimine (kui see on saadaval)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Piiramatu - igakuine</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Piiramatu - igal aastal</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Esmane väljalase</value>
+  </data>
+</root>

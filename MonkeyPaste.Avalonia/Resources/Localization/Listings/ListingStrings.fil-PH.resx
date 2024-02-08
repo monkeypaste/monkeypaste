@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Sa subscription na ito ay makakatanggap ka ng:
+● hanggang 1,000 clip ng nilalaman 
+● Walang limitasyong basura &amp; archive</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Pangunahing - Buwanang</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Basic - Yearly</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>kopyahin ang</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>i-paste</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>tagapamahala ng clipboard</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>tool na</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>utility</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>pag aautomat</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer para sa mga pasadyang automation at pagkilos chaining</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Pahalang / vertical layout, listahan / grid view at suporta sa multi monitor</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Ganap na itinatampok na editor ng clip na may hanapin / palitan, mayaman na teksto (mga talahanayan, listahan, link, atbp) text templating para sa mabilis, dynamic na pag paste mula sa iyong koleksyon ng snippet</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Ligtas, ligtas at pribadong lokal na imbakan ng data na may opsyonal na proteksyon ng 2 factor password</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Built in na browser ng plugin na may isang patuloy na lumalagong library ng mga plugin na hinihimok ng komunidad</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Ang MonkeyPaste ay isang clipboard manager, automation at tool sa pagiging produktibo tulad ng walang iba pa. Pagpapahusay ng iyong clipboard sa isang enriched at organisadong bahagi ng iyong daloy ng trabaho,
+Nagtatampok ng intuitive at mababang profile na interface na sumusuporta sa teksto, mga file at mga imahe. Idinisenyo para sa kakayahang umangkop, na may patuloy na lumalagong libray na hinihimok ng komunidad ng mga plugin.
+
+Nagsimula ito bilang isang eksperimento ng isang programmer na nagnanais ng higit pa sa kopyahin at i paste sa labas ng clipboard. Gusto niya ng isang simpleng utos tulad ng Control + C na 'magdagdag sa' sa halip 
+ng 'palitan' ang nasa clipboard. At ang eksperimento ay nagtrabaho, eureka! Ang maliit na tool ay napaka madaling gamitin. Ito entrigued ang programmer na may higit pang mga ideya at higit pang mga eksperimento, na 
+ngayon ay naging "MonkeyPaste". 
+
+Tulad ng desktop ay sa iyong mga file, ang MonkeyPaste ay nagnanais na maging sa iyong clipboard. Ito ay isang suite ng mga tool na maingat na dinisenyo upang tila walang putol na pagsamahin at interoperate sa 
+anumang application o format ng nilalaman. Ang Control+C at Control+V ay higit pa sa mga shortcut lamang. Ang mga ito ay ang mga port ng entry lahat ng mga application ibahagi, nagdadala ng isang 
+kayamanan ng halaga at kahulugan karapat dapat kang magkaroon ng magagamit sa iyong mga daliri. Hindi basta basta itatapon pagkatapos ng susunod na Control+C.
+
+Ako na programmer nabanggit mas maaga at gusto ko lahat ng tao ay magagawang upang mahanap ang paggamit out ng MonkeyPaste. Kaya ito at ang lahat ng mga tampok nito ay ganap na libre upang gamitin. 
+Gusto ko rin na maging komportable ka sa paggamit nito. Kaya tinitiyak ko sa iyo, bilang ang tanging puwersa sa likod ng paglikha nito, na WALA sa (napaka) personal na impormasyon na maaaring lumitaw sa 
+ang iyong clipboard ay kailanman sinusubaybayan o naka imbak SAANMAN lampas sa iyong sariling makina. Panahon.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Simple at friendly na interface na may parehong pahalang / vertical layout, listahan / grid view at multi-monitor na suporta</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Append mode: Ang pagkopya ay nagiging 'add to' sa halip na 'palitan' sa clipboard. Parehong teksto at mga file, ganap na napapasadyang</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Sopistikadong pagsubaybay sa clip, mga mapagkukunan at paggamit na may pinahusay na suporta para sa mga browser na nakabase sa Firefox at Chromium (Chrome, Edge, Matapang)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Ganap na itinampok na editor ng clip na may mayaman na teksto (mga talahanayan, listahan, link, atbp) na may hanapin / palitan at i-highlight</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● I-imbak ang iyong mga imahe sa ligtas na database, handang gamitin bilang mga file anumang oras na kailangan lang hilahin-at-drop!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Mabisang text templating para sa mabilis, dynamic na pag-paste mula sa iyong snippet koleksyon</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger &amp; Action designer para sa pasadyang mga automation at pagkilos chaining</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Simple upang gamitin at palawakin ang plugin system para sa parehong pagsusuri ng mga clip o basahin / isulat ang anumang format sa iyong clipboard</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Built-in na plugin browser na may isang patuloy na lumalagong komunidad driven library ng mga plugin</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● I-automate ang lahat gamit ang mga preset ng plugin, ilagay at gamitin ang alinman sa iyong AI prompt o command nang madali</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Higit pang mga platform at tampok na darating sa lalong madaling panahon! Kami ay lamang gettings nagsimula 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Ang parehong liwanag at madilim na tema ay ganap na dynamic, gamitin ang anumang kulay na gusto mo</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integrated help &amp; hints sa interface. Online manual, mga video at forum upang makapagsimula ka lahat sa website (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Na optimize para sa pagganap at stressed nasubok sa 1,000,000s ng mga clip.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Anumang oras paghahanap, simulan lamang ang pag-type gamit ang parehong simple &amp; advanced na pag-filter sa mga clip at ang kanilang mga mapagkukunan sa paglipas ng dose-dosenang mga patlang</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Ayusin ang iyong mga clip sa tag puno at lumikha ng mga resusable filter</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Ligtas, ligtas at pribadong lokal na imbakan ng data (walang koleksyon ng data) palaging naka-encrypt na may opsyonal na 2-factor na proteksyon ng password at madaling harangan ang mga app o website mula sa iyong tracker</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Malawak na suporta sa pag-drag at-drop, pasadyang mga shortcut sa buong mundo, pag-routing at pag-navigate na walang mouse</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Pasadyang mga mode ng mouse: i-right-click paste at kaliwang click auto-copy</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Simple at friendly na interface 
+● Mga horizontal/vertical layout, listahan/grid view at suporta sa multi-monitor
+● Ang parehong liwanag at madilim na tema ay ganap na dynamic, gamitin ang anumang kulay na gusto mo
+
+● Integrated tulong &amp; mga pahiwatig karapatan sa interface
+● Help manual, mga video at forum para makapagsimula kayong lahat sa website (monkeypaste.com/docs)
+
+● Na optimize para sa pagganap at stressed nasubok sa 1,000,000s ng mga clip.
+● Anumang oras maghanap, simulan lamang ang pag-type
+● Parehong simple at advanced na pag-filter sa mga clip at ang kanilang mga mapagkukunan sa paglipas ng dose-dosenang mga patlang
+● Ayusin ang iyong mga clip sa tag puno at lumikha ng mga resusable filter
+
+● Ligtas, ligtas at pribadong lokal na imbakan ng data (walang koleksyon ng data) palaging naka-encrypt
+● Maaari mong balewalain ang mga clip mula sa mga partikular na app o website
+● Opsyonal na 2-factor na proteksyon ng password
+
+● Pasadyang global hot key, routing at mouse-free navigation
+● Malawak na suporta sa pag-drag-at-drop
+● Pasadyang mga mode ng mouse: i-right-click paste at kaliwang click auto-copy 
+● Append mode: Ang pagkopya ay nagiging 'add to' sa halip na 'palitan' sa clipboard. Parehong teksto at mga file, ganap na napapasadyang
+
+● Sopistikadong pagsubaybay sa clip, mga pinagkukunan at paggamit
+● Pinahusay na suporta para sa mga browser ng Firefox at Chromium (Chrome, Edge, Matapang)
+
+● Gumagana sa mayamang teksto (mga talahanayan, listahan, link, atbp.)
+● Ganap na itinampok na editor ng clip na may hanapin / palitan at i-highlight
+● I-imbak ang iyong mga imahe sa ligtas na database, handang gamitin bilang mga file anumang oras na kailangan lang hilahin-at-drop!
+
+● Mabisang text templating para sa mabilis, dynamic na pag-paste mula sa iyong snippet koleksyon
+
+● Trigger &amp; Action designer para sa pasadyang mga automation at pagkilos chaining
+
+● Simple upang gamitin at palawakin ang plugin system para sa parehong pagsusuri ng mga clip o basahin / isulat ang anumang format sa iyong clipboard
+● Built-in na plugin browser na may isang patuloy na lumalagong komunidad driven library ng mga plugin 
+● I-automate ang lahat gamit ang mga preset ng plugin, ilagay at gamitin ang alinman sa iyong AI prompt o command nang madali
+
+● Higit pang mga platform at tampok na darating sa lalong madaling panahon! Kami ay lamang gettings nagsimula 🎉</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Ang clipboard ay isang gubat. MonkeyPaste ang KING! Mag-swing mula sa app sa app, pagkopya nito at pag-paste na tulad ng hindi kailanman bago sa MonkeyPaste!! Isang bagong tatak, cutting edge clipboard at analytic automation tool!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Sample ng MonkeyPaste sa pagkilos!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Naka-install sa wikang ito. Ang Ingles ay para lamang sa mga halimbawang ito</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Paalala! Ang mga screen shot ay mga halimbawa lamang. Ang na install mo ay isinalin sa wikang ito.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Sa subscription na ito ay makakatanggap ka ng:
+● Walang limitasyong Kapasidad
+● Pag-sync ng Device (sa Pagkakaroon)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Walang limitasyong - Buwanang</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Walang limitasyong - Taunang</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Unang Paglabas</value>
+  </data>
+</root>

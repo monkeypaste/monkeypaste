@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Med dette abonnement modtager du:
+● op til 1.000 klip med indhold
+● ubegrænset papirkurv og arkivering</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Grundlæggende - Månedligt</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Grundlæggende - Årligt</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>kopi</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>sæt ind</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>udklipsholder</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>værktøj</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>nytte</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>automatisering</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer til brugerdefinerede automatiseringer og handlingskæder</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Horisontale/lodrette layouts, liste/gittervisning og understøttelse af flere skærme</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Fuldt udstyret klipeditor med find/erstat, rig tekst (tabeller, lister, links osv.) tekstskabelon til hurtig, dynamisk indsættelse fra din uddragssamling</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor adgangskodebeskyttelse</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Indbygget plugin-browser med et stadigt voksende community-drevet bibliotek af plugins</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste er et udklipsholder, automatiserings- og produktivitetsværktøj som ingen anden. Forbedring af dit udklipsholder til en beriget og organiseret del af din arbejdsgang,
+med en intuitiv og lav profil grænseflade, der understøtter tekst, filer og billeder. Designet til fleksibilitet med et stadigt voksende community-drevet bibliotek af plugins.
+
+Det begyndte som et eksperiment af en programmør, der ville mere end blot kopiere og indsætte ud af udklipsholderen. Han ville have en simpel kommando som Control+C, der ville "føje til" i stedet for
+af 'erstat' det, der var på udklipsholderen. Og eksperimentet virkede, eureka! Det lille værktøj var meget praktisk. Dette fascinerede programmøren med flere ideer og flere eksperimenter
+nu er blevet til "MonkeyPaste".
+
+Da skrivebordet er til dine filer, har MonkeyPaste til hensigt at være til dit udklipsholder. Det er en pakke af værktøjer omhyggeligt designet til at integrere og interoperere uden problemer
+enhver applikation eller indholdsformat. Control+C og Control+V er meget mere end blot genveje. De er indgangshavne, som alle applikationer deler, med en
+rigdom af værdi og mening, du fortjener at have lige ved hånden. Ikke bare smidt ud efter næste Control+C.
+
+Jeg er den programmør, der er nævnt tidligere, og jeg ønsker, at alle skal kunne bruge MonkeyPaste. Så det og alle dets funktioner er helt gratis at bruge.
+Jeg vil også gerne have, at du føler dig tryg ved at bruge den. Så jeg forsikrer dig, som værende den eneste kraft bag dets oprettelse, at INGEN af de (meget) personlige oplysninger, der kan opstå på
+dit udklipsholder spores eller gemmes HVOR som helst ud over din egen maskine. Periode.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Enkel og venlig grænseflade med både vandrette/lodrette layouts, liste-/gittervisning og understøttelse af flere skærme</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Tilføj tilstand: Kopiering bliver "tilføj til" i stedet for "erstat" på udklipsholderen. Både tekst og filer kan tilpasses fuldt ud</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Sofistikeret klipsporing, kilder og brug med forbedret understøttelse af Firefox og Chromium-baserede browsere (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Fuldt udstyret klipeditor med rig tekst (tabeller, lister, links osv.) med find/erstat og fremhævning</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Gem dine billeder i den sikre database, klar til brug som filer når som helst on-demand bare træk-og-slip!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Kraftig tekstskabelon til hurtig, dynamisk indsætning fra din uddragssamling</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Trigger &amp; Action designer til brugerdefinerede automatiseringer og handling chaining</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Enkelt at bruge og udvide plugin-systemet til både at analysere klip eller læse/skrive ethvert format til din udklipsholder</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Indbygget plugin-browser med et stadigt voksende community-drevet bibliotek af plugins</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automatiser alt med plugin-forudindstillinger, gem og brug dine AI-prompter eller kommandoer med lethed</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Flere platforme og funktioner kommer snart! Vi er lige startet 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Både lyse og mørke temaer er fuldstændig dynamiske, brug enhver farve du ønsker</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integreret hjælp og tip lige i grænsefladen. Online manual, videoer og forum for at komme i gang alt sammen på webstedet (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Optimeret til ydeevne og stresstestet med 1.000.000vis af klip.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Når som helst søgning, skal du bare begynde at skrive med både enkel og avanceret filtrering på klip og deres kilder over snesevis af felter</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Organiser dine klip i tag-træer og opret genbrugelige filtre</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) altid krypteret med valgfri 2-faktor adgangskodebeskyttelse og bloker nemt apps eller websteder fra din tracker</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Omfattende træk-og-slip-understøttelse, tilpassede globale genveje, routing og musefri navigation</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Brugerdefinerede musetilstande: Højreklik på indsæt og venstreklik på autokopier</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Enkel og venlig grænseflade
+● Horisontale/lodrette layouts, liste/gittervisning og understøttelse af flere skærme
+● Både lyse og mørke temaer er fuldstændig dynamiske, brug enhver farve du ønsker
+
+● Integreret hjælp og tip lige i grænsefladen
+● Hjælpevejledning, videoer og forum til at komme i gang på webstedet (monkeypaste.com/docs)
+
+● Optimeret til ydeevne og stresstestet med 1.000.000vis af klip.
+● Søg når som helst, bare begynde at skrive
+● Både enkel og avanceret filtrering på klip og deres kilder over snesevis af felter
+● Organiser dine klip i tag-træer og opret genbrugelige filtre
+
+● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) altid krypteret
+● Du kan ignorere klip fra bestemte apps eller websteder
+● Valgfri 2-faktor adgangskodebeskyttelse
+
+● Tilpassede globale genvejstaster, routing og musefri navigation
+● Omfattende træk-og-slip-understøttelse
+● Brugerdefinerede musetilstande: Højreklik på indsæt og venstreklik på autokopier
+● Tilføj tilstand: Kopiering bliver "tilføj til" i stedet for "erstat" på udklipsholderen. Både tekst og filer kan tilpasses fuldt ud
+
+● Sofistikeret klipsporing, kilder og brug
+● Forbedret understøttelse af Firefox og Chromium-baserede browsere (Chrome, Edge, Brave)
+
+● Fungerer med rig tekst (tabeller, lister, links osv.)
+● Fuldt udstyret klip-editor med find/erstat og fremhævning
+● Gem dine billeder i den sikre database, klar til brug som filer når som helst on-demand bare træk-og-slip!
+
+● Kraftig tekstskabelon til hurtig, dynamisk indsætning fra din uddragssamling
+
+● Trigger &amp; Action designer til brugerdefinerede automatiseringer og handling chaining
+
+● Enkelt at bruge og udvide plugin-systemet til både at analysere klip eller læse/skrive ethvert format til din udklipsholder
+● Indbygget plugin-browser med et stadigt voksende community-drevet bibliotek af plugins
+● Automatiser alt med plugin-forudindstillinger, gem og brug dine AI-prompter eller kommandoer med lethed
+
+● Flere platforme og funktioner kommer snart! Vi er lige startet 🎉</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Udklipsholderen er en jungle. MonkeyPaste er KONGEN! Skift fra app til app, kopier dette og indsæt det som aldrig før med MonkeyPaste!! Et helt nyt, banebrydende udklipsholder og analytisk automatiseringsværktøj!!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Prøve af MonkeyPaste i aktion!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Installeret på dette sprog. Engelsk er kun for disse eksempler</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Bemærk! Skærmbilleder er kun eksempler. Det, du installerer, er blevet oversat til dette sprog.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Med dette abonnement modtager du:
+● ubegrænset kapacitet
+● enhedssynkronisering (efter tilgængelighed)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Ubegrænset - Månedligt</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Ubegrænset - årligt</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Første udgivelse</value>
+  </data>
+</root>

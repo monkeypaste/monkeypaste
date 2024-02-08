@@ -178,4 +178,17 @@
     <DefineConstants>$(DefineConstants);OUTSYS_WV</DefineConstants>
     <DefaultPlatforms>AnyCpu</DefaultPlatforms>
   </PropertyGroup>
+  
+  <!-- LOCALIZED RESOURCES -->
+
+  <ItemGroup>
+    <!--<Content Include="Resources\Resources.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\manifest.*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>-->
+    <None Include="Resources\Resources.*.resx"/>
+    <None Include="Resources\manifest.*.json"/>
+  </ItemGroup>
 </Project>

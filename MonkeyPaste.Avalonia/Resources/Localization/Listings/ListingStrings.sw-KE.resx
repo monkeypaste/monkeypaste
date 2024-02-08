@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value />
+  </data>
+</root>

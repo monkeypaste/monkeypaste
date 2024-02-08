@@ -1167,7 +1167,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Triggered when a clip of the selected type is added to the system in any way (clipboard, drag-and-drop, analyzer generated or duplicated)..
+        ///   Looks up a localized string similar to Triggered when a clip of the selected type is added to the system in any way (clipboard, drag - and - drop, analyzer generated or duplicated)..
         /// </summary>
         public static string ActionContentAddHint {
             get {
@@ -1529,7 +1529,7 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Triggered by a global shortcut you define. If MonkeyPaste is active it will attempt to use the selected clip (if there is one) as input. Otherwise it will try to use the clipboard as its input.
         ///
-        ///Note: a Shortcut Trigger will still execute if there is no input to keep it flexible (so it can be a macro trigger etc.) since its not a data-driven event..
+        ///Note: a Shortcut Trigger will still execute if there is no input to keep it flexible (so it can be a macro trigger etc.) since its not a data - driven event..
         /// </summary>
         public static string ActionShortcutTriggerHint {
             get {
@@ -1619,7 +1619,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto-generated default preset for &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Auto - generated default preset for &apos;{0}&apos;.
         /// </summary>
         public static string AnalyzerAutoGenPresetDescription {
             get {
@@ -1763,7 +1763,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To append you must unpause the clipboard listener (System Tray-&gt;Resume)..
+        ///   Looks up a localized string similar to To append you must unpause the clipboard listener (System Tray -&gt; Resume)..
         /// </summary>
         public static string AppendCannotActivateText {
             get {
@@ -2756,7 +2756,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Built in elements are read-only. Duplicate to alter..
+        ///   Looks up a localized string similar to Built in elements are read - only. Duplicate to alter..
         /// </summary>
         public static string CommonReadOnlyElmDisabledToolTip {
             get {
@@ -3496,7 +3496,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click + Control to follow....
+        ///   Looks up a localized string similar to Click + Ctrl to follow....
         /// </summary>
         public static string LinkNavigateToolTipText {
             get {
@@ -3894,7 +3894,7 @@ namespace MonkeyPaste.Avalonia {
         
         /// <summary>
         ///   Looks up a localized string similar to Your subscription is now {0}/{1} with {2} content and {3} trash storage. 
-        ///But fret not! No data is lost after downgrading. Only new stuff will be evaluated..
+        ///But don&apos;t worry, no data is lost after downgrading. Only new clips will be evaluated..
         /// </summary>
         public static string NtfCapAccountDowngradeText {
             get {
@@ -4194,7 +4194,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are all up-to-date!.
+        ///   Looks up a localized string similar to You are all up - to - date!.
         /// </summary>
         public static string NtfUpToDateTitle {
             get {
@@ -4581,7 +4581,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An uninstallation is pending. Please restart if you would like to re-install..
+        ///   Looks up a localized string similar to An uninstallation is pending. Please restart if you would like to re - install..
         /// </summary>
         public static string PluginUninstallPendingTooltip {
             get {
@@ -4619,7 +4619,7 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to There was an issue updating &apos;{0}&apos;. In order to complete the update you will need to restart and install &apos;{0}&apos; again (don&apos;t worry all of your settings will be restored). 
         ///
-        ///You can restart now and complete the update by re-installing, ignore this and update it later or cancel the update all together and continue using version &apos;{1}&apos;?.
+        ///You can restart now and complete the update by re - installing, ignore this and update it later or cancel the update all together and continue using version &apos;{1}&apos;?.
         /// </summary>
         public static string PluginUpdateErrorText {
             get {
@@ -4979,7 +4979,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing a application specific keyboard paste command in &apos;Settings-&gt;Copy &amp; Paste-&gt;Shortcuts&apos;..
+        ///   Looks up a localized string similar to This setting will track system - wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing a application specific keyboard paste command in &apos;Settings -&gt; Copy &amp; Paste -&gt; Shortcuts&apos;..
         /// </summary>
         public static string PrefPasteHistoryHint {
             get {
@@ -4997,7 +4997,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many pinned clips (like browser tabs) can consume significant memory. removal is by first-in-first-out.
+        ///   Looks up a localized string similar to Too many pinned clips (like browser tabs) can consume significant memory. removal is by first - in - first - out.
         /// </summary>
         public static string PrefPinTrayCapacityHint {
             get {
@@ -5015,7 +5015,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This applies to all auto-completable inputs, lower values will improve performance.
+        ///   Looks up a localized string similar to This applies to all auto - completable inputs, lower values will improve performance.
         /// </summary>
         public static string PrefRecentTextLimitHint {
             get {
@@ -5222,7 +5222,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This only hides the main window. All other non-dialog windows are always shown in taskbar..
+        ///   Looks up a localized string similar to This only hides the main window. All other non - dialog windows are always shown in taskbar..
         /// </summary>
         public static string PrefShowInTaskbarHint {
             get {
@@ -5285,7 +5285,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi-targeted workflows.
+        ///   Looks up a localized string similar to Like scrolling along the top screen edge to open, this will lock the main window when it opens. Allowing for quicker multi - targeted workflows.
         ///
         ///* Corners are in terms of all your screens, not per monitor..
         /// </summary>
@@ -5458,7 +5458,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User-Defined Search Extensions.
+        ///   Looks up a localized string similar to User - Defined Search Extensions.
         /// </summary>
         public static string PrefUserFileExtLabel {
             get {
@@ -5961,7 +5961,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste.
+        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag - and - drop into MonkeyPaste.
         /// </summary>
         public static string SettingsInteropAppOleNoopReaderTooltip {
             get {
@@ -5970,7 +5970,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data)..
+        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. Automated paste or drag - and - drop from MonkeyPaste will have no affect (its empty data)..
         /// </summary>
         public static string SettingsInteropAppOleNoopWriterTooltip {
             get {
@@ -5981,7 +5981,7 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Many MonkeyPaste features use keyboard automation to interact with other applications.
         ///
-        ///Some applications (like some consoles or shells for example) may have a non-default paste shortcut. 
+        ///Some applications (like some consoles or shells for example) may have a non - default paste shortcut. 
         ///
         ///To ensure proper interoperability, record those shortcuts for that application here..
         /// </summary>
@@ -6208,7 +6208,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough (or change the &apos;Routing Type&apos;) to not conflict with shortcuts from other applications..
+        ///   Looks up a localized string similar to This is a global shortcut. That means it will attempt to execute whenever it is performed. Try to make it unique enough (or change the &apos;Routing Type&apos;) to not conflict with shortcuts from other applications..
         /// </summary>
         public static string ShortcutAssignGlobalHint {
             get {
@@ -6226,7 +6226,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shortcut must contain ONE and only ONE non-modifier key..
+        ///   Looks up a localized string similar to Shortcut must contain ONE and only ONE non - modifier key..
         /// </summary>
         public static string ShortcutAssignInvalidGestureWarning {
             get {
@@ -6280,7 +6280,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, ⌘/Win depending on platform)..
+        ///   Looks up a localized string similar to Gestures must be unique and may only contain one input key..
         /// </summary>
         public static string ShortcutGestureRulesHint {
             get {
@@ -6624,7 +6624,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Righ-Click Paste.
+        ///   Looks up a localized string similar to Righ - Click Paste.
         /// </summary>
         public static string SysTrayRightClickPasteHeader {
             get {
@@ -7022,7 +7022,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Would you like to remove all the sub-actions for &apos;{0}&apos;? (Otherwise they will be re-parented to &apos;{1}&apos;).
+        ///   Looks up a localized string similar to Would you like to remove all the sub - actions for &apos;{0}&apos;? (Otherwise they will be re - parented to &apos;{1}&apos;).
         /// </summary>
         public static string TriggerRemoveActionText {
             get {
@@ -7220,7 +7220,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings-&gt;Preferences -&gt;Window&apos; menu..
+        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings -&gt; Preferences -&gt; Window&apos; menu..
         /// </summary>
         public static string WelcomeDragToOpenDescription2 {
             get {
@@ -7238,7 +7238,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p align=&quot;center&quot;&gt;MonkeyPaste is &lt;span color=&quot;red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p align=&quot;center&quot;&gt;MonkeyPaste is &lt;span color=&quot;red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;.
         /// </summary>
         public static string WelcomeDragToOpenFakeWindowDetail {
             get {
@@ -7274,7 +7274,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drag-to-Open.
+        ///   Looks up a localized string similar to Drag - to - Open.
         /// </summary>
         public static string WelcomeDragToOpenTitle {
             get {
@@ -7292,7 +7292,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings-&gt;Shortcuts&apos; menu..
+        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings -&gt; Shortcuts&apos; menu..
         /// </summary>
         public static string WelcomeGestureProfileCaption {
             get {
@@ -7427,7 +7427,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Left-clicking the taskbar icon will still open MonkeyPaste..
+        ///   Looks up a localized string similar to Left - clicking the taskbar icon will still open MonkeyPaste..
         /// </summary>
         public static string WelcomeScrollToOpenDescription1 {
             get {
@@ -7436,7 +7436,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings-&gt;Preferences-&gt;Window&apos; menu..
+        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings -&gt; Preferences -&gt; Window&apos; menu..
         /// </summary>
         public static string WelcomeScrollToOpenDescription2 {
             get {
@@ -7472,7 +7472,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll-to-Open.
+        ///   Looks up a localized string similar to Scroll - to - Open.
         /// </summary>
         public static string WelcomeScrollToOpenTitle {
             get {
@@ -7501,7 +7501,7 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to I only speak English and MonkeyPaste has been translated into this language. 
         ///
-        ///All versions ship with the English pack so if you speak English you can change the language to it at anytime after this setup (Settings-&gt;Preferences-&gt;International).
+        ///All versions ship with the English pack so if you speak English you can change the language to it at anytime after this setup (Settings -&gt; Preferences -&gt; International).
         ///
         ///If you would like to help improve the translation we would love to hear from you! 
         ///

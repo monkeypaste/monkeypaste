@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>S tímto předplatným získáte:
+● až 1 000 klipů obsahu
+● neomezený koš a archiv</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Základní - Měsíční</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Základní - Roční</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>kopírovat</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>vložit</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>správce schránky</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>nástroj</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>utility</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>automatizace</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Trigger &amp; Action Designer pro vlastní automatizaci a řetězení akcí</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Horizontální / vertikální rozložení, zobrazení seznamu / mřížky a podpora více monitorů</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Plně vybavený editor klipů s textovými šablonami pro hledání/nahrazování formátovaného textu (tabulky, seznamy, odkazy atd.) pro rychlé a dynamické vkládání z vaší sbírky úryvků</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Bezpečné, zabezpečené a soukromé místní úložiště dat s volitelnou 2faktorovou ochranou heslem</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Vestavěný prohlížeč pluginů se stále rostoucí komunitou řízenou knihovnou pluginů</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste je správce schránky, automatizace a nástroj produktivity jako žádný jiný. Vylepšení vaší schránky na obohacenou a organizovanou část vašeho pracovního postupu,
+s intuitivním a nízkoprofilovým rozhraním, které podporuje text, soubory a obrázky. Navrženo pro flexibilitu, se stále rostoucí komunitou řízenou knihovnou pluginů.
+
+Začalo to jako experiment programátora, který chtěl víc než jen kopírovat a vkládat ze schránky. Chtěl jednoduchý příkaz jako Control+C, který by místo toho ‚přidal‘
+„nahradit“ to, co bylo ve schránce. A experiment vyšel, heuréko! Malý nástroj byl velmi šikovný. To programátora zaujalo dalšími nápady a dalšími experimenty, že
+nyní se stal "MonkeyPaste".
+
+Protože plocha je pro vaše soubory, MonkeyPaste má v úmyslu být pro vaši schránku. Je to sada nástrojů pečlivě navržených tak, aby se s nimi snadno integrovaly a spolupracovaly
+jakákoli aplikace nebo formát obsahu. Control+C a Control+V jsou mnohem víc než jen zkratky. Jsou to vstupní porty, které sdílejí všechny aplikace, nesoucí a
+bohatství hodnoty a významu, které si zasloužíte mít k dispozici na dosah ruky. Po dalším Control+C se jen tak nevyhodí.
+
+Jsem programátor zmíněný výše a chci, aby každý mohl najít použití z MonkeyPaste. Takže jej a všechny jeho funkce lze používat zcela zdarma.
+Také chci, abyste se při jeho používání cítili pohodlně. Takže vás ujišťuji, jako jediná síla stojící za jeho vytvořením, že ŽÁDNÁ z (velmi) osobních informací, které mohou vzniknout na
+vaše schránka je vždy sledována nebo uložena KDEKOLIV mimo váš vlastní počítač. Doba.</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>● Jednoduché a přátelské rozhraní s horizontálním/vertikálním rozložením, zobrazením seznamu/mřížky a podporou více monitorů</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>● Režim připojení: Kopírování se ve schránce změní na „přidat do“ namísto „nahradit“. Text i soubory, plně přizpůsobitelné</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>● Sofistikované sledování klipů, zdroje a použití s vylepšenou podporou pro prohlížeče Firefox a Chromium (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>● Plně vybavený editor klipů s formátovaným textem (tabulky, seznamy, odkazy atd.) s funkcí hledání/nahrazování a zvýrazňování</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>● Ukládejte své obrázky do zabezpečené databáze, připravené k použití jako soubory kdykoli na vyžádání pouhým přetažením!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>● Výkonné šablony textu pro rychlé a dynamické vkládání z vaší sbírky úryvků</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>● Návrhář Trigger &amp; Action pro vlastní automatizaci a řetězení akcí</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>● Jednoduché použití a rozšíření systému zásuvných modulů pro analýzu klipů nebo čtení/zápis jakéhokoli formátu do schránky</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>● Vestavěný prohlížeč pluginů se stále rostoucí komunitou řízenou knihovnou pluginů</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>● Automatizujte vše pomocí přednastavení zásuvných modulů, schovávejte a snadno používejte jakékoli výzvy nebo příkazy AI</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>● Další platformy a funkce již brzy! Právě začínáme 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>● Světlé i tmavé motivy jsou zcela dynamické, použijte libovolnou barvu</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>● Integrovaná nápověda a rady přímo v rozhraní. Online manuál, videa a fórum, které vám pomohou začít, vše na webu (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>● Optimalizováno pro výkon a zátěžově testováno s 1 000 000 s klipy.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>● Kdykoli vyhledávejte, stačí začít psát pomocí jednoduchého i pokročilého filtrování klipů a jejich zdrojů v desítkách polí</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>● Uspořádejte své klipy ve stromech značek a vytvořte opakovaně použitelné filtry</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Bezpečné, zabezpečené a soukromé místní úložiště dat (žádné shromažďování dat) vždy šifrované pomocí volitelné dvoufaktorové ochrany heslem a snadno blokuje aplikace nebo webové stránky z vašeho sledovače</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>● Rozsáhlá podpora přetahování, vlastní globální zkratky, směrování a navigace bez myši</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>● Vlastní režimy myši: pravým tlačítkem myši vložit a levým kliknutím auto-kopírovat</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value>● Jednoduché a přátelské rozhraní
+● Horizontální/vertikální rozvržení, zobrazení seznamu/mřížky a podpora více monitorů
+● Světlé i tmavé motivy jsou zcela dynamické, použijte libovolnou barvu
+
+● Integrovaná nápověda a rady přímo v rozhraní
+● Příručka nápovědy, videa a fórum, které vám pomohou začít na webu (monkeypaste.com/docs)
+
+● Optimalizováno pro výkon a zátěžově testováno s 1 000 000 s klipy.
+● Kdykoli vyhledávání, stačí začít psát
+● Jednoduché i pokročilé filtrování klipů a jejich zdrojů v desítkách polí
+● Uspořádejte své klipy ve stromech značek a vytvořte opakovaně použitelné filtry
+
+● Bezpečné, zabezpečené a soukromé místní úložiště dat (žádný sběr dat) vždy šifrované
+● Klipy z konkrétních aplikací nebo webových stránek můžete ignorovat
+● Volitelná 2faktorová ochrana heslem
+
+● Vlastní globální klávesové zkratky, směrování a navigace bez myši
+● Rozsáhlá podpora drag-and-drop
+● Vlastní režimy myši: pravým tlačítkem myši vložit a levým kliknutím auto-kopírovat
+● Režim připojení: Kopírování se ve schránce změní na „přidat do“ namísto „nahradit“. Text i soubory, plně přizpůsobitelné
+
+● Sofistikované sledování klipů, zdroje a použití
+● Vylepšená podpora pro prohlížeče Firefox a Chromium (Chrome, Edge, Brave)
+
+● Pracuje s formátovaným textem (tabulky, seznamy, odkazy atd.)
+● Plně vybavený editor klipů s funkcí najít/nahradit a zvýrazňovat
+● Ukládejte své obrázky do zabezpečené databáze, připravené k použití jako soubory kdykoli na vyžádání pouhým přetažením!
+
+● Výkonné šablony textu pro rychlé a dynamické vkládání z vaší sbírky úryvků
+
+● Návrhář Trigger &amp; Action pro vlastní automatizaci a řetězení akcí
+
+● Jednoduché použití a rozšíření systému zásuvných modulů pro analýzu klipů nebo čtení/zápis jakéhokoli formátu do schránky
+● Vestavěný prohlížeč pluginů se stále rostoucí komunitou řízenou knihovnou pluginů
+● Automatizujte vše pomocí přednastavení zásuvných modulů, schovávejte a snadno používejte jakékoli výzvy nebo příkazy AI
+
+● Další platformy a funkce již brzy! Právě začínáme 🎉</value>
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Schránka je džungle. MonkeyPaste je KRÁL! Přecházejte z aplikace do aplikace, zkopírujte to a vložte to jako nikdy předtím s MonkeyPaste!! Zcela nový, špičkový nástroj pro schránku a analytický automatizační nástroj!!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Ukázka MonkeyPaste v akci!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Instalováno v tomto jazyce. Angličtina je pouze pro tyto příklady</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Poznámka! Snímky obrazovky jsou pouze příklady. To, co nainstalujete, bylo přeloženo do tohoto jazyka.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>S tímto předplatným získáte:
+● neomezená kapacita
+● synchronizace zařízení (podle dostupnosti)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Neomezené - měsíčně</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Neomezené - ročně</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>První vydání</value>
+  </data>
+</root>

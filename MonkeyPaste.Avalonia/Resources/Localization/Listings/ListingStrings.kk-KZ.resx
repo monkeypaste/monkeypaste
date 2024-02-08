@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BasicDescription" xml:space="preserve">
+    <value>Осы жазылымның көмегімен аласыз:
+↑ 1000-ға дейін мазмұн клиптері 
+↑ Шексіз себет — мұрағат</value>
+  </data>
+  <data name="BasicMonthlyTitle" xml:space="preserve">
+    <value>Негізгі - ай сайын</value>
+  </data>
+  <data name="BasicYearlyTitle" xml:space="preserve">
+    <value>Негізгі - Жыл сайын</value>
+  </data>
+  <data name="logo1080x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo150x150" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo1920x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo300x300" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo71x71" xml:space="preserve">
+    <value />
+  </data>
+  <data name="logo720x1080" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OverrideLogosForWin10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SearchTerm2" xml:space="preserve">
+    <value>көшіру</value>
+  </data>
+  <data name="SearchTerm3" xml:space="preserve">
+    <value>қою</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>алмасу буферінің менеджері</value>
+  </data>
+  <data name="SearchTerm5" xml:space="preserve">
+    <value>құрал</value>
+  </data>
+  <data name="SearchTerm6" xml:space="preserve">
+    <value>утилита</value>
+  </data>
+  <data name="SearchTerm7" xml:space="preserve">
+    <value>автоматтандыру</value>
+  </data>
+  <data name="ssCaption1" xml:space="preserve">
+    <value>Реттелетін автоматика және әрекеттер тізбегіне арналған триггер және әрекет құрастырушысы</value>
+  </data>
+  <data name="ssCaption2" xml:space="preserve">
+    <value>Көлденең/тік орналасулар, тізім/тор көрінісі және көп - монитор қолдауы</value>
+  </data>
+  <data name="ssCaption3" xml:space="preserve">
+    <value>Толық - фрагмент жинағынан жылдам, динамикалық қоюға арналған мәтінді табу/ауыстыру, мәтінді байлау (кестелер, тізімдер, сілтемелер және т.б.) бар танымал клип өңдегіші</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Міндетті емес 2 - факторлық парольді қорғаумен жергілікті деректерді қауіпсіз, қауіпсіз және жеке сақтау</value>
+  </data>
+  <data name="ssCaption5" xml:space="preserve">
+    <value>Салынған - бұрыннан бар плагин браузерінде - өсіп келе жатқан қауымдастық - қосылатын модульдер кітапханасы</value>
+  </data>
+  <data name="ssSrc1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ssSrc5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste — басқа ешкімге ұқсамайтын аралық сақтағыш менеджер, автоматтандыру және өнімділік құралы. Алмасу буферін жұмыс процесінің байытылған және ұйымдастырылған бөлігіне арттыру,
+интуитивті және төмен - мәтінді, файлдар мен суреттерді қолдайтын профиль интерфейсі. Икемділікке арналған, үнемі өсіп келе жатқан қауымдастықпен - плагиндердің қозғалмалы дірілі.
+
+Ол алмасу буферінен жай ғана көшіріп, қойғысы келетін бағдарламашының эксперименті ретінде басталды. Ол орнына «қосылатын» Ctrl+C сияқты қарапайым пәрменді қалаған 
+алмасу буферінде не болғанын «ауыстыру». Ал тәжірибе жұмыс істеді, эврика! Кішкентай құрал өте ыңғайлы болды. Бұл бағдарламашыны көбірек идеялармен және тәжірибелермен таңқалдырды, яғни 
+қазір «Маймыл пастасына» айналды. 
+
+Жұмыс үстелі файлдарыңызда болғандықтан, MonkeyPaste алмасу буферінде болуға ниетті. Оның құрал-саймандар дестесі көрінбеуі және өзара әрекеттесуі үшін мұқият жасалған 
+кез келген қосымша немесе мазмұн пішімі. Ctrl+C және Ctrl+V пернелер тіркесімдерінен әлдеқайда көп. Олар кіру порттары болып табылады барлық өтінімдер үлесі, а 
+құндылығы мен мағынасының байлығы саусақ ұштарында қол жетімді болуға лайық. Келесі Ctrl+C-ден кейін ғана тасталмайды.
+
+Мен бұрын айтылған бағдарламашымын және әркімнің MonkeyPaste-тен қолданыс таба алғанын қалаймын. Осылайша ол және оның барлық ерекшеліктері толығымен еркін қолданылады. 
+Сондай-ақ, оны пайдалана отырып, өзіңізді жайлы сезінуіңізді қалаймын. Сондықтан сізді, оны құрудың бірден-бір күші ретінде, пайда болуы мүмкін жеке ақпараттың ешқайсысы (өте) жоқ екеніне сендіремін. 
+алмасу буфері өз машинаңыздан тыс кез келген жерде бақыланады немесе сақталады. Кезең....</value>
+  </data>
+  <data name="StoreDevStudio" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreFeature1" xml:space="preserve">
+    <value>↑ Көлденең/тік орналасулары, тізім/тор көрінісі және көп - қолдау мониторы бар қарапайым және достық интерфейс</value>
+  </data>
+  <data name="StoreFeature10" xml:space="preserve">
+    <value>↑ Қосу режимі: Көшіру алмасу буферіндегі «ауыстырудың» орнына «қосуға» айналады. Мәтін де, файлдар да, толық реттелетін</value>
+  </data>
+  <data name="StoreFeature11" xml:space="preserve">
+    <value>↑ Firefox және Chromium-ға күшейтілген қолдауы бар күрделі клипарттарды қадағалау, дереккөздер мен пайдалану - негізделген браузерлер (Chrome, Edge, Brave)</value>
+  </data>
+  <data name="StoreFeature12" xml:space="preserve">
+    <value>↑ Толық — табу/ауыстыру және бөлектеумен бай мәтіні (кестелер, тізімдер, сілтемелер және т.б.) бар танымал клип редакторы</value>
+  </data>
+  <data name="StoreFeature13" xml:space="preserve">
+    <value>↑ Суреттеріңізді қауіпсіз дерекқорда сақтаңыз, кез келген уақытта файл ретінде пайдалануға дайын - тек апаруды талап етіңіз - және - тастаңыз!</value>
+  </data>
+  <data name="StoreFeature14" xml:space="preserve">
+    <value>↑ Фрагмент жинағынан жылдам, серпінді қоюға арналған қуатты мәтіндік храм</value>
+  </data>
+  <data name="StoreFeature15" xml:space="preserve">
+    <value>↑ Реттелетін автоматика және әрекеттер тізбегіне арналған триггер және әрекет құрастырушысы</value>
+  </data>
+  <data name="StoreFeature16" xml:space="preserve">
+    <value>↑ Клиптерді талдау немесе алмасу буферіне кез келген пішімді оқу/жазу үшін плагин жүйесін пайдалану және кеңейту қарапайым</value>
+  </data>
+  <data name="StoreFeature17" xml:space="preserve">
+    <value>↑ Салынған - бұрын-соңды болмаған плагин браузерінде - өсіп келе жатқан қауымдастық - плагин модульдерінің жетегі бар кітапханасы</value>
+  </data>
+  <data name="StoreFeature18" xml:space="preserve">
+    <value>↑ Барлығын плагин прецеденттерімен автоматтандыру, кез келген ИСК сұрауларын немесе пәрмендерін оңай пайдалану</value>
+  </data>
+  <data name="StoreFeature19" xml:space="preserve">
+    <value>↑ Жақын арада тағы платформалар мен мүмкіндіктер! Біз енді ғана жұмысқа кірісіп кеттік 🎉</value>
+  </data>
+  <data name="StoreFeature2" xml:space="preserve">
+    <value>↑ Екі жарық та , күңгірт тақырыптар да толық серпінді, қалаған кез келген түсті пайдаланыңыз</value>
+  </data>
+  <data name="StoreFeature3" xml:space="preserve">
+    <value>↑ Біріктірілген анықтама - интерфейсте дұрыс тұспалдайды. Барлығын веб-сайтта іске қосу үшін онлайн-нұсқаулық, бейнелер және форум (monkeypaste.com/docs)</value>
+  </data>
+  <data name="StoreFeature4" xml:space="preserve">
+    <value>↑ Өнімділік үшін оңтайландырылған және 1000 000-дық клиптермен сыналған.</value>
+  </data>
+  <data name="StoreFeature5" xml:space="preserve">
+    <value>↑ Кез келген уақытта іздеу, клиптерде және олардың көздерінде ондаған өрістерде қарапайым және кеңейтілген сүзгілеуді пайдаланып теруді бастаңыз</value>
+  </data>
+  <data name="StoreFeature6" xml:space="preserve">
+    <value>↑ Тег ағаштарындағы клиптерді ұйымдастырып, қайта қолданылатын сүзгілер жасау</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>↑ Қауіпсіз, қауіпсіз және жеке жергілікті деректерді сақтау (деректерді жинау жоқ) әрқашан міндетті емес 2 - факторлық құпия сөзді қорғаумен шифрланады және бағдарламаларды немесе веб-сайттарды трекерден оңай бұғаттайды</value>
+  </data>
+  <data name="StoreFeature8" xml:space="preserve">
+    <value>↑ Экстенсивті апару - және - тамшы қолдауы, реттелетін ғаламдық пернелер тіркесімдері, бағыттау және тінтуір - еркін шарлау</value>
+  </data>
+  <data name="StoreFeature9" xml:space="preserve">
+    <value>↑ Реттелетін тінтуір режимдері: оң жақта - қою және сол жақ түймешігін басыңыз - авто түймешігін басыңыз - көшіру</value>
+  </data>
+  <data name="StoreFeatures" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StoreShortDescription" xml:space="preserve">
+    <value>Алмасу буфері - джунгли. Маймыл Пасте - КОРОЛЬ! Бағдарламадан бағдарламаға тербеліп, осыны көшіріп, MonkeyPaste-пен бұрын-соңды болмағандай қою!! Бренд - жаңа, шеткі аралық сақтағыш және аналитикалық автоматика құралы!!</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TeaserCaption" xml:space="preserve">
+    <value>Әрекеттегі MonkeyPaste үлгісі!</value>
+  </data>
+  <data name="TeaserSrc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TranslationShortWarning" xml:space="preserve">
+    <value>Осы тілде орнатылған. Ағылшын тілі тек осы мысалдар үшін ғана</value>
+  </data>
+  <data name="TranslationWarning" xml:space="preserve">
+    <value>Ескерту! Экрандық түсірілімдер тек мысалдар ғана. Сіз орнатқан нәрсе осы тілге аударылды.</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Осы жазылымның көмегімен аласыз:
+↑ Шексіз сыйымдылық
+↑ Құрылғыны синхрондау (бар болған жағдайда)</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Шексіз - ай сайын</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Шексіз - Жыл сайын</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Бастапқы шығарылымы</value>
+  </data>
+</root>
