@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Захиалгаар хязгаарлагдмал шинж чанарууд хязгаарлагдмал, зөвхөн хадгалах хүчин чадал, хүссэн үедээ өөрчилж болно.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Одоо байгаа дансаа сэргээх ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Агуулга ба хогийн сав
+хязгаарлагдмал {0} ба {1}
+тус тусад нь клип.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>{2} -ийг агуулга, хязгааргүй хогийн сав хадгалах боломжийг олгодог.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Хязгааргүй, хязгааргүй агуулга, хогийн сав хадгалах.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Сэргээх</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Үнэгүй</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Стандарт</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Хязгааргүй</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Захиалга</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Таны хувийн нууц нь чухал бөгөөд санах ойн мэдээлэл маш их хувь байж болно. Хадгалалт нь үргэлж шифрлэгдсэн боловч таны төхөөрөмж хулгайлагдсан эсвэл өөр хэн нэгэн таны төхөөрөмжийг ашиглаж байгаа нууц үгийг тохируулах боломжтой.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Нууц үг</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Идэвхжүүлсэн, дэлгэцийн дээд хэсэгт байрлах аливаа програмаас чирэх нь сармагчингоос ламин дахь агуулгыг амархан буулгах болно.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Үндсэн цонхны зүүн дээд хэсэгт байрлах "түгжээг идэвхжүүлэхийг идэвхжүүлнэ.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Илүү олон цонхны тохиргоог "Тохиргоо -&gt; Тохиргоо - PREEVERSERSERS -&gt; Цонхны 'цэс.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Банагыг энд чирнэ үү!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Чирэх - TO - нээлттэй</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Гарын товчлолыг 'Тохиргоо - Тохиргоо -&gt; товчлол' цэснээс хүссэн үедээ хянаж үзэх боломжтой.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Дэлхийн бүх товчлолуудыг идэвхгүй болгосон тул та дараа нь тохируулж болно.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypute-ийн санах ойн товчлолыг бүх програмд ​​ашиглах боломжтой болно.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Дотор</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Үл хүрэлцэх</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Зохиооны танилцуулга</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Хүүе! Сармагчингуудтай харьцуулахад нийт туршлагыг сайжруулахын тулд цөөн хэдэн зүйлийг тохируулцгаая.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Мэндчилгээ</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Монкепаснаас хамгийн их ашиглагдаж, нэвтрэх үед автоматаар ачаалах, автоматаар ачаалах нь сайн санаа юм. Гэхдээ энэ нь бүхэлдээ танд хамаарна.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Энэ нь энгийн байлгах.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Болоцоо огох</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Нэвтрэх ачаалал ачаалах уу?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Хэзээ идэвхжсэн бол дэлгэцийн дээд хэсэгт гүйлгэх дохио нь сармагчинг илчлэх болно.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Зүүн - Taskbar дүрс дээр дарах нь сармагчинг нээх болно.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Илүү олон цонхны тохиргоог "Тохиргоо -&gt; Тохиргоо - PREEVERSERSERS -&gt; Цонхны 'цэс.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Зөв үү?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Энд дээшээ гүйлгэ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Гүйлгэх - TO - нээлттэй</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p leign = "Төв"&gt; Monkeypaste нь &lt;splypaste нь &lt;splypaste = "Red&gt; REDANT &lt;/ SPAND &lt;/ PANDENT&gt; -ийг чирэх &lt;/ spand&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Энд хая!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p leign = "Төв"&gt; Энэ аргаар ламгай &lt;/ span &lt;specolet = "RAND COLDER =" RED SPAND = "RED"&gt; эсвэл &lt;RED "&gt; нүдэнд нэвтрэх боломжтой. &amp; # x1f440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Намайг чирээрэй!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Үүнийг үзээрэй!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Үүнийг үзээрэй!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Үр дүн байхгүй байна.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Батлах</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Тэнхрэх</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Хайх ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Тохиргоо</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Хамаарал:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Угсрах</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Та '{0 {0 {0}' ба бүх урьдчилсан бэлтгэл, товчлолуудыг арилгахыг хүсч байна уу?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Устгах</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' үр дүнгүй байна.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Сонголт байхгүй.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Хэн ч</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Кредит:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Тодорхойлолт:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Хандив өгөх:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Тусгай зөвшөөрөл:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Төслийн URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Нийтлэгдсэн:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Намайг унших:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Буруутгагдсан мэдүүлэг:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Шошго:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Шинэчлэх</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Хувилбар:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Цонхонд нээ</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Хөөх</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Тэнхрэх</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Аврах</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Дараагийн устгах!
+
+Зайлсхийхийн тулд шинэчлэх.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Хогийнхөө хажууд!
+
+Зайлсхийхийн тулд шинэчлэх.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Фиднарүүд</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Дүр</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Сэдэв</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Хуулсан {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Файл | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0&gt; cars | {1} мөрүүд</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} хуулбар | {1} пастерууд</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Хөдлөх</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Нэмэх</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Хуулах</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Тайрах</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Товч</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} хуулбар</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Ухаангүй шүүлтүүр</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Сонгоно уу -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Алдар байсан</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Уовлагч</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Тусгай бичигч</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Гарын даруулга</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Эдгээх</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Хуулбар</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Дуучлах нэр</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Нөөц</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Бичиглэл байна</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Үйл ажиллагаа</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Зургийн үдийн чиг</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Хэвтэн</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Дохио зангаа нь өвөрмөц байх ёстой бөгөөд зөвхөн нэг оролтын түлхүүрийг агуулж болно.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;B&gt; Дотоод &lt;/ b&gt; Бүх товчлол нь аппликешн дотор хязгаарлагддаг. Энэ нь үнэхээр зорилтот сонголт биш боловч Globle &lt;i&gt; Sopled &lt;/ i&gt;. &lt;/ Li&gt;. &lt;/ Li&gt;
+&lt;li&gt;
+&lt;B&gt; Үндсэн утга &lt;/ b&gt; Бүх дэлхийн товчлолыг идэвхжүүлсэн байна. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. Та энэ чиглүүлэлт эсвэл зангалтыг хүссэн үедээ өөрчилж болно. Гэхдээ &lt;span өнгө = "Ногоон"&gt;&gt; Үүнийг туршиж үзээрэй &lt;/ span&gt;
+&lt;/ li&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;толгой&gt; &lt;/ толгой&gt;
+&lt;бие&gt; бие
+&lt;H1&gt; Global Bountcut горим &lt;/ h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Идэвхгүй &lt;/ B&gt; товчлол нь богиносгогч сармагчинг дурдана. &lt;br&gt;
+* Энэ бол &lt;i&gt; зөвхөн &lt;i&gt; &lt;/ i&gt; сонголтыг одоо linux дээр дарна уу.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;B&gt; Pre &lt;/ b&gt; товчлол нь &lt;b&gt; &lt;b&gt; &lt;&lt;&lt;&lt;i&gt; -ийг &lt;/ i&gt; &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;
+&lt;li&gt;
+&lt;B&gt; POST &lt;/ B&gt; товчлол нь &lt;b&gt; &lt;&lt;i&gt; &lt;&lt;i&gt; &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/ b&gt; -ийг ажиллуулна. &lt;/ b&gt; &lt;&lt;/ b&gt;. &lt;/ li&gt;
+&lt;li&gt;
+Monkeypate товчлуурын товчлуурыг дарахад &lt;/ b&gt; нь &lt;/ b&gt; нь &lt;i&gt; surect (Insofifier) ​​нь &lt;i&gt; suff &lt;/ i&gt; програмыг дарахад &lt;/ i&gt; програмын даралт.
+Энэ сонголт нь товчлолыг идэвхтэй програмд ​​зөрчилдөөнгүйгээр өдөөн хатгасан болно.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;B&gt; Онцгой дарж &lt;/ B&gt; Энэ бол Caps Lock товчийг дарж бичих тусгай хэлбэр юм. Энэ нь зөвхөн &lt;B&gt; нэг &lt;&lt;/ B&gt; товчлуурыг даалгавраа хийх боломжийг олгодог. &lt;br&gt; &lt;br&gt;
+Энгийн давталтын горимын түгжээний цоож нь бусад түлхүүрүүдтэй хослуулсан тохиолдолд &lt;i&gt; дээр &lt;i&gt; дээр дарах боломжтой. &lt;br&gt; &lt;br&gt;
+Тиймээс бусад түлхүүрүүд ямар ч хамаагүй, хэрэв &lt;b&gt; hotkey &lt;/ b&gt; товчлол дарагдсан бөгөөд энэ нь &lt;i&gt; &lt;i&gt; гацахаас урьдчилан сэргийлэх болно.
+&lt;/ li&gt;
+&lt;/ ul&gt;
+&lt;/ бие&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Солих</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Энэ хэрэглэгчийн бүртгэлийг бусад хэрэглэгчдэд зориулагдаагүй тохиолдолд ачаалах үед ачаална уу.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Боломжтой холбоо барих хаягийг ашиглах (Fetcher Plugnate-ийг энэ баримтад эсвэл энэ загварыг ашиглахад шаардлагатай бүх загварыг ашиглана. Энд, дараа нь таны сонгосон харилцагчийн талбарыг энд оруулсан холбоо барих талбарт энэ баримт бичигт бүх тохиолдлуудад ашиглагдах болно. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = Богино жил &lt;br/&gt; yyyy yyyy = londy = 'MM = СУРГУУЛЬ &lt;ТОГЛОЛТ (1-р сар) &lt;br/&gt; MM = СУРГУУЛЬ (012) &lt;bm/&gt; MM = СУРГУУЛЬ (1-р сар) &lt;br/&gt; mm = сар (1-р сар) &lt;br/&gt; MM = СУРГУУЛЬ (01-2) &lt;br/&gt; MM (1-р сар) &lt;br/&gt; mm = сар (1-р сар) &lt;br/&gt; MM = СУРГУУЛЬ (012) Байна. 12-р сар) &lt;br/&gt; mmmm = урт сар (1-р сар) &lt;br/&gt; D = 12-р сар (1-р сар) &lt;br/1-21-р сар (0 - 31) &lt;br/ 31) &lt;br/ 31) &lt;br/1 - 01 - 01) &lt;br/ 31-р сарууд Долоо хоногийн өдөр (Даваа, Мягмар, Мягмар, Мягмар гараг) &lt;bre, Tue ... SUN, TUE DOUNTER DOUNTON-д ҮНЭГҮЙ (Ням гараг) 3, 21-р, 22-р, 22-р 2, 23-р сар, 4-р сарын 4-ний өдөр. &gt; H = Өдөрт (0-23) &lt;br/&gt; hh =&gt; mm =&gt; &lt;br/&gt; ss = ss =&gt; ss = sss = sss = sss = mildiseconds = Millisecods = Milliseconds = Milliseconds = Millisecons &lt;brisecons &lt;briancons &lt;brisecons &lt;brisecons &lt;brisecons &lt;brisecons &lt;brisects &lt;briancons &lt;briancons &lt;briancoads &lt;brisecons &lt;brisecons &lt;briancons = ' A = = AM / PM MAPER &lt;br/&gt; P = A.M./P.A. Зиль</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Одоогийн огноо ба / эсвэл цаг хугацааг буулгах үед DateTime загварыг орлуулах болно.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Энэ загваруудын бүх тохиолдол нь өгсөн текстийг ашиглах болно. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Энэ загваруудын бүх тохиолдол нь өгсөн текстийг ашиглах болно. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Дуусгах ажлыг дуусгах</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Блок идэвхжүүлэх</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Доторыг идэвхжүүлэх</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Гарын авлага</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Гарын авлага</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Түр зогсоох</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Өмнө нь сэлгэх</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Өмнө нь сэлгэх</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>ҮЙЛЧИЛГЭЭНИЙ ТӨЛӨВЛӨГӨӨ</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Нэмэх ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Товч</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Сулбээр зүү</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Нууц</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Бүх '{0}' мэдэгдлийг нуу</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Хөөх</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Сүүлчийн идэвхтэй апп нь тодорхойгүй байна. Monkey Profte-д зориулагдсан програм руу шилжих.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;&lt;Em&gt; &lt;i &lt;eate = "lease-ate atch =" paste-ate office =&gt; {0} &lt;{{0} &lt;/} &lt;/}</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Төгс хаях</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Түр хүлээнэ үү ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Түгжих</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Данс</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Туслаач</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Хуулж тавих</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Тохиролцоонал</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Үндсэн утгыг сэргээх</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Шүүлтүүр ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Хэв хаягдал</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Апп нэмэх</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Вэбсайт нэмэх</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Блок уу?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Нэр</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Хэрэгтсон</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Домэйн блок?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>URL-г хаах уу?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Дэмий</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Эх сурвалж URL-ийн хүлээн зөвшөөрөх нь хост өргөдөлд танилд ээлтэй байх нь хэр найдвартай болохыг харуулна</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Туар</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Вэбсайтууд</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Зарим сармагчингууд нь бусад програмуудад "хуулах" үйл явдлыг дууриахын тулд гар автоматжуулалтыг ашигладаг.
+
+Эдгээр шинж чанаруудыг зохих ёсоор хангахын тулд өвөрмөц хуулбарлах товчлол (консол, бүрхүүл шиг) -ийг нэмж, эсвэл / эсвэл сонгоно уу.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Хуулах товчлол</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Хэн ч</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Зөвхөн сонгосон урьдчилан тохируулгыг заасан програмд ​​ашиглах болно. Тодорхойлогдоогүй, &lt;em&gt; Clipboard Dightbar &lt;&lt;em&gt; Clipboard &lt;&lt;/ em&gt; -ээс олддог.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Олон сармагчингууд нь бусад програмтай харилцахын тулд гар автоматжуулалтыг ашигладаг.
+
+Зарим програмууд (жишээ нь зарим нэг конструуд, жишээ нь, жишээлбэл, жишээлбэл, жишээ нь) анхдагч astune lecte товчлол байж болно.
+
+Тохиромжтой харилцан тохиролцохыг баталгаажуулахын тулд энэ аппликешнийн эдгээр товчлолуудыг энд бичнэ үү.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Хэв хаях</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Уовлагч</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Татгалзсан програмуудаас бүх үл тоомсорлох самбарын хяналт нь &lt;b&gt; үл тоомсорлох болно &lt;b&gt; үл тоомсорлох &lt;/ b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Тусгай бичигч</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Засварлах ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Алдар байсан</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Тэтгэсэн</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Хэв хаягдал</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Та {{1} '-ээс бүх {0} клипийг устгахыг хүсч байна уу?</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Клипийг арилгах уу?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Хүсэлт</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Апп руу шилжих ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Програмын замыг сонгоно уу</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Та {0} -д зориулж захиалгын товчлолыг арилгахыг хүсч байна уу?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Та {0} -д тохируулсан форматыг арилгахыг хүсч байна уу?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Энэ апп-д өгсөн санах ойн формат байхгүй байна. Энэ нь тайрч, хуулбарлах / хуулбарлах, хуулбарлах, эсвэл чирэхийг оролдохгүй.</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Энэ апп-д өгсөн санах ойн формат байхгүй байна. Автомат оо эсвэл чирэх эсвэл чирэх - ба сармагчингаас дусал нь (хоосон өгөгдөл) нөлөөлөхгүй.</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Та бүх товчлолыг дахин тохируулахыг хүсч байна уу? Бүх Тусгай товчлолуудыг арилгах болно.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Та товчлуурын чиглүүлэлтийн чиглэлийг өөрчлөхийг хүсч байгаа гэдэгт итгэлтэй байна уу?</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Бүгд</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Дуртай бэлэг</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Шүүгч</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Алдар байсан</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Бичиглэл байна</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Оноо</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Хог</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Тухай</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Зөв үү?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>UNPIN-г хоёр дахин дарна уу</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Ес заншил</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Дэлхий нийтийн</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Энэ нь хадгалагдсан бол '{0 {0}' -тэй зөрчилдөж байна.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Товчлолыг өгөх ёстой.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Энэ бол дэлхийн товчлол юм. Энэ нь хийх үед гүйцэтгэхийг хичээх болно гэсэн үг юм. Өөр програмуудаас гарах товчлолтой зөрчилдөхгүй байхын тулд үүнийг хангалттай болгохыг хичээ (эсвэл "чиглүүлэлтийн төрлийг өөрчлөх").</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Дэлхий нийтийн</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Богино товчлол нь нэг ба зөвхөн нэг биш харин хувиргагчийн түлхүүрийг агуулсан байх ёстой.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Бичлэг хийхийн тулд дурын товчийг дарна уу ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Тавчлаа тавь</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Илүү их судла...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Оржилт</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Цуаах</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Бэхлэх</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Үл тоомсорлох</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>-Гүй / -битгий</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Болж байна уу</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Уилах</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Унтраах</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Бууж өгөх</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Мон</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Настай</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Сар бүр</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>ҮНЭГҮЙ үзээрэй!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Тооцоо ром</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Байлдлаа</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Нэвтрэх</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Холболтоо шалгана уу
+дахин оролдоно уу.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Гарах</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Дараагийн төлбөр</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Нууц үг</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Бүртгүүлэх</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Имэйл хүчингүй байна</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Нууц үг таарахгүй байна.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Нууц үг нь дор хаяж {0} тэмдэгт байх ёстой.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Бүртгэлээ баталгаажуулахын тулд имэйлээ шалгана уу</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Нууц үгээ анхны байдалд нь оруулж</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Ммм d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Ммм D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM / DD / YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Ер</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Үнэгүй {0} өдрийн туршилт</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Гүйцэтгэх асуудал байсан
+таны худалдан авалт.
+
+Холболтыг шалгаж байна
+Тохиргоо нь тусалж магадгүй юм.
+
+Та дахин оролдож үзмээр байна уу?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Таны данс амжилттай болсон
+сайжруулсан:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Худалдан авах амжилттай!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Алдаа</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Холболт амжилтгүй болсон.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Уилах</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Данс өөрчлөгдсөн</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Таны захиалгаа одоо {0} / {0} / {1} -г {2} агуулга ба {3} хогны агуулах.
+Гэхдээ санаа зовох хэрэггүй, буурсны дараа ямар ч өгөгдөл алдагдахгүй. Зөвхөн шинэ клипийг үнэлэх болно.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Баяр хүргэе! Таны захиалгаа одоо {0} / {0} / {1} -г {2} агуулга ба {3} хогны агуулах.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Хогийн сав эсвэл ямар нэгэн зүйлийг салгах
+'{0}' -аас илүү ихийг нэмэх.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>MAX '{0}' Хадгалах нь {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Сэргээх</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} хаасан</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Агуулга &amp; Хогийн саванд хүрсэн!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>MAX '{0}' Хадгалах нь {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Агуулгын багтаамж хүрлээ!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Та эдгээр анхааруулгыг нууж болно
+"Бүгдийг нь нуух" дээр дарна уу
+Дээрх сонголтын цэс.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Хамгийн их хогийн сав хадгалах нь {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Хогийн саванд хүрсэн!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} буруу байна</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} нь дор хаяж {1} тэмдэгт байх ёстой</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} нь зөвхөн {1} тэмдэгт байж болно</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Буулгах: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Таны {0} -ийн төлбөр
+Захиалга нь {1}
+хүлээн аваагүй байна.
+
+Шинэчлэнэ үү
+Төлбөрийн мэдээлэл.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Таны {0} -ийн төлбөр
+Захиалга нь {1}
+хүлээн аваагүй байна.
+
+Холбоно уу
+Төхөөрөмж дээрх интернет
+захиалгаа болон
+Үргэлжлүүлэхийн тулд дахин эхлүүлнэ үү
+таны {0} төлөвлөгөө ашиглан.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Таны {0} -ийн төлбөр
+Захиалга нь {1}
+хүлээн аваагүй байна.
+
+Нээх эсвэл дахин эхлүүлнэ үү
+Монкепаст төхөөрөмж дээр
+Таны захиалгаар
+Ашиглаж үргэлжлүүлээрэй
+{0} төлөвлөгөө.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Дансны хугацаа дууссан</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Мөнгөн дэвсгэрт</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store нь шатлалыг зөвшөөрдөггүй
+захиалгын нэмэлт өөрчлөлт.
+
+Та цуцлах ёстой
+{0} / {1} нь өөрийгөө төлөвлө
+эсвэл та хоёуланд нь төлбөр авах болно.
+
+Та одоо үүнийг хиймээр байна уу?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Таны нууц үг дахин тохируулагдсан байна.
+
+Имэйлээ шалгана уу
+Өөрчлөх холбоосыг дага
+таны нууц үг.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Нэвтрэх</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Зохиогч (ууд)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Үргэлжлүүлэхийн өмнө дараах Лицензийн нэр томъёог хүлээн авах шаардлагатай.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Дараах багц (ууд) нь суулгахаасаа өмнө Лицензийн нэр томъёог хүлээн авахыг шаарддаг.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Жара</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"Би хүлээн зөвшөөрч" дээр дарах нь та энэ аппликешны зөвшөөрлийг хүлээн зөвшөөрч байна гэсэн үг юм. Хэрэв та Нөхцлийг зөвшөөрөхгүй бол "би татгалзах" дээр дарна уу.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"Би хүлээн зөвшөөрч" дээр дарах нь дээр дурдсанчлан лиценз (ууд) -ыг зөвшөөрч байна гэсэн үг юм. Хэрэв та Нөхцлийг зөвшөөрөхгүй бол "би татгалзах" дээр дарна уу.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Тусгай зөвшөөрөх</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Лиценз хүлээн авах</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Би зөвшөөрч байна</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Идэвхтэй</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Etft-Намрын шугам</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Бүртгүүлээгүй</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Хийх</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Нууц үг тохирохгүй байна</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Нууц үг</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Таны захиалга байна
+Одоо {0} / {1 {1} болгон тохируулсан.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Данс олдсон</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Нэвтрэх амжилтгүй боллоо</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Бүртгэл амжилтгүй боллоо</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Бүртгэл амжилттай болсон!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Алдаа дээр дахин эхлүүлэх</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Захиалга</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Өөр юу байна</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Ер</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Хязгааргүй</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>хүчин чадал</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>үлдсэн</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>нийт</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Таны төлбөр дууссан.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Онцгой хэрэгсэхгүй товчлол нь зөвхөн нэг товчлуур агуулж болно бөгөөд энэ товчлуурыг агуулсан бөгөөд энэ түлхүүр нь тохируулагчийн түлхүүр байж болохгүй.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Хугацааны ажил</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Авах</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Эрэмдэг зэрэмдэг</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Өгүүллэг Хургашил! Энэ нууц үг нь заавал биш бөгөөд зөвхөн нэмэлт аюулгүй байдалд зориулагдсан болно. Таны өгөгдөл аль хэдийн шифрлэгдсэн бөгөөд хэзээ ч хуваалцаагүй. Энэ нууц үг нь зөвхөн Monkeypast-ыг ачаалахаас сэргийлдэг.</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Хүлээн авах тохиргоогоо санаарай.</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Pluwing-ийг үзэх</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Шинжлэх</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Илн хийх үйлдэл</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Засах Засах</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Залгих</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Тоосэгчид</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Энгийн текст</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Цонхонд нээ</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Дараахыг дарна уу.</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Дараахь + Alt дээр дарна уу ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Хэвлэл мэдээллийн хэрэгслийг эндээс эсвэл хая!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Саруул</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0-ээс дээш босго нь rgba өнгөний орон зайд euclidean зайг ашиглан бүдэг өнгөтэй тохирох болно.
+
+Жишээ нь, хэрэв улаан (# FF0000) нь Хайлтын нэр томъёо, хар өнгийн зай нь 255-ийн зайтай байх болно.</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Дараахь зүйл бүгд үнэн</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Тугарлын самбар</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Ийн цугллах</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Хулганы горимууд</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Рж гарах</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Завсарлах</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Сэргээх</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Шинэ тосон байна</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Өмч дөхт нэмэх</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Сармагчин дуслах шидтэн</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Элнөл</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Анализатор</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Нийтэлжих</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Бүсийн чиглэл</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Сүлжээний байрлал</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Том жижгээр бичхээс хамаарна</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Босго</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Бүхэл үг</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Байхгүй</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Гарын тайлан</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Үйл ажиллагаа</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Дэвэрсэн усан</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Хийх</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Дараачийн</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Урөдын</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Дэвхрэх</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Одоо байгаа данс?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Дараагийн төлбөр</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Бүртгэл нь таны төлбөрийн бүх төхөөрөмжүүдийг бүх төхөөрөмжөөр дамжуулж өгөх боломжийг олгодог (бэлэн байдал). Бид таны имэйлийг спам хийхгүй.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Захиалга</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Скэдхэн нэр</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Бүртгүүлэх шаардлагатай байна уу?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Давхар суртах</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Сондгой, юу ч боломжгүй. Ямар нэг зүйл буруу байх ёстой 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Зөөх</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Дахин эхлүүлэхийг шаарддаг</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Дэвшилттэй</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>'{0}' залгаасыг гаргаж авахад алдаа гарлаа</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Plugin-г суулгахад алдаа гарлаа: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Plongin '{0 {0}' гэмтсэн эсвэл зохисгүй директорын бүтцийг суулгахад алдаа гарлаа. Манифест '{1}' дээр байх ёстой, гэхдээ олдсонгүй.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>PANCING PANSING PANSING MANIFING MANIFING '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>GUID-т ачих шаардлагагүй: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} алдаа</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Temp Dir '{0} {0} {0} {0}</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>'{0 {0}' '{0 {1 {1}' руу буцаахад алдаа гарлаа. Дэлгэрэнгүй мэдээлэл: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Текст хайрцаг ямар ч зураг дээр анхаарлаа төвлөрүүлэхгүй байх текстийг автоматаар ашиглах болно.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Автоматаар хайх оролт</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Нууц үг солих амжилтгүй боллоо</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Өөрчлөгдөх</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Нууц үгээ өөрчлөх</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Саруул</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Баталгаажаа зөвшөөрөх</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Сэтгэл ханамжтай</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Агуулгын үсгийн хэмжээ</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Жинхэнэ, гадаад агуулга нь клипэнд оруулсан тохиолдолд клипийг форматлах, эх сурвалжаас авах боломжтой зүйл биш юм.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Буулгах, унах эсвэл очих газрын форматтай хавсаргах</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Та нууц үгээ мартахыг хүсч байна уу?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Мартах</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Нууц үгээ мартсан</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Хэмжээ</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>ТОНОГ ТӨХӨӨРӨМЖИЙН ТӨЛӨВЛӨГӨӨ</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Шинэ санах ойн агуулга хавсаргаж байх үед энэ нь шинэ клипийг хянахгүй</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Хавсралтыг үл тоомсорлох</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Санах самбар нь одоо байгаа клиптэй тохирч байх үед клипийг шинэ зүйл үүсгэхийн оронд ашиглах болно</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Шинэ хуулбарыг үл тоомсорлох</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Апп-ийн доторх санах ойн өөрчлөлтийг хянах боломжгүй</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Дотоод санах ойг үл тоомсорлох</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Зай, таб, шинэ мөрүүдийг хянахаас үл тоомсорлох болно</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Зөвхөн цагаан орон зайг үл тоомсорлох</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Нэвтрэх дээр ачаалах</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Анкийн цонх</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Тогтворгүй</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Зан үйл</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Үндсэн цонх нь таны мониторын дээд ирмэг дээр гүйлгэх дохио гүйцэтгэх замаар илчлэгдэх болно</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Шилдэг дэлгэц дээр үзүүлэх</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Матгалтын хооронд</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Энэ тохиргоо нь системийг хянах болно - өргөн гар оо нь хэрэглээний статистикт тооцогддог. Энэ мэдээлэл нь хувийн болон хуваалцахгүй боловч бас баталгаатай биш юм. Нарийвчилсан үр дүнг 'Тохиргоо &amp; Paste &amp; Paste-айргад програмын тодорхой гарт команд өгөхийг шаардаж болно.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Түүх</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Хэт олон зүүсэн клип (хөтөч таб шиг) их хэмжээний санах ойг идэж болно. Устгах нь эхлээд - эхний - эхний - гарах</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>ПИНКАСВчилал</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Энэ нь бүх AUTO-д хамаарах бөгөөд бага хэмжээгээр бөглөнө үү, доод утгууд нь гүйцэтгэлийг сайжруулах болно</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Саяхны текст хязгаарлалт</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Та хүсч байгаа гэдэгтээ итгэлтэй байна уу
+Үндсэн тохиргоог сэргээх үү?
+
+Энэ буцаах боломжгүй!
+
+* Програмыг дуусмагц дахин асах болно.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Та бүх мэдэгдлийг дахин тохируулахыг хүсч байна уу?
+
+*Энэ буцаах боломжгүй!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste нь гадны хөтөлбөрт буулгахдаа санах ойг (хүчингүй болгох) багцыг тогтоодог. Энэ нь &lt;B&gt; оролдлого &lt;PRENT &lt;POMENT &lt;/ B&gt; АЖИЛЛАГААНЫ ТӨЛӨВЛӨГӨӨГИЙН ТӨЛӨВЛӨГӨӨГИЙН ТӨЛӨВЛӨГӨӨГ ЗӨВЛӨГӨӨ.
+
+Нийт сэргээн засварлах боломжгүй бөгөөд өгөгдлийн эх үүсвэрээс хамаарч гүйцэтгэлийг бууруулж, гүйцэтгэлийг бууруулж болзошгүй.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Сармагчингийн хажуугаар өнгөрсний дараа санах ойг дахин тохируулах</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>PATH-аас залгаасын кэшийг устгах боломжгүй байна: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Бүх нэмэлт өргөтгөл нь анхдагч анхдагч төлөвт дахин тохируулах болно</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Pluglin кэш</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Та бүх нэмэлт өргөтгөлүүдийг анхдагчаар тохируулахыг хүсч байна уу?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Та нууц үгээ дахин тохируулахыг хүсч байна уу?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Бүх програмын товчлолууд нь үндсэн түлхүүр дохиогоор дахин тохируулах болно.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Товчлолыг дахин тохируулах</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Бүх үл тоомсорлосон мэдэгдлүүдийг өмнө нь тохируулсан.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Мэдэгдэлийг сэргээх</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Идэвхжүүлж болно) форматлагдсан форматыг идэвхгүй болгох нь санах ойн хэрэглээ буурах болно.</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Баялаг агуулга</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Нууц үгээ оруулна уу</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Зөвлөмжийг харуул</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Taskbar дээр үзүүлэх</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Даалгаврын шилжүүлэгчд үзүүлэх</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Гараа үзүүлэх</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Идэвхжүүлсэн, дэлгэцийн дээд хэсэгт байрлах аливаа програмаас чирэх нь сармагчингоос ламин дахь агуулгыг амархан буулгах болно.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Дэлгэцийн дээд хэсэгт чирэх</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Дууны сэдэв</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Алдаа шалгах</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Санах самбарын эх үүсвэрийг эхлүүлэх нь таны аюулгүй байдлын тохиргоог үл мэдэгдэх бөгөөд таны аюулгүй байдлын тохиргооноос хамааран агуулга нь хасагдсан вэбсайт эсвэл програмаас хамаарч магадгүй юм.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Гаралтын хэрэгслийг нэмэх</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Эхлэх үед санах ойг сонсох</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Шилэх</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>АНХААРУУЛГА! Бусад палитрын өнгө нь Нүдэнд биш математикийг ашиглан сонгосон! Тиймээс зарим өнгө, хэв маягийн хослолууд нь уншихад тохиромжгүй байж магадгүй юм.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Сэдэвт өнгө</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Сэдэв загварын</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Автомат хогийн савыг SETERAL интервал дээр эхлүүлэхэд автоматаар арилна.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Хогийн сав цэвэрлэх</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Интерфэйс</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Өндөр буцаах хязгаарлалт нь гүйцэтгэлд нөлөөлж болзошгүй юм</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Буцаах хязгаарлалт</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Хязгаар болгон хүрээгүй</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Нарийвчилсан файлын хайлтыг PreeNET файлын төрөлд ашиглахад ашигладаг</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Хэрэглэгч - хайлтын өргөтгөлийг тодорхойлсон</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Олох, солих ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Дуулгах</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Хуваалцах ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Харагдац</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Удирдах ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Тайлан</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Оноо: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Төрөл: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Бүрмөсөн устгах</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>'{0}' рүү харах</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Хувиргах</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Мэдээлэлгээ тарах</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Гарц</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Давхар суртах</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Сэргээх</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Зургийг сонгоно уу ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Өнгө</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>'{0}' удирдах ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Нээлттэй</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Түр хүлээнэ үү ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Дэвсгэр өнгө</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Бүгдийг цэвэрлэ</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Хяналтын самбарын форматууд</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Бүгдийг устгах</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Дэлгэрэнгүй чиглүүлэх</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Нэр</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Илрүүлэх</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Үсгийн өнгө</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Автомат чанар</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Сонгон шалгаруулах</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Зураг оруулах</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Холбоос суулгах</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Судлах</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Тохируулгын хэрэг</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Шинэ загвар</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Дараагийн загвар</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Буулгах текстийг оруулна уу ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Өмнөх загвар</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Тогтмол илэрхийлэл</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Бүгдийг орлуулаарай</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Буцааж тавих</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Бүхэл үг</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Эргэн тойронд ороосон</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Гуалин</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Дэмий</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Хаван харагдах</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Хориглох</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Тухай</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Хаалт хаах</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>НЭГДСЭН НЭГДСЭН</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Авто - Хуулах</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Бүтдсон</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Сармагчинг түр хүлээнэ үү ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Орхих</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Rogl - ШАЛГАХ ХУГАЦАА</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Бүлэг</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Шүүх</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Бүгдийг бүрмөсөн устгах</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Бүгдийг сэргээх</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Үйл ажиллагаа</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL аль хэдийн орсон байна: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL нь зөв форматтай байх ёстой.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Бүрэн URL-г оруулна уу:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>URAT шаардлагатай</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Утгыг нь оруулна</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Текст эсвэл файлыг хуулах.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>{0} {1} горим идэвхжүүлсэн</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Санах самбарын өөрчлөлтийг одоо хавсаргана</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Хавсралт горим идэвхжсэний дараа</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Санах самбарын өөрчлөлтийг одоо угсарч байх болно</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Хавсралт горим идэвхжүүлсэн</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Гуалин</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Ердийн санах ойн замын зан үйлийг сэргээв</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Идэвхгүй болгох</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Клипийн дээд эсвэл ботомыг нэмж оруулсан</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Хэмжээг идэвхжүүлсэн горим идэвхжүүлсэн</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Шугаманд</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Гарын авлага</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Таны одоогийн сонголтод хавсаргана уу.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Гарын авлагын багцыг идэвхжүүлсэн</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Хяналтын самбар хуримтлал зогсов</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Түр зогсоох</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Хяналтын самбар хуримтлалыг үргэлжлүүлэв</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Хэмжээг үргэлжлүүлэв</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Та нэмэлт хүсэлт гаргаж дуусгахыг хүсч байна уу?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Нэхэмжлэх горимд засварлах нь бүх баялаг форматыг арилгах болно. Та үүнийг өөрчлөхийг хүсч байна уу?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Мэдээллийн доройтол нь анхааруулга</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Идэвхтэй</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Оруулах</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Унтраах</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>-Тухай</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Дүр ам цуч</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Үр дун</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Байдал</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Үл мэдэгдэх алдаа гарлаа.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>үлдсэн оролдлого</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Нууц үгээ оруулна</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Батлах</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Харилцах</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Он сар өдөр цаг</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Та '{0}' хэрэглээг устгахыг хүсч байна уу?
+
+Энэ буцаах боломжгүй!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Динамик</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Стобик</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} хоосон байна ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Илүү удахгүй ирэх болно!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Нэвтрэх ачааллыг идэвхгүй болгож чадсангүй</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Нэвтрэх ачаалал нь амжилтыг идэвхгүй болгож байна</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Нэвтрэх ачаалал идэвхжээгүй</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Нэвтрэх ачаалал нь амжилтыг идэвхжүүлдэг</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Арөс элдэх</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Сармагчингийн оо одоо ачаалагдсан байна.
+Clipboard Сонсох нь: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Ачлагдсан</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Шоу</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Автомат хуулбарлах сонголтын горим: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Горим өөрчлөгдсөн</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Баруун товшилт astepe горим: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin шинэчлэгдсэн</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Aste '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>'{0}' AJELYYEZER ажиллуул</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>'{0}' гох</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>'{0}' -г сонгоно уу</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Та '{0 {0}' болон бүх холбоотой үйлдлүүдийг устгахыг хүсч байна уу?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Гох</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>"{0}" -д зориулж бүх дэд зүйлийг арилгахыг хүсч байна уу? (Үгүй бол тэд re - {{1} 'гэж хэлэв)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Сонголтуудыг арилгах</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Та үнэхээр "{0} 'goto-г үнэхээр хүсч байна уу?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Данс</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Шинжилгээчид</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Програмын үйл ажиллагаа</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Тугарлын самбар</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Сэтгэл ханамжтай</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Хуваач</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Соел</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Мэдээ</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Чиглэл</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Чирж унах</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Дусал шидтэн</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Тууч</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Сэвхтэй гар</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Интерфэйс</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Хүлээс үйл ажиллагаа</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Тохиролцоонал</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Эрэл хайгуул хийх</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Хэв хаягдал</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Ангилах</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Хүү хүүгүй</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Нь хуваалтын үнэгүйз</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Ийн цугллах</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Сэдэв</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Рж гарах</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Вэбсайтын үйл ажиллагаа</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Хэл</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Санах самбарыг оролтын клипэнд тохируулна.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Соргог байх</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Хүүц</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Ёё</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Ерөнхий зориулалттай дуу, / эсвэл системийн тосгуурын тосгуурын зурвасын анхааруулга. Сэрэмжлүүлэг үйлдлийн арга хэмжээ нь тэдний оролтод нөлөөлөхгүй.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Захиа</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Сармагчин</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Киноны урөдчилсан үзлэг</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Харуулах уу?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>TOAME шарсан талхыг хэдхэн секундын дотор харуулав. 0 утга нь 0 мессежийг гараар хаах ёстой.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Цаг (ууд) шоу</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Янн</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Дуу чимээ?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Дууны төрөл</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Жүжиг</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Хэмжээ</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Анализатор</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Өгөгдсөн анализаторын тохиргоог ашиглан оролтын клипийг боловсруулдаг.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Оролтын агуулга нь сонгосон цуглуулгад холбогдсон байна</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Оролтын клипийг томилсон TAG цуглуулга руу холбодог.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Захьдхны</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Том жижгээр бичхээс хамаарна?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Энэ нь оролттой харьцуулах, / эсвэл сонгосон шинж чанарыг агуулсан байхын тулд статик текст (шүүлтүүрийн товчлуурыг)</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Даатгалгүй нөхцөл</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Нөхцөл байдлыг үнэлэхээс өмнө сонгосон 'Оролтын үл хөдлөх хөрөнгийг сонгосон' заавал '-ийг сонгосон нэмэлт JANSPATH PRAUTE.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Түгрийн шүүлтүүр</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Энэ нөхцөлд ашигласан клипийн өмч.
+
+Энэ нөхцлийг одоогийн байдлаар үл хөдлөх хөрөнгө нь зөвхөн анализаторын үйл ажиллагаа, өгөгдсөн хүүхэд нь зөвхөн анализаторын үйлдэл, өгөгдлийг анализаторын гаралтаас хамааран өөр өөр байх болно.
+
+Асуудлыг олж засварлахын тулд энэ нөхцлийг эцэг эхийн эцэг эхэд нь холбож, энэ орчуулгын үл хөдлөх хөрөнгийг тааруулахын тулд Alert Attone-ийн 'мессеж' параметрийг хавсаргана уу. Энэ нь энэхүү нөхцөлд ашиглагдаж байгаа бодит өгөгдлийг хянах боломжийг танд олгоно.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Оруулах өмч</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Оролтын клип эсвэл өмнөх үйл ажиллагааны гаралт дээр текстийг харьцуулж үздэг. Харьцуулалт амжилтгүй болмогц (энэ нь тохирохгүй) нь хүүхдийн арга хэмжээ авахгүй. Тиймээс энэ нь логик хаалга шиг үйлдэл хийдэг.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Хүүхдийн үйлдэл нь зөвхөн үр дүн нь үнэн бол зөвхөн үнэн эсвэл хуурамч үйл ажиллагаа.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Болзол</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Бүгд</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Сонгосон хэлбэрийг сонгосон клипийг системд нэмж оруулах үед өдөөгдсөн тохиолдолд (Clipboard, Clipboard - DROP - PROP, AJELYEZERER үүсгэж эсвэл давхардсан).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Зөвхөн оролтын клип нь шинэ бөгөөд хуулбар биш бол энэ триггерийг гүйцэтгэнэ. Энэ нь шинэ агуулга үл тоомсорлож байгаа эсэхээс үл хамааран аливаа давуу эрхт тохируулагч юм.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Хуулбарыг үл тоомсорлох</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Зөвхөн энэ төрлийн клипүүд энэ үйлдлийг өдөөх болно.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Оролтын клипийг томилсон TAG цуглуулга руу холбодог.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Клипийг заасан тэмдэглэгээтэй холбосон үед өдөөгдсөн.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Цүглуулга</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Миллисекундын цаг хугацааны хэмжээ нь хүүхдүүдийн цаазаар авахаас өмнө хүлээсэн цаг хугацаа</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Хойшлуулах</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Туршилтын) нь ихэвчлэн алсын удирдлагатай эсвэл урт удаан ажиллуулахад дэмжлэг үзүүлэх зорилгоор давталт хийх арга хэмжээ авах.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Хоосон байх үед гаралтын файл нь файлын клипийг файлын нэр болгон ашиглах болно.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Зөвхөн захиалсан нэр</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Файлыг бичихэд зориулагдсан директор.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Лавлах</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Сонгосон фолдерт оролтыг хадгалдаг.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Сонгосон фолдерын агуулга өөрчлөгдөхөд өдөөгдсөн. Гаралт нь шинэ эсвэл одоо байгаа (үл тоомсорлож байгаа файл нь тохирох файл эсвэл хавтасны файлыг өөрчилсөн хэлбэртэй байх болно.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Галтт хүн</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Хавтас</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Хуулбарыг үл тоомсорлох</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0-ийн утга нь эцэг эхийн үйл ажиллагааг тодорхойгүй хугацаагаар давтах болно</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Давтах</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Эцэг эхийн үйл ажиллагаа дууссаны дараа миллисекунд дахь цаг хугацаа</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Давхын цаг</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>Үйл ажиллагааны гогцоо эсвэл давтагдах даалгаврыг үүсгэхэд ашигладаг (туршилтын). Давтагдах үед энэ нь бүх хүүхдүүдийг дахин анхны оролтоор гүйцэтгэнэ. Давтан тоололгүйгээр интервал ашиглах үед триггерийг идэвхгүй болгохын тулд триггерийг идэвхгүй болгох, дахин хийх шаардлагатай болно. Санал хураалт эсвэл вэб хаягдал автоматжуулалтад хэрэгтэй байж болно.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Тодорхойлох дэлхийн товчлолоор өдөөгдсөн. Хэрэв сармагчингууд идэвхтэй байвал энэ нь сонгосон клипийг ашиглахыг оролдох болно (хэрэв байгаа бол). Үгүй бол санах ойг оролт болгон ашиглахыг хичээх болно.
+
+ТАЙЛБАР: Уян хатан байхын тулд introutput триггер нь өгөгдөл байхгүй хэвээр байх болно.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Богино хоолойн триггер</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Бүртгэгдсэн товчлолыг хэзээ ч одоогийн санах ойтой хэзээ нэгэн цагт дарах үед өдөөгдсөн</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Энэ үйлдэл нь апп-ыг дахин эхлүүлэхийг шаарддаг. Та одоо үүнийг хиймээр байна уу?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Асуудал гарсан. Та өргөдлийг гараар дахин эхлүүлэх хэрэгтэй.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Ангаахайтай дүн шинжилгээ хийх</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Тэмдэглэгээ гох</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Элементүүд дээр суурилсан нь зөвхөн унших болно. Өөрчлөхийн тулд хуулбарлах.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Нэргүй</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Ес заншил</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Өчигдөр</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} хоногийн өмнө</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 цагийн өмнө</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} цагийн өмнө</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Саяхан</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Хэдхэн өмнө</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} минутын өмнө</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Өнгөрсөн сар</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} сарын өмнө</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Өнгөрсөн долоо хоног</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} долоо хоногийн өмнө</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} жилийн өмнө</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Тоосэгчид</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Диалимын нэр</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Профайл зам</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Том жижгээр бичхээс хамаарна</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Сэтгэл ханамжтай</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Файлын төрөл</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Зургийн төрөл</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Тогтмол илэрхийлэл</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Текстийн төрөл</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Гарчиг</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Туар</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>HЙРХАНний нэр</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Бүхэл үг</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Шилдэг дэлгэцийн ирмэгийн дагуу гүйлгэж харахад энэ нь нээгдэхэд гол цонхыг түгжих болно. Илүү хурдан хийх боломжийг олгодог - зорилтот ажлын урсгал.
+
+* Булан нь таны бүх дэлгэцийн хувьд бүх дэлгэцийн хувьд, хяналтгүй байдаг.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Цонх, түгжээг харуул</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Үньюффис!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Бидэнд 5 од өг!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Бүгдийг устгах</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Бүх агуулгыг устгах</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Та устгахыг хүсч байгаа гэдэгтээ итгэлтэй байна уу
+Бүх клипүүд чинь?
+
+* Энэ үйлдлийг буцаах боломжгүй!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Би Indy Dey нь зарим нэг дэмжлэг үзүүлнэ үү!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Сармагчин шиг үү?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} нь зөвхөн төрөл (ууд) -ыг хүлээн зөвшөөрдөг: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Автомат хуулах горим - Хулганы зүүн товчлуурыг зогсоох бүрт 'Хуулах' үйл явдлыг дуурайдаг.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Хулганы баруун товчийг дарахад баруун товчийг дарна уу</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Доо бичиг</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Plugin Finance-ийг харуул</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Тайлан</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Харагдац</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Хэрэгслийн хэрэгслийг харуулах</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Анализаторууд нь оролтоо тэмдэглэж эсвэл шинэ клип үүсгэдэг. Анализаторуудын хүүхдүүд аль нь орц болох хэрэгтэй болохыг шийдэх хэрэгтэй. Энэ нь ихэвчлэн хамгийн сүүлчийн гаралт юм.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Олгохын төрөл</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Триггерийн дизайнер '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>{0} -г сонгоно уу ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Олдсонгүй...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} өдөөгч</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Нөхцлийн үнэн эсвэл хуурамч үр дүнг шалгаж үзэхэд. Жишээ нь, "агуулсан" нөхцөл байдал нь "агуулагдахгүй" болно.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Үгүй</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Түр хүлээнэ үү ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Өнгө сонгох</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Тоглолтын өнгийг сонгоно уу</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Товчлол шиг триггер шиг боловч түлхүүрийн хослолыг идэвхтэй болгох үед энэ нь "Хуулбар" -д суурилсан боловч Monkey-ийн триггерийн гинжин хэлхээнд загварчлагдсан хуулбар санах ойн өгөгдлийг.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Нарийвчилсан шүүлтүүр</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Шүүлтүүрүүдийг нуух</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Шүүлтүүрийг сэргээх</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Шүүлтүүр үүсгэх</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Заавал биш) Зүүн хоосон хоосон байх үед санах ойг энэ үйлдлийн оролтыг ашиглан тохируулна. Эндээс өгсөн бүх зүйл нь зөвхөн энгийн тексттэй харьцах болно.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Санах самбарын агуулга</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Энэ үйлдэл нь санах ойг тогтоосны дараа клипийг нэмж оруулахгүй.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Үл тоомсорлох</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>'{0}' арга хэмжээ авахаар анализатор сонгоогүй байна.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>'{0}' арга хэмжээ олдсонгүй</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Эцэг эх нь '{0 {0}' Шүүлтүүр нь зөвхөн '{1 {1 {1} хэлбэрийн агуулга, анализатор' {2} '{{3}' хэлбэрийг дэмждэггүй тул '{3}' хэлбэрийг дэмжихгүй</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>'{0}' ангилалд сонгосон шошго байхгүй байна</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Classifier-д зориулсан шошго '{0}' олдсонгүй</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Харьцуулах үнэ цэнэ нь зөвхөн үсэг, тоо эсвэл орон зай байж болно</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Clip tagged Tagged '{0}' клипийг сонгосон шошго сонгоогүй байна.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Clip tagged '{0 {0}' клип '{0}' олдсонгүй</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>'{0}' -д заасан цагны хавтас байхгүй байна</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>'{0 {0}' -г үзэхийн тулд '{0}' -г үзэх боломжгүй '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>'{0 {0}' -д зориулж файлын зохиолч.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Файлын зохиолчын зам '{0}' '' '' '' '' '' FOR '{1 {1}' олдсонгүй.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Захиалга</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Илчлэлтүүдийн талаар сур</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Энэ шинжилгээний тохиргоог сэргээх</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} өөрчлөх бүртгэл</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Интернетэд холбогдоод дараа дахин оролдоно уу.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Тусламж</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} нь хамгийн сүүлийн хувилбар юм</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Та бүгд - - огноо!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Шинэчлэлтүүдийг шалгах...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Шинэ хувилбар авах боломжтой!
+
+'{0}' 🎉🍾🥳 -д шинэчлэхийн тулд энд дарна уу</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>'{0}' -д шинэчлэгдэхийн тулд доор дарна уу</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Шинэчлэх боломжтой!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Одоо шинэчлэх</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' нь хуваалцсан утгыг агуулдаг. Та юу дахин тохируулахыг хүсч байна вэ?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Саруул</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Сүүлийн сүүлийн үеийн хайлтыг арилгах</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Бүгдийг нь дахин тохируулах</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Хуваалцсан дахин тохируулах</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Unsheed-ийг дахин тохируулах</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Хуваарилагдсан өргөдлийн үйлдлийг дууддаг. Бүх програмын командыг хууль бус, тэдгээрийн оролтын клипийг үл тоомсорлодог.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Сонгоогүй бөгөөд тушаалыг галлах боломжгүй, гүйцэтгэх гинжин хэлхээг зогсоов. Олон тушаалууд гүйцэтгэхийн тулд тодорхой програмын тодорхой төрлийг шаарддаг.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Үргэлж үргэлжлүүлдэг үү?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Гүйцэтгэх тушаал.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Тушаах</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>'{0}' команданд сонгогдоогүй тушаал байхгүй байна.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Програмын командын командыг '{0}' олдсонгүй</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Сүл -ийг хийсэн</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Дахин ачааллах</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>'{0}' -ийг шинэчлэх асуудал гарсан. Шинэчлэлтийг дуусгахын тулд та дахин эхлүүлэхийн тулд дахин эхлүүлэхийн тулд '{0 {0}' дахин эхлүүлэх шаардлагатай (таны бүх тохиргоог сэргээх болно).
+
+Та одоо дахин эхлүүлж, шинэчлэлтийг дахин эхлүүлж, шинэчлэлтийг бөглөж, үүнийг үл тоомсорлож, дараа нь шинэчилж, дараа нь шинэчлэгдэж, дараа нь шинэчлэлтийг үргэлжлүүлж, хувилбарыг нь үргэлжлүүлж, "{1}" -г дахин шинэчилнэ үү?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Үлдэглэлийг шинэчлэх</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Шинэчлэх боломжгүй байна</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Шинэчлэлт амжилтгүй болсон</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Шинэчлэлтийг дуусгахын тулд та дахин эхлүүлэх шаардлагатай болно. Та одоо эсвэл дараа дахин эхлүүлэхийг хүсч байна уу?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Шинэчлэлт бэлэн байна</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Сүүлд</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Одоо дахин эхлүүлнэ</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Унжсан</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} {1} -д амжилттай шинэчлэгдсэн</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Үндсэн залгаас шаардлагатай бөгөөд үүнийг арилгах боломжгүй.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Слоодог</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Шинэчлэлт хүлээж байна. Дуусгахын тулд дахин эхлүүлнэ үү.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Унжсан</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Устгах нь хүлээгдэж буй. Хэрэв та дахин суулгахыг хүсч байвал дахин эхлүүлнэ үү.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Устгахын тулд дахин эхлүүлэх хэрэгтэй болно. Та одоо эсвэл дараа дахин эхлүүлэхийг хүсч байна уу?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Устгахыг дуусгах уу?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Нийтлэгдээгүй</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Авто - '{0}' -д зориулж анхдагч тохируулга</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Сонгосон клип байхгүй байна</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Сонгосон клипийг шинжлэх</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Сонгосон клип дээр '{0 {0}' товчийг дар</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Хамт шилжүүлсэн</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Global Paste товчлолыг '{0}' -д хуваарилах</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Нууц үгээ мартсан?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Нэвтрэх</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Гарах</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Нууцлалын бодлого</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>Оношлогооны мэдээллийг идэвхжүүлсэн тохиолдолд дахин эхлүүлэх шаардлагатай). Энэ нь удаан гүйцэтгэл, хувийн мэдээллийг агуулж болно.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Файл руу нэвтрэх</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Нээлттэй</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Нээлттэй бүртгэлийн хавтас</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Pluwing-ийг үзэх</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Уншсан</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Бичих</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Санал хүсэлт, алдааны тайланг илгээх</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Энэ нь зөвхөн үндсэн цонхыг нууна. Бусад бүх зүйлгүй - Диалог цонхыг үргэлж ажлын самбар дээр үзүүлдэг.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>'{0}' хайх</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Шүүлтүүр нэмэх</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Засах INTINT төрөл</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Энэ шүүлтүүрийг устгана уу</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Энэ талаар нээлттэй тусламж.</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} клип</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Өөрчлөгдөх</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Ер</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Эд юмны цүглуулга</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Гарчиггүй</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Пянзанд бичих</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Unlaited Эх сурвалж лавлагаа</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' Шаардлагатай</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Алдаа гарсан)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Хязгаарлагдмал</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Агуулах</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Хог</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Хязгааргүй</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Энэ апп нь одоогоор анхдагч самбарын уншигч уншигч, форматтай таарч байна.
+
+Үндсэн уншигчдын товчилогчийг идэвхжүүлж, идэвхгүй болгох (санах ойн хажуугийн хажуугийн самбараас) Энэ тохиргоонд нөлөөлөхгүй. Зөвхөн худалдаагүй програмууд үндсэн тохиргоог дагаж мөрдөнө.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Энэ апп нь одоогоор анхдагч клип самбартай таарч тохирч байна.
+
+Үндсэн зохиолч урьдчилан бэлтгэх эсвэл идэвхгүй болгох (санах ойн хажуугийн хажуугийн хажуугийн самбараас) энэ тохиргоонд нөлөөлөхгүй. Зөвхөн худалдаагүй програмууд үндсэн тохиргоог дагаж мөрдөнө.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Хяналтын самбарыг сонсох ёстой (Системийн тавиур -&gt; анкет)</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Хэмжээ ашиглах боломжгүй байна</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Тохиргоо байхгүй байна</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Би англиар ярьдаг, сармагчинг л хэлчихсэн.
+
+Бүх хувилбарууд нь англи хэл дээр хөлөг онгоцоор хөлөг онгоцоор дамжуулж, хэрэв та Англи хэлээр ярих юм бол энэ тохиргоог хүссэн үедээ энэ хэлээр өөрчилж болно.
+
+Хэрэв та орчуулгыг сайжруулахад туслахыг хүсч байвал бид танаас сонсохыг хүсч байна!
+
+FEEDBOWY@monkeypue.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Орчуулгын асуудал</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Энэ функцийг ашиглахын тулд та сармагчинг шинэчлэх хэрэгтэй.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Товчлолгүй</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Clipboard сонсогч идэвхгүй болсон</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Clipboard сонсогч идэвхжүүлсэн</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Эцэг эхийн арга хэмжээ '{0}' нь оролтын өмчийн төрөл 'Сүүлийн гаралтыг дэмжихгүй байна.</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Төлөвлөгөөний талаар илүү ихийг олж мэдэх</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Хүсэлт</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Гох</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Дүрэм</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Анализатор</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Захьдхны</value>
+  </data>
+</root>

@@ -59,1131 +59,1131 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MpThemeType_Light" xml:space="preserve">
-    <value />
+    <value>വെളിച്ചം</value>
   </data>
   <data name="MpThemeType_Dark" xml:space="preserve">
-    <value />
+    <value>അന്ധകാരം</value>
   </data>
   <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
-    <value />
+    <value>ഒരിക്കലുമില്ല</value>
   </data>
   <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
-    <value />
+    <value>ദിവസവും</value>
   </data>
   <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
-    <value />
+    <value>പ്രതിവാരം</value>
   </data>
   <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
-    <value />
+    <value>പ്രതിമാസം</value>
   </data>
   <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
-    <value />
+    <value>അവസാന ഔട്ട്പുട്ട്</value>
   </data>
   <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
-    <value />
+    <value>ഉറവിട ക്ലിപ്പ്</value>
   </data>
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
-    <value />
+    <value>ഒന്നുമില്ല.</value>
   </data>
   <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
-    <value />
+    <value>ഹോൾഡിംഗ് ഷിഫ്റ്റ്</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
-    <value />
+    <value>മുകളിൽ വലത് കോണിൽ</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
-    <value />
+    <value>മുകളിൽ ഇടത് കോണിൽ</value>
   </data>
   <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
-    <value />
+    <value>എപ്പോഴും</value>
   </data>
   <data name="MpBillingCycleType_Never" xml:space="preserve">
-    <value />
+    <value>ഒരിക്കലുമില്ല</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
-    <value />
+    <value>പ്രതിമാസം</value>
   </data>
   <data name="MpBillingCycleType_Yearly" xml:space="preserve">
-    <value />
+    <value>വാർഷികം</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
-    <value />
+    <value>ലോഡർ</value>
   </data>
   <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
-    <value />
+    <value>സബ്സ്ക്രിപ്ഷൻ കാലഹരണപ്പെട്ടു</value>
   </data>
   <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
-    <value />
+    <value>അക്കൗണ്ട് ലോഗിൻ പരാജയപ്പെട്ടു</value>
   </data>
   <data name="MpNotificationType_DbError" xml:space="preserve">
-    <value />
+    <value>Db പിശക്</value>
   </data>
   <data name="MpNotificationType_Help" xml:space="preserve">
-    <value />
+    <value>സഹായം</value>
   </data>
   <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
-    <value />
+    <value>പ്ലഗിൻ അപ് ഡേറ്റുചെയ് തു</value>
   </data>
   <data name="MpNotificationType_Message" xml:space="preserve">
-    <value />
+    <value>സന്ദേശം</value>
   </data>
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
-    <value />
+    <value>ആപ്പ് മോഡ് മാറ്റം</value>
   </data>
   <data name="MpNotificationType_Debug" xml:space="preserve">
-    <value />
+    <value>Debug</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
-    <value />
+    <value>ഉള്ളടക്ക ക്യാപ് എത്തി</value>
   </data>
   <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
-    <value />
+    <value>ചവറ്റുകുട്ട എത്തി</value>
   </data>
   <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>അക്കൗണ്ട് വഴി ബ്ലോക്ക് ചെയ്ത ഉള്ളടക്കം ചേർക്കുക</value>
   </data>
   <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>അക്കൗണ്ട് വഴി ബ്ലോക്ക് ചെയ്ത ഉള്ളടക്കം പുനഃസ്ഥാപിക്കുക</value>
   </data>
   <data name="MpNotificationType_AccountChanged" xml:space="preserve">
-    <value />
+    <value>അക്കൗണ്ട് മാറി</value>
   </data>
   <data name="MpNotificationType_Welcome" xml:space="preserve">
-    <value />
+    <value>സ്വാഗതം</value>
   </data>
   <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
-    <value />
+    <value>അപ് ഡേറ്റ് ലഭ്യമാണ്</value>
   </data>
   <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
-    <value />
+    <value>അപ് ഡേറ്റ് ലഭ്യമല്ല</value>
   </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
-    <value />
+    <value>അനുബന്ധ മോഡ് മാറ്റിയിരിക്കുന്നു</value>
   </data>
   <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
-    <value />
+    <value>ട്രിഗർ പ്രവർത്തനക്ഷമമാക്കി</value>
   </data>
   <data name="MpNotificationType_AlertAction" xml:space="preserve">
-    <value />
+    <value>ജാഗ്രതാ നടപടി</value>
   </data>
   <data name="MpNotificationType_StartupComplete" xml:space="preserve">
-    <value />
+    <value>Startup Complete</value>
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
-    <value />
+    <value>ഫയല് Io മുന്നറിയിപ്പ്</value>
   </data>
   <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
-    <value />
+    <value>പ്ലഗിൻ പിശക് അൺലോഡ് ചെയ്യുക</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
-    <value />
+    <value>അസാധുവായ പ്ലഗിൻ</value>
   </data>
   <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
-    <value />
+    <value>അസാധുവായ Clipboard ഫോർമാറ്റ് ഹാൻഡ് ലർ</value>
   </data>
   <data name="MpNotificationType_InvalidAction" xml:space="preserve">
-    <value />
+    <value>അസാധുവായ നടപടി</value>
   </data>
   <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
-    <value />
+    <value>മോശം http അഭ്യർത്ഥന</value>
   </data>
   <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
-    <value />
+    <value>Analyzer Timeout</value>
   </data>
   <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
-    <value />
+    <value>അസാധുവായ അഭ്യർത്ഥന</value>
   </data>
   <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
-    <value />
+    <value>അസാധുവായ മറുപടി</value>
   </data>
   <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
-    <value />
+    <value>പാരാമീറ്ററുകൾ അഭ്യർത്ഥന നടപ്പിലാക്കുക</value>
   </data>
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
-    <value />
+    <value>Db പാസ് വേഡ് ഇൻപുട്ട്</value>
   </data>
   <data name="MpNotificationType_RateApp" xml:space="preserve">
-    <value />
+    <value>റേറ്റ് ആപ്പ്</value>
   </data>
   <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
-    <value />
+    <value>മോഡൽ റീസെറ്റ് പങ്കിട്ട മൂല്യ പ്രീസെറ്റ്</value>
   </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
-    <value />
+    <value>മോഡൽ ഉള്ളടക്ക ഫോർമാറ്റ് ഡീഗ്രേഡേഷൻ</value>
   </data>
   <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ Yes No Cancel Message Box</value>
   </data>
   <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ Yes No Message Box</value>
   </data>
   <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ OK സന്ദേശ ബോക്സ് റദ്ദാക്കുക</value>
   </data>
   <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ ഓകെ സന്ദേശ ബോക്സ്</value>
   </data>
   <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ ടെക്സ്റ്റ് ബോക്സ് ശരി സന്ദേശ ബോക്സ് റദ്ദാക്കുക</value>
   </data>
   <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ ഓർമ്മിക്കാവുന്ന ടെക്സ്റ്റ് ബോക്സ് ശരി സന്ദേശ ബോക്സ് റദ്ദാക്കുക</value>
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ പ്രോഗ്രസ് കാൻസൽ സന്ദേശ ബോക്സ്</value>
   </data>
   <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
-    <value />
+    <value>മോഡൽ തിരക്കുള്ള സന്ദേശ ബോക്സ്</value>
   </data>
   <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
-    <value />
+    <value>മോഡൽ റീസ്റ്റാർട്ട് അവഗണന</value>
   </data>
   <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
-    <value />
+    <value>മോഡൽ ഇപ്പോൾ അല്ലെങ്കിൽ പിന്നീട് പുനരാരംഭിക്കുക</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
-    <value />
+    <value>അന്തിമ അനുബന്ധം സ്ഥിരീകരിക്കുക</value>
   </data>
   <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
-    <value />
+    <value>പ്ലഗിൻ പ്രതികരണ സന്ദേശം</value>
   </data>
   <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
-    <value />
+    <value>പ്ലഗിൻ പ്രതികരണ പിശക്</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
-    <value />
+    <value>പ്ലഗിൻ പ്രതികരണ മുന്നറിയിപ്പ്</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
-    <value />
+    <value>ഓപ്ഷനുള്ള പ്ലഗിൻ പ്രതികരണ മുന്നറിയിപ്പ്</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
-    <value />
+    <value>Toggle പ്രധാന ജാലകം</value>
   </data>
   <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
-    <value />
+    <value>ടോഗിൾ ഓട്ടോ കോപ്പി മോഡ്</value>
   </data>
   <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
-    <value />
+    <value>ടോഗിൾ റൈറ്റ് ക്ലിക്ക് പേസ്റ്റ് മോഡ്</value>
   </data>
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
-    <value />
+    <value>ടോഗിൾ ക്ലിപ്പ്ബോർഡ് കേൾക്കുക</value>
   </data>
   <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
-    <value />
+    <value>Toggle Append Inline Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
-    <value />
+    <value>Toggle Append Block മോഡ്</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
-    <value />
+    <value>Toggle Append Position Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
-    <value />
+    <value>Toggle Append Paused</value>
   </data>
   <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
-    <value />
+    <value>ക്ലിപ്ബോർഡിൽ നിന്ന് സ്വമേധയാ ചേർക്കുക</value>
   </data>
   <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
-    <value />
+    <value>ഫോക്കസ് കുറയ്ക്കുക</value>
   </data>
   <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
-    <value />
+    <value>ശ്രദ്ധ വർദ്ധിപ്പിക്കുക</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
-    <value />
+    <value>എക്സിറ്റ് ആപ്ലിക്കേഷൻ</value>
   </data>
   <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
-    <value />
+    <value>പേസ്റ്റ് ടു ബാഹ്യ</value>
   </data>
   <data name="MpShortcutType_PasteSelection" xml:space="preserve">
-    <value />
+    <value>പേസ്റ്റ് തിരഞ്ഞെടുപ്പ്</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
-    <value />
+    <value>പകർപ്പ് തിരഞ്ഞെടുക്കൽ</value>
   </data>
   <data name="MpShortcutType_CutSelection" xml:space="preserve">
-    <value />
+    <value>കട്ട് സെലക്ഷൻ</value>
   </data>
   <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
-    <value />
+    <value>തിരഞ്ഞെടുത്ത ഇനങ്ങൾ ഇല്ലാതാക്കുക</value>
   </data>
   <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
-    <value />
+    <value>അടുത്ത കോളം ഇനം തിരഞ്ഞെടുക്കുക</value>
   </data>
   <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
-    <value />
+    <value>മുമ്പത്തെ കോളം ഇനം തിരഞ്ഞെടുക്കുക</value>
   </data>
   <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
-    <value />
+    <value>അടുത്ത നിര ഇനം തിരഞ്ഞെടുക്കുക</value>
   </data>
   <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
-    <value />
+    <value>മുമ്പത്തെ നിര ഇനം തിരഞ്ഞെടുക്കുക</value>
   </data>
   <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
-    <value />
+    <value>കുറുക്കുവഴി നിശ്ചയിക്കുക</value>
   </data>
   <data name="MpShortcutType_Undo" xml:space="preserve">
-    <value />
+    <value>റദ്ദാക്കുക</value>
   </data>
   <data name="MpShortcutType_Redo" xml:space="preserve">
-    <value />
+    <value>റെഡോ</value>
   </data>
   <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
-    <value />
+    <value>ടോഗിൾ ഉള്ളടക്കം മാത്രം വായിക്കുക</value>
   </data>
   <data name="MpShortcutType_Rename" xml:space="preserve">
-    <value />
+    <value>പുനർനാമകരണം</value>
   </data>
   <data name="MpShortcutType_Duplicate" xml:space="preserve">
-    <value />
+    <value>ഡ്യൂപ്ലിക്കേറ്റ്</value>
   </data>
   <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
-    <value />
+    <value>വീട്ടിലേക്ക് Scroll ചെയ്യുക</value>
   </data>
   <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
-    <value />
+    <value>അവസാനിപ്പിക്കാൻ സ്ക്രോൾ ചെയ്യുക</value>
   </data>
   <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
-    <value />
+    <value>ജാലക വലുപ്പം വർദ്ധിച്ചു</value>
   </data>
   <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
-    <value />
+    <value>ജാലക വലുപ്പം താഴേക്ക്</value>
   </data>
   <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
-    <value />
+    <value>ജാലക വലുപ്പം ഇടത്</value>
   </data>
   <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
-    <value />
+    <value>ജാലക വലുപ്പം ശരിയാണ്</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
-    <value />
+    <value>ഓറിയന്റ് മെയിൻ വിൻഡോ ടോപ്പ്</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
-    <value />
+    <value>ഓറിയന്റ് പ്രധാന ജാലകത്തിന്റെ ചുവടെ</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
-    <value />
+    <value>ഓറിയന്റ് മെയിൻ വിൻഡോ ഇടത്</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
-    <value />
+    <value>ഓറിയന്റ് മെയിൻ വിൻഡോ വലത്ത്</value>
   </data>
   <data name="MpShortcutType_PreviousPage" xml:space="preserve">
-    <value />
+    <value>മുമ്പത്തെ പേജ്</value>
   </data>
   <data name="MpShortcutType_NextPage" xml:space="preserve">
-    <value />
+    <value>അടുത്ത പേജ്</value>
   </data>
   <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
-    <value />
+    <value>തിരഞ്ഞെടുത്ത ഇനം കണ്ടെത്തി മാറ്റിസ്ഥാപിക്കുക</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
-    <value />
+    <value>Toggle പ്രധാന വിൻഡോ ലോക്ക് ചെയ്തിരിക്കുന്നു</value>
   </data>
   <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
-    <value />
+    <value>ടോഗിൾ ഫിൽട്ടർ മെനു ദൃശ്യമാണ്</value>
   </data>
   <data name="MpShortcutType_ShowSettings" xml:space="preserve">
-    <value />
+    <value>ക്രമീകരണം കാണിക്കുക</value>
   </data>
   <data name="MpShortcutType_TogglePinned" xml:space="preserve">
-    <value />
+    <value>Toggle Pinned</value>
   </data>
   <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
-    <value />
+    <value>ജാലകത്തിൽ തുറക്കുക</value>
   </data>
   <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
-    <value />
+    <value>ശാശ്വതമായി ഇല്ലാതാക്കുക</value>
   </data>
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
-    <value />
+    <value>ഫോഴ്സ് മിനിമൈസ് പ്രധാന ജാലകം</value>
   </data>
   <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
-    <value />
+    <value>Toggle Append Direction Mode</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
-    <value />
+    <value>സഹായം തുറക്കുക</value>
   </data>
   <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
-    <value />
+    <value>സൂം ഇൻ സെലക്ഷൻ</value>
   </data>
   <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
-    <value />
+    <value>സൂം ഔട്ട് ഓൺ സെലക്ഷൻ</value>
   </data>
   <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
-    <value />
+    <value>റീസെറ്റ് സെലക്ഷൻ സൂം</value>
   </data>
   <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
-    <value />
+    <value>ക്ലിയർ പിൻ ട്രേ</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
-    <value />
+    <value>M A XA P PS H O R T C U T</value>
   </data>
   <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
-    <value />
+    <value>ഒട്ടിക്കുക പകർപ്പ് ഇനം</value>
   </data>
   <data name="MpShortcutType_SelectTag" xml:space="preserve">
-    <value />
+    <value>ടാഗ് തിരഞ്ഞെടുക്കുക</value>
   </data>
   <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
-    <value />
+    <value>പ്രീസെറ്റ് ഉപയോഗിച്ച് പകർപ്പ് ഇനം വിശകലനം ചെയ്യുക</value>
   </data>
   <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
-    <value />
+    <value>ട്രിഗർ ആവശ്യപ്പെടുക</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
-    <value />
+    <value>Clip Text</value>
   </data>
   <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
-    <value />
+    <value>അസംസ്കൃത ക്ലിപ്പ് ഡാറ്റ</value>
   </data>
   <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
-    <value />
+    <value>ക്ലിപ്പ് തരം</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
-    <value />
+    <value>ശീർഷകം</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
-    <value />
+    <value>ഉറവിട ആപ്പ് പാത</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
-    <value />
+    <value>ഉറവിട ആപ്പിന്റെ പേര്</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
-    <value />
+    <value>ഉറവിട URL</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
-    <value />
+    <value>ഉറവിടം URL Title</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
-    <value />
+    <value>ഉറവിടം Url Domain</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>പകർപ്പ് തീയതി സമയം</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
-    <value />
+    <value>പകർപ്പ് എണ്ണം</value>
   </data>
   <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
-    <value />
+    <value>പേസ്റ്റ് കൗണ്ട്</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
-    <value />
+    <value>ഉറവിട ഉപകരണത്തിന്റെ പേര്</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
-    <value />
+    <value>ഉറവിട ഉപകരണ തരം</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
-    <value />
+    <value>അവസാന ഔട്ട്പുട്ട്</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
-    <value />
+    <value>വർഗ്ഗീകരിക്കുക</value>
   </data>
   <data name="MpActionType_Analyze" xml:space="preserve">
-    <value />
+    <value>വിശകലനം ചെയ്യുക</value>
   </data>
   <data name="MpActionType_Conditional" xml:space="preserve">
-    <value />
+    <value>നിബന്ധനകൾ</value>
   </data>
   <data name="MpActionType_Trigger" xml:space="preserve">
-    <value />
+    <value>ട്രിഗർ</value>
   </data>
   <data name="MpActionType_Repeater" xml:space="preserve">
-    <value />
+    <value>Repeater</value>
   </data>
   <data name="MpActionType_FileWriter" xml:space="preserve">
-    <value />
+    <value>ഫയല് രചയിതാവ്</value>
   </data>
   <data name="MpActionType_SetClipboard" xml:space="preserve">
-    <value />
+    <value>Clipboard സജ്ജമാക്കുക</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
-    <value />
+    <value>കാലതാമസം</value>
   </data>
   <data name="MpActionType_Alert" xml:space="preserve">
-    <value />
+    <value>ജാഗ്രത</value>
   </data>
   <data name="MpActionType_ApplicationCommand" xml:space="preserve">
-    <value />
+    <value>ആപ്ലിക്കേഷൻ കമാൻഡ്</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTriggerType_ClipAdded" xml:space="preserve">
-    <value />
+    <value>Clip Added</value>
   </data>
   <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
-    <value />
+    <value>ഫയൽ സിസ്റ്റം മാറി</value>
   </data>
   <data name="MpTriggerType_ClipTagged" xml:space="preserve">
-    <value />
+    <value>Clip Tagged</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
-    <value />
+    <value>കുറുക്കുവഴി</value>
   </data>
   <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
-    <value />
+    <value>മങ്കി കോപ്പി കുറുക്കുവഴി</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
-    <value />
+    <value>ആന്തരികം</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
-    <value />
+    <value>Default</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
-    <value />
+    <value>ഇഷ്ടാനുസൃത</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
-    <value />
+    <value>ഓപറേറ്റിങ്ങ് സിസ്റ്റം</value>
   </data>
   <data name="MpPluginDependencyType_app" xml:space="preserve">
-    <value />
+    <value>ആപ്പ്</value>
   </data>
   <data name="MpPluginDependencyType_lib" xml:space="preserve">
-    <value />
+    <value>lib</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
-    <value />
+    <value>വാചകം</value>
   </data>
   <data name="MpClipboardFormatType_Html" xml:space="preserve">
-    <value />
+    <value>HTML</value>
   </data>
   <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
-    <value />
+    <value>Rtf</value>
   </data>
   <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
-    <value />
+    <value>Bitmap</value>
   </data>
   <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
-    <value />
+    <value>ഫയല് ഡ്രോപ്പ്</value>
   </data>
   <data name="MpClipboardFormatType_Csv" xml:space="preserve">
-    <value />
+    <value>Csv</value>
   </data>
   <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
-    <value />
+    <value>ആന്തരിക ഉള്ളടക്കം</value>
   </data>
   <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
-    <value />
+    <value>യൂണിക്കോഡ് ടെക്സ്റ്റ്</value>
   </data>
   <data name="MpClipboardFormatType_OemText" xml:space="preserve">
-    <value />
+    <value>Oem Text</value>
   </data>
   <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
-    <value />
+    <value>Xaml</value>
   </data>
   <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
-    <value />
+    <value>Xaml പാക്കേജ്</value>
   </data>
   <data name="MpClipboardFormatType_Custom" xml:space="preserve">
-    <value />
+    <value>ഇഷ്ടാനുസൃത</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
-    <value />
+    <value>ലോഗിൻ</value>
   </data>
   <data name="MpSettingsFrameType_Status" xml:space="preserve">
-    <value />
+    <value>സ്റ്റാറ്റസ്</value>
   </data>
   <data name="MpSettingsFrameType_Register" xml:space="preserve">
-    <value />
+    <value>രജിസ്റ്റർ ചെയ്യുക</value>
   </data>
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
-    <value />
+    <value>പ്രമേയം</value>
   </data>
   <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
-    <value />
+    <value>Default Fonts</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
-    <value />
+    <value>ശബ്ദം</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
-    <value />
+    <value>ജാലകം</value>
   </data>
   <data name="MpSettingsFrameType_Hints" xml:space="preserve">
-    <value />
+    <value>സൂചനകൾ</value>
   </data>
   <data name="MpSettingsFrameType_International" xml:space="preserve">
-    <value />
+    <value>ഇന്റർനാഷണൽ</value>
   </data>
   <data name="MpSettingsFrameType_Limits" xml:space="preserve">
-    <value />
+    <value>പരിധികൾ</value>
   </data>
   <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
-    <value />
+    <value>ട്രാക്കിംഗ്</value>
   </data>
   <data name="MpSettingsFrameType_Startup" xml:space="preserve">
-    <value />
+    <value>സ്റ്റാർട്ടപ്പ്</value>
   </data>
   <data name="MpSettingsFrameType_Search" xml:space="preserve">
-    <value />
+    <value>തിരയുക</value>
   </data>
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
-    <value />
+    <value>ഉള്ളടക്കം</value>
   </data>
   <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
-    <value />
+    <value>ടോപ്പ് സ്ക്രീൻ എഡ്ജ് ആംഗ്യങ്ങൾ</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
-    <value />
+    <value>കുറുക്കുവഴികൾ</value>
   </data>
   <data name="MpSettingsFrameType_System" xml:space="preserve">
-    <value />
+    <value>സിസ്റ്റം</value>
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
-    <value />
+    <value>Password</value>
   </data>
   <data name="MpSettingsFrameType_Logs" xml:space="preserve">
-    <value />
+    <value>ലോഗുകൾ</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
-    <value />
+    <value>ബ്രൗസ് ചെയ്യുക</value>
   </data>
   <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
-    <value />
+    <value>ഇൻസ്റ്റാൾ ചെയ്തു</value>
   </data>
   <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
-    <value />
+    <value>അപ്‌ഡേറ്റുകൾ</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
-    <value />
+    <value>റൂട്ട്</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
-    <value />
+    <value>ആപ്പ്</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
-    <value />
+    <value>ഉപകരണം</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
-    <value />
+    <value>മെറ്റാ</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
-    <value />
+    <value>സ്ഥിതിവിവരക്കണക്കുകൾ</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
-    <value />
+    <value>URL</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
-    <value />
+    <value>ഉം</value>
   </data>
   <data name="MpNextJoinOptionType_Or" xml:space="preserve">
-    <value />
+    <value>അല്ലെങ്കിൽ</value>
   </data>
   <data name="MpNextJoinOptionType_Not" xml:space="preserve">
-    <value />
+    <value>അല്ല</value>
   </data>
   <data name="MpRootOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpRootOptionType_Clip" xml:space="preserve">
-    <value />
+    <value>ക്ലിപ്പ്</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
-    <value />
+    <value>ശേഖരം</value>
   </data>
   <data name="MpRootOptionType_Sources" xml:space="preserve">
-    <value />
+    <value>ഉറവിടങ്ങൾ</value>
   </data>
   <data name="MpRootOptionType_History" xml:space="preserve">
-    <value />
+    <value>ചരിത്രം</value>
   </data>
   <data name="MpTextOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpTextOptionType_Matches" xml:space="preserve">
-    <value />
+    <value>മത്സരങ്ങൾ</value>
   </data>
   <data name="MpTextOptionType_Contains" xml:space="preserve">
-    <value />
+    <value>അടങ്ങിയിരിക്കുന്നു</value>
   </data>
   <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>ആരംഭിക്കുന്നത്</value>
   </data>
   <data name="MpTextOptionType_EndsWith" xml:space="preserve">
-    <value />
+    <value>അവസാനിക്കുന്നു</value>
   </data>
   <data name="MpTextOptionType_RegEx" xml:space="preserve">
-    <value />
+    <value>Reg Ex</value>
   </data>
   <data name="MpNumberOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpNumberOptionType_Equals" xml:space="preserve">
-    <value />
+    <value>തുല്യർ</value>
   </data>
   <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
-    <value />
+    <value>ഇതിനേക്കാള് വലുത്</value>
   </data>
   <data name="MpNumberOptionType_LessThan" xml:space="preserve">
-    <value />
+    <value>അതിലും കുറവ്</value>
   </data>
   <data name="MpNumberOptionType_IsNot" xml:space="preserve">
-    <value />
+    <value>അല്ല</value>
   </data>
   <data name="MpColorOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpColorOptionType_Hex" xml:space="preserve">
-    <value />
+    <value>ഹെക്സ്</value>
   </data>
   <data name="MpColorOptionType_ARGB" xml:space="preserve">
-    <value />
+    <value>A R G B</value>
   </data>
   <data name="MpDimensionOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpDimensionOptionType_Width" xml:space="preserve">
-    <value />
+    <value>വീതി</value>
   </data>
   <data name="MpDimensionOptionType_Height" xml:space="preserve">
-    <value />
+    <value>ഉയരം</value>
   </data>
   <data name="MpImageOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpImageOptionType_Dimensions" xml:space="preserve">
-    <value />
+    <value>മാനങ്ങൾ</value>
   </data>
   <data name="MpImageOptionType_Color" xml:space="preserve">
-    <value />
+    <value>നിറം</value>
   </data>
   <data name="MpFileOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpFileOptionType_Audio" xml:space="preserve">
-    <value />
+    <value>ഓഡിയോ</value>
   </data>
   <data name="MpFileOptionType_Compressed" xml:space="preserve">
-    <value />
+    <value>കംപ്രസ്ഡ്</value>
   </data>
   <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
-    <value />
+    <value>ഡിസ്കും മീഡിയയും</value>
   </data>
   <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
-    <value />
+    <value>ഡാറ്റയും ഡാറ്റാബേസും</value>
   </data>
   <data name="MpFileOptionType_Document" xml:space="preserve">
-    <value />
+    <value>രേഖ</value>
   </data>
   <data name="MpFileOptionType_Email" xml:space="preserve">
-    <value />
+    <value>ഇ-മെയില്</value>
   </data>
   <data name="MpFileOptionType_Executable" xml:space="preserve">
-    <value />
+    <value>എക്സിക്യൂട്ടബിൾ</value>
   </data>
   <data name="MpFileOptionType_Font" xml:space="preserve">
-    <value />
+    <value>ഫോണ്ട്</value>
   </data>
   <data name="MpFileOptionType_Image" xml:space="preserve">
-    <value />
+    <value>ചിത്രം</value>
   </data>
   <data name="MpFileOptionType_Internet" xml:space="preserve">
-    <value />
+    <value>ഇന്റർനെറ്റ്</value>
   </data>
   <data name="MpFileOptionType_Presentation" xml:space="preserve">
-    <value />
+    <value>അവതരണം</value>
   </data>
   <data name="MpFileOptionType_Programming" xml:space="preserve">
-    <value />
+    <value>പ്രോഗ്രാമിംഗ്</value>
   </data>
   <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
-    <value />
+    <value>Spreadsheet</value>
   </data>
   <data name="MpFileOptionType_System" xml:space="preserve">
-    <value />
+    <value>സിസ്റ്റം</value>
   </data>
   <data name="MpFileOptionType_Video" xml:space="preserve">
-    <value />
+    <value>വീഡിയോ</value>
   </data>
   <data name="MpFileOptionType_UserDefined" xml:space="preserve">
-    <value />
+    <value>ഉപയോക്താവ് നിർവചിക്കപ്പെട്ടിരിക്കുന്നു</value>
   </data>
   <data name="MpFileOptionType_Custom" xml:space="preserve">
-    <value />
+    <value>ഇഷ്ടാനുസൃത</value>
   </data>
   <data name="MpFileContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpFileContentOptionType_Path" xml:space="preserve">
-    <value />
+    <value>പാത</value>
   </data>
   <data name="MpFileContentOptionType_Name" xml:space="preserve">
-    <value />
+    <value>നാമം</value>
   </data>
   <data name="MpFileContentOptionType_Kind" xml:space="preserve">
-    <value />
+    <value>ദയവായി</value>
   </data>
   <data name="MpContentTypeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpContentTypeOptionType_Text" xml:space="preserve">
-    <value />
+    <value>വാചകം</value>
   </data>
   <data name="MpContentTypeOptionType_Image" xml:space="preserve">
-    <value />
+    <value>ചിത്രം</value>
   </data>
   <data name="MpContentTypeOptionType_Files" xml:space="preserve">
-    <value />
+    <value>ഫയലുകള്</value>
   </data>
   <data name="MpAppOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
-    <value />
+    <value>ആപ്ലിക്കേഷന്റെ പേര്</value>
   </data>
   <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
-    <value />
+    <value>പ്രോസസ്സ് പാത</value>
   </data>
   <data name="MpWebsiteOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpWebsiteOptionType_Url" xml:space="preserve">
-    <value />
+    <value>URL</value>
   </data>
   <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
-    <value />
+    <value>ഡൊമെയ്ൻ</value>
   </data>
   <data name="MpWebsiteOptionType_Title" xml:space="preserve">
-    <value />
+    <value>ശീർഷകം</value>
   </data>
   <data name="MpSourcesOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpSourcesOptionType_Device" xml:space="preserve">
-    <value />
+    <value>ഉപകരണം</value>
   </data>
   <data name="MpSourcesOptionType_App" xml:space="preserve">
-    <value />
+    <value>ആപ്പ്</value>
   </data>
   <data name="MpSourcesOptionType_Website" xml:space="preserve">
-    <value />
+    <value>വെബ്സൈറ്റ്</value>
   </data>
   <data name="MpTransactionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpTransactionType_Created" xml:space="preserve">
-    <value />
+    <value>സൃഷ്ടിച്ചു</value>
   </data>
   <data name="MpTransactionType_Dropped" xml:space="preserve">
-    <value />
+    <value>ഉപേക്ഷിച്ചു</value>
   </data>
   <data name="MpTransactionType_Dragged" xml:space="preserve">
-    <value />
+    <value>വലിച്ചിഴച്ചു</value>
   </data>
   <data name="MpTransactionType_Pasted" xml:space="preserve">
-    <value />
+    <value>ഒട്ടിച്ചു</value>
   </data>
   <data name="MpTransactionType_Copied" xml:space="preserve">
-    <value />
+    <value>കോപ്പിയടിച്ചത്</value>
   </data>
   <data name="MpTransactionType_Cut" xml:space="preserve">
-    <value />
+    <value>മുറിക്കുക</value>
   </data>
   <data name="MpTransactionType_Edited" xml:space="preserve">
-    <value />
+    <value>എഡിറ്റ് ചെയ്തു</value>
   </data>
   <data name="MpTransactionType_Analyzed" xml:space="preserve">
-    <value />
+    <value>വിശകലനം ചെയ്തു</value>
   </data>
   <data name="MpTransactionType_Appended" xml:space="preserve">
-    <value />
+    <value>അനുബന്ധം</value>
   </data>
   <data name="MpTransactionType_Recreated" xml:space="preserve">
-    <value />
+    <value>പുനഃസൃഷ്ടിക്കപ്പെട്ടു</value>
   </data>
   <data name="MpTransactionType_Linked" xml:space="preserve">
-    <value />
+    <value>ലിങ്കുചെയ്തു</value>
   </data>
   <data name="MpTransactionType_Unlinked" xml:space="preserve">
-    <value />
+    <value>അൺലിങ്ക്ഡ്</value>
   </data>
   <data name="MpTransactionType_Error" xml:space="preserve">
-    <value />
+    <value>പിശക്</value>
   </data>
   <data name="MpTransactionType_System" xml:space="preserve">
-    <value />
+    <value>സിസ്റ്റം</value>
   </data>
   <data name="MpDateTimeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
-    <value />
+    <value>അവസാനത്തിനുള്ളിൽ</value>
   </data>
   <data name="MpDateTimeOptionType_Before" xml:space="preserve">
-    <value />
+    <value>മുമ്പ്</value>
   </data>
   <data name="MpDateTimeOptionType_After" xml:space="preserve">
-    <value />
+    <value>അതിനുശേഷം</value>
   </data>
   <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
-    <value />
+    <value>കൃത്യം</value>
   </data>
   <data name="MpDateBeforeUnitType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
-    <value />
+    <value>ഇന്ന്</value>
   </data>
   <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>ഇന്നലെ</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
-    <value />
+    <value>ഈ ആഴ്ച</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
-    <value />
+    <value>ഈ മാസം</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
-    <value />
+    <value>ഈ വര് ഷം</value>
   </data>
   <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>കൃത്യം</value>
   </data>
   <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>സ്റ്റാർട്ടപ്പ്</value>
   </data>
   <data name="MpDateAfterUnitType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>ഇന്നലെ</value>
   </data>
   <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
-    <value />
+    <value>കഴിഞ്ഞയാഴ്ച</value>
   </data>
   <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
-    <value />
+    <value>കഴിഞ്ഞ മാസം</value>
   </data>
   <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
-    <value />
+    <value>കഴിഞ്ഞ വർഷം</value>
   </data>
   <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>കൃത്യം</value>
   </data>
   <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>സ്റ്റാർട്ടപ്പ്</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
-    <value />
+    <value>മണിക്കൂറുകൾ</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
-    <value />
+    <value>ദിവസങ്ങൾ</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
-    <value />
+    <value>ആഴ്ചകള്</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
-    <value />
+    <value>മാസങ്ങൾ</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
-    <value />
+    <value>വര് ഷങ്ങള്</value>
   </data>
   <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>പകർപ്പ് തീയതി സമയം</value>
   </data>
   <data name="MpContentSortType_Source" xml:space="preserve">
-    <value />
+    <value>ഉറവിടം</value>
   </data>
   <data name="MpContentSortType_Title" xml:space="preserve">
-    <value />
+    <value>ശീർഷകം</value>
   </data>
   <data name="MpContentSortType_ItemData" xml:space="preserve">
-    <value />
+    <value>ഇനം ഡാറ്റ</value>
   </data>
   <data name="MpContentSortType_ItemType" xml:space="preserve">
-    <value />
+    <value>ഇനം തരം</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value />
+    <value>ഉപയോഗ സ്കോർ</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
-    <value />
+    <value>ആന്തരികം</value>
   </data>
   <data name="MpRoutingType_Passive" xml:space="preserve">
-    <value />
+    <value>Passive</value>
   </data>
   <data name="MpRoutingType_Pre" xml:space="preserve">
-    <value />
+    <value>പ്രീ</value>
   </data>
   <data name="MpRoutingType_Post" xml:space="preserve">
-    <value />
+    <value>പോസ്റ്റ്</value>
   </data>
   <data name="MpRoutingType_Override" xml:space="preserve">
-    <value />
+    <value>മറികടക്കുക</value>
   </data>
   <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
-    <value />
+    <value>Exclusive Override</value>
   </data>
   <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
-    <value />
+    <value>അടങ്ങിയിരിക്കുന്നു</value>
   </data>
   <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
-    <value />
+    <value>കൃത്യം</value>
   </data>
   <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>ആരംഭിക്കുന്നത്</value>
   </data>
   <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
-    <value />
+    <value>അവസാനിക്കുന്നു</value>
   </data>
   <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
-    <value />
+    <value>Regex</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
-    <value />
+    <value>സൗജന്യം</value>
   </data>
   <data name="MpUserAccountType_Basic" xml:space="preserve">
-    <value />
+    <value>അടിസ്ഥാനം</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
-    <value />
+    <value>പരിധിയില്ലാത്ത</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- ദയവായി തിരഞ്ഞെടുക്കുക -</value>
   </data>
   <data name="MpContentOptionType_Type" xml:space="preserve">
-    <value />
+    <value>തരം</value>
   </data>
   <data name="MpContentOptionType_Text" xml:space="preserve">
-    <value />
+    <value>വാചകം</value>
   </data>
   <data name="MpContentOptionType_Images" xml:space="preserve">
-    <value />
+    <value>ചിത്രങ്ങള്</value>
   </data>
   <data name="MpContentOptionType_Files" xml:space="preserve">
-    <value />
+    <value>ഫയലുകള്</value>
   </data>
   <data name="MpContentOptionType_AnyContent" xml:space="preserve">
-    <value />
+    <value>ഏത് ഉള്ളടക്കവും</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
-    <value />
+    <value>ശീർഷകം</value>
   </data>
   <data name="MpContentOptionType_Annotation" xml:space="preserve">
-    <value />
+    <value>Annotation</value>
   </data>
   <data name="MpContentOptionType_Color" xml:space="preserve">
-    <value />
+    <value>നിറം</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
-    <value />
+    <value>പ്രാഥമികം</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
-    <value />
+    <value>ചുണ്ടെലി</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value />
+    <value>വ്യക്തം</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value />
+    <value>ഡിലീറ്റ് ചെയ്യുക</value>
   </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTagType_Link" xml:space="preserve">
-    <value />
+    <value>ലിങ്ക്</value>
   </data>
   <data name="MpTagType_Query" xml:space="preserve">
-    <value />
+    <value>ചോദ്യം</value>
   </data>
   <data name="MpTagType_Group" xml:space="preserve">
-    <value />
+    <value>ഗ്രൂപ്പ്</value>
   </data>
   <data name="MpReadOnlyTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
-    <value />
+    <value>ടാഗുകൾ</value>
   </data>
   <data name="MpReadOnlyTagType_All" xml:space="preserve">
-    <value />
+    <value>എല്ലാം</value>
   </data>
   <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
-    <value />
+    <value>Favorites</value>
   </data>
   <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
-    <value />
+    <value>ഫിൽട്ടറുകൾ</value>
   </data>
   <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
-    <value />
+    <value>ചവറ്റുകുട്ട</value>
   </data>
   <data name="MpReadOnlyTagType_Today" xml:space="preserve">
-    <value />
+    <value>ഇന്ന്</value>
   </data>
   <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
-    <value />
+    <value>ഫോർമാറ്റുകൾ</value>
   </data>
   <data name="MpReadOnlyTagType_Text" xml:space="preserve">
-    <value />
+    <value>വാചകം</value>
   </data>
   <data name="MpReadOnlyTagType_Images" xml:space="preserve">
-    <value />
+    <value>ചിത്രങ്ങള്</value>
   </data>
   <data name="MpReadOnlyTagType_Files" xml:space="preserve">
-    <value />
+    <value>ഫയലുകള്</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
-    <value />
+    <value>വാചകം</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
-    <value />
+    <value>ചിത്രം</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
-    <value />
+    <value>ഫയല്</value>
   </data>
   <data name="WatcherChangeTypes_Created" xml:space="preserve">
-    <value />
+    <value>സൃഷ്ടിച്ചു</value>
   </data>
   <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
-    <value />
+    <value>നീക്കം ചെയ്തു</value>
   </data>
   <data name="WatcherChangeTypes_Changed" xml:space="preserve">
-    <value />
+    <value>മാറി</value>
   </data>
   <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
-    <value />
+    <value>പുനർനാമകരണം ചെയ്തു</value>
   </data>
   <data name="WatcherChangeTypes_All" xml:space="preserve">
-    <value />
+    <value>എല്ലാം</value>
   </data>
 </root>

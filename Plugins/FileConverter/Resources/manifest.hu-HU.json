@@ -1,0 +1,82 @@
+{
+  "title": "Fájlkonverter",
+  "description": "Lehetővé teszi a fájlok lefordítását képekre vagy szöveges tartalomtípusokra",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "Alap, szöveg, kép, fájl, konverter, fájl szövegre, fájlra a képre",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Fájl a konvertáláshoz",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Kimeneti típus",
+        "description": "Csak .png vagy .txt most",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Szöveg",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "Kép",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Konvertáljon szöveggé",
+        "iconUri": "text.png",
+        "description": "Megkísérli a megadott fájlt sima szövegre konvertálni",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Képre konvertálás",
+        "description": "A megadott fájl konvertálásának kísérletei memóriájú képgé",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Podstawowy moduł obsługi schowka",
+  "description": "Obsługuje domyślne formaty schowka",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Rdzeń, schowek, przeciągnięcie i upuszczenie, tekst, RTF, Rich Tekst, HTML, CSV, Image, PNG, JPG, JPEG, Link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

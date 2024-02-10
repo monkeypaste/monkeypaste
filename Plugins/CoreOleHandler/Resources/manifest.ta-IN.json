@@ -1,0 +1,12 @@
+{
+  "title": "கோர் கிளிப்போர்டு ஹேண்ட்லர்",
+  "description": "இயல்புநிலை கிளிப்போர்டு வடிவங்களைக் கையாளுகிறது",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "கோர், கிளிப்போர்டு, இழுத்தல் மற்றும் டிராப், உரை, ஆர்.டி.எஃப், பணக்கார உரை, HTML, CSV, படம், PNG, JPG, JPEG, இணைப்பு",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Core Clipboard Handler",
+  "description": "Hushughulikia fomati za clipboard chaguo -msingi",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Core, clipboard, Drag na Drop, maandishi, RTF, maandishi tajiri, HTML, CSV, Picha, PNG, JPG, JPEG, Kiunga",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

@@ -1780,9 +1780,22 @@
 </PropertyGroup>
   
   <!-- LOCALIZATION RESOURCES-->
-<ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Localization\Listings" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IncludeCultures)' == 'True'">
+    <Content Include="Resources\Localization\UiStrings\UiStrings.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\Localization\UiStrings\UiStrings.*.resx" />
     <None Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx" />
     <None Include="Resources\Localization\Listings" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IncludeCultures)' == 'False'">
+    <None Include="Resources\Localization\UiStrings\UiStrings.*.resx" />
+    <None Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx" />
   </ItemGroup>
 </Project>

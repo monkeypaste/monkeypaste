@@ -1,0 +1,12 @@
+{
+  "title": "„Core“ iškarpinės tvarkyklė",
+  "description": "Numatytųjų mainų srities formatų tvarko",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "„Core“, mainų sritis, vilkimas ir lašas, tekstas, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, nuoroda, nuoroda",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

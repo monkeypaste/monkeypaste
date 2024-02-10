@@ -1,0 +1,11 @@
+{
+  "title": "ملحق النص الأساسي",
+  "description": "يوفر دعم الارتباط التشعبي الأساسي للمحتوى القائم على النص",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "الأساسية ، التعليقات ، النص ، الارتباط ، اللون ، التحليل ، العنوان ، الهاتف ، البريد الإلكتروني ، العملة ، التمويل"
+}

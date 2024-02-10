@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Abonēšana nav ierobežota, tikai uzglabāšanas ietilpība, un to var mainīt jebkurā laikā.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Atjaunojiet savu esošo kontu ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Saturs un miskaste ir
+ierobežots līdz {0} un {1}
+attiecīgi klipi.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Ļauj līdz {2} satura klipiem un neierobežotu atkritumu glabāšanu.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Neierobežots un neierobežots saturs un atkritumu glabāšana.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Atjaunot</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Brīvs</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standarta</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Neierobežots</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Abonēšana</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Jūsu privātums ir svarīgs, un starpliktuves dati var būt ļoti personiski. Uzglabāšana vienmēr ir šifrēta, bet jūs varat iestatīt paroli, kas būs nepieciešama, ja ierīce tiek nozagta vai kāds cits lieto jūsu ierīci.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Parole</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Kad tas ir iespējots, velkot no jebkuras lietojumprogrammas uz ekrāna augšdaļu, tas atklās pērtiķus, lai viegli nomestu saturu pērtiķiem.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Iespējojot “slēdzeni” galvenā loga augšējā kreisajā pusē, joprojām ļaus nomesties uz Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Vairāk logu preferences ir pieejamas izvēlnē “Iestatījumi -&gt; Preferences -&gt; logs”.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Velciet banānus šeit!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Velciet - uz - atveriet</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Tastatūras saīsnes var pārskatīt vai mainīt jebkurā laikā no izvēlnes “Iestatījumi -&gt; saīsnes”.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Visi globālie saīsnes tiks atspējoti, lai jūs tos varētu iestatīt vēlāk.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypaste starpliktuves saīsnes būs pieejamas visās lietojumprogrammās.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Iekšējs</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Nepildīt</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Žestu profils</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hei! Izveidosim dažas lietas, lai uzlabotu jūsu vispārējo pieredzi ar pērtiķiem.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Sagaidīt</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Lai visvairāk izmantotu Monkeypaste, automātiski ielādēšana, kad piesakāties, ir laba ideja. Bet tas ir pilnībā atkarīgs no jums.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Saglabājiet to gadījuma rakstura.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Dot iespēju</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Ielādēt pieteikšanos?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Kad tas ir iespējots, ritināšanas žests ekrāna augšdaļā atklās pērtiķus.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Pa kreisi - noklikšķinot uz uzdevumjoslas ikonas, joprojām tiks atvērta pērtiķeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Vairāk logu preferences ir pieejamas izvēlnē “Iestatījumi -&gt; Preferences -&gt; logs”.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Viegli labi?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Ritiniet šeit!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Ritiniet - līdz - atveriet</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "Center"&gt; pērtiķiem ir &lt;span color = "Red&gt; pilnībā integrēts &lt;/span&gt; ar vilkšanu un - Drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Nometiet to šeit!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P align = "Center"&gt; šādā veidā, pērtiķiem var piekļūt &lt;br&gt; &lt;span color = "sarkans"&gt; bez klikšķa &lt;/span&gt; vai pat &lt;span color = "sarkans"&gt; vatē aci &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Velciet mani!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Izmēģini!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Izmēģini!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Rezultāti nav pieejami.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Apstiprināt</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>atjaunot</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Meklēt...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Iestatījumi</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Atkarības:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Uzstādīt</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties noņemt “{0}” un visus tā iestatījumus un saīsnes?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Atinstalēt</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' nav rezultātu.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Nav atlases.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Neviens</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Kredīti:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Apraksts:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Ziedot:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licence:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projekta URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Publicēts:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Lasīt mani:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Ziņot par ļaunprātīgu izmantošanu:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tagi:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Atjaunināt</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versija:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Atveriet logu</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Atlaist</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>atjaunot</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Ietaupīt</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Blakus izdzēst!
+
+Jauniniet, lai izvairītos.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Blakus miskastei!
+
+Jauniniet, lai izvairītos.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Faili</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Attēls</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Teksts</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kopēts {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} faili | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} līnijas</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} kopijas | {1} pastas</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Kustēties</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Pievienot</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopija</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Griezt</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Pastā</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Kopēt</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Nestatīts filtrs</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Lūdzu izvēlieties -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formāti</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lasītāji</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Rakstnieki</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Apstrādātāji</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Dzēst</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Dublikāts</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Rediģēt vārdu</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Atiestatīt</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tagi</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Darbība</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Globālā maršrutēšana</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Saīsne</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Žestiem jābūt unikāliem, un tiem var būt tikai viena ievades atslēga.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Iekšējie &lt;/b&gt; Visi saīsnes ir ierobežoti ar pieteikuma ietvariem. Šī nav īsti paredzēta iespēja, bet var ļaut pielāgot to, kādus saīsnes jūs plānojat padarīt globālu &lt;i&gt; kādreiz &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; noklusējuma &lt;/b&gt; ir iespējoti visi globālie saīsnes. &lt;b&gt; parādīt/paslēpt galveno logu &lt;/b&gt; saīsne tiek izmantota &lt;span color = "sarkans"&gt; ignorēt &lt;/span&gt; taustiņu &lt;b&gt; caps bloķēt &lt;/b&gt;. Jūs varat mainīt šo maršrutēšanu vai žestu jebkurā laikā. Bet &lt;span color = "zaļš"&gt; Izmēģiniet &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;Head&gt; &lt;/Head&gt;
+&lt;Body&gt;
+&lt;h1&gt; Globālie saīsnes režīmi &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; pasīvi &lt;/b&gt; saīsnes pērtiķiem klausīsies jebkurā pieteikumā. &lt;br&gt;
+*Šī ir tikai &lt;i&gt; &lt;/i&gt; opcija Linux.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; saīsne izpildīs &lt;b&gt; &lt;i&gt; pirms &lt;/i&gt; &lt;/b&gt; to apstrādā ar aktīvo pieteikumu. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; saīsne izpildīs &lt;b&gt; &lt;i&gt; pēc &lt;/i&gt; &lt;/b&gt; to apstrādā ar aktīvo pieteikumu. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; ignorēt &lt;/b&gt; Kad Monkeypaste dzird pārmērīga saīsnes ievades atslēgu (nenodarbinātības taustiņu), tā &lt;i&gt; paslēpt &lt;/i&gt;, ka taustiņš nospiež no lietojumprogrammas - līmeņa ieejas. &lt;br&gt;
+Šī opcija garantēs, ka saīsne tiek aktivizēta bez konfliktiem ar aktīvo pieteikumu.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Ekskluzīvs ignorēšana &lt;/b&gt; Šis ir īpašs ignorēšanas režīma veids, kas paredzēts CAPS bloķēšanas atslēgai. Tas piešķir tikai &lt;b&gt; vienu &lt;/b&gt; atslēgu (nenodarbinātāju) tā piešķiršanai. &lt;br&gt;
+Parastā ignorēšanas režīmā Caps Lock var kļūt &lt;i&gt; iestrēdzis &lt;/i&gt;, kad to nospiež kombinācijā ar citām taustiņiem. &lt;br&gt;
+Tātad neatkarīgi no tā, kādas citas atslēgas ir uz leju, ja tiek nospiesta &lt;b&gt; hotkey &lt;/b&gt; saīsne, tas tiks ignorēts un neļaus tam kļūt &lt;i&gt; iestrēdzis &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Atspējot</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Ielādējiet, kad šis lietotāja konts ir pieteicies, nevis citiem lietotājiem.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Izmantojot pieejamos kontaktus (nepieciešams, lai atnestu spraudnis) Šis lauks tiks izmantots visiem šīs veidnes gadījumiem visā šajā dokumentā vai jebkurā gadījumā, uz kuru tas tiks norādīts vēlāk. &lt;/p&gt; &lt;p&gt; Tātad, piemēram, atlasiet e -pasta adresi, ja atlasiet e -pasta adresi Šeit jūsu izvēlētā kontakta e -pasta lauks tiks izmantots visiem šajā dokumentā. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = īss gads &lt;br/&gt; yigyy = garais gads &lt;br/&gt; m = mēnesis (1-12) &lt;br/&gt; mm = mēnesis (01-12) &lt;br/&gt; mmm = mēneša saīsinājums (janvāris, februāris .. . Dec) &lt;br/&gt; mmmm = ilgs mēnesis (janvāris, februāris ... decembris) &lt;br/&gt; d = diena (1 - 31) &lt;br/&gt; dd = diena (01 - 31) &lt;br/&gt; ddd = Nedēļas diena vārdos (pirmdiena, otrdiena ... svētdiena) &lt;br/&gt; e = īsa nedēļas diena vārdos (pirmdiena, otrā ... saule) &lt;br/&gt; D - Ordinālā diena (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; H = stunda am/pm (0-12) &lt;br/&gt; hh = stunda am/pm (00-12) &lt;br/ &gt; H = stunda dienā (0-23) &lt;br/&gt; HH = stunda dienā (00-23) &lt;br/&gt; mm = minūte &lt;br/&gt; ss = otrais &lt;br/&gt; sss = milisekundes &lt;br/&gt; a = am/pm marķieris &lt;br/&gt; p = a.m./p.m. marķieris</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Pašreizējais datums un/vai laiks tiks aizstāts ar datuma laika veidnēm, kad tās tiks ielīmētas.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Visos šīs veidnes gadījumos tiks izmantots sniegtais teksts. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Visos šīs veidnes gadījumos tiks izmantots sniegtais teksts. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Pabeigt pievienošanos</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Iespējot bloku</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Iespējot inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Pārslēgt rokasgrāmatu</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Pārslēgt rokasgrāmatu</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pauze Pievienot</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Pārslēgt iepriekš</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Pārslēgt iepriekš</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Atsākt pievienoties</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Pievienot ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Pastā</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Piespraust</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Neslēpt</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Paslēpt visus '{0}' paziņojumus</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Atlaist</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Pēdējā aktīvā lietotne nav zināma. Pārslēdzieties uz paredzēto lietotni uz pērtiķu pastu.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Ielīmēt to: &lt;em&gt; &lt;i class = "Paste-Tooltip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Samazināt</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Lūdzu uzgaidiet...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Slēdzene</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Konts</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Palīdzēt</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopēt ielīmēt</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Izvēles</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Atjaunot noklusējumus</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtrs ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Saīsnes</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Pievienot lietotni</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Pievienot vietni</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bloķēt?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nosaukt</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Lietotnes</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Bloķēt domēnu?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Bloķēt URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Sfēra</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Avota URL atpazīšana ir atkarīga no tā, kā starpliktuplatiņam draudzīga resursdatora lietojumprogramma ir tāda, ka noraidījumu nevar garantēt</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Vietnes</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Dažās pērtiķīšu funkcijās tiek izmantota tastatūras automatizācija, lai simulētu “kopēt” notikumus citās lietojumprogrammās.
+
+Pievienojiet un/vai atlasiet lietotni ar unikālo kopēšanas saīsni (piemēram, konsoli vai, piemēram, apvalku), lai nodrošinātu, ka šīs funkcijas darbojas pareizi.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopēt saīsni</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Neviens</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Norādītajai lietojumprogrammai tiks izmantoti tikai atlasītie iestatījumi. Kad netiek noteikts, tiks izmantoti noklusējuma iepriekšējie iestatījumi, kas atrodami starpliktuvē sānjoslā &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Daudzas Monkeypaste funkcijas izmanto tastatūras automatizāciju, lai mijiedarbotos ar citām lietojumprogrammām.
+
+Dažām lietojumprogrammām (piemēram, dažām konsolēm vai, piemēram, čaumalām) var būt īsceļu, kas nav noklusējuma pastas.
+
+Lai nodrošinātu pareizu savietojamību, reģistrējiet šos pieteikuma saīsnes šeit.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Ielīmēt saīsni</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lasītāji</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Visa starpliktuves uzraudzība no noraidītajām lietojumprogrammām tiks ignorēta &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Rakstnieki</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Rediģēt ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formāti</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Noraidīts</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Saīsnes</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Vai jūs arī vēlētos noņemt visus {0} klipus no '{1}' '</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Noņemt klipus?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Pieteikums</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Pārlūkot lietotni ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Atlasiet lietojumprogrammas ceļu</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties noņemt pielāgotus saīsnes {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties noņemt pielāgotus formātus {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Šai lietotnei nav piešķirtu starpliktuves formātu. No tā netiks nolasīti dati, izgriezti/kopējiet vai mēģinot vilkt - un - nometiet pērtiķus</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Šai lietotnei nav piešķirtu starpliktuves formātu. Automatizēta pasta vai vilkšana - un - nokritums no pērtiķiem neietekmēs (tā tukšie dati).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties atiestatīt visus saīsnes? Visi pielāgotie saīsnes tiks noņemti.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties mainīt saīsnes maršrutēšanas profilu uz '{0}' '</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Viss</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favorīts</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtri</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formāti</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tagi</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Šodien</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Atkritumi</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Apmēram</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Viegli labi?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Veiciet dubultklikšķi, lai neļautu</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Paraža</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globāls</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Šī kombinācija ir pretrunā ar “{0}”, kas tiks notīrīta, ja tā tiks saglabāta.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Jānodrošina saīsne.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Tas ir globāls saīsne. Tas nozīmē, ka tas mēģinās izpildīt, kad tas tiks veikts. Mēģiniet padarīt to pietiekami unikālu (vai mainiet “maršrutēšanas veidu”), lai tas nebūtu pretrunā ar citām lietojumprogrammām.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globāls</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Saīsinājumā jābūt vienam un tikai vienam modifikatora atslēgai.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Nospiediet jebkuru atslēgu, lai ierakstītu ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Piešķirt saīsni</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Uzzināt vairāk...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Uzlabot</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Atcelt</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Salabot</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignorēt</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Nē</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Labi</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Atkārtot</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Izslēgt</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Iesniegt</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Jā</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Ikgadējs</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Ikmēneša</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Izmēģiniet bez maksas!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Norēķinu cikls</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E -pasts</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Pieslēgties</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Pārbaudiet savu savienojumu
+Un mēģiniet vēlreiz.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Izlogoties</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Nākamais maksājums</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Parole</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Reģistrēt</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E -pasts nav derīgs</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Paroles nesakrīt.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Parolei jābūt vismaz {0} rakstzīmēm.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Atcerēties?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Pārbaudiet savu e -pastu, lai apstiprinātu kontu</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Atiestatīt paroli</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Nekad</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Bezmaksas {0} dienas izmēģinājums</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Bija problēma uzstāties
+jūsu pirkums.
+
+Pārbaudot savienojumu un
+Iestatījumi var palīdzēt.
+
+Vai vēlaties mēģināt vēlreiz?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Jūsu konts ir veiksmīgi
+modernizēts uz:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Iegādājieties veiksmīgu!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Kļūda</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Savienojums neizdevās.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Atkārtot</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Mainīts konts</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Jūsu abonements tagad ir {0}/{1} ar {2} saturu un {3} miskastes krātuvi.
+Bet neuztraucieties, pēc pazemināšanas dati netiek zaudēti. Tiks novērtēti tikai jauni klipi.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Apsveicam! Jūsu abonements tagad ir {0}/{1} ar {2} saturu un {3} miskastes krātuvi.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Miskaste vai kaut ko atlaist
+no '{0}', lai pievienotu vairāk.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' krātuve ir {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Atjaunot</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} bloķēts</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Sasniegts saturs un atkritumu tvertne!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' krātuve ir {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Sasūtās satura ietilpība!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Jūs varat slēpt šos brīdinājumus pēc
+Noklikšķinot uz “paslēpt visu” no
+Opciju izvēlne iepriekš.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Maksimālā atkritumu glabāšana ir {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Sasniedza miskastes ietilpība!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} nav derīgs</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} jābūt vismaz {1} rakstzīmēm</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} var būt tikai {1} raksturs</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Ielīmēt uz: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Maksājums par jūsu {0}
+abonements bija paredzēts {1}
+un nav saņemts.
+
+Lūdzu, atjauniniet savu
+Informācija par maksājumu.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Maksājums par jūsu {0}
+abonements bija paredzēts {1}
+un nav saņemts.
+
+Lūdzu, izveidojiet savienojumu ar
+Internets ierīcē
+ar jūsu abonementu un
+restartēt, lai turpinātu
+izmantojot savu {0} plānu.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Maksājums par jūsu {0}
+abonements bija paredzēts {1}
+un nav saņemts.
+
+Lūdzu, atveriet vai restartējiet
+Monkeypaste uz ierīces
+Ar jūsu abonementu
+Turpiniet izmantot savu
+{0} plāns.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Beidzas konta derīguma termiņš</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Piezīme</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft veikals nepieļauj līmeni
+Abonēšanas papildinājumu izmaiņas.
+
+Jums ir jāatceļ savi
+{0}/{1} Plānojiet sevi
+vai arī par jums tiks iekasēta maksa par abiem.
+
+Vai jūs vēlētos iet to darīt tagad?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Jūsu parole ir atiestatīta.
+
+Lūdzu, pārbaudiet savu e -pastu un
+Sekojiet saitei, lai mainītu
+Tava parole.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Pieslēgties</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autors (-i)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Pirms turpināt, ir nepieciešams pieņemt šādus licences noteikumus.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Šai (-ām) paketei ir nepieciešams, lai pirms instalēšanas jūs pieņemat viņu licences nosacījumus.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Es atsakos</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Noklikšķinot uz "Es pieņemu", jūs piekrītat licences noteikumiem šai lietojumprogrammai. Ja jūs nepiekrītat terminiem, noklikšķiniet uz "Es atsakos".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Noklikšķinot uz "Es pieņemu", jūs piekrītat iepriekš uzskaitītajam spraudņa (-u) licences nosacījumiem. Ja jūs nepiekrītat terminiem, noklikšķiniet uz "Es atsakos".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Skata licence</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Licences pieņemšana</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Es piekrītu</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktīvs</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Bezsaistē</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Nereģistrēts</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Darīts</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Paroles neatbilst</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Parole</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Jūsu abonements ir
+Tagad iestatiet uz {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Atrasts konts</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Pieslēgšanās neizdevās</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Reģistrācija neizdevās</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Reģistrācija veiksmīga!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Atiestatīšanas kļūda</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Abonēšana</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Kas jauns</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Nekad</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Neierobežots</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>ietilpība</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>atlikušais</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>Kopā</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Jūsu maksājums ir beidzies.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Ekskluzīvi ignorēšanas saīsnes var saturēt tikai vienu atslēgu, un šī atslēga nevar būt modifikatora atslēga.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Beidzies</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Iekraušana</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Nespējīgs</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Piezīme! Šī parole nav obligāta un tikai papildu drošībai. Jūsu dati jau ir šifrēti un nekad nav koplietoti. Šī parole vienkārši neļauj kādam, kura nevis jūs ielādējat pērtiķus, ja viņš kaut kā piekļūst jūsu darbvirsmai (nozagts, jūs atstājat istabu utt.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Atcerieties nomest iestatījumus:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Pārlūkot spraudņus</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analizēt</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Ātra rīcība</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Pārslēgt rediģēšanu</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Pārslēgt piespraustus</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anotācijas</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Vienkāršs teksts</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Atveriet logu</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Noklikšķiniet uz + Ctrl, lai sekotu ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Noklikšķiniet uz + Alt, lai sekotu ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Piespraudiet vai nometiet jebkuru multivides šeit!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Noskaidrot</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Sliekšņi virs 0 nodrošinās izplūdušo krāsu saskaņošanu, izmantojot Eiklīda attālumu RGBA krāsās.
+
+Piemēram, ja sarkanais (#FF0000) ir meklēšanas termiņš un melns (#000000) ir pikselis attēla klipā, tad krāsu attālums būs 255. Melns līdz balts attālums ir maksimālais iespējamais 510, ieskaitot alfa kanālu</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Visi šie ir patiesi</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Starplikatūra</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kolekcijas</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Peles režīmi</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Izraisītāji</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Apturēt</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Turpināt</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Jauns sprūda</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Pievienot iepriekš iestatītu</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Pērtiķu pilienu vednis</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Priekšnosacījumi</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizators</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Kute</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Veloceliņa orientācija</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Pārslēgt režģa izkārtojumu</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Case jutīgs</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Slieksnis</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Vesels vārds</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Neviens nav iestatīts</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Maršrutēšana</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Darbība</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Lakta</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Darīts</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Nākamais</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Iepriekšējs</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Izlaist</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Esošais konts?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Nākamais maksājums</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Reģistrācija ļauj veikt apmaksāto abonementu visās jūsu ierīcēs (pēc pieejamības). Mēs neiespiestos jūsu e -pastu, ko mēs apsolām 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Abonēšana</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Lietotājvārds</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Nepieciešams reģistrēties?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Avoti</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Nepāra, nekas nav pieejams. Kaut kam jābūt nepareizam 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Noņemt</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Nepieciešams restartēt</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Attīstīts</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Kļūdu izvilkšanas spraudnis no '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Kļūdas instalēšanas spraudņa instalēšana: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Kļūdas instalēšana spraudņa instalēšana '{0}' korumpēta vai nepareiza direktorija struktūra. Manifestam vajadzētu pastāvēt pie '{1}', bet netika atrasts.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Kļūdu parsēšanas spraudņa manifests '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Nav spraudņa, kas ielādēts ar GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} kļūda</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Kļūdu iestudēšanas spraudnis Temp Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Kļūda dublēšana '{0}' uz '{1}'. Sīkāka informācija: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Teksts Ierakstīts tiks automātiski piemērots meklēšanai, kad netiks koncentrēts neviens tekstlodziņš.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Automātiskā meklēšanas ievade</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Paroles maiņa neizdevās</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Mainīt</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Mainīt paroli</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Noskaidrot</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Skaidra parole</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Apmierināts</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Satura fonta lielums</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kad tas ir patiess, klipā ievietotais ārējais saturs izmantos klipu formatējumu, nevis to, kas ir pieejams no avota.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Ielīmēt, nomest vai pievienot galamērķa formatēšanu</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties aizmirst paroli?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Aizmirst</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Aizmirstiet paroli</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profils</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Slēpt jaudas ūdenszīmes</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Kad ir pievienots jauns starpliktuves saturs, tas netiks izsekots kā jauns klips</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignorēt pielikumus</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kad starpliktuvē sakrīt ar esošo klipu, šis klips tiks izmantots, tā vietā, lai izveidotu jaunu</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorēt jaunus dublikātus</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Starpliktuves izmaiņas no lietotnes netiks izsekotas</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignorēt iekšējo starpliktuves izsekošanu</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Telpas, cilnes un jaunas līnijas tiks ignorētas no izsekošanas</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignorēt tikai balto telpu</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Ielādēt pieteikšanos</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Atdzīvināt logu</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Necaurredzamība</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Parādīt uzvedību</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Galvenais logs tiks atklāts, veicot ritināšanas žestu uz monitora augšējās malas</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Rādīt augšējā ekrāna ritinā</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Paziņojuma apjoms</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Šis iestatījums izsekos sistēmu - plašu tastatūras pastas skaitu lietošanas statistikā. Šī informācija ir privāta un nav kopīga, bet arī nav garantēta. Precīziem rezultātiem var būt nepieciešams nodrošināt lietojumprogrammai specifisku tastatūras ielīmēšanas komandu “Iestatījumi -&gt; Kopēt un ielīmēt -&gt; saīsnes”.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Ielīmēšanas vēsture</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Pārāk daudz piespraustu klipu (piemēram, pārlūka cilnes) var patērēt ievērojamu atmiņu. noņemšana notiek pēc pirmā - pirmās - ārā</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Tapu ietilpība</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Tas attiecas uz visām automātiskajām pieejamajām ieejām, zemākas vērtības uzlabos veiktspēju</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Nesenais teksta ierobežojums</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties
+atjaunot noklusējuma preferences?
+
+To nevar atsaukt!
+
+*Lietojumprogramma tiks restartēta, kad būs pabeigta.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties atiestatīt visus paziņojumus?
+
+*To nevar atsaukt!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Pērtiķu pastas, ielīmējot ārēju programmu, iestata starpliktuvi (ignorēšanu). Tas &lt;b&gt; mēģinās &lt;/b&gt; atjaunot starpliktuves stāvokli pēc ārējas pastas.
+
+Kopējo atjaunošanu nevar garantēt, un tas var samazināt veiktspēju vai pat avāriju pērtiķiem atkarībā no datu avota.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Atiestatīt starpliktuvi pēc pērtiķa ielīmēšanas</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nevarēja izdzēst spraudņa kešatmiņu no ceļa: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Visi spraudņi tiks atiestatīti uz sākotnējo noklusējuma stāvokli</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Spraudņa kešatmiņa</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties atiestatīt visus spraudņus uz noklusējumiem?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties atiestatīt paroli?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Visi lietojumprogrammu saīsnes tiks atiestatītas uz noklusējuma atslēgu žestiem.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Atiestatīt saīsnes</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Visi iepriekš noteikti ignorēti paziņojumi.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Atjaunošanas paziņojumi</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Iespējošana var būt diezgan lēna) Atspējojošs formatēts samazinās atmiņas patēriņu, bet kavēs dažas uzlabotas funkcijas, piemēram: papildināt, veidnes, anotācijas un atrast/aizstāt</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Bagāts saturs</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Uzstādīt paroli</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Rādīt padomus</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Parādīt uzdevumjoslā</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Parādīt uzdevumu pārslēgšanā</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Rādīt nosaukumus</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Kad tas ir iespējots, velkot no jebkuras lietojumprogrammas uz ekrāna augšdaļu, tas atklās pērtiķus, lai viegli nomestu saturu pērtiķiem.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Parādīt vilkšanu uz ekrāna augšdaļu</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Skaņas tēma</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Pareizrakstības pārbaude</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Startēšanas laikā starpliktuves avots nebūs zināms, un atkarībā no jūsu drošības iestatījumiem saturs var būt no izslēgtas vietnes vai lietojumprogrammas.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Pievienojiet starta starpliktuvi</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Klausieties starpliktuvi startupā</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Atlasīt</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>UZMANĪBU! Citas paletes krāsas tiek izvēlētas, izmantojot matemātiku, nevis acis! Tāpēc ņemiet vērā, ka dažām krāsu un stila kombinācijām, iespējams, nav pareiza lasāmības kontrasta.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Tematiskā krāsa</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Tēmas stils</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automātiska atkritumu tīrīšana notiks startēšanas laikā ar iestatītu intervālu.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Atkritumu tīrīšana</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Saskarne</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Augstas atsaukšanas robežas var ietekmēt veiktspēju</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Atsaukt ierobežojumu</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Nav ierobežojumu</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Izmanto uzlabotajā failā, meklējot bez iepriekš iestatītiem failu veidiem</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Lietotājs - definēti meklēšanas paplašinājumi</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Atrodi un nomaini ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Ielīmēt šeit</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Dalīties ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Skats</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Pārvaldīt ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Pārdēvēt</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Rezultāts: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tips: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Pastāvīgi izdzēst</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Pārlūkot uz '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Pārveidot</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Ieguldījums</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Izvade</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Avoti</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Atjaunot</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Izvēlieties attēlu ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Krāsa</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Pārvaldīt '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Atvērt</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Lūdzu uzgaidiet...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Fona krāsa</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Iztīrīt visu</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Starpliktuves formāti</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Dzēst visus</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Rediģēt informāciju</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nosaukt</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Atrast</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Fonta krāsa</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formāta krāsa</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Atlasē</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Ievietojiet attēlu</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Ievietot saiti</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Ievietot video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Atbilstība</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Jauna veidne</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Nākamā veidne</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Ievadiet pastas tekstu ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Iepriekšējā veidne</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Regulāra izteiksme</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Nomainīt visu</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Aizvietot</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Vesels vārds</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Aptīt</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Bloķēt</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Sfēra</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Rādīt mapi</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Atbloķēt</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Apmēram</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Pievienot bloku</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Pievienot inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopija</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Režīmi</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Lūdzu, uzgaidiet Monkeypaste ielādē ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Atmest</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - noklikšķiniet uz Paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupa</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtrēt</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Pastāvīgi izdzēst visus</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Atjaunot visu</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Darbība</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL jau pastāv: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL jābūt derīgā formātā.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Ievadiet pilnu URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Pievienot URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Ievadiet vērtības</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopējiet pieteikšanās tekstu vai failus.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Pievienojiet {0} {1} aktivizētu režīmu</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Starpliktuves izmaiņas tagad tiks pievienotas</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Pēc aktivizēta režīma pievienošanas</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Starpliktuves izmaiņas tagad tiks pabeigtas</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Pirms aktivizēta režīma pievienošana</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Bloķēt</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Parastā starpliktuves uzvedība ir atjaunota</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Pievienojiet deaktivizētu</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Pievieno klipa augšdaļai vai Botomam</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Apjoma pievienošanas režīms aktivizēts</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Rindā</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Rokasgrāmata</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Pievienojiet pašreizējai atlasei.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Manuāls papildinājuma režīms aktivizēts</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Starpliktuves uzkrāšanās apstājās</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Pievienot apturēšanu</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Atsākta starpliktuves uzkrāšanās</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Pievienot atsākšanu</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties pabeigt pievienošanos?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Rediģēšana saderības režīmā noņems visu bagātīgo formatējumu. Vai esat pārliecināts, ka vēlaties to modificēt?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Datu degradācijas brīdinājums</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktīvs</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Iespējots</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Ārpus</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Uz</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Apturēt</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Rezultāts</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Statuss</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Nezināma kļūda.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Mēģinājumi palikt</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Ievadi paroli</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Apstiprināt</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Saskare</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Datums Laiks</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties izdzēst visus “{0}” lietojumus?
+
+To nevar atsaukt!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamisks</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statisks</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} ir tukšs ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Vairāk drīzumā!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Pieteikšanās slodze atspējota neizdevās</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Pieteikšanās slodze Atspējot panākumus</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Pieteikšanās slodze iespējot neizdevušies</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Pieteikšanās slodze Iespējot panākumus</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Slēpties</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Pērtiķu pastas tagad ir piekrauta.
+Starpliktuves klausīšanās ir: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Noslogots</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Izrādīt</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Automātiska kopēšanas izvēles režīms: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Mainīts režīms</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Ar peles labo pogu noklikšķiniet uz Ielīmēšanas režīma: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Spraudnis atjaunināts</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Ielīmēt '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Palaist '{0}' analizatoru</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Palaist '{0}' sprūda</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Atlasiet '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties izdzēst '{0}' un visas saistītās darbības?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Sprūda</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Vai vēlaties noņemt visas apakšgrupu “{0}” darbības? (Pretējā gadījumā tie tiks vecāki par “{1} ')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Noņemt opcijas</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Vai tiešām vēlaties goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Konts</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analizatori</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Lietojumprogrammu darbības</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Starplikatūra</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Apmierināts</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Pārveidotāji</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultūra</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Dati</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Vadība</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Vilkt un nomest</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Nolaižamais vednis</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikonas</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Mežonīgs</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Saskarne</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Pastas operācijas</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Izvēles</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Meklēt</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Saīsnes</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Šķirot</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Skaņas</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Sistēmas paplāte</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kolekcijas</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tēma</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Izraisītāji</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Vietņu operācijas</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Valoda</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Iestata starpliktuvi uz ievades klipu.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Modrs</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Mirkšķēt</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Skanēt</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Vispārīgas nozīmes skaņas un/vai sistēmas paplātes ziņojumu brīdinājumi. Brīdinājuma darbība neietekmē viņu ieguldījumu.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Ziņot</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Pērtiķis</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Priekšskatījums</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Parādīt?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Laika grauzdiņa ziņojums tiek parādīts dažu sekunžu laikā. Kad vērtība ir 0 ziņojums, jābūt aizvērtam manuāli.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Izrādes laiks (-i)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Homerāts</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Skaņa?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Skaņas tips</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ligzda</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Tilpums</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizators</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Apstrādā savu ievades klipu, izmantojot piešķirto analizatora iepriekš iestatīto iestatījumu.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Ievades saturs ir saistīts ar atlasīto kolekciju</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Saitē tā ievades klipu ar piešķirto tagu kolekciju.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Marķēt</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Lieta jutīga?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Tas var būt statisks teksts, lai salīdzinātu ar ievadi un/vai iekļautu atlasītās rekvizītus (izmantojot filtra pogu), tiks aizstāts, novērtējot nosacījumu.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Stāvokļa dati</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Izvēles JSONPATH vaicājums, kas tiks piemērots izvēlētajam “ievades īpašumam” pirms nosacījuma novērtēšanas.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Ieejas filtrs</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Klipa īpašība, ko izmanto šim nosacītajam.
+
+Īpašums “Pēdējā izvade” pašlaik tiek atbalstīts tikai tad, ja šis nosacījums ir analizatora darbības bērns, un sniegtie dati mainīsies atkarībā no vecāku analizatora izejas.
+
+Traucējummeklēšanai pievienojiet “trauksmes darbību” šī nosacītā vecākam un iestatiet trauksmes parametru “Message”, lai tas atbilstu šim ievades rekvizītam. Tas ļaus pārskatīt faktiskos datus, kas tiek izmantoti šim nosacītajam.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Ievades īpašība</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Veica teksta salīdzinājumu ievades klipā vai iepriekšējā darbības izvadē. Ja salīdzinājums neizdodas (tā nav sakritība), bērna darbības netiks veiktas. Tātad tas darbojas kā loģiski vārti.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Visas patiesās vai nepatiesās operācijas, kurās bērnu darbības izpildīs tikai tad, ja rezultāts būs patiess.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Nosacījums</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Viss</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Iedarbināts, kad sistēmai tiek pievienots izvēlētā tipa klips (starpliktuvē, velciet - un - nomešanu, analizētu vai dublētu).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Izpildiet šo sprūdu tikai tad, ja ievades klips ir jauns, nevis dublikāts. Tas ir neatkarīgi no jebkāda izvēles iestatījuma, vai jaunais saturs tiek ignorēts vai nē.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorēt dublikātu</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Tikai šāda veida klipi izraisīs šo darbību.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Saitē tā ievades klipu ar piešķirto tagu kolekciju.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Iedarbināts, kad klips ir saistīts ar norādīto tagu kolekciju.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kolekcija</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Laiks milisekundēs gaidīja, pirms bērni izpilda</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Aizkavēt</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimentāls), kas galvenokārt tiek izmantots kopā ar atkārtotāju darbību, lai aptaujātu attālos avotus vai palīdzētu ar ilgstošu darbību.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kad atstāj tukšu, izvades fails kā faila nosaukums izmantos ievades klipa nosaukumu.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Pielāgots nosaukums</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Direktorijā, kurā fails tiks uzrakstīts.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Direktors</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Saglabā ievadi atlasītajā mapē.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Aktivizēts, kad mainās atlasītās mapes saturs. Izeja būs jauna vai esoša (kad ir iespējota ignorēšanas dublikātu izvēle) faila vai mapes faila klips, kas ir mainījies kopā ar izmaiņu veidu kā pēdējo izvadi.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Notikumi</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Mape</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorēt dublikātu</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Vērtība 0 atkārtos vecāku darbību uz nenoteiktu laiku</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Atkārtot skaitīšanu</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Laiks milisekundēs gaidīt, kad vecāku darbība tiks pabeigta</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Atkārtot kavēšanos</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimentāls), ko izmanto darbības cilpu vai atkārtotu uzdevumu radīšanai. Atkārtojot, tas atkal izpildīs visus bērnus ar sākotnējo ieguldījumu. Izmantojot intervālu bez atkārtota skaita, sprūda būs jāatspējo un jāatstāj atkārtoti, lai apturētu atkārtošanu. Var būt noderīga aptauju vai tīmekļa nokasīšanas automatizācijai.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Izraisa globālu saīsni, kuru jūs definējat. Ja MonkeyPaste ir aktīvs, tas mēģinās izmantot izvēlēto klipu (ja tāds ir) kā ievadi. Pretējā gadījumā tas mēģinās izmantot starpliktuvi kā ievadi.
+
+Piezīme: saīsnes sprūda joprojām tiks izpildīta, ja nav ievades, lai to saglabātu elastīgu (lai tas varētu būt makro sprūda utt.), Jo tā nav dati, kas balstīti uz notikumu.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Saīsnes sprūda</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Aktivizēts, kad ierakstītais saīsne tiek nospiests jebkurā laikā ar pašreizējo starpliktuvi</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Šī darbība prasa, lai lietotne restartētu. Vai vēlaties to darīt tagad?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Bija problēma. Jums ir manuāli jārestartē lietojumprogramma.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analizēt ar anotatoru</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Anotēt sprūdu</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Iebūvēti elementi tiek nolasīti - tikai. Dublēt, lai mainītu.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonīms</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Paraža</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Vakar</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} pirms dienām</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Pirms 1 stundas</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} pirms stundām</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Tikko</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Pirms minūtes</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} pirms minūtēm</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Pagājušajā mēnesī</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} pirms mēnešiem</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Pagājušajā nedēļā</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} pirms nedēļām</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} pirms gadiem</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anotācijas</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Lietojumprogrammas nosaukums</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Pielietojuma ceļš</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Case jutīgs</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Apmierināts</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Faila tips</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Attēla tips</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Regulāra izteiksme</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Teksta tips</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Tituls</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL nosaukums</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Vesels vārds</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Tāpat kā ritinot pa augšējo ekrāna malu, lai atvērtu, tas aizslēdz galveno logu, kad tas atveras. Ļaujot ātrākām vairākām mērķtiecīgām darbplūsmām.
+
+* Stūri ir visi jūsu ekrāni, nevis uz vienu monitoru.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Rādīt logu un bloķēšanu</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Bezmaksas!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Dodiet mums 5 zvaigznes!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Dzēst visus</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Izdzēsiet visu saturu</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties izdzēst
+Visi jūsu klipi?!
+
+*Šo operāciju nevar atsaukt!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Es esmu Indy Dev, lūdzu, parādiet kādu atbalstu!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Piemēram, pērtiķiem?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} pieņem tikai tipa (-u) ievadi: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Automātiska kopēšanas režīms - imitē “Kopēt” notikumu katru reizi, kad tiek atbrīvota peles poga.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Ar peles labo pogu noklikšķiniet uz Paste režīma - imitē “ielīmēšanas” notikumu katru reizi, kad tiek atbrīvota peles poga</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Iepriekš iestatīts</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Rādīt spraudņa mapi</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Ziņot</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Skats</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Rādīt rīku padomus</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analizatori anotē viņu ievadi vai izveido jaunus klipus kā izvadi. Analzeru bērniem jāizlemj, kurš no tiem ir nepieciešams kā viņu ieguldījums. Parasti šī ir pēdējā izvade.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Ieejas veids</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Sprūda dizainers '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Izvēlieties {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nav atrasts...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} sprūda</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Pārbaudot stāvokļa patieso vai nepatieso iznākumu, tiks pārvērtēts. Tātad, piemēram, “satur” nosacījumu kļūs “nesatur”.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Nav</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Lūdzu uzgaidiet...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Krāsu izvēlētāja</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Izvēlieties atbilstības krāsu</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Tāpat kā saīsnes sprūda, bet, kad tiek nospiesta atslēgas kombinācija, aktīvajā lietojumprogrammā tiks modelēts “kopijas” notikums, lai tas joprojām darbotos kā kopija, bet pēc tam darbību ķēde, kas pievienota pērtiķa kopēšanas sprūdai, tiks izpildīta fonā, izmantojot imitēti kopijas starpliktuves dati.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Uzlabots filtrs</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Paslēpt filtrus</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Atjaunot filtrus</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Izveidot filtru</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Pēc izvēles) Ja atstāj tukšu, starpliktuvē tiks iestatīts, izmantojot šīs darbības ievadi. Viss, kas šeit piegādāts, tiks uzskatīts tikai par vienkāršu tekstu.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Starpliktuves saturs</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kad tas ir patiess, pēc tam, kad šī darbība ir iestatīta starpliktuvē, netiks pievienots klips.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignorēt</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Nav atlasīts analizators darbībai '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Darbības analizators '{0}' nav atrasts</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Vecāks '{0}' filtrē tikai '{1}' Type Saturs un Analyzer '{2}' nekad neizpildīs, jo tas neatbalsta '{3}' ievades tips</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Nav atlasīta taga klasifikatoram '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tagu klasifikatoram '{0}' nav atrasts</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Salīdzināt vērtību var būt tikai burti, skaitļi vai telpas</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Nav atlasīta taga, lai to iesprauž tagged sprūda '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tags klipam Tagged sprūda '{0}' nav atrasts</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Nav norādīta pulksteņa mape “{0}”</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Pulksteņa mape '{0}' nav atrasts sprūda '{1}' '</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Failu rakstnieka ceļš darbībai '{0}' nav iestatīts</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Failu rakstītāja ceļš '{0}' '{1}' nav atrasts.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Uzdevumjosla</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Uzziniet par spraudņiem</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Atjaunojiet šo analīzes konfigurāciju</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Mainīt žurnālu</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Lūdzu, izveidojiet savienojumu ar internetu un vēlāk mēģiniet vēlreiz.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - palīdzība</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} ir jaunākā versija</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Jūs visi esat augšā - līdz - datumam!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Meklēt atjauninājumus...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Pieejama jauna versija!
+
+Noklikšķiniet šeit, lai atjauninātu uz '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Noklikšķiniet zemāk, lai atjauninātu uz '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Pieejams atjauninājums!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Atjaunināt tagad</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' satur kopīgas vērtības. Ko jūs vēlētos atiestatīt?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Noskaidrot</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Notīriet nesenos meklējumus</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Atiestatīt visu</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Atiestatīt kopīgotu</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Atiestatīt neatrisinātu</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Izsauc piešķirto lietojumprogrammas darbību. Visas lietojumprogrammas komanda ir bezvalstniecībā, un to ievades klips tiek ignorēts.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kad nepārbaudīts un komanda nevar izšaut, izpildes ķēde apstāsies. Daudzām komandām būs nepieciešams kāds īpašs lietojumprogrammas stāvoklis, lai izpildītu.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Vienmēr turpināt?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Komanda izpildīt.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Vadība</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Nav atlasīta komanda, kas atlasīta lietojumprogrammas komandai '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Komanda lietojumprogrammas komandai '{0}' nav atrasta</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Atlasīts</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Restartēt</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Bija problēma, atjauninot “{0}”. Lai aizpildītu atjauninājumu, jums atkal būs jārestartē un jāinstalē '{0}' (neuztraucieties, ka visi iestatījumi tiks atjaunoti).
+
+Jūs varat restartēt tūlīt un aizpildīt atjauninājumu, instalējot, ignorējiet to un atjauniniet to vēlāk vai atcelt atjauninājumu kopā un turpināt izmantot versiju “{1}”?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Atjaunināšanas kļūda</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nevarēja lejupielādēt atjauninājumu</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Atjauninājums neizdevās</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Lai pabeigtu atjauninājumu, jums būs jārestartē. Vai vēlaties restartēt tagad vai vēlāk?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Atjaunināt gatavību</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Vēlāk</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Restartēt tagad</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Līdz</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} tika veiksmīgi atjaunināts uz {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Ir nepieciešami serdes spraudņi, un tos nevar noņemt.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instalācijas</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Atjauninājums tiek gaidīts. Restartēt, lai pabeigtu.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Līdz</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Tiek gaidīta atinstalācija. Lūdzu, restartējiet, ja vēlaties atkārtoti instalēt.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Lai pabeigtu atinstalēšanu, jums būs jārestartē. Vai vēlaties restartēt tagad vai vēlāk?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Pabeidziet atinstalēt?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Nepublicēts</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Automātiski ģenerēts noklusējuma iestatījums '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Nav atlasīts klips</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analizēt atlasīto klipu</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Piešķiriet saīsni, lai palaistos “{0}” uz atlasītā klipa</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Globālā pastas</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Piešķiriet globālo pastas saīsni '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Aizmirsi paroli?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Pieslēgties</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Izlogoties</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Privātuma politika</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Nepieciešama restartēšana) Ja iespējota diagnostikas informācija tiks reģistrēta, lai iesniegtu failu. Tas var palēnināt veiktspēju un var saturēt personisko informāciju.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Pieteikšanās, lai failu</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Atvērt</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Atvērt žurnālu mapi</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Pārlūkot spraudņus</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lasīt</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Uzrakstīt</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Nosūtiet atsauksmes vai kļūdu ziņojumu</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Tas tikai slēpj galveno logu. Visi pārējie dialoglodziņa logi vienmēr tiek parādīti uzdevumjoslā.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Meklēt '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Pievienot filtru</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Rediģēt pievienoties tipam</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Noņemiet šo filtru</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Atklāta palīdzība šajā ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Mainīt</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Nekad</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Uzstādīt</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Bez nosaukuma</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Reģistrēt</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Neredzēta avota atsauce</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Ir nepieciešams '{0}'</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Ir kļūdas)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Ierobežots</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Uzglabāšana</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Atkritumi</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Neierobežots</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Šī lietotne šobrīd atbilst noklusējuma starpliktuves lasītāju iestatījumiem un formātiem.
+
+Iespējot vai atspējojot noklusējuma lasītāja iestatījumus (no starpliktuves sānjoslas), šo konfigurāciju neietekmēs. Tikai neiekļautas lietotnes seko noklusējuma iestatīšanai.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Šī lietotne šobrīd atbilst noklusējuma starpliktuvju rakstnieku sākotnējiem iestatījumiem un formātiem.
+
+Iespējot vai atspējojot noklusējuma rakstnieku iestatījumus (no starpliktuves sānjoslas), šo konfigurāciju neietekmēs. Tikai neiekļautas lietotnes seko noklusējuma iestatīšanai.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Lai pievienotu, jums ir jāatstāj starpliktuves klausītāja (sistēmas paplāte -&gt; atsākt).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Pievienot nepieejamu</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Nav iestatījumu</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Es runāju tikai angliski, un pērtipaste ir tulkota šajā valodā.
+
+Visas versijas tiek piegādātas ar angļu komplektu, tāpēc, ja jūs runājat angliski, varat mainīt valodu uz to jebkurā laikā pēc šīs iestatīšanas (iestatījumi -&gt; Preferences -&gt; International).
+
+Ja vēlaties palīdzēt uzlabot tulkojumu, mēs labprāt dzirdētu no jums!
+
+ATBILDĪBA@monkepaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Tulkošanas bažas</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Lai izmantotu šo funkciju, jums jāatjaunina pērtiķiem.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Saīsne</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Starpliktuves klausītājs ir atspējots</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Starpliktuves klausītājs iespējots</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Vecāku darbība '{0}' neatbalsta ievades rekvizīta tipu 'Last Output'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Uzziniet vairāk par plāniem</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Pieteikums</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Sprūda</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Saspraude</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizators</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Marķēt</value>
+  </data>
+</root>

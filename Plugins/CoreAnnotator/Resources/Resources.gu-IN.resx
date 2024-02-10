@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CurrencyLabel" xml:space="preserve">
+    <value>ચલણ</value>
+  </data>
+  <data name="CurrencyTypesDescription" xml:space="preserve">
+    <value>આ એકમાત્ર ચલણ પ્રતીકો છે જે ot નોટેટ કરવામાં આવશે.</value>
+  </data>
+  <data name="CurrencyTypesLabel" xml:space="preserve">
+    <value>ચલણ પ્રતીકો</value>
+  </data>
+  <data name="CurrencyUrlDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CurrencyUrlLabel" xml:space="preserve">
+    <value>ચલણની કડી</value>
+  </data>
+  <data name="DefAnnHint" xml:space="preserve">
+    <value>બધા ટેક્સ્ટ ot નોટેશંસ સક્ષમ છે</value>
+  </data>
+  <data name="DefAnnLabel" xml:space="preserve">
+    <value>ડિફોલ્ટ નોટેટર</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>ઇમેઇલ</value>
+  </data>
+  <data name="HexLabel" xml:space="preserve">
+    <value>હેક્સ રંગ</value>
+  </data>
+  <data name="OptionsDescription" xml:space="preserve">
+    <value>સક્ષમ વિકલ્પો ક્લિપ ટેક્સ્ટમાં મળશે અને જ્યારે જરૂરી હોય ત્યારે હાયપરલિંક્સમાં રૂપાંતરિત થશે.</value>
+  </data>
+  <data name="OptionsLabel" xml:space="preserve">
+    <value>વિકલ્પ</value>
+  </data>
+  <data name="PhoneLabel" xml:space="preserve">
+    <value>ફોન નંબર</value>
+  </data>
+  <data name="PhoneUrlDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PhoneUrlLabel" xml:space="preserve">
+    <value>ફોન નંબર લિંક</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ટેક્સ્ટ આધારિત સામગ્રી માટે મૂળભૂત હાયપરલિંક સપોર્ટ પ્રદાન કરે છે</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>કોર, ot નોટેટ, ટેક્સ્ટ, લિંક, રંગ, પાર્સિંગ, સરનામું, ફોન, ઇમેઇલ, ચલણ, નાણાં</value>
+  </data>
+  <data name="PluginTitle" xml:space="preserve">
+    <value>મૂળ લખાણ -ot નોટેટર</value>
+  </data>
+  <data name="UrlLabel" xml:space="preserve">
+    <value>Urલટ</value>
+  </data>
+</root>

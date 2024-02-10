@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>ምዕፃው</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>{0} ፎርማት ምስ ተፈተሸ ካብቲ ቅንጥብጣብ ሰሌዳ ወይ ስሓብ-ኣንድ-ድሮፕ ዳታ ኣይክንበብን እዩ።</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>{0} ፎርማት ኣብ ዝፍተሽሉ እዋን ናብቲ ቅንጥብጣብ ሰሌዳ ወይ ስሓብ-ኣንድ-ድሮፕ ዳታ ኣይክጽሓፍን እዩ።</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>ኣንብብ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>ፀሓፍ</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV .</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ፋይላት</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF ድሮ ኣብ ዘይህልወሉ እዋን፡ HTML ናብ RTF ክቕየር እዩ። እዚ ኣብ መንጎ መርበብ ሓበሬታን/ወይ ናይ ቃላት መስርሕ መተግበሪታትን ጠቓሚ ክኸውን ይኽእል። (RTF ፎርማት ክኽፈት ይሓትትን ንዝድገፉ መድረኻት ጥራይ ዝኸውንን)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>ናብ RTF ምቕያር</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>ኤችቲኤምኤል .</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>እዘን ማህደራት ካብ ቅንጥብጣብ ወይ ድራግ-ኣንድ-ድሮፕ ዳታ ኣይክንበብን እዩ።</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>ዕሽሽ ዝተባህሉ ማህደራት</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>ዕሽሽ ኢልካ ናይ ፋይል መቐጸልታታት .</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>እዞም ዓይነታት ፋይላት ካብቲ ክሊፕቦርድ ወይ ድራግ-ኣንድ-ድሮፕ ዳታ ኣይክንበብን እዩ።</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>እዞም ዓይነታት ፋይላት ኣብቲ ክሊፕቦርድ ወይ ድራግን ድርባይን ዳታ ኣይክጽሓፍን እዩ።</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>ምስ ተፈተሸ፡ ካብ max dimension ዝዓብዩ ምስልታት፡ ናይ ኣስፔክት ሬሽዮ ኣብ ዝዕቀቡሉ እዋን፡ ስኬል ክግበረሎም እዩ። እዚ ነቲ ኣብቲ ቅንጥብጣብ ሰሌዳ ዘሎ ምስሊ ኣይጸልዎን እዩ።</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>ስኬል ልዕሊ ዓቐን</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>ንቢትማፕ ክትለጥፍ ወይ ከተውርዶ ከለኻ እዚ ነባሪ ዓይነት ፋይል ክኸውን እዩ</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>ነባሪ ዓይነት ሰደድ</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>ሓደ ሓደ ግዜ ምሉእ ብምሉእ ግሉጽ ምስልታት ኣብቲ ቅንጥብጣብ ሰሌዳ ክቐርቡ እዮም፡ ንሱ ድማ ምድንጋር።</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>ባዶ ምስልታት ሸለል ኢልካ</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>ዓበይቲ ምስልታት (ልዕሊ ውሑዳት MBs) ድራግ-ኣንድ-ድሮፕን ሓፈሻዊ ብቕዓትን ብመጠኑ ድኹም ክገብሩ ይኽእሉ ሕማቕ ኣጋጣሚ ኮይኑ። ነዚ ዋጋ ትሑት ክትከውን ፈትን።</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>ዝለዓለ ቁመት</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>ዝለዓለ ስፍሓት</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>ንናይ ኣፈጻጽማ ስክፍታታት፡ ዝለዓለ መጠን ገንዘብ ፊደላት የድሊ</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>ማክስ ገጸ ባህርያት</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (ማይም)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>ጽሑፍ (ማይም)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>ቅርጺ '{0}' ባዶ ወይ ግሉጽ ዳታ ዝነበሮ ኮይኑ ተዓጽዩ።</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ባዶ ዳታ ተዓጊቱ</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' ዝብል ቅርጺ 'ተሸፊኑ' ዝብል ባንዴራ ተሰሊፉ ኣሎ።</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>ፎርማት ሸለል ኢልካ</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} ገደብ {1} ኮይኑ ዳታ ድማ {2} እዩ ነይሩ።</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>max size ተረኺቡ</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>ቀንዲ ቅንጥብጣብ ሰሌዳ ኣንባቢ</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>ቀንዲ ቅንጥብጣብ ሰሌዳ ጸሓፊ</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ነባሪ ቅርጺ ቅንጥብጣብ ሰሌዳታት ይሕዝ</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>ዋና ቅንጥብጣብ ሰሌዳ መትሓዚ</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>ኮር፣ ቅንጥብጣብ ሰሌዳ፣ ድራግን ድሮፕን፣ ጽሑፍ፣ RTF፣ ሃብታም ጽሑፍ፣ ኤችቲኤምኤል፣ CSV፣ ምስሊ፣ PNG፣ JPG፣ JPEG፣ ሊንክ</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>ምስሊ (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML ድሮ ኣብ ዘይህልወሉ እዋን፡ RTF ናብ HTML ክቕየር እዩ። እዚ ኣብ መንጎ መርበብ ሓበሬታን/ወይ ናይ ቃላት መስርሕ መተግበሪታትን ጠቓሚ ክኸውን ይኽእል። (HTML Format Requires to be enabled and is only for supported platforms)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>ናብ ኤችቲኤምኤል ምቕያር</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF .</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>ኣርእስቲ ዘይብሉ</value>
+  </data>
+</root>

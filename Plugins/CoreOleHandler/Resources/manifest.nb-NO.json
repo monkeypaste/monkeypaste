@@ -1,0 +1,12 @@
+{
+  "title": "Kjerneutklippstavlebehandler",
+  "description": "Håndterer standard utklippstavleformater",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Kjerne, utklippstavle, dra og slipp, tekst, RTF, rik tekst, HTML, CSV, Image, PNG, JPG, JPEG, Link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

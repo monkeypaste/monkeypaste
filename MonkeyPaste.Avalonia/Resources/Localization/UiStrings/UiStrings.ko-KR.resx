@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>구독으로 제한되지 않으며 스토리지 용량 만 제한되지 않으며 언제든지 변경할 수 있습니다.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>기존 계정을 복원 ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>내용과 쓰레기입니다
+{0} 및 {1}로 제한
+각각 클립.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>{2} 컨텐츠 클립 및 무제한 쓰레기 스토리지를 허용합니다.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>무제한 및 무제한 컨텐츠 및 쓰레기 스토리지.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>복원하다</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>무료</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>기준</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>제한 없는</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>신청</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>귀하의 개인 정보는 중요하며 클립 보드 데이터는 매우 개인적 일 수 있습니다. 스토리지는 항상 암호화되지만 장치가 도난 당하거나 다른 사람이 장치를 사용하는 경우 필요한 비밀번호를 설정할 수 있습니다.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>비밀번호</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>활성화되면 모든 응용 프로그램에서 화면 상단으로 드래그하면 MonkeyPaste가 표시되어 콘텐츠가 MonkeyPaste에 쉽게 삭제됩니다.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>기본 창의 왼쪽 상단에 '잠금'을 활성화하면 여전히 monkeypaste에 떨어질 수 있습니다.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>'설정 -&gt; 환경 설정 -&gt; 창'메뉴에서 더 많은 창 기본 설정을 사용할 수 있습니다.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>바나나를 여기로 끌어!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>드래그 -로 - 열립니다</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>키보드 바로 가기는 '설정 -&gt; 바로 가기'메뉴에서 언제든지 검토하거나 변경할 수 있습니다.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>모든 글로벌 단축키는 비활성화되므로 나중에 직접 설정할 수 있습니다.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypaste의 클립 보드 바로 가기는 모든 응용 프로그램에서 제공됩니다.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>내부</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>기본</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>제스처 프로파일</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>여기요! Monkeypaste에 대한 전반적인 경험을 향상시키기 위해 몇 가지 사항을 설정합시다.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>환영</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>monkeypaste에서 가장 많이 사용하려면 로그인 할 때 자동으로로드하는 것이 좋습니다. 그러나 그것은 전적으로 당신에게 달려 있습니다.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>캐주얼하게 유지하십시오.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>할 수 있게 하다</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>로그인에로드 하시겠습니까?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>활성화되면 화면 상단의 스크롤 제스처가 원숭이를 드러냅니다.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>왼쪽 - 작업 표시 줄 아이콘을 클릭하면 여전히 원숭이가 열립니다.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>'설정 -&gt; 환경 설정 -&gt; 창'메뉴에서 더 많은 창 기본 설정을 사용할 수 있습니다.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>쉬운?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>여기서 스크롤하십시오!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>스크롤 - to- 열기</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste는 &lt;span color = "red&gt; 완전히 통합 된 &lt;/span&gt; drag- and -drop &lt;/p&gt;입니다.</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>여기로 떨어 뜨리십시오!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt;이 방법으로, monkeypaste에 액세스 할 수 있습니다 &lt;br&gt; &lt;span color = "red"&gt; 클릭없이 &lt;/span&gt; 또는 &lt;span color = "red"&gt; 눈을 타격 &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>나를 끌어!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>시도해보십시오!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>시도해보십시오!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>사용 가능한 결과가 없습니다.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>확인하다</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>새로 고치다</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>찾다...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>종속성 :</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>설치하다</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>'{0}'과 모든 사전 설정과 지름길을 제거 하시겠습니까?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}'에는 결과가 없습니다.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>선택이 없습니다.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>크레딧 :</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>설명:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>기부 :</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>특허:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>프로젝트 URL :</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>게시 :</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>저를 읽으십시오 :</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>남용 신고:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>태그 :</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>업데이트</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>버전:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>창에서 열립니다</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>해고하다</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>새로 고치다</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>구하다</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>삭제 옆!
+
+피하기 위해 업그레이드.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>쓰레기 옆!
+
+피하기 위해 업그레이드.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>영상</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>텍스트</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>복사 {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} 파일 | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} 라인</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} 사본 | {1} 페이스트</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>이동하다</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>추가하다</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>복사</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>자르다</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>반죽</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} 사본</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>구원받지 않은 필터</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- 선택 해주세요 -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>형식</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>독자</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>작가</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>핸들러</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>복제하다</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>이름 편집</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>초기화</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>태그</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>행동</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>글로벌 라우팅</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>지름길</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>제스처는 독특해야하며 하나의 입력 키만 포함 할 수 있습니다.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; 내부 &lt;/b&gt; 모든 바로 가기는 응용 프로그램 내에서 제한됩니다. 이것은 실제로 의도 된 옵션은 아니지만 Global &lt;i&gt; 언젠가로 만들려고하는 바로 가기를 사용자 정의 할 수 있습니다. &lt;/li&gt;.
+&lt;li&gt;
+&lt;b&gt; 기본값 &lt;/b&gt; 모든 글로벌 단축키가 활성화되었습니다. &lt;b&gt; 표시 기본 창 &lt;/b&gt; 바로 가기는 &lt;b&gt; 캡 잠금 &lt;/b&gt; 키에 대한 &lt;span color = "red"&gt; 재정의 &lt;/span&gt; 라우팅을 사용합니다. 언제든지 라우팅이나 제스처를 변경할 수 있습니다. 그러나 &lt;span color = "green"&gt; 시도해보세요 &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;헤드&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;H1&gt; 글로벌 바로 가기 모드 &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Passive &lt;/b&gt; 바로 가기 원숭이가 모든 응용 프로그램에서들을 것입니다. &lt;br&gt;
+*이것은 현재 Linux의 &lt;i&gt; Only &lt;/i&gt; 옵션입니다.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; 바로 가기는 &lt;b&gt; &lt;i&gt; 전에 실행됩니다. &lt;/i&gt; &lt;/b&gt;는 활성 응용 프로그램에 의해 처리됩니다.
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; 바로 가기는 &lt;/i&gt; &lt;/b&gt; 후 &lt;b&gt; &lt;i&gt;을 실행합니다. 활성 응용 프로그램에 의해 처리됩니다. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; 재정의 &lt;/b&gt; MonkeyPaste는 재정의 단축키의 입력 키 (비 수정 키)를들을 때 응용 프로그램에서 그 키를 누른다 - 레벨 입력. &lt;br&gt;
+이 옵션은 바로 가기가 활성 응용 프로그램에 대한 충돌없이 트리거되도록 보장합니다.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; 독점 재정의 &lt;/b&gt; 이것은 캡스 잠금 키를 위해 설계된 특수 유형의 재정의 모드입니다. &lt;b&gt; one &lt;/b&gt; 키 (비 수정 자) 만 할당 할 수 있습니다. &lt;br&gt;
+정상 오버라이드 모드 모드에서 캡 잠금 장치는 다른 키와 함께 눌렀을 때 &lt;/i&gt;에 고정 될 수 있습니다. &lt;br&gt;
+따라서 다른 키가 줄어들 든 &lt;b&gt; hotkey &lt;/b&gt; 바로 가기가 누르면 상정되게하고 &lt;/i&gt;에 붙어있는 것을 방지합니다.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>장애를 입히다</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>이 사용자 계정이 다른 사용자가 아닌 로그인 될 때로드하십시오.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; 사용 가능한 연락처 사용 (Fetcher 플러그인 필요)이 필드는이 템플릿의 모든 인스턴스에 사용됩니다. 여기에서 선택한 연락처의 이메일 필드는이 문서의 모든 인스턴스에 사용됩니다. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = 짧은 해 &lt;br/&gt; yyyy = 긴 연도 &lt;br/&gt; m = Month (1-12) &lt;br/&gt; mm = mond (01-12) &lt;br/&gt; mmm = 월 약어 (1 월, 2 월 .. . Dec) &lt;br/&gt; mmmm = 긴 달 (1 월, 2 월 ... 말의 요일 (월요일, 화요일 ... 일요일) &lt;br/&gt; e = 말의 짧은 요일 (mon, tue ... sun) &lt;br/&gt; d- 서수의 날 (1, 2, 2 일, 3, 21, 22, 23, 31, 4th ...) &lt;br/&gt; h = 오전/pm (0-12) &lt;br/&gt; hh = am/pm (00-12) &lt;br/ &gt; h = 하루의 시간 (0-23) &lt;br/&gt; hh = 하루의 시간 (00-23) &lt;br/&gt; mm = ming &lt;br/&gt; ss = sss = sss = milliseconds &lt;br/&gt; a = am/pm 마커 &lt;br/&gt; p = a.m./p.m. 채점자</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>현재 날짜 및/또는 시간은 붙여 넣을 때 DateTime 템플릿으로 대체됩니다.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;이 템플릿의 모든 발생은 제공된 텍스트를 사용합니다. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;이 템플릿의 모든 발생은 제공된 텍스트를 사용합니다. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>추가 마무리</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>블록 활성화</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>인라인을 활성화합니다</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>토글 매뉴얼</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>토글 매뉴얼</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>잠시 일시 중지하십시오</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>전에 전환하십시오</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>전에 전환하십시오</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>부록을 재개하십시오</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>추가 ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>반죽</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>핀</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>핀</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>모두 '{0}'알림을 숨 깁니다</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>해고하다</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>마지막으로 활성 앱을 알 수 없습니다. 의도 한 앱으로 Monkey Paste로 전환하십시오.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>붙여 넣기 : &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>최소화하십시오</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>기다리세요...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>잠그다</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>계정</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>돕다</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>복사 붙여 넣기</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>선호도</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>기본값으로 복원</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>필터...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>바로 가기</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>앱 추가</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>웹 사이트 추가</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>차단하다?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>앱</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>블록 도메인?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>블록 URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>도메인</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>소스 URL 인식은 클립 보드 친화적 인 방법에 따라 호스트 애플리케이션이 거부 할 수 없습니다.</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>웹 사이트</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>일부 monkeypaste 기능은 키보드 자동화를 사용하여 다른 응용 프로그램에서 '사본'이벤트를 시뮬레이션합니다.
+
+이러한 기능이 올바르게 작동하는지 확인하기 위해 고유 한 사본 바로 가기 (예 : 콘솔 또는 쉘)로 앱을 추가 및/또는 선택하십시오.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>바로 가기를 복사하십시오</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>지정된 응용 프로그램에는 선택된 사전 설정 만 사용됩니다. 지정되지 않으면 &lt;em&gt; 클립 보드 사이드 바에있는 기본 사전 설정이 사용됩니다.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>많은 monkeypaste 기능은 키보드 자동화를 사용하여 다른 응용 프로그램과 상호 작용합니다.
+
+일부 애플리케이션 (예 : 일부 콘솔 또는 쉘과 같은)에는 비 기본 페이스트 단축키가있을 수 있습니다.
+
+적절한 상호 운용성을 보장하려면 해당 응용 프로그램의 바로 가기를 여기에서 기록하십시오.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>붙여 넣기 바로 가기</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>독자</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>거부 된 응용 프로그램의 모든 클립 보드 모니터링은 &lt;b&gt; 무시됩니다 &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>작가</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>편집하다...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>형식</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>거부</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>바로 가기</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>'{1}'에서 {0} 클립을 모두 제거 하시겠습니까?</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>클립을 제거 하시겠습니까?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>애플리케이션</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>앱을 찾아보세요 ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>응용 프로그램 경로를 선택하십시오</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>{0}에 대한 사용자 정의 단축키를 제거 하시겠습니까?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>{0}에 대한 사용자 정의 형식을 제거 하시겠습니까?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>이 앱에는 할당 된 클립 보드 형식이 없습니다. 컷/복사 또는 드래그를 시도한 데이터를 통해 데이터를 읽지 않습니다.</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>이 앱에는 할당 된 클립 보드 형식이 없습니다. 자동화 된 페이스트 또는 드래그 - 및 몽키 테스트에서 떨어지는 것은 영향을 미치지 않습니다 (빈 데이터).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>모든 지름길을 재설정 하시겠습니까? 모든 맞춤형 단축키가 제거됩니다.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>바로 가기 라우팅 프로필을 '{0}'로 변경하고 싶습니까?</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>모두</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>즐겨 찾기</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>필터</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>형식</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>태그</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>오늘</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>쓰레기</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>에 대한</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>쉬운?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>두 번 클릭하여 UNPIN</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>관습</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>글로벌</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>이 조합은 '{0}'과 충돌하여 저장하면 지워집니다.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>바로 가기가 제공되어야합니다.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>이것은 글로벌 바로 가기입니다. 그것은 그것이 수행 될 때마다 실행하려고 시도한다는 것을 의미합니다. 다른 응용 프로그램의 바로 가기와 충돌하지 않도록 충분히 독특하게 만들거나 '라우팅 유형'을 변경하십시오.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>글로벌</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>바로 가기에는 하나의 비 수정 자 키가 하나만 포함되어야합니다.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>기록하려면 모든 키를 누르십시오 ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>바로 가기 할당</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>더 알아보기...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>업그레이드</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>고치다</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>무시하다</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>아니요</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>좋아요</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>다시 해 보다</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>일시 휴업</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>제출하다</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>예</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>매년</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>월간 간행물</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>무료로 시도하십시오!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>결제주기</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>이메일</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>로그인</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>연결을 확인하십시오
+그리고 다시 시도하십시오.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>로그 아웃</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>다음 지불</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>비밀번호</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>등록하다</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>이메일은 유효하지 않습니다</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>비밀번호가 일치하지 않습니다.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>비밀번호는 {0} 문자의 최소이어야합니다.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>기억하다?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>계정을 확인하려면 이메일을 확인하십시오</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>암호를 재설정</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, Yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>MMM D, H : MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH : MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>절대</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>무료 {0} 일 시험</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>문제가 발생했습니다
+구매.
+
+연결 확인 및
+설정이 도움이 될 수 있습니다.
+
+다시 시도 하시겠습니까?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>귀하의 계정이 성공적으로되었습니다
+업그레이드 :
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>성공적으로 구매하십시오!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>오류</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>연결에 실패.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>다시 해 보다</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>계정이 변경되었습니다</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>구독은 이제 {2} 컨텐츠와 {3} 쓰레기 스토리지가있는 {0}/{1}입니다.
+그러나 걱정하지 마십시오. 다운 그레이드 후에는 데이터가 손실되지 않습니다. 새로운 클립 만 평가됩니다.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>축하해요! 구독은 이제 {2} 컨텐츠와 {3} 쓰레기 스토리지가있는 {0}/{1}입니다.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>쓰레기를 버리거나 inking
+'{0}'에서 더 많은 것을 추가합니다.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>MAX '{0}'스토리지는 {1}입니다.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>복원하다</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} 차단되었습니다</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>내용 및 쓰레기 용량에 도달했습니다!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>MAX '{0}'스토리지는 {1}입니다.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>콘텐츠 용량에 도달했습니다!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>*이 경고를 숨길 수 있습니다
+'모두 숨기기'를 클릭하십시오
+위의 옵션 메뉴.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>최대 쓰레기 스토리지는 {0}입니다.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>쓰레기 용량에 도달했습니다!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0}은 유효하지 않습니다</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0}은 {1} 문자 이상이어야합니다.</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0}은 {1} 문자 일 수 있습니다.</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>붙여 넣기 : '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>{0}에 대한 지불
+구독이 마감되었습니다 {1}
+접수되지 않았습니다.
+
+업데이트하십시오
+결제 정보.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>{0}에 대한 지불
+구독이 마감되었습니다 {1}
+접수되지 않았습니다.
+
+연결하십시오
+장치의 인터넷
+구독과 함께
+계속하려면 다시 시작하십시오
+{0} 계획 사용.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>{0}에 대한 지불
+구독이 마감되었습니다 {1}
+접수되지 않았습니다.
+
+열거 나 다시 시작하십시오
+장치의 monkeypaste
+구독으로
+계속 사용하십시오
+{0} 계획.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>계정이 만료되었습니다</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>메모</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store는 계층을 허용하지 않습니다
+구독 부가 관계 변경.
+
+취소해야합니다
+{0}/{1} 직접 계획하십시오
+또는 둘 다에 대해 청구됩니다.
+
+지금 가고 싶습니까?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>당신의 비밀번호가 초기화되었습니다.
+
+이메일을 확인하십시오
+링크를 따라 변경을 수행하십시오
+너의 비밀번호.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>로그인</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>저자</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>계속하기 전에 다음 라이센스 용어를 수락해야합니다.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>다음 패키지는 설치하기 전에 라이센스 용어를 수락해야합니다.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>내가 거절</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"ICCEPT"를 클릭하면이 응용 프로그램의 라이센스 약관에 동의 함을 의미합니다. 이 약관에 동의하지 않으면 "I Degline"을 클릭하십시오.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"ICCEPT"를 클릭하면 위에 나열된 플러그인의 라이센스 용어에 동의 함을 의미합니다. 이 약관에 동의하지 않으면 "I Degline"을 클릭하십시오.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>라이센스보기</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>라이센스 수락</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>동의 함</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>활동적인</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>오프라인</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>미등록</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>완료</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ 암호는 일치하지 않습니다</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>비밀번호</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>구독입니다
+이제 {0}/{1}으로 설정하십시오.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>발견 된 계정</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>로그인 실패</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>등록 실패</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>등록 성공!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>재설정 오류</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>신청</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>새로운 것</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>절대</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>제한 없는</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>용량</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>남아 있습니다</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>총</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>귀하의 지불은 과거입니다.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>독점 재정의 단축키에는 하나의 키만 포함 할 수 있으며 해당 키는 수정 자 키가 될 수 없습니다.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>만료되었습니다</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>로딩</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>장애가 있는</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>메모! 이 비밀번호는 선택 사항이며 추가 보안을위한 것입니다. 귀하의 데이터는 이미 암호화되어 공유되지 않았습니다. 이 암호는 단순히 당신이 당신의 데스크탑에 액세스 할 때 당신이 원숭이를로드하는 것을 방지합니다 (도난, 방을 떠나는 등).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>드롭 설정을 기억하십시오.</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>플러그인을 찾아보세요</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>분석</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>빠른 행동</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>전환 편집</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>토글 고정</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>주석</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>일반 텍스트</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>창에서 열립니다</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>팔로우하려면 + ctrl을 클릭하십시오 ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>팔로우하려면 + alt를 클릭하십시오 ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>여기에 미디어를 고정하거나 떨어 뜨립니다!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>분명한</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0 이상의 임계 값은 RGBA 색상 공간에서 유클리드 거리를 사용하여 퍼지 색상 일치를 제공합니다.
+
+예를 들어, Red (#ff0000)가 검색어이고 검은 색 (#000000)이 이미지 클립의 픽셀 인 경우 색 거리는 255입니다. 검은 색 내지 흰색 거리는 알파 채널을 포함하여 최대 510입니다.</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>다음은 모두 사실입니다</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>클립 보드</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>컬렉션</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>마우스 모드</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>트리거</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>정지시키다</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>재개하다</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>새로운 방아쇠</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>사전 설정을 추가하십시오</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>원숭이 드롭 마법사</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>사전 설정</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>분석기</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>사이클 방향</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>전환 그리드 레이아웃</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>사례에 민감합니다</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>한계점</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>전체 단어</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>없음 설정</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>라우팅</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>행동</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>그리드</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>완료</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>다음</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>이전의</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>건너뛰다</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>기존 계정?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>다음 지불</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>등록을 통해 모든 장치에서 유료 구독을 전달할 수 있습니다 (가용성시). 우리는 당신의 이메일을 약속하지 않을 것입니다.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>신청</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>사용자 이름</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>등록해야합니까?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>출처</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>홀수, 사용 가능한 것은 없습니다. 뭔가 잘못되어야합니다</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>제거하다</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>다시 시작해야합니다</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>고급의</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>'{0}'에서 플러그인 추출 오류</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>플러그인 설치 오류 : '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>플러그인 설치 '{0}'부패 또는 부적절한 디렉토리 구조. Manifest는 '{1}'에 존재해야하지만 발견되지 않았습니다.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>오류 파싱 플러그인 매니페스트 '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>안내서로로드 된 플러그인 없음 : '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} 오류</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>오류 스테이징 플러그인에 대한 오류 '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>오류 백업 '{0}'로 '{1}'. 세부 사항 : '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>텍스트 상자가 초점을 맞추지 않으면 타이핑 된 텍스트가 검색에 자동으로 적용됩니다.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>자동 검색 입력</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>암호 변경이 실패했습니다</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>변화</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>비밀번호를 변경하십시오</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>분명한</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>비밀번호를 지우십시오</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>콘텐츠</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>콘텐츠 글꼴 크기</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>TRUE 일 때 클립에 삽입 된 외부 컨텐츠는 클립 서식을 사용하며 소스에서 사용할 수있는 내용이 아닙니다.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>대상 형식으로 붙여 넣기, 드롭 또는 추가하십시오</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>비밀번호를 잊고 싶습니까?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>잊다</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>비밀번호 분실</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>프로필</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>용량을 숨기십시오</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>새 클립 보드 컨텐츠가 추가되면 새 클립으로 추적되지 않습니다.</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>추가 사항을 무시하십시오</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>클립 보드가 기존 클립과 일치하면 새 클립을 만드는 대신 해당 클립이 사용됩니다.</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>새로운 복제물을 무시하십시오</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>앱 내에서 클립 보드 변경 사항은 추적되지 않습니다.</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>내부 클립 보드 추적을 무시하십시오</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>추적에서 공백, 탭 및 새로운 라인이 무시됩니다.</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>공백 만 무시하십시오</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>로그인시로드하십시오</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>애니메이션 창</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>불투명</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>행동을 보여줍니다</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>메인 창은 모니터의 상단 가장자리에 스크롤 제스처를 수행하여 공개됩니다.</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>상단 화면 스크롤에 표시하십시오</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>알림 볼륨</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>이 설정은 사용 통계를위한 시스템 - 넓은 키보드 페이스트 카운트를 추적합니다. 이 정보는 비공개이며 공유되지는 않지만 보증되지 않습니다. 정확한 결과는 '설정 -&gt; 복사 및 붙여 넣기 -&gt; 바로 가기에서 응용 프로그램 특정 키보드 페이스트 명령을 제공해야 할 수 있습니다.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>붙여 넣기 역사</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>너무 많은 고정 클립 (예 : 브라우저 탭)은 상당한 메모리를 소비 할 수 있습니다. 제거는 첫 번째 - in -first- out입니다.</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>핀 용량</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>이것은 모든 자동 - 완성 가능한 입력에 적용되며 낮은 값은 성능을 향상시킵니다.</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>최근 텍스트 한계</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>당신이 원하십니까?
+기본 환경 설정을 복원 하시겠습니까?
+
+이 취소 할 수 없습니다!
+
+*응용 프로그램이 완료되면 다시 시작됩니다.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>모든 알림을 재설정 하시겠습니까?
+
+*이 취소 할 수 없습니다!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>원숭이 페이스트는 외부 프로그램에 붙여 넣을 때 클립 보드 (재정의)를 설정합니다. 이것은 &lt;b&gt; &lt;/b&gt; 외부 페이스트 후 클립 보드 상태를 복원하려고 시도합니다.
+
+총 복원은 보장 될 수 없으며 데이터 소스에 따라 성능을 줄이거 나 충돌 원숭이를 줄일 수 있습니다.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>원숭이 붙여 넣기 후 클립 보드를 재설정하십시오</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>경로에서 플러그인 캐시를 삭제할 수 없습니다 : '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>모든 플러그인은 초기 기본 상태로 재설정됩니다</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>플러그인 캐시</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>모든 플러그인을 기본값으로 재설정 하시겠습니까?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>비밀번호를 재설정 하시겠습니까?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>모든 응용 프로그램 바로 가기는 기본 키 제스처로 재설정됩니다.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>바로 가기 재설정</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>이전에 설정된 모든 알림이 무시되었습니다.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>알림을 복원하십시오</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>형식을 비활성화하면 메모리 소비가 줄어들지 만 Append, Templates, Annotations 및 Find/Replace와 같은 일부 고급 기능이 억제됩니다.</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>풍부한 콘텐츠</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>암호를 설정하세요</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>힌트를 보여줍니다</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>작업 표시 줄에 표시하십시오</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>작업 전환기에 표시하십시오</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>제목을 보여주십시오</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>활성화되면 모든 응용 프로그램에서 화면 상단으로 드래그하면 MonkeyPaste가 표시되어 콘텐츠가 MonkeyPaste에 쉽게 삭제됩니다.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>화면 상단에 드래그에 표시하십시오</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>음향 테마</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>맞춤법 검사</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>시작시 클립 보드 소스는 알 수 없으며 보안 설정에 따라 컨텐츠가 제외 된 웹 사이트 또는 응용 프로그램에서 나올 수 있습니다.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>스타트 업 클립 보드를 추가하십시오</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>시작시 클립 보드를 듣습니다</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>선택하다</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>주의! 다른 팔레트 색상은 Eyes가 아닌 수학을 사용하여 선택됩니다! 따라서 일부 색상과 스타일 조합은 가독성에 대한 적절한 대비가 없을 수 있습니다.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>테마 색상</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>테마 스타일</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>설정 간격으로 시작시 자동 쓰레기 정리가 발생합니다.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>휴지통 정리</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>상호 작용</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>실행 취소 한도는 성능에 영향을 줄 수 있습니다</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>실행 취소 제한</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>제한 없음</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>고급 파일에 사용되지 않은 파일 파일 종류에 대한 검색</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>사용자 - 정의 된 검색 확장</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>찾아서 교체 ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>여기에 붙여 넣으십시오</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>공유하다...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>보다</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>관리하다...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>이름 바꾸기</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>점수 : {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>유형 : {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>영구적으로 삭제</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>'{0}'로 찾아보기</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>변환</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>입력</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>산출</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>출처</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>복원하다</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>이미지 선택 ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>색상</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>'{0}'...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>열려 있는</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>기다리세요...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>배경색</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>모든 것을 지우십시오</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>클립 보드 형식</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>모두 삭제</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>세부 사항을 편집하십시오</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>찾다</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>글꼴 색상</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>형식 페인트</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> 선택 중</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>이미지 삽입</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>링크를 삽입하십시오</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>비디오 삽입</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> 매치 케이스</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>새로운 템플릿</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>다음 템플릿</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>페이스트 텍스트를 입력하십시오 ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>이전 템플릿</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> 정규 표현</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>모두 다 바꿔</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>바꾸다</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> 전체 단어</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> 줄 바꿈</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>차단하다</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>도메인</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>폴더 표시</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>차단 해제</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>에 대한</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>블록을 추가하십시오</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>인라인을 추가하십시오</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>자동 - 복사</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>모드</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Monkeypaste가로드 중일 때까지 기다려주세요 ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>그만두다</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ- 페이스트를 클릭하십시오</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>그룹</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>필터</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>모든 것을 영구적으로 삭제하십시오</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>전부 복구</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>행동</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL은 이미 존재합니다 : '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL은 유효한 형식이어야합니다.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>전체 URL을 입력하십시오 :</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>URL을 추가하십시오</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>값을 입력하십시오</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>적용 할 텍스트 또는 파일을 복사합니다.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>{0} {1} 모드가 활성화되었습니다</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>클립 보드 변경이 추가됩니다</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Append Mode가 활성화 된 후</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>클립 보드 변경 사항이 선정됩니다</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Append Mode가 활성화되기 전에</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>차단하다</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>정상적인 클립 보드 동작이 복원되었습니다</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>비활성화 된 것을 추가하십시오</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>클립의 상단 또는 Botom에 추가됩니다</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Append 모드가 활성화되었습니다</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>인라인</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>수동</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>현재 선택에 추가하십시오.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>수동 부속 모드가 활성화되었습니다</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>클립 보드 축적이 중단되었습니다</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>잠시 멈춤</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>클립 보드 축적이 재개되었습니다</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>append ed</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>부여를 끝내고 싶습니까?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>호환성 모드에서 편집하면 모든 풍부한 형식이 제거됩니다. 이것을 수정 하시겠습니까?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>데이터 저하 경고</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>활동적인</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>활성화</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>끄다</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>~에</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>일시 중지</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>결과</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>상태</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>알 수없는 오류가 발생했습니다.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>남은 시도</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>암호를 입력</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>확인하다</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>연락하다</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>날짜 시간</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>'{0}'의 모든 사용법을 삭제 하시겠습니까?
+
+이 취소 할 수 없습니다!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>동적</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>공전</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0}은 비어 있습니다 ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>더 곧 출시 될 예정입니다!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>로그인로드 비활성화에 실패했습니다</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>로그인로드가 성공하지 못합니다</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>로그인로드 활성화에 실패했습니다</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>로그인로드 활성화 성공</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>숨다</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>이제 원숭이 페이스트가로드되었습니다.
+클립 보드 청취는 : {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>짐을 실은</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>보여주다</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>자동 사본 선택 모드 : {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>모드가 변경되었습니다</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>오른쪽 클릭 페이스트 모드 : {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>플러그인 업데이트</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>붙여 넣기 '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>'{0}'분석기를 실행하십시오</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>'{0}'트리거를 실행하십시오</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>'{0}'을 선택하십시오.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>'{0}'및 모든 관련 조치를 삭제 하시겠습니까?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>방아쇠</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>'{0}'에 대한 모든 하위 작업을 제거 하시겠습니까? (그렇지 않으면 그들은 '{1}'에 양육됩니다.)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>옵션을 제거하십시오</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>정말로 '{0}'를 얻고 싶습니까?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>계정</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>분석기</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>응용 프로그램 운영</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>클립 보드</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>콘텐츠</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>변환기</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>문화</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>데이터</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>방향</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>끌어서 놓기</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>드롭 마법사</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>아이콘</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>나무꾼</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>상호 작용</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>페이스트 작업</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>선호도</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>찾다</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>바로 가기</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>종류</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>소리</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>시스템 트레이</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>컬렉션</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>주제</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>트리거</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>웹 사이트 운영</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>클립 보드를 입력 클립으로 설정합니다.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>알리다</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>블립</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>차임</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>범용 사운드 및/또는 시스템 트레이 메시지 알림. Alert Action은 입력에 영향을 미치지 않습니다.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>메시지</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>원숭이</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>시사</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>보여주다?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>시간 토스트 메시지는 몇 초 만에 표시됩니다. 값이 0 인 경우 0 메시지가 수동으로 닫아야합니다.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>쇼 시간 (들)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>소나</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>소리?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>사운드 유형</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>팅</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>용량</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>분석기</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>지정된 분석기 사전 설정을 사용하여 입력 클립을 처리합니다.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>입력 컨텐츠는 선택한 컬렉션에 연결되어 있습니다</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>입력 클립을 지정된 태그 컬렉션에 연결합니다.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>꼬리표</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>사례에 민감합니까?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>이는 입력과 비교하는 정적 텍스트 일 ​​수 있으며 조건이 평가 될 때 선택된 속성 (필터 버튼을 통해)을 포함시킬 수 있습니다.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>조건 데이터</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>조건이 평가되기 전에 선택한 '입력 속성'에 적용되는 선택적 JSONPATH 쿼리.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>입력 필터</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>이 조건부에 사용되는 클립 속성.
+
+'마지막 출력'속성은 현재이 조건부가 분석기 조치의 자식 인 경우에만 지원되며 제공된 데이터는 부모 분석기의 출력에 따라 다릅니다.
+
+문제 해결을 위해이 조건부 부모에게 '경고 조치'를 첨부 하고이 입력 속성과 일치하도록 Alert의 '메시지'매개 변수를 설정하십시오. 이 조건에 사용되는 실제 데이터를 검토 할 수 있습니다.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>입력 속성</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>입력 클립 또는 이전 조치 출력에 대한 텍스트 비교를 수행합니다. 비교가 실패하면 (일치하지 않음) 아동 행동이 실행되지 않습니다. 그래서 그것은 논리적 인 게이트처럼 작용합니다.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>아동 행동이 결과가 참인 경우에만 실행되는 모든 참 또는 거짓 작전.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>상태</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>모두</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>선택한 유형의 클립이 어떤 식 으로든 시스템에 추가 될 때 트리거됩니다 (클립 보드, 드래그 - 및 - 드롭, 분석기 생성 또는 복제).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>입력 클립이 새롭고 복제본이 아닌 경우이 트리거 만 실행하십시오. 이것은 새 컨텐츠가 무시되는지 여부에 대한 선호도 설정과 독립적입니다.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>중복을 무시하십시오</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>이 유형의 클립만이 작업을 트리거합니다.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>입력 클립을 지정된 태그 컬렉션에 연결합니다.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>클립이 지정된 태그 컬렉션에 연결되어있을 때 트리거됩니다.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>수집</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>아이들이 처형하기 전에 밀리 초의 시간의 시간</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>지연</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(실험) 주로 원격 소스를 폴링하기위한 리피터 조치와 함께 사용되거나 오랜 작업을 수행하는 원조.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>비워두면 출력 파일은 입력 클립의 제목을 파일 이름으로 사용합니다.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>사용자 정의 이름</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>파일이 작성 될 디렉토리.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>예배 규칙서</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>선택한 폴더에 입력을 저장합니다.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>선택한 폴더의 콘텐츠가 변경 될 때 트리거되었습니다. 출력은 새 또는 기존 (중복 기본 설정이 활성화 될 때)이됩니다. 파일 또는 폴더의 파일 클립이 마지막 출력 유형과 함께 변경된 파일 또는 폴더의 파일 클립입니다.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>이벤트</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>폴더</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>중복을 무시하십시오</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0의 값은 부모 행동을 무기한으로 반복합니다</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>반복 카운트</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>부모 조치가 완료되면 기다릴 밀리 초의 시간</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>지연을 반복하십시오</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(실험) 액션 루프 또는 반복적 인 작업을 만드는 데 사용됩니다. 반복되면 원래의 입력으로 모든 어린이를 다시 실행합니다. 반복 카운트없이 간격을 사용하는 경우, 반복을 중단하려면 트리거를 비활성화하고 재조정해야합니다. 폴링 또는 웹 스크래핑 자동화에 유용 할 수 있습니다.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>당신이 정의하는 글로벌 단축키에 의해 트리거됩니다. monkeypaste가 활성화되면 선택한 클립 (있는 경우)을 입력으로 사용하려고합니다. 그렇지 않으면 클립 보드를 입력으로 사용하려고합니다.
+
+참고 : 데이터 구동 이벤트가 아니기 때문에 유연하게 유지하려는 입력이 없으면 바로 가기 트리거가 여전히 실행됩니다 (매크로 트리거 등이 될 수 있음).</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>바로 가기 트리거</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>기록 된 바로 가기가 현재 클립 보드로 언제든지 누르면 트리거됩니다.</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>이 작업을 위해서는 앱이 다시 시작해야합니다. 지금 그렇게 하시겠습니까?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>문제가있었습니다. 응용 프로그램을 수동으로 다시 시작해야합니다.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Annotator로 분석하십시오</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>주석 트리거</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>내장 요소는 읽습니다. 변경하려면 복제.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>익명의</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>관습</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>어제</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} 며칠 전</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 시간 전</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} 몇 시간 전</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>방금</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>1 분 전에</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} 몇 분 전</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>지난 달</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} 몇 달 전</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>지난주</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} 몇 주 전</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} 몇 년 전</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>주석</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>응용 프로그램 이름</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>응용 프로그램 경로</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>사례에 민감합니다</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>콘텐츠</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>파일 유형</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>이미지 유형</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>정규 표현</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>텍스트 유형</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>제목</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL 제목</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>전체 단어</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>상단 화면 가장자리를 따라 스크롤하여 열면 기본 창이 열리면 잠이 듭니다. 더 빠른 다중 대상 워크 플로우를 허용합니다.
+
+* 모서리는 모니터 당 모든 화면의 관점에서 사용됩니다.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>창과 잠금을 보여줍니다</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>무료!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>우리에게 별 5 개를주세요!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>모두 삭제</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>모든 컨텐츠를 삭제합니다</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>삭제 하시겠습니까
+모든 클립?!
+
+*이 작업은 취소 할 수 없습니다!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>나는 Indy Dev입니다. 몇 가지 지원을 보여주세요!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>monkeypaste처럼?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} 유형의 입력 만 허용합니다. {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>자동 복사 모드 - 왼쪽 마우스 버튼이 해제 될 때마다 '사본'이벤트를 시뮬레이션합니다.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>오른쪽 버튼을 클릭하면 오른쪽 마우스 버튼이 해제 될 때마다 '페이스트'이벤트를 시뮬레이션합니다.</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>사전 설정</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>플러그인 폴더를 표시하십시오</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>보고서</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>보다</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>툴팁 표시</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>분석기는 입력에 주석을 달거나 출력으로 새 클립을 만듭니다. 분석기의 어린이는 자신의 입력으로 필요한 것을 결정해야합니다. 이것은 일반적으로 마지막 출력입니다.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>입력 유형</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>트리거 디자이너 '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>{0}을 선택하십시오 ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>찾지 못해 ...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} 트리거</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>확인하면 조건의 참 또는 거짓 결과가 뒤집어집니다. 예를 들어, '포함'조건은 '포함되지 않습니다'가됩니다.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>하지 않습니다</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>기다리세요...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>컬러 선택기</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>경기 색상을 선택하십시오</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>바로 가기 트리거와 마찬가지로 키 조합이 누르면 활성 응용 프로그램에서 '사본'이벤트가 시뮬레이션되므로 여전히 사본처럼 작동하지만 원숭이 사본 트리거에 첨부 된 작업 체인은 백그라운드에서 배경에서 실행됩니다. 시뮬레이션 된 사본 클립 보드 데이터.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>고급 필터</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>필터를 숨 깁니다</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>필터를 복원하십시오</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>필터를 만듭니다</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(선택 사항) 비어 있으면이 작업의 입력을 사용하여 클립 보드가 설정됩니다. 여기에 제공된 모든 것은 일반 텍스트로만 취급됩니다.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>클립 보드의 콘텐츠</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>True 일 때이 작업이 클립 보드를 설정 한 후 클립이 추가되지 않습니다.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>무시하다</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>조치를 위해 선택된 분석기 '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>작업 용 분석기 '{0}'찾기 없음</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>'{1}'유형 컨텐츠 및 분석기 '{2}'에 대해서만 Parent '{0}'필터는 지원하지 않기 때문에 실행되지 않습니다. '{3}'유형의 입력 유형</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Classifier '{0}'에 대해 선택한 태그가 없습니다.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>분류기 '{0}'태그를 찾을 수 없습니다.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>값 비교는 글자, 숫자 또는 공백 일 수 있습니다.</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>클립 태그 트리거 '{0}'에 대한 태그가 선택되지 않았습니다.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>클립 태그 트리거 '{0}'태그를 찾을 수 없습니다.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>'{0}'에 지정된 시계 폴더 없음</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>폴더를보기 '{0}'트리거 용으로 찾을 수 없음 '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>액션을위한 파일 작성자 경로 '{0}'설정되지 않음</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>'{1}'을 찾을 수없는 파일 작성자 경로 '{0}'.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>작업 표시 줄</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>플러그인에 대해 알아보십시오</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>이 분석 구성을 복원하십시오</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} 로그를 변경합니다</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>인터넷에 연결하고 나중에 다시 시도하십시오.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - 도움</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0}은 최신 버전입니다</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>당신은 모두 - 날짜입니다!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>업데이트 확인...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>새로운 버전을 사용할 수 있습니다!
+
+'{0}'로 업데이트하려면 여기를 클릭하십시오.</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>'{0}'로 업데이트하려면 아래를 클릭하십시오.</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>사용 가능한 업데이트!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>지금 업데이트하십시오</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}'에는 공유 값이 포함됩니다. 무엇을 재설정 하시겠습니까?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>분명한</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>최근의 검색을 명확하게합니다</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>모두 초기화</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>공유</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>공유되지 않은 재설정</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>할당 된 응용 프로그램 조치를 호출합니다. 모든 응용 프로그램 명령은 stanteless이고 입력 클립은 무시됩니다.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>확인되지 않고 명령이 발사 될 수 없으면 실행 체인이 중단됩니다. 많은 명령에 실행하려면 특정 응용 프로그램 상태가 필요합니다.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>항상 계속 되나요?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>수행하는 명령.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>명령</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>응용 프로그램 명령 '{0}'에 선택된 명령이 없습니다.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>응용 프로그램 명령 '{0}'를 찾을 수 없습니다.</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>선택된</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>재시작</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>'{0}'을 업데이트하는 문제가있었습니다. 업데이트를 완료하려면 다시 시작하고 '{0}'을 다시 설치해야합니다 (모든 설정이 복원 될 걱정하지 마십시오).
+
+지금 다시 시작하고 다시 설치하여 업데이트를 완료하고이를 무시하고 나중에 업데이트하거나 업데이트를 모두 취소하고 버전 '{1}'을 계속 사용하십시오.</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>업데이트 오류</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>업데이트를 다운로드 할 수 없었습니다</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>업데이트가 실패</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>업데이트를 완료하려면 다시 시작해야합니다. 지금 또는 나중에 다시 시작 하시겠습니까?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>업데이트 준비</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>나중에</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>지금 다시 시작하십시오</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>보류 중</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0}은 {1}으로 성공적으로 업데이트되었습니다.</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>핵심 플러그인이 필요하며 제거 할 수 없습니다.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>설치</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>업데이트가 보류 중입니다. 완료하려면 다시 시작하십시오.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>보류 중</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>설치가 보류 중입니다. 다시 설치하려면 다시 시작하십시오.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>제거를 완료하려면 다시 시작해야합니다. 지금 또는 나중에 다시 시작 하시겠습니까?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>제거를 끝내시겠습니까?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>널리 알려지지 않은</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>자동 - '{0}'에 대한 기본 기본 사전 설정</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>클립이 선택되지 않았습니다</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>선택한 클립을 분석하십시오</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>선택한 클립에서 '{0}'를 실행하려면 바로 가기를 할당하십시오.</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>글로벌 페이스트</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>'{0}'에 대해 글로벌 페이스트 바로 가기 할당</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>비밀번호를 잊으 셨나요?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>로그인</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>로그 아웃</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>개인 정보 정책</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>활성화 된 진단 정보가 파일에 로그인되는 경우 (다시 시작해야합니다). 이것은 성능을 늦출 수 있으며 개인 정보가 포함될 수 있습니다.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>파일에 로그인하십시오</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>열려 있는</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>로그 폴더 열기</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>플러그인을 찾아보세요</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>읽다</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>쓰다</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>피드백 또는 버그 보고서를 보내십시오</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>이것은 기본 창만 숨겨집니다. 다른 모든 비 대화 창은 항상 작업 표시 줄에 표시됩니다.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>'{0}'에서 검색</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>필터를 추가하십시오</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>조인 유형을 편집합니다</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>이 필터를 제거하십시오</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>이것에 대한 도움이 열려 ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} 클립</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>변화</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>절대</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>세트</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>제목없는</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>기록</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>표지되지 않은 소스 참조</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}'가 필요합니다</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(오류가 있음)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>제한된</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>쓰레기</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>제한 없는</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>이 앱은 현재 기본 클립 보드 리더 사전 설정 및 형식과 일치합니다.
+
+클립 보드 사이드 바에서 기본 판독기 사전 설정을 활성화하거나 비활성화 해도이 구성에는 영향을 미치지 않습니다. 무선 앱 만 기본 설정을 따릅니다.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>이 앱은 현재 기본 클립 보드 라이터 사전 설정 및 형식과 일치합니다.
+
+클립 보드 사이드 바에서 기본 작가 사전 설정을 활성화하거나 비활성화 해도이 구성에는 영향을 미치지 않습니다. 무선 앱 만 기본 설정을 따릅니다.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>추가하려면 클립 보드 리스너 (시스템 트레이 -&gt; 이력서)를 풀어야합니다.</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>사용할 수없는 것을 추가하십시오</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> 설정이 없습니다</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>나는 영어로만 말하며 monkeypaste는이 언어로 번역되었습니다.
+
+모든 버전은 영어 팩으로 배송되므로 영어를 구사하는 경우이 설정 후 언제든지 언어를 변경할 수 있습니다 (설정 -&gt; 환경 설정 -&gt; 국제).
+
+번역 개선을 돕고 싶다면 우리는 당신의 의견을 듣고 싶습니다!
+
+피드백@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>번역 문제</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>이 기능을 사용하려면 monkeypaste를 업데이트해야합니다.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>바로 가기가 없습니다</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>클립 보드 리스너가 비활성화되었습니다</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>클립 보드 리스너가 활성화되었습니다</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>부모 조치 '{0}'는 입력 속성 유형 '마지막 출력'을 지원하지 않습니다.</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>계획에 대해 자세히 알아보십시오</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>애플리케이션</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>방아쇠</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>클립</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>분석기</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>꼬리표</value>
+  </data>
+</root>

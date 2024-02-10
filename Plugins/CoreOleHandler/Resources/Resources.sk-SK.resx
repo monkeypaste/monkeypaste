@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorovať</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Po začiarknutí {0} formátu sa nebude čítať z údajov o schránke alebo drag-and-drop.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Po začiarknutí {0} formátu sa nebude zapísať do údajov o schránke alebo drag-and-drop.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Čítať</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Zápis</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Súbory</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Ak RTF ešte nie je prítomný, HTML sa prevedie na RTF. Môže to byť užitočné medzi webovými prehliadačmi a/alebo aplikáciami na spracovanie textu. (Vyžaduje, aby bol povolený formát RTF a je iba pre podporované platformy)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Previesť na RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Tieto adresáre sa nebudú čítať zo schránky alebo drag-and-drop údajov.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Ignorované adresáre</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Ignorované rozšírenia súborov</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Tieto typy súborov sa nebudú čítať zo schránky alebo drag-and-drop.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Tieto typy súborov sa nebudú písať do údajov o schránke alebo drag-and-drop.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Po kontrole sa obrázky väčšie ako maximálna dimenzia zmenia pri zachovaní pomeru strán. To nemá vplyv na obrázok na schránke.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Nadrozmerný</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Pri vkladaní alebo vyhodení bitmapy to bude predvolený typ súboru</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Predvolený typ exportu</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Niekedy sa na schránke zobrazia úplne priehľadné obrázky, čo je mätúce.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignorujte prázdne obrázky</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Veľké obrázky (viac ako niekoľko MBS) môžu bohužiaľ drag-and-drop a celkový výkon trochu pomaly. Pokúste sa udržať túto hodnotu nízku.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maximálna výška</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maximálna šírka</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Pre obavy z výkonu je potrebná maximálna suma znakov</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Maximálne znaky</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Text (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Formát '{0}' mal prázdne alebo priehľadné údaje a bol blokovaný</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Prázdne údaje blokované</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' formát je označený ako 'ignorovaný'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Formát ignorovaný</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limit je {1} a údaje boli {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Zistená veľkosť maximálnej veľkosti</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Čítačka pre schránku</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Spisovateľ základnej schránky</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Zvládne predvolené formáty schránky</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Obsluha</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Jadro, schránka, drag and drop, text, rtf, bohatý text, html, csv, image, png, jpg, jpeg, link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Obrázok (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Ak HTML ešte nie je prítomný, RTF sa prevedie na HTML. Môže to byť užitočné medzi webovými prehliadačmi a/alebo aplikáciami na spracovanie textu. (Vyžaduje povolenie formátu HTML a je iba pre podporované platformy)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Konvertovať na HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Bez názvu</value>
+  </data>
+</root>

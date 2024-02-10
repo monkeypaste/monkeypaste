@@ -1,0 +1,12 @@
+{
+  "title": "କୋର କ୍ଲିପବୋର୍ଡ ନିୟନ୍ତ୍ରକ |",
+  "description": "ଡିଫଲ୍ଟ କ୍ଲିପବୋର୍ଡ ଫର୍ମାଟ୍ ପରିଚାଳନା କରେ |",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "କୋର୍, କ୍ଲିପବୋର୍ଡ, ଡ୍ରାଗ୍ ଏବଂ ଡ୍ରପ୍ ଏବଂ ଡ୍ରପ ଏବଂ ଡ୍ରପ, RTL,, CSV, ପ୍ରତିଛବି, png, jpg, jpeg, ଲିଙ୍କ୍ |",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

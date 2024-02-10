@@ -59,1131 +59,1131 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MpThemeType_Light" xml:space="preserve">
-    <value />
+    <value>Światło</value>
   </data>
   <data name="MpThemeType_Dark" xml:space="preserve">
-    <value />
+    <value>Ciemny</value>
   </data>
   <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
-    <value />
+    <value>Nigdy</value>
   </data>
   <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
-    <value />
+    <value>Codziennie</value>
   </data>
   <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
-    <value />
+    <value>Co tydzień</value>
   </data>
   <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
-    <value />
+    <value>Miesięczny</value>
   </data>
   <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
-    <value />
+    <value>Ostatnie wyjście</value>
   </data>
   <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
-    <value />
+    <value>Klip źródłowy</value>
   </data>
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
-    <value />
+    <value>Nic</value>
   </data>
   <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
-    <value />
+    <value>Trzymanie zmiany</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
-    <value />
+    <value>Prawy górny róg</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
-    <value />
+    <value>Górny lewy róg</value>
   </data>
   <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
-    <value />
+    <value>Zawsze</value>
   </data>
   <data name="MpBillingCycleType_Never" xml:space="preserve">
-    <value />
+    <value>Nigdy</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
-    <value />
+    <value>Miesięczny</value>
   </data>
   <data name="MpBillingCycleType_Yearly" xml:space="preserve">
-    <value />
+    <value>Rocznie</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
-    <value />
+    <value>Ładowarka</value>
   </data>
   <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
-    <value />
+    <value>Subskrypcja wygasła</value>
   </data>
   <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
-    <value />
+    <value>Logowanie konta nie powiodło się</value>
   </data>
   <data name="MpNotificationType_DbError" xml:space="preserve">
-    <value />
+    <value>Błąd db</value>
   </data>
   <data name="MpNotificationType_Help" xml:space="preserve">
-    <value />
+    <value>Pomoc</value>
   </data>
   <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
-    <value />
+    <value>Zaktualizowana wtyczka</value>
   </data>
   <data name="MpNotificationType_Message" xml:space="preserve">
-    <value />
+    <value>Wiadomość</value>
   </data>
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
-    <value />
+    <value>Zmiana trybu aplikacji</value>
   </data>
   <data name="MpNotificationType_Debug" xml:space="preserve">
-    <value />
+    <value>Odpluskwić</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
-    <value />
+    <value>Osiągnięto czapkę treści</value>
   </data>
   <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
-    <value />
+    <value>Kapitacja skręciła się</value>
   </data>
   <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>Treść Dodaj zablokowaną przez konto</value>
   </data>
   <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>Przywracanie treści zablokowane przez konto</value>
   </data>
   <data name="MpNotificationType_AccountChanged" xml:space="preserve">
-    <value />
+    <value>Konto się zmieniło</value>
   </data>
   <data name="MpNotificationType_Welcome" xml:space="preserve">
-    <value />
+    <value>Powitanie</value>
   </data>
   <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
-    <value />
+    <value>Dostępna aktualizacja</value>
   </data>
   <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
-    <value />
+    <value>Brak dostępnej aktualizacji</value>
   </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
-    <value />
+    <value>Zmieniony tryb dodatkowy</value>
   </data>
   <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
-    <value />
+    <value>Włączony wyzwala</value>
   </data>
   <data name="MpNotificationType_AlertAction" xml:space="preserve">
-    <value />
+    <value>Akcja ostrzegawcza</value>
   </data>
   <data name="MpNotificationType_StartupComplete" xml:space="preserve">
-    <value />
+    <value>Uruchomienie ukończone</value>
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
-    <value />
+    <value>PLIK IO OSTRZEŻENIE</value>
   </data>
   <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
-    <value />
+    <value>Błąd rozładunku wtyczki</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
-    <value />
+    <value>Nieprawidłowa wtyczka</value>
   </data>
   <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
-    <value />
+    <value>Nieprawidłowy obsługa formatu schowka</value>
   </data>
   <data name="MpNotificationType_InvalidAction" xml:space="preserve">
-    <value />
+    <value>Nieprawidłowe działanie</value>
   </data>
   <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
-    <value />
+    <value>Niezłe żądanie HTTP</value>
   </data>
   <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
-    <value />
+    <value>Limit czasu analizatora</value>
   </data>
   <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
-    <value />
+    <value>Nieprawidłowe żądanie</value>
   </data>
   <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
-    <value />
+    <value>Nieprawidłowa odpowiedź</value>
   </data>
   <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
-    <value />
+    <value>Realizacja parametrów żądanie</value>
   </data>
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
-    <value />
+    <value>Wejście hasła DB</value>
   </data>
   <data name="MpNotificationType_RateApp" xml:space="preserve">
-    <value />
+    <value>Oceń aplikację</value>
   </data>
   <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
-    <value />
+    <value>Modalny reset współdzielony wartość ustawienia</value>
   </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
-    <value />
+    <value>Degradacja formatu treści modalnej</value>
   </data>
   <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Modalny Tak Nie Anuluj pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
-    <value />
+    <value>Modalny tak nie ma pola wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Modal OK Anuluj pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
-    <value />
+    <value>Modal OK Pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Modalne pole tekstowe OK Anuluj pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Modalne Pamiętające pole tekstowe OK Anuluj pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Postęp modalny Anuluj pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
-    <value />
+    <value>Modalne zajęte pole wiadomości</value>
   </data>
   <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
-    <value />
+    <value>Modalny restart ignoruj</value>
   </data>
   <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
-    <value />
+    <value>Modalny restart teraz lub później</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
-    <value />
+    <value>Potwierdź dodatkowe dodatki</value>
   </data>
   <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
-    <value />
+    <value>Komunikat odpowiedzi wtyczki</value>
   </data>
   <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
-    <value />
+    <value>Błąd odpowiedzi wtyczki</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
-    <value />
+    <value>Ostrzeżenie o odpowiedzi wtyczki</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
-    <value />
+    <value>Ostrzeżenie odpowiedzi wtyczki z opcją</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
-    <value />
+    <value>Przełącz główne okno</value>
   </data>
   <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
-    <value />
+    <value>Przełącz tryb automatycznego kopiowania</value>
   </data>
   <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
-    <value />
+    <value>Przełącz tryb kliknij prawym przyciskiem myszy</value>
   </data>
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
-    <value />
+    <value>Przełącz słuchaj schowka</value>
   </data>
   <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
-    <value />
+    <value>Przełącz tryb dodatkowy</value>
   </data>
   <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
-    <value />
+    <value>Przełącz tryb blokowy dołączania</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
-    <value />
+    <value>Przełącz tryb pozycji dołączania</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
-    <value />
+    <value>Przełącz dołączanie</value>
   </data>
   <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
-    <value />
+    <value>Ręcznie dodaj ze schowka</value>
   </data>
   <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
-    <value />
+    <value>Zmniejszyć ostrość</value>
   </data>
   <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
-    <value />
+    <value>Zwiększyć ostrość</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
-    <value />
+    <value>Aplikacja wyjścia</value>
   </data>
   <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
-    <value />
+    <value>Wklej do zewnętrznego</value>
   </data>
   <data name="MpShortcutType_PasteSelection" xml:space="preserve">
-    <value />
+    <value>Wybór wklejania</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
-    <value />
+    <value>Wybór kopii</value>
   </data>
   <data name="MpShortcutType_CutSelection" xml:space="preserve">
-    <value />
+    <value>Selekcja cięcia</value>
   </data>
   <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
-    <value />
+    <value>Usuń wybrane elementy</value>
   </data>
   <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
-    <value />
+    <value>Wybierz następną pozycję kolumny</value>
   </data>
   <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
-    <value />
+    <value>Wybierz poprzedni element kolumny</value>
   </data>
   <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
-    <value />
+    <value>Wybierz element następnego wiersza</value>
   </data>
   <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
-    <value />
+    <value>Wybierz poprzedni element wiersza</value>
   </data>
   <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
-    <value />
+    <value>Przypisz skrót</value>
   </data>
   <data name="MpShortcutType_Undo" xml:space="preserve">
-    <value />
+    <value>Cofnij</value>
   </data>
   <data name="MpShortcutType_Redo" xml:space="preserve">
-    <value />
+    <value>Przerobić</value>
   </data>
   <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
-    <value />
+    <value>Przełącz treść tylko odczyt</value>
   </data>
   <data name="MpShortcutType_Rename" xml:space="preserve">
-    <value />
+    <value>Przemianować</value>
   </data>
   <data name="MpShortcutType_Duplicate" xml:space="preserve">
-    <value />
+    <value>Duplikować</value>
   </data>
   <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
-    <value />
+    <value>Przewiń do domu</value>
   </data>
   <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
-    <value />
+    <value>Przewiń do końca</value>
   </data>
   <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
-    <value />
+    <value>Rozmiar okna w górę</value>
   </data>
   <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
-    <value />
+    <value>Rozmiar okna w dół</value>
   </data>
   <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
-    <value />
+    <value>Rozmiar okna w lewo</value>
   </data>
   <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
-    <value />
+    <value>Rozmiar okna w prawo</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
-    <value />
+    <value>Orient główny górny</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
-    <value />
+    <value>Orient główne okno</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
-    <value />
+    <value>Orient główne okno lewe</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
-    <value />
+    <value>Orient główne okno w prawo</value>
   </data>
   <data name="MpShortcutType_PreviousPage" xml:space="preserve">
-    <value />
+    <value>Poprzednia strona</value>
   </data>
   <data name="MpShortcutType_NextPage" xml:space="preserve">
-    <value />
+    <value>Następna strona</value>
   </data>
   <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
-    <value />
+    <value>Znajdź i wymień wybrany element</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
-    <value />
+    <value>Przełącz główne okno</value>
   </data>
   <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
-    <value />
+    <value>Widoczne menu filtra przełączania</value>
   </data>
   <data name="MpShortcutType_ShowSettings" xml:space="preserve">
-    <value />
+    <value>Pokaż ustawienia</value>
   </data>
   <data name="MpShortcutType_TogglePinned" xml:space="preserve">
-    <value />
+    <value>Przełącz przypięte</value>
   </data>
   <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
-    <value />
+    <value>Otwórz w oknie</value>
   </data>
   <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
-    <value />
+    <value>Na stałe usunąć</value>
   </data>
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
-    <value />
+    <value>Wymień minimalizuj okno główne</value>
   </data>
   <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
-    <value />
+    <value>Przełącz tryb kierunku dołączania</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
-    <value />
+    <value>Otwarta pomoc</value>
   </data>
   <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
-    <value />
+    <value>Powiększ wybór</value>
   </data>
   <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
-    <value />
+    <value>Powiększ wybór</value>
   </data>
   <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
-    <value />
+    <value>Zresetować zoom</value>
   </data>
   <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
-    <value />
+    <value>Wyczyść taca na szpilki</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
-    <value />
+    <value>M a xa p ps h o r t c u t</value>
   </data>
   <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
-    <value />
+    <value>Wklej element kopii</value>
   </data>
   <data name="MpShortcutType_SelectTag" xml:space="preserve">
-    <value />
+    <value>Wybierz Tag</value>
   </data>
   <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
-    <value />
+    <value>Przeanalizuj element kopii za pomocą ustawień wstępnych</value>
   </data>
   <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
-    <value />
+    <value>Wywołaj spust</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
-    <value />
+    <value>Tekst klipu</value>
   </data>
   <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
-    <value />
+    <value>Surowe dane dotyczące klipu</value>
   </data>
   <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
-    <value />
+    <value>Typ klipu</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
-    <value />
+    <value>Tytuł</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
-    <value />
+    <value>Źródłowa ścieżka aplikacji</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
-    <value />
+    <value>Nazwa aplikacji źródłowej</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
-    <value />
+    <value>URL źródłowego</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
-    <value />
+    <value>Tytuł adresu URL źródłowego</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
-    <value />
+    <value>Źródło URL domeny</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>Kopiuj godzinę daty</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
-    <value />
+    <value>Liczba kopii</value>
   </data>
   <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
-    <value />
+    <value>Liczba wklejania</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
-    <value />
+    <value>Nazwa urządzenia źródłowego</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
-    <value />
+    <value>Typ urządzenia źródłowego</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
-    <value />
+    <value>Ostatnie wyjście</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
-    <value />
+    <value>Klasyfikować</value>
   </data>
   <data name="MpActionType_Analyze" xml:space="preserve">
-    <value />
+    <value>Analizować</value>
   </data>
   <data name="MpActionType_Conditional" xml:space="preserve">
-    <value />
+    <value>Warunkowy</value>
   </data>
   <data name="MpActionType_Trigger" xml:space="preserve">
-    <value />
+    <value>Spust</value>
   </data>
   <data name="MpActionType_Repeater" xml:space="preserve">
-    <value />
+    <value>Przekaźnik</value>
   </data>
   <data name="MpActionType_FileWriter" xml:space="preserve">
-    <value />
+    <value>Pisarz plików</value>
   </data>
   <data name="MpActionType_SetClipboard" xml:space="preserve">
-    <value />
+    <value>Ustaw schowek</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
-    <value />
+    <value>Opóźnienie</value>
   </data>
   <data name="MpActionType_Alert" xml:space="preserve">
-    <value />
+    <value>Alarm</value>
   </data>
   <data name="MpActionType_ApplicationCommand" xml:space="preserve">
-    <value />
+    <value>Polecenie aplikacji</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTriggerType_ClipAdded" xml:space="preserve">
-    <value />
+    <value>Dodano klip</value>
   </data>
   <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
-    <value />
+    <value>Zmieniono system plików</value>
   </data>
   <data name="MpTriggerType_ClipTagged" xml:space="preserve">
-    <value />
+    <value>Klip oznaczony tagiem</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
-    <value />
+    <value>Skrót</value>
   </data>
   <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
-    <value />
+    <value>Skrót do kopiowania małpy</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
-    <value />
+    <value>Wewnętrzny</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
-    <value />
+    <value>Domyślny</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
-    <value />
+    <value>Zwyczaj</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
-    <value />
+    <value>system operacyjny</value>
   </data>
   <data name="MpPluginDependencyType_app" xml:space="preserve">
-    <value />
+    <value>App</value>
   </data>
   <data name="MpPluginDependencyType_lib" xml:space="preserve">
-    <value />
+    <value>Lib</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
-    <value />
+    <value>Tekst</value>
   </data>
   <data name="MpClipboardFormatType_Html" xml:space="preserve">
-    <value />
+    <value>Język HTML</value>
   </data>
   <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
-    <value />
+    <value>Rtf</value>
   </data>
   <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
-    <value />
+    <value>Bitmapa</value>
   </data>
   <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
-    <value />
+    <value>Upuść plik</value>
   </data>
   <data name="MpClipboardFormatType_Csv" xml:space="preserve">
-    <value />
+    <value>Plik CSV</value>
   </data>
   <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
-    <value />
+    <value>Zawartość wewnętrzna</value>
   </data>
   <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
-    <value />
+    <value>Tekst Unicode</value>
   </data>
   <data name="MpClipboardFormatType_OemText" xml:space="preserve">
-    <value />
+    <value>Tekst OEM</value>
   </data>
   <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
-    <value />
+    <value>Język XAML</value>
   </data>
   <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
-    <value />
+    <value>Pakiet XAML</value>
   </data>
   <data name="MpClipboardFormatType_Custom" xml:space="preserve">
-    <value />
+    <value>Zwyczaj</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
-    <value />
+    <value>Login</value>
   </data>
   <data name="MpSettingsFrameType_Status" xml:space="preserve">
-    <value />
+    <value>Stan</value>
   </data>
   <data name="MpSettingsFrameType_Register" xml:space="preserve">
-    <value />
+    <value>Rejestrować</value>
   </data>
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
-    <value />
+    <value>Kompozycja</value>
   </data>
   <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
-    <value />
+    <value>Czcionki domyślne</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
-    <value />
+    <value>Dźwięk</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
-    <value />
+    <value>Okno</value>
   </data>
   <data name="MpSettingsFrameType_Hints" xml:space="preserve">
-    <value />
+    <value>Wskazówki</value>
   </data>
   <data name="MpSettingsFrameType_International" xml:space="preserve">
-    <value />
+    <value>Międzynarodowy</value>
   </data>
   <data name="MpSettingsFrameType_Limits" xml:space="preserve">
-    <value />
+    <value>Limity</value>
   </data>
   <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
-    <value />
+    <value>Śledzenia</value>
   </data>
   <data name="MpSettingsFrameType_Startup" xml:space="preserve">
-    <value />
+    <value>Startup</value>
   </data>
   <data name="MpSettingsFrameType_Search" xml:space="preserve">
-    <value />
+    <value>Szukać</value>
   </data>
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
-    <value />
+    <value>Zawartość</value>
   </data>
   <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
-    <value />
+    <value>Gesty na górnej krawędzi ekranu</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
-    <value />
+    <value>Skróty</value>
   </data>
   <data name="MpSettingsFrameType_System" xml:space="preserve">
-    <value />
+    <value>System</value>
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
-    <value />
+    <value>Hasło</value>
   </data>
   <data name="MpSettingsFrameType_Logs" xml:space="preserve">
-    <value />
+    <value>Dzienniki</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
-    <value />
+    <value>Przeglądać</value>
   </data>
   <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
-    <value />
+    <value>Zainstalowana</value>
   </data>
   <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
-    <value />
+    <value>Aktualizacje</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
-    <value />
+    <value>Korzeń</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
-    <value />
+    <value>App</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
-    <value />
+    <value>Urządzenie</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
-    <value />
+    <value>Meta</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
-    <value />
+    <value>Statystyka</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
-    <value />
+    <value>Adres URL</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
-    <value />
+    <value>I</value>
   </data>
   <data name="MpNextJoinOptionType_Or" xml:space="preserve">
-    <value />
+    <value>Lub</value>
   </data>
   <data name="MpNextJoinOptionType_Not" xml:space="preserve">
-    <value />
+    <value>Nie</value>
   </data>
   <data name="MpRootOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpRootOptionType_Clip" xml:space="preserve">
-    <value />
+    <value>Klips</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
-    <value />
+    <value>Kolekcja</value>
   </data>
   <data name="MpRootOptionType_Sources" xml:space="preserve">
-    <value />
+    <value>Źródeł</value>
   </data>
   <data name="MpRootOptionType_History" xml:space="preserve">
-    <value />
+    <value>Historia</value>
   </data>
   <data name="MpTextOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpTextOptionType_Matches" xml:space="preserve">
-    <value />
+    <value>Pasuje</value>
   </data>
   <data name="MpTextOptionType_Contains" xml:space="preserve">
-    <value />
+    <value>Contains</value>
   </data>
   <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>Zaczyna się od</value>
   </data>
   <data name="MpTextOptionType_EndsWith" xml:space="preserve">
-    <value />
+    <value>Kończy się na</value>
   </data>
   <data name="MpTextOptionType_RegEx" xml:space="preserve">
-    <value />
+    <value>Reg Ex</value>
   </data>
   <data name="MpNumberOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpNumberOptionType_Equals" xml:space="preserve">
-    <value />
+    <value>Equals</value>
   </data>
   <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
-    <value />
+    <value>Większe niż</value>
   </data>
   <data name="MpNumberOptionType_LessThan" xml:space="preserve">
-    <value />
+    <value>Mniej niż</value>
   </data>
   <data name="MpNumberOptionType_IsNot" xml:space="preserve">
-    <value />
+    <value>Nie jest</value>
   </data>
   <data name="MpColorOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpColorOptionType_Hex" xml:space="preserve">
-    <value />
+    <value>Urok</value>
   </data>
   <data name="MpColorOptionType_ARGB" xml:space="preserve">
-    <value />
+    <value>A R G B</value>
   </data>
   <data name="MpDimensionOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpDimensionOptionType_Width" xml:space="preserve">
-    <value />
+    <value>Szerokość</value>
   </data>
   <data name="MpDimensionOptionType_Height" xml:space="preserve">
-    <value />
+    <value>Wysokość</value>
   </data>
   <data name="MpImageOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpImageOptionType_Dimensions" xml:space="preserve">
-    <value />
+    <value>Wymiary</value>
   </data>
   <data name="MpImageOptionType_Color" xml:space="preserve">
-    <value />
+    <value>Kolor</value>
   </data>
   <data name="MpFileOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpFileOptionType_Audio" xml:space="preserve">
-    <value />
+    <value>Dźwięk</value>
   </data>
   <data name="MpFileOptionType_Compressed" xml:space="preserve">
-    <value />
+    <value>Skompresowane</value>
   </data>
   <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
-    <value />
+    <value>Płyta i nośnik</value>
   </data>
   <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
-    <value />
+    <value>Dane i baza danych</value>
   </data>
   <data name="MpFileOptionType_Document" xml:space="preserve">
-    <value />
+    <value>Dokument</value>
   </data>
   <data name="MpFileOptionType_Email" xml:space="preserve">
-    <value />
+    <value>E-mail</value>
   </data>
   <data name="MpFileOptionType_Executable" xml:space="preserve">
-    <value />
+    <value>Plik wykonywalny</value>
   </data>
   <data name="MpFileOptionType_Font" xml:space="preserve">
-    <value />
+    <value>Czcionka</value>
   </data>
   <data name="MpFileOptionType_Image" xml:space="preserve">
-    <value />
+    <value>Obraz</value>
   </data>
   <data name="MpFileOptionType_Internet" xml:space="preserve">
-    <value />
+    <value>Internet</value>
   </data>
   <data name="MpFileOptionType_Presentation" xml:space="preserve">
-    <value />
+    <value>Prezentacja</value>
   </data>
   <data name="MpFileOptionType_Programming" xml:space="preserve">
-    <value />
+    <value>Programowanie</value>
   </data>
   <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
-    <value />
+    <value>Arkusz kalkulacyjny</value>
   </data>
   <data name="MpFileOptionType_System" xml:space="preserve">
-    <value />
+    <value>System</value>
   </data>
   <data name="MpFileOptionType_Video" xml:space="preserve">
-    <value />
+    <value>Wideo</value>
   </data>
   <data name="MpFileOptionType_UserDefined" xml:space="preserve">
-    <value />
+    <value>Zdefiniowany przez użytkownika</value>
   </data>
   <data name="MpFileOptionType_Custom" xml:space="preserve">
-    <value />
+    <value>Zwyczaj</value>
   </data>
   <data name="MpFileContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpFileContentOptionType_Path" xml:space="preserve">
-    <value />
+    <value>Ścieżka</value>
   </data>
   <data name="MpFileContentOptionType_Name" xml:space="preserve">
-    <value />
+    <value>Nazwa</value>
   </data>
   <data name="MpFileContentOptionType_Kind" xml:space="preserve">
-    <value />
+    <value>Rodzaj</value>
   </data>
   <data name="MpContentTypeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpContentTypeOptionType_Text" xml:space="preserve">
-    <value />
+    <value>Tekst</value>
   </data>
   <data name="MpContentTypeOptionType_Image" xml:space="preserve">
-    <value />
+    <value>Obraz</value>
   </data>
   <data name="MpContentTypeOptionType_Files" xml:space="preserve">
-    <value />
+    <value>Pliki</value>
   </data>
   <data name="MpAppOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
-    <value />
+    <value>Nazwa aplikacji</value>
   </data>
   <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
-    <value />
+    <value>Ścieżka procesu</value>
   </data>
   <data name="MpWebsiteOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpWebsiteOptionType_Url" xml:space="preserve">
-    <value />
+    <value>Adres URL</value>
   </data>
   <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
-    <value />
+    <value>Domena</value>
   </data>
   <data name="MpWebsiteOptionType_Title" xml:space="preserve">
-    <value />
+    <value>Tytuł</value>
   </data>
   <data name="MpSourcesOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpSourcesOptionType_Device" xml:space="preserve">
-    <value />
+    <value>Urządzenie</value>
   </data>
   <data name="MpSourcesOptionType_App" xml:space="preserve">
-    <value />
+    <value>App</value>
   </data>
   <data name="MpSourcesOptionType_Website" xml:space="preserve">
-    <value />
+    <value>Strona internetowa</value>
   </data>
   <data name="MpTransactionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpTransactionType_Created" xml:space="preserve">
-    <value />
+    <value>Utworzono</value>
   </data>
   <data name="MpTransactionType_Dropped" xml:space="preserve">
-    <value />
+    <value>Spadła</value>
   </data>
   <data name="MpTransactionType_Dragged" xml:space="preserve">
-    <value />
+    <value>Przeciągnąć</value>
   </data>
   <data name="MpTransactionType_Pasted" xml:space="preserve">
-    <value />
+    <value>Wklejony</value>
   </data>
   <data name="MpTransactionType_Copied" xml:space="preserve">
-    <value />
+    <value>Kopiowane</value>
   </data>
   <data name="MpTransactionType_Cut" xml:space="preserve">
-    <value />
+    <value>Ciąć</value>
   </data>
   <data name="MpTransactionType_Edited" xml:space="preserve">
-    <value />
+    <value>Edytowane</value>
   </data>
   <data name="MpTransactionType_Analyzed" xml:space="preserve">
-    <value />
+    <value>Analizowane</value>
   </data>
   <data name="MpTransactionType_Appended" xml:space="preserve">
-    <value />
+    <value>Dołączane</value>
   </data>
   <data name="MpTransactionType_Recreated" xml:space="preserve">
-    <value />
+    <value>Odtworzone</value>
   </data>
   <data name="MpTransactionType_Linked" xml:space="preserve">
-    <value />
+    <value>Połączone</value>
   </data>
   <data name="MpTransactionType_Unlinked" xml:space="preserve">
-    <value />
+    <value>Niepołączone</value>
   </data>
   <data name="MpTransactionType_Error" xml:space="preserve">
-    <value />
+    <value>Błąd</value>
   </data>
   <data name="MpTransactionType_System" xml:space="preserve">
-    <value />
+    <value>System</value>
   </data>
   <data name="MpDateTimeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
-    <value />
+    <value>W ciągu ostatniego</value>
   </data>
   <data name="MpDateTimeOptionType_Before" xml:space="preserve">
-    <value />
+    <value>Przed</value>
   </data>
   <data name="MpDateTimeOptionType_After" xml:space="preserve">
-    <value />
+    <value>Po</value>
   </data>
   <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
-    <value />
+    <value>Dokładny</value>
   </data>
   <data name="MpDateBeforeUnitType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
-    <value />
+    <value>Dzisiaj</value>
   </data>
   <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>Wczoraj</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
-    <value />
+    <value>W tym tygodniu</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
-    <value />
+    <value>W tym miesiącu</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
-    <value />
+    <value>Tego roku</value>
   </data>
   <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>Dokładny</value>
   </data>
   <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>Startup</value>
   </data>
   <data name="MpDateAfterUnitType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>Wczoraj</value>
   </data>
   <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
-    <value />
+    <value>W zeszłym tygodniu</value>
   </data>
   <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
-    <value />
+    <value>Ostatni miesiąc</value>
   </data>
   <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
-    <value />
+    <value>Ubiegły rok</value>
   </data>
   <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>Dokładny</value>
   </data>
   <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>Startup</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
-    <value />
+    <value>Godzin</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
-    <value />
+    <value>Dni</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
-    <value />
+    <value>Tygodni</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
-    <value />
+    <value>Miesiące</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
-    <value />
+    <value>Lata</value>
   </data>
   <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>Kopiuj datę i godzinę</value>
   </data>
   <data name="MpContentSortType_Source" xml:space="preserve">
-    <value />
+    <value>Źródło</value>
   </data>
   <data name="MpContentSortType_Title" xml:space="preserve">
-    <value />
+    <value>Tytuł</value>
   </data>
   <data name="MpContentSortType_ItemData" xml:space="preserve">
-    <value />
+    <value>Dane przedmiotu</value>
   </data>
   <data name="MpContentSortType_ItemType" xml:space="preserve">
-    <value />
+    <value>Typ przedmiotu</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value />
+    <value>Wynik użycia</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
-    <value />
+    <value>Wewnętrzny</value>
   </data>
   <data name="MpRoutingType_Passive" xml:space="preserve">
-    <value />
+    <value>Bierny</value>
   </data>
   <data name="MpRoutingType_Pre" xml:space="preserve">
-    <value />
+    <value>Przed</value>
   </data>
   <data name="MpRoutingType_Post" xml:space="preserve">
-    <value />
+    <value>Post</value>
   </data>
   <data name="MpRoutingType_Override" xml:space="preserve">
-    <value />
+    <value>Zastąpić</value>
   </data>
   <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
-    <value />
+    <value>Ekskluzywne nadpisanie</value>
   </data>
   <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
-    <value />
+    <value>Contains</value>
   </data>
   <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
-    <value />
+    <value>Dokładny</value>
   </data>
   <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>Zaczyna się od</value>
   </data>
   <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
-    <value />
+    <value>Kończy się na</value>
   </data>
   <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
-    <value />
+    <value>Wyrażenie regularne</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
-    <value />
+    <value>Wolny</value>
   </data>
   <data name="MpUserAccountType_Basic" xml:space="preserve">
-    <value />
+    <value>Podstawowy</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
-    <value />
+    <value>Nieograniczony</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Proszę wybrać -</value>
   </data>
   <data name="MpContentOptionType_Type" xml:space="preserve">
-    <value />
+    <value>Typ</value>
   </data>
   <data name="MpContentOptionType_Text" xml:space="preserve">
-    <value />
+    <value>Tekst</value>
   </data>
   <data name="MpContentOptionType_Images" xml:space="preserve">
-    <value />
+    <value>Obrazów</value>
   </data>
   <data name="MpContentOptionType_Files" xml:space="preserve">
-    <value />
+    <value>Pliki</value>
   </data>
   <data name="MpContentOptionType_AnyContent" xml:space="preserve">
-    <value />
+    <value>Dowolna zawartość</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
-    <value />
+    <value>Tytuł</value>
   </data>
   <data name="MpContentOptionType_Annotation" xml:space="preserve">
-    <value />
+    <value>Adnotacja</value>
   </data>
   <data name="MpContentOptionType_Color" xml:space="preserve">
-    <value />
+    <value>Kolor</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
-    <value />
+    <value>Podstawowy</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
-    <value />
+    <value>Mysz</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value />
+    <value>Jasny</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value />
+    <value>Usunąć</value>
   </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTagType_Link" xml:space="preserve">
-    <value />
+    <value>Łącze</value>
   </data>
   <data name="MpTagType_Query" xml:space="preserve">
-    <value />
+    <value>Zapytanie</value>
   </data>
   <data name="MpTagType_Group" xml:space="preserve">
-    <value />
+    <value>Grupa</value>
   </data>
   <data name="MpReadOnlyTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
-    <value />
+    <value>Tagi</value>
   </data>
   <data name="MpReadOnlyTagType_All" xml:space="preserve">
-    <value />
+    <value>Cały</value>
   </data>
   <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
-    <value />
+    <value>Ulubione</value>
   </data>
   <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
-    <value />
+    <value>Filtry</value>
   </data>
   <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
-    <value />
+    <value>Śmieci</value>
   </data>
   <data name="MpReadOnlyTagType_Today" xml:space="preserve">
-    <value />
+    <value>Dzisiaj</value>
   </data>
   <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
-    <value />
+    <value>Formaty</value>
   </data>
   <data name="MpReadOnlyTagType_Text" xml:space="preserve">
-    <value />
+    <value>Tekst</value>
   </data>
   <data name="MpReadOnlyTagType_Images" xml:space="preserve">
-    <value />
+    <value>Obrazów</value>
   </data>
   <data name="MpReadOnlyTagType_Files" xml:space="preserve">
-    <value />
+    <value>Pliki</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
-    <value />
+    <value>Tekst</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
-    <value />
+    <value>Obraz</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
-    <value />
+    <value>Plik</value>
   </data>
   <data name="WatcherChangeTypes_Created" xml:space="preserve">
-    <value />
+    <value>Utworzono</value>
   </data>
   <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
-    <value />
+    <value>Usunięte</value>
   </data>
   <data name="WatcherChangeTypes_Changed" xml:space="preserve">
-    <value />
+    <value>Zmienione</value>
   </data>
   <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
-    <value />
+    <value>Zmieniona</value>
   </data>
   <data name="WatcherChangeTypes_All" xml:space="preserve">
-    <value />
+    <value>Cały</value>
   </data>
 </root>

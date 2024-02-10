@@ -1,0 +1,11 @@
+{
+  "title": "Төп текст аннотатор",
+  "description": "Текстка нигезләнгән эчтәлек өчен төп гипершлай ярдәм күрсәтә",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Хор, аннотация, текст, сылтама, төс, анализлау, адрес, телефон, электрон почта, валюта, финанс"
+}

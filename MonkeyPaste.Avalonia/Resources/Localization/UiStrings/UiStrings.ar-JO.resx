@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>لا توجد ميزات محدودة بالاشتراك ، وسعة التخزين فقط ويمكن تغييرها في أي وقت.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>استعادة حسابك الحالي ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>المحتوى والقمامة
+يقتصر على {0} و {1}
+مقاطع على التوالي.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>يسمح بمقاطع المحتوى {2} وتخزين القمامة غير المحدود.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>محتوى غير مقيد وغير محدود وتخزين القمامة.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>يعيد</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>حر</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>معيار</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>غير محدود</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>الاشتراك</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>خصوصيتك مهمة ويمكن أن تكون بيانات الحافظة شخصية للغاية. يتم تشفير التخزين دائمًا ولكن يمكنك تعيين كلمة مرور ستكون مطلوبة في حالة سرق جهازك أو يستخدم أي شخص آخر جهازك.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>عند التمكين ، سيكشف السحب من أي تطبيق إلى أعلى الشاشة لإسقاط المحتوى بسهولة إلى Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>إن تمكين "القفل" في الجزء العلوي الأيسر من النافذة الرئيسية سيظل يسمح بإسقاط Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>تتوفر المزيد من تفضيلات النوافذ من قائمة "الإعدادات -&gt; تفضيلات -&gt; نافذة".</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>اسحب الموز هنا!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>السحب - إلى - فتح</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>يمكن مراجعة اختصارات لوحة المفاتيح أو تغييرها في أي وقت من قائمة "الإعدادات -&gt; اختصارات".</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>سيتم تعطيل جميع الاختصارات العالمية حتى تتمكن من إعدادها في وقت لاحق.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>ستتوفر اختصارات Monkeypaste's الحافظة في جميع التطبيقات.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>داخلي</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>تقصير</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>ملف تعريف لفتة</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>يا! دعنا ننشئ بعض الأشياء لتحسين تجربتك العامة مع Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>مرحباً</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>للحصول على أكبر قدر من الاستخدام من Monkeypaste ، يعد التحميل تلقائيًا عند تسجيل الدخول فكرة جيدة. لكن هذا متروك لك تمامًا.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>تبقيه غير رسمي.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>يُمكَِن</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>تحميل على تسجيل الدخول؟</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>عند تمكينها ، فإن لفتة التمرير في الجزء العلوي من الشاشة تكشف عن Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>اليسار - النقر على أيقونة شريط المهام لا يزال يفتح Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>تتوفر المزيد من تفضيلات النوافذ من قائمة "الإعدادات -&gt; تفضيلات -&gt; نافذة".</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>الحق سهلة؟</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>انتقل هنا!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>التمرير - إلى - مفتوح</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste هو &lt;span color = "red&gt; متكامل تمامًا &lt;/span&gt; مع السحب - و - إسقاط &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>أسقطه هنا!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; بهذه الطريقة ، يمكن الوصول إلى monkeypaste &lt;br&gt; &lt;span color = "red"&gt; بدون نقرة &lt;/span&gt; أو حتى &lt;span color = "red" &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>جرني!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>حاول!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>حاول!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>لا توجد نتائج متاحة.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>يتأكد</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>ينعش</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>يبحث...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>إعدادات</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>التبعيات:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>ثَبَّتَ</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إزالة '{0}' وجميع عمليات الإعداد المسبق والاختصارات؟</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>الغاء التثبيت</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>"{0}" ليس له نتائج.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>لا اختيار.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>لا أحد</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>الاعتمادات:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>وصف:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>يتبرع:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>رخصة:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>عنوان المشروع:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>نشرت:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>اقرأني:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>بلغ عن سوء معاملة:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>العلامات:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>إصدار:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>افتح في النافذة</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>ينعش</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>يحفظ</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>بجانب الحذف!
+
+ترقية لتجنب.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>بجانب القمامة!
+
+ترقية لتجنب.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>الملفات</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>نص</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>نسخ {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} ملفات | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} الخطوط</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} نسخ | {1} المعاجين</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>يتحرك</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>يضيف</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>ينسخ</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>يقطع</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>معجون</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} نسخة</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>مرشح غير محفوظ</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- الرجاء تحديد -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>تنسيقات</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>القراء</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>الكتاب</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>معالجات</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>يمسح</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>ينسخ</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>تعديل الاسم</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>إعادة ضبط</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>العلامات</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>فعل</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>التوجيه العالمي</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>الاختصار</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>يجب أن تكون الإيماءات فريدة من نوعها وقد تحتوي فقط على مفتاح إدخال واحد.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; داخلي &lt;/b&gt; تقتصر جميع الاختصارات على التطبيق. هذا ليس خيارًا مقصودًا حقًا ولكنه يمكن أن يسمح بتخصيص الاختصارات التي تنوي جعلها عالمية &lt;i&gt; يومًا ما &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; الافتراضي &lt;/b&gt; يتم تمكين جميع الاختصارات العالمية. يستخدم اختصار &lt;b&gt; show/hide main window &lt;/b&gt; &lt;span color = "red"&gt; تجاوز &lt;/span&gt; التوجيه لمفتاح &lt;b&gt; caps lock &lt;/b&gt;. يمكنك تغيير هذا التوجيه أو الإيماءة في أي وقت. لكن &lt;span color = "green"&gt; جربه &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; أوضاع الاختصار العالمية &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; السلبي &lt;/b&gt; سيستمع Monkeypaste المختصرة في أي تطبيق. &lt;br&gt;
+*هذا هو خيار &lt;i&gt; فقط &lt;/i&gt; على Linux في الوقت الحالي.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; الاختصار pre &lt;/b&gt; سيتم تنفيذ &lt;b&gt; &lt;i&gt; قبل &lt;/i&gt; &lt;/b&gt; يتم التعامل معه بواسطة التطبيق النشط. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; سيتم تنفيذ اختصار &lt;b&gt; &lt;i&gt; بعد &lt;/i&gt; &lt;/b&gt; يتم التعامل معه بواسطة التطبيق النشط. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; override &lt;/b&gt; عندما يسمع Monkeypaste مفتاح الإدخال (مفتاح المعدل غير المعدل) لاختصار التجاوز ، فإنه سيخفي &lt;/i&gt; هذا المفتاح يضغط من Application - مستوى الإدخال. &lt;br&gt;
+سيضمن هذا الخيار أن يتم تشغيل الاختصار دون تعارض مع التطبيق النشط.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Override الحصري &lt;/b&gt; هذا نوع خاص من وضع التجاوز المصمم لمفتاح قفل Caps. يسمح فقط &lt;b&gt; مفتاح واحد &lt;/b&gt; (غير مُعدِّل) لمهمته. &lt;br&gt;
+في وضع Caps Caps Mode العادي ، يمكن أن يصبح قفل &lt;i&gt; عالقًا على &lt;/i&gt; عند الضغط عليه مع مفاتيح أخرى. &lt;br&gt;
+لذلك بغض النظر عن مفاتيح أخرى ، إذا تم الضغط على مختصرة &lt;b&gt; hotkey &lt;/b&gt; ، فسيتم تجاوزه ومنعه من أن يصبح &lt;i&gt; عالقًا على &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>إبطال</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>قم بتحميل عند تسجيل الدخول إلى حساب المستخدم ، وليس للمستخدمين الآخرين.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; استخدام جهات الاتصال المتاحة (يتطلب مكونًا إضافيًا لـ Fotcher) سيتم استخدام هذا الحقل لجميع مثيلات هذا القالب عبر هذا المستند أو في أي سيتم الرجوع إليه لاحقًا. &lt;/p&gt; &lt;p&gt; لذلك على سبيل المثال إذا حدد عنوان البريد الإلكتروني هنا سيتم استخدام حقل البريد الإلكتروني لجهة الاتصال التي تحددها لجميع الحالات في هذا المستند. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = سنة قصيرة &lt;br/&gt; yyyy = long year &lt;br/&gt; m = month (1-12) &lt;br/&gt; mm = month (01-12) &lt;br/&gt; mmm = شهر الاختصار (يناير ، فبراير .. . يوم الأسبوع بالكلمات (الاثنين ، الثلاثاء ... الأحد) &lt;br/&gt; e = يوم قصير من الأسبوع بالكلمات (الاثنين ، الثلاثاء ... الشمس) &lt;br/&gt; د - يوم ترتيبي (الأول ، الثاني ، 3rd ، 21 ، 22 ، 23 ، 31 ، 4 ...) &lt;br/&gt; H = ساعة في AM/PM (0-12) &lt;br/&gt; hh = ساعة في AM/PM (00-12) &lt;br/ &gt; h = ساعة في اليوم (0-23) &lt;br/&gt; hh = ساعة في اليوم (00-23) &lt;br/&gt; mm = minate &lt;br/&gt; ss = second &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm علامة &lt;br/&gt; p = amm/p.m. علامة</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>سيتم استبدال التاريخ و/أو الوقت الحالي لقوالب DateTime عند لصقها.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; ستستخدم جميع حالات هذا القالب النص المقدم. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; ستستخدم جميع حالات هذا القالب النص المقدم. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>الانتهاء من الإلحاق</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>تمكين كتلة</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>تمكين مضمونة</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>دليل تبديل</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>دليل تبديل</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>الإيقاف التوقف</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>تبديل من قبل</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>تبديل من قبل</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>استئناف إلحاق</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>ألحق...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>معجون</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>دبوس</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>إخفاء كل إشعارات "{0}</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>آخر تطبيق نشط غير معروف. التبديل إلى التطبيق المقصود إلى معجون القرد.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>لصق إلى: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>تقليل</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>انتظر من فضلك...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>قفل</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>حساب</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>يساعد</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>نسخ ولصق</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>التفضيلات</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>استعادة الضبط الافتراضي</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>منقي...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>اختصارات</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>أضف التطبيق</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>أضف موقع الويب</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>حاجز؟</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>تطبيقات</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>حظر المجال؟</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>كتلة عنوان URL؟</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>اِختِصاص</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>يعتمد التعرف على عنوان URL للمصدر على مدى ملاءمة الحافظة ، إن تطبيق المضيف لا يمكن ضمان الرفض</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>عنوان URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>مواقع الويب</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>تستخدم بعض ميزات Monkeypaste أتمتة لوحة المفاتيح لمحاكاة أحداث "النسخ" في التطبيقات الأخرى.
+
+إضافة و/أو حدد التطبيق مع اختصار النسخ الفريد (مثل وحدة التحكم أو القشرة على سبيل المثال) لضمان عمل هذه الميزات بشكل صحيح.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>اختصار نسخ</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>لا أحد</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>سيتم استخدام الإعدادات المسبقة المحددة فقط للتطبيق المحدد. عندما يكون غير محدد ، سيتم استخدام الإعدادات المسبقة الافتراضية الموجودة في الشريط الجانبي &lt;em&gt; الحافظة &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>تستخدم العديد من ميزات Monkeypaste أتمتة لوحة المفاتيح للتفاعل مع التطبيقات الأخرى.
+
+قد يكون لبعض التطبيقات (مثل بعض لوحات المفاتيح أو القذائف على سبيل المثال) اختصار لصق غير الافتراضي.
+
+لضمان قابلية التشغيل البيني السليم ، سجل هذه الاختصارات لهذا التطبيق هنا.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>لصق اختصار</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>القراء</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>سيتم تجاهل جميع مراقبة الحافظة من التطبيقات المرفوضة &lt;b&gt; &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>الكتاب</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>يحرر...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>تنسيقات</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>مرفوض</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>اختصارات</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>هل ترغب أيضًا في إزالة جميع المقاطع {0} من '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>إزالة المقاطع؟</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>طلب</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>تصفح للتطبيق ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>حدد مسار التطبيق</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إزالة اختصارات مخصصة لـ {0}؟</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إزالة التنسيقات المخصصة لـ {0}؟</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>لا توجد تنسيقات مخصصة للحافظة لهذا التطبيق. لن تتم قراءة أي بيانات منها عن طريق القطع/النسخ أو محاولة السحب - و - إسقاط في Monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>لا توجد تنسيقات مخصصة للحافظة لهذا التطبيق. المعجون الآلي أو السحب - و - إسقاط من Monkeypaste لن يكون له أي تأثير (بياناته الفارغة).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إعادة تعيين جميع الاختصارات؟ ستتم إزالة جميع الاختصارات المخصصة.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد تغيير ملف تعريف توجيه الاختصار الخاص بك إلى "{0} '</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>المفضلة</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>المرشحات</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>تنسيقات</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>العلامات</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>اليوم</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>نفاية</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>عن</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>الحق سهلة؟</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>انقر نقرًا مزدوجًا لإلغاء الدخل</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>مخصص</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>عالمي</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>يتعارض هذا المزيج مع "{0} 'الذي سيتم مسحه إذا تم حفظه.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>يجب توفير اختصار.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>هذا اختصار عالمي. هذا يعني أنه سيحاول التنفيذ كلما تم تنفيذه. حاول أن تجعلها فريدة من نوعها بما يكفي (أو تغيير "نوع التوجيه") حتى لا تتعارض مع اختصارات من التطبيقات الأخرى.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>عالمي</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>يجب أن يحتوي الاختصار على مفتاح واحد غير مُعدِّل واحد فقط.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>اضغط على أي مفتاح للتسجيل ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>تعيين اختصار</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>يتعلم أكثر...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>يرقي</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>يلغي</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>يصلح</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>يتجاهل</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>إعادة المحاولة</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>اغلق</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>يُقدِّم</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>سنوي</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>شهريا</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>حاول مجانا!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>دورة الفواتير</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>بريد إلكتروني</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>تحقق من اتصالك
+وحاول مرة أخرى.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>الدفعة التالية</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>يسجل</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>البريد الإلكتروني غير صالح</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>كلمة المرور غير مطابقة.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>يجب أن تكون كلمة المرور بحد أدنى من الأحرف {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>يتذكر؟</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>تحقق من بريدك الإلكتروني لتأكيد حسابك</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>ط ط ط د ، yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>MMM D ، H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>أبداً</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>تجربة مجانية {0}</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>كانت هناك مشكلة في الأداء
+مشترياتك.
+
+التحقق من اتصالك و
+قد تساعد الإعدادات.
+
+هل تود أن تجرب مجددا؟</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>لقد تم نجاح حسابك
+تمت ترقيتها إلى:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>شراء ناجحة!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>فشل الاتصال.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>إعادة المحاولة</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>تم تغيير الحساب</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>اشتراكك هو الآن {0}/{1} بمحتوى {2} و {3} تخزين القمامة.
+لكن لا تقلق ، لا تضيع أي بيانات بعد تخفيض تصنيفها. سيتم تقييم مقاطع جديدة فقط.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>تهانينا! اشتراكك هو الآن {0}/{1} بمحتوى {2} و {3} تخزين القمامة.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>القمامة أو إلغاء ربط شيء ما
+من '{0}' لإضافة المزيد.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' التخزين هو {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>يعيد</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} محظور</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>تم الوصول إلى قدرة المحتوى والقمامة!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' التخزين هو {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>تم الوصول إلى سعة المحتوى!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* يمكنك إخفاء هذه التحذيرات
+النقر فوق "إخفاء الكل" من
+قائمة الخيارات أعلاه.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>تخزين القمامة القصوى {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>وصلت قدرة القمامة!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} غير صالح</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} يجب أن تكون أحرف {1} على الأقل</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} يمكن أن يكون فقط {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>لصق إلى: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>الدفع مقابل {0}
+كان الاشتراك مستحقًا {1}
+ولم يتم استلامها.
+
+الرجاء تحديث الخاص بك
+معلومات الدفع.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>الدفع مقابل {0}
+كان الاشتراك مستحقًا {1}
+ولم يتم استلامها.
+
+الرجاء الاتصال بـ
+الإنترنت على الجهاز
+مع اشتراكك و
+أعد التشغيل من أجل الاستمرار
+باستخدام خطة {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>الدفع مقابل {0}
+كان الاشتراك مستحقًا {1}
+ولم يتم استلامها.
+
+الرجاء فتح أو إعادة التشغيل
+monkeypaste على الجهاز
+مع اشتراكك في
+استمر في استخدامك
+{0} خطة.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>صلاحية الحساب</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>ملحوظة</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>متجر Microsoft لا يسمح Tier
+التغييرات في الملحقات الاشتراك.
+
+يجب عليك إلغاء الخاص بك
+{0}/{1} خطط لنفسك
+أو سيتم محاسبتك لكليهما.
+
+هل ترغب في الذهاب تفعل ذلك الآن؟</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>تم إعادة تعيين كلمة المرور الخاصة بك.
+
+يرجى التحقق من بريدك الإلكتروني و
+اتبع الرابط للتغيير
+كلمة السر خاصتك.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>المؤلفون)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>مطلوب أن تقبل شروط الترخيص التالية قبل المتابعة.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>تتطلب الحزمة (الحزمة) التالية أن تقبل شروط الترخيص الخاصة بهم قبل التثبيت.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>انخفض</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>النقر فوق "أقبل" يعني أنك توافق على شروط الترخيص لهذا الطلب. إذا كنت لا توافق على الشروط ، فانقر فوق "أنا أرفض".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>النقر فوق "أقبل" يعني أنك توافق على شروط الترخيص الخاصة بالمكون الإضافي المذكور أعلاه. إذا كنت لا توافق على الشروط ، فانقر فوق "أنا أرفض".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>ترخيص عرض</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>قبول الترخيص</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>أنا أتفق</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>نشيط</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>غير متصل على الانترنت</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>غير مسجل</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>منتهي</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ كلمات المرور لا تتطابق</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>اشتراكك هو
+الآن تعيين على {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>تم العثور على الحساب</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>فشل تسجيل الدخول</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>فشل في التسجيل</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>التسجيل ناجح!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>إعادة تعيين الخطأ</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>الاشتراك</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>ما هو الجديد</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>أبداً</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>غير محدود</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>سعة</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>متبقي</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>المجموع</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>دفعتك بعد مستحقة.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>قد تحتوي اختصارات التجاوز الحصرية على مفتاح واحد فقط ولا يمكن أن يكون هذا المفتاح مفتاح تعديل.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>منتهي الصلاحية</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>تحميل</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>عاجز</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>ملحوظة! كلمة المرور هذه اختيارية وفقط لأمان إضافي. بياناتك مشفرة بالفعل ولم يتم مشاركتها أبدًا. تمنع كلمة المرور هذه ببساطة شخصًا لا أنت ليس من تحميل monkeypaste إذا كان يتم الوصول إلى سطح المكتب بطريقة ما (سرقت ، تغادر الغرفة ، إلخ).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>تذكر إعدادات الإسقاط لـ:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>تصفح الإضافات</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>تحليل</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>عمل سريع</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>تبديل تحرير</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>تبديل مثبت</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>التعليقات التوضيحية</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>نص عادي</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>افتح في النافذة</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>انقر فوق + Ctrl لمتابعة ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>انقر فوق + بديل لمتابعة ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>دبوس أو إسقاط أي وسائط هنا!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>واضح</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>ستوفر العتبات أعلاه 0 مطابقة ألوان غامضة باستخدام المسافة الإقليدية في مساحة الألوان RGBA.
+
+على سبيل المثال ، إذا كان Red (#ff0000) هو مصطلح البحث والأسود (#000000) هو بكسل في مقطع صورة ، فإن مسافة اللون ستكون 255. المسافة من الأسود إلى الأبيض هو الحد الأقصى الممكن من 510 ، بما في ذلك قناة ألفا</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>كل ما يلي صحيح</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>الحافظة</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>مجموعات</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>أوضاع الماوس</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>محفزات</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>يوقف</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>سيرة ذاتية</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>الزناد الجديد</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>أضف مسبقًا</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>قرد إسقاط معالج</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>الإعدادات المسبقة</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>محلل</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>شريحة</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>اتجاه الدورة</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>تبديل تخطيط شبكة</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>حساسية الموضوع</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>عتبة</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>الكلمة بالكامل</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>لا شيء مجموعة</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>التوجيه</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>فعل</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>شبكة</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>منتهي</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>سابق</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>يتخطى</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>حساب موجود؟</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>الدفعة التالية</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>يتيح لك التسجيل حمل اشتراكك المدفوع عبر جميع أجهزتك (عند التوفر). لن نرسل بريدك الإلكتروني بريدك الإلكتروني.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>الاشتراك</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>اسم المستخدم</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>تحتاج إلى التسجيل؟</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>مصادر</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>غريب ، لا شيء متاح. يجب أن يكون هناك خطأ 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>يزيل</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>يتطلب إعادة التشغيل</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>متقدم</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Error Errracting Plugin من "{0} '</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>خطأ في تثبيت البرنامج المساعد: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>خطأ في تثبيت المكون الإضافي '{0}' بنية الدليل الفاسد أو غير لائق. يجب أن يكون هناك بيان في '{1}' ولكن لم يتم العثور عليه.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Error Plasping Plugin بيان "{0} ': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>لا يوجد مكون إضافي محمل بـ GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} خطأ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Error Turging Plugin to temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>خطأ النسخ الاحتياطي '{0}' إلى '{1}'. التفاصيل: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>سيتم تطبيق النص المكتوب تلقائيًا على البحث عندما لا يتم تركيز مربع نص.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>إدخال البحث التلقائي</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>فشل تغيير كلمة المرور</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>يتغير</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>تغيير كلمة المرور</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>واضح</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>مسح كلمة المرور</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>محتوى</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>حجم خط المحتوى</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>عندما يكون صحيحًا ، فإن المحتوى الخارجي الذي يتم إدخاله في مقطع سيستخدم تنسيق المقاطع وليس ما هو متاح من المصدر.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>لصق أو إسقاط أو إلحاق بتنسيق الوجهة</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد أن تنسى كلمة المرور؟</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>ينسى</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>ننسى كلمة المرور</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>حساب تعريفي</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>إخفاء العلامات المائية السعة</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>عندما يتم إلحاق محتوى الحافظة الجديدة ، فلن يتم تتبعه كمقطع جديد</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>تجاهل الإلحقات</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>عندما تتطابق الحافظة مع مقطع موجود ، سيتم استخدام هذا المقطع بدلاً من إنشاء واحد جديد</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>تجاهل التكرارات الجديدة</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>لن يتم تتبع تغييرات الحافظة من داخل التطبيق</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>تجاهل تتبع الحافظة الداخلية</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>سيتم تجاهل المساحات وعلامات التبويب والخطوط الجديدة من التتبع</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>تجاهل المساحة البيضاء فقط</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>تحميل على تسجيل الدخول</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>تحريك نافذة</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>الغضب</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>إظهار السلوك</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>سيتم الكشف عن النافذة الرئيسية من خلال إجراء لفتة تمرير على الحافة العلوية من شاشتك</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>عرض على شاشة التمرير العلوي</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>حجم الإخطار</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>سيتتبع هذا الإعداد النظام - تعداد معجون لوحة المفاتيح على نطاق واسع لإحصائيات الاستخدام. هذه المعلومات خاصة وليست مشتركة ولكنها أيضًا غير ضاربة. قد تتطلب النتائج الدقيقة توفير أمر لصق لوحة مفاتيح معين في "الإعدادات -&gt; نسخ ولصق -&gt; اختصارات".</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>لصق التاريخ</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>يمكن أن تستهلك الكثير من المقاطع المثبتة (مثل علامات تبويب المتصفح) ذاكرة كبيرة. الإزالة هي أولاً - في - أولاً - خارج</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>السعة الدبوس</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>ينطبق هذا على جميع المدخلات التلقائية القابلة للتكوين ، وسوف تقوم القيم المنخفضة بتحسين الأداء</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>حد النص الأخير</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد
+استعادة التفضيلات الافتراضية؟
+
+هذا لا يمكن التراجع عنها!
+
+*سيتم إعادة تشغيل التطبيق بمجرد الانتهاء.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إعادة تعيين جميع الإخطارات؟
+
+*هذا لا يمكن التراجع عنها!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>يقوم Monkey Paste بتعيين الحافظة (تجاوز) عند لصق برنامج خارجي. هذا سوف &lt;b&gt; محاولة &lt;/b&gt; لاستعادة حالة الحافظة بعد عجينة خارجية.
+
+لا يمكن ضمان ترميم إجمالي وقد يقلل من الأداء أو حتى تعطل Monkeypaste اعتمادًا على مصدر البيانات.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>إعادة تعيين الحافظة بعد لصق القرد</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>لا يمكن حذف ذاكرة التخزين المؤقت المكون الإضافي من المسار: "{0} '</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>سيتم إعادة تعيين جميع الإضافات إلى الحالة الافتراضية الأولية</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>ذاكرة التخزين المؤقت المكون الإضافي</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إعادة تعيين جميع الإضافات إلى الإعدادات الافتراضية؟</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد إعادة تعيين كلمة المرور الخاصة بك؟</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>سيتم إعادة تعيين جميع اختصارات التطبيق إلى إيماءات المفاتيح الافتراضية الخاصة بها.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>إعادة تعيين اختصارات</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>جميع الإخطارات التي تم تجاهلها مسبقًا.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>استعادة الإخطارات</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(التمكين يمكن أن يكون بطيئًا إلى حد ما) سيؤدي تعطيل التنسيق إلى تقليل استهلاك الذاكرة ولكنه سيمنع بعض الميزات المتقدمة ، مثل: الإلحاح والقوالب والشروح والبحث/الاستبدال</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>محتوى غني</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>ضبط كلمة السر</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>تلميحات المعرض</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>عرض في شريط المهام</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>عرض في مهام المهام</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>إظهار العناوين</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>عند التمكين ، سيكشف السحب من أي تطبيق إلى أعلى الشاشة لإسقاط المحتوى بسهولة إلى Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>عرض على السحب إلى أعلى الشاشة</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>موضوع الصوت</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>التدقيق الإملائي</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>عند بدء التشغيل ، سيكون مصدر الحافظة غير معروف واعتمادًا على إعدادات الأمان الخاصة بك ، قد يأتي المحتوى من موقع ويب أو تطبيق مستبعد.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>إضافة حافظة بدء التشغيل</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>استمع إلى الحافظة على بدء التشغيل</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>يختار</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>حذر! يتم اختيار ألوان لوحة أخرى باستخدام الرياضيات وليس العيون! لذا كن على دراية ببعض مجموعات الألوان والأناقة قد لا يكون لها تباين مناسب لقابلية القراءة.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>لون الموضوع</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>نمط الموضوع</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>سيحدث تنظيف القمامة التلقائي عند بدء التشغيل عند الفاصل الزمني المحدد.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>تنظيف القمامة</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>واجهه المستخدم</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>قد تؤثر حدود التراجع العالية على الأداء</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>التراجع عن الحد</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>لا حدود</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>تستخدم في بحث الملف المتقدم عن أنواع الملفات غير المحددة مسبقًا</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>المستخدم - امتدادات البحث المحددة</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>ابحث واستبدل ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>لصق هنا</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>يشارك...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>منظر</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>يدير...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>إعادة تسمية</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>النتيجة: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>اكتب: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>حذف بشكل دائم</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>تصفح إلى '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>تحول</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>مدخل</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>انتاج |</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>مصادر</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>يعيد</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>اختر صورة...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>لون</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>إدارة '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>يفتح</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>انتظر من فضلك...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>لون الخلفية</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>امسح الكل</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>تنسيقات الحافظة</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>حذف الكل</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>عدل التفاصيل</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>يجد</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>لون الخط</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>تنسيق الطلاء</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> في الاختيار</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>إدراج صورة</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>أدخل الرابط</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>أدخل الفيديو</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> حالة مباراة</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>قالب جديد</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>القالب التالي</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>أدخل نص لصق ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>القالب السابق</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> تعبير عادي</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>استبدل كل شيء</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>يستبدل</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> الكلمة بالكامل</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> التفاف حول</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>حاجز</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>اِختِصاص</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>مجلد عرض</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>رفع الحظر</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>عن</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>كتلة إلحاق</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>إلحاق مضمّن</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - نسخة</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>أساليب</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>من فضلك انتظر monkeypaste يتم تحميل ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>يترك</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>RIGH - انقر فوق لصق</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>مجموعة</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>منقي</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>حذف كل شيء بشكل دائم</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>استعادة كل</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>فعل</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>عنوان URL موجود بالفعل: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>يجب أن يكون عنوان URL بتنسيق صالح.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>أدخل عنوان URL الكامل:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>إضافة رابط</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>أدخل القيم</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>نسخ النص أو الملفات لتطبيق.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>تم تنشيط وضع الإلحاح {0} {1}</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>سيتم الآن إلحاق تغييرات الحافظة</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>بعد تنشيط وضع الإلحاق</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>سيتم الآن إعداد تغييرات الحافظة</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>قبل تنشيط وضع الإلحاق</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>حاجز</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>تم استعادة سلوك الحافظة العادية</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>إلحاق تنشيط</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>الإلحاحات المضافة إلى أعلى أو botom من المقطع</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>تم تنشيط وضع الملحق</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>في النسق</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>يدوي</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>إلحاق اختيارك الحالي.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>تم تنشيط وضع الإلحاح اليدوي</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>توقف تراكم الحافظة</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>إلحاق توقف مؤقتًا</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>استئناف تراكم الحافظة</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>تم استئناف إلحاق</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد الانتهاء من الإلحاق؟</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>سيؤدي التحرير في وضع التوافق إلى إزالة جميع التنسيقات الغنية. هل أنت متأكد من أنك ترغب في تعديل هذا؟</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>تحذير تدهور البيانات</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>نشيط</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>تمكين</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>عن</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>على</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>توقف مؤقتا</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>نتيجة</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>حالة</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>حدث خطأ غير معروف.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>المحاولات المتبقية</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>أدخل كلمة المرور</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>يتأكد</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>اتصال</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>وقت التاريخ</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف جميع استخدامات "{0}؟
+
+هذا لا يمكن التراجع عنها!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>متحرك</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>ثابتة</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} فارغ ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>المزيد قادم قريبا!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>فشل تحميل تسجيل الدخول تعطيل</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>تسجيل الدخول تعطيل النجاح</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>فشل تحميل تسجيل الدخول</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>قم بتمكين تحميل تسجيل الدخول النجاح</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>يخفي</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>تم الآن تحميل معجون القرد.
+الاستماع إلى الحافظة هو: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>محمل</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>يعرض</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>وضع اختيار النسخ التلقائي: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>تغير الوضع</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>انقر بزر الماوس الأيمن على وضع لصق: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>تم تحديث البرنامج المساعد</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>لصق '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>قم بتشغيل محلل "{0}</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>تشغيل "{0}" الزناد</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>حدد '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف "{0} وجميع الإجراءات المرتبطة؟</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>مشغل</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>هل ترغب في إزالة جميع الإجراءات الفرعية لـ '{0}'؟ (وإلا فإنهم سيتم إعادة الوالدين إلى '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>إزالة الخيارات</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>هل تريد حقًا الحصول على '{0}'؟</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>حساب</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>المحللون</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>عمليات التطبيق</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>الحافظة</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>محتوى</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>المحولات</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>ثقافة</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>بيانات</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>اتجاه</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>سحب وإسقاط</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>معالج إسقاط</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>أيقونات</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>المسجل</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>واجهه المستخدم</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>لصق العمليات</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>التفضيلات</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>يبحث</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>اختصارات</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>اصوات</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>علبة النظام</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>مجموعات</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>سمة</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>محفزات</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>عمليات الموقع</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>لغة</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>يضبط الحافظة على مقطع الإدخال.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>يُحذًِر</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>وميض</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>تتناغم</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>تنبيهات رسائل صينية الصوت و/أو الغرض العام. لا تؤثر إجراء التنبيه على مدخلاتهم.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>رسالة</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>قرد</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>معاينة</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>يعرض؟</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>يتم عرض رسالة Time Toast في ثوان. عندما تكون القيمة 0 يجب إغلاق الرسالة يدويًا.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>أوقات العرض)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>السونار</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>صوت؟</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>نوع الصوت</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>تينغ</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>مقدار</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>محلل</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>تقوم بمعالجة مقطع الإدخال الخاص به باستخدام محلل محلل مسبق.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>محتوى الإدخال مرتبط بالمجموعة المحددة</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>يرتبط مقطع الإدخال الخاص به إلى مجموعة العلامات المعينة.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>بطاقة شعار</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>حساسية الموضوع؟</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>يمكن أن يكون هذا نصًا ثابتًا للمقارنة مع الإدخال و/أو تضمين خصائص محددة (عبر زر المرشح) سيتم استبداله عند تقييم الحالة.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>بيانات الحالة</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>استعلام jsonpath اختياري سيتم تطبيقه على "خاصية الإدخال" المحددة قبل تقييم الشرط.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>مرشح الإدخال</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>خاصية مقطع تستخدم لهذا الشرط.
+
+يتم دعم خاصية "الإخراج الأخير" حاليًا فقط عندما يكون هذا الشرطي طفلًا لإجراء المحلل وستختلف البيانات المقدمة اعتمادًا على إخراج المحلل الأصل.
+
+لاستكشاف الأخطاء وإصلاحها ، قم بإرفاق "إجراء تنبيه" بوالد هذا الشرط وقم بتعيين معلمة "رسالة" التنبيه لمطابقة خاصية الإدخال هذه. سيسمح ذلك بمراجعة البيانات الفعلية المستخدمة لهذا الشرطية.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>خاصية الإدخال</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>يقوم بمقارنة نص على مقطع الإدخال أو إخراج الإجراء السابق. عندما تفشل المقارنة (ليس تطابقًا) ، لن يتم تنفيذ إجراءات الطفل. لذلك يتصرف مثل بوابة منطقية.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>جميع العمليات الحقيقية أو الخاطئة حيث سيتم تنفيذ إجراءات الطفل فقط إذا كانت النتيجة صحيحة.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>حالة</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>يتم تشغيله عند إضافة مقطع من النوع المحدد إلى النظام بأي شكل من الأشكال (الحافظة ، السحب - و - إسقاط ، محلل أو مكرر).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>قم بتنفيذ هذا المشغل فقط إذا كان مقطع الإدخال جديدًا وليس مكررًا. هذا مستقل عن أي إعداد تفضيل لما إذا كان يتم تجاهل محتوى جديد أم لا.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>تجاهل مكررة</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>فقط المقاطع من هذا النوع سوف تؤدي إلى هذا الإجراء.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>يرتبط مقطع الإدخال الخاص به إلى مجموعة العلامات المعينة.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>يتم تشغيله عند ربط مقطع بمجموعة العلامات المحددة.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>مجموعة</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>تم انتظار مقدار الوقت بالميلي ثانية قبل تنفيذ الأطفال</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>تأخير</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(تجريبي) يستخدم في المقام الأول بالتزامن مع إجراء مكرر لاستقصاء مصادر عن بُعد أو المساعدات مع عمليات طويلة المدى.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>عند تركه فارغًا ، سيستخدم ملف الإخراج عنوان مقطع الإدخال كاسم الملف.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>اسم مخصص</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>الدليل حيث سيتم كتابة الملف.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>الدليل</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>يحفظ المدخلات إلى المجلد المحدد.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>يتم تشغيله عندما يتغير محتوى المجلد المحدد. سيكون الإخراج عبارة عن مقطع ملف جديد أو موجود (عند تمكين تفضيل التكرار) للملف أو المجلد الذي تغير مع نوع التغيير كخلفه الأخير.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>الأحداث</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>مجلد</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>تجاهل مكررة</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>ستكرر قيمة 0 إجراء الوالدين إلى أجل غير مسمى</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>تكرار العد</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>مقدار الوقت بالمللي ثانية للانتظار بمجرد اكتمال إجراء الوالدين</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>كرر التأخير</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(تجريبي) يستخدم لإنشاء حلقات الحركة أو المهام المتكررة. عند التكرار ، سيتم تنفيذ جميع الأطفال مرة أخرى بمدخلاته الأصلية. عند استخدام فاصل زمني بدون عدد تكرار ، يجب تعطيل الزناد وإعادة تمكينه لوقف التكرار. يمكن أن تكون مفيدة لتلقيح أو أتمتة تجريف الويب.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>الناتج عن اختصار عالمي تحدده. إذا كان Monkeypaste نشطًا ، فسيحاول استخدام المقطع المحدد (إذا كان هناك واحد) كمدخل. وإلا فإنه سيحاول استخدام الحافظة كمدخلات لها.
+
+ملاحظة: لا يزال يتم تنفيذ مشغل الاختصار إذا لم يكن هناك أي مدخلات للحفاظ على مرونة (بحيث يمكن أن يكون مشغل ماكرو وما إلى ذلك) نظرًا لأنه ليس حدثًا غير مدفوع.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>الزناد اختصار</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>يتم تشغيله عندما يتم الضغط على الاختصار المسجل في أي وقت مع الحافظة الحالية</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>يتطلب هذا الإجراء إعادة التشغيل. هل ترغب في القيام بذلك الآن؟</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>كان هناك مشكلة. تحتاج إلى إعادة تشغيل التطبيق يدويًا.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>تحليل مع التعليق</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>شرح الزناد</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>بنيت في عناصر قراءة - فقط. مكررة لتغيير.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>مجهول</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>مخصص</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>أمس</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} منذ أيام</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>منذ 1 ساعة</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} منذ ساعات</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>الآن</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>قبل دقيقة</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} منذ دقيقة</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>الشهر الماضي</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} منذ أشهر</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>الأسبوع الماضي</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} قبل أسابيع</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} منذ سنوات</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>التعليقات التوضيحية</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>اسم التطبيق</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>مسار التطبيق</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>حساسية الموضوع</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>محتوى</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>نوع الملف</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>نوع الصورة</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>تعبير عادي</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>إدخال النص</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>عنوان URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>عنوان URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>الكلمة بالكامل</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>مثل التمرير على طول حافة الشاشة العلوية لفتحه ، سيؤدي ذلك إلى قفل النافذة الرئيسية عند فتحها. السماح لسير العمل المستهدف أسرع.
+
+* الزوايا من حيث جميع الشاشات الخاصة بك ، وليس لكل شاشة.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>عرض النافذة والقفل</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>حر!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>أعطنا 5 نجوم!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>حذف الكل</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>حذف جميع المحتوى</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف
+كل مقاطعك؟!
+
+*هذه العملية لا يمكن التراجع عنها!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>أنا indy dev يرجى إظهار بعض الدعم!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>مثل monkeypaste؟</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} يقبل فقط إدخال النوع (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>وضع النسخ التلقائي - يحاكي حدث "نسخة" في كل مرة يتم فيها إصدار زر الماوس الأيسر.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>انقر بزر الماوس الأيمن على وضع لصق - يحاكي حدث "لصق" في كل مرة يتم فيها إصدار زر الماوس الأيمن</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>المعد مسبقا</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>إظهار مجلد البرنامج المساعد</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>تقرير</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>منظر</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>عرض تلميحات</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>يقوم المحللون بتعليق مدخلاتهم أو إنشاء مقاطع جديدة كمخرجات. يحتاج أطفال التحليلات إلى تحديد أي شخص يحتاجون إليه كمدخلاتهم. هذا هو عادة الناتج الأخير.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>نوع الإدخال</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>مصمم الزناد '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>اختر {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>غير معثور عليه...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} الزناد</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>عند فحص النتيجة الحقيقية أو الخاطئة للشرط ، سيتم قلبها. على سبيل المثال ، ستصبح حالة "تحتوي على" "لا تحتوي على".</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>انتظر من فضلك...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>اختيار اللون</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>اختيار لون المباراة</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>مثل مشغل الاختصار ولكن عندما يتم الضغط على مجموعة المفاتيح ، سيتم محاكاة حدث "نسخة" في التطبيق النشط بحيث لا يزال يعمل مثل النسخ ولكن بعد ذلك سيتم تنفيذ سلسلة الإجراءات المرتبطة بنسخ القرد في الخلفية باستخدام الخلفية باستخدام محاكاة بيانات الحافظة.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>تصفية متقدم</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>إخفاء المرشحات</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>استعادة المرشحات</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>إنشاء مرشح</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(اختياري) عند تركه فارغًا ، سيتم تعيين الحافظة باستخدام إدخال هذا الإجراء. سيتم التعامل مع أي شيء المقدم هنا كنص عادي فقط.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>محتوى الحافظة</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>عندما يكون صحيحًا ، سيتم إضافة أي مقطع بعد تعيين هذا الإجراء الحافظة.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>يتجاهل</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>لم يتم اختيار محلل للعمل "{0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>لم يتم العثور على محلل للعمل '{0}</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>الأصل '{0}' مرشحات فقط من أجل "{1} 'لن يتم تنفيذ المحتوى والمحلل' {2} 'لأنه لا يدعم' نوع الإدخال {3} '</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>لم يتم تحديد علامة لمصنف '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>علامة على المصنف '{0}' لم يتم العثور عليها</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>يمكن أن تكون قيمة المقارنة فقط الحروف أو الأرقام أو المساحات</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>لم يتم تحديد علامة محددة لمقطع Tagged Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag for Clip Tagged Trigger '{0}' لم يتم العثور عليها</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>لا يوجد مجلد مشاهدة محدد لـ '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>لم يتم العثور على مجلد مشاهدة '{0}' من أجل الزناد '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>لم يتم تعيين مسار ملف كاتب الملف "{0}</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>لم يتم العثور على مسار كاتب الملف '{0}' لـ '{1}'.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>شريط المهام</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>تعرف على الإضافات</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>استعادة تكوين التحليل هذا</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} تغيير السجل</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>يرجى الاتصال بالإنترنت وحاول مرة أخرى لاحقًا.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - مساعدة</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} هو أحدث إصدار</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>أنت كل شيء - حتى - التاريخ!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>تحقق من وجود تحديثات...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>نسخة جديدة متاحة!
+
+انقر هنا للتحديث إلى '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>انقر أدناه للتحديث إلى '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>التحديث متاح!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>تحديث الان</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>يحتوي '{0}' على قيم مشتركة. ماذا تريد إعادة التعيين؟</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>واضح</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>واضحة عمليات البحث الحديثة</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>إعادة ضبط الجميع</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>إعادة تعيين مشتركة</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>إعادة تعيين غير مشتركة</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>يستدعي إجراء التطبيق المعين. جميع أوامر التطبيق عديمة الجنسية ويتم تجاهل مقطع الإدخال الخاص بهم.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>عندما لم يتم التحقق من ذلك ولا يمكن أن يطلق الأمر ، ستتوقف سلسلة التنفيذ. سوف تتطلب العديد من الأوامر بعض حالة التطبيق المحددة من أجل التنفيذ.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>تابع دائما؟</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>الأمر لأداء.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>يأمر</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>لم يتم تحديد أمر محدد لأمر التطبيق "{0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>أمر Application أمر "{0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>المحدد</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>إعادة تشغيل</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>كان هناك مشكلة تحديث '{0}'. من أجل إكمال التحديث ، ستحتاج إلى إعادة تشغيل وتثبيت "{0} مرة أخرى (لا تقلق سيتم استعادة جميع الإعدادات الخاصة بك).
+
+يمكنك إعادة التشغيل الآن وإكمال التحديث عن طريق إعادة التثبيت ، وتجاهل ذلك وتحديثه لاحقًا أو إلغاء التحديث معًا ومتابعة استخدام الإصدار '{1}'؟</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>خطأ في التحديث</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>لا يمكن تنزيل التحديث</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>فشل التحديث</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>لإكمال التحديث ، ستحتاج إلى إعادة التشغيل. هل ترغب في إعادة التشغيل الآن أم لاحقًا؟</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>تحديث جاهز</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>لاحقاً</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>اعد البدء الان</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>قيد الانتظار</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>تم تحديث {0} بنجاح إلى {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>المكونات الإضافية الأساسية مطلوبة ولا يمكن إزالتها.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>تثبيت</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>التحديث معلق. أعد التشغيل لإكمال.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>قيد الانتظار</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>إلغاء التثبيت معلق. يرجى إعادة التشغيل إذا كنت ترغب في إعادة التثبيت.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>لإكمال إلغاء التثبيت ، ستحتاج إلى إعادة التشغيل. هل ترغب في إعادة التشغيل الآن أم لاحقًا؟</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>الانتهاء من إلغاء التثبيت؟</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>غير منشورة</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>تلقائي - تم إنشاؤه الإعداد المسبق الافتراضي لـ '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>لم يتم تحديد مقطع</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>تحليل مقطع محدد</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>تعيين اختصار لتشغيل '{0}' على المقطع المحدد</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>عجينة عالمية</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>قم بتعيين اختصار اللصق العالمي لـ '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>هل نسيت كلمة السر؟</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>سياسة الخصوصية</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(يتطلب إعادة التشغيل) عند تسجيل تسجيل المعلومات التشخيصية الممكّنة للملف. هذا يمكن أن يبطئ الأداء وقد يحتوي على معلومات شخصية.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>تسجيل الدخول إلى ملف</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>يفتح</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>فتح سجلات سجلات</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>تصفح الإضافات</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>يقرأ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>يكتب</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>أرسل التعليقات أو تقرير الأخطاء</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>هذا يخفي النافذة الرئيسية فقط. يتم دائمًا عرض جميع نوافذ الحوار غير الأخرى في شريط المهام.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>ابحث في '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>إضافة مرشح</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>تحرير نوع الانضمام</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>إزالة هذا المرشح</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>مساعدة مفتوحة حول هذا ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} مقاطع</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>يتغير</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>أبداً</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>تعيين</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>بلا عنوان</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>سِجِلّ</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>مرجع المصدر غير المسماة</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>مطلوب "{0}"</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(لديه أخطاء)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>محدود</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>تخزين</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>نفاية</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>غير محدود</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>يطابق هذا التطبيق حاليًا إعدادات وقارئ الحافظة الافتراضية وتنسيقات.
+
+إن تمكين أو تعطيل الإعدادات المسبقة للقارئ الافتراضي (من الشريط الجانبي للحافظة) لن يؤثر على هذا التكوين. فقط التطبيقات غير المدرجة تتبع الإعداد الافتراضي.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>يطابق هذا التطبيق حاليًا الإعدادات المسبقة للتنسيقات والتنسيقات الافتراضية للحافظة.
+
+إن تمكين أو تعطيل الإعدادات المسبقة للكاتب الافتراضي (من الشريط الجانبي للحافظة) لن يؤثر على هذا التكوين. فقط التطبيقات غير المدرجة تتبع الإعداد الافتراضي.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>لإلحاقك ، يجب عليك إلغاء تفسير مستمع الحافظة (علبة النظام -&gt; استئناف).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>إلحاق غير متوفر</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> ليس لديه إعدادات</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>أنا أتحدث الإنجليزية فقط وترجمت Monkeypaste إلى هذه اللغة.
+
+تشحن جميع الإصدارات مع حزمة اللغة الإنجليزية ، لذا إذا كنت تتحدث الإنجليزية ، فيمكنك تغيير اللغة إليها في أي وقت بعد هذا الإعداد (الإعدادات -&gt; التفضيلات -&gt; الدولية).
+
+إذا كنت ترغب في المساعدة في تحسين الترجمة ، فإننا نود أن نسمع منك!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>اهتمامات الترجمة</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>تحتاج إلى تحديث Monkeypaste من أجل استخدام هذه الميزة.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>اختصار unset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>مستمع الحافظة معطل</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>تم تمكين مستمع الحافظة</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>لا يدعم إجراء الوالدين '{0}' نوع خاصية الإدخال "الإخراج الأخير"</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>تعرف على المزيد حول الخطط</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>طلب</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>مشغل</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>مقطع</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>محلل</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>بطاقة شعار</value>
+  </data>
+</root>

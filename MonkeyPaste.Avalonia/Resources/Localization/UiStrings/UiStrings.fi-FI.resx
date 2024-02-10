@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Mitään ominaisuuksia ei rajoiteta tilaus, vain tallennuskapasiteetti, ja niitä voidaan muuttaa milloin tahansa.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Palauta nykyinen tilisi ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Sisältö ja roskat ovat
+rajoitettu {0} ja {1}
+Leikkeet.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Sallii jopa {2} sisältöpidikkeet ja rajoittamaton roskavarasto.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Rajoittamaton ja rajoittamaton sisältö ja roskakorin tallennus.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Palauttaa</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Vapaa</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standardi</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Rajoittamaton</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Tilaus</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Yksityisyytesi on tärkeää ja leikepöydän tiedot voivat olla hyvin henkilökohtaisia. Tallennus on aina salattu, mutta voit asettaa salasanan, joka vaaditaan, jos laitteesi varastetaan tai joku muu käyttää laitetta.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Salasana</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Kun se on käytössä, vetämällä mistä tahansa sovelluksesta näytön yläosaan paljastaa Monkepasten, jotta sisältö on helposti pudottanut MonkeyPasteen.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Pääikkunan vasemmassa yläkulmassa olevan 'lukon' mahdollistaminen antaa silti pudota MonkeyPastelle.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Lisää ikkuna -asetuksia on saatavana 'Asetukset -&gt; Asetukset -&gt; Window' -valikosta.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Vedä banaaneja tänne!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Vedä - avaa</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Pakkauspikakuvakkeita voidaan tarkistaa tai muuttaa milloin tahansa 'Asetukset -&gt; pikakuvakkeet' -valikosta.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Kaikki globaalit pikakuvakkeet poistetaan käytöstä, jotta voit asettaa ne itse myöhemmin.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkepasten leikepöydän pikakuvakkeet ovat saatavilla kaikissa sovelluksissa.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Sisäinen</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Laiminlyönti</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Eleprofiili</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hei! Asennetaan muutama asia parantaaksesi yleistä kokemustasi Monkeypasten kanssa.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Tervetuloa</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Saadaksesi eniten käyttöä Monkeypasten, lataaminen automaattisesti kirjautuessasi on hyvä idea. Mutta se on täysin sinun tehtäväsi.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Pidä se rento.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>ota käyttöön</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Lataus kirjautumiseen?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Kun se on käytössä, näytön yläosassa oleva vieritys ele paljastaa Monkepasten.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Vasen - Napsauttamalla tehtäväpalkin kuvaketta avaa edelleen monkepaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Lisää ikkuna -asetuksia on saatavana 'Asetukset -&gt; Asetukset -&gt; Window' -valikosta.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Helppo eikö?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Vieritä täällä!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Vieritä - to - auki</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P align = "Center"&gt; MonkeyPaste on &lt;span color = "punainen&gt; täysin integroitu &lt;/span&gt; Drag - ja - Drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Pudota se tänne!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P align = "Center"&gt; Tällä tavalla MonkeyPaste voidaan käyttää &lt;br&gt; &lt;span color = "punainen"&gt; ilman napsautusta &lt;/span&gt; tai jopa &lt;span color = "punainen"&gt; silmän lyöminen &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Vedä minua!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Kokeile!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Kokeile!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Tuloksia ei ole saatavilla.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Vahvistaa</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>virkistää</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Hae...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>asetukset</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Riippuvuudet:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Asentaa</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Haluatko varmasti poistaa '{0}' ja kaikki sen esiasetukset ja pikakuvakkeet?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Asennuksen poistaminen</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' ei ole tuloksia.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Ei valintaa.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Ei mitään</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Hyvitykset:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Kuvaus:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Lahjoittaa:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Lisenssi:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projektin URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Julkaistu:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Lue minut:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Ilmoita väärinkäytöstä:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tunnisteet:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Päivittää</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versio:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Avaa ikkunassa</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Hylätä</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>virkistää</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Tallentaa</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Poista!
+
+Päivitys välttääkseen.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Roskakorin vieressä!
+
+Päivitys välttääkseen.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Tiedostot</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Kuva</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Teksti</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kopioitu {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} tiedostot | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} riviä</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} kopiot | {1} pasta</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Liikkua</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Lisätä</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopio</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Leikata</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Liittää</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} kopio</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Pelkkä suodatin</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Ole hyvä ja valitse -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Muodot</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lukijat</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Kirjailijat</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Käsittelijät</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Poistaa</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Kopioida</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Muokkausnimi</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Nollata</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tunnisteet</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Toiminta</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Globaali reititys</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Pikakuva</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Eleiden on oltava ainutlaatuisia ja ne voivat sisältää vain yhden syöttöavaimen.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;Li&gt;
+&lt;b&gt; Sisäinen &lt;/b&gt; Kaikki pikakuvakkeet rajoittuvat sovellukseen. Tämä ei oikeastaan ​​ole tarkoitettu vaihtoehto, mutta voi sallia mukauttaa, mitä pikakuvakkeita aiot tehdä globaalista &lt;i&gt; joskus &lt;/i&gt;. &lt;/li&gt;
+&lt;Li&gt;
+&lt;b&gt; oletus &lt;/b&gt; Kaikki globaalit pikavalinnat ovat käytössä. &lt;b&gt; Näytä/piilota pääikkuna &lt;/b&gt; pikakuvake käyttää &lt;span color = "red"&gt; ohitus &lt;/span&gt; reititys &lt;b&gt; caps lukko &lt;/b&gt; -näppäimelle. Voit muuttaa sitä reititystä tai elettä milloin tahansa. Mutta &lt;span color = "vihreä"&gt; kokeile sitä kokeile &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/pää&gt;
+&lt;body&gt;
+&lt;H1&gt; Globaalit pikavalintatilat &lt;/h1&gt;
+&lt;ul&gt;
+&lt;Li&gt;
+&lt;b&gt; Passiivinen &lt;/b&gt; pikakuvakkeen monkepaste kuuntelee missä tahansa sovelluksessa. &lt;br&gt;
+*Tämä on vain &lt;/i&gt; -vaihtoehto Linuxissa.
+&lt;/li&gt;
+&lt;Li&gt;
+&lt;b&gt; pre &lt;/b&gt; pikakuvake suoritetaan &lt;b&gt; &lt;i&gt; ennen &lt;/i&gt; &lt;/b&gt; sitä käsittelee aktiivinen sovellus. &lt;/li&gt;
+&lt;Li&gt;
+&lt;b&gt; Post &lt;/b&gt; pikakuvake suoritetaan &lt;b&gt; &lt;i&gt; &lt;/i&gt; &lt;/b&gt; Aktiivinen sovellus käsittelee sitä. &lt;/li&gt;
+&lt;Li&gt;
+&lt;b&gt; ohitus &lt;/b&gt; Kun MonkeyPaste kuulee ohitusnäppäimen syöttöavaimen (ei -modifiointiavaimen), se &lt;i&gt; piilottaa &lt;/i&gt; -näppäimen painavan sovelluksen tason tulosta. &lt;br&gt;
+Tämä vaihtoehto takaa, että pikakuvake laukaistaan ​​ilman konflikteja aktiiviseen sovellukseen.
+&lt;/li&gt;
+&lt;Li&gt;
+&lt;B&gt; Yksinomainen ohitus &lt;/b&gt; Tämä on erityinen tyyppinen ohitustila, joka on suunniteltu CAPS -lukitusnäppäimelle. Se sallii vain yhden &lt;/b&gt; -näppäimen (ei -modifikaattorin). &lt;br&gt;
+Normaalissa ohitusmoodissa Caps -lukko voi tulla &lt;i&gt; jumissa &lt;/i&gt;, kun sitä painetaan yhdessä muiden avaimien kanssa. &lt;br&gt;
+Joten riippumatta siitä, mitkä muut avaimet ovat alhaalla, jos A &lt;b&gt; pikanäppäin &lt;/b&gt; pikakuvake on painettu, se ohittaa ja estää sen olevan jumissa &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Poista käytöstä</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Lataa, kun tämä käyttäjätili on kirjautunut sisään, ei muille käyttäjille.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Käytettävissä olevien yhteystietojen käyttäminen (vaatii Fetcher -laajennuksen) Tätä kenttää käytetään tämän mallin kaikkiin tapauksiin tämän asiakirjan välillä tai missä tahansa siihen viitataan myöhemmin. &lt;/p&gt; &lt;p&gt; Joten esimerkiksi jos valitse sähköpostiosoite Tässä sitten valitsemasi yhteystietokenttä käytetään kaikkiin tämän asiakirjan tapauksiin. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = lyhyt vuosi &lt;br/&gt; yyyy = pitkä vuosi &lt;br/&gt; m = kuukausi (1-12) &lt;br/&gt; mm = kuukausi (01-12) &lt;br/&gt; mmm = kuukauden lyhenne (tammikuu, helmikuu .. .. . DEC) &lt;br/&gt; mmmm = pitkä kuukausi (tammikuu, helmikuu ... joulukuu) &lt;br/&gt; d = päivä (1 - 31) &lt;br/&gt; dd = päivä (01 - 31) &lt;br/&gt; ddd = Viikonpäivä sanoin (maanantai, tiistai ... sunnuntai) &lt;br/&gt; e = viikon lyhyt päivä sanoina (ma, tiistaina ... aurinko) &lt;br/&gt; d - ordinaalipäivä (1., 2., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = tunti AM/PM: ssä (0-12) &lt;br/&gt; HH = tunti AM/PM: ssä (00-12) &lt;br/br/ &gt; H = tunti päivässä (0-23) &lt;br/&gt; hh = tunti päivässä (00-23) &lt;br/&gt; mm = minuutti &lt;br/&gt; ss = toinen &lt;br/&gt; sss = millisekunnit &lt;br/&gt; A = AM/PM -merkki &lt;br/&gt; p = A.M./P.M. merkintä</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Nykyinen päivämäärä ja/tai aika korvataan DateTime -malleissa, kun ne on liitetty.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Tämän mallin kaikki tapahtumat käyttävät toimitettua tekstiä. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Tämän mallin kaikki tapahtumat käyttävät toimitettua tekstiä. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Viimeistellä</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Ottaa käyttöön lohko</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Ottaa käyttöön</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Vaihtaa käsikirja</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Vaihtaa käsikirja</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Tauko</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Kypsyä ennen</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Kypsyä ennen</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Jatkaa liitettä</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Liitä ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Liittää</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Nasta</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Purkaa</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Piilota kaikki '{0}' ilmoitukset</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Hylätä</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Viimeinen aktiivinen sovellus tuntematon. Vaihda suunniteltuun sovellukseen apinapastaan.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Liitä: &lt;em&gt; &lt;i class = "liitä-hooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimoida</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Odota...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Lukko</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Tili</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>auta</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopioi liitä</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Mieltymykset</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Palauttaa oletukset</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Suodattaa...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Pikakuvakkeet</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Lisää sovellus</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Lisää verkkosivusto</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Lohko?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Sovellukset</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Block -verkkotunnus?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Esto URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Alue</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Lähteen URL -osoitteen tunnistus riippuu siitä, kuinka leikepöytäystävällinen isäntäsovellus on, joten hylkäämistä ei voida taata</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL -osoite</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Verkkosivustot</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Jotkut monkepaste -ominaisuudet käyttävät näppäimistön automaatiota simuloidaksesi 'kopiota' tapahtumia muissa sovelluksissa.
+
+Lisää ja/tai valitse sovellus ainutlaatuisella kopio -pikakuvakkeella (kuten esimerkiksi konsoli tai kuori) varmistaaksesi, että nämä ominaisuudet toimivat oikein.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopioi pikakuvake</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Ei mitään</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Vain valittuja esiasetuksia käytetään määritettyyn sovellukseen. Kun määrittelemätön, &lt;em&gt; leikepöydällä sivupalkista &lt;/em&gt; löydettyjä oletusasetuksia käytetään.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Monet monkepaste -ominaisuudet käyttävät näppäimistön automaatiota vuorovaikutuksessa muiden sovellusten kanssa.
+
+Joillakin sovelluksilla (kuten esimerkiksi joillakin konsolilla tai kuorilla) voivat olla oletuspasta -pikakuvakkeita.
+
+Varmistaaksesi asianmukaisen yhteentoimivuuden tallentamalla nämä pikanäppäimet kyseiseen sovellukseen täällä.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Liitä pikakuvake</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lukijat</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Kaikki leikepöydän valvonta hylätyistä sovelluksista on &lt;b&gt; huomiotta &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Kirjailijat</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Muokata...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Muodot</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Hylätty</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Pikakuvakkeet</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Haluatko myös poistaa kaikki {0} leikkeet '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Poista leikkeet?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Soveltaminen</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Selaa sovellusta ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Valitse sovelluspolku</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Haluatko varmasti poistaa mukautetut pikakuvakkeet {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Haluatko varmasti poistaa mukautetut muodot {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Tälle sovellukselle ei ole määritetty leikepöytämuotoja. Tietoja ei lue siitä leikkauksen/kopioinnin tai vetämisen yrittämisen - ja - pudota Monkeypasteen</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Tälle sovellukselle ei ole määritetty leikepöytämuotoja. Automatisoidulla tahnalla tai vetämällä - ja - pudotus Monkeypasten ei ole vaikutusta (sen tyhjiä tietoja).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Oletko varma, että haluat nollata kaikki pikakuvakkeet? Kaikki mukautetut pikakuvakkeet poistetaan.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Oletko varma, että haluat vaihtaa pikakuvakeprofiilisi '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Kaikki</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Suosikit</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Suodattimet</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Muodot</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tunnisteet</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Tänään</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Roskia</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Noin</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Helppo eikö?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Kaksoisnapsauta irrottaaksesi</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Mukautettu</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globaali</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Tämä yhdistelmä on ristiriidassa '{0}' kanssa, joka selvitetään, jos se tallennetaan.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Pikakuvake on annettava.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Tämä on globaali pikakuvake. Tämä tarkoittaa, että se yrittää suorittaa aina, kun se suoritetaan. Yritä tehdä siitä tarpeeksi ainutlaatuinen (tai muuta 'reititystyyppiä') olla ristiriidassa muiden sovellusten pikakuvakkeiden kanssa.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globaali</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Pikakuvake on sisällettävä yksi ja vain yksi modifiointiavain.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Paina mitä tahansa näppäintä tallentaaksesi ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Määrätä pikakuva</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Lisätietoja ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Päivittää</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Peruuttaa</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Korjata</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Jättää huomiotta</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Ei</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Hyvä</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Tehdä uudelleen</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Sammuttaa</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Lähetä</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Joo</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Vuosittain</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Kuukausittain</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Kokeile ilmaiseksi!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Laskutusjakso</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Sähköposti</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Kirjaudu sisään</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Tarkista yhteys
+ja yritä uudelleen.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Kirjautua ulos</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Seuraava maksu</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Salasana</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Rekisteröidä</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Sähköposti ei ole voimassa</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Salasanat eivät täsmää.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Salasanan on oltava vähintään {0} merkkejä.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Muistaa?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Tarkista sähköpostiosoitteesi vahvistaaksesi tilisi</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Nollaa salasana</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/vvvv hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Ei koskaan</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Ilmainen {0} päiväkoe</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Esiintymisessä oli ongelma
+sinun ostosi.
+
+Yhteyden tarkistaminen ja
+Asetukset voivat auttaa.
+
+Haluatko yrittää uudelleen?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Tilisi on ollut onnistuneesti
+Päivitetty:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Osta onnistunut!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Virhe</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Yhteys epäonnistui.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Tehdä uudelleen</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Tili</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Tilauksesi on nyt {0}/{1} {2} -sisällöllä ja {3} roskakorilla.
+Mutta älä huoli, mitään tietoja ei menetetä alentamisen jälkeen. Vain uusia leikkeitä arvioidaan.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Onnittelut! Tilauksesi on nyt {0}/{1} {2} -sisällöllä ja {3} roskakorilla.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Roskat tai kytke jotain
+Lisää '{0}' lisätäksesi lisää.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' tallennus on {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Palauttaa</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} estetty</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Sisältö ja roskakori saavutettiin!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' tallennus on {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Sisältökapasiteetti saavutettiin!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Voit piilottaa nämä varoitukset
+napsauttamalla 'piilota kaikki'
+Yllä olevien vaihtoehtojen valikko.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max -roskakorin tallennus on {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Roskakori saavutettiin!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} on virheellinen</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} on oltava vähintään {1} merkkejä</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} voi olla vain {1} merkki</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Liitä: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Maksu {0}
+Tilaus oli erääntynyt {1}
+eikä sitä ole vastaanotettu.
+
+Päivitä
+Maksutiedot.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Maksu {0}
+Tilaus oli erääntynyt {1}
+eikä sitä ole vastaanotettu.
+
+Ole hyvä ja muodosta yhteyttä
+Internet laitteessa
+tilauksellasi ja
+Käynnistä uudelleen jatkaaksesi
+käyttämällä {0} suunnitelmasi.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Maksu {0}
+Tilaus oli erääntynyt {1}
+eikä sitä ole vastaanotettu.
+
+Avaa tai käynnistä uudelleen
+Monkepaste laitteessa
+tilauksellasi
+Jatka käyttöä
+{0} suunnitelma.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Tili päättyi</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Huomautus</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store ei salli tasoa
+Muutokset tilaamisjuhliin.
+
+Sinun on peruutettava
+{0}/{1} Suunnittele itsesi
+Tai sinulta veloitetaan molemmista.
+
+Haluatko mennä tekemään sen nyt?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Salasanasi on nollattu.
+
+Tarkista sähköpostiosoitteesi ja
+Seuraa linkkiä muutokseen
+salasanasi.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Kirjaudu sisään</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Kirjailija (t)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Vaaditaan, että hyväksyt seuraavat lisenssiehdot ennen jatkamista.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Seuraavat paketit vaativat, että hyväksyt heidän lisenssiehdot ennen asentamista.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Kieltäydyn</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Napsauttamalla "hyväksyn" tarkoittaa, että hyväksyt tämän hakemuksen lisenssiehdot. Jos et hyväksy ehtoja, napsauta "I Laske".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Napsauttamalla "Hyväksyn" tarkoittaa, että hyväksyt yllä luetellut laajennuksen lisenssiehdot. Jos et hyväksy ehtoja, napsauta "I Laske".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Katsella lupaa</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Lisenssin hyväksyminen</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Hyväksyn</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktiivinen</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline -tilassa</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Rekisteröimätön</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Tehty</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ salasanat eivät vastaa</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Salasana</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Tilauksesi on
+Aseta nyt arvoon {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Löydetty tili</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Kirjautuminen epäonnistui</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Rekisteröityminen epäonnistui</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Rekisteröinti onnistui!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Nollata virhe</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Tilaus</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Mikä on uutta</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Ei koskaan</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Rajoittamaton</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapasiteetti</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>jäljelle jäänyt</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>kaikki yhteensä</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Maksusi on erääntynyt.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Yksinomaiset ohitusnumerot voivat sisältää vain yhden avaimen ja että avain ei voi olla modifiointiavain.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Vanhentunut</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Ladataan</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Liikuntarajoitteinen</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Huomautus! Tämä salasana on valinnainen ja vain ylimääräistä turvallisuutta. Tietosi on jo salattu eikä niitä ole koskaan jaettu. Tämä salasana yksinkertaisesti estää jonkun, jonka et sinä ladata Monkepaste, jos he jotenkin pääsevät työpöydällesi (varastettu, jätät huoneen jne.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Muista pudotusasetukset:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Selaa laajennuksia</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analysoida</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Nopea toiminta</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Kiertää muokkausta</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Kytketty</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Merkinnät</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Selkeä teksti</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Avaa ikkunassa</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Napsauta + Ctrl seurataksesi ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Napsauta + alt seurataksesi ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Kiinnitä tai pudota minkä tahansa median täältä!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Asia selvä</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Ylä 0: n kynnysarvot tarjoavat sumean värin sovituksen euklidisen etäisyyden avulla RGBA -värilaitteessa.
+
+Esimerkiksi, jos punainen (#FF0000) on hakutermi ja musta (#000000) on pikseli kuvapidikkeessä, värietäisyys on 255. Musta - valkoinen etäisyys on enimmäismäärä 510, mukaan lukien alfa -kanava</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Kaikki seuraavat ovat totta</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Leikepöytä</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kokoelmat</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Hiiren tilat</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Liipaisimet</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Tauko</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Jatkaa</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Uusi liipaisin</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Lisää esiasetettu</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Apinan pudotusvelho</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Esiasetukset</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analysaattori</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Leikata</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Syklisuuntaus</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Vaihda ruudukon asettelu</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Kohtaus-</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Kynnys</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Koko maailma</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Ei mitään asetettu</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Reititys</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Toiminta</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Ruudukko</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Tehty</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Seuraava</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Edellinen</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Hypätä</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Nykyinen tili?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Seuraava maksu</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Rekisteröinnin avulla voit kuljettaa maksetun tilauksen kaikissa laitteissasi (saatavuuden yhteydessä). Emme roskapostia sähköpostiosoitteesi lupaamme 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Tilaus</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Käyttäjänimi</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Tarvitseeko rekisteröidä?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Lähteet</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Odd, ei mitään saatavilla. Jotain on oltava vialla 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Poista</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Vaatii uudelleenkäynnistyksen</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Pitkälle kehittynyt</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Virhe poimia laajennus '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Virheen asennus laajennus: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Virhe asentaa laajennus '{0}' Vorruptoitunut tai virheellinen hakemistorakenne. Manifestin tulisi olla '{1}', mutta sitä ei löydy.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Virheen jäsentäminen laajennus manifesti '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Ei laajennusta ladattu GUID: llä: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} virhe</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Virhekavastus laajennus temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Virhe varmuuskopioi '{0}' - '{1}'. Yksityiskohdat: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Kirjoitettu teksti sovelletaan automaattisesti hakuun, kun tekstiruutua ei ole keskittynyt.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Automaattinen haku syöttö</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Salasananvaihto epäonnistui</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Muuttaa</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Vaihda salasana</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Asia selvä</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Tyhjennä salasana</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Sisältö</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Sisältöfontin koko</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kun totta, leikkeeseen asetettu ulkoinen sisältö käyttää Clips -muotoilua eikä sitä, mitä lähteestä on saatavana.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Liitä, pudota tai liitä määränpäästöön</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Haluatko varmasti unohtaa salasanan?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Unohtaa</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Unohtaa salasana</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profiili</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Piilota kapasiteetti vesileimat</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Kun uusi leikepöydän sisältö liitetään, sitä ei seurata uudena leikkeinä</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ohita lisäykset</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kun leikepöytä vastaa olemassa olevaa leikettä, tätä leikettä käytetään uuden luomisen sijasta</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ohita uusia kopioita</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Leikepöydän muutoksia sovelluksesta ei seurata</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ohita sisäinen leikepöydän seuranta</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Tilat, välilehdet ja uudet rivit jätetään huomiotta seurannasta</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ohita vain valkoinen tila</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Ladata kirjautumista</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Elävä ikkuna</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opasiteetti</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Näyttelykäyttäytyminen</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Pääikkuna paljastetaan suorittamalla vieritys ele näytön yläreunassa</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Näytä yläreunassa</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Ilmoituksen tilavuus</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Tämä asetus seuraa järjestelmää - laaja näppäimistö liittää käyttötilastoja. Nämä tiedot ovat yksityisiä eikä jaettuja, mutta eivät myöskään takaa. Tarkat tulokset saattavat edellyttää sovelluskohtaisen näppäimistön liittämiskomennon tarjoamista 'Asetukset -&gt; Kopioi ja liitä -&gt; pikakuvakkeet'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Liittää historiaa</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Liian monet kiinnitetyt leikkeet (kuten selainvälilehdet) voivat kuluttaa merkittävää muistia. Poisto on ensin - sisään - ensin -</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Pinekapasiteetti</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Tämä koskee kaikkia automaattisia suoritettavia tuloja, alhaisemmat arvot parantavat suorituskykyä</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Viimeaikainen tekstiraja</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Oletko varma että haluat
+Palauta oletusasetukset?
+
+Tätä ei voi peruuttaa!
+
+*Sovellus käynnistyy uudelleen, kun se on valmis.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Oletko varma, että haluat nollata kaikki ilmoitukset?
+
+*Tätä ei voi peruuttaa!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Apinapasta asettaa leikepöydän (ohittaa) liittämällä ulkoiseen ohjelmaan. Tämä yrittää &lt;/b&gt; leikepöydän tilan palauttamista ulkoisen tahnan jälkeen.
+
+Kokonaisten palauttamista ei voida taata, ja se voi vähentää suorituskykyä tai jopa kaatumis Monkeypasten tietojen lähteestä riippuen.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Palauta leikepöytä apinan liittämisen jälkeen</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Plugin -välimuistia ei voinut poistaa polusta: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Kaikki laajennukset palautetaan alkuperäiseen oletustilaan</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin -välimuisti</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Haluatko varmasti nollata kaikki laajennukset oletusarvoiksi?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Haluatko varmasti nollata salasanasi?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Kaikki sovelluksen pikakuvakkeet palautetaan niiden oletusnäppäimien eleisiin.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Palauta pikakuvakkeet</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Kaikki aiemmin asetetut ilmoitukset.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Palauta ilmoitukset</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Mahdollistaminen voi olla melko hidasta) Vaihdettavan käytöstä poistaminen vähentää muistin kulutusta, mutta estää joitain edistyneitä ominaisuuksia, kuten: liite, mallit, merkinnät ja etsivät/korvaavat</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Rikas sisältö</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Aseta salasana</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Näytä vihjeet</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Näytä tehtäväpalkissa</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Näytä tehtäväkytkimessä</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Näytä otsikot</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Kun se on käytössä, vetämällä mistä tahansa sovelluksesta näytön yläosaan paljastaa Monkepasten, jotta sisältö on helposti pudottanut MonkeyPasteen.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Näytä vetämällä näytön huipulle</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Ääni -teema</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Oikeinkirjoituksen tarkistus</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Käynnistyksen yhteydessä leikepöydän lähde on tuntematon ja suojausasetuksistasi riippuen sisältö voi tulla syrjäytyneeltä verkkosivustolta tai sovelluksesta.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Lisää käynnistyslevy</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Kuuntele leikepöytä käynnistyksessä</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Valita</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Varovainen! Muut palettivärit valitaan matematiikan käyttämällä silmiä! Joten tiedä, että joillakin väri- ja tyyliyhdistelmillä ei ehkä ole asianmukaista kontrastia luettavuudelle.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Teemaväri</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Teematyyli</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automaattinen roskakorin puhdistus tapahtuu käynnistyksen yhteydessä asetetulla aikavälillä.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Roskien puhdistus</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Käyttöliittymä</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Korkeat kumouksen rajat voivat vaikuttaa suorituskykyyn</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Kumota raja</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Ei rajoitusta</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Käytetään edistyneessä tiedostohaussa ei -esiasetettujen tiedostojen tyyppejä</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Käyttäjä - määritellyt hakupidennykset</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Etsi ja korvaa...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Liitä täällä</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Jaa...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Näkymä</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Hallita ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Nimeä uudelleen</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Pisteet: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tyyppi: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Poistaa pysyvästi</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Selaa '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Muuttaa</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Syöttö</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Tulos</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Lähteet</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Palauttaa</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Valitse kuva ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Väri</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Hallitse '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Avata</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Odota...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Taustaväri</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Tyhjennä</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Leikepöydän muodot</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Poista kaikki</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Muokkaa yksityiskohtia</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>löytö</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Fontin väri</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Muotoilla maali</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Valinnassa</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Lisätä kuva</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Aseta linkki</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Lisää video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Kotelo</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Uusi malli</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Seuraava malli</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Kirjoita liitä teksti ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Aikaisempi malli</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Tavallinen ilme</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Korvaa kaikki</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Korvata</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Koko maailma</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Kietoa</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Lohko</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Alue</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Näytä kansio</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Estä</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Noin</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Liite</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Liittää</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopio</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Moodit</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Odota, että Monkeypaste latautuu ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Lopettaa</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - napsauta liitä</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Ryhmä</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Suodattaa</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Poista kaikki pysyvästi</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Palauta kaikki</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Toiminta</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL on jo olemassa: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL -osoitteen on oltava kelvollisessa muodossa.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Syötä täysi URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Lisää URL -osoite</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Kirjoittaa arvot</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopioi sovellettava teksti tai tiedostot.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Liitä {0} {1} -tila aktivoitu</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Leikepöydän muutokset liitetään nyt</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Kun lisäystila on aktivoitu</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Leikepöydän muutokset valmistetaan nyt</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Ennen kuin lisäystila aktivoituu</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Lohko</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Normaali leikepöydän käyttäytyminen on palautettu</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Liitä deaktivoitu</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Lisäykset, jotka on lisätty leikkeen ylä- tai botomiin</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Laajennustila aktivoitu</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Linjassa</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manuaalinen</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Liitä nykyiseen valintaan.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Manuaalinen lisäystila aktivoitu</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Leikepöydän kertyminen pysäytettiin</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Liite</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Leikepöydän kertyminen jatkui</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Liite jatkui</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Oletko varma, että haluat viimeistellä liiton?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Muokkaus yhteensopivuustilassa poistaa kaikki rikkaat muotoilun. Haluatko varmasti muokata tätä?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Tietojen huonontumisvaroitus</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktiivinen</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Poistettu</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Vinossa</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Päällä</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Keskeytetty</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Tulos</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Tila</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Tuntematon virhe tapahtui.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>yrityksiä jäljellä</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Kirjoita salasana</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Vahvistaa</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Ottaa yhteyttä</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Treffiaika</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Oletko varma, että haluat poistaa kaikki '{0}' käytöt?
+
+Tätä ei voi peruuttaa!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dynaaminen</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Staattinen</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} on tyhjä ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Lisää tulossa pian!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Kirjautumiskuormitus epäonnistui käytöstä</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Kirjautumiskuorma poista menestys käytöstä</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Kirjautumiskuorma Enable epäonnistui</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Kirjautumiskuorma mahdollistaa menestyksen</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Piilottaa</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Apinapasta on nyt ladattu.
+Leikepöydän kuuntelu on: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Ladattu</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Näytä</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Automaattinen kopiointivalintatila: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Tila muuttunut</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Napsauta hiiren kakkospainikkeella liitä: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Laajennus päivitetty</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Liitä '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Suorita '{0}' analysaattori</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Suorita '{0}' liipaisin</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Valitse '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Haluatko varmasti poistaa '{0}' ja kaikki siihen liittyvät toimet?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Laukaista</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Haluatko poistaa kaikki '{0}' -toiminnot? (Muuten heidät vanhemmiksi '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Poista vaihtoehdot</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Haluatko todella goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Tili</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analysaattorit</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Hakemusoperaatiot</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Leikepöytä</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Sisältö</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Muuntimet</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kulttuuri</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Tiedot</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Suunta</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Raahaa ja pudota</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Pudotusvelho</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Kuvakkeet</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Käyttöliittymä</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Liittää operaatiot</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Mieltymykset</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Hae</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Pikakuvakkeet</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Järjestellä</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Äänet</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Järjestelmäalue</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kokoelmat</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Teema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Liipaisimet</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Verkkosivustojen toiminta</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Kieli</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Asettaa leikepöydän syöttöliikkeeseen.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Hälytys</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Nykäy</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Soittaminen</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Yleiskäyttöiset ääni- ja/tai järjestelmälokeron viestihälytykset. Hälytystoiminnoilla ei ole vaikutusta heidän panokseensa.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Viesti</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Apina</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Esikatselu</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Näytä?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Aika -paahtoviesti näkyy sekunneissa. Kun arvo on 0 viesti on suljettava manuaalisesti.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Näytä aika (t)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Ääni?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Äänityyppi</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>King</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Tilavuus</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analysaattori</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Käsittelee syöttöliitteen määritetyn analysaattorin esiasetuksen avulla.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Syöttösisältö on linkitetty valittuun kokoelmaan</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Linkittää sen syöttöliitteen määritettyyn tunnisteiden kokoelmaan.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Tapauskokous?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Tämä voi olla staattista tekstiä verrataan tuloon ja/tai sisällyttämällä valittuja ominaisuuksia (suodatinpainikkeen kautta) korvataan kun ehto arvioidaan.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Ehtotiedot</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Valinnainen JSONPATH -kysely, jota sovelletaan valittuun 'syöttöominaisuuteen' ennen ehdon arviointia.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Tulosuodatin</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Tätä ehdollista käytetty leikkeen ominaisuus.
+
+'Viimeistä lähtö' -ominaisuutta tuetaan tällä hetkellä vain silloin, kun tämä ehdollinen on analysaattorin lapsen lapsi ja toimitetut tiedot vaihtelevat emo -analysaattorin tuotoksen mukaan.
+
+Liitä vianetsintä 'hälytystoiminto' tälle ehdolliselle vanhemmalle ja aseta hälytyksen 'viesti' -parametri vastaamaan tätä syöttöominaisuutta. Tämä sallii tarkistaa todelliset tiedot, joita käytetään tässä ehdollisessa.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Syöttöominaisuus</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Suorittaa tekstin vertailun syöttöliikkeessä tai edellisessä toimintoulostulossa. Kun vertailu epäonnistuu (se ei ole ottelu), lapsen toimintoja ei suoriteta. Joten se toimii kuin looginen portti.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Kaikki todelliset tai väärät toiminnot, joissa lasten toimet suoritetaan vain, jos tulos on totta.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Kunto</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Kaikki</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Kytketty, kun järjestelmään lisätään valitun tyypin leike (leikepöytä, vedä - ja - pudotus, analysaattori luotu tai kopioitu).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Suorita tämä liipaisin vain, jos syöttöleike on uusi eikä kaksoiskappale. Tämä on riippumaton kaikesta mieltymysasetuksesta, onko uusi sisältö huomiotta vai ei.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Sivuuttaa kaksoiskappale</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Vain tämän tyyppiset leikkeet laukaisevat tämän toiminnan.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Linkittää sen syöttöliitteen määritettyyn tunnisteiden kokoelmaan.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Laukaistiin, kun leike on linkitetty määritettyyn tunnistekopalakokokoelmaan.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kokoelma</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Millisekuntien aika odotti ennen kuin lapset toteuttavat</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Viive</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Kokeellinen) käytetään ensisijaisesti yhdessä toistimen toiminnan kanssa etälähteiden tai apujen kyselyyn pitkäaikaisten toimintojen kanssa.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kun jätetään tyhjäksi, tulostetiedosto käyttää syöttöleikkeen otsikkoa tiedostonimeä.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Mukautettu nimi</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Hakemisto, johon tiedosto kirjoitetaan.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Hakemisto</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Tallentaa sisääntulon valittuun kansioon.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Laukaisee, kun valitun kansioiden sisältö muuttuu. Tulos on uusi tai olemassa oleva (kun ohittavat päällekkäisyydet on käytössä) tiedostoleike tiedostosta tai kansiosta, joka on muuttunut muutoksen tyypin kanssa viimeisenä tulosteena.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Tapahtumat</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Kansio</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Sivuuttaa kaksoiskappale</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Arvo 0 toistaa vanhemman toiminnan toistaiseksi</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Toistaa lukumäärä</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Millisekuntien aika odottaa, kun vanhempien toiminta on valmis</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Toistaa viive</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Kokeellinen) käytetään toimintasilmukoiden tai toistotehtävien luomiseen. Kun se toistetaan, se suorittaa kaikki lapset uudelleen alkuperäisellä panoksellaan. Kun käytät väliä ilman toistoa, liipaisin on poistettava käytöstä ja palautettava uudelleen toistamisen pysäyttämiseksi. Voi olla hyödyllinen äänestys- tai raapimiseen automaatioon.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Lääkellä määrittelemäsi globaali pikakuvake. Jos Monkeypaste on aktiivinen, se yrittää käyttää valittua leikettä (jos sellaista on) syöttönä. Muutoin se yrittää käyttää leikepöytää sen tuloksi.
+
+HUOMAUTUS: Pikakuvakelausekkeessa suoritetaan edelleen, jos syöttöä ei ole joustavana (joten se voi olla makroliipaisin jne.), Koska se ei ole data -ohjattu tapahtuma.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Pikakuvake</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Laukaistiin, kun tallennettua pikakuvaketta painetaan milloin tahansa nykyisen leikepöydän kanssa</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Tämä toimenpide edellyttää sovelluksen käynnistämistä uudelleen. Haluatko tehdä sen nyt?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Oli ongelma. Sinun on käynnistettävä sovellus manuaalisesti.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analysoi merkinnällä</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Merkintä laukaista</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Rakennetut elementit luetaan - vain. Kopio muuttamaan.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Tuntematon</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Mukautettu</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Eilen</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} päivää sitten</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 tunti sitten</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} tuntia sitten</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Juuri nyt</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Minuutti sitten</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minuutti sitten</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Viime kuukausi</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} kuukautta sitten</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Viime viikko</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} viikkoa sitten</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} vuotta sitten</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Merkinnät</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>sovelluksen nimi</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Sovelluspolku</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Kohtaus-</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Sisältö</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Tiedostotyyppi</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Kuvatyyppi</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Tavallinen ilme</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tekstityyppi</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Otsikko</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL -osoite</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL -osoite</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Koko maailma</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Kuten vierittäen yläreunaa pitkin avataksesi, tämä lukitsee pääikkunan, kun se aukeaa. Mahdollistaa nopeamman moni -kohdennetut työnkulut.
+
+* Kulmat ovat kaikkien näytöiden suhteen, ei näyttöä kohti.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Näytä ikkuna ja lukko</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Vapaa!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Anna meille 5 tähteä!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Poista kaikki</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Poista kaikki sisältö</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Haluatko varmasti poistaa
+Kaikki leikkeet?!
+
+*Tätä operaatiota ei voida kumota!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Olen Indy Dev, näytä tukea!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Kuten Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} hyväksyy vain tyypin (S) syötteen: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Automaattinen kopiotila - Simuloi 'kopiota' -tapahtumaa joka kerta, kun vasen hiiren painike julkaistaan.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Napsauta hiiren kakkospainikkeella liitä tilaa - simuloi liitä tapahtumaa joka kerta, kun oikea hiiren painike julkaistaan</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Asettaa</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Näytä laajennuskansio</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Raportti</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Näkymä</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Näytä työkaluvihjeet</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analysaattorit merkitsevät tuloksensa tai luovat uusia leikkeitä tulosteena. Analysaattorien lasten on päätettävä, mitä he tarvitsevat panoksensa. Tämä on tyypillisesti viimeinen lähtö.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Syötteen tyyppi</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger -suunnittelija '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Valitse {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Ei löydetty...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} liipaisin</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Kun tarkistetaan, tilan todellinen tai väärä lopputulos käännetään. Joten esimerkiksi 'sisältää' -olosuhteet tulevat 'ei sisällä'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ei</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Odota...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Värivalinta</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Valitse otteluväri</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Kuten pikakuvake, mutta kun näppäinyhdistelmää painetaan, 'kopio' -tapahtumaa simuloidaan aktiivisessa sovelluksessa, joten se toimii edelleen kuin kopio, mutta silloin apinan kopion liipaisimen liitetty toimintoketju suoritetaan taustalla käyttämällä Simuloidut leikepöydän tiedot.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Edistynyt suodatin</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Piilota suodattimet</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Palauta suodattimet</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Luo suodatin</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Valinnainen), kun jätetään tyhjäksi, leikepöytä asetetaan tämän toiminnon tuloksi. Kaikkia täällä toimitettuja käsitellään vain selkeänä tekstinä.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Leikepöydän sisältö</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kun totta, leikettä ei lisätty tämän toiminnan jälkeen leikepöydän.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Jättää huomiotta</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Ei analysaattoria, joka on valittu toimintaan '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analysaattori toiminnasta '{0}' ei löydy</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Vanhempi '{0}' Suodattimet vain '{1}' Tyyppisisältö ja analysaattori '{2}' ei koskaan suorita, koska se ei tue '{3}' Tulotyyppi</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Ei tunnistetta, joka on valittu luokittelijalle '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tunniste luokittelijalle '{0}' ei löydy</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Vertaa arvoa voi olla vain kirjaimia, numeroita tai välilyöntejä</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Ei tunnistetta, joka on valittu Clip Tallged Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag for clip -merkitty liipaisin '{0}' ei löydy</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Ei kellokansiota määritetty '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Katso kansio '{0}' ei löydy liipaisimesta '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Tiedostokirjailijapolku toimintaan '{0}' ei ole asetettu</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Tiedostokirjailijapolku '{0}' '{1}' ei löydy.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Tehtäväpalkki</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Tutustu laajennuksiin</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Palauta tämä analyysin kokoonpano</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} vaihda loki</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Ota yhteyttä Internetiin ja yritä myöhemmin uudelleen.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Ohje</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} on uusin versio</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Olet kaikki ylös - päivämäärä!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Tarkista päivitykset...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Uusi versio saatavilla!
+
+Napsauta tätä päivittääksesi '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Napsauta alla, jotta voit päivittää '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Päivitys saatavilla!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Päivitä nyt</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' sisältää jaettuja arvoja. Mitä haluaisit nollata?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Asia selvä</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Selkeät viimeaikaiset haut</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Nollaa kaikki</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Nollaa jaettu</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Palauta jakautumaton</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Vetoaa määritettyyn sovellustoimintaan. Kaikki sovelluskomennot ovat kansalaisuudettomia ja niiden syöttöleike jätetään huomiotta.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kun tarkistamaton ja komento ei voi ampua, suoritusketju pysähtyy. Monet komennot vaativat jonkin tietyn sovellustilan suorittaakseen.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Jatka aina?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Suoritettava komento.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Komento</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Ei komentoa, joka on valittu sovelluskomennolle '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Komento sovelluskomennolle '{0}' ei löydy</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Valittu</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Uudelleenkäynnistää</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Oli ongelma päivittää '{0}'. Päivityksen suorittamiseksi sinun on käynnistettävä uudelleen ja asennettava uudelleen '{0}' uudelleen (älä huoli, että kaikki asetukset palautetaan).
+
+Voit käynnistää nyt uudelleen ja suorittaa päivityksen uudelleen asentamalla, sivuuttaa tämä ja päivittää se myöhemmin tai peruuttaa päivitys kaikki yhdessä ja jatkaa version '{1}' käyttöä?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Päivitysvirhe</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Päivitystä ei voinut ladata</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Päivitys epäonnistui</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Päivityksen suorittamiseksi sinun on käynnistettävä uudelleen. Haluatko käynnistää uudelleen nyt tai myöhemmin?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Päivitys valmis</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Myöhemmin</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Käynnistä uudelleen nyt</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Odotettavissa oleva</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} päivitettiin onnistuneesti {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Ydinlaajennukset vaaditaan, eikä niitä voida poistaa.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Asennus</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Päivitys on vireillä. Käynnistä uudelleen loppuun.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Odotettavissa oleva</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Poistaminen on vireillä. Käynnistä uudelleen, jos haluat asentaa uudelleen.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Poistamaan asennuksen sinun on käynnistettävä uudelleen. Haluatko käynnistää uudelleen nyt tai myöhemmin?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Lopettaa asennuksen?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Julkaisematon</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - Luotu oletusasetus '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Ei leikettä valittu</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analysoi valittu leike</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Määritä pikakuvake '{0}' valitulla leikkeellä</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Globaali tahna</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Määritä globaali liitännäytöt '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Unohtuiko salasana?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Kirjaudu sisään</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Kirjautua ulos</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Tietosuojakäytäntö</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Vaatii uudelleenkäynnistyksen), kun diagnostiikkatiedot kirjataan tiedostoon. Tämä voi hidastaa suorituskykyä ja sisältää henkilökohtaisia ​​tietoja.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Kirjaudu tiedostoon</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Avata</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Avaa Logs -kansio</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Selaa laajennuksia</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lukea</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Kirjoittaa</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Lähetä palautetta tai virheraportti</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Tämä vain piilottaa pääikkunan. Kaikki muut ei -valintaikkunat ikkunat näkyy aina tehtäväpalkissa.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Hae '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Lisää suodatin</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Muokkaa liitä tyyppi</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Poista tämä suodatin</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Avoin apu tästä ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} leikkeet</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Muuttaa</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Ei koskaan</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Aseta</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Nimettömä</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Ennätys</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Leimaamaton lähdeviite</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' vaaditaan</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(On virheitä)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Rajoitettu</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Säilytys</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Roskia</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Rajoittamaton</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Tämä sovellus vastaa tällä hetkellä oletuslevylukijan esiasetuksia ja muotoja.
+
+Oletuslukijan esiasetusten käyttöönotto tai poistaminen käytöstä (leikepöydältä sivupalkista) ei vaikuta tähän kokoonpanoon. Vain noteeraamattomat sovellukset seuraavat oletusasetuksia.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Tämä sovellus vastaa tällä hetkellä oletuslevyn kirjoittajan esiasetuksia ja muotoja.
+
+Oletuskirjoittajan esiasetusten (leikepöydän sivupalkin) käyttöönotto tai poistaminen käytöstä ei vaikuta tähän kokoonpanoon. Vain noteeraamattomat sovellukset seuraavat oletusasetuksia.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Liittymiseksi sinun on purettava leikepöydän kuuntelija (järjestelmälokero -&gt; jatka).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Liitetä</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Ei ole asetuksia</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Puhun vain englantia ja monkepaste on käännetty tähän kieleen.
+
+Kaikki versiot toimittavat englanninkielisen paketin kanssa, joten jos puhut englantia, voit muuttaa kielen siihen milloin tahansa tämän asennuksen jälkeen (asetukset -&gt; asetukset -&gt; kansainvälinen).
+
+Jos haluat auttaa parantamaan käännöstä, haluaisimme kuulla sinusta!
+
+palaute@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Käännöshuolet</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Sinun on päivitettävä Monkeypaste, jotta voit käyttää tätä ominaisuutta.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Pikakuvake</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Leikepöydän kuuntelija poistettu käytöstä</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Leikepöydän kuuntelija käytössä</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Vanhempien toiminta '{0}' ei tue syöttöominaisuuden tyyppiä 'viimeinen lähtö'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lisätietoja suunnitelmista</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Soveltaminen</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Laukaista</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Leike</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analysaattori</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+</root>

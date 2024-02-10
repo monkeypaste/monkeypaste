@@ -59,1131 +59,1131 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MpThemeType_Light" xml:space="preserve">
-    <value />
+    <value>Яктылык</value>
   </data>
   <data name="MpThemeType_Dark" xml:space="preserve">
-    <value />
+    <value>Караңгылык</value>
   </data>
   <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
-    <value />
+    <value>Беркайчан да</value>
   </data>
   <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
-    <value />
+    <value>Көндәлек</value>
   </data>
   <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
-    <value />
+    <value>Атналык</value>
   </data>
   <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
-    <value />
+    <value>Ай саен</value>
   </data>
   <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
-    <value />
+    <value>Соңгы чыгару</value>
   </data>
   <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
-    <value />
+    <value>Чыганак клипы</value>
   </data>
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
-    <value />
+    <value>Юк</value>
   </data>
   <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
-    <value />
+    <value>Сменаны тоту</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
-    <value />
+    <value>Иң яхшы уң почмак</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
-    <value />
+    <value>Сул почмак</value>
   </data>
   <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
-    <value />
+    <value>Һәрвакыт</value>
   </data>
   <data name="MpBillingCycleType_Never" xml:space="preserve">
-    <value />
+    <value>Беркайчан да</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
-    <value />
+    <value>Ай саен</value>
   </data>
   <data name="MpBillingCycleType_Yearly" xml:space="preserve">
-    <value />
+    <value>Ели</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
-    <value />
+    <value>Йөкләүче</value>
   </data>
   <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
-    <value />
+    <value>Язылу вакыты</value>
   </data>
   <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
-    <value />
+    <value>Хисапсыз калдырмаган</value>
   </data>
   <data name="MpNotificationType_DbError" xml:space="preserve">
-    <value />
+    <value>БД хатасы</value>
   </data>
   <data name="MpNotificationType_Help" xml:space="preserve">
-    <value />
+    <value>Ярдәм</value>
   </data>
   <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
-    <value />
+    <value>Яңартасып яңартасы</value>
   </data>
   <data name="MpNotificationType_Message" xml:space="preserve">
-    <value />
+    <value>Хәбәр</value>
   </data>
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
-    <value />
+    <value>Кушымта режимының үзгәреше</value>
   </data>
   <data name="MpNotificationType_Debug" xml:space="preserve">
-    <value />
+    <value>Дебуг</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
-    <value />
+    <value>Эчтәлек</value>
   </data>
   <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
-    <value />
+    <value>Чүп -чар</value>
   </data>
   <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>Хисап белән капланган эчтәлек</value>
   </data>
   <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>Хисапка кире кайтарылган эчтәлек</value>
   </data>
   <data name="MpNotificationType_AccountChanged" xml:space="preserve">
-    <value />
+    <value>Хисап үзгәргән</value>
   </data>
   <data name="MpNotificationType_Welcome" xml:space="preserve">
-    <value />
+    <value>Рәхим итегез</value>
   </data>
   <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
-    <value />
+    <value>Яңартып була</value>
   </data>
   <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
-    <value />
+    <value>Яңартырга кирәкми</value>
   </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
-    <value />
+    <value>Кушымтаның үзгәртелгән режимы</value>
   </data>
   <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
-    <value />
+    <value>Хезмәттәш ярдәм</value>
   </data>
   <data name="MpNotificationType_AlertAction" xml:space="preserve">
-    <value />
+    <value>Уяу булыгыз</value>
   </data>
   <data name="MpNotificationType_StartupComplete" xml:space="preserve">
-    <value />
+    <value>Стартап-тулы</value>
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
-    <value />
+    <value>Файл Io кисәтүе</value>
   </data>
   <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
-    <value />
+    <value>Плагинның хатасы</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
-    <value />
+    <value>Чын-чын плагин</value>
   </data>
   <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
-    <value />
+    <value>Юкка чыдамлы клип такталар форматын</value>
   </data>
   <data name="MpNotificationType_InvalidAction" xml:space="preserve">
-    <value />
+    <value>Чыныксыз эш</value>
   </data>
   <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
-    <value />
+    <value>Бад-Пауза</value>
   </data>
   <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
-    <value />
+    <value>Анализлар өчен вакыт бүлеп куе</value>
   </data>
   <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
-    <value />
+    <value>Юкка чыдамлы үтенеч</value>
   </data>
   <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
-    <value />
+    <value>Чын күңелдән җавап</value>
   </data>
   <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
-    <value />
+    <value>Параметрлар үтенечләрен үтәргә</value>
   </data>
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
-    <value />
+    <value>2019-2019</value>
   </data>
   <data name="MpNotificationType_RateApp" xml:space="preserve">
-    <value />
+    <value>Ставкалар кушымтасы</value>
   </data>
   <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
-    <value />
+    <value>Мөддәтле ыгы - ныгы - пәрдәләү</value>
   </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
-    <value />
+    <value>Модаль контент форматы бозылу</value>
   </data>
   <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>« Әйе » дигән тәгълим</value>
   </data>
   <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
-    <value />
+    <value>«Әйе » дигән модаль</value>
   </data>
   <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Модаль ок хәбәрне юк итә</value>
   </data>
   <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
-    <value />
+    <value>Модаль ок хәбәре рамкасы</value>
   </data>
   <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Модаль текст тартмасы хәбәрне юк итә</value>
   </data>
   <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Модаль истә калдырылган текст тартмасы хәбәрне калдырмый</value>
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Модаль прогресс хәбәрне юк итә</value>
   </data>
   <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
-    <value />
+    <value>Модаль булмаган хәбәр тартмасы</value>
   </data>
   <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
-    <value />
+    <value>Модаль яңадан кире кага</value>
   </data>
   <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
-    <value />
+    <value>Модаль яңадан яңадан эшли</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
-    <value />
+    <value>Ахыр чиктә өстәмәне раслагыз</value>
   </data>
   <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
-    <value />
+    <value>Плагиннар хәбәре</value>
   </data>
   <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
-    <value />
+    <value>Плагиннарның җавап хатасы</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
-    <value />
+    <value>Плагиннарның җаваплары турында кисәтү</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
-    <value />
+    <value>Пленкага чыдамлылык белән җавап бирә</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
-    <value />
+    <value>Төп тәрәзә</value>
   </data>
   <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
-    <value />
+    <value>Авто күчермә режимы</value>
   </data>
   <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
-    <value />
+    <value>Уңда басыгыз</value>
   </data>
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
-    <value />
+    <value>Кычкыра торган тактаны тыңлагыз</value>
   </data>
   <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
-    <value />
+    <value>Сызыклы режимга кушымта</value>
   </data>
   <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
-    <value />
+    <value>Тоггле Блокны каплау режимы</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
-    <value />
+    <value>Урынны тоггле</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
-    <value />
+    <value>Тоггл Аппенд Паунд</value>
   </data>
   <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
-    <value />
+    <value>Слип тактадан куллан</value>
   </data>
   <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
-    <value />
+    <value>Игътибарыгызны киметегез</value>
   </data>
   <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
-    <value />
+    <value>Игътибарыгызны арттыру</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
-    <value />
+    <value>Экзит-пол</value>
   </data>
   <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
-    <value />
+    <value>Тышкы чыдамлылык</value>
   </data>
   <data name="MpShortcutType_PasteSelection" xml:space="preserve">
-    <value />
+    <value>Сайлап алучылар</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
-    <value />
+    <value>Сайлауның күчермәсе</value>
   </data>
   <data name="MpShortcutType_CutSelection" xml:space="preserve">
-    <value />
+    <value>Кисәкләр сайлаганы</value>
   </data>
   <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
-    <value />
+    <value>Сайланган әйберләрне юк итегез</value>
   </data>
   <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
-    <value />
+    <value>Киләсе багананы сайлагыз</value>
   </data>
   <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
-    <value />
+    <value>Алдагы багананы сайлагыз</value>
   </data>
   <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
-    <value />
+    <value>Киләсе рәт пунктын сайлагыз</value>
   </data>
   <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
-    <value />
+    <value>Алдагы рәт пунктын сайлагыз</value>
   </data>
   <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
-    <value />
+    <value>Кысыйкны билгеләгез</value>
   </data>
   <data name="MpShortcutType_Undo" xml:space="preserve">
-    <value />
+    <value>Юк</value>
   </data>
   <data name="MpShortcutType_Redo" xml:space="preserve">
-    <value />
+    <value>Редо</value>
   </data>
   <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
-    <value />
+    <value>Контентны тик укып чыгыгыз</value>
   </data>
   <data name="MpShortcutType_Rename" xml:space="preserve">
-    <value />
+    <value>Ренамент</value>
   </data>
   <data name="MpShortcutType_Duplicate" xml:space="preserve">
-    <value />
+    <value>Кабатла</value>
   </data>
   <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
-    <value />
+    <value>Өйгә төргәк</value>
   </data>
   <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
-    <value />
+    <value>Ахырга кадәр төргәк</value>
   </data>
   <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
-    <value />
+    <value>Тәрәзәнең зурлыгы</value>
   </data>
   <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
-    <value />
+    <value>Тәрәзәнең зурлыгы түбән</value>
   </data>
   <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
-    <value />
+    <value>Тәрәзәнең зурлыгы сулда</value>
   </data>
   <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
-    <value />
+    <value>Тәрәзәнең зурлыгы уңда</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
-    <value />
+    <value>Көнчыгышның төп тәрәзәсе</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
-    <value />
+    <value>Көнчыгыш төп тәрәзә төбе</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
-    <value />
+    <value>Көнчыгышның төп тәрәзәсе сулга</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
-    <value />
+    <value>Көнчыгышның төп тәрәзәсе уң як</value>
   </data>
   <data name="MpShortcutType_PreviousPage" xml:space="preserve">
-    <value />
+    <value>Алдагы бит</value>
   </data>
   <data name="MpShortcutType_NextPage" xml:space="preserve">
-    <value />
+    <value>Киләсе бит</value>
   </data>
   <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
-    <value />
+    <value>Сайланган әйберне табу һәм алыштыру</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
-    <value />
+    <value>Төп тәрәзә бикләнгән тоггле</value>
   </data>
   <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
-    <value />
+    <value>Тоггл Фильтр мәзүзе күренеп торган</value>
   </data>
   <data name="MpShortcutType_ShowSettings" xml:space="preserve">
-    <value />
+    <value>Төймәләрне күрсәт</value>
   </data>
   <data name="MpShortcutType_TogglePinned" xml:space="preserve">
-    <value />
+    <value>Тоггле Пиннед</value>
   </data>
   <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
-    <value />
+    <value>Тәрәзәдә ачык</value>
   </data>
   <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
-    <value />
+    <value>Мәңгегә юк</value>
   </data>
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
-    <value />
+    <value>Көч төп тәрәзәне киметә</value>
   </data>
   <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
-    <value />
+    <value>Ачлык күрсәтмәсе режимы</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
-    <value />
+    <value>Ачык ярдәм</value>
   </data>
   <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
-    <value />
+    <value>Сайлауда кабыз</value>
   </data>
   <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
-    <value />
+    <value>Сайлап алырга омтылу</value>
   </data>
   <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
-    <value />
+    <value>Ысыйклар сайлаганы</value>
   </data>
   <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
-    <value />
+    <value>Чиста пинь трай</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
-    <value />
+    <value>M A XA P PS H R T C U Т</value>
   </data>
   <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
-    <value />
+    <value>Пунктны күчереп языгыз</value>
   </data>
   <data name="MpShortcutType_SelectTag" xml:space="preserve">
-    <value />
+    <value>Тег сайлагыз</value>
   </data>
   <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
-    <value />
+    <value>Бу әйберне алдан ук күчереп тикшерегез</value>
   </data>
   <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
-    <value />
+    <value>Үз - үзегезгә ярдәм сорап дога кылыгыз</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
-    <value />
+    <value>Клип тексты</value>
   </data>
   <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
-    <value />
+    <value>Чыгымлы клиплар</value>
   </data>
   <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
-    <value />
+    <value>Клип тибы</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
-    <value />
+    <value>Титул</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
-    <value />
+    <value>Чыганаклы юл</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
-    <value />
+    <value>Чыганак кушымтасы</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
-    <value />
+    <value>Чыганак урыгы</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
-    <value />
+    <value>Чыганакның url исеме</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
-    <value />
+    <value>Чыганакның урлау домены</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>Датаны күчереп язар өчен вакыт</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
-    <value />
+    <value>Санакны күчереп графигы</value>
   </data>
   <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
-    <value />
+    <value>Граф</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
-    <value />
+    <value>Чыганак җайланманың исеме</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
-    <value />
+    <value>Чыганак җайланмасы тибы</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
-    <value />
+    <value>Соңгы чыгару</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
-    <value />
+    <value>Классификация</value>
   </data>
   <data name="MpActionType_Analyze" xml:space="preserve">
-    <value />
+    <value>Анализ</value>
   </data>
   <data name="MpActionType_Conditional" xml:space="preserve">
-    <value />
+    <value>Шартлы</value>
   </data>
   <data name="MpActionType_Trigger" xml:space="preserve">
-    <value />
+    <value>Ысыйка</value>
   </data>
   <data name="MpActionType_Repeater" xml:space="preserve">
-    <value />
+    <value>Реплер</value>
   </data>
   <data name="MpActionType_FileWriter" xml:space="preserve">
-    <value />
+    <value>Файл язучысы</value>
   </data>
   <data name="MpActionType_SetClipboard" xml:space="preserve">
-    <value />
+    <value>Сноуборд</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
-    <value />
+    <value>Тоткарлау</value>
   </data>
   <data name="MpActionType_Alert" xml:space="preserve">
-    <value />
+    <value>Уяу булыгыз</value>
   </data>
   <data name="MpActionType_ApplicationCommand" xml:space="preserve">
-    <value />
+    <value>Куллану боерыгы</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTriggerType_ClipAdded" xml:space="preserve">
-    <value />
+    <value>Клип өстәлде</value>
   </data>
   <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
-    <value />
+    <value>Файл системасы үзгәргән</value>
   </data>
   <data name="MpTriggerType_ClipTagged" xml:space="preserve">
-    <value />
+    <value>Клип тамгалау</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
-    <value />
+    <value>Клакш</value>
   </data>
   <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
-    <value />
+    <value>Маймыл күчермәсе</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
-    <value />
+    <value>Эчке</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
-    <value />
+    <value>Тәвәккәллек</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
-    <value />
+    <value>Гадәт</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
-    <value />
+    <value>ос</value>
   </data>
   <data name="MpPluginDependencyType_app" xml:space="preserve">
-    <value />
+    <value>кушымта</value>
   </data>
   <data name="MpPluginDependencyType_lib" xml:space="preserve">
-    <value />
+    <value>либ</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
-    <value />
+    <value>Текст</value>
   </data>
   <data name="MpClipboardFormatType_Html" xml:space="preserve">
-    <value />
+    <value>Пл</value>
   </data>
   <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
-    <value />
+    <value>Ртф</value>
   </data>
   <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
-    <value />
+    <value>Биткап</value>
   </data>
   <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
-    <value />
+    <value>Файл тамчысы</value>
   </data>
   <data name="MpClipboardFormatType_Csv" xml:space="preserve">
-    <value />
+    <value>Csv</value>
   </data>
   <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
-    <value />
+    <value>Эчтәлек</value>
   </data>
   <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
-    <value />
+    <value>Уникод тексты</value>
   </data>
   <data name="MpClipboardFormatType_OemText" xml:space="preserve">
-    <value />
+    <value>Оэм тексты</value>
   </data>
   <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
-    <value />
+    <value>Благей</value>
   </data>
   <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
-    <value />
+    <value>Чыңгы пакет</value>
   </data>
   <data name="MpClipboardFormatType_Custom" xml:space="preserve">
-    <value />
+    <value>Гадәт</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
-    <value />
+    <value>Логин</value>
   </data>
   <data name="MpSettingsFrameType_Status" xml:space="preserve">
-    <value />
+    <value>Статус</value>
   </data>
   <data name="MpSettingsFrameType_Register" xml:space="preserve">
-    <value />
+    <value>Реестр</value>
   </data>
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
-    <value />
+    <value>Тема</value>
   </data>
   <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
-    <value />
+    <value>Нәзәле фонтлар</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
-    <value />
+    <value>Тавыш</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
-    <value />
+    <value>Тәрәзә</value>
   </data>
   <data name="MpSettingsFrameType_Hints" xml:space="preserve">
-    <value />
+    <value>Хинтлар</value>
   </data>
   <data name="MpSettingsFrameType_International" xml:space="preserve">
-    <value />
+    <value>Халыкара</value>
   </data>
   <data name="MpSettingsFrameType_Limits" xml:space="preserve">
-    <value />
+    <value>Чикләр</value>
   </data>
   <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
-    <value />
+    <value>Трекинг</value>
   </data>
   <data name="MpSettingsFrameType_Startup" xml:space="preserve">
-    <value />
+    <value>Стартап</value>
   </data>
   <data name="MpSettingsFrameType_Search" xml:space="preserve">
-    <value />
+    <value>Эзләү</value>
   </data>
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
-    <value />
+    <value>Эчтәлек</value>
   </data>
   <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
-    <value />
+    <value>Иң югары экран чит хәрәкәтләре</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
-    <value />
+    <value>Клезбез</value>
   </data>
   <data name="MpSettingsFrameType_System" xml:space="preserve">
-    <value />
+    <value>Система</value>
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
-    <value />
+    <value>Пысый</value>
   </data>
   <data name="MpSettingsFrameType_Logs" xml:space="preserve">
-    <value />
+    <value>Лож</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
-    <value />
+    <value>Челл</value>
   </data>
   <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
-    <value />
+    <value>Урнаштырылган</value>
   </data>
   <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
-    <value />
+    <value>Яңарыгыз</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
-    <value />
+    <value>Тамыр</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
-    <value />
+    <value>Кушымта</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
-    <value />
+    <value>Җайланма</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
-    <value />
+    <value>Мета</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
-    <value />
+    <value>Статистика</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
-    <value />
+    <value>Урлык</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
-    <value />
+    <value>Һәм</value>
   </data>
   <data name="MpNextJoinOptionType_Or" xml:space="preserve">
-    <value />
+    <value>Ор</value>
   </data>
   <data name="MpNextJoinOptionType_Not" xml:space="preserve">
-    <value />
+    <value>Юк</value>
   </data>
   <data name="MpRootOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpRootOptionType_Clip" xml:space="preserve">
-    <value />
+    <value>Клип</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
-    <value />
+    <value>Коллекция</value>
   </data>
   <data name="MpRootOptionType_Sources" xml:space="preserve">
-    <value />
+    <value>Чыганаклар</value>
   </data>
   <data name="MpRootOptionType_History" xml:space="preserve">
-    <value />
+    <value>Тарих</value>
   </data>
   <data name="MpTextOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpTextOptionType_Matches" xml:space="preserve">
-    <value />
+    <value>Матчлар</value>
   </data>
   <data name="MpTextOptionType_Contains" xml:space="preserve">
-    <value />
+    <value>Анда язылганнар</value>
   </data>
   <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>Башлана</value>
   </data>
   <data name="MpTextOptionType_EndsWith" xml:space="preserve">
-    <value />
+    <value>Тәмамлана</value>
   </data>
   <data name="MpTextOptionType_RegEx" xml:space="preserve">
-    <value />
+    <value>Рег Экс</value>
   </data>
   <data name="MpNumberOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpNumberOptionType_Equals" xml:space="preserve">
-    <value />
+    <value>Тигезлек</value>
   </data>
   <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
-    <value />
+    <value>Бөегрәк</value>
   </data>
   <data name="MpNumberOptionType_LessThan" xml:space="preserve">
-    <value />
+    <value>Ким</value>
   </data>
   <data name="MpNumberOptionType_IsNot" xml:space="preserve">
-    <value />
+    <value>Түгел</value>
   </data>
   <data name="MpColorOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpColorOptionType_Hex" xml:space="preserve">
-    <value />
+    <value>Гекс</value>
   </data>
   <data name="MpColorOptionType_ARGB" xml:space="preserve">
-    <value />
+    <value>Р Г Б</value>
   </data>
   <data name="MpDimensionOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpDimensionOptionType_Width" xml:space="preserve">
-    <value />
+    <value>Киңлеге</value>
   </data>
   <data name="MpDimensionOptionType_Height" xml:space="preserve">
-    <value />
+    <value>Биеклек</value>
   </data>
   <data name="MpImageOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpImageOptionType_Dimensions" xml:space="preserve">
-    <value />
+    <value>Үлчәмнәр</value>
   </data>
   <data name="MpImageOptionType_Color" xml:space="preserve">
-    <value />
+    <value>Төс</value>
   </data>
   <data name="MpFileOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpFileOptionType_Audio" xml:space="preserve">
-    <value />
+    <value>Аудио</value>
   </data>
   <data name="MpFileOptionType_Compressed" xml:space="preserve">
-    <value />
+    <value>Кысылган</value>
   </data>
   <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
-    <value />
+    <value>Диск һәм медиа</value>
   </data>
   <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
-    <value />
+    <value>Мәгълүмат һәм мәгълүмат базасы</value>
   </data>
   <data name="MpFileOptionType_Document" xml:space="preserve">
-    <value />
+    <value>Документ</value>
   </data>
   <data name="MpFileOptionType_Email" xml:space="preserve">
-    <value />
+    <value>Электрон почта</value>
   </data>
   <data name="MpFileOptionType_Executable" xml:space="preserve">
-    <value />
+    <value>Яраклы</value>
   </data>
   <data name="MpFileOptionType_Font" xml:space="preserve">
-    <value />
+    <value>Фонт</value>
   </data>
   <data name="MpFileOptionType_Image" xml:space="preserve">
-    <value />
+    <value>Образ</value>
   </data>
   <data name="MpFileOptionType_Internet" xml:space="preserve">
-    <value />
+    <value>Интернет</value>
   </data>
   <data name="MpFileOptionType_Presentation" xml:space="preserve">
-    <value />
+    <value>Презентация</value>
   </data>
   <data name="MpFileOptionType_Programming" xml:space="preserve">
-    <value />
+    <value>Программалау</value>
   </data>
   <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
-    <value />
+    <value>Таралган тәгәрмә</value>
   </data>
   <data name="MpFileOptionType_System" xml:space="preserve">
-    <value />
+    <value>Система</value>
   </data>
   <data name="MpFileOptionType_Video" xml:space="preserve">
-    <value />
+    <value>Видео</value>
   </data>
   <data name="MpFileOptionType_UserDefined" xml:space="preserve">
-    <value />
+    <value>Кулланучылар билгеләмәсе</value>
   </data>
   <data name="MpFileOptionType_Custom" xml:space="preserve">
-    <value />
+    <value>Гадәт</value>
   </data>
   <data name="MpFileContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpFileContentOptionType_Path" xml:space="preserve">
-    <value />
+    <value>Юл</value>
   </data>
   <data name="MpFileContentOptionType_Name" xml:space="preserve">
-    <value />
+    <value>Исем</value>
   </data>
   <data name="MpFileContentOptionType_Kind" xml:space="preserve">
-    <value />
+    <value>Киндер</value>
   </data>
   <data name="MpContentTypeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpContentTypeOptionType_Text" xml:space="preserve">
-    <value />
+    <value>Текст</value>
   </data>
   <data name="MpContentTypeOptionType_Image" xml:space="preserve">
-    <value />
+    <value>Образ</value>
   </data>
   <data name="MpContentTypeOptionType_Files" xml:space="preserve">
-    <value />
+    <value>Файллар</value>
   </data>
   <data name="MpAppOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
-    <value />
+    <value>Кушымтаның исеме</value>
   </data>
   <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
-    <value />
+    <value>Процесс юлы</value>
   </data>
   <data name="MpWebsiteOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpWebsiteOptionType_Url" xml:space="preserve">
-    <value />
+    <value>Урлык</value>
   </data>
   <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
-    <value />
+    <value>Домен</value>
   </data>
   <data name="MpWebsiteOptionType_Title" xml:space="preserve">
-    <value />
+    <value>Титул</value>
   </data>
   <data name="MpSourcesOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpSourcesOptionType_Device" xml:space="preserve">
-    <value />
+    <value>Җайланма</value>
   </data>
   <data name="MpSourcesOptionType_App" xml:space="preserve">
-    <value />
+    <value>Кушымта</value>
   </data>
   <data name="MpSourcesOptionType_Website" xml:space="preserve">
-    <value />
+    <value>Веб-сайт</value>
   </data>
   <data name="MpTransactionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpTransactionType_Created" xml:space="preserve">
-    <value />
+    <value>Барлыкка китерелгән</value>
   </data>
   <data name="MpTransactionType_Dropped" xml:space="preserve">
-    <value />
+    <value>Кимеде</value>
   </data>
   <data name="MpTransactionType_Dragged" xml:space="preserve">
-    <value />
+    <value>Сөртелгәннәр</value>
   </data>
   <data name="MpTransactionType_Pasted" xml:space="preserve">
-    <value />
+    <value>Паштед</value>
   </data>
   <data name="MpTransactionType_Copied" xml:space="preserve">
-    <value />
+    <value>Күчермә</value>
   </data>
   <data name="MpTransactionType_Cut" xml:space="preserve">
-    <value />
+    <value>Кисәкләр</value>
   </data>
   <data name="MpTransactionType_Edited" xml:space="preserve">
-    <value />
+    <value>Эдида</value>
   </data>
   <data name="MpTransactionType_Analyzed" xml:space="preserve">
-    <value />
+    <value>Анализланган</value>
   </data>
   <data name="MpTransactionType_Appended" xml:space="preserve">
-    <value />
+    <value>Аппред</value>
   </data>
   <data name="MpTransactionType_Recreated" xml:space="preserve">
-    <value />
+    <value>Яңадан булдырылыгыз</value>
   </data>
   <data name="MpTransactionType_Linked" xml:space="preserve">
-    <value />
+    <value>Бәйләнгән</value>
   </data>
   <data name="MpTransactionType_Unlinked" xml:space="preserve">
-    <value />
+    <value>Тыелган</value>
   </data>
   <data name="MpTransactionType_Error" xml:space="preserve">
-    <value />
+    <value>Хата</value>
   </data>
   <data name="MpTransactionType_System" xml:space="preserve">
-    <value />
+    <value>Система</value>
   </data>
   <data name="MpDateTimeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
-    <value />
+    <value>Соңгы вакыт эчендә</value>
   </data>
   <data name="MpDateTimeOptionType_Before" xml:space="preserve">
-    <value />
+    <value>Элек</value>
   </data>
   <data name="MpDateTimeOptionType_After" xml:space="preserve">
-    <value />
+    <value>Соң</value>
   </data>
   <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
-    <value />
+    <value>Төгәл</value>
   </data>
   <data name="MpDateBeforeUnitType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
-    <value />
+    <value>Бүген</value>
   </data>
   <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>Кичә</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
-    <value />
+    <value>Бу атна</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
-    <value />
+    <value>Бу ай</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
-    <value />
+    <value>Быел</value>
   </data>
   <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>Төгәл</value>
   </data>
   <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>Стартап</value>
   </data>
   <data name="MpDateAfterUnitType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>Кичә</value>
   </data>
   <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
-    <value />
+    <value>Үткән атнада</value>
   </data>
   <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
-    <value />
+    <value>Узган ай</value>
   </data>
   <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
-    <value />
+    <value>Узган ел</value>
   </data>
   <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>Төгәл</value>
   </data>
   <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>Стартап</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
-    <value />
+    <value>Сәгатьләр</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
-    <value />
+    <value>Көннәр</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
-    <value />
+    <value>Атналар</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
-    <value />
+    <value>Айлар</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
-    <value />
+    <value>Еллар</value>
   </data>
   <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>Датаны күчереп язар өчен вакыт</value>
   </data>
   <data name="MpContentSortType_Source" xml:space="preserve">
-    <value />
+    <value>Чыганак</value>
   </data>
   <data name="MpContentSortType_Title" xml:space="preserve">
-    <value />
+    <value>Титул</value>
   </data>
   <data name="MpContentSortType_ItemData" xml:space="preserve">
-    <value />
+    <value>Пунктлар турында мәгълүмат</value>
   </data>
   <data name="MpContentSortType_ItemType" xml:space="preserve">
-    <value />
+    <value>Пунктлар тибы</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value />
+    <value>Куллану баллы</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
-    <value />
+    <value>Эчке</value>
   </data>
   <data name="MpRoutingType_Passive" xml:space="preserve">
-    <value />
+    <value>Пассив</value>
   </data>
   <data name="MpRoutingType_Pre" xml:space="preserve">
-    <value />
+    <value>Пре</value>
   </data>
   <data name="MpRoutingType_Post" xml:space="preserve">
-    <value />
+    <value>Пост</value>
   </data>
   <data name="MpRoutingType_Override" xml:space="preserve">
-    <value />
+    <value>Оверрид</value>
   </data>
   <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
-    <value />
+    <value>Эксклюзив Оверрид</value>
   </data>
   <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
-    <value />
+    <value>Анда язылганнар</value>
   </data>
   <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
-    <value />
+    <value>Төгәл</value>
   </data>
   <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>Башлана</value>
   </data>
   <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
-    <value />
+    <value>Тәмамлана</value>
   </data>
   <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
-    <value />
+    <value>Регекс</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
-    <value />
+    <value>Ирекле</value>
   </data>
   <data name="MpUserAccountType_Basic" xml:space="preserve">
-    <value />
+    <value>Төп</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
-    <value />
+    <value>Чиксез</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- Сайлагыз .</value>
   </data>
   <data name="MpContentOptionType_Type" xml:space="preserve">
-    <value />
+    <value>Төр</value>
   </data>
   <data name="MpContentOptionType_Text" xml:space="preserve">
-    <value />
+    <value>Текст</value>
   </data>
   <data name="MpContentOptionType_Images" xml:space="preserve">
-    <value />
+    <value>Сурәтләр</value>
   </data>
   <data name="MpContentOptionType_Files" xml:space="preserve">
-    <value />
+    <value>Файллар</value>
   </data>
   <data name="MpContentOptionType_AnyContent" xml:space="preserve">
-    <value />
+    <value>Нинди генә эчтәлек</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
-    <value />
+    <value>Титул</value>
   </data>
   <data name="MpContentOptionType_Annotation" xml:space="preserve">
-    <value />
+    <value>Аннотация</value>
   </data>
   <data name="MpContentOptionType_Color" xml:space="preserve">
-    <value />
+    <value>Төс</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
-    <value />
+    <value>Беренчел</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
-    <value />
+    <value>Тычкан</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value />
+    <value>Ачык</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value />
+    <value>Юк</value>
   </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTagType_Link" xml:space="preserve">
-    <value />
+    <value>Сылтан</value>
   </data>
   <data name="MpTagType_Query" xml:space="preserve">
-    <value />
+    <value>Пл</value>
   </data>
   <data name="MpTagType_Group" xml:space="preserve">
-    <value />
+    <value>Төркем</value>
   </data>
   <data name="MpReadOnlyTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
-    <value />
+    <value>Теги</value>
   </data>
   <data name="MpReadOnlyTagType_All" xml:space="preserve">
-    <value />
+    <value>Барысы да</value>
   </data>
   <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
-    <value />
+    <value>Яратканнар</value>
   </data>
   <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
-    <value />
+    <value>Фильтрлар</value>
   </data>
   <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
-    <value />
+    <value>Чүплек</value>
   </data>
   <data name="MpReadOnlyTagType_Today" xml:space="preserve">
-    <value />
+    <value>Бүген</value>
   </data>
   <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
-    <value />
+    <value>Форматлар</value>
   </data>
   <data name="MpReadOnlyTagType_Text" xml:space="preserve">
-    <value />
+    <value>Текст</value>
   </data>
   <data name="MpReadOnlyTagType_Images" xml:space="preserve">
-    <value />
+    <value>Сурәтләр</value>
   </data>
   <data name="MpReadOnlyTagType_Files" xml:space="preserve">
-    <value />
+    <value>Файллар</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
-    <value />
+    <value>Текст</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
-    <value />
+    <value>Образ</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
-    <value />
+    <value>Файл</value>
   </data>
   <data name="WatcherChangeTypes_Created" xml:space="preserve">
-    <value />
+    <value>Барлыкка китерелгән</value>
   </data>
   <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
-    <value />
+    <value>Бетерелгән</value>
   </data>
   <data name="WatcherChangeTypes_Changed" xml:space="preserve">
-    <value />
+    <value>Үзгәртелгән</value>
   </data>
   <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
-    <value />
+    <value>Ренам</value>
   </data>
   <data name="WatcherChangeTypes_All" xml:space="preserve">
-    <value />
+    <value>Барысы да</value>
   </data>
 </root>

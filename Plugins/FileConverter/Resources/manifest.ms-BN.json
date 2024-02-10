@@ -1,0 +1,82 @@
+{
+  "title": "Penukar fail",
+  "description": "Membolehkan fail diterjemahkan ke dalam imej atau jenis kandungan teks",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "Teras, teks, imej, fail, penukar, fail ke teks, fail ke gambar",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Fail untuk menukar",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Jenis output",
+        "description": "Hanya .png atau .txt sekarang",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Teks",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "Gambar",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Tukar ke teks",
+        "iconUri": "text.png",
+        "description": "Percubaan untuk menukar fail yang diberikan ke teks biasa",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Tukar ke imej",
+        "description": "Percubaan untuk menukar fail yang diberikan kepada imej dalam memori",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

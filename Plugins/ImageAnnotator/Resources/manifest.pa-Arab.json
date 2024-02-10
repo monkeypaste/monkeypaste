@@ -1,0 +1,53 @@
+{
+  "title": "ਚਿੱਤਰ ਐਨੋਟੇਟਰ",
+  "description": "80 ਵੱਖ-ਵੱਖ ਕਿਸਮਾਂ ਦੀਆਂ ਵਸਤੂਆਂ 'ਤੇ ਸਿਖਲਾਈ ਪ੍ਰਾਪਤ ਸਥਾਨਕ ਅਤੇ ਲਾਈਟਵੇਟ ਆਬਜੈਕਟ ਡਿਟੈਕਟਰ.",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/ImageAnnotator",
+  "packageUrl": "https://github.com/monkeypaste/ImageAnnotator/releases/download/v1.0.0/ImageAnnotator.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/icon.png",
+  "packageType": "Dll",
+  "tags": "ਚਿੱਤਰ ਖੋਜ, ਐਨੋਟੇਸ਼ਨ, ਚਿੱਤਰ, ਏਆਈ, ਟੈਕਸਟ",
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageToken": true
+    },
+    "parameters": [
+      {
+        "label": "ਦਾ ਭਰੋਸਾ",
+        "description": "ਡਿਟਕਟਿਡ ਸ਼ੁੱਧਤਾ ਨੂੰ ਫਿਲਟਰ ਕਰਨ ਲਈ 0 ਅਤੇ 1 ਦੇ ਵਿਚਕਾਰ ਇੱਕ ਮੁੱਲ",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "minimum": 0,
+        "maximum": 1,
+        "isRequired": true,
+        "paramId": "conf",
+        "values": [
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": "img64",
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      }
+    ]
+  }
+}

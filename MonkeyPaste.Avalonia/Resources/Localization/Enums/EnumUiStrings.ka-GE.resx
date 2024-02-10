@@ -59,1131 +59,1131 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MpThemeType_Light" xml:space="preserve">
-    <value />
+    <value>მსუბუქი</value>
   </data>
   <data name="MpThemeType_Dark" xml:space="preserve">
-    <value />
+    <value>მუქი</value>
   </data>
   <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
-    <value />
+    <value>არასდროს</value>
   </data>
   <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
-    <value />
+    <value>ბინები დღიურად</value>
   </data>
   <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
-    <value />
+    <value>ყოველკვირეული</value>
   </data>
   <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
-    <value />
+    <value>ყოველთვიურად</value>
   </data>
   <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
-    <value />
+    <value>ბოლო გამომავალი</value>
   </data>
   <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
-    <value />
+    <value>წყაროს კლიპი</value>
   </data>
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
-    <value />
+    <value>არცერთი</value>
   </data>
   <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
-    <value />
+    <value>ჰოლდინგის ცვლა</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
-    <value />
+    <value>ზედა მარჯვენა კუთხე</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
-    <value />
+    <value>ზედა მარცხენა კუთხე</value>
   </data>
   <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
-    <value />
+    <value>ყოველთვის</value>
   </data>
   <data name="MpBillingCycleType_Never" xml:space="preserve">
-    <value />
+    <value>არასდროს</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
-    <value />
+    <value>ყოველთვიურად</value>
   </data>
   <data name="MpBillingCycleType_Yearly" xml:space="preserve">
-    <value />
+    <value>ყოველწლიურად</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
-    <value />
+    <value>დამტვირთველი</value>
   </data>
   <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
-    <value />
+    <value>გამოწერა ამოიწურა</value>
   </data>
   <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
-    <value />
+    <value>ანგარიშის შესვლა ვერ შედგა</value>
   </data>
   <data name="MpNotificationType_DbError" xml:space="preserve">
-    <value />
+    <value>Db შეცდომა</value>
   </data>
   <data name="MpNotificationType_Help" xml:space="preserve">
-    <value />
+    <value>დახმარება</value>
   </data>
   <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
-    <value />
+    <value>მოდული განახლებულია</value>
   </data>
   <data name="MpNotificationType_Message" xml:space="preserve">
-    <value />
+    <value>შეტყობინება</value>
   </data>
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
-    <value />
+    <value>აპლიკაციის რეჟიმის შეცვლა</value>
   </data>
   <data name="MpNotificationType_Debug" xml:space="preserve">
-    <value />
+    <value>განბზიკვი</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
-    <value />
+    <value>შინაარსის თავსახური მიღწეულია</value>
   </data>
   <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
-    <value />
+    <value>Trash Cap მიაღწია</value>
   </data>
   <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>ანგარიშის მიერ დაბლოკილი კონტენტის დამატება</value>
   </data>
   <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>კონტენტის აღდგენა დაბლოკილია ანგარიშით</value>
   </data>
   <data name="MpNotificationType_AccountChanged" xml:space="preserve">
-    <value />
+    <value>შეიცვალა ანგარიში</value>
   </data>
   <data name="MpNotificationType_Welcome" xml:space="preserve">
-    <value />
+    <value>მოგესალმებით</value>
   </data>
   <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
-    <value />
+    <value>განახლება ხელმისაწვდომია</value>
   </data>
   <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
-    <value />
+    <value>განახლება არ არის ხელმისაწვდომი</value>
   </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
-    <value />
+    <value>დანართების რეჟიმი შეიცვალა</value>
   </data>
   <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
-    <value />
+    <value>ტრიგერი ჩართულია</value>
   </data>
   <data name="MpNotificationType_AlertAction" xml:space="preserve">
-    <value />
+    <value>გაფრთხილების მოქმედება</value>
   </data>
   <data name="MpNotificationType_StartupComplete" xml:space="preserve">
-    <value />
+    <value>სტარტაპ სრული</value>
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
-    <value />
+    <value>ფაილის Io გაფრთხილება</value>
   </data>
   <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
-    <value />
+    <value>მოდულის განტვირთვის შეცდომა</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
-    <value />
+    <value>არასწორი მოდული</value>
   </data>
   <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
-    <value />
+    <value>არასწორი ბუფერის ფორმატის დამმუშავებელი</value>
   </data>
   <data name="MpNotificationType_InvalidAction" xml:space="preserve">
-    <value />
+    <value>არასწორი ქმედება</value>
   </data>
   <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
-    <value />
+    <value>ცუდი http მოთხოვნა</value>
   </data>
   <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
-    <value />
+    <value>ანალიზატორის დრო</value>
   </data>
   <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
-    <value />
+    <value>არასწორი მოთხოვნა</value>
   </data>
   <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
-    <value />
+    <value>არასწორი პასუხი</value>
   </data>
   <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
-    <value />
+    <value>პარამეტრების შესრულება</value>
   </data>
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
-    <value />
+    <value>Db პაროლის შეყვანა</value>
   </data>
   <data name="MpNotificationType_RateApp" xml:space="preserve">
-    <value />
+    <value>აპლიკაციის შეფასება</value>
   </data>
   <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
-    <value />
+    <value>მოდალური გადატვირთვის საერთო ღირებულების წინასწარ დაყენება</value>
   </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
-    <value />
+    <value>მოდალური შინაარსის ფორმატის დეგრადაცია</value>
   </data>
   <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური დიახ არ გააუქმებს შეტყობინების ყუთს</value>
   </data>
   <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური დიახ არ არის შეტყობინების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური Ok გააუქმეთ შეტყობინებების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური Ok შეტყობინებების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური ტექსტური ყუთი Ok გააუქმეთ შეტყობინების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური დამახსოვრების ტექსტური ყუთი Ok გააუქმეთ შეტყობინების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური პროგრესის გაუქმების შეტყობინების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
-    <value />
+    <value>მოდალური დატვირთული შეტყობინების ყუთი</value>
   </data>
   <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
-    <value />
+    <value>მოდალური გადატვირთვა იგნორირება</value>
   </data>
   <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
-    <value />
+    <value>მოდალური გადატვირთვა ახლა თუ გვიან</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
-    <value />
+    <value>დაადასტურეთ საბოლოო დანართი</value>
   </data>
   <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
-    <value />
+    <value>მოდულების რეაგირების შეტყობინება</value>
   </data>
   <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
-    <value />
+    <value>მოდულის რეაგირების შეცდომა</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
-    <value />
+    <value>მოდულის რეაგირების გაფრთხილება</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
-    <value />
+    <value>მოდულის რეაგირების გაფრთხილება ვარიანტით</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
-    <value />
+    <value>მთავარი ფანჯრის გადართვა</value>
   </data>
   <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
-    <value />
+    <value>ავტომატური კოპირების რეჟიმის გადართვა</value>
   </data>
   <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
-    <value />
+    <value>მარჯვენა ღილაკით ჩასმა რეჟიმი</value>
   </data>
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
-    <value />
+    <value>ბუფერში გადართვა</value>
   </data>
   <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
-    <value />
+    <value>Toggle დანართის Inline Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
-    <value />
+    <value>Toggle დანართების ბლოკის რეჟიმი</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
-    <value />
+    <value>პოზიციის რეჟიმის გადართვა</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
-    <value />
+    <value>Toggle Append დაპაუზებული</value>
   </data>
   <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
-    <value />
+    <value>ხელით დაამატეთ ბუფერში</value>
   </data>
   <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
-    <value />
+    <value>შეამცირეთ ფოკუსი</value>
   </data>
   <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
-    <value />
+    <value>გაზარდეთ ფოკუსი</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
-    <value />
+    <value>გასვლა განაცხადი</value>
   </data>
   <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
-    <value />
+    <value>ჩასვით გარედან</value>
   </data>
   <data name="MpShortcutType_PasteSelection" xml:space="preserve">
-    <value />
+    <value>ჩასმა შერჩევა</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
-    <value />
+    <value>მონიშნულის კოპირება</value>
   </data>
   <data name="MpShortcutType_CutSelection" xml:space="preserve">
-    <value />
+    <value>მონიშნულის გაჭრა</value>
   </data>
   <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
-    <value />
+    <value>მონიშნული ელემენტების წაშლა</value>
   </data>
   <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
-    <value />
+    <value>აირჩიეთ შემდეგი სვეტის ელემენტი</value>
   </data>
   <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
-    <value />
+    <value>წინა სვეტის ელემენტის არჩევა</value>
   </data>
   <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
-    <value />
+    <value>აირჩიეთ შემდეგი რიგის ელემენტი</value>
   </data>
   <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
-    <value />
+    <value>წინა რიგის ელემენტის არჩევა</value>
   </data>
   <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
-    <value />
+    <value>მალსახმობის მინიჭება</value>
   </data>
   <data name="MpShortcutType_Undo" xml:space="preserve">
-    <value />
+    <value>გაუქმება</value>
   </data>
   <data name="MpShortcutType_Redo" xml:space="preserve">
-    <value />
+    <value>რედო</value>
   </data>
   <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
-    <value />
+    <value>შინაარსის გადართვა მხოლოდ</value>
   </data>
   <data name="MpShortcutType_Rename" xml:space="preserve">
-    <value />
+    <value>გადარქმევა</value>
   </data>
   <data name="MpShortcutType_Duplicate" xml:space="preserve">
-    <value />
+    <value>დუბლიკატი</value>
   </data>
   <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
-    <value />
+    <value>გადადით სახლში</value>
   </data>
   <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
-    <value />
+    <value>გადადით ბოლომდე</value>
   </data>
   <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
-    <value />
+    <value>ფანჯრის ზომა ზემოთ</value>
   </data>
   <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
-    <value />
+    <value>ფანჯრის ზომა ქვემოთ</value>
   </data>
   <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
-    <value />
+    <value>ფანჯრის ზომა მარცხნივ</value>
   </data>
   <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
-    <value />
+    <value>ფანჯრის ზომა მარჯვნივ</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
-    <value />
+    <value>ორიენტის მთავარი ფანჯრის ზედა</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
-    <value />
+    <value>ორიენტის მთავარი ფანჯრის ქვედა</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
-    <value />
+    <value>ორიენტის მთავარი ფანჯარა მარცხენა</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
-    <value />
+    <value>ორიენტის მთავარი ფანჯარა მარჯვნივ</value>
   </data>
   <data name="MpShortcutType_PreviousPage" xml:space="preserve">
-    <value />
+    <value>წინა გვერდი</value>
   </data>
   <data name="MpShortcutType_NextPage" xml:space="preserve">
-    <value />
+    <value>შემდეგი გვერდი</value>
   </data>
   <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
-    <value />
+    <value>მონიშნული ნივთის მოძებნა და შეცვლა</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
-    <value />
+    <value>მთავარი ფანჯრის გადართვა ჩაკეტილი</value>
   </data>
   <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
-    <value />
+    <value>ფილტრის მენიუს გადართვა ხილული</value>
   </data>
   <data name="MpShortcutType_ShowSettings" xml:space="preserve">
-    <value />
+    <value>პარამეტრების ჩვენება</value>
   </data>
   <data name="MpShortcutType_TogglePinned" xml:space="preserve">
-    <value />
+    <value>გადართვა Pinned</value>
   </data>
   <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
-    <value />
+    <value>ფანჯარაში გახსნა</value>
   </data>
   <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
-    <value />
+    <value>სამუდამოდ წაშლა</value>
   </data>
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
-    <value />
+    <value>ძალის მინიმიზაცია მთავარი ფანჯარა</value>
   </data>
   <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
-    <value />
+    <value>Toggle დანართების მიმართულებით რეჟიმი</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
-    <value />
+    <value>Open დახმარება</value>
   </data>
   <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
-    <value />
+    <value>შერჩევის მასშტაბირება</value>
   </data>
   <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
-    <value />
+    <value>შერჩევის მასშტაბირება</value>
   </data>
   <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
-    <value />
+    <value>შერჩევის ზუმის გადატვირთვა</value>
   </data>
   <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
-    <value />
+    <value>წმინდა პინის უჯრა</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
-    <value />
+    <value>M A XA P PS H O R T C U T</value>
   </data>
   <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
-    <value />
+    <value>ჩასვით დააკოპირეთ ნივთი</value>
   </data>
   <data name="MpShortcutType_SelectTag" xml:space="preserve">
-    <value />
+    <value>ჭდის მონიშვნა</value>
   </data>
   <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
-    <value />
+    <value>წინასწარ გაანალიზეთ ასლის ელემენტი</value>
   </data>
   <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
-    <value />
+    <value>Invoke Trigger</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
-    <value />
+    <value>კლიპის ტექსტი</value>
   </data>
   <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
-    <value />
+    <value>Raw Clip მონაცემები</value>
   </data>
   <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
-    <value />
+    <value>კლიპის ტიპი</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
-    <value />
+    <value>სათაური</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
-    <value />
+    <value>წყარო App Path</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
-    <value />
+    <value>აპლიკაციის სახელი</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
-    <value />
+    <value>წყარო Url</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
-    <value />
+    <value>წყარო Url სათაური</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
-    <value />
+    <value>წყარო Url Domain</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>კოპირების თარიღის დრო</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
-    <value />
+    <value>კოპირების რაოდენობა</value>
   </data>
   <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
-    <value />
+    <value>ჩასმა რაოდენობა</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
-    <value />
+    <value>წყაროს მოწყობილობის სახელი</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
-    <value />
+    <value>წყაროს მოწყობილობის ტიპი</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
-    <value />
+    <value>ბოლო გამომავალი</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
-    <value />
+    <value>კლასიფიკაცია</value>
   </data>
   <data name="MpActionType_Analyze" xml:space="preserve">
-    <value />
+    <value>ანალიზი</value>
   </data>
   <data name="MpActionType_Conditional" xml:space="preserve">
-    <value />
+    <value>პირობითი</value>
   </data>
   <data name="MpActionType_Trigger" xml:space="preserve">
-    <value />
+    <value>ტრიგერი</value>
   </data>
   <data name="MpActionType_Repeater" xml:space="preserve">
-    <value />
+    <value>გამეორება</value>
   </data>
   <data name="MpActionType_FileWriter" xml:space="preserve">
-    <value />
+    <value>ფაილის მწერალი</value>
   </data>
   <data name="MpActionType_SetClipboard" xml:space="preserve">
-    <value />
+    <value>დააყენეთ ბუფერი</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
-    <value />
+    <value>გადადება</value>
   </data>
   <data name="MpActionType_Alert" xml:space="preserve">
-    <value />
+    <value>გაფრთხილება</value>
   </data>
   <data name="MpActionType_ApplicationCommand" xml:space="preserve">
-    <value />
+    <value>განაცხადის ბრძანება</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTriggerType_ClipAdded" xml:space="preserve">
-    <value />
+    <value>კლიპის დამატება</value>
   </data>
   <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
-    <value />
+    <value>ფაილური სისტემა შეიცვალა</value>
   </data>
   <data name="MpTriggerType_ClipTagged" xml:space="preserve">
-    <value />
+    <value>კლიპი Tagged</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
-    <value />
+    <value>მალსახმობი</value>
   </data>
   <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
-    <value />
+    <value>მაიმუნის კოპირების მალსახმობი</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
-    <value />
+    <value>შიდა</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
-    <value />
+    <value>დეფოლტი</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
-    <value />
+    <value>საბაჟო</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
-    <value />
+    <value>ოს</value>
   </data>
   <data name="MpPluginDependencyType_app" xml:space="preserve">
-    <value />
+    <value>აპლიკაცია</value>
   </data>
   <data name="MpPluginDependencyType_lib" xml:space="preserve">
-    <value />
+    <value>ლიბი</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
-    <value />
+    <value>ტექსტი</value>
   </data>
   <data name="MpClipboardFormatType_Html" xml:space="preserve">
-    <value />
+    <value>Html</value>
   </data>
   <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
-    <value />
+    <value>Rtf</value>
   </data>
   <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
-    <value />
+    <value>ბიტრუქო</value>
   </data>
   <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
-    <value />
+    <value>ფაილის ვარდნა</value>
   </data>
   <data name="MpClipboardFormatType_Csv" xml:space="preserve">
-    <value />
+    <value>Csv</value>
   </data>
   <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
-    <value />
+    <value>შიდა შინაარსი</value>
   </data>
   <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
-    <value />
+    <value>უნიკოდის ტექსტი</value>
   </data>
   <data name="MpClipboardFormatType_OemText" xml:space="preserve">
-    <value />
+    <value>Oem ტექსტი</value>
   </data>
   <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
-    <value />
+    <value>ქამლი</value>
   </data>
   <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
-    <value />
+    <value>Xaml პაკეტი</value>
   </data>
   <data name="MpClipboardFormatType_Custom" xml:space="preserve">
-    <value />
+    <value>საბაჟო</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
-    <value />
+    <value>შესვლა</value>
   </data>
   <data name="MpSettingsFrameType_Status" xml:space="preserve">
-    <value />
+    <value>სტატუსი</value>
   </data>
   <data name="MpSettingsFrameType_Register" xml:space="preserve">
-    <value />
+    <value>რეგისტრაცია</value>
   </data>
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
-    <value />
+    <value>თემა</value>
   </data>
   <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
-    <value />
+    <value>ნაგულისხმები ფონტები</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
-    <value />
+    <value>საუნდი</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
-    <value />
+    <value>ფანჯარა</value>
   </data>
   <data name="MpSettingsFrameType_Hints" xml:space="preserve">
-    <value />
+    <value>მინიშნებები</value>
   </data>
   <data name="MpSettingsFrameType_International" xml:space="preserve">
-    <value />
+    <value>საერთაშორისო ურთიერთობები</value>
   </data>
   <data name="MpSettingsFrameType_Limits" xml:space="preserve">
-    <value />
+    <value>ლიმიტები</value>
   </data>
   <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
-    <value />
+    <value>ძიება</value>
   </data>
   <data name="MpSettingsFrameType_Startup" xml:space="preserve">
-    <value />
+    <value>სტარტაპი</value>
   </data>
   <data name="MpSettingsFrameType_Search" xml:space="preserve">
-    <value />
+    <value>ძიება</value>
   </data>
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
-    <value />
+    <value>შინაარსი</value>
   </data>
   <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
-    <value />
+    <value>ზედა ეკრანის Edge ჟესტები</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
-    <value />
+    <value>მალსახმობები</value>
   </data>
   <data name="MpSettingsFrameType_System" xml:space="preserve">
-    <value />
+    <value>სისტემა</value>
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
-    <value />
+    <value>პაროლი</value>
   </data>
   <data name="MpSettingsFrameType_Logs" xml:space="preserve">
-    <value />
+    <value>ჟურნალები</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
-    <value />
+    <value>დათვალიერება</value>
   </data>
   <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
-    <value />
+    <value>დაინსტალირებული</value>
   </data>
   <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
-    <value />
+    <value>განახლებები</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
-    <value />
+    <value>ფესვი</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
-    <value />
+    <value>აპლიკაცია</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
-    <value />
+    <value>მოწყობილობა</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
-    <value />
+    <value>მეტა</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
-    <value />
+    <value>სტატისტიკა</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
-    <value />
+    <value>Url</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
-    <value />
+    <value>და</value>
   </data>
   <data name="MpNextJoinOptionType_Or" xml:space="preserve">
-    <value />
+    <value>ან</value>
   </data>
   <data name="MpNextJoinOptionType_Not" xml:space="preserve">
-    <value />
+    <value>არა</value>
   </data>
   <data name="MpRootOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpRootOptionType_Clip" xml:space="preserve">
-    <value />
+    <value>კლიპი</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
-    <value />
+    <value>კოლექცია</value>
   </data>
   <data name="MpRootOptionType_Sources" xml:space="preserve">
-    <value />
+    <value>წყაროები</value>
   </data>
   <data name="MpRootOptionType_History" xml:space="preserve">
-    <value />
+    <value>ისტორია</value>
   </data>
   <data name="MpTextOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpTextOptionType_Matches" xml:space="preserve">
-    <value />
+    <value>მატჩები</value>
   </data>
   <data name="MpTextOptionType_Contains" xml:space="preserve">
-    <value />
+    <value>შეიცავს</value>
   </data>
   <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>იწყება</value>
   </data>
   <data name="MpTextOptionType_EndsWith" xml:space="preserve">
-    <value />
+    <value>მთავრდება</value>
   </data>
   <data name="MpTextOptionType_RegEx" xml:space="preserve">
-    <value />
+    <value>რეგ ექს</value>
   </data>
   <data name="MpNumberOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpNumberOptionType_Equals" xml:space="preserve">
-    <value />
+    <value>თანასწორები</value>
   </data>
   <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
-    <value />
+    <value>უფრო დიდი, ვიდრე</value>
   </data>
   <data name="MpNumberOptionType_LessThan" xml:space="preserve">
-    <value />
+    <value>ნაკლებია, ვიდრე</value>
   </data>
   <data name="MpNumberOptionType_IsNot" xml:space="preserve">
-    <value />
+    <value>არ არის</value>
   </data>
   <data name="MpColorOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpColorOptionType_Hex" xml:space="preserve">
-    <value />
+    <value>ჰექსი</value>
   </data>
   <data name="MpColorOptionType_ARGB" xml:space="preserve">
-    <value />
+    <value>A R G B</value>
   </data>
   <data name="MpDimensionOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpDimensionOptionType_Width" xml:space="preserve">
-    <value />
+    <value>სიგანე</value>
   </data>
   <data name="MpDimensionOptionType_Height" xml:space="preserve">
-    <value />
+    <value>სიმაღლე</value>
   </data>
   <data name="MpImageOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpImageOptionType_Dimensions" xml:space="preserve">
-    <value />
+    <value>ზომები</value>
   </data>
   <data name="MpImageOptionType_Color" xml:space="preserve">
-    <value />
+    <value>ფერი</value>
   </data>
   <data name="MpFileOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpFileOptionType_Audio" xml:space="preserve">
-    <value />
+    <value>აუდიო</value>
   </data>
   <data name="MpFileOptionType_Compressed" xml:space="preserve">
-    <value />
+    <value>შეკუმშული</value>
   </data>
   <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
-    <value />
+    <value>დისკი და მედია</value>
   </data>
   <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
-    <value />
+    <value>მონაცემები და მონაცემთა ბაზა</value>
   </data>
   <data name="MpFileOptionType_Document" xml:space="preserve">
-    <value />
+    <value>დოკუმენტი</value>
   </data>
   <data name="MpFileOptionType_Email" xml:space="preserve">
-    <value />
+    <value>ელ-ფოსტა</value>
   </data>
   <data name="MpFileOptionType_Executable" xml:space="preserve">
-    <value />
+    <value>შესრულებადი</value>
   </data>
   <data name="MpFileOptionType_Font" xml:space="preserve">
-    <value />
+    <value>შრიფტი</value>
   </data>
   <data name="MpFileOptionType_Image" xml:space="preserve">
-    <value />
+    <value>სურათი</value>
   </data>
   <data name="MpFileOptionType_Internet" xml:space="preserve">
-    <value />
+    <value>ინტერნეტი</value>
   </data>
   <data name="MpFileOptionType_Presentation" xml:space="preserve">
-    <value />
+    <value>პრეზენტაცია</value>
   </data>
   <data name="MpFileOptionType_Programming" xml:space="preserve">
-    <value />
+    <value>პროგრამირება</value>
   </data>
   <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
-    <value />
+    <value>ცხრილები</value>
   </data>
   <data name="MpFileOptionType_System" xml:space="preserve">
-    <value />
+    <value>სისტემა</value>
   </data>
   <data name="MpFileOptionType_Video" xml:space="preserve">
-    <value />
+    <value>ვიდეო</value>
   </data>
   <data name="MpFileOptionType_UserDefined" xml:space="preserve">
-    <value />
+    <value>მომხმარებლის განსაზღვრული</value>
   </data>
   <data name="MpFileOptionType_Custom" xml:space="preserve">
-    <value />
+    <value>საბაჟო</value>
   </data>
   <data name="MpFileContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpFileContentOptionType_Path" xml:space="preserve">
-    <value />
+    <value>გეზი</value>
   </data>
   <data name="MpFileContentOptionType_Name" xml:space="preserve">
-    <value />
+    <value>სახელი</value>
   </data>
   <data name="MpFileContentOptionType_Kind" xml:space="preserve">
-    <value />
+    <value>კეთილი</value>
   </data>
   <data name="MpContentTypeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpContentTypeOptionType_Text" xml:space="preserve">
-    <value />
+    <value>ტექსტი</value>
   </data>
   <data name="MpContentTypeOptionType_Image" xml:space="preserve">
-    <value />
+    <value>სურათი</value>
   </data>
   <data name="MpContentTypeOptionType_Files" xml:space="preserve">
-    <value />
+    <value>ფაილები</value>
   </data>
   <data name="MpAppOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
-    <value />
+    <value>საგანაცხადო ბლანდი</value>
   </data>
   <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
-    <value />
+    <value>პროცესის გზა</value>
   </data>
   <data name="MpWebsiteOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpWebsiteOptionType_Url" xml:space="preserve">
-    <value />
+    <value>Url</value>
   </data>
   <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
-    <value />
+    <value>დომენის</value>
   </data>
   <data name="MpWebsiteOptionType_Title" xml:space="preserve">
-    <value />
+    <value>სათაური</value>
   </data>
   <data name="MpSourcesOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpSourcesOptionType_Device" xml:space="preserve">
-    <value />
+    <value>მოწყობილობა</value>
   </data>
   <data name="MpSourcesOptionType_App" xml:space="preserve">
-    <value />
+    <value>აპლიკაცია</value>
   </data>
   <data name="MpSourcesOptionType_Website" xml:space="preserve">
-    <value />
+    <value>საიტი</value>
   </data>
   <data name="MpTransactionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpTransactionType_Created" xml:space="preserve">
-    <value />
+    <value>შექმნილია</value>
   </data>
   <data name="MpTransactionType_Dropped" xml:space="preserve">
-    <value />
+    <value>ჩამოვარდნილი</value>
   </data>
   <data name="MpTransactionType_Dragged" xml:space="preserve">
-    <value />
+    <value>გადატანილი</value>
   </data>
   <data name="MpTransactionType_Pasted" xml:space="preserve">
-    <value />
+    <value>ჩასვით</value>
   </data>
   <data name="MpTransactionType_Copied" xml:space="preserve">
-    <value />
+    <value>კოპირებული</value>
   </data>
   <data name="MpTransactionType_Cut" xml:space="preserve">
-    <value />
+    <value>ამოჭრა</value>
   </data>
   <data name="MpTransactionType_Edited" xml:space="preserve">
-    <value />
+    <value>რედაქტირებულია</value>
   </data>
   <data name="MpTransactionType_Analyzed" xml:space="preserve">
-    <value />
+    <value>გაანალიზებულია</value>
   </data>
   <data name="MpTransactionType_Appended" xml:space="preserve">
-    <value />
+    <value>დანართი</value>
   </data>
   <data name="MpTransactionType_Recreated" xml:space="preserve">
-    <value />
+    <value>ხელახლა შეიქმნა</value>
   </data>
   <data name="MpTransactionType_Linked" xml:space="preserve">
-    <value />
+    <value>დაკავშირებული</value>
   </data>
   <data name="MpTransactionType_Unlinked" xml:space="preserve">
-    <value />
+    <value>დაუკავშირებელი</value>
   </data>
   <data name="MpTransactionType_Error" xml:space="preserve">
-    <value />
+    <value>შეცდომა</value>
   </data>
   <data name="MpTransactionType_System" xml:space="preserve">
-    <value />
+    <value>სისტემა</value>
   </data>
   <data name="MpDateTimeOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
-    <value />
+    <value>ბოლო დროს</value>
   </data>
   <data name="MpDateTimeOptionType_Before" xml:space="preserve">
-    <value />
+    <value>ადრე</value>
   </data>
   <data name="MpDateTimeOptionType_After" xml:space="preserve">
-    <value />
+    <value>შემდეგ</value>
   </data>
   <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
-    <value />
+    <value>ზუსტი</value>
   </data>
   <data name="MpDateBeforeUnitType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
-    <value />
+    <value>დღეს</value>
   </data>
   <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>გუშინ</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
-    <value />
+    <value>ამ კვირაში</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
-    <value />
+    <value>ამ თვეში</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
-    <value />
+    <value>წელს</value>
   </data>
   <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>ზუსტი</value>
   </data>
   <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>სტარტაპი</value>
   </data>
   <data name="MpDateAfterUnitType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>გუშინ</value>
   </data>
   <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
-    <value />
+    <value>წინა კვირას</value>
   </data>
   <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
-    <value />
+    <value>ბოლო თვე</value>
   </data>
   <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
-    <value />
+    <value>შარშან</value>
   </data>
   <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>ზუსტი</value>
   </data>
   <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>სტარტაპი</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
-    <value />
+    <value>საათი</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
-    <value />
+    <value>დღე</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
-    <value />
+    <value>კვირები</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
-    <value />
+    <value>თვეები</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
-    <value />
+    <value>წლები</value>
   </data>
   <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>კოპირების თარიღის დრო</value>
   </data>
   <data name="MpContentSortType_Source" xml:space="preserve">
-    <value />
+    <value>წყარო</value>
   </data>
   <data name="MpContentSortType_Title" xml:space="preserve">
-    <value />
+    <value>სათაური</value>
   </data>
   <data name="MpContentSortType_ItemData" xml:space="preserve">
-    <value />
+    <value>საქონელი მონაცემები</value>
   </data>
   <data name="MpContentSortType_ItemType" xml:space="preserve">
-    <value />
+    <value>ნივთის ტიპი</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value />
+    <value>გამოყენების ქულა</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
-    <value />
+    <value>შიდა</value>
   </data>
   <data name="MpRoutingType_Passive" xml:space="preserve">
-    <value />
+    <value>პასიური</value>
   </data>
   <data name="MpRoutingType_Pre" xml:space="preserve">
-    <value />
+    <value>წინა</value>
   </data>
   <data name="MpRoutingType_Post" xml:space="preserve">
-    <value />
+    <value>ჩანაწერი</value>
   </data>
   <data name="MpRoutingType_Override" xml:space="preserve">
-    <value />
+    <value>გადალახვა</value>
   </data>
   <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
-    <value />
+    <value>ექსკლუზიური Override</value>
   </data>
   <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
-    <value />
+    <value>შეიცავს</value>
   </data>
   <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
-    <value />
+    <value>ზუსტი</value>
   </data>
   <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>იწყება</value>
   </data>
   <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
-    <value />
+    <value>მთავრდება</value>
   </data>
   <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
-    <value />
+    <value>რეგექსი</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
-    <value />
+    <value>უფასო</value>
   </data>
   <data name="MpUserAccountType_Basic" xml:space="preserve">
-    <value />
+    <value>ძირითადი</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
-    <value />
+    <value>ულიმიტო</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>- გთხოვთ აირჩიოთ -</value>
   </data>
   <data name="MpContentOptionType_Type" xml:space="preserve">
-    <value />
+    <value>ტიპი</value>
   </data>
   <data name="MpContentOptionType_Text" xml:space="preserve">
-    <value />
+    <value>ტექსტი</value>
   </data>
   <data name="MpContentOptionType_Images" xml:space="preserve">
-    <value />
+    <value>სურათები</value>
   </data>
   <data name="MpContentOptionType_Files" xml:space="preserve">
-    <value />
+    <value>ფაილები</value>
   </data>
   <data name="MpContentOptionType_AnyContent" xml:space="preserve">
-    <value />
+    <value>ნებისმიერი შინაარსი</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
-    <value />
+    <value>სათაური</value>
   </data>
   <data name="MpContentOptionType_Annotation" xml:space="preserve">
-    <value />
+    <value>ანოტაცია</value>
   </data>
   <data name="MpContentOptionType_Color" xml:space="preserve">
-    <value />
+    <value>ფერი</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
-    <value />
+    <value>პირველადი</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
-    <value />
+    <value>მაუსი</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value />
+    <value>მოწმენდილი ცა</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value />
+    <value>წაშლა</value>
   </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTagType_Link" xml:space="preserve">
-    <value />
+    <value>ლინკი</value>
   </data>
   <data name="MpTagType_Query" xml:space="preserve">
-    <value />
+    <value>შეკითხვა</value>
   </data>
   <data name="MpTagType_Group" xml:space="preserve">
-    <value />
+    <value>ჯგუფი</value>
   </data>
   <data name="MpReadOnlyTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
-    <value />
+    <value>ტეგი</value>
   </data>
   <data name="MpReadOnlyTagType_All" xml:space="preserve">
-    <value />
+    <value>ყველა</value>
   </data>
   <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
-    <value />
+    <value>რჩეულები</value>
   </data>
   <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
-    <value />
+    <value>ფილტრები</value>
   </data>
   <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
-    <value />
+    <value>ნაგავი</value>
   </data>
   <data name="MpReadOnlyTagType_Today" xml:space="preserve">
-    <value />
+    <value>დღეს</value>
   </data>
   <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
-    <value />
+    <value>ფორმატები</value>
   </data>
   <data name="MpReadOnlyTagType_Text" xml:space="preserve">
-    <value />
+    <value>ტექსტი</value>
   </data>
   <data name="MpReadOnlyTagType_Images" xml:space="preserve">
-    <value />
+    <value>სურათები</value>
   </data>
   <data name="MpReadOnlyTagType_Files" xml:space="preserve">
-    <value />
+    <value>ფაილები</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
-    <value />
+    <value>ტექსტი</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
-    <value />
+    <value>სურათი</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
-    <value />
+    <value>ფაილი</value>
   </data>
   <data name="WatcherChangeTypes_Created" xml:space="preserve">
-    <value />
+    <value>შექმნილია</value>
   </data>
   <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
-    <value />
+    <value>წაშლილია</value>
   </data>
   <data name="WatcherChangeTypes_Changed" xml:space="preserve">
-    <value />
+    <value>შეიცვალა</value>
   </data>
   <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
-    <value />
+    <value>დაარქვეს</value>
   </data>
   <data name="WatcherChangeTypes_All" xml:space="preserve">
-    <value />
+    <value>ყველა</value>
   </data>
 </root>

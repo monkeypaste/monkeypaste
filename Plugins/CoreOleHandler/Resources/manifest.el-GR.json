@@ -1,0 +1,12 @@
+{
+  "title": "Κύριος χειρισμός του Prigboard",
+  "description": "Χειρίζεται προεπιλεγμένες μορφές πρόχειρου",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Πυρήνα, πρόχειρο, σύρσιμο και πτώση, κείμενο, RTF, πλούσιο κείμενο, HTML, CSV, εικόνα, PNG, JPG, JPEG, Link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

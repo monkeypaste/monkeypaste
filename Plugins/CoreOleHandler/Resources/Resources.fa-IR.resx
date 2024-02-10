@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>چشم پوشی</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>هنگامی که بررسی می شود {0} از داده های کلیپ بورد یا کشش و رها کردن خوانده نمی شود.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>هنگامی که بررسی می شود {0} فرمت به داده های کلیپ بورد یا کشیدن و رها کردن نوشته نمی شود.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>خواندن</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>نوشتن</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>فایل ها</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>هنگامی که RTF از قبل موجود نیست ، HTML به RTF تبدیل می شود. این ممکن است بین مرورگرهای وب و/یا برنامه های پردازش کلمه مفید باشد. (برای فعال کردن فرمت RTF نیاز دارد و فقط برای سیستم عامل های پشتیبانی شده است)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>تبدیل به RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>این دایرکتوری ها از داده های کلیپ بورد یا کشیدن و رها کردن خوانده نمی شوند.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>دایرکتوری های نادیده گرفته شده</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>پسوند پرونده نادیده گرفته شده است</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>این انواع فایل از داده های کلیپ بورد یا کشش و رها کردن خوانده نمی شوند.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>این انواع پرونده ها به داده های کلیپ بورد یا کشیدن و رها کردن نوشته نمی شوند.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>در صورت بررسی ، تصاویر بزرگتر از حداکثر بعد در حالی که نسبت ابعاد را حفظ می کنند ، مقیاس می شوند. این بر تصویر موجود در کلیپ بورد تأثیر نمی گذارد.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>مقیاس بزرگ</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>هنگام چسباندن یا رها کردن بیت مپ ، این نوع فایل پیش فرض خواهد بود</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>نوع صادرات پیش فرض</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>بعضی اوقات تصاویر کاملاً شفاف در کلیپ بورد ، گیج کننده آن نشان داده می شوند.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>تصاویر خالی را نادیده بگیرید</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>تصاویر بزرگ (بیش از چند Mbs) می توانند متأسفانه عملکرد کشش و رها و کلی را تا حدودی لاغر کنند. سعی کنید این مقدار را کم نگه دارید.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>حداکثر ارتفاع</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>حداکثر عرض</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>برای نگرانی های عملکرد ، حداکثر شخصیت ها مورد نیاز است</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>حداکثر نویسه ها</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>متن (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>فرمت '{0}' داده های خالی یا شفاف داشت و مسدود شد</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>داده های خالی مسدود شده است</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>فرمت '{0}' به عنوان "نادیده گرفته شده" پرچم گذاری شده است</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>قالب نادیده گرفته می شود</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} حد {1} و داده ها {2} بود</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>حداکثر اندازه تشخیص داده شد</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>خواننده کلیپ بورد اصلی</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>نویسنده کلیپ بورد</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>قالب های پیش فرض کلیپ بورد</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>کنترل کننده کلیپ بورد</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>هسته ، کلیپ بورد ، کشیدن و رها کردن ، متن ، RTF ، متن غنی ، HTML ، CSV ، تصویر ، PNG ، JPG ، JPEG ، پیوند</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>تصویر (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>هنگامی که HTML در حال حاضر موجود نیست ، RTF به HTML تبدیل می شود. این ممکن است بین مرورگرهای وب و/یا برنامه های پردازش کلمه مفید باشد. (نیاز به فعال کردن فرمت HTML دارد و فقط برای سیستم عامل های پشتیبانی شده است)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>تبدیل به HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>بدون عنوان</value>
+  </data>
+</root>

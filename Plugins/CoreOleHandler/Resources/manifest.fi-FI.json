@@ -1,0 +1,12 @@
+{
+  "title": "Ytimen leikepöydän käsittelijä",
+  "description": "Käsittelee oletuslevymuotoja",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Ydin, leikepöytä, vedä ja pudota, teksti, rtf, rikas teksti, html, csv, kuva, png, jpg, jpeg, linkki",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

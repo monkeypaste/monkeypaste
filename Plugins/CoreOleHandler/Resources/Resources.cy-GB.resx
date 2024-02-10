@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Anwybyddem</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Wrth gael ei wirio ni fydd fformat {0} yn cael ei ddarllen o'r clipfwrdd na data llusgo a gollwng.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Pan fydd yn cael ei wirio ni fydd fformat {0} yn cael ei ysgrifennu i'r clipfwrdd na data llusgo a gollwng.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Darllenasit</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ysgrifennu</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Ffeiliau</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Pan nad yw RTF eisoes yn bresennol, bydd HTML yn cael ei drawsnewid yn RTF. Gall hyn fod yn ddefnyddiol rhwng porwyr gwe a/neu gymwysiadau prosesu geiriau. (Angen Fformat RTF i'w alluogi ac mae ar gyfer llwyfannau a gefnogir yn unig)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Trosi i rtf</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ni fydd y cyfeirlyfrau hyn yn cael eu darllen o ddata clipfwrdd na llusgo a gollwng.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Cyfeiriaduron a anwybyddwyd</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Anwybyddu estyniadau ffeiliau</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ni fydd y mathau hyn o ffeiliau yn cael eu darllen o'r clipfwrdd na data llusgo a gollwng.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ni fydd y mathau hyn o ffeiliau yn cael eu hysgrifennu i'r clipfwrdd na data llusgo a gollwng.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Pan fyddant yn cael eu gwirio, bydd delweddau sy'n fwy na'r dimensiwn mwyaf yn cael eu graddio wrth gadw cymhareb agwedd. Nid yw hyn yn effeithio ar y ddelwedd ar y clipfwrdd.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Graddfa rhy fawr</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Wrth gludo neu ollwng map did hwn, hwn fydd y math o ffeil ddiofyn</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Math o allforio diofyn</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Weithiau bydd delweddau cwbl dryloyw yn ymddangos ar y clipfwrdd, mae'n ddryslyd.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Anwybyddu delweddau gwag</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Gall delweddau mawr (mwy nag ychydig MBS) wneud llusgo a gollwng a pherfformiad cyffredinol braidd yn swrth yn anffodus. Ceisiwch gadw'r gwerth hwn yn isel.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Uchder Max</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Lled max</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Ar gyfer pryderon perfformiad, mae angen cymeriadau uchafswm</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Cymeriadau Max</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Nhestun</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Roedd gan fformat '{0}' ddata gwag neu dryloyw ac roedd wedi'i rwystro</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Data gwag wedi'i rwystro</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Mae fformat '{0}' yn cael ei nodi fel 'anwybyddu'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Anwybyddu fformat</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>Terfyn {0} yw {1} a data oedd {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Canfyddir maint mwyaf</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Darllenydd Clipfwrdd Craidd</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Awdur Clipfwrdd Craidd</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Yn trin fformatau clipfwrdd diofyn</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Triniwr Clipfwrdd Craidd</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Craidd, clipfwrdd, llusgo a gollwng, testun, rtf, testun cyfoethog, html, csv, delwedd, png, jpg, jpeg, dolen</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Delwedd (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Pan nad yw HTML eisoes yn bresennol, bydd RTF yn cael ei drawsnewid yn HTML. Gall hyn fod yn ddefnyddiol rhwng porwyr gwe a/neu gymwysiadau prosesu geiriau. (ei gwneud yn ofynnol i fformat html gael ei alluogi a dim ond ar gyfer llwyfannau a gefnogir))</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Trosi i html</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Tecstio</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Heb deitl</value>
+  </data>
+</root>

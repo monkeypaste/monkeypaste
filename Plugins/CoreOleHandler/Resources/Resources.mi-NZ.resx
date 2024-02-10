@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Whakaririka</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Ka tirohia te whakatakotoranga (0} kaore e panuihia mai i te kapo o te kaata, ka toia ranei nga raraunga.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Ka tirohia te whakatakotoranga {0} kaore e tuhia ki te topenga, ki te toia ranei nga raraunga.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Pānui pukapuka</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Tuhi</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>Kupu A</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Kōnae</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>I te wa kaore ano a RTF i te waa, ka hurihia te HTML ki RTF. Ka whai hua pea tenei i waenga i nga kaitirotiro paetukutuku me / ranei nga tono tukatuka kupu. (Kei te hiahia te whakatakotoranga RTF kia whakahohea, he mea noa mo nga papaa tautoko)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Tahuri ki te RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ko enei tohu kaore e panuihia mai i te kapo o te kopapa, ka toia ranei nga raraunga.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>KAUPAPA KAUPAPA</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>E warewarehia nga konae konae</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ko enei momo konae kaore e panuihia mai i te kapo o te kaata, te toia ranei nga raraunga.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ko enei momo momo konae kaore e tuhia ki te topenga, te toia ranei nga raraunga taapiri.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Ka tirohia, ko nga whakaahua nui atu i te rahi o te Max me te pupuri i te wa e mau tonu ana i nga paanga. Kaore tenei e pa ki te ahua o te topenga.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Tauine nui</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>I te wa e whakahekehia ana, e maturuturu ana ranei i te bitmap tenei ka waiho hei momo konae</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Momo Kaweake Taunoa</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>I etahi wa ka whakaatuhia nga whakaahua maamaa i runga i te topenga, he raru.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Kaua e wareware ki nga whakaahua kau</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Ko nga whakaahua nui (nui atu i te maha o nga MB) ka taea te toia-toia-ma-maturuturu me te katoa o te mahi mangere ahakoa he mangere. Ngana ki te pupuri i tenei uara iti.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Te teitei o Max</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Te whanui</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Mo nga awangawanga mahi, ka hiahiatia nga tohu nui rawa atu</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Pūāhua max</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (Mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Kuputuhi (Mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Hōputu '{0}' he raraunga kau, he maamaa ranei, ka aukati</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>I aukati nga raraunga kau</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' te hōputu kua uru ki te 'wareware'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Ko te whakatakotoranga kaore i warewarehia</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} te rohe ko te {1} me te raraunga i {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Kua kitea te rahi o te rahi</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Kaituhi Kōrero Core</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Kaituhi tohutoro matua</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Te whakahaere i nga whakatakotoranga tohutao taunoa</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>He Kaitoha ColPablat Core</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, topenga, toia me te maturuturu, te kuputuhi, te kNF, te html, te html, te whakaahua, te kng, te jpeg, te jpeg, te jpeg, JPG, hono</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Whakaahua (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>I te wa kaore ano a HTML i te waa, ka hurihia te RTF ki HTML. Ka whai hua pea tenei i waenga i nga kaitirotiro paetukutuku me / ranei nga tono tukatuka kupu. (Kei te hiahia koe ki te hōputu HTML kia whakahohea, he mea noa mo nga papaa tautoko)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Tahuri ki te HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Kupu tuhi</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Wete</value>
+  </data>
+</root>

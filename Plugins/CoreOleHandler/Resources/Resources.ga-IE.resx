@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Neamhaird a thabhairt ar</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Nuair a sheiceáiltear é {0} ní léifear an fhormáid ón ghearrthaisce nó as na sonraí tarraing agus tarraing.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Nuair a sheiceáiltear é {0} ní scríobhfar formáid chuig na gearrthaisce ná ar na sonraí tarraing agus tarraing.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Léamh</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Cum</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Comhaid</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Nuair nach bhfuil RTF i láthair cheana féin, déanfar HTML a thiontú go RTF. D'fhéadfadh sé seo a bheith úsáideach idir brabhsálaithe gréasáin agus/nó feidhmchláir phróiseála focal. .</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Tiontaigh go RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ní léifear na heolairí seo ó ghearrthaisce ná ó shonraí tarraingthe agus tarraingthe.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Eolairí neamhaird</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Síntí comhaid neamhaird</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ní léifear na cineálacha comhaid seo ó na gearrthaisce ná ón sonraí tarraing agus tarraing.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ní scríobhfar na cineálacha comhaid seo chuig na gearrthaisce ná ar na sonraí tarraingthe agus tarraingthe.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Nuair a sheiceáiltear iad, déanfar na híomhánna níos mó ná an toise uasta a scálaáil agus cóimheas gné á choinneáil acu. Ní théann sé seo i bhfeidhm ar an íomhá ar an ghearrthaisce.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Scála ró -mhór</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Agus bitmap á ​​ghreamú nó á ligean agat, is é seo an cineál comhaid réamhshocraithe</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Cineál onnmhairithe réamhshocraithe</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Uaireanta taispeánfar íomhánna atá trédhearcach go hiomlán ar an ghearrthaisce, agus tá sé mearbhall.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Neamhaird a dhéanamh ar íomhánna folamh</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Is féidir le híomhánna móra (níos mó ná cúpla MB) a bheith ag titim agus ag titim agus ag an iomlán ar an drochuair. Déan iarracht an luach seo a choinneáil íseal.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Airde Max</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Leithead uasmhéid</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Maidir le hábhair imní feidhmíochta, tá gá le huasmhéid carachtair ag teastáil</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Uascharachtair</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Téacs (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Bhí sonraí folamh nó trédhearcacha ag formáid '{0}' agus cuireadh bac air</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Sonraí folamh blocáilte</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Déantar formáid '{0}' a bhratach mar 'neamhaird'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Ní dhearnadh neamhaird ar fhormáid</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>Is é {0} an teorainn {1} agus bhí na sonraí {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Méid Max Braite</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Léitheoir gearrthaisce croí</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Scríbhneoir gearrthaisce croí</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Láimhseálann formáidí gearrthaisce réamhshocraithe</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Láimhseálaí gearrthaisce croí</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Croí, gearrthaisce, tarraing agus titim, téacs, RTF, Téacs Rich, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Íomhá (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Nuair nach bhfuil HTML i láthair cheana féin, déanfar RTF a thiontú go HTML. D'fhéadfadh sé seo a bheith úsáideach idir brabhsálaithe gréasáin agus/nó feidhmchláir phróiseála focal. .</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Tiontaigh go html</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Téacs</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Gan teideal</value>
+  </data>
+</root>

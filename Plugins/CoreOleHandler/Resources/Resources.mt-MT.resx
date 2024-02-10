@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Tinjora</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Meta jiġi kkontrollat ​​{0} il-format ma jinqarax mid-dejta tal-clipboard jew tal-ġibda u tal-qatra.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Meta jiġi kkontrollat ​​{0} il-format ma jinkitebx fuq il-clipboard jew id-dejta drag-and-drop.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Aqra</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ikteb</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Fajls</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Meta l-RTF ma tkunx diġà preżenti, HTML jiġi kkonvertit għal RTF. Dan jista 'jkun utli bejn il-browsers tal-web u / jew applikazzjonijiet tal-ipproċessar tal-kliem. (teħtieġ li l-format RTF ikun attivat u huwa biss għal pjattaformi appoġġjati)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Ikkonverti għal RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Dawn id-direttorji ma jinqrawx minn clipboard jew dejta ta 'drag-and-drop.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Injorat direttorji</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Estensjonijiet tal-fajl injorati</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Dawn it-tipi ta 'fajls ma jinqrawx mid-dejta tal-clipboard jew tal-ġibda u tal-qatra.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Dawn it-tipi ta 'fajls ma jinkitbux fuq il-clipboard jew id-dejta tal-ġibda u tal-qatra.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Meta jiġu kkontrollati, immaġini ikbar mid-dimensjoni massima se jiġu skalati waqt li tinżamm il-proporzjon tal-aspett. Dan ma jaffettwax l-immaġni fuq il-clipboard.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Skala kbira</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Meta twaħħal jew twaqqa 'bitmap dan se jkun it-tip ta' fajl default</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Tip ta 'Esportazzjoni Default</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Kultant immaġini kompletament trasparenti se jidhru fuq il-clipboard, il-konfużjoni tagħha.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Injora immaġini vojta</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Immaġini kbar (aktar minn ftit MBs) jistgħu jagħmlu l-qatra u l-qatra u l-prestazzjoni ġenerali kemmxejn sluggish sfortunatament. Ipprova żomm dan il-valur baxx.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Għoli massimu</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Wisa 'massimu</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Għal tħassib dwar il-prestazzjoni, hemm bżonn ta 'ammont massimu ta' karattri</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Karattri massimi</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Test (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Il-format '{0}' kellu dejta vojta jew trasparenti u ġie mblukkat</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Dejta vojta imblukkata</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Il-format "{0}" huwa mmarkat bħala "injorat"</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format injorat</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limitu huwa {1} u d-dejta kienet {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Daqs massimu misjub</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Qarrej Core Clipboard</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Kittieb Core Clipboard</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Jimmaniġġja formati tal-klippbord default</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Handler Core Clipboard</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, Clipboard, Drag and Drop, Test, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Immaġni (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Meta HTML ma jkunx diġà preżenti, l-RTF tiġi kkonvertita għal HTML. Dan jista 'jkun utli bejn il-browsers tal-web u / jew applikazzjonijiet tal-ipproċessar tal-kliem. (teħtieġ li l-format HTML ikun attivat u huwa biss għal pjattaformi appoġġjati)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Ikkonverti għal HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Bla titlu</value>
+  </data>
+</root>

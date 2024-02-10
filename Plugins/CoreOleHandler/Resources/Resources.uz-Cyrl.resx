@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>E'tibor bermaslik</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Belgilangan {0} format klipboarddan yoki drag-va tomchi ma'lumotlarni o'qimaydi.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Belgilangan {0} format klipboardga yoki drag-va tomchi ma'lumotlarni yozib bo'lmaydi.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>O'qimoq</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Yozmoq</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>Chigal</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Fayllar</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF allaqachon hozir bo'lmaganda, HTML RTFga o'zgartiriladi. Bu veb-brauzerlar va / yoki so'zlarni qayta ishlash dasturlari o'rtasida foydali bo'lishi mumkin. (RTF formatini talab qiladi va faqat qo'llab-quvvatlanadigan platformalar uchun)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTF-ga aylantiring</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ushbu kataloglar Clipboard yoki Drag-va tomchi ma'lumotlarni o'qimaydi.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Derazalar e'tiborsiz</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Mayli kengaytirilgan kengaytmalar</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ushbu fayl turlari klipboarddan yoki drag va tomchi ma'lumotlarni o'qimaydi.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ushbu fayl turlari Clipboard yoki Drag-va tomchi ma'lumotlariga yozilmaydi.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Belgilanganda, maksimal o'lchovdan kattaroq rasmlar nisbati pasayganda kengaytiriladi. Bu Clipboarddagi rasmga ta'sir qilmaydi.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Shkalasi katta</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Bitmapni o'chirishda yoki o'chirishda bu standart fayl turi bo'ladi</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Odatiy eksport turi</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Ba'zida to'liq shaffof tasvirlar parlamli, chalkashliklarni namoyish etadi.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Bo'sh rasmlarni e'tiborsiz qoldiring</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Katta rasmlar (bir nechta funbdan ko'proq) sud-tomchi va umuman ishlashni biroz sustlashi mumkin. Ushbu qiymatni past saqlashga harakat qiling.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maks balandligi</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maks kengligi</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Ishlash tashvishlari uchun maksimal miqdordagi belgilar kerak</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Maksimal belgilar</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Matn (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>"{0}" formatida bo'sh yoki shaffof ma'lumotlar mavjud edi va bloklangan</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Bo'sh ma'lumotlar bloklangan</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0} "formati" e'tiborsiz qoldiriladi "deb bayroqlangan</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format e'tiborga olinmaydi</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} cheklov - {1} va ma'lumotlar {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Maksning o'lchamlari aniqlandi</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core Clipboard o'quvchi</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Clipboard yozuvchisi</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Odatiy klipboard formatlarini ishlov berish</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard boshqaruvchisi</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Yadro, pleyboard, sudrab, matn, RTF, boy matn, HTML, CSV, Rasm, PNG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Rasm (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML allaqachon hozir bo'lmaganda, RTF HTMLga aylantiriladi. Bu veb-brauzerlar va / yoki so'zlarni qayta ishlash dasturlari o'rtasida foydali bo'lishi mumkin. (HTML formatini yoqish uchun va faqat qo'llab-quvvatlanadigan platformalar uchun kerak)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML-ga aylantiring</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Matn</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Uncha ta'sirlanmagan</value>
+  </data>
+</root>

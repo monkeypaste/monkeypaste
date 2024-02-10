@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignoreer</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>As dit gekontroleer word, word {0} -formaat nie van die knipbord of sleep-en-drop-data gelees nie.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>As dit gekontroleer word, word {0} -formaat nie op die knipbord of sleep-en-drop-data geskryf nie.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lees</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Skryf</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Lêers</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Wanneer RTF nog nie teenwoordig is nie, sal HTML na RTF omgeskakel word. Dit kan nuttig wees tussen webblaaiers en/of woordverwerkingsaansoeke. (vereis dat RTF -formaat geaktiveer moet word en is slegs vir ondersteunde platforms)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Skakel om na RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Hierdie kaarte sal nie gelees word vanaf die klembord- of sleep-en-drop-data nie.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Gidse geïgnoreer</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Ignoreerde lêeruitbreidings</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Hierdie lêertipes sal nie gelees word vanaf die knipbord- of sleep-en-drop-data nie.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Hierdie lêertipes sal nie op die knipbord of sleep-en-drop-data geskryf word nie.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>As dit gekontroleer word, sal beelde groter as maksimum dimensie afgeskaal word terwyl die aspekverhouding behou word. Dit beïnvloed nie die beeld op die knipbord nie.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Skaal groot skaal</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>As u 'n bitmap plak of laat val, sal dit die standaardlêer wees</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Standaarduitvoertipe</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Soms sal volledig deursigtige beelde op die knipbord verskyn, dit is verwarrend.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignoreer leë beelde</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Groot beelde (meer as 'n paar MBS) kan ongelukkig sleep-en-drop en algehele prestasie ietwat traag maak. Probeer om hierdie waarde laag te hou.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maksimum hoogte</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maksimum breedte</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Vir kommer is daar 'n maksimum hoeveelheid karakters nodig</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Maksimum karakters</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Teks (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Formaat '{0}' het leë of deursigtige data gehad en is geblokkeer</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Leë data geblokkeer</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' Formaat word gemerk as 'geïgnoreer'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Formaat geïgnoreer</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limiet is {1} en data was {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Maksimum grootte opgespoor</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Kerngreepbordleser</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Kernknipbordskrywer</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Hanteer standaard -knipbordformate</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Kernknipbordhanteerder</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, Clipboard, Drag and Drop, Text, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Beeld (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>As HTML nog nie teenwoordig is nie, sal RTF na HTML omgeskakel word. Dit kan nuttig wees tussen webblaaiers en/of woordverwerkingsaansoeke. (Vereis HTML -formaat moet ingeskakel word en is slegs vir ondersteunde platforms)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Omskep na html</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Ongetitel</value>
+  </data>
+</root>

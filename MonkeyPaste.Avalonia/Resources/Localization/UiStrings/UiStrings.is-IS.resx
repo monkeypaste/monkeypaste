@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Engir eiginleikar eru takmarkaðir af áskrift, aðeins geymslugetu og hægt er að breyta þeim hvenær sem er.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Endurheimtu núverandi reikning ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Innihald og rusl eru
+Takmarkað við {0} og {1}
+úrklippur í sömu röð.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Leyfir allt að {2} úrklippum af innihaldi og ótakmarkaðri ruslgeymslu.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Ótakmarkað og ótakmarkað efni og ruslgeymsla.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Endurheimta</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Ókeypis</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Ótakmarkað</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Áskrift</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Persónuvernd þín eru mikilvæg og gögn um klemmuspjald geta verið mjög persónuleg. Geymsla er alltaf dulkóðuð en þú getur stillt lykilorð sem þarf ef tækinu þínu er stolið eða einhver annar notar tækið þitt.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Lykilorð</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Þegar það er virkt, mun draga frá hvaða forriti sem er efst á skjánum að koma í ljós að acpressaste er auðveldlega að sleppa efni í aceyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Með því að virkja „lásinn“ efst til vinstri við aðalgluggann gerir það samt kleift að falla niður í monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Fleiri gluggakjör eru fáanlegar í valmyndinni „Stillingar -&gt; Val -&gt; Window“ valmynd.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Dragðu banana hérna upp!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Drag - til - Opið</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Hægt er að endurskoða eða breyta lyklaborðs flýtilyklum hvenær sem er í valmyndinni „Stillingar -&gt; Flýtileiðir“.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Allar flýtileiðir á heimsvísu verða óvirkir svo þú getir stillt þá upp sjálfur seinna.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Klemmuspjald flýtileiðir MonkeyPaste verða fáanlegir í öllum forritum.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Innra</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Sjálfgefið</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Bendingasnið</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hæ! Við skulum setja upp nokkur atriði til að bæta heildarupplifun þína af afköstum.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Velkominn</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Til að fá sem mest notkun úr aceypresse er það góð hugmynd að hlaða sjálfkrafa þegar þú skráir þig inn. En það er alveg undir þér komið.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Haltu því frjálslegur.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Virkja</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Hlaða á innskráningu?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Þegar það er virkt mun skrunbragð efst á skjánum leiða í ljós acyndaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Vinstri - með því að smella á Taskbar táknið opnar enn acepyaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Fleiri gluggakjör eru fáanlegar í valmyndinni „Stillingar -&gt; Val -&gt; Window“ valmynd.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Auðvelt, ekki satt?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Skrunaðu hingað!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Skrun - til - Opið</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "Center"&gt; MonkeyPaste er &lt;span color = "red&gt; fullkomlega samþætt &lt;/span&gt; með drag - og - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Sendu það hér!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Þannig er hægt að nálgast acepyaste &lt;br&gt; &lt;span color = "red"&gt; án þess &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Dragðu mig!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Prufaðu það!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Prufaðu það!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Engar niðurstöður í boði.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Staðfesta</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Hressa</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Leit ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Stillingar</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Ósjálfstæði:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Settu upp</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Ertu viss um að þú viljir fjarlægja '{0}' og allar forstillingar þess og flýtileiðir?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Fjarlægja</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' hefur engar niðurstöður.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Ekkert úrval.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Enginn</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Einingar:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Lýsing:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Gefðu:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Leyfi:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Verkefnisslóð:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Birt:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Lestu mig:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Tilkynna misnotkun:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Merki:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>UPDATE</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Útgáfa:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Opið í glugga</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Hafna</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Hressa</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Vista</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Við hliðina á að eyða!
+
+Uppfærðu til að forðast.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Við hliðina á rusli!
+
+Uppfærðu til að forðast.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Skrár</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Mynd</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Texti</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Afritað {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} skrár | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} línur</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} eintök | {1} Pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Hreyfa þig</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Bæta við</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Afritaðu</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Skera</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Límu</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} afrit</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Óvissað sía</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Vinsamlegast veldu -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Snið</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lesendur</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Rithöfundar</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Meðhöndlarar</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Eyða</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Afrit</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Breyta nafni</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Endurstilla</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Merkimiðar</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Aðgerð</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Alheimsleiðbeiningar</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Flýtileið</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Bendingar verða að vera einstök og geta aðeins innihaldið einn innsláttarlykil.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Innri &lt;/b&gt; Allir flýtileiðir eru takmarkaðir við umsóknina. Þetta er í raun ekki ætlaður valkostur en getur leyft að sérsníða hvaða flýtileiðir þú ætlar að gera alþjóðlegt &lt;i&gt; einhvern tíma &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Sjálfgefið &lt;/b&gt; Allar flýtileiðir á heimsvísu eru virkir. &lt;b&gt; sýna/fela aðalgluggann &lt;/b&gt; flýtileið notar &lt;span color = "red"&gt; hnekki &lt;/span&gt; beina fyrir &lt;b&gt; húfuralásinn &lt;/b&gt; takkann. Þú getur breytt þeirri leið eða látbragði hvenær sem er. En &lt;span color = "Green"&gt; Prófaðu það &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; Global Shortcut stillingar &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; óvirkur &lt;/b&gt; flýtileiðir mun hlusta á í hvaða forriti sem er. &lt;br&gt;
+*Þetta er &lt;i&gt; aðeins &lt;/i&gt; valkosturinn á Linux í bili.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; flýtileið mun framkvæma &lt;b&gt; &lt;i&gt; áður &lt;/i&gt; &lt;/b&gt; það er meðhöndlað af virka forritinu. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; flýtileið mun framkvæma &lt;b&gt; &lt;i&gt; eftir &lt;/i&gt; &lt;/b&gt; það er meðhöndlað af virka forritinu. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; hnekkja &lt;/b&gt; þegar monkeypaste heyrir inntakslykilinn (Non -Modifier lykill) á hnekki flýtileið mun það &lt;i&gt; fela &lt;/i&gt; þessi lykill Ýttu frá forritinu - stig inntak. &lt;br&gt;
+Þessi valkostur tryggir að flýtileiðin er sett af stað án átaka við virka umsóknina.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Exclusive Override &lt;/b&gt; Þetta er sérstök gerð af hnekkingarstillingu sem er hönnuð fyrir Caps Lock takkann. Það leyfir aðeins &lt;b&gt; einn &lt;/b&gt; lykill (ekki - breytir) fyrir verkefni sitt. &lt;br&gt;
+Í venjulegu hnekkihamur getur læsing læsingar lent í &lt;/i&gt; þegar ýtt er á samsett með öðrum lyklum. &lt;br&gt;
+Svo það er sama hvaða aðrir lyklar eru niðri, ef ýtt er á &lt;b&gt; hotkey &lt;/b&gt; flýtileið verður það hnekkt og koma í veg fyrir að það festist &lt;i&gt; fast á &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Slökkva</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Hlaðið upp þegar þessi notendareikningur er skráður inn, ekki fyrir aðra notendur.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Notkun tiltækra tengiliða (krefst fetcher viðbótar) Þessi reitur verður notaður í öllum tilvikum þessa sniðmáts í þessu skjali eða í öllu því verður vísað til síðar. &lt;/p&gt; &lt;p&gt; Svo til dæmis ef valið er netfang Hér verður tölvupóstsvið tengiliðsins sem þú velur notaður í öllum tilvikum í þessu skjali. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = stutt ár &lt;br/&gt; yyyy = langt árið &lt;br/&gt; m = mánuður (1-12) &lt;br/&gt; mm = mánuður (01-12) &lt;br/&gt; mmm = mánuður skammstöfun (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = langur mánuður (janúar, febrúar ... desember) &lt;br/&gt; d = dagur (1 - 31) &lt;br/&gt; dd = dagur (01 - 31) &lt;br/&gt; ddd = Dagur vikunnar í orðum (mánudagur, þriðjudagur ... sunnudagur) &lt;br/&gt; e = stuttur dagur vikunnar í orðum (mán, Þri ... sól) &lt;br/&gt; d - Venjulegur dagur (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = klukkustund í Am/PM (0-12) &lt;br/&gt; HH = klukkustund í Am/PM (00-12) &lt;Br/ &gt; H = klukkustund í dag (0-23) &lt;br/&gt; HH = klukkustund í dag (00-23) &lt;br/&gt; mm = mínúta &lt;br/&gt; ss = önnur &lt;br/&gt; sss = millisekúndur &lt;br/&gt; A = Am/PM merki &lt;br/&gt; p = a.m./p.m. Merki</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Núverandi dagsetning og/eða tíminn verður skipt út fyrir sniðmát datetime þegar þau eru límd.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Öll atburðir þessa sniðmáts munu nota textann sem fylgir. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Öll atburðir þessa sniðmáts munu nota textann sem fylgir. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Ljúktu viðauka</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Virkja blokk</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Virkja inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Skipta handbók</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Skipta handbók</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Hlé bæta við</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Skiptu áður</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Skiptu áður</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Halda áfram bætt við</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Bæta við ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Límu</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Taka úr</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Fela allar tilkynningar '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Hafna</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Síðasta virka appið óþekkt. Skiptu yfir í fyrirhugað app yfir í apa líma.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Límdu við: &lt;em&gt; &lt;i class = "pasta-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Lágmarka</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Vinsamlegast bíðið...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Læstu</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Reikningur</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Hjálp</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Klippa líma</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Óskir</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Endurheimta vanskil</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Sía ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Flýtileiðir</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Bæta við appi</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Bættu við vefsíðu</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Block?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nafn</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Forrit</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokk lén?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Block URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Lén</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Viðurkenning vefslóða vefslóða er háð því hvernig klemmuspjald vingjarnlegt hýsingarforritið er svo ekki er hægt að tryggja höfnun</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Vefsíður</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Sumir MonkeyPaste aðgerðir nota sjálfvirkni lyklaborðs til að líkja eftir „afritun“ atburðum í öðrum forritum.
+
+Bættu við og/eða veldu forritið með hinni einstöku afritun flýtileið (eins og leikjatölvu eða skel til dæmis) til að tryggja að þeir eiginleikar virki rétt.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Afritaðu flýtileið</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Enginn</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Aðeins valdar forstillingar verða notaðar við tilgreint forrit. Þegar ótilgreint verður sjálfgefnar forstillingar sem finnast í &lt;em&gt; klemmuspjaldinu &lt;/em&gt; notaðar.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Margir MonkeyPaste eiginleikar nota sjálfvirkni lyklaborðs til að hafa samskipti við önnur forrit.
+
+Sum forrit (eins og sumar leikjatölvur eða skel til dæmis) geta verið með flýtileið sem ekki er - sjálfgefin líma.
+
+Til að tryggja rétta samvirkni skaltu skrá þá flýtileiðir fyrir þá umsókn hér.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Límdu flýtileið</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lesendur</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Allt eftirlit með klippuspjaldi frá hafnaðum umsóknum verður &lt;b&gt; hunsað &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Rithöfundar</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>EDIT ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Snið</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Hafnað</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Flýtileiðir</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Myndir þú líka vilja fjarlægja allar {0} úrklippur frá '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Fjarlægðu úrklippur?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Umsókn</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Vafraðu í app ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Veldu umsóknarleið</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Ertu viss um að þú viljir fjarlægja sérsniðnar flýtileiðir fyrir {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Ertu viss um að þú viljir fjarlægja sérsniðin snið fyrir {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Það er engin úthlutað klemmusnið fyrir þetta forrit. Engin gögn verða lesin úr því með klippingu/afriti eða reynt að draga - og - slepptu í aceyPaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Það er engin úthlutað klemmusnið fyrir þetta forrit. Sjálfvirk líma eða drag - og - falla frá acepyaste mun ekki hafa nein áhrif (tóm gögn þeirra).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Ertu viss um að þú viljir endurstilla alla flýtileiðir? Allar sérsniðnar flýtileiðir verða fjarlægðar.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Ertu viss um að þú viljir breyta flýtileiðbeinandi prófílnum þínum í '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Allt</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Eftirlæti</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Síur</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Snið</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Merkimiðar</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Í dag</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Rusl</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Um</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Auðvelt, ekki satt?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Tvísmelltu til að taka upp</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Sérsniðin</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Þessi samsetning stangast á við '{0}' sem verður hreinsað ef það er vistað.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Veita verður flýtileið.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Þetta er alþjóðlegur flýtileið. Það þýðir að það mun reyna að framkvæma hvenær sem það er framkvæmt. Reyndu að gera það nógu einstakt (eða breyta „leiðargerðinni“) til að stangast ekki á við flýtileiðir frá öðrum forritum.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Flýtileið verður að innihalda einn og aðeins einn breytingarlykil.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Ýttu á hvaða takka sem er til að taka upp ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Úthlutaðu flýtileið</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Læra meira...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Uppfæra</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Hætta við</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Laga</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Hunsa</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Nei</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Reyni aftur</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Lokun</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Sendu</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Já</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Árlega</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Mánaðarlega</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Reyndu ókeypis!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Innheimtuferli</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Netfang</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Skrá inn</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Athugaðu tenginguna þína
+og reyndu aftur.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Að skrá þig út</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Næsta greiðsla</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Lykilorð</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Skráðu þig</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Tölvupóstur er ekki gildur</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Lykilorð passa ekki.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Lykilorð verður að vera að lágmarki {0} stafir.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Mundu?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Athugaðu tölvupóstinn þinn til að staðfesta reikninginn þinn</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Endur stilla lykilorð</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, Yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Aldrei</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Ókeypis {0} dags prufu</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Það var vandamál að framkvæma
+kaupin þín.
+
+Athugaðu tenginguna þína og
+Stillingar geta hjálpað.
+
+Viltu prófa aftur?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Reikningurinn þinn hefur verið með góðum árangri
+Uppfært í:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Kaupa vel!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Villa</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Tenging mistókst.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Reyni aftur</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Reikningur breytt</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Áskriftin þín er nú {0}/{1} með {2} innihaldi og {3} ruslgeymslu.
+En ekki hafa áhyggjur, engin gögn glatast eftir lækkun. Aðeins nýjar úrklippur verða metnar.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Til hamingju! Áskriftin þín er nú {0}/{1} með {2} innihaldi og {3} ruslgeymslu.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Rusl eða aftengdu eitthvað
+frá '{0}' til að bæta við meira.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' Geymsla er {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Endurheimta</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} lokað</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Innihald og ruslgeta náð!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' Geymsla er {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Efni getu náði!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Þú getur falið þessar viðvaranir fyrir
+Að smella 'fela allt' úr
+Valkostir matseðill hér að ofan.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Hámarks ruslgeymsla er {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Ruslastarfsemi náði!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} er ógilt</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} verður að vera að minnsta kosti {1} stafir</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} getur aðeins verið {1} stafur</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Límdu við: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Greiðslan fyrir {0}
+Áskrift var vegna {1}
+og hefur ekki borist.
+
+Vinsamlegast uppfærðu þig
+greiðslu upplýsingar.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Greiðslan fyrir {0}
+Áskrift var vegna {1}
+og hefur ekki borist.
+
+Vinsamlegast tengdu við
+Internet á tækinu
+með áskriftinni þinni og
+Endurræstu til að halda áfram
+Notaðu {0} áætlunina þína.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Greiðslan fyrir {0}
+Áskrift var vegna {1}
+og hefur ekki borist.
+
+Vinsamlegast opnaðu eða endurræstu
+Monkeysta í tækinu
+Með áskriftinni þinni að
+Haltu áfram að nota
+{0} áætlun.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Reikningur rann út</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Athugið</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store leyfir ekki Tier
+Breytingar á áskriftarviðbótum.
+
+Þú verður að hætta við þinn
+{0}/{1} Skipuleggðu sjálfan þig
+Eða þú verður ákærður fyrir báða.
+
+Myndir þú vilja fara að gera það núna?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Lykilorð þitt hefur verið endurstillt.
+
+Vinsamlegast athugaðu tölvupóstinn þinn og
+Fylgdu hlekknum til að breyta
+lykilorð þitt.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Skrá inn</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Höfundur (s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Það er krafist að þú samþykkir eftirfarandi leyfisskilmála áður en haldið er áfram.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Eftirfarandi pakki (ir) krefjast þess að þú samþykkir leyfisskilmála þeirra áður en þú setur upp.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Ég neita</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Með því að smella „Ég samþykki“ þýðir að þú samþykkir leyfisskilmála fyrir þessa umsókn. Ef þú samþykkir ekki skilmálana skaltu smella á „ég hafna“.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Með því að smella á „Ég samþykki“ þýðir að þú samþykkir leyfisskilmála fyrir viðbótina sem talin eru upp hér að ofan. Ef þú samþykkir ekki skilmálana skaltu smella á „ég hafna“.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Skoða leyfi</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Samþykki leyfis</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Ég samþykki</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Virkur</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Óskráður</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Gert</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Lykilorð passa ekki</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Lykilorð</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Áskrift þín er
+Nú stillt á {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Reikningur fannst</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Innskráning mistókst</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Skráning mistókst</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Skráning vel heppnuð!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Endurstilla villu</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Áskrift</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Hvað er nýtt</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Aldrei</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Ótakmarkað</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>getu</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>eftir</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>Alls</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Greiðsla þín er liðin.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Einkarétt flýtileiðir geta aðeins innihaldið einn lykil og sá lykill getur ekki verið breytingarlykill.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Útrunnið</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Hleðsla</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Óvirkur</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Athugið! Þetta lykilorð er valfrjálst og aðeins til að auka öryggi. Gögnin þín eru þegar dulkóðuð og aldrei deilt. Þetta lykilorð kemur einfaldlega í veg fyrir að einhver sem ekki þú hleður upp afköstum ef þeir fá einhvern veginn aðgang að skjáborðinu þínu (stolið, þú yfirgefur herbergið osfrv.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Mundu eftir að setja stillingar fyrir:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Vafraðu viðbætur</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Greina</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Fljótleg aðgerð</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Skiptu um breytingu</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Skiptu fest</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Athugasemdir</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Einfaldur texti</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Opið í glugga</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Smelltu + Ctrl til að fylgja ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Smelltu + Alt til að fylgja ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Festu eða slepptu hvaða fjölmiðlum sem er hér!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Tær</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Þröskuldar yfir 0 munu veita loðna litasamsetningu með því að nota Euclidean fjarlægð í RGBA Colorspace.
+
+Til dæmis, ef rauður (#ff0000) er leitarorðið og svart (#000000) er pixla í myndklemmu, þá verður litafjarlægðin 255. Svartur til hvítur fjarlægð er hámarks möguleg 510, þar með talin alfa rás</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Allt eftirfarandi eru satt</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Klemmuspjald</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Söfn</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Músarstillingar</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Kallar</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Hlé</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Halda áfram</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Nýr kveikja</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Bæta við forstillingu</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Forstillingar</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Greiningartæki</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Hringrás stefnumörkun</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Skiptu um skipulag rist</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Hugsanlegt</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Þröskuldur</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Allt orð</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Enginn settur</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Leið</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Aðgerð</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Rist</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Gert</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Næst</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Fyrri</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Slepptu</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Núverandi reikningur?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Næsta greiðsla</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Skráning gerir þér kleift að bera greidda áskrift þína um öll tæki þín (við framboð). Við munum ekki gera ruslpóstinn þinn sem við lofum 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Áskrift</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Notandanafn</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Þarftu að skrá sig?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Heimildir</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Skrýtið, ekkert í boði. Eitthvað hlýtur að vera rangt 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Fjarlægðu</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Krefst endurræsingar</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Langt gengið</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Villa til að draga viðbót úr '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Villa við að setja upp viðbót: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Villa við að setja upp Plugin '{0}' Spillt eða óviðeigandi uppbygging skráar. Manifest ætti að vera til á '{1}' en fannst ekki.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Villa við að flokka tappi birtist '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Engin viðbót hlaðin með GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} villa</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Villa við að setja viðbót við Temp Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Villa afrit af '{0}' til '{1}'. Upplýsingar: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Texti sleginn verður sjálfkrafa notaður í leit þegar enginn textakassi er einbeittur.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Sjálfvirk leitarinntak</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Breyting á lykilorði mistókst</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Skipta um</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Breyta lykilorði</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Tær</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Skýrt lykilorð</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Innihald</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Innihald leturstærðar</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Þegar satt er, mun ytra efni sett inn í klemmu nota sniðið og ekki hvað er tiltækt frá upptökum.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Límdu, slepptu eða bætið við áfangastað</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir gleyma lykilorðinu?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Gleymdu</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Gleymdu lykilorði</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Prófíl</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Fela vatnsmerki</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Þegar nýju klemmuspjaldinu er bætt verður það ekki rakið sem ný klippa</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Hunsa viðauka</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Þegar klemmuspjaldið passar við núverandi bút verður sú bút notuð í stað þess að búa til nýjan</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Hunsa nýjar afrit</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Breytingar á klemmuspjaldi innan appsins verða ekki raknar</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Hunsa innri klemmuspjald mælingar</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Rými, flipar og nýjar línur verða hunsaðar frá mælingum</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Hunsa aðeins hvítt rými</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Hlaðið á innskráningu</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animate gluggi</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Ógagnsæi</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Sýna hegðun</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Aðalglugginn verður opinberaður með því að framkvæma skrunbrest á efstu brún skjásins</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Sýna á efstu skjánum</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Tilkynningarrúmmál</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Þessi stilling mun fylgjast með kerfinu - Breitt lyklaborðs líma telja fyrir tölfræði um notkun. Þessar upplýsingar eru einkamál og ekki deilt en heldur ekki Guarenteed. Nákvæmar niðurstöður geta krafist þess að útvega forrit sérstaka lyklaborðs líma skipun í 'Stillingar -&gt; Afritun og líma -&gt; flýtileiðir'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Límdu sögu</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Of margar festar klemmur (eins og flipar vafra) geta neytt verulegt minni. Flutningur er fyrst - í - fyrst - út</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Pinna getu</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Þetta á við um öll sjálfvirkt aðföng, lægri gildi munu bæta árangur</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Nýleg textamörk</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir
+Endurheimta sjálfgefnar óskir?
+
+Þetta er ekki hægt að afturkalla!
+
+*Umsóknin mun endurræsa einu sinni lokið.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir endurstilla allar tilkynningar?
+
+*Þetta er ekki hægt að afturkalla!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste setur klemmuspjaldið (hnekkir) þegar þú límist á ytra forrit. Þetta mun &lt;b&gt; tilraun &lt;/b&gt; að endurheimta ástand klemmuspjaldsins eftir ytri líma.
+
+Ekki er hægt að tryggja heildar endurreisn og getur dregið úr afköstum eða jafnvel hrun afköst eftir uppsprettu gagna.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Endurstilltu klemmuspjald eftir pípu apa</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Gat ekki eytt skyndiminni viðbótar úr slóð: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Allar viðbætur verða endurstilltar í upphaflegu sjálfgefnu ástandi</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Appin skyndiminni</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir núllstilla allar viðbætur í vanskil?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir núllstilla lykilorðið þitt?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Öllum flýtileiðum forritsins verður endurstillt í sjálfgefnar lykilbendingar þeirra.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Endurstilla flýtileiðir</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Allar hunsaðar tilkynningar sem áður voru settar.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Endurheimta tilkynningar</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Að virkja getur verið frekar hægt) Slökkt á sniðinu mun draga úr minni neyslu en hamla nokkrum háþróuðum eiginleikum, svo sem: bæta við, sniðmát, athugasemdir og finna/skipta</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Ríkt innihald</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Stilltu lykilorð</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Sýna vísbendingar</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Sýna í Taskbar</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Sýna í verkefnaskipti</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Sýna titla</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Þegar það er virkt, mun draga frá hvaða forriti sem er efst á skjánum að koma í ljós að acpressaste er auðveldlega að sleppa efni í aceyPaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Sýna á dragi efst á skjánum</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Hljóðþema</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Stafaathugun</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Við ræsingu verður uppspretta klemmuspjaldsins ekki þekkt og fer eftir öryggisstillingum þínum getur innihaldið komið frá útilokuðum vefsíðu eða forriti.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Bættu við ræsisklemmu</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Hlustaðu á klemmuspjald við ræsingu</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Veldu</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Varúð! Aðrir litatöflu litir eru valdir með því að nota stærðfræði ekki augu! Svo vertu meðvituð um að einhverjar lit- og stílsamsetningar hafi ekki viðeigandi andstæða fyrir læsileika.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Þema litur</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Þema stíl</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Sjálfvirk ruslhreinsun mun eiga sér stað við ræsingu við stillt bil.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Ruslhreinsun</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Viðmót</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Mikil afturköllunarmörk geta haft áhrif á afköst</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Afturkalla mörk</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Engin takmörk</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Notað í háþróaðri skráaleit að tegundum sem ekki eru forstilltar</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Notandi - skilgreindar leitarlengingar</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Finndu og skiptu um ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Límdu hér</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Deila ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Útsýni</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Stjórna ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Endurnefna</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Skor: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Gerð: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Eyða varanlega</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Vafraðu að '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Breyta</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Inntak</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Framleiðsla</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Heimildir</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Endurheimta</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Veldu mynd ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Litur</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Stjórna '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Opið</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Vinsamlegast bíðið...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Bakgrunns litur</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Hreinsa allt</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Klemmuspjald</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Eyða öllu</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Breyta smáatriðum</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nafn</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Finndu</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Leturlitur</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Sniðmálning</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Í vali</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Settu inn mynd</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Settu inn hlekk</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Settu inn myndband</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Samsvörunarmál</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Nýtt sniðmát</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Næsta sniðmát</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Sláðu inn líma texta ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Fyrra sniðmát</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Regluleg tjáning</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Skiptu um allt</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Skiptu um</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Allt orð</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Vefja utan um</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blokk</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Lén</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Sýna möppu</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Opnaðu</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Um</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Bæta við blokk</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Bæta við inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Copy</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Stillingar</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Vinsamlegast bíddu acpeyaste er að hlaða ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Hættu</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Smelltu á líma</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Hópur</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Sía</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Eyða öllum varanlega</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Endurheimta allt</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Aðgerð</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL er þegar til: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Vefslóð verður að vera á gilt sniði.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Sláðu inn fulla slóð:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Bættu við URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Sláðu inn gildi</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Afritaðu texta eða skrár til að beita.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Bætið við {0} {1} stillingu</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Klemmuspjaldsbreytingum verður nú bætt við</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Eftir bætastillingu virkjað</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Breytingar á klemmuspjaldi verða nú háðar</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Áður en bætistilling virkjaði</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blokk</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Venjuleg hegðun klemmuspjalds hefur verið endurreist</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Bæta við slökktum</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Viðaukar bætt við topp eða botom klemmunnar</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Umfang Bæta við stillingu</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Í línu</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Handbók</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Bættu við núverandi val þitt.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Handvirk bætistilling virk</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Uppsöfnun klemmuspjalds stöðvuð</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Bæta við hlé</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Uppsöfnun klemmuspjalds hófst á ný</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Bæta við aftur</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir klára að bæta við?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Klippingu í samhæfingarstillingu mun fjarlægja allt ríkt snið. Ertu viss um að þú viljir breyta þessu?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Viðvörun um niðurbrot gagna</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Virkur</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Virkt</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Af</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Á</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Hlé</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Niðurstaða</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Staða</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Óþekkt villa kom upp.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>tilraunir eftir</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Sláðu inn lykilorð</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Staðfesta</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Hafðu samband</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Dagsetningartími</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir eyða öllum notkun '{0}'?
+
+Þetta er ekki hægt að afturkalla!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Kraftmikið</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Truflanir</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} er tómt ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Meira að koma fljótlega!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Innskráningarálag slökkt mistókst</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Innskráning álag Slökkva á árangri</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Innskráningarálag Virkja mistókst</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Innskráningarálag Virkja árangur</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Fela</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Apa líma er nú hlaðið.
+Hlustun á klemmuspjald er: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Hlaðinn</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Sýna</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Sjálfvirk afritunarvalstilling: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Mode breytt</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Hægri smelltu á Paste Mode: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Viðbót uppfærð</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Límdu '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Keyrðu '{0}' greiningartæki</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Keyrðu '{0}' kveikja</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Veldu '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir eyða '{0}' og öllum tengdum aðgerðum?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Viltu fjarlægja allar undiraðgerðir fyrir '{0}'? (Annars verða þeir aftur - foreldri til '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Fjarlægðu valkosti</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Viltu virkilega fá '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Reikningur</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Greiningartæki</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Umsóknaraðgerðir</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Klemmuspjald</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Innihald</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Breytir</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Menning</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Gögn</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Átt</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Draga og sleppa</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Slepptu töframanni</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Tákn</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Skógarhöggsmaður</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Viðmót</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Límdu aðgerðir</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Óskir</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Leitaðu</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Flýtileiðir</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Raða</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Hljóð</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Kerfisbakki</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Söfn</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Þema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Kallar</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Rekstur vefsíðna</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Tungumál</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Stillir klemmuspjaldið á inntaksklemmuna.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Viðvörun</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Almennt hljóð- og/eða viðvaranir um kerfisbakka. Viðvörunaraðgerðir hafa engin áhrif á inntak þeirra.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Skilaboð</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Apaköttur</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Forsýning</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Sýna?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Time Toast skilaboð eru sýnd á nokkrum sekúndum. Þegar gildi er 0 verður að loka skilaboðum handvirkt.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Sýna tíma (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sónar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Hljóð?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Hljóðgerð</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Bindi</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Greiningartæki</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Vinnur inntaksklemmu þess með því að nota forstillingu greiningaraðila.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Inntaksefni er tengt við valið safn</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Tengir innsláttarklemmu sína við úthlutað merkjasafn.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Merki</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Hugsanlegt?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Þetta getur verið kyrrstæður texti til að bera saman við inntakið og/eða innihalda valna eiginleika (með síuhnappinum) verður skipt út þegar ástandið er metið.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Ástand gögn</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Valfrjáls JSONPath fyrirspurn sem verður notuð á valinn „inntakseiginleika“ áður en ástandið er metið.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Innsláttar sía</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Klemmueignin sem notuð er við þetta skilyrt.
+
+Eign „Síðasta framleiðsla“ er nú aðeins studd þegar þetta skilyrt er barn greiningaraðgerða og gögnin sem fylgja með eru breytileg eftir framleiðsla foreldra greiningartækisins.
+
+Festu „viðvörunaraðgerð“ til að leysa úr vandræðum og stilltu „skilaboð“ færibreytu þessa skilyrða og stilltu „skilaboð“ viðvörunarinnar til að passa við þessa innsláttareign. Þetta gerir kleift að endurskoða raunveruleg gögn sem notuð eru við þetta skilyrt.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Inntakseign</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Framkvæmir textasamanburð á inntaksklemmunni eða fyrri aðgerðaútgangi. Þegar samanburður mistakast (það er ekki samsvörun) verða engar aðgerðir gegn börnum framkvæmdar. Svo það virkar eins og rökrétt hlið.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Allar sannar eða rangar aðgerðir þar sem aðgerðir barna munu aðeins framkvæma ef niðurstaðan er sönn.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Ástand</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Allt</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Kveikt þegar bút af völdum gerð er bætt við kerfið á nokkurn hátt (klemmuspjald, drag - og - dropi, greiningartæki myndað eða afritað).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Framkvæmdu aðeins þennan kveikju ef inntaksklemma er nýtt og ekki afrit. Þetta er óháð hvaða forgangsstillingu sem er hunsað eða ekki.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Hunsa afrit</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Aðeins úrklippur af þessari gerð munu kalla fram þessa aðgerð.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Tengir innsláttarklemmu sína við úthlutað merkjasafn.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Kveikt þegar bút er tengt við tilgreindu merkjasafnið.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Safn</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Tíminn í millisekúndum beið áður en börn framkvæma</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Töf</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Tilrauna) fyrst og fremst notuð í tengslum við hríðskotaaðgerðina til að könnun á fjarstýringu eða aðstoð við langan rekstur.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Þegar það er auðt autt mun framleiðsla skráin nota titil innsláttarklemmunnar sem skráarheitið.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Sérsniðið nafn</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Möppan þar sem skráin verður skrifuð.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Skrá</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Vistar inntak í valna möppuna.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Kveikt þegar innihald valinnar möppu breytist. Framleiðslan verður ný eða fyrirliggjandi (þegar Hness Duplicates valið er virkt) skráarklemmu af skránni eða möppunni sem hefur breyst ásamt gerð breytinga sem síðasta framleiðsla hennar.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Atburðir</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Mappa</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Hunsa afrit</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Gildi 0 mun endurtaka aðgerð foreldra um óákveðinn tíma</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Endurtaktu talningu</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Tíminn í millisekúndum til að bíða þegar foreldraaðgerðum lýkur</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Endurtaktu seinkun</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Tilrauna) notað til að búa til aðgerðarlykkjur eða endurtekningarverkefni. Þegar það er endurtekið mun það framkvæma öll börn aftur með upprunalegu inntakinu. Þegar bili er án endurtekningar verður að gera slökkt á kveikjunni og endurtaka það til að stöðva endurtekninguna. Getur verið gagnlegt til að skoða sjálfvirkni í kjör- eða á vefnum.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Kveikt af alþjóðlegum flýtileiðum sem þú skilgreinir. Ef MonkeyPaste er virkur mun það reyna að nota valið bút (ef það er einn) sem inntak. Annars mun það reyna að nota klemmuspjaldið sem inntak þess.
+
+Athugasemd: Flýtileið mun samt framkvæma ef það er ekkert inntak til að halda því sveigjanlegu (svo það getur verið fjölvi kveikja o.s.frv.) Þar sem það er ekki gögn - drifinn atburður.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Flýtileið</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Kveikt þegar ýtt er á flýtileiðina hvenær sem er með núverandi klemmuspjaldi</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Þessi aðgerð krefst þess að appið endurræsist. Viltu gera það núna?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Það var vandamál. Þú verður að endurræsa forritið handvirkt.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Greindu með umsjá</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Skýrða kveikjuna</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Innbyggt þætti er aðeins lesið - aðeins. Afrit til að breyta.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Nafnlaus</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Sérsniðin</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Í gær</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} fyrir dögum</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Fyrir 1 klukkustund</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} fyrir klukkustundum</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Rétt í þessu</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Fyrir mínútu</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} fyrir mínútum</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Í síðasta mánuði</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} mánuðum síðan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Síðustu viku</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} vikum</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} fyrir árum</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Athugasemdir</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Nafn umsóknar</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Umsóknarleið</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Hugsanlegt</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Innihald</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Skráartegund</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Myndategund</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Regluleg tjáning</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Textategund</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titill</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL titill</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Allt orð</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Eins og að fletta meðfram efstu skjábrúninni til að opna, læsa þetta aðalglugganum þegar hann opnar. Leyfa fyrir skjótari fjölþættum verkflæði.
+
+* Horn eru hvað varðar alla skjái, ekki á hvern skjá.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Sýna glugga og læsa</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Ókeypis!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Gefðu okkur 5 stjörnur!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Eyða öllu</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Eyða öllu innihaldi</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir eyða
+Öll úrklippurnar þínar?!
+
+*Ekki er hægt að afturkalla þessa aðgerð!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Ég er Indy Dev vinsamlegast sýndu smá stuðning!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Eins og MonkeyPlae?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} samþykkir aðeins inntak af tegundum (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Sjálfvirk afritunarstilling - hermir eftir „afritunar“ atburði í hvert skipti sem vinstri músarhnappur er gefinn út.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Hægri smelltu límaham - hermir eftir „líma“ atburði í hvert skipti sem hægri músarhnappur er gefinn út</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Forstillt</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Sýna tappamöppu</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Skýrsla</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Útsýni</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Sýna verkfæri</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Greiningartæki gera athugasemdir við inntak sitt eða búa til nýjar úrklippur sem framleiðsla. Börn greiningaraðila þurfa að ákveða hver þau þurfa sem inntak sitt. Þetta er venjulega síðasti framleiðslan.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Inntaksgerð</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger Designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Veldu {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Ekki fundið...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} kveikja</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Þegar það er athugað verður hinum sönnu eða ranga niðurstöðu ástandsins flett. Þannig að til dæmis verður „innihald“ ástand „ekki innihalda“.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Gerir ekki</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Vinsamlegast bíðið...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Litakstur</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Veldu samsvörun lit.</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Eins og flýtileiðir en þegar ýtt er á lykilsamsetninguna verður „afrit“ atburður hermt eftir í virka forritinu svo hann virkar enn eins og eintak en þá verður aðgerðakeðjan fest við apa afritunar kveikjuna. hermað afrit af afriti klemmuspjalds.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Háþróaður sía</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Fela síur</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Endurheimta síur</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Búðu til síu</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Valfrjálst) Þegar það er skilið eftir verður klemmuspjaldið stillt með því að nota inntak þessa aðgerðar. Allt sem veitt er hér verður aðeins meðhöndlað sem venjulegan texta.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Innihald fyrir klemmuspjald</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Þegar satt er verður engum bút bætt við eftir að þessi aðgerð setur klemmuspjaldið.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Hunsa</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Enginn greiningartæki valið fyrir aðgerð '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Greiningartæki fyrir aðgerð '{0}' fannst ekki</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Foreldri '{0}' síur aðeins fyrir '{1}' tegund og greiningartæki '{2}' mun aldrei framkvæma vegna þess að það styður ekki '{3}' tegund innsláttar</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Ekkert merki valið fyrir flokkara '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Merki fyrir flokkun '{0}' fannst ekki</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Bera saman gildi geta aðeins verið stafir, tölur eða rými</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Ekkert merki valið fyrir klemmu merkt kveikju '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Merki fyrir klemmu merkt kveikju '{0}' fannst ekki</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Engin vaktamappa tilgreind fyrir '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Horfa á möppu '{0}' fannst ekki fyrir kveikju '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer Path for Action '{0}' ekki stillt</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' fyrir '{1}' fannst ekki.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Verkefni</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Lærðu um viðbætur</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Endurheimtu þessa greiningarstillingu</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Breyta log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Vinsamlegast tengdu við internetið og reyndu aftur seinna.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - hjálp</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} er nýjasta útgáfan</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Þið eruð öll upp - til - dagsetning!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Athugaðu með uppfærslur...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Ný útgáfa í boði!
+
+Smelltu hér til að uppfæra í '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Smelltu hér að neðan til að uppfæra í '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Uppfærsla í boði!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Uppfæra núna</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' inniheldur sameiginleg gildi. Hvað myndir þú vilja endurstilla?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Tær</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Skýr nýlegar leitir</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Endurstilla allt</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Endurstilla deilt</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Endurstilla óstrikað</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Kallar fram úthlutað umsóknaraðgerð. Allar umsóknarskipanir eru ríkisfangslausar og hunsað innsláttarklemmu þeirra.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Þegar óskoðað er og skipunin getur ekki skotið mun framkvæmdakeðjan stöðvast. Margar skipanir munu krefjast sérstaks umsóknarástands til að framkvæma.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Haltu alltaf áfram?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Skipunin að koma fram.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Skipan</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Engin skipun valin fyrir umsóknarskipun '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Skipun fyrir umsóknarstjórn '{0}' fannst ekki</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Valinn</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Endurræsa</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Það var mál að uppfæra '{0}'. Til að ljúka uppfærslunni þarftu að endurræsa og setja upp '{0}' aftur (ekki hafa áhyggjur af öllum stillingum þínum verða endurreistar).
+
+Þú getur endurræst núna og klárað uppfærsluna með því að setja upp, hunsa þetta og uppfæra hana seinna eða hætta við uppfærsluna allt saman og halda áfram að nota útgáfu '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Uppfærsluvilla</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Gat ekki halað niður uppfærslu</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Uppfærsla mistókst</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Til að ljúka uppfærslu þarftu að endurræsa. Viltu endurræsa núna eða síðar?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Uppfærsla tilbúin</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Seinna</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Endurræsa núna</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Framandi</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} var uppfært í {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Krafist er kjarna viðbóta og ekki er hægt að fjarlægja það.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Uppsetningar</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Uppfærsla er í bið. Endurræstu til að ljúka.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Framandi</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Óákveðinn greinir í ensku í bið. Vinsamlegast endurræstu ef þú vilt setja aftur.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Til að ljúka fjarlægð þarftu að endurræsa. Viltu endurræsa núna eða síðar?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Klára að fjarlægja?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Óbirt</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - myndað sjálfgefið forstillt fyrir '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Engin bút valin</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Greindu valinn bút</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Úthlutaðu flýtileið til að keyra '{0}' á völdum klemmu</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Global Pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Úthlutaðu Global Paste flýtileið fyrir '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Gleymt lykilorð?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Skrá inn</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Að skrá þig út</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Friðhelgisstefna</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Krefst endurræsingar) Þegar greiningarupplýsingar verða skráðar í skrá. Þetta getur hægt á frammistöðu og getur innihaldið persónulegar upplýsingar.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Log á skrá</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Opið</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Opnaðu möppu</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Vafraðu viðbætur</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lestu</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Skrifaðu</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Sendu endurgjöf eða villuskýrslu</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Þetta felur aðeins aðalgluggann. Allir aðrir gluggar sem ekki eru ekki - eru alltaf sýndir í verkstikunni.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Leitaðu í '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Bættu við síu</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Breyta tengingu</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Fjarlægðu þessa síu</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Opið hjálp um þetta ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} úrklippur</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Skipta um</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Aldrei</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Sett</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Met</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Ómerkt uppspretta tilvísun</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' er krafist</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Hefur villur)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Takmarkað</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Geymsla</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Rusl</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Ótakmarkað</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Þetta forrit samsvarar nú sjálfgefnu forstillingum og sniðum klemmuspjalds.
+
+Að virkja eða slökkva á sjálfgefnum forstillingum lesanda (frá hliðarstikunni klemmuspjaldsins) mun ekki hafa áhrif á þessa stillingu. Aðeins óskráð forrit fylgja sjálfgefnu skipulaginu.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Þetta forrit passar nú við sjálfgefið klemmuspjald rithöfundar forstillingar og snið.
+
+Að virkja eða slökkva á forstillingu rithöfundar (frá hliðarstiku klemmuspjaldsins) mun ekki hafa áhrif á þessa stillingu. Aðeins óskráð forrit fylgja sjálfgefnu skipulaginu.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Til að bæta við verður þú að losa þig við hlustun klemmuspjaldsins (kerfisbakki -&gt; halda áfram).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Bætið ekki við</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Hefur engar stillingar</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ég tala aðeins ensku og acepyaste hefur verið þýtt á þetta tungumál.
+
+Allar útgáfur senda með enska pakkanum þannig að ef þú talar ensku geturðu breytt tungumálinu í það hvenær sem er eftir þessa uppsetningu (Stillingar -&gt; Val -&gt; International).
+
+Ef þú vilt hjálpa til við að bæta þýðinguna viljum við gjarnan heyra frá þér!
+
+endurgjöf@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Þýðingaráhyggjur</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Þú verður að uppfæra MonkeyPaste til að nota þennan eiginleika.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Flýtileið</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Klemmuspjald hlustandi óvirkur</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Klemmuspjald hlustandi virkt</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Foreldraaðgerð '{0}' styður ekki innsláttargerðargerð 'Last Output'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lærðu meira um áætlanir</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Umsókn</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klemmu</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Greiningartæki</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Merki</value>
+  </data>
+</root>

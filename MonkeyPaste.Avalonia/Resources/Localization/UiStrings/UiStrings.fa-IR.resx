@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>هیچ ویژگی با اشتراک محدود نیست ، فقط ظرفیت ذخیره سازی است و در هر زمان قابل تغییر است.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>حساب موجود خود را بازیابی کنید ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>محتوا و سطل زباله هستند
+محدود به {0} و {1}
+کلیپ ها به ترتیب.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>به کلیپ های محتوا و ذخیره زباله نامحدود اجازه می دهد.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>محتوای نامحدود و نامحدود و ذخیره زباله.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>بازگرداندن</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>رایگان</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>استاندارد</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>نامحدود</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>اشتراک، ابونمان</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>حریم خصوصی شما مهم است و داده های کلیپ بورد می توانند بسیار شخصی باشند. ذخیره سازی همیشه رمزگذاری شده است اما می توانید رمزعبور را تنظیم کنید که در صورت سرقت دستگاه شما یا شخص دیگری از دستگاه شما استفاده می کند.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>کلمه عبور</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>در صورت فعال بودن ، کشیدن از هر برنامه به بالای صفحه ، میمون را نشان می دهد تا به راحتی محتوا را در Monkeypaste رها کند.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>فعال کردن "قفل" در سمت چپ بالای پنجره اصلی هنوز هم اجازه می دهد تا روی میمون رها شود.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>ترجیحات بیشتر پنجره از منوی "تنظیمات -&gt; تنظیمات -&gt; پنجره" در دسترس است.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>موزها را به اینجا بکشید!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>کشیدن - به - باز</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>میانبرهای صفحه کلید را می توان در هر زمان از منوی "تنظیمات -&gt; میانبر" بررسی یا تغییر داد.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>تمام میانبرهای جهانی غیرفعال خواهند شد ، بنابراین می توانید بعداً آنها را تنظیم کنید.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>میانبرهای کلیپ بورد Monkeypaste در کلیه برنامه ها در دسترس خواهند بود.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>درونی؛ داخلی</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>پیش فرض</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>نمایه ژست</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>سلام! بیایید چند مورد را تنظیم کنیم تا تجربه کلی خود را با Monkeypaste بهبود بخشیم.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>خوش آمدی</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>برای به دست آوردن بیشترین استفاده از Monkeypaste ، بارگیری خودکار هنگام ورود به سیستم ایده خوبی است. اما ، این کاملاً به شما بستگی دارد.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>آن را گاه به گاه نگه دارید.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>فعال کردن</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>ورود به سیستم؟</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>هنگامی که فعال شد ، یک ژست پیمایش در بالای صفحه نمایش میمون را نشان می دهد.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>سمت چپ - با کلیک بر روی نماد TaskBar باز هم Monkeypaste باز خواهد شد.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>ترجیحات بیشتر پنجره از منوی "تنظیمات -&gt; تنظیمات -&gt; پنجره" در دسترس است.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>آسان است؟</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>اینجا را پیمایش کنید!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>پیمایش - به - باز</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste &lt;span color = "red&gt; کاملاً یکپارچه &lt;/span&gt; با کشیدن - و - قطره &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>اینجا را رها کنید!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; به این ترتیب ، به Monkeypaste می توان دسترسی پیدا کرد &lt;br&gt; &lt;span color = "red"&gt; بدون کلیک &lt;/span&gt; یا حتی &lt;span color = "red"&gt; ضرب و شتم چشم &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>مرا بکش!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>آن را امتحان کنید!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>آن را امتحان کنید!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>هیچ نتیجه ای در دسترس نیست.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>تایید</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>تازه کردن</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>جستجو کردن...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>تنظیمات</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>وابستگی ها:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>نصب</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید "{0}" و تمام پیش تنظیم و میانبرهای آن را حذف کنید؟</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>حذف کردن</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' نتیجه ای ندارد.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>بدون انتخاب</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>هیچ یک</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>وام:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>شرح:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>اهدا:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>مجوز:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL پروژه:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>منتشر شده:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>من را بخوان:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>گزارش سوءاستفاده:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>برچسب ها:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>به روز رسانی</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>نسخه:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>در پنجره باز شوید</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>رد</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>تازه کردن</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>صرفه جویی</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>بعد برای حذف!
+
+برای جلوگیری از آن ، ارتقا دهید.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>کنار سطل زباله!
+
+برای جلوگیری از آن ، ارتقا دهید.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>فایل ها</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>تصویر</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>کپی شده {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} پرونده ها | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} خطوط</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} کپی | {1} خمیر</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>حرکت</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>اضافه کردن</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>کپی 🀄</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>برش</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>خمیر</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} کپی</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>فیلتر غیر ذخیره نشده</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- لطفا انتخاب کنید -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>قالبها</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>خوانندگان</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>نویسندگان</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>دستگیرنده</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>دورامی</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>ویرایش نام</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>بازپا</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>برچسب ها</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>عمل</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>مسیریابی جهانی</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>میانبر</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>حرکات باید منحصر به فرد باشد و فقط ممکن است یک کلید ورودی باشد.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; داخلی &lt;/b&gt; همه میانبرها در داخل برنامه محدود هستند. این واقعاً یک گزینه در نظر گرفته شده نیست اما می تواند به سفارشی کردن چه میانبرهایی که قصد ساخت یک روز جهانی را دارید &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; پیش فرض &lt;/b&gt; همه میانبرهای جهانی فعال هستند. میانبر &lt;b&gt; نمایش/پنهان کردن پنجره اصلی &lt;/b&gt; از &lt;span color = "red"&gt; override &lt;/span&gt; مسیریابی برای قفل &lt;b&gt; caps lock &lt;/b&gt; استفاده می کند. شما می توانید در هر زمان آن مسیریابی یا ژست را تغییر دهید. اما &lt;span color = "green"&gt; آن را امتحان کنید &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;Html&gt;
+&lt;Head&gt; &lt;/head&gt;
+&lt;setody&gt;
+&lt;H1&gt; حالت های میانبر جهانی &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; منفعل &lt;/b&gt; یک میمون میانبر در هر برنامه گوش می دهد. &lt;br&gt;
+*در حال حاضر این گزینه &lt;i&gt; تنها در لینوکس است.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; قبل از &lt;/b&gt; میانبر قبل از &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; انجام می شود. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; پست &lt;/b&gt; میانبر &lt;b&gt; &lt;i&gt; پس از &lt;/i&gt; &lt;/b&gt; توسط برنامه فعال انجام می شود. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Override &lt;/b&gt; هنگامی که Monkeypaste کلید ورودی (کلید غیر اصلاح کننده) یک میانبر Override را می شنود ، آن را پنهان می کند &lt;/i&gt; که کلید را از ورودی سطح فشار می دهد - &lt;br&gt;
+این گزینه تضمین می کند که میانبر بدون درگیری با برنامه فعال ایجاد می شود.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; انحصاری انحصاری &lt;/b&gt; این یک نوع خاص از حالت Override است که برای کلید قفل Caps طراحی شده است. این فقط به &lt;b&gt; یک کلید &lt;/b&gt; (غیر اصلاح کننده) برای تکالیف خود اجازه می دهد. &lt;br&gt;
+در حالت Override Override Mode Caps Lock می تواند در صورت فشار دادن در ترکیب با سایر کلیدها ، در &lt;/i&gt; گیر بیفتد. &lt;br&gt;
+بنابراین مهم نیست که چه کلیدهای دیگری پایین آمده اند ، اگر کلید کلید &lt;b&gt; هات کلید &lt;/b&gt; فشرده شود ، بیش از حد نادیده گرفته می شود و از اینکه در &lt;/i&gt; گیر بیفتد جلوگیری می شود.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>غیرفعال کردن</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>هنگام ورود به این حساب کاربری ، نه برای سایر کاربران بارگیری کنید.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; با استفاده از مخاطبین موجود (به افزونه Fetcher نیاز دارد) این قسمت برای تمام موارد این الگوی در این سند یا در هر مورد در بعداً مورد استفاده قرار می گیرد. &lt;/p&gt; &lt;p&gt; بنابراین به عنوان مثال اگر آدرس ایمیل را انتخاب کنید در اینجا قسمت ایمیل مخاطبی که انتخاب می کنید برای همه موارد موجود در این سند استفاده می شود. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = سال کوتاه &lt;br/&gt; yyyy = سال طولانی &lt;br/&gt; m = ماه (1-12) &lt;br/&gt; mm = ماه (01-12) &lt;br/&gt; mmm = مخفف ماه (ژانویه ، فوریه .. دسامبر) &lt;br/&gt; mmmm = ماه طولانی (ژانویه ، فوریه ... دسامبر) &lt;br/&gt; d = روز (1 - 31) &lt;br/&gt; dd = روز (01 - 31) &lt;br/&gt; ddd = روز هفته کلمات (دوشنبه ، سه شنبه ... یکشنبه) &lt;br/&gt; e = روز کوتاه هفته در کلمات (دوشنبه ، سه شنبه ... خورشید) &lt;br/&gt; d - روز سفارش (اول ، 2 ، 3 ، 21 ، 22 ، 23 ، 31 ، 4 ...) &lt;br/&gt; h = ساعت در am/pm (0-12) &lt;br/&gt; hh = ساعت در am/pm (00-12) &lt;br/ &gt; H = ساعت در روز (0-23) &lt;br/&gt; HH = ساعت در روز (00-23) &lt;br/&gt; mm = دقیقه &lt;br/&gt; ss = دوم &lt;br/&gt; sss = میلی ثانیه &lt;br/&gt; A = Am/PM نشانگر &lt;br/&gt; P = A.M./P.M. نشانگر</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>تاریخ و/یا زمان فعلی در هنگام چسباندن برای الگوهای DateTime جایگزین می شود.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; تمام اتفاقات این الگوی از متن ارائه شده استفاده می کند. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; تمام اتفاقات این الگوی از متن ارائه شده استفاده می کند. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>ضمیمه کردن</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>بلوک را فعال کنید</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Inline را فعال کنید</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>دفترچه راهنما</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>دفترچه راهنما</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>مکث ضمیمه</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>قبل از</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>قبل از</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>رزومه ضمیمه</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>ضمیمه ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>خمیر</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>سنجاق</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>باز کردن</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>اعلان های "{0}" را پنهان کنید</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>رد</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>آخرین برنامه فعال ناشناخته است. به برنامه در نظر گرفته شده به میمون خمیر بروید.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>چسباندن به: &lt;em&gt; &lt;i class = "paste-tooltip-soffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>به حداقل رساندن</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>لطفا صبر کنید...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>قفل کردن</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>حساب</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>کمک</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>کپی و چسباندن</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>اولویت ها</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>بازیابی پیش فرض ها</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>فیلتر ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>میانبرها</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>اضافه کردن برنامه</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>وب سایت را اضافه کنید</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>مسدود کردن؟</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>برنامه</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>دامنه بلوک؟</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>URL بلوک؟</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>دامنه</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>تشخیص URL منبع بستگی به چگونگی دوستانه کلیپ بورد برنامه میزبان دارد بنابراین رد نمی تواند تضمین شود</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>وب سایت ها</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>برخی از ویژگی های Monkeypaste از اتوماسیون صفحه کلید برای شبیه سازی رویدادهای "کپی" در سایر برنامه ها استفاده می کنند.
+
+برنامه را با میانبر کپی منحصر به فرد (مانند یک کنسول یا پوسته) اضافه و یا انتخاب کنید تا اطمینان حاصل شود که این ویژگی ها به درستی عملکرد دارند.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>کپی میانبر</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>هیچ یک</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>فقط از پیش تنظیم شده انتخاب شده برای برنامه مشخص استفاده می شود. هنگامی که نامشخص باشد ، از پیش فرض های پیش فرض موجود در نوار کناری کلیپ بورد &lt;/em&gt; استفاده می شود.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>بسیاری از ویژگی های Monkeypaste از اتوماسیون صفحه کلید برای تعامل با سایر برنامه ها استفاده می کنند.
+
+برخی از برنامه ها (مانند برخی از کنسول ها یا پوسته ها به عنوان مثال) ممکن است میانبر خمیر غیر پیش فرض داشته باشند.
+
+برای اطمینان از قابلیت همکاری مناسب ، آن میانبرها را برای آن برنامه ثبت کنید.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>چسباندن میانبر</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>خوانندگان</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>تمام نظارت کلیپ بورد از برنامه های رد شده &lt;b&gt; نادیده گرفته می شود.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>نویسندگان</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>ویرایش ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>قالبها</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>رد شده</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>میانبرها</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>آیا می خواهید کلیپ های {0 را از "{1}" حذف کنید</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>کلیپ ها را حذف کنید؟</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>کاربرد</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>مرور به برنامه ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>مسیر برنامه را انتخاب کنید</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید میانبرهای سفارشی را برای {0} حذف کنید؟</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید فرمت های سفارشی را برای {0} حذف کنید؟</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>هیچ قالب کلیپ بورد اختصاصی برای این برنامه وجود ندارد. هیچ داده ای از طریق برش/کپی یا تلاش برای کشیدن - و - رها کردن به میمونپست از آن خوانده نمی شود.</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>هیچ قالب کلیپ بورد اختصاصی برای این برنامه وجود ندارد. خمیر خودکار یا کشیدن - و - رها کردن از Monkeypaste هیچ تاثیری نخواهد داشت (داده های خالی آن).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید تمام میانبرها را مجدداً تنظیم کنید؟ تمام میانبرهای سفارشی برداشته می شوند.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید نمایه مسیریابی میانبر خود را به "{0}" تغییر دهید</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>نفع</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>فیلتر</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>قالبها</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>برچسب ها</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>امروز</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>زباله ها</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>در باره</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>آسان است؟</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>برای Unpin دوبار کلیک کنید</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>سفارشی</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>جهانی</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>این ترکیب با "{0}" مغایرت دارد که در صورت ذخیره پاک می شود.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>میانبر باید ارائه شود.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>این یک میانبر جهانی است. این بدان معناست که هر زمان که انجام شود سعی در اجرای آن خواهد داشت. سعی کنید آن را به اندازه کافی منحصر به فرد (یا "نوع مسیریابی" را تغییر دهید تا با میانبرهای دیگر برنامه ها مغایرت نداشته باشد.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>جهانی</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>میانبر باید شامل یک و تنها یک کلید غیر اصلاح کننده باشد.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>برای ضبط هر کلید را فشار دهید ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>میانبر اختصاص دهید</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>بیشتر بدانید...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>بالا بردن</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>لغو کردن</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>ثابت</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>چشم پوشی</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>هیچ</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>خوب</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>مجدداً</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>تعطیل</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>ارسال</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>آره</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>سالانه</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>ماهانه</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>مجانی امتحان کنید!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>چرخه صورتحساب</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>پست الکترونیک</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>وارد شدن</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>اتصال خود را بررسی کنید
+و دوباره سعی کن.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>پرداخت بعدی</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>کلمه عبور</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>ثبت نام</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>ایمیل معتبر نیست</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>رمزهای ورود مطابقت ندارند.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>رمز عبور باید حداقل نویسه های 0 {باشد.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>یاد آوردن؟</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>برای تأیید حساب خود ، ایمیل خود را بررسی کنید</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>رمزعبور بازنشانی</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D ، yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>mmm d ، h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>هرگز</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>آزمایش روزانه 0 {</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>مشکلی برای انجام وجود داشت
+خرید شما.
+
+بررسی اتصال شما و
+تنظیمات ممکن است کمک کند.
+
+آیا دوست دارید دوباره امتحان کنید؟</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>حساب شما با موفقیت بوده است
+به روز شده به:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>خرید موفق!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>خطا</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>ارتباط ناموفق بود.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>مجدداً</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>حساب تغییر کرد</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>اشتراک شما اکنون {0}/{1} با محتوای {2} و 3 {} ذخیره زباله است.
+اما نگران نباشید ، پس از پایین آمدن هیچ داده ای از بین نمی رود. فقط کلیپ های جدید ارزیابی می شوند.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>تبریک می گویم! اشتراک شما اکنون {0}/{1} با محتوای {2} و 3 {} ذخیره زباله است.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>سطل آشغال یا به هم وصل کنید
+از '{0}' برای اضافه کردن بیشتر.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>ذخیره سازی حداکثر '{0}' {1} است.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>بازگرداندن</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} مسدود شد</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>محتوا و ظرفیت زباله به دست آمد!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>ذخیره سازی حداکثر '{0}' {1} است.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>ظرفیت محتوا رسیده است!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* شما می توانید این هشدارها را توسط
+با کلیک بر روی "پنهان کردن همه" از
+منوی گزینه ها در بالا.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>حداکثر ذخیره زباله {0} است.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>ظرفیت زباله به دست آمد!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} نامعتبر است</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} باید حداقل {1 شخصیت باشد</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} فقط می تواند {1} شخصیت باشد</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>چسباندن به: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>پرداخت برای {0} شما
+اشتراک به دلیل 1 {
+و دریافت نشده است
+
+لطفا خود را به روز کنید
+اطلاعات پرداخت.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>پرداخت برای {0} شما
+اشتراک به دلیل 1 {
+و دریافت نشده است
+
+لطفا به
+اینترنت در دستگاه
+با اشتراک خود و
+برای ادامه کار دوباره راه اندازی کنید
+با استفاده از برنامه {0} خود.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>پرداخت برای {0} شما
+اشتراک به دلیل 1 {
+و دریافت نشده است
+
+لطفا باز یا راه اندازی مجدد کنید
+میمون روی دستگاه
+با اشتراک خود در
+استفاده از خود را ادامه دهید
+{0} طرح.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>حساب منقضی شد</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>توجه داشته باشید</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>فروشگاه مایکروسافت اجازه ردیف نمی کند
+تغییر در افزونه های اشتراک.
+
+شما باید خود را لغو کنید
+{0}/{1} خود را برنامه ریزی کنید
+یا برای هر دو هزینه می شود.
+
+آیا دوست دارید اکنون این کار را انجام دهید؟</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>رمز ورود شما تنظیم مجدد شده است.
+
+لطفا ایمیل خود را بررسی کنید و
+برای تغییر پیوند را دنبال کنید
+رمز عبور شما.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>وارد شدن</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>نویسنده (ها)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>لازم است قبل از ادامه شرایط مجوز زیر را بپذیرید.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>بسته (های) زیر نیاز دارد که قبل از نصب شرایط مجوز آنها را بپذیرید.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>من کاهش می یابد</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>با کلیک بر روی "من قبول می کنم" به این معنی است که شما با شرایط مجوز این برنامه موافق هستید. اگر با اصطلاحات موافق نیستید ، روی "من کاهش می یابد" کلیک کنید.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>با کلیک بر روی "من قبول می کنم" به این معنی است که شما با شرایط مجوز برای افزونه (های) ذکر شده در بالا موافق هستید. اگر با اصطلاحات موافق نیستید ، روی "من کاهش می یابد" کلیک کنید.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>مشاهده پروانه</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>پذیرش مجوز</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>قبول میکنم</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>آفلاین</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>ثبت نشده</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>انجام شده</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ رمزهای عبور مطابقت ندارند</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>کلمه عبور</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>اشتراک شما است
+اکنون روی {0}/{1} تنظیم کنید.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>حساب یافت شد</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>ورود به سیستم انجام نشد</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>ثبت نام انجام نشد</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>ثبتنام موفقیتآمیز!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>خطای تنظیم مجدد</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>اشتراک، ابونمان</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>چه خبر</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>هرگز</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>نامحدود</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>ظرفیت</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>باقی مانده</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>جمع</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>پرداخت شما گذشته است.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>میانبرهای منحصر به فرد Override فقط ممکن است یک کلید را داشته باشند و این کلید نمی تواند یک کلید اصلاح کننده باشد.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>منقضی شده</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>بارگذاری</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>معلول</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>توجه داشته باشید! این رمز عبور اختیاری و فقط برای امنیت اضافی است. داده های شما قبلاً رمزگذاری شده و هرگز به اشتراک گذاشته نشده است. این رمز عبور به سادگی مانع از آن می شود که اگر شما به نوعی به دسک تاپ شما دسترسی پیدا کنند (به سرقت رفته ، اتاق را ترک می کنید و غیره) از بارگیری میمون استفاده نمی کند.</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>تنظیمات قطره را برای:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>پلاگین ها را مرور کنید</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>تجزیه و تحلیل</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>واکنش سریع</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>تغییر ویرایش</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>پیچ خورده</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>حاشیه ها</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>متن ساده</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>در پنجره باز شوید</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>برای دنبال کردن ... Ctrl را کلیک کنید ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>روی + alt کلیک کنید تا دنبال کنید ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>پین یا رها کردن هر رسانه ای در اینجا!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>آستانه های بالاتر از 0 با استفاده از فاصله اقلیدسی در فضای RGBA ، تطبیق رنگ فازی را فراهم می کند.
+
+به عنوان مثال ، اگر قرمز (#FF0000) اصطلاح جستجو باشد و سیاه (#000000) پیکسل در یک کلیپ تصویر است ، پس فاصله رنگ 255 خواهد بود. مسافت سیاه تا سفید حداکثر ممکن از 510 است ، از جمله کانال آلفا</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>همه موارد زیر درست است</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>کلیپ بورد</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>مجموعه ها</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>حالت موش</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>محرک</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>مکث</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>از سرگیری</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>ماشه جدید</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>از پیش تعیین شده اضافه کنید</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>جادوگر قطره میمون</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>از پیش تنظیم</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>تحلیلگر</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>برش</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>جهت گیری چرخه</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>چیدمان شبکه را تغییر دهید</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>مورد حساس</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>آستانه</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>کلمه کلیدی</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>هیچ یک</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>مسیریابی</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>عمل</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>توری</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>انجام شده</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>بعد</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>قبلی</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>پرش</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>حساب موجود؟</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>پرداخت بعدی</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>ثبت نام به شما امکان می دهد اشتراک پرداخت شده خود را در تمام دستگاه های خود (در صورت در دسترس بودن) حمل کنید. ما ایمیل شما را که قول می دهیم اسپم نمی کنیم.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>اشتراک، ابونمان</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>نام کاربری</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>نیاز به ثبت نام دارید؟</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>منابع</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>عجیب ، هیچ چیز در دسترس نیست. چیزی باید اشتباه باشد</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>برداشتن</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>نیاز به راه اندازی مجدد دارد</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>پیشرفته</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>خطای استخراج افزونه از '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>خطای نصب افزونه: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>خطای نصب افزونه '{0}' ساختار دایرکتوری فاسد یا نادرست. مانیفست باید در "{1}" وجود داشته باشد اما یافت نشد.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>خطای تجزیه کننده افزونه "{0}": {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>هیچ افزونه ای با Guid بارگذاری نشده است: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} خطا</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>خطای طرح افزونه به دما dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>خطای پشتیبان گیری از "{0}" به "{1}". جزئیات: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>متن تایپ شده در صورت تمرکز جعبه متن ، به طور خودکار برای جستجو اعمال می شود.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>ورودی جستجوی خودکار</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>تغییر رمز انجام نشد</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>تغییر دادن</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>رمز عبور را تغییر دهید</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>رمز عبور پاک</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>محتوا</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>اندازه فونت محتوا</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>در صورت صحت ، محتوای خارجی که در یک کلیپ قرار داده شده از قالب بندی کلیپ ها استفاده می کنند و نه آنچه از منبع موجود است.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>با قالب بندی مقصد چسبانده ، رها یا ضمیمه کنید</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید رمز عبور را فراموش کنید؟</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>فراموش کردن</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>فراموشی رمز عبور</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>مشخصات</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>مخفی کردن واتارزیت های ظرفیت</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>هنگامی که محتوای کلیپ بورد جدید ضمیمه می شود ، به عنوان کلیپ جدید ردیابی نمی شود</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>نادیده گرفتن Appends</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>هنگامی که کلیپ بورد با یک کلیپ موجود مطابقت دارد ، از آن کلیپ به جای ایجاد یک نسخه جدید استفاده می شود</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>کپی های جدید را نادیده بگیرید</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>تغییرات کلیپ بورد از درون برنامه ردیابی نمی شود</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>ردیابی کلیپ بورد داخلی را نادیده بگیرید</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>فضاها ، زبانه ها و خطوط جدید از ردیابی نادیده گرفته می شوند</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>فقط فضای سفید را نادیده بگیرید</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>بارگذاری در ورود به سیستم</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>پنجره</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>جسارت</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>رفتار نشان دادن</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>پنجره اصلی با انجام یک ژست پیمایش در لبه بالای مانیتور شما فاش می شود</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>نمایش در صفحه نمایش بالا</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>حجم اعلان</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>این تنظیمات سیستم را ردیابی می کند - تعداد خمیر صفحه کلید گسترده برای آمار استفاده. این اطلاعات خصوصی است و به اشتراک گذاشته نمی شود بلکه تضمین نمی شود. نتایج دقیق ممکن است نیاز به ارائه یک دستور رب صفحه کلید خاص در "تنظیمات -&gt; کپی و چسباندن -&gt; میانبر" داشته باشد.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>تاریخ چسباندن</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>بسیاری از کلیپ های پین شده (مانند زبانه های مرورگر) می توانند حافظه قابل توجهی مصرف کنند. حذف توسط اول - در - اول - خارج است</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>ظرفیت سنج</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>این در مورد همه ورودی های خودکار - قابل تکمیل ، مقادیر پایین تر عملکرد را بهبود می بخشد</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>محدودیت متن اخیر</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید
+ترجیحات پیش فرض را بازیابی کنید؟
+
+این قابل بازگشت نیست!
+
+*برنامه پس از اتمام مجدداً راه اندازی می شود.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید همه اعلان ها را مجدداً تنظیم کنید؟
+
+*این قابل بازگشت نیست!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste هنگام چسباندن به یک برنامه خارجی ، کلیپ بورد (غلبه بر آن) را تنظیم می کند. این تلاش برای بازگرداندن وضعیت کلیپ بورد پس از خمیر خارجی خواهد بود.
+
+ترمیم کامل نمی تواند تضمین شود و بسته به منبع داده ها ممکن است عملکرد یا حتی میمون تصادف را کاهش دهد.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>تنظیم مجدد کلیپ بورد پس از چسباندن میمون</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>نمی توان حافظه پنهان افزونه را از مسیر حذف کرد: "{0}"</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>همه افزونه ها به حالت پیش فرض اولیه بازنشانی می شوند</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>مخزن پلاگین</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید همه افزونه ها را به صورت پیش فرض تنظیم کنید؟</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید رمز ورود خود را مجدداً تنظیم کنید؟</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>تمام میانبرهای برنامه در حرکات اصلی پیش فرض آنها تنظیم مجدد می شوند.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>میانبرهای تنظیم مجدد</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>همه اعلان های نادیده گرفته شده که قبلاً تنظیم شده بودند.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>اعلان ها را بازیابی کنید</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(فعال کردن می تواند نسبتاً کند باشد) غیرفعال کردن فرمت باعث کاهش مصرف حافظه می شود اما برخی از ویژگی های پیشرفته مانند: ضمیمه ، الگوها ، حاشیه نویسی ها و یافتن/جایگزینی را مهار می کند</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>محتوای غنی</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>قراردادن رمز عبور</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>نکات نمایش</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>نمایش در نوار وظیفه</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>نمایش در تعویض کار</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>عناوین نمایش</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>در صورت فعال بودن ، کشیدن از هر برنامه به بالای صفحه ، میمون را نشان می دهد تا به راحتی محتوا را در Monkeypaste رها کند.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>نمایش در بالای صفحه نمایش</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>تم صدا</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>بررسی طلسم</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>در هنگام راه اندازی ، منبع کلیپ بورد ناشناخته خواهد بود و بسته به تنظیمات امنیتی شما ممکن است محتوا از یک وب سایت یا برنامه مستثنی تهیه شود.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>کلیپ بورد استارتاپ را اضافه کنید</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>در راه اندازی به کلیپ بورد گوش دهید</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>انتخاب کنید</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>احتیاط! سایر رنگهای پالت با استفاده از ریاضی و نه چشم انتخاب می شوند! بنابراین آگاه باشید برخی از ترکیبات رنگ و سبک ممکن است تضاد مناسبی برای خوانایی نداشته باشد.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>رنگ تم</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>سبک تم</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>پاکسازی سطل زباله اتوماتیک در زمان راه اندازی در فاصله زمانی رخ خواهد داد.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>پاکسازی زباله</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>رابط</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>محدودیت های خنثی کننده بالا ممکن است بر عملکرد تأثیر بگذارد</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>محدود کردن</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>بدون محدودیت</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>در جستجوی پرونده های پیشرفته برای انواع فایل غیر از پیش تعیین شده استفاده می شود</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>کاربر - پسوند جستجوی تعریف شده</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>پیدا کردن و جایگزینی ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>اینجا چسباندن</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>اشتراک گذاری...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>چشم انداز</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>مدیریت ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>نام بردن</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>امتیاز: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>نوع: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>حذف دائمی</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>به "{0}" مرور کنید</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>تبدیل</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>ورودی</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>خروجی</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>منابع</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>بازگرداندن</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>تصویر را انتخاب کنید ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>رنگ</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>مدیریت '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>باز کن</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>لطفا صبر کنید...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>رنگ پس زمینه</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>همه را پاک کن</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>قالب های کلیپ بورد</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>همه را حذف کنید</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>جزئیات ویرایش</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>پیدا کردن</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>رنگ فونت</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>رنگ قالب</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> در انتخاب</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>درج تصویر</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>پیوند</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>وارد کردن فیلم</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> مورد تطبیق</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>الگوی جدید</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>الگوی بعدی</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>متن خمیر را وارد کنید ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>الگوی قبلی</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> عبارت منظم</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>جایگزین همه</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>جایگزین کردن</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> کلمه کلیدی</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> پیچیدن</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>مسدود کردن</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>دامنه</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>پوشه</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>انسداد</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>در باره</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>بلوک ضمیمه</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>درون خطی اضافه کنید</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>خودکار - کپی کردن</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>حالت ها</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>لطفا صبر کنید Monkeypaste در حال بارگیری است ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>ترک</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>ری - روی خمیر کلیک کنید</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>گروه</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>فیلتر کردن</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>به طور دائم همه را حذف کنید</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>بازگرداندن همه</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>عمل</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL از قبل وجود دارد: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL باید در یک قالب معتبر باشد.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>URL کامل را وارد کنید:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>اضافه کردن URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>مقادیر را وارد کنید</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>متن یا پرونده ها را برای اعمال کپی کنید.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>APPEND {0} {1} حالت فعال شده</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>اکنون تغییرات کلیپ بورد ضمیمه خواهد شد</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>بعد از فعال شدن حالت ضمیمه</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>تغییرات کلیپ بورد اکنون پیش بینی خواهد شد</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>قبل از اینکه حالت ضمیمه فعال شود</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>مسدود کردن</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>رفتار کلیپ بورد طبیعی ترمیم شده است</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>ضعف غیرفعال</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>ضمیمه اضافه شده به بالا یا بوتوم کلیپ</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>حالت ضمیمه فعال شده</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>درون خطی</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>کتابچه راهنمای</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>به انتخاب فعلی خود پیوست.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>حالت ضمیمه دستی فعال شده است</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>تجمع کلیپ بورد متوقف شد</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>ضمیمه مکث</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>تجمع کلیپ بورد از سر گرفته شد</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>پیوست از سر گرفته شد</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید ضمیمه کنید؟</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>ویرایش در حالت سازگاری ، تمام قالب بندی های غنی را حذف می کند. آیا مطمئن هستید که می خواهید این را اصلاح کنید؟</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>هشدار تخریب داده ها</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>از روی</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>بر</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>مکث</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>نتیجه</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>وضعیت</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>خطای ناشناخته رخ داده است.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>تلاش های باقیمانده</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>رمز عبور را وارد کنید</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>تایید</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>مخاطب</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>زمان قرار</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید تمام کاربردهای "{0}" را حذف کنید؟
+
+این قابل بازگشت نیست!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>پویا</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>ثابت</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} خالی است ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>به زودی!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>ورود به سیستم غیرفعال شد</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>ورود به سیستم موفقیت غیرفعال کردن</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>ورود به سیستم فعال نشده</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>ورود به سیستم موفقیت را فعال کنید</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>پنهان شدن</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>خمیر میمون اکنون بارگیری شده است.
+شنیدن کلیپ بورد: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>لود شده</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>نشان دادن</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>حالت انتخاب کپی خودکار: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>حالت تغییر کرد</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>روی حالت Paste Rete کلیک راست کنید: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>افزونه به روز شده</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>چسباندن '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>آنالایزر '{0}' را اجرا کنید</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>ماشه '{0}' را اجرا کنید</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>"{0}" را انتخاب کنید</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید "{0}" و تمام اقدامات مرتبط را حذف کنید؟</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>ماشه</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>آیا می خواهید تمام اقدامات زیر را برای "{0}" حذف کنید؟ (در غیر این صورت آنها دوباره به "{1}" والدین می شوند)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>حذف گزینه ها</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>آیا واقعاً می خواهید '{0}' شود؟</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>حساب</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>مورد تجزیه و تحلیل</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>عملیات کاربردی</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>کلیپ بورد</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>محتوا</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>مبدل</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>فرهنگ</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>داده ها</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>جهت</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>کشیدن و انداختن</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>جادوگر</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>نماد</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>متمرکز ساز</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>رابط</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>عملیات چسباندن</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>اولویت ها</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>جستجو کردن</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>میانبرها</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>مرتب سازی</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>صدا</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>سینی سیستم</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>مجموعه ها</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>موضوع</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>محرک</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>عملیات وب سایت</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>کلیپ بورد را روی کلیپ ورودی تنظیم می کند.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>هشدار دادن</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>لگد زدن</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>صدا کردن</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>هشدارهای پیام سینی صدا و/یا سیستم هدف کلی. اقدامات هشدار هیچ تاثیری در ورودی آنها ندارد.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>پیام</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>میمون</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>پیش نمایش</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>نشان دادن؟</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>پیام نان تست زمان در ثانیه نشان داده شده است. وقتی مقدار 0 پیام باشد باید به صورت دستی بسته شود.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>زمان نمایش (ها)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>ردیاب آوایی</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>صدا؟</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>نوع صدا</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>تنگی</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>جلد</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>تحلیلگر</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>کلیپ ورودی خود را با استفاده از پیش تنظیم آنالایزر اختصاص داده شده پردازش می کند.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>محتوای ورودی به مجموعه انتخاب شده مرتبط است</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>کلیپ ورودی خود را به مجموعه برچسب اختصاص داده شده پیوند می دهد.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>نشان</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>مورد حساس؟</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>این می تواند متن استاتیک برای مقایسه با ورودی باشد و/یا شامل خصوصیات انتخاب شده (از طریق دکمه فیلتر) در هنگام ارزیابی شرایط جایگزین می شود.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>داده های شرط</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>یک پرس و جو JSONPATH اختیاری که قبل از ارزیابی شرط برای "خاصیت ورودی" انتخاب شده اعمال می شود.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>فیلتر ورودی</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>خاصیت کلیپ مورد استفاده برای این مشروط.
+
+ویژگی "آخرین خروجی" در حال حاضر فقط زمانی پشتیبانی می شود که این شرط فرزند یک عمل آنالایزر باشد و داده های ارائه شده بسته به تولید آنالایزر والدین متفاوت خواهد بود.
+
+برای عیب یابی ، یک عمل هشدار را به والدین این شرط وصل کنید و پارامتر "پیام" هشدار را برای مطابقت با این ویژگی ورودی تنظیم کنید. این امکان را برای بررسی داده های واقعی مورد استفاده برای این شرط فراهم می کند.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>دارایی</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>مقایسه متن را در کلیپ ورودی یا خروجی عملکرد قبلی انجام می دهد. هنگامی که مقایسه انجام نشود (این یک مسابقه نیست) هیچ اقدامات کودک انجام نمی شود. بنابراین مانند یک دروازه منطقی عمل می کند.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>تمام عملیات درست یا دروغین که در آن اقدامات کودک فقط در صورت صحت نتیجه انجام می شود.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>وضعیت</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>هنگامی که کلیپ از نوع انتخاب شده به هر طریقی به سیستم اضافه می شود (کلیپ بورد ، کشیدن - و - قطره ، آنالایزر تولید شده یا تکثیر می شود).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>اگر کلیپ ورودی جدید باشد و یک نسخه کپی نباشد ، فقط این ماشه را اجرا کنید. این مستقل از هرگونه تنظیم اولویت است که آیا محتوای جدید نادیده گرفته می شود یا خیر.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>نادیده گرفتن تکراری</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>فقط کلیپ هایی از این نوع باعث ایجاد این عمل می شوند.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>کلیپ ورودی خود را به مجموعه برچسب اختصاص داده شده پیوند می دهد.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>هنگامی که یک کلیپ به مجموعه برچسب مشخص شده مرتبط می شود ، شروع می شود.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>مجموعه</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>مدت زمان در میلی ثانیه منتظر بود تا بچه ها اعدام شوند</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>تاخیر انداختن</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(تجربی) که در درجه اول در رابطه با عمل تکرار شونده برای نظرسنجی منابع از راه دور یا کمک به عملیات طولانی مدت استفاده می شود.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>در صورت خالی بودن ، پرونده خروجی از عنوان کلیپ ورودی به عنوان نام پرونده استفاده می کند.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>دایرکتوری که پرونده در آن نوشته خواهد شد.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>فهرست راهنما</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>ورودی را به پوشه انتخاب شده ذخیره می کند.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>هنگامی که محتوای پوشه انتخاب شده تغییر می کند ، شروع می شود. خروجی یک کلیپ پرونده یا پوشه ای که به همراه نوع تغییر به عنوان آخرین خروجی آن تغییر کرده است ، یک کلیپ پرونده یا پوشه ای جدید یا موجود است (هنگامی که ترجیح نسخه های نادیده گرفته شده است).</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>مناسبت ها</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>پوشه</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>نادیده گرفتن تکراری</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>مقدار 0 عمل والدین را به طور نامحدود تکرار می کند</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>تعداد تکرار</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>مدت زمان در میلی ثانیه برای انتظار پس از اتمام عمل والدین</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>به تعویق انداختن دوباره</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(آزمایشی) برای ایجاد حلقه های اکشن یا کارهای تکراری استفاده می شود. هنگام تکرار ، دوباره همه کودکان را با ورودی اصلی خود اجرا می کند. هنگام استفاده از یک بازه بدون تعداد تکرار ، ماشه برای متوقف کردن تکرار نیاز به غیرفعال و مجدداً امکان پذیر است. می تواند برای نظرسنجی یا اتوماسیون خراش وب مفید باشد.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>ناشی از میانبر جهانی که شما تعریف می کنید. اگر Monkeypaste فعال باشد ، سعی خواهد کرد از کلیپ انتخاب شده (در صورت وجود) به عنوان ورودی استفاده کند. در غیر این صورت سعی خواهد کرد از کلیپ بورد به عنوان ورودی آن استفاده کند.
+
+توجه: اگر هیچ ورودی برای انعطاف پذیری آن وجود نداشته باشد ، یک ماشه میانبر همچنان اجرا می شود (بنابراین می تواند یک محرک کلان و غیره باشد) زیرا این یک رویداد داده نیست.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>ماشه میانبر</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>هنگامی که میانبر ضبط شده در هر زمان با کلیپ بورد فعلی فشرده می شود ، شروع می شود</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>این عمل نیاز به مجدداً برنامه دارد. آیا دوست دارید اکنون این کار را انجام دهید؟</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>مشکلی بود. شما باید برنامه را به صورت دستی مجدداً راه اندازی کنید.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>با حاشیه نویسی تجزیه و تحلیل کنید</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>حاشیه نویسی ماشه</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>ساخته شده در عناصر فقط خوانده می شود. کپی برای تغییر</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>ناشناس</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>سفارشی</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>دیروز</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} روزها پیش</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 ساعت پیش</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} ساعت پیش</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>همین الان</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>یک دقیقه پیش</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} دقیقه پیش</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>ماه گذشته</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} ماه پیش</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>هفته گذشته</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} هفته ها پیش</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} سال پیش</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>حاشیه ها</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>نام نرم افزار</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>مسیر کاربرد</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>مورد حساس</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>محتوا</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>نوع فایل</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>نوع تصویر</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>عبارت منظم</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>نوع متن</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>عنوان URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>کلمه کلیدی</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>مانند پیمایش در امتداد لبه صفحه بالا برای باز کردن ، این پنجره اصلی هنگام باز شدن قفل می شود. اجازه گردش کار سریعتر چند هدف.
+
+* گوشه ها از نظر تمام صفحه های شما هستند ، نه در هر مانیتور.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>نمایش پنجره و قفل</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>رایگان!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>به ما 5 ستاره بدهید!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>همه را حذف کنید</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>تمام مطالب را حذف کنید</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>آیا مطمئنید که میخواهید حذف کنید
+همه کلیپ های شما؟!
+
+*این عملیات نمی تواند خنثی شود!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>من یک ایندی دیو هستم لطفا برخی از پشتیبانی ها را نشان دهید!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>مثل Monkeypaste؟</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} فقط ورودی نوع (ها) را می پذیرد: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>حالت کپی خودکار - هر بار که دکمه سمت چپ ماوس آزاد شود ، یک رویداد "کپی" را شبیه سازی می کند.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>روی حالت خمیر راست کلیک کنید - هر بار که دکمه سمت راست ماوس آزاد شود ، یک رویداد "خمیر" را شبیه سازی می کند</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>از پیش تعیین شده</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>پوشه افزونه را نشان دهید</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>گزارش</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>چشم انداز</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>نمایش های ابزار</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>آنالایزرها ورودی خود را حاشیه نویسی می کنند یا کلیپ های جدید را به عنوان خروجی ایجاد می کنند. کودکان آنالایزر باید تصمیم بگیرند که به عنوان ورودی آنها به کدام یک نیاز داشته باشد. این به طور معمول آخرین خروجی است.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>نوع ورودی</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>طراح Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>{0} را انتخاب کنید ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>پیدا نشد...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} ماشه</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>هنگامی که بررسی می شود ، نتیجه واقعی یا نادرست از این وضعیت دور می شود. به عنوان مثال ، یک "حاوی" شرط می شود "حاوی" نیست.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>نمی کند</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>لطفا صبر کنید...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>انتخاب کننده رنگ</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>رنگ مسابقه را انتخاب کنید</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>مانند یک ماشه میانبر اما وقتی ترکیب کلید فشرده می شود ، یک رویداد "کپی" در برنامه فعال شبیه سازی می شود ، بنابراین هنوز هم مانند کپی کار می کند اما سپس زنجیره ای از اقدامات متصل به ماشه میمون با استفاده از پس زمینه با استفاده از پس زمینه اجرا می شود. داده های کلیپ بورد کپی شبیه سازی شده.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>فیلتر پیشرفته</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>فیلترها را پنهان کنید</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>بازیابی فیلترها</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>فیلتر ایجاد کنید</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(اختیاری) هنگامی که خالی شود ، کلیپ بورد با استفاده از ورودی این عمل تنظیم می شود. هر چیزی که در اینجا ارائه شود فقط به عنوان متن ساده رفتار می شود.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>محتوای کلیپ بورد</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>در صورت صحت ، پس از تنظیم این عمل کلیپ بورد ، هیچ کلیپی اضافه نمی شود.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>چشم پوشی</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>هیچ آنالایزیکی برای عمل "{0}" انتخاب نشده است</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>آنالایزر برای عمل "{0}" یافت نشد</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>پدر و مادر '{0}' فقط فیلترهای "{1}" نوع محتوای و آنالایزر "{2}" هرگز اجرا نمی شود زیرا از نوع ورودی "{3" پشتیبانی نمی کند</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>بدون برچسب انتخاب شده برای طبقه بندی "{0}"</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>برچسب برای طبقه بندی "{0}" یافت نشد</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>مقایسه مقدار فقط می تواند حروف ، اعداد یا فضاها باشد</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>بدون برچسب انتخاب شده برای Trigger Tigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>برچسب برای کلیپ برچسب خورده ماشه '{0}' یافت نشد</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>بدون پوشه ساعت مشخص شده برای "{0}"</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>پوشه "{0}" برای ماشه "{1}" یافت نشد</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer Path for Action '{0}' تنظیم نشده است</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' برای '{1}' یافت نشد.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>نوار وظیفه</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>در مورد افزونه ها بیاموزید</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>این پیکربندی تجزیه و تحلیل را بازیابی کنید</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} تغییر ورود به سیستم</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>لطفاً به اینترنت وصل شوید و بعداً دوباره امتحان کنید.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - راهنما</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} آخرین نسخه است</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>همه شما بالا هستید - به - تاریخ!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>به روزرسانی ها را بررسی کنید ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>نسخه جدید در دسترس است!
+
+برای به روزرسانی در "{0}" اینجا را کلیک کنید</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>برای به روزرسانی در "{0}" در زیر کلیک کنید</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>بروزرسانی موجود!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>اکنون به روز کنید</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' حاوی مقادیر مشترک است. دوست دارید دوباره تنظیم مجدد کنید؟</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>جستجوهای اخیر را پاک کنید</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>همه رو دوباره تنظیم کن</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>بازنشانی به اشتراک گذاشته شده</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>مجدداً</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>اقدام به درخواست درخواست شده را فراخوانی می کند. همه فرمان های برنامه بدون تابعیت هستند و کلیپ ورودی آنها نادیده گرفته می شود.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>هنگامی که کنترل نشده و فرمان نتواند آتش بگیرد ، زنجیره اعدام متوقف می شود. بسیاری از دستورات برای اجرای آن به برخی از وضعیت برنامه های خاص نیاز دارند.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>همیشه ادامه دهید؟</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>دستور اجرای.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>فرمان</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>بدون دستور برای دستور برنامه '{0}' انتخاب نشده است</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>دستور برای دستور برنامه '{0}' یافت نشد</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>انتخاب شد</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>مجدداً</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>یک مسئله به روزرسانی "{0}" وجود داشت. برای تکمیل به روزرسانی ، باید دوباره "{0}" را مجدداً راه اندازی و نصب کنید (نگران نباشید که تمام تنظیمات شما بازیابی شود).
+
+اکنون می توانید دوباره راه اندازی مجدد کرده و به روزرسانی را با نصب ، نصب ، نادیده گرفتن این موضوع و به روزرسانی بعداً یا به روزرسانی همه را با هم لغو کنید و با استفاده از نسخه "{1}" ادامه دهید؟</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>خطای به روز رسانی</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>به روزرسانی بارگیری نشد</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>به روز رسانی نا موفق بود</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>برای تکمیل به روزرسانی ، نیاز به راه اندازی مجدد دارید. آیا دوست دارید اکنون یا دیرتر دوباره راه اندازی کنید؟</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>بروزرسانی آماده</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>بعد</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>اکنون دوباره راه اندازی کنید</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>انتظار</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} با موفقیت در {1} به روز شد</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>افزونه های اصلی مورد نیاز هستند و قابل حذف نیستند.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>نصب کردن</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>به روزرسانی در انتظار است. مجدداً راه اندازی کنید تا تکمیل شود.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>انتظار</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>حذف نصب در انتظار است. لطفاً اگر می خواهید دوباره نصب کنید ، مجدداً راه اندازی کنید.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>برای تکمیل نصب نیاز به راه اندازی مجدد دارید. آیا دوست دارید اکنون یا دیرتر دوباره راه اندازی کنید؟</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>حذف نصب را تمام می کنید؟</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>منتشر نشده</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>خودکار - پیش فرض پیش فرض برای "{0}"</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>بدون کلیپ انتخاب نشده است</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>کلیپ انتخاب شده را تجزیه و تحلیل کنید</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>برای اجرای "{0}" در کلیپ انتخاب شده ، یک میانبر اختصاص دهید</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>خمیر جهانی</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>برای "{0}" میانبر خمیر جهانی را اختصاص دهید</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>رمز ورود را فراموش کرده اید؟</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>وارد شدن</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>سیاست حفظ حریم خصوصی</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(نیاز به راه اندازی مجدد دارد) هنگامی که اطلاعات تشخیصی فعال شده به پرونده وارد می شوند. این می تواند عملکرد را کند کند و ممکن است حاوی اطلاعات شخصی باشد.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>ورود به پرونده</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>باز کن</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>پوشه سیاهههای سیاه</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>پلاگین ها را مرور کنید</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>خواندن</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>نوشتن</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>ارسال بازخورد یا گزارش اشکال</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>این فقط پنجره اصلی را پنهان می کند. تمام ویندوزهای غیر گفتگوی دیگر همیشه در نوار وظیفه نشان داده می شوند.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>جستجو در '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>فیلتر را اضافه کنید</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>ویرایش نوع پیوستن</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>این فیلتر را بردارید</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>کمک باز در این مورد ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} کلیپ ها</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>تغییر دادن</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>هرگز</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>تنظیم</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>بدون عنوان</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>رکورد</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>مرجع منبع بدون برچسب</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' لازم است</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(خطاها دارد)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>محدود</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>ذخیره سازی</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>زباله ها</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>نامحدود</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>این برنامه در حال حاضر با پیش فرض و فرمت های خواننده کلیپ بورد خواننده مطابقت دارد.
+
+فعال کردن یا غیرفعال کردن پیش فرض از پیش فرض خواننده (از نوار کناری کلیپ بورد) بر این پیکربندی تأثیر نمی گذارد. فقط برنامه های ثبت نشده تنظیم پیش فرض را دنبال می کنند.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>این برنامه در حال حاضر با پیش فرض و قالب های نویسنده کلیپ بورد مطابقت دارد.
+
+فعال کردن یا غیرفعال کردن پیش فرض از پیش فرض نویسنده (از نوار کناری کلیپ بورد) بر این پیکربندی تأثیر نمی گذارد. فقط برنامه های ثبت نشده تنظیم پیش فرض را دنبال می کنند.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>برای پیوستن به شما باید شنونده کلیپ بورد (سینی سیستم -&gt; رزومه) را از بین ببرید.</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>در دسترس نیست</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> هیچ تنظیماتی ندارد</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>من فقط انگلیسی صحبت می کنم و Monkeypaste به این زبان ترجمه شده است.
+
+همه نسخه ها با بسته انگلیسی ارسال می شوند ، بنابراین اگر انگلیسی صحبت می کنید می توانید در هر زمان پس از این تنظیم ، زبان را به آن تغییر دهید (تنظیمات -&gt; ترجیحات -&gt; بین المللی).
+
+اگر دوست دارید به بهبود ترجمه کمک کنید ، دوست داریم از شما بشنویم!
+
+بازخورد@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>نگرانی های ترجمه</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>برای استفاده از این ویژگی باید MonkeyPaste را به روز کنید.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>میانبر بازنویسی</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>شنونده کلیپ بورد غیرفعال است</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>شنونده کلیپ بورد فعال شده است</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>عمل والدین '{0}' از نوع ویژگی ورودی "آخرین خروجی" پشتیبانی نمی کند</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>درباره برنامه ها بیشتر بدانید</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>کاربرد</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>ماشه</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>گیره</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>تحلیلگر</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>نشان</value>
+  </data>
+</root>

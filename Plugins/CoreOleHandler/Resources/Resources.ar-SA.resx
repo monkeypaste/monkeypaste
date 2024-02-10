@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>يتجاهل</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>عند فحص تنسيق {0} ، لن يتم قراءة من بيانات الحافظة أو السحب والإفلات.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>عند فحص تنسيق {0} ، لن يتم كتابة بيانات الحافظة أو السحب والإفلات.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>يقرأ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>يكتب</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>الملفات</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>عندما لا يكون RTF موجودًا بالفعل ، سيتم تحويل HTML إلى RTF. قد يكون هذا مفيدًا بين متصفحات الويب و/أو تطبيقات معالجة النصوص. (يتطلب تمكين تنسيق RTF وهو فقط للمنصات المدعومة)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>تحويل إلى RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>لغة البرمجة</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>لن تتم قراءة هذه الدلائل من بيانات الحافظة أو السحب والإفلات.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>دلائل تجاهل</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>تم تجاهل ملحقات الملف</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>لن تتم قراءة أنواع الملفات هذه من بيانات الحافظة أو السحب والإفلات.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>لن تتم كتابة أنواع الملفات هذه إلى بيانات الحافظة أو السحب والإفلات.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>عند فحصها ، سيتم تحجيم الصور أكبر من أقصى الحد الأقصى مع الحفاظ على نسبة العرض إلى الارتفاع. هذا لا يؤثر على الصورة على الحافظة.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>حجم كبير</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>عند لصق أو إسقاط صورة نقطية ، سيكون هذا هو نوع الملف الافتراضي</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>نوع التصدير الافتراضي</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>في بعض الأحيان ، ستظهر الصور الشفافة تمامًا على الحافظة ، مربكة.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>تجاهل الصور الفارغة</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>يمكن أن تجعل الصور الكبيرة (أكثر من بضعة MBS) السحب والإفلات والأداء العام بطيئًا إلى حد ما للأسف. حاول أن تبقي هذه القيمة منخفضة.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>اقصى ارتفاع</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>أقصى عرض</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>بالنسبة لمخاوف الأداء ، هناك حاجة إلى أقصى أحرف مبلغ</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>الأحرف القصوى</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>نص (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>كان التنسيق '{0}' بيانات فارغة أو شفافة وتم حظرها</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>تم حظر البيانات الفارغة</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>يتم وضع علامة على تنسيق '{0}' على أنه "تم تجاهله"</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>تجاهل التنسيق</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} الحد هو {1} وكانت البيانات {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>كحد أقصى الحجم المكتشف</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>قارئ الحافظة الأساسية</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>كاتب الحافظة الأساسية</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>يتعامل مع تنسيقات الحافظة الافتراضية</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>معالج الحافظة الأساسية</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core ، الحافظة ، السحب والإفلات ، النص ، RTF ، النص الغني ، HTML ، CSV ، الصورة ، PNG ، JPG ، JPEG ، رابط</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>الصورة (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>عندما لا يكون HTML موجودًا بالفعل ، سيتم تحويل RTF إلى HTML. قد يكون هذا مفيدًا بين متصفحات الويب و/أو تطبيقات معالجة النصوص. (يتطلب تمكين تنسيق HTML وهو فقط للمنصات المدعومة)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>تحويل إلى HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>نص</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>بلا عنوان</value>
+  </data>
+</root>

@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>No hi ha funcions limitades per la subscripció, només la capacitat d’emmagatzematge i es pot canviar en qualsevol moment.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Restaureu el vostre compte existent ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>El contingut i les escombraries són
+limitat a {0} i {1}
+clips respectivament.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Permet fins a {2} clips de contingut i emmagatzematge il·limitat.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Contingut sense restriccions i emmagatzematge de les escombraries sense restriccions.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Retornar</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Alliberar</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Estàndard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Il·limitat</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Subscripció</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>La vostra privadesa és important i les dades del porta -retalls poden ser molt personals. L’emmagatzematge sempre està xifrat, però podeu definir una contrasenya que caldrà en cas que el vostre dispositiu sigui robat o algú altre utilitzi el vostre dispositiu.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Contrasenya</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Quan estigui activat, arrossegar de qualsevol aplicació a la part superior de la pantalla revelarà Monkeypaste per deixar fàcilment el contingut a MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Si activeu el "bloqueig" a la part superior esquerra de la finestra principal, encara permetrà caure a Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Hi ha més preferències de la finestra al menú "Configuració -&gt; Preferències -&gt; Finestra".</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Arrossegueu els plàtans aquí!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Arrossega - a - obert</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Les dreceres del teclat es poden revisar o canviar en qualsevol moment des del menú "Configuració -&gt; dreceres".</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Totes les dreceres globals es desactivaran de manera que pugueu configurar -les més endavant.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Les dreceres de retalls de MonkeyPaste estaran disponibles a totes les aplicacions.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Intern</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>No pagar</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Perfil de gestos</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Ei! Configurem algunes coses per millorar la vostra experiència global amb MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Benvingut</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Per obtenir el màxim ús de MonkeyPaste, carregar -se automàticament quan inicieu la sessió és una bona idea. Però, això depèn completament de vosaltres.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Mantingueu -lo casual.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Capacitar</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Carregueu la sessió d'inici de sessió?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Quan estigui activat, un gest de desplaçament a la part superior de la pantalla revelarà Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>A l'esquerra: feu clic a la icona de la barra de tasques encara obrirà MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Hi ha més preferències de la finestra al menú "Configuració -&gt; Preferències -&gt; Finestra".</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Fàcil, no?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Desplaceu -vos cap amunt aquí!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Scroll - to - Obre</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P align = "Centre"&gt; MonkeyPaste és &lt;span color = "vermell&gt; completament integrat &lt;/span&gt; amb arrossegament - i - gota &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Deixeu -ho aquí!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "centre"&gt; d'aquesta manera, es pot accedir a Monkeypaste &lt;br&gt; &lt;span color = "vermell"&gt; sense fer clic &lt;/span&gt; o fins i tot &lt;span color = "vermell"&gt; batre un ull &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Arrossegueu -me!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Intenta-ho!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Intenta-ho!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>No hi ha resultats disponibles.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Actualització</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Cerca...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Configuració</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dependències:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Instal·lar</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Esteu segur que voleu eliminar "{0} i tots els seus presets i dreceres?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Desinstal·lar</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' no té resultats.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Sense selecció.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Res</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Crèdits:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Descripció:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Donar:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Llicència:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL del projecte:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Publicat:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Llegiu -me:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Informar d'un abús:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Etiquetes:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Actualitzar</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versió:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Obriu a la finestra</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Acomiadar</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Actualització</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Estalviar</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Al costat de suprimir!
+
+Actualització per evitar.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Al costat de les escombraries!
+
+Actualització per evitar.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Fitxers</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Imatge</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Copiat {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} fitxers | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} línies</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Còpies | {1} pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Moure</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Addiccionar</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Còpia</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Tallar</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Pastar</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Còpia</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Filtre no salvat</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Seleccioneu -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formats</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lectors</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Escriptors</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Manipuladors</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Esborrar</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplicar</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Editar el nom</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Restablir</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Etiquetes</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Acció</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Enrutament global</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Drecera</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Els gestos han de ser únics i només poden contenir una clau d’entrada.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Intern &lt;/b&gt; Totes les dreceres es limiten a l'aplicació. Aquesta no és realment una opció prevista, però pot permetre personalitzar quines dreceres teniu intenció de fer un &lt;i&gt; algun dia &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; per defecte &lt;/b&gt; Totes les dreceres globals estan habilitades. La drecera &lt;b&gt; show/oculta la finestra principal &lt;/b&gt; Utilitza &lt;span color = "vermell"&gt; substituir &lt;/span&gt; enrutament per a la tecla &lt;b&gt; bloqueig de taps &lt;/b&gt;. Podeu canviar aquest encaminament o gest en qualsevol moment. Però &lt;span color = "verd"&gt; proveu -ho &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;now&gt; &lt;/now&gt;
+&lt;Body&gt;
+&lt;H1&gt; Modes de drecera global &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; passiu &lt;/b&gt; Una drecera Monkeypaste escoltarà en qualsevol aplicació. &lt;br&gt;
+*Aquesta és l'opció &lt;i&gt; només &lt;/i&gt; de Linux per ara.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; La drecera executarà &lt;b&gt; &lt;i&gt; abans &lt;/i&gt; &lt;/b&gt; és gestionada per l'aplicació activa. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; La drecera executarà &lt;b&gt; &lt;i&gt; després &lt;/i&gt; &lt;/b&gt; és gestionada per l’aplicació activa. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; substituir &lt;/b&gt; quan MonkeyPaste sent la tecla d'entrada (tecla no modificadora) d'una drecera de substitució &lt;i&gt; oculta &lt;/i&gt; aquesta tecla premsa des de l'entrada de l'aplicació. &lt;br&gt;
+Aquesta opció garantirà que la drecera es desencadeni sense conflictes a l'aplicació activa.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; exclusiu de substitució &lt;/b&gt; Es tracta d'un tipus especial de mode de substitució dissenyat per a la tecla de bloqueig de CAPS. Només permet &lt;b&gt; una &lt;/b&gt; clau (no modificador) per a la seva tasca. &lt;br&gt;
+En el mode normal de substitució, el bloqueig es pot enganxar &lt;i&gt; enganxat a &lt;/i&gt; quan es premeu en combinació amb altres tecles. &lt;br&gt;
+Per tant, no importa quines altres claus siguin cap avall, si es pressiona una drecera &lt;b&gt; hotkey &lt;/b&gt;, es sobrevocarà i evitarà que es quedi &lt;i&gt; enganxada a &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Desactivar</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Carregueu -lo quan es connecti aquest compte d'usuari, no per a altres usuaris.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;P&gt; Utilitzant els contactes disponibles (requereix un complement de cercador) Aquest camp s'utilitzarà per a totes les instàncies d'aquesta plantilla a través d'aquest document o en qualsevol que es faci referència a més endavant. &lt;/p&gt; &lt;p&gt; Per exemple, per exemple, si seleccioneu l'adreça de correu electrònic A continuació, el camp de correu electrònic del contacte que seleccioneu s'utilitzarà per a totes les instàncies d'aquest document. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = any curt &lt;br/&gt; Aaa = llarg any &lt;br/&gt; m = mes (1-12) &lt;br/&gt; mm = mes (01-12) &lt;br/&gt; mmm = abreviació del mes (Jan, febrer .. . Dec) &lt;br/&gt; mmmm = mes llarg (gener, febrer ... desembre) &lt;br/&gt; d = dia (1 - 31) &lt;br/&gt; dd = dia (01 - 31) &lt;br/&gt; ddd = dia de la setmana amb paraules (dilluns, dimarts ... diumenge) &lt;br/&gt; e = curt dia de la setmana en paraules (dilluns ... sol) &lt;br/&gt; d - dia ordinal (1r, 2n, 3r, 21, 22, 23, 31a, 4t ...) &lt;br/&gt; h = hora en am/pm (0-12) &lt;br/&gt; hh = hora en am/pm (00-12) &lt;br/ &gt; H = hora al dia (0-23) &lt;br/&gt; hh = hora al dia (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = segon &lt;br/&gt; sss = mil·lisegons &lt;br/&gt; A = AM/PM marcador &lt;br/&gt; P = A.M./P.M. marcador</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>La data i/o hora actuals es substituiran per les plantilles de DateTime quan siguin enganxades.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Totes les ocasions d'aquesta plantilla utilitzaran el text proporcionat. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Totes les ocasions d'aquesta plantilla utilitzaran el text proporcionat. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Acaba de afegir</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Activar el bloc</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Activa en línia</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Manual de commutació</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Manual de commutació</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pausa Append</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Commutació abans</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Commutació abans</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Reprendre l’append</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Append ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Pastar</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Agulla</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Desfeta</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Amagueu totes les notificacions '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Acomiadar</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Última aplicació activa desconeguda. Canvieu a l'aplicació prevista a la pasta de mico.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Enganxeu a: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimitzar</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Si us plau, espereu ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Tancar</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Compte</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Ajudar</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Copiar enganxar</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferències</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Restaurar els valors predeterminats</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtre ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Dreceres</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Afegiu l'aplicació</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Afegeix lloc web</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bloc?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplicacions</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Bloquejar el domini?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Bloquejar l'URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domini</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>El reconeixement de l’URL de la font depèn de la forma en què l’aplicació de l’amfitrió sigui així que no es pugui garantir el rebuig</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Llocs web</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Algunes funcions de MonkeyPaste utilitzen l’automatització del teclat per simular esdeveniments “copiar” en altres aplicacions.
+
+Afegiu i/o seleccioneu l’aplicació amb la drecera de còpia única (com ara una consola o un shell, per exemple) per assegurar -vos que aquestes funcions funcionen correctament.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Copia drecera</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Res</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Només s’utilitzaran els presets seleccionats per a l’aplicació especificada. Quan no es especifiqui, s’utilitzaran els presets predeterminats que es troben a la barra lateral &lt;em&gt; retalls &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Moltes funcions de MonkeyPaste utilitzen l’automatització del teclat per interactuar amb altres aplicacions.
+
+Algunes aplicacions (com algunes consoles o closques per exemple) poden tenir una drecera de pasta no predeterminada.
+
+Per garantir una interoperabilitat adequada, registreu les dreceres per a aquesta aplicació aquí.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Drecera enganxada</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lectors</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Tot el control del porta -retalls de les aplicacions rebutjades serà &lt;b&gt; ignorar &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Escriptors</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Edita ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formats</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Rebutjada</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Dreceres</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>També voldríeu eliminar tots els clips {0} de '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Traieu els clips?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Aplicació</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Navegueu a l'aplicació ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Seleccioneu la ruta de l'aplicació</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Esteu segur que voleu eliminar dreceres personalitzades per a {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Esteu segur que voleu eliminar formats personalitzats per a {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>No hi ha formats de porta -retalls assignats per a aquesta aplicació. No es llegiran dades a través de Cut/Copy o intentant un arrossega</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>No hi ha formats de porta -retalls assignats per a aquesta aplicació. Pasta automatitzada o arrossegament - i - La caiguda de MonkeyPaste no tindrà cap afecte (les seves dades buides).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Esteu segur que voleu restablir totes les dreceres? S'eliminaran totes les dreceres personalitzades.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Esteu segur que voleu canviar el vostre perfil d'encaminament de drecera a '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Totes</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favorits</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formats</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Etiquetes</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Avui</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Escombreries</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Fàcil, no?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Feu doble clic per desfer</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Costum</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Aquesta combinació entra en conflicte amb '{0}' que esborrarà si es desarà.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Cal proporcionar una drecera.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Es tracta d’una drecera global. Això vol dir que intentarà executar -se sempre que es faci. Proveu de fer -lo prou únic (o canvieu el "tipus d'encaminament") per no entrar en conflicte amb dreceres d'altres aplicacions.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>La drecera ha de contenir una i només una tecla no modificadora.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Premeu qualsevol tecla per gravar ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Assignar drecera</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Aprèn més...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Actualització</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Cancel · lar</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Fixar</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignorar</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>D'acord</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Tornar a provar</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Tancar</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Presentar</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Anual</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Mensual</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Proveu de franc!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Cicle de facturació</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Correu electrònic</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>iniciar Sessió</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Comproveu la vostra connexió
+I torneu -ho a provar.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Tancar sessió</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Pròxim pagament</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Contrasenya</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Registrar</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>El correu electrònic no és vàlid</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Les contrasenyes no coincideixen.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>La contrasenya ha de ser un mínim de caràcters {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Recordeu -ho?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Comproveu el vostre correu electrònic per confirmar el vostre compte</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Restablir la contrasenya</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, AAAA</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/aaaa hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Mai</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Free {0} prova de dia</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Hi va haver un problema
+la vostra compra.
+
+Comprovant la vostra connexió i
+La configuració pot ajudar.
+
+Voleu tornar -ho a provar?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>El vostre compte ha estat amb èxit
+actualitzat a:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Compra amb èxit!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Connexió fallida.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Tornar a provar</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Compte canviat</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>La vostra subscripció és ara {0}/{1} amb contingut {2} i {3} emmagatzematge d'escombraries.
+Però no us preocupeu, no es perden dades després de la baixada. Només s’avaluaran nous clips.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Felicitats! La vostra subscripció és ara {0}/{1} amb contingut {2} i {3} emmagatzematge d'escombraries.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Escombraries o desplegables alguna cosa
+de '{0}' per afegir -ne més.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' emmagatzematge és {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Retornar</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} bloquejat</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Contingut i capacitat d’escombraries!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' emmagatzematge és {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Capacitat de contingut a la qual s’aconsegueix!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Podeu amagar aquestes advertències per
+fent clic a "Oculta tot" del
+Menú d’opcions a dalt.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>L’emmagatzematge màxim d’escombraries és {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>La capacitat de les escombraries va assolir!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} no és vàlid</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} ha de ser almenys {1} caràcters</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} només pot ser un caràcter {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Enganxeu a: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>El pagament del vostre {0}
+La subscripció s'havia degut {1}
+i no ha estat rebut.
+
+Actualitzeu el vostre
+Informació sobre el pagament.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>El pagament del vostre {0}
+La subscripció s'havia degut {1}
+i no ha estat rebut.
+
+Connecteu -vos a la
+Internet al dispositiu
+amb la vostra subscripció i
+Reinicieu per continuar
+utilitzant el vostre pla {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>El pagament del vostre {0}
+La subscripció s'havia degut {1}
+i no ha estat rebut.
+
+Obriu o reinicieu
+MonkeyPaste al dispositiu
+amb la vostra subscripció a
+Continueu utilitzant el vostre
+{0} Pla.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>El compte caducat</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store no permet el nivell
+Canvis als addons de subscripció.
+
+Heu de cancel·lar el vostre
+{0}/{1} Planifiqueu -vos
+O se us cobrarà els dos.
+
+Voleu anar a fer -ho ara?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>La vostra contrasenya s'ha restablert.
+
+Comproveu el vostre correu electrònic i
+Seguiu l'enllaç per canviar
+la teva contrasenya.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>iniciar Sessió</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autor (s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Cal que accepteu els termes de llicència següents abans de continuar.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Els següents paquets requereixen que accepteu els termes de la llicència abans d’instal·lar.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Declino</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Feu clic a "Accepto" significa que accepteu els termes de la llicència d'aquesta sol·licitud. Si no esteu d'acord amb els termes, feu clic a "Declino".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Feu clic a "Accepto" significa que esteu d'acord amb els termes de la llicència dels connectors enumerats anteriorment. Si no esteu d'acord amb els termes, feu clic a "Declino".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Llicència de vista</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Acceptació de la llicència</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Accepto</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Actiu</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Fora de línia</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>No registrat</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Fer</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Les contrasenyes no coincideixen</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Contrasenya</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>La vostra subscripció és
+Ara configureu a {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Compte que es troba</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Error a l'iniciar sessió</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>El registre ha fallat</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Inscripcions amb èxit!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Error de restabliment</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Subscripció</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Que hi ha de nou</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Mai</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Il·limitat</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>capacitat</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>que resten</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>El vostre pagament ha passat.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Les dreceres exclusives de substitució només poden contenir una tecla i aquesta tecla no pot ser una tecla modificadora.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Expirat</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Càrrega</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Inepte</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Nota! Aquesta contrasenya és opcional i només per a una seguretat addicional. Les vostres dades ja estan xifrades i no es comparteixen mai. Aquesta contrasenya simplement impedeix a algú que no carregueu MonkeyPaste si d’alguna manera accedeix al vostre escriptori (robat, deixeu la sala, etc.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Recordeu la configuració de la caiguda de:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Consulteu els plugins</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analitzar</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Acció ràpida</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Commutació d'edició</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Commutador fixat</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anotacions</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Text simple</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Obriu a la finestra</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Feu clic + Ctrl per seguir ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Feu clic a + Alt per seguir ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pineu o deixeu anar qualsevol mitjà aquí!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Clar</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Els llindars superiors a 0 proporcionaran una coincidència de colors difusos amb la distància euclidiana al espai de colors RGBA.
+
+Per exemple, si el vermell (#FF0000) és el terme de cerca i el negre (#000000) és un píxel en un clip d’imatge, la distància de color serà de 255. La distància de negre a blanc és el màxim possible de 510, inclòs un canal alfa</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Totes les opcions següents són certes</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Porta -referència</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Col·leccions</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Modes de ratolí</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Desencadenants</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Fer una pausa</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Resum</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Nou disparador</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Afegiu preestabliment</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Preestabliment</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analitzador</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutocar</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientació del cicle</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Commutar la disposició de la graella</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Cas delicat</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Llindar</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Paraula sencera</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Cap conjunt</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Encaminador</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Acció</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Graella</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Fer</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Pròxim</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Previ</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Omet</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Compte existent?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Pròxim pagament</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>El registre us permet portar la vostra subscripció a tots els vostres dispositius (després de disponibilitat). No prometem el vostre correu electrònic que prometem 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Subscripció</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Nom d'usuari</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Necessiteu registrar -vos?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Fonts</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Estrany, res disponible. Alguna cosa ha d'estar malament 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Treure</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Requereix reinici</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Avançada</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Error que extreu el connector de "{0}"</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Error d'instal·lació del connector: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Error en la instal·lació del connector '{0}' Estructura del directori corrupte o inadequat. Manifest hauria d'existir a "{1}", però no es va trobar.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Error analitzant el complement Manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>No hi ha cap complement carregat amb GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} Error</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Error de posada en escena</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Error de còpia de seguretat '{0}' a '{1}'. Detalls: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>El text escrit s’aplicarà automàticament a una cerca quan no s’enfoci cap quadre de text.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Entrada de cerca automàtica</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>S'ha fallat el canvi de contrasenya</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Canviar</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Canvieu la contrasenya</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Clar</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Esborra la contrasenya</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Mida de la lletra de contingut</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Quan sigui cert, el contingut extern inserit en un clip utilitzarà el format de clips i no el que hi ha disponible des de la font.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Enganxar, deixar anar o afegir amb la format de destinació</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu oblidar la contrasenya?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Oblidar</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Oblida’t de la contrasenya</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Amagar la capacitat de les filigranes</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Quan s’afegeixi el contingut del porta -retalls nou, no es farà el seguiment com a nou clip</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignora les apendes</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Quan el porta -retalls coincideix amb un clip existent, aquest clip s’utilitzarà en lloc de crear -ne un de nou</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignora els nous duplicats</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>No es faran un seguiment dels canvis de porta -retalls des de dins de l'aplicació</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignora el seguiment intern del porta -retalls</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Es ignoraran els espais, les pestanyes i les noves línies del seguiment</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignora només l’espai blanc</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Carregueu l’inici de sessió</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Finestra animada</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opacitat</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Mostrar el comportament</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>La finestra principal es revelarà realitzant un gest de desplaçament a la vora superior del monitor</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Mostra a la pantalla superior desplaçament</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Volum de notificació</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Aquesta configuració rastrejarà el sistema: recompte de pasta de teclat ampli per a estadístiques d’ús. Aquesta informació és privada i no es comparteix, però tampoc es garanteix. Els resultats precisos poden requerir una comanda de pasta de teclat específica de l'aplicació a "Configuració -&gt; Copiar i enganxar -&gt; dreceres".</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Enganxar la història</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Massa clips fixats (com les pestanyes del navegador) poden consumir memòria important. L'eliminació és per primera - in - primer - out</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Capacitat de pes</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Això s'aplica a totes les entrades automàtiques, els valors inferiors milloraran el rendiment</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Límit de text recent</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu
+restaurar les preferències per defecte?
+
+Això no es pot desfer!
+
+*La sol·licitud es reiniciarà un cop finalitzada.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Esteu segur que voleu restablir totes les notificacions?
+
+*Això no es pot desfer!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste estableix el porta -retalls (anul·la) en enganxar -se a un programa extern. Això &lt;b&gt; intentarà &lt;/b&gt; restaurar l'estat del porta -retalls després d'una pasta externa.
+
+La restauració total no es pot garantir i pot reduir el rendiment o fins i tot bloquejar Monkeypaste segons la font de les dades.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Restableix el porta -retalls després de la enganxada del mico</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>No s'hauria de suprimir la memòria cau del complement de la ruta: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Tots els plugins es restabliran a l'estat predeterminat inicial</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin Cache</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu restablir tots els plugins als valors predeterminats?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu restablir la vostra contrasenya?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Totes les dreceres de l'aplicació es restabliran als gestos de clau predeterminats.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Restableix les dreceres</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Totes les notificacions ignorades prèviament establertes.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Restaurar les notificacions</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Habilitar pot ser més aviat lent) Desactivar format, reduirà el consum de memòria, però inhibirà algunes funcions avançades, com ara: append, plantilles, anotacions i trobar/substituir</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Contingut ric</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Estableix la contrasenya</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Mostrar suggeriments</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Mostra a la barra de tasques</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Mostra en el commutador de tasques</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Títols d’espectacles</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Quan estigui activat, arrossegar de qualsevol aplicació a la part superior de la pantalla revelarà Monkeypaste per deixar fàcilment el contingut a MonkeyPaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Mostra a l'arrossegament a la part superior de la pantalla</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Tema de so</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Corrector ortogràfic</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>A l'inici, la font del porta -retalls serà desconeguda i, segons la configuració de seguretat, el contingut pot provenir d'un lloc web o aplicació exclosa.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Afegiu el porta -retalls d'inici</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Escolteu el porta -retalls en startup</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Precaució! Altres colors de la paleta s’escullen amb matemàtiques no ulls! Així que tingueu en compte que algunes combinacions de colors i estil poden no tenir un contrast adequat per a la llegibilitat.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Color tema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Estil de tema</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>La neteja automàtica de les escombraries es produirà a l’inici a l’interval establert.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Neteja d'escombraries</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interfície</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Els límits elevats poden afectar el rendiment</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Desfer el límit</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Sense límit</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>S'utilitza en la cerca avançada de fitxers per a tipus de fitxer no establerts</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Extensions de cerca definides</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Trobar i substituir ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Enganxeu aquí</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Compartir...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Visió</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Gestiona ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Rebatejar</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Puntuació: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tipus: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Suprimeix permanentment</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Navegueu a '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transformar</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Introduir</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Producció</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Fonts</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Retornar</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Trieu la imatge ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Gestiona '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Obrir</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Si us plau, espereu ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Color de fons</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Esborrar tot</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formats de porta -retalls</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Eliminar tots</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Editeu els detalls</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Trobar</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Color de la lletra</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Format de pintura</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> En selecció</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Inseriu la imatge</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Enllaç d'inserció</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Inseriu el vídeo</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Caixa de coincidència</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Plantilla nova</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Plantilla següent</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Introduïu el text de pasta ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Plantilla anterior</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Expressió normal</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Substituïu -ho tot</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Tornar a col·locar</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Paraula sencera</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Embolicar</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Bloc</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domini</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Carpeta Mostra</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Desbloquejar</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Append Block</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Afegiu en línia</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>AUTO - COPIA</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Modes</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Si us plau, espereu que Monkeypaste està carregant ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Abandonar</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>RIGH - Feu clic a Paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Agrupar</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Suprimeix permanentment tot</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Restaureu -ho tot</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Acció</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL ja existeix: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>L’URL ha d’estar en un format vàlid.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Introduïu URL complet:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Afegiu URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Introduïu els valors</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Copieu el text o els fitxers per sol·licitar.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Append {0} {1} activat</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Els canvis de porta -retalls ara s’afegiran</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Després de l’activació del mode Append activat</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Ara es prepararan els canvis de porta -retalls</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Abans de l’activació del mode Append</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Bloc</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>S'ha restaurat el comportament normal del porta -retalls</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Apèndit desactivat</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Appendes afegides a la part superior o al bot del clip</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>El mode d'append extensió està activat</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>En linia</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Afegiu la vostra selecció actual.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Mode d'append manual activat</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>L’acumulació de porta -retalls s’atura</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Apend</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Es va reprendre l’acumulació de porta -retalls</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Apèndit reprès</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Esteu segur que voleu acabar d’afectar?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>L’edició en mode de compatibilitat eliminarà tot el format ric. Esteu segur que voleu modificar -ho?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Advertència de degradació de dades</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Actiu</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Activat</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Apagada</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Al damunt de</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Frenar</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Resultat</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Estat</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>S'ha produït un error desconegut.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>els intents que queden</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Introduir la contrasenya</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Contacte</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Data i hora</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu eliminar tots els usos de '{0}'?
+
+Això no es pot desfer!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinàmic</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Estàtic</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} està buit ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Aviat, més!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>La càrrega d’inici de sessió desactivar ha fallat</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>La càrrega d’inici de sessió desactiva l’èxit</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Inici de sessió Habilit ha fallat</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Inici de sessió Habilita l'èxit</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Amagar</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>La pasta de mico ara es carrega.
+L’escolta del porta -retalls és: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Carregat</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Espectacle</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Mode de selecció de còpia automàtica: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Mode canviat</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Mode de paste de clic dret: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin actualitzat</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Enganxeu '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Executeu l'analitzador '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Executeu '{0}' disparador</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Seleccioneu '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu suprimir '{0}' i totes les accions associades?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Gallet</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Voleu eliminar totes les sub -accions per a '{0}'? (En cas contrari, seran parents a '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Eliminar les opcions</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>De debò voleu goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Compte</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analitzadors</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operacions d'aplicacions</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Porta -referència</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Convertidors</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Cultura</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Dades</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Direcció</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Arrossegar i deixar anar</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Registrador</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interfície</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Enganxar les operacions</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferències</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Dreceres</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Classificar</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Sons</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Safata del sistema</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Col·leccions</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Desencadenants</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operacions del lloc web</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Llenguatge</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Estableix el porta -retalls al clip d’entrada.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alertar</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Vincle</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Dins</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Alertes de missatges del so de propòsit general i/o del sistema. L’acció d’alerta no té cap afecte en la seva aportació.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Missatge</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Simi</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Vista prèvia</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Espectacle?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>El missatge de torrades de temps es mostra en segons. Quan el valor és 0, el missatge s'ha de tancar manualment.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Mostra el temps (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Sona?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Tipus de so</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Cint</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volum</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analitzador</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Processa el seu clip d’entrada mitjançant el preestabliment de l’analitzador assignat.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>El contingut d'entrada està enllaçat a la col·lecció seleccionada</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Enllaça el seu clip d'entrada a la col·lecció d'etiquetes assignada.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Cas delicat?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Aquest pot ser que el text estàtic per comparar -lo amb l’entrada i/o incloure les propietats seleccionades (mitjançant el botó de filtre) es substituirà quan s’avalua la condició.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Condicionar les dades</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Una consulta opcional de JSONPath que s’aplicarà a la “propietat d’entrada” seleccionada abans que s’avalui la condició.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filtre d'entrada</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>La propietat del clip usada per a aquest condicional.
+
+Actualment, la propietat de "última sortida" només és compatible quan aquest condicional és un fill d'una acció de l'analitzador i les dades proporcionades variaran en funció de la sortida de l'analitzador de pares.
+
+Per a la resolució de problemes, adjunteu una "acció d'alerta" al progenitor d'aquest condicional i configureu el paràmetre "Missatge" de l'alerta perquè coincideixi amb aquesta propietat d'entrada. Això permetrà revisar les dades reals que s’utilitzen per a aquest condicional.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Propietat d'entrada</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Realitza una comparació de text al clip d’entrada o sortida d’acció anterior. Quan la comparació falla (no és una concordança), no s’executaran accions infantils. Per tant, actua com una porta lògica.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Totes les operacions veritables o falses on les accions infantils només s’executaran si el resultat és cert.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Condició</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Totes</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Es va desencadenar quan s’afegeix un clip del tipus seleccionat al sistema de qualsevol manera (porta -retalls, arrossegament i - gota, l’analitzador generat o duplicat).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Executeu aquest disparador només si el clip d’entrada és nou i no és un duplicat. Això és independent de qualsevol configuració de preferència de si es ignora o no el contingut nou.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignora el duplicat</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Només els clips d’aquest tipus desencadenaran aquesta acció.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Enllaça el seu clip d'entrada a la col·lecció d'etiquetes assignada.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Es va desencadenar quan un clip està vinculat a la col·lecció d'etiquetes especificada.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Col · lecció</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>La quantitat de temps en mil·lisegons esperava abans que els nens s’executessin</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Retard</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Experimental) S'utilitza principalment conjuntament amb l'acció repetidora per votar fonts remotes o ajuda amb operacions de llarga durada.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Quan es deixa en blanc, el fitxer de sortida utilitzarà el títol del clip d'entrada com a nom del fitxer.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Nom personalitzat</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>El directori on s’escriurà el fitxer.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Guia telefònica</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Deseu l’entrada a la carpeta seleccionada.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Es va desencadenar quan el contingut de la carpeta seleccionat canvia. La sortida serà un nou clip de fitxers o carpeta que ha canviat juntament amb el tipus de canvi com a última sortida.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Esdeveniments</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Carpeta</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignora el duplicat</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Un valor de 0 repetirà l’acció dels pares indefinidament</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Repetiu el recompte</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>La quantitat de temps en mil·lisegons a esperar un cop finalitzi l’acció dels pares</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Repetiu el retard</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Experimental) S'utilitza per crear bucles d'acció o tasques repetides. Quan es repeteixi, tornarà a executar tots els nens amb la seva entrada original. Quan s'utilitzi un interval sense recompte de repetició, el disparador haurà de desactivar -se i tornar -lo a detenir per aturar la repetició. Pot ser útil per a la votació o l’automatització de rascades web.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Desencadenat per una drecera global que definiu. Si MonkeyPaste està actiu, intentarà utilitzar el clip seleccionat (si n’hi ha) com a entrada. En cas contrari, intentarà utilitzar el porta -retalls com a entrada.
+
+Nota: un disparador de dreceres encara s'executarà si no hi ha cap entrada per mantenir -la flexible (de manera que pot ser un disparador de macro, etc.), ja que no és un esdeveniment impulsat per dades.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Disparador de dreceres</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Es va desencadenar quan es pressiona la drecera gravada en qualsevol moment amb el porta -retalls actual</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Aquesta acció requereix que l’aplicació es reiniciï. Voleu fer -ho ara?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Hi va haver un problema. Cal reiniciar manualment l’aplicació.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analitzar amb Annotador</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Anotar desencadenant</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Només es llegeixen els elements integrats. Duplicar per alterar.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anònim</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Costum</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Ahir</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} Dies</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Fa 1 hora</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} hores</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Ara mateix</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Fa un minut</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} fa minuts</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>El mes passat</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} fa mesos</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>La setmana passada</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} fa setmanes</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} anys enrere</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anotacions</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Nom de l'aplicació</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Camí d'aplicació</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Cas delicat</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Tipus d'arxiu</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Tipus d'imatge</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Expressió normal</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tipus de text</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Títol</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Títol de l'URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Paraula sencera</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Igual que desplaçant -se per la vora superior de la pantalla per obrir -la, es bloquejarà la finestra principal quan s’obri. Permetent fluxos de treball multi -orientats més ràpids.
+
+* Les cantonades són en termes de totes les pantalles, no per monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Mostra la finestra i el bloqueig</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>GRATU! T!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Doneu -nos 5 estrelles!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Eliminar tots</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Suprimeix tot el contingut</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Esteu segur que voleu suprimir
+Tots els vostres clips?!
+
+*Aquesta operació no es pot desfer!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Sóc un indy dev, si us plau, mostreu algun suport!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Com Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} només accepta l'entrada del tipus (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Mode de còpia automàtica: simula un esdeveniment de "còpia" cada vegada que es publica el botó esquerre del ratolí.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Mode de paste dret del clic: simula un esdeveniment "enganxar" cada vegada que es publica el botó dret del ratolí</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Preestabliment</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Mostra la carpeta de plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Informar</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Visió</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Mostra els consells d’eines</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Els analitzadors anoten la seva entrada o creen clips nous com a sortida. Els nens d’analitzadors han de decidir quina necessiten com a aportació. Aquesta és normalment la darrera sortida.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Tipus d'entrada</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Desencadeneu el dissenyador '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Trieu un {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>No trobat...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} disparador</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Quan es comprovi el resultat real o fals de la condició. Així, per exemple, una condició "conté" es convertirà en "no conté".</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Si us plau, espereu ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Escollidor de colors</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Pick Match Color</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Igual que un disparador de drecera però quan es prem la combinació de tecles, es simularà un esdeveniment de "còpia" a l'aplicació activa, de manera que encara funciona com una còpia, però la cadena d'accions adjuntes al disparador de còpia de mico s'executarà en segon pla mitjançant el Dades simulades de retalls de còpia.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Filtre avançat</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Amaga els filtres</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Restaureu els filtres</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Crea un filtre</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opcional) Quan es deixa buida, el porta -retalls s'establirà mitjançant l'entrada d'aquesta acció. Qualsevol cosa que es proporcioni aquí serà tractada com a text senzill.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Contingut per al porta -retalls</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Quan sigui cert, no s’afegirà cap clip després que aquesta acció configuri el porta -retalls.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignorar</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>No s'ha seleccionat cap analitzador per a l'acció '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>L'analitzador per a l'acció '{0}' no s'ha trobat</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Parent '{0}' filtres només per a '{1}' tipus de contingut i analitzador '{2}' no s'executaran mai perquè no admet el tipus d'entrada '{3}'</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Sense etiqueta seleccionada per al classificador '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Etiqueta per al classificador '{0}' no s'ha trobat</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Comparar el valor només pot ser lletres, números o espais</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Sense etiqueta seleccionada per al disparador etiquetat per clip '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Etiqueta per al disparador etiquetat per clip '{0}' no es troba</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>No hi ha cap carpeta de rellotge especificada per a '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Vigileu la carpeta '{0}' que no es troba per a Trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Ruta de l'escriptor de fitxers per a l'acció '{0}' No es defineix</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>No es troba la ruta de l'escriptor de fitxers '{0}' per '{1}'.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Barra de tasques</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Obteniu informació sobre els plugins</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Restaurar aquesta configuració d’anàlisi</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Canvia el registre</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Connecteu -vos a Internet i torneu -ho a provar més tard.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Ajuda</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} és la versió més recent</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Esteu tots a l’altura de la data!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Buscar actualitzacions...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Nova versió disponible!
+
+Feu clic aquí per actualitzar -lo a "{0}" 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Feu clic a continuació per actualitzar a "{0}"</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Actualització disponible!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Actualitzar ara</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' conté valors compartits. Què voldríeu restablir?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Clar</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Cerques recents clares</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Restableix tot</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Restableix compartit</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Restableix no compartit</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Invoca l’acció de l’aplicació assignada. Tots els comandaments de l'aplicació són sense estat i el seu clip d'entrada s'ignora.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Quan no es marca i la comanda no es pot disparar, la cadena d’execució s’aturarà. Moltes ordres requeriran algun estat de sol·licitud específic per executar -se.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Continuar sempre?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>La comanda per realitzar.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Comandament</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>No s'ha seleccionat cap ordre per a l'aplicació '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Ordre per a l'aplicació "{0} 'no s'ha trobat</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Seleccionat</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Reinicia</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Hi va haver un problema actualitzant "{0}". Per completar l'actualització, haureu de reiniciar i tornar a instal·lar '{0}' (no us preocupeu que es restaurarà tota la configuració).
+
+Podeu reiniciar ara i completar l'actualització mitjançant la instal·lació, ignorar -la i actualitzar -la més endavant o cancel·lar l'actualització tots junts i continuar utilitzant la versió '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Error d'actualització</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>No s'ha pogut descarregar l'actualització</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>No s'ha pogut actualitzar</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Per completar l’actualització, haureu de reiniciar. Voleu reiniciar ara o més tard?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Actualitzeu a punt</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Més tard</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Reiniciar ara</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Pendents</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} s'ha actualitzat amb èxit a {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Els plugins bàsics són necessaris i no es poden eliminar.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instal·lacions</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>L'actualització està pendent. Reinicieu -ho per completar.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Pendents</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Hi ha pendent una desinstal·lació. Reinicieu si voleu tornar a instal·lar.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Per completar la desinstal·lació, haureu de reiniciar. Voleu reiniciar ara o més tard?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Acabeu de desinstal·lar?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Inèdit</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>AUTO - Generat predeterminat preestablert per a '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>No hi ha cap clip seleccionat</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analitzeu el clip seleccionat</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Assigneu una drecera per executar '{0}' al clip seleccionat</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Pasta global</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Assigneu una drecera de pasta global per a '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Has oblidat la contrasenya?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>iniciar Sessió</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Tancar sessió</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Política de privacitat</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Requereix reinici) Quan la informació de diagnòstic activada es registrarà al fitxer. Això pot frenar el rendiment i pot contenir informació personal.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Registra't al fitxer</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Obrir</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Obriu la carpeta de registres</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Consulteu els plugins</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Llegir</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Escriure</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Envieu comentaris o informes d'errors</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Això només amaga la finestra principal. Totes les altres finestres de diàleg no es mostren sempre a la barra de tasques.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Cerqueu a '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Afegir filtre</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Edita el tipus d'unió</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Traieu aquest filtre</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Obriu ajuda sobre això ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clips</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Canviar</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Mai</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Conjunt</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Deslligat</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rècord</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Referència d'origen sense etiquetar</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Es requereix "{0}"</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Té errors)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Limitat</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Emmagatzematge</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Escombreries</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Il·limitat</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Actualment, aquesta aplicació coincideix amb els presets i formats de lector de porta -retalls predeterminats.
+
+L’activació o desactivació dels presets de lector predeterminat (de la barra lateral del porta -retalls) no afectarà aquesta configuració. Només les aplicacions no cotitzades segueixen la configuració predeterminada.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Actualment, aquesta aplicació coincideix amb els presets i formats per a escriptors per defecte.
+
+L’activació o desactivació dels presets d’escriptor predeterminat (de la barra lateral del porta -retalls) no afectarà aquesta configuració. Només les aplicacions no cotitzades segueixen la configuració predeterminada.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Per afegir, heu de desfer el Clipboard Oient (safata del sistema -&gt; currículum).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Afegiu no disponible</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> No té configuració</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Només parlo anglès i Monkeypaste s’ha traduït en aquest idioma.
+
+Totes les versions s’envien amb el paquet anglès, de manera que si parleu anglès, podeu canviar -lo en qualsevol moment després d’aquesta configuració (Configuració -&gt; Preferències -&gt; Internacional).
+
+Si voleu ajudar a millorar la traducció, ens agradaria escoltar -vos!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Preocupacions de traducció</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Heu d’actualitzar MonkeyPaste per utilitzar aquesta funció.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Drecera desactivada</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Oient de porta -retalls desactivat</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Oient de porta -retalls activat</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Acció parental '{0}' No admet el tipus de propietat d'entrada 'última sortida'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Obteniu més informació sobre els plans</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Aplicació</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Gallet</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Referència</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analitzador</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+</root>

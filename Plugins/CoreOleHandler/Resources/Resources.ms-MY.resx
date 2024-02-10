@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Abai</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Apabila diperiksa {0} format tidak akan dibaca dari data clipboard atau drag-and-drop.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Apabila diperiksa {0} format tidak akan ditulis ke data clipboard atau drag-and-drop.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Baca</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Tulis</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Fail</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Apabila RTF belum hadir, HTML akan ditukar kepada RTF. Ini mungkin berguna antara pelayar web dan/atau aplikasi pemprosesan perkataan. (Memerlukan format RTF untuk didayakan dan hanya untuk platform yang disokong)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Tukar ke RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Direktori-direktori ini tidak akan dibaca dari data clipboard atau drag-and-drop.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Diabaikan direktori</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Sambungan fail yang diabaikan</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Jenis fail ini tidak akan dibaca dari data clipboard atau drag-and-drop.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Jenis fail ini tidak akan ditulis ke papan klip atau data drag-and-drop.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Apabila diperiksa, imej yang lebih besar daripada dimensi max akan ditingkatkan semasa mengekalkan nisbah aspek. Ini tidak menjejaskan imej pada papan klip.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Skala besar</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Semasa menampal atau menjatuhkan bitmap ini akan menjadi jenis fail lalai</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Jenis eksport lalai</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Kadang -kadang imej telus sepenuhnya akan muncul di papan klip, yang mengelirukan.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Abaikan gambar kosong</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Imej-imej besar (lebih daripada beberapa MB) boleh membuat drag-and-drop dan prestasi keseluruhan agak lambat malangnya. Cuba simpan nilai ini rendah.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Ketinggian maksimum</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Lebar maks</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Untuk kebimbangan prestasi, jumlah maksimum aksara diperlukan</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Watak maksimum</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Teks (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format '{0}' mempunyai data kosong atau telus dan disekat</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Data kosong disekat</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Format '{0}' ditandakan sebagai 'diabaikan'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format diabaikan</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} had adalah {1} dan data adalah {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Saiz maksimum dikesan</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Pembaca Clipboard Teras</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Penulis Papan Klip Teras</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Mengendalikan format papan klip lalai</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Pengendali Clipboard Teras</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Teras, papan klip, seret dan drop, teks, rtf, teks kaya, html, csv, imej, png, jpg, jpeg, pautan</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Imej (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Apabila HTML belum hadir, RTF akan ditukar kepada HTML. Ini mungkin berguna antara pelayar web dan/atau aplikasi pemprosesan perkataan. (Memerlukan format HTML untuk didayakan dan hanya untuk platform yang disokong)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Tukar ke HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+</root>

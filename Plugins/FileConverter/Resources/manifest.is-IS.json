@@ -1,0 +1,82 @@
+{
+  "title": "File breytir",
+  "description": "Gerir kleift að þýða skrár yfir á myndir eða tegundir texta efnis",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "Kjarna, texti, mynd, skrá, breytir, skrá til texta, skrá til myndar",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Skrá til að umbreyta",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Framleiðsla gerð",
+        "description": "Aðeins .png eða .txt núna",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Texti",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "Mynd",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Umbreyta í texta",
+        "iconUri": "text.png",
+        "description": "Tilraunir til að umbreyta meðfylgjandi skrá í venjulegan texta",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Umbreyta í mynd",
+        "description": "Tilraunir til að umbreyta meðfylgjandi skrá í minni mynd",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

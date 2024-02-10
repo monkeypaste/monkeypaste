@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>להתעלם</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>בעת סימון הפורמט {0} לא ייקרא מהלוח או נתוני גרירה ושחרור.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>בעת בדיקת הפורמט {0} לא ייכתב ללוח או לנתוני גרירה ושחרור.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>לקרוא</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>לִכתוֹב</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>קבצים</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>כאשר RTF כבר לא קיים, HTML תומר ל- RTF. זה עשוי להיות שימושי בין דפדפני אינטרנט ו/או יישומי עיבוד תמלילים. (דורש הופעת פורמט RTF ומיועד רק לפלטפורמות נתמכות)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>המרה ל- RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>ספריות אלה לא ייקראו מנתוני לוח או טיפה.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>ספריות מתעלמות</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>התעלמותו מתוספי קבצים</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>סוגי קבצים אלה לא ייקראו מהלוח או נתוני גרירה ושחרור.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>סוגי קבצים אלה לא ייכתבו ללוח או לנתוני גרירה ושחרור.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>כאשר ייבדקו, תמונות גדולות ממקסימום יוגדרו תוך שמירה על יחס גובה -רוחב. זה לא משפיע על התמונה בלוח.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>גודל גדול מדי</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>בעת הדבקה או ירידה של מפת סיביות זה יהיה סוג קובץ ברירת המחדל</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>סוג ייצוא ברירת מחדל</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>לפעמים תמונות שקופות לחלוטין יופיעו על הלוח, שלהן מבלבל.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>התעלם מתמונות ריקות</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>תמונות גדולות (יותר מכמה MBs) יכולות לגרום למרבה הצער של גרירה ושחרור וביצועים כוללים למרבה הצער. נסה לשמור על ערך זה נמוך.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>גובה מקסימלי</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>רוחב מקסימום</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>לדאגות לביצועים, יש צורך בתווי כמות מקסימאלית</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>דמויות מקסימאליות</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>טקסט (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>כתובת אתר (מוז)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>בפורמט '{0}' היו נתונים ריקים או שקופים ונחסמו</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>נתונים ריקים חסומים</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>הפורמט '{0}' מסומן כ'התעלם '</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>מתעלם מתבנית</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} המגבלה היא {1} והנתונים היו {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>גודל מקסימום זוהה</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>קורא לוח ליבה</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>סופר לוח ליבה</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>מטפל בפורמטים של ברירת מחדל של לוח הלוח</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>מטפל לוח ליבה</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>ליבה, לוח, גרור ושחרור, טקסט, RTF, טקסט עשיר, HTML, CSV, תמונה, PNG, JPG, JPEG, קישור</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>תמונה (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>כאשר HTML כבר לא קיים, RTF יומר ל- HTML. זה עשוי להיות שימושי בין דפדפני אינטרנט ו/או יישומי עיבוד תמלילים. (דורש הופעת פורמט HTML ומיועד רק לפלטפורמות נתמכות)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>המרה ל- HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>טֶקסט</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>ללא כותרת</value>
+  </data>
+</root>

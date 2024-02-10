@@ -1,0 +1,11 @@
+{
+  "title": "Çekirdek metin ek açıklama",
+  "description": "Metin tabanlı içerik için temel köprü desteği sağlar",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Çekirdek, ek açıklama, metin, bağlantı, renk, ayrıştırma, adres, telefon, e -posta, para birimi, finans"
+}

@@ -1,0 +1,49 @@
+{
+  "title": "QR ক'ড জেনেৰেটৰ",
+  "description": "লিখনীক এটা QR ক'ডলৈ ৰূপান্তৰ কৰে",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/QrCoder",
+  "packageUrl": "https://github.com/monkeypaste/QrCoder/releases/download/v1.0.0/QrCoder.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/icon.png",
+  "packageType": "Dll",
+  "tags": "কোৰ, QR কোড, লিখনী, ছবি, লিংক, ৰূপান্তৰক",
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "image": true
+    },
+    "parameters": [
+      {
+        "label": "কনভাৰ্টাৰৰ বাবে বিষয়বস্তু",
+        "description": "ৰূপান্তৰ কৰিবলৈ স্নিপেট",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "শিৰোনাম উপসৰ্গ",
+        "description": "উৎস ক্লিপসমূহৰ ওপৰত ভিত্তি কৰি QR ক'ড শিৰোনাম কৰে শিৰোনাম শিৰোনামৰ ওপৰত ভিত্তি কৰি",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{Title}"
+          }
+        ]
+      }
+    ]
+  }
+}

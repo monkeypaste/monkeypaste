@@ -1,0 +1,12 @@
+{
+  "title": "కోర్ క్లిప్‌బోర్డ్ హ్యాండ్లర్",
+  "description": "డిఫాల్ట్ క్లిప్‌బోర్డ్ ఫార్మాట్‌లను నిర్వహిస్తుంది",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "కోర్, క్లిప్‌బోర్డ్, డ్రాగ్ అండ్ డ్రాప్, టెక్స్ట్, RTF, రిచ్ టెక్స్ట్, HTML, CSV, IMAGE, PNG, JPG, JPEG, లింక్",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

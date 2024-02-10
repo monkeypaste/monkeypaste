@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>ችላ በል</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>ምልክት በተደረገበት ጊዜ {0} ቅርጸት ከ Clipboard ወይም የመጎተት እና የመቆለፊያ ውሂብ አይነበቡም.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>ምልክት በተደረገበት ጊዜ {0} ቅርጸት ለክሊፕቦርድ ወይም ለመጎተት እና ለመጎተት ውሂብ አይጻፍም.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>ያንብቡ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>ፃፍ</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ፋይሎች</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF ቀድሞ በማይኖርበት ጊዜ ኤችቲኤምኤል ወደ RTF ይለወጣሉ. ይህ በድር አሳሾች እና / ወይም በቃል ማቀነባበሪያ ትግበራዎች መካከል ጠቃሚ ሊሆን ይችላል. (የ RTF ቅርጸት እንዲነቃ ይፈልጋል እና ለሚደገፉ የመሣሪያ ስርዓቶች ብቻ ነው)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>ወደ RTF ቀይር</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>እነዚህ ዳይሬሽራዎች ከ CLIP ሰሌዳ ወይም ከጎን-እና የመቆለፊያ ውሂብ አይነበቡም.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>ችላ ተብሏል</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>ችላ ተብሏል የፋይል ቅጥያዎች</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>እነዚህ የፋይል ዓይነቶች ከ Clipboard ወይም የመጎተት እና የመጣል ውሂብ አይነበቡም.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>እነዚህ የፋይል ዓይነቶች ለክሊፕቦርዱ አይጻፉም ወይም ለመጎተት እና ለመጎተት ውሂብ አይጻፉም.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>ሲታዩ, ምስሎች ከፍተኛው ከፍታ የሚበልጡ ምስሎች ከቁጥቋጦዎች የሚበልጡ ውዝግብ በሚቆዩበት ጊዜ የሚቆጠሩ ናቸው. ይህ በቅንጥብ ሰሌዳው ላይ ምስሉን አይጎዳውም.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>ሚዛን ከመጠን በላይ</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>አንድ ቢትሪንግ ሲያስቀምጥ ወይም ሲጣል ይህ ነባሪው የፋይል አይነት ይሆናል</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>ነባሪ ወደ ውጭ የመላክ አይነት</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>አንዳንድ ጊዜ ሙሉ በሙሉ ግልጽ ያልሆኑ ምስሎች በክሊፕቦርዱ ላይ ግራ የሚያጋቡ ናቸው.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>ባዶ ምስሎችን ችላ ይበሉ</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>ትላልቅ ምስሎች (ከጥቂት ሜባዎች በላይ) መጎተት እና የመጓጓዣ እና አጠቃላይ አፈፃፀም በአጭር ጊዜ እንደ አለመታደል ሆኖ ሊያደርጉ ይችላሉ. ይህንን እሴት ዝቅ ለማድረግ ይሞክሩ.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>ከፍተኛ ቁመት</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>ማክስ ስፋት</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>ለአፈፃፀም ጉዳዮች, ከፍተኛው መጠን ቁምፊዎች ያስፈልጋሉ</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>ከፍተኛ ቁምፊዎች</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>ኤችቲኤምኤል (ሚሚ)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>ጽሑፍ (ሚሚ)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>ዩ አር ኤል (ሞዛ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>ቅርጸት '{0}' ባዶ ወይም ግልጽ መረጃዎች ነበሩ እና ታግደዋል</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ባዶ ውሂብ ታግ .ል</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0} ቅርጸት እንደ &lt;ችላ ተብለዋል&gt;</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>ቅርጸት ችላ ተብሏል</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} ወሰን {1} እና ውሂብ {2} ነበር</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>ከፍተኛ መጠን ተገኝቷል</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>ኮር ቅንጥብ ሰሌዳ አንባቢ</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>ኮር ክሊፕቦርድ ጸሐፊ</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ነባሪ ቅንጥብ ሰሌዳዎች</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>ኮር ክሊፕ ቦርድ ተቆጣጣሪ</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>ኮር, ቅንጥብ ሰሌዳ, ጽሑፍ, RTF, ሀብታም ጽሑፍ, ኤችቲኤምኤል, CSV, ምስል, PRG, JPG, አገናኝ, አገናኝ</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>ምስል (ፒንግ)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>ኤችቲኤምኤል ቀድሞውኑ ስላልተገኘ RTF ወደ ኤችቲኤምኤል ይቀየራል. ይህ በድር አሳሾች እና / ወይም በቃል ማቀነባበሪያ ትግበራዎች መካከል ጠቃሚ ሊሆን ይችላል. (የ HTML ቅርጸት እንዲነቃ ይፈልጋል እና ለሚደገፉ የመሣሪያ ስርዓቶች ብቻ ነው)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>ወደ ኤችቲኤምኤል ቀይር</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>ላልተሰራ</value>
+  </data>
+</root>

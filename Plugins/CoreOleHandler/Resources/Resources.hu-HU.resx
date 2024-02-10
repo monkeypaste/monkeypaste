@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyni</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>A {0} formátum bejelentkezésekor a vágólapról vagy a drag-and-drop adatokról nem olvasható.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>A {0} formátum ellenőrzése esetén nem írják a vágólapra vagy a drag-and-drop adatokra.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Olvas</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ír</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Irat</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Ha az RTF még nincs jelen, akkor a HTML átalakul RTF -re. Ez hasznos lehet a böngészők és/vagy a szövegszerkesztő alkalmazások között. (megköveteli, hogy az RTF formátum engedélyezhető legyen, és csak a támogatott platformokhoz szükséges)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Konvertáljon RTF -re</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ezeket a könyvtárakat a vágólapról vagy a drag-and-drop adatokról nem olvashatjuk.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyott könyvtárak</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyva a fájlbővítéseket</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ezeket a fájltípusok nem olvashatók a vágólapról vagy a drag-and-drop adatokról.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ezeket a fájltípusokat nem írják a vágólapra vagy a drag-and-drop adatokra.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Ellenőrzéskor a maximális méretnél nagyobb képeket méretezzük, miközben megtartják a képarányt. Ez nem befolyásolja a vágólapon lévő képet.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Túlméretezett skála</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Bitmap beillesztése vagy eldobásakor ez lesz az alapértelmezett fájltípus</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Alapértelmezett exporttípus</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Időnként teljesen átlátszó képek jelennek meg a vágólapon, zavaró.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ne hagyja figyelmen kívül az üres képeket</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>A nagy képek (több mint néhány MB-nál) a drag-and-drop és az általános teljesítményt kissé lassúvá tehetik. Próbálja meg ezt az értéket alacsonyan tartani.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maximum magasság</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maximális szélesség</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>A teljesítmény -aggályokhoz maximális összegű karakterekre van szükség</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max karakterek</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Szöveg (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>A '{0}' formátumnak üres vagy átlátható adatai voltak, és blokkolták</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Üres adatok blokkolva</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>A '{0}' formátumot „figyelmen kívül hagyva” jelölik</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>A formátum figyelmen kívül hagyva</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limit {1} és az adatok {2} volt</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Maximális méret észlelve</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core Clipboard Reader</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Alapvető vágólapíró</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Az alapértelmezett vágólap -formátumokat kezeli</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Alapvető vágólap -kezelő</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, vágólap, húzás és csepp, szöveg, RTF, gazdag szöveg, HTML, CSV, kép, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Kép (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Ha a HTML még nincs jelen, az RTF HTML -re alakul át. Ez hasznos lehet a böngészők és/vagy a szövegszerkesztő alkalmazások között. (megköveteli, hogy a HTML formátum engedélyezhető legyen, és csak a támogatott platformokhoz szükséges)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Konvertáljon HTML -re</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Szöveg</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Névtelen</value>
+  </data>
+</root>

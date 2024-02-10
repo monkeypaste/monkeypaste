@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Kaore he waahanga e kiia ana ko te ohaurunga, ko te kaha rokiroki anake ka taea te whakarereke i nga wa katoa.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Whakaora i to putea kei mua ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Ko te ihirangi me te paru
+whāiti ki te {0} me {1}
+pūkete tika.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Tukuna kia tae atu ki te {2} tuhinga o te ihirangi me te penapena maumau.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Ko te ihirangi me te kore mutunga me te rokiroki riki.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Whakaora</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Marere</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Takoto</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Mutunga kore</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Koha</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>He mea nui to maatauranga me te raraunga topumoana ka taea te whaiaro. Kei te whakamuna tonu te rokiroki engari ka taea e koe te whakanoho i tetahi kupuhipa ka hiahiatia kia tahaetia to taputapu, kei te whakamahi ranei tetahi atu i to taputapu.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Kupu whakataha</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Ka whakahohea, ka toia mai i tetahi tono ki te tihi o te mata ka whakaatu i te Monkeypaste kia ngawari te heke ki Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Ka taea e te 'Lock' i te taha maui o te matapihi matua ka waiho tonu kia heke ki runga i te Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>He maha atu nga hiahia o te matapihi mai i nga 'Tautuhinga -&gt; Manakohanga -&gt; Matapihi'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Toia te panana ki runga!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Toia - ki - Open</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Ka taea te arotake i nga pokatata papapātuhi, ka hurihia ranei i nga wa katoa mai i nga 'Tautuhinga -&gt; te tahua poto'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Ka monokia nga poto poto katoa o te ao kia taea ai e koe te whakatu i a koe i muri ake.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Ka waatea nga pokatata o nga papaa o Monkeypaste i nga tono katoa.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>O roto</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Hapanga</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Kōtaha taihara</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>E! Me whakarite e koe etahi mea hei whakapai ake i to wheako katoa me te monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Maioha</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Ki te whakaputa i te nuinga o te whakamahinga mai i Monkeypaste, ka utaina aunoa ka uru koe he whakaaro pai. Engari, tae noa ki a koe.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Kia mau tonu.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Whakamana</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Utaina ki te takiuru?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Ka whakahohea, ko te tohu panui i te tihi o te mata ka whakaatu i a Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Te taha maui - te paatene i te tohu Tohu Kaitohu ka whakatuwhera tonu te monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>He maha atu nga hiahia o te matapihi mai i nga 'Tautuhinga -&gt; Manakohanga -&gt; Matapihi'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>He ngawari?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Panuku ki konei!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Panuku - to - tuwhera</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "Center"&gt; Monkeypaste ko te &lt;span tae = "Whero&gt; Whakahoahoa &lt;/ span&gt; me - maturuturu &lt;/ prop &lt;/ pro&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Maturuturu mai i konei!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p allign = "Center" Tenei ara, ka taea te Monkeypaste &lt;br&gt; &lt;Span "&gt;" whero "me te" whero " &amp; # x1440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Toia mai!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Whakamātauria!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Whakamātauria!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Kaore he hua.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Whakaū</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Tāmata</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Rapu ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Tautuhinga</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Te whakawhirinaki:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Whakanoho</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tango i te '{0}' me ona pou katoa me nga pokatata?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Tango</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' Kāore he hua.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Kaore he kowhiringa.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Kāore tētahi</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Whiwhinga:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Whakaahuatanga:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Koha:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Raihana:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL Kaupapa:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>I whakaputaina:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Panuitia ahau:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Korerotia te kohukohu:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Whakahou</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Putanga:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Tuwhera i te matapihi</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Pana</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Tāmata</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Whakaora</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Muri ki te muku!
+
+Whakahoutu kia kore ai e karo.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Kei te taha o te paru!
+
+Whakahoutu kia kore ai e karo.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Kōnae</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Pakoko</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Kupu tuhi</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kua kape {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Kōnae | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} nga raina</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Copies | {1} ngā pā</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Nekehanga</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Tāpiri</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Tauira</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Tapahi</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Whakapiri</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} kape</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Tātari Kore</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Tohua koa -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Whakaaturanga</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Kaipānui</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Kaituhi</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Ringanga</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Muku</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Tāruarua</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Whakatika Ingoa</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Tautuhi anō</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Ngā</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Mahi</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Te Huringa o te Ao</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Pokatata</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Me noho motuhake nga tohu me te whakauru noa i tetahi waahanga whakauru.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; roto &lt;/ b&gt; Ko nga poto poto he iti noa iho nga waahanga poto ki roto i te tono. Ehara tenei i te mea tino pai engari ka taea e koe te whakarite he aha nga wa poto ka hiahia koe ki te mahi i te ao &lt;i&gt; i tetahi ra.
+&lt;li&gt;
+&lt;b&gt; taunoa &lt;/ b&gt; Ka whakahohea nga poto poto o te ao. Ko te &lt;b&gt; Whakaatu / Huna te matapihi matua &lt;/ B&gt; Spanfort = "whero" Ka taea e koe te whakarereke i taua ara, i te tohu ranei i nga wa katoa. Engari ko te "Span tae =" Green "&gt; hoatu he whakamatautau &lt;/ SPAN&gt;
+&lt;/ li&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;te upoko&gt; &lt;/ upoko&gt;
+&lt;te tinana&gt;
+&lt;h1&gt; Taonga Poto o te Ao &lt;/ H1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; paanui &lt;/ b&gt; Ka whakarongo te monkeypaste poto mo tetahi tono. &lt;br&gt;
+* Koinei te &lt;i&gt; anake &lt;/ i&gt; whiriwhiri i Linux mo naianei.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/ b&gt; poto ka mahia &lt;b&gt; &lt;i&gt; i mua &lt;/ i&gt; &lt;/ b&gt; ka whakahaerehia e te tono kaha. &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Ka tukuna e &lt;/ B&gt; poto poto &lt;b&gt; &lt;i&gt; i muri i te &lt;/ i&gt; &lt;/ b&gt; ka whakahaerehia e te tono kaha. &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Ka hurihia te &lt;/ B&gt; ka rongohia e MonkeyPaste te tohu whakauru (kore-a-ringa) o te poto poto o te waa poto
+Ma tenei whiringa ka whakaingoatia te poto poto ka kitea kaore he tautohetohe ki te tono hohe.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Whakakahorehia te Urunga &lt;/ B&gt; He momo motuhake tenei o te aratau o te nui i hangaia mo te tohu raka. Ka taea noa e te &lt;B&gt; tetahi &lt;/ B&gt; (kore-a-kore) mo tana mahi. &lt;br&gt;
+I roto i nga momo aratau aratau noa ka taea te &lt;i&gt; ka mau ki runga &lt;/ i&gt; ka pehia ki etahi atu. &lt;br&gt;
+Na ahakoa he aha etahi atu mau taviri, mena he &lt;b&gt; Hotkey &lt;/ b&gt; ka pahemo te poto poto ka mutu ka aukati i te &lt;/ I&gt;.
+&lt;/ li&gt;
+&lt;/ ul&gt;
+&lt;/ tinana&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Mahue</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Whakanuia I te wa kua uru mai tenei kaute kaiwhakamahi, kaua mo etahi atu kaiwhakamahi.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Ma te whakamahi i nga hoapaki e waatea ana (me tono te waahi Fetcret) tenei mara mo nga wa katoa o tenei tuhinga, i roto i tetahi korero ka tohua mena ka tohua te wahitau imeera I konei ka whakamahia te mara imeera o te whakapā ka tohua e koe mo nga waa katoa o tenei tuhinga. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = Tau poto &lt;br/&gt; Yyyy = Long &lt;br/&gt; MM = MM = MMP = MMBER (JAN, FOB .. . Dec) &lt;br/&gt; mmmm = roa (marama roa (Hui-tanguru, Hui-tanguru ... Hakihea) &lt;ber/&gt;) Ra o te wiki i roto i nga kupu (Mane, Rātapu ... Rātapu) 3th, 21st, 22nd, 23th, 31st, 4th ...) &lt;br/&gt; HA = HM (0-12) &lt;br/&gt; HAH (00-12) &lt;BR / &gt; H = Hutahi i te ra (0-23) &lt;br/&gt; HH = haora i te ra (00-23) &lt;br/&gt; &lt;br/&gt; &lt;br/&gt; (milliseconds &lt;br/&gt; A = am / pm tohu &lt;br/&gt; p = a.m./p.m. tohu</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Ko te ra o naianei me / te waa ranei ka whakakapihia mo nga tauira o te waa ka oti te whakakii.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Ko nga ahuatanga katoa o tenei tauira ka whakamahi i te tuhinga kua whakaratohia. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Ko nga ahuatanga katoa o tenei tauira ka whakamahi i te tuhinga kua whakaratohia. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Whakaoti i te Apiti</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Whakahohe Poraka</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Whakahohe i roto</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Toggle Topggle</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Toggle Topggle</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Te taapiri mo te taapiri</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Tuhinga o mua</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Tuhinga o mua</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Taapiri taapiri</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Tāpiri ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Whakapiri</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pine</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Āneki</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Hunaia nga panui katoa '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Pana</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Ko te taupānga kaha whakamutunga kaore e mohiotia. Huri ki te taupānga e hiahiatia ana ki a Monekey whakapiri.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Whakapiri ki: &lt;em&gt; &lt;i te akomanga = "whakapiri-whakaurua-suramix"&gt; {0} &lt;/ i&gt; &lt;/ i&gt; &lt;/ em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Whakau</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Tatari koa ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Raka</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Kaute</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Āwhina</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Tāruahia me te whakapiri</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Nga manakohanga</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Whakaora i nga hapa</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Tātari ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Pokatata</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Tāpiri taupānga</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Tāpiri paetukutuku</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Poraka?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Ingoa</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Taupānga</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Te rohe poraka?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Poraka URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Rohe</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Ko te Whakaaetanga URL URL e whakawhirinaki ana ki te ahua o te topenga o te Kaihautū kei te whakakahoretia e te Kaihauturu te aukati kaore e taea te whakamanahia</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Paetukutuku</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Ko etahi o nga waahanga monkeypaste e whakamahi ana i nga aporo papapātuhi hei whakarite i nga kaupapa 'kape' i etahi atu tono.
+
+Tāpirihia me / te kowhiri ranei i te taupānga i te poto o te kape kape (penei i te papatohu me te anga anga ranei hei tauira) hei whakarite kia tika te mahi.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Tāruatia poto</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Kāore tētahi</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Ko nga pou anake i tohua ka whakamahia mo te tono kua tohua. Ki te kore e tohua, ka whakamahia nga whakaaturanga taunoa i te &lt;em&gt; Clipboard Sidel &lt;/ em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>He maha nga waahanga monkeypaste e whakamahi ana i nga aporo papapātuhi ki te taunekeneke ki etahi atu tono.
+
+Ko etahi o nga tono (penei i etahi papatohu me nga anga ranei hei tauira) Ka taea pea e te poto poto noa - he poto poto.
+
+Hei whakarite i te whakahoahoa tika, ka tuhia e enei poto poto mo taua tono i konei.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Whakapiri poto</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Kaipānui</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ko te aro turuki i nga paparanga katoa mai i nga tono kua paopao ka waiho &lt;b&gt; kaore i warewarehia &lt;/ B&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Kaituhi</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Whakatika ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Whakaaturanga</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Whakahē</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Pokatata</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Kei te hiahia ano koe ki te tango i nga waahanga katoa katoa o te '0}' {1} '</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Tangohia nga topenga?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Puka tono</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Tirotiro ki te App ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Tīpakohia te Ara Tono</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tango i nga pokatata ritenga mo te {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tango i nga whakatakotoranga ritenga mo te {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Kaore he tuhinga papaa i whakaritea mo tenei taupānga. Kaore he raraunga ka panuihia mai ma te tapahi / kape me te ngana ranei i te toia - me - maturuturu ki te monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Kaore he tuhinga papaa i whakaritea mo tenei taupānga. Whakapiri aunoa ranei toia - me - maturuturu mai i Monkeypaste kaore e pa (ona raraunga kau).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tautuhi i nga waa poto katoa? Ka tangohia nga pokatata ritenga katoa.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Kei te mohio koe kei te hiahia koe ki te whakarereke i to tuhinga poto poto ki te '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Katoa</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Manakorei</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Whiriwhiringa</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Whakaaturanga</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Ngā</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Tēnei rā</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Parapara</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Mō</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>He ngawari?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Pāwhiri rua ki Unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Ritenga</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>O te ao</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Ko tenei tautohetohe whakauru me te '{0}' ka mutu mena ka ora.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Me whakarite he poto poto.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>He poto poto tenei. Ko te tikanga ka ngana ki te whakaputa i nga wa katoa e mahia ana. Whakamātauria kia tino motuhake (ka huri ranei i te 'momo rori') kia kaua e taupatupatu ki nga pokatata mai i etahi atu tono.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>O te ao</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Ko te poto poto me noho kotahi anake te mea kotahi-kore-kore.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Patohia tetahi ki hei tuhi ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Whakarite Kōrero</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Ako atu ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Whakahou</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Whakakore</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Whakatika</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Whakaririka</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Kāo</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Rehiry hoki</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Kāti</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Ngohe kau</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Āe</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Ā tau</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Ā marama</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Whakamātauria mo te kore utu!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Huringa nama</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Aiea</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Takiuru</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Tirohia to hononga
+ka ngana ano.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Takiuru</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Te utu o muri</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Kupu whakataha</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Rēhita</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Kaore i te whaimana te imeera</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Kāore i te ōrite ngā kupuhipa.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Ko te kupuhipa me iti ake te {0} pūāhua.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Kia maumahara?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Tirohia to imeera hei whakaū i to putea</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Tautuhi Kupuhipa</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM / DD / YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Kore rawa</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>FREE {0} Ra Whakamātautau</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>He raru te mahi
+to hoko.
+
+Tirohia to hononga me
+Tuhinga ka whai mai.
+
+Kei te hiahia ano koe ki te ngana ano?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Kua angitu to putea
+Whakapaihia ki:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Hoko angitu!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Hē</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>I hinga te hononga.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Rehiry hoki</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Kua hurihia te kaute</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Ko to ohaurunga ko [0} / {1} me te {2} me te penapena rokiroki.
+Engari kaua e manukanuka, kaore he raraunga e ngaro i muri i te heke iho. Ko nga topenga hou ka arotakehia.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Mihi Ko to ohaurunga ko [0} / {1} me te {2} me te penapena rokiroki.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Paru, kaore ranei i tetahi mea
+Tuhinga ka whai mai.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' Ko te rokiroki ko te {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Whakaora</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} aukati</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Ihirangi &amp; Maarama Pakanga i tae atu!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' Ko te rokiroki ko te {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>I tae te kaha ihirangi!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Ka taea e koe te huna i enei whakatupato a
+Ka paatohia te 'huna katoa' mai i te
+Tahua Kōwhiringa i runga ake nei.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Ko te rokiroki max max te {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Ka tae te kaha o te whakangungu!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} he muhu</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} me neke atu i te {1} pūāhua</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} anake te {1} huru</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Whakapiri ki: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Te utu mo to {0}
+I tika te ohaurunga {1}
+a kaore ano kia riro.
+
+Tena koa whakahou i to
+Nga korero mo te utu.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Te utu mo to {0}
+I tika te ohaurunga {1}
+a kaore ano kia riro.
+
+Tena hono atu ki te
+Ipurangi i runga i te taputapu
+me to ohaurunga me
+Tīmata anō kia haere tonu
+Ma te whakamahi i to mahere {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Te utu mo to {0}
+I tika te ohaurunga {1}
+a kaore ano kia riro.
+
+Whakatuwherahia, whakahou ranei
+Monkeypaste i runga i te taputapu
+me to ohaurunga ki
+Me whakamahi tonu i to
+{0} Mahere.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Kua pau te kaute</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Rangi</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Kaore e whakaae a Microsoft Store
+Te huringa ki nga taapiri ohaurunga.
+
+Me whakakore e koe to
+{0} / {1} Whakaritea koe
+ka utua ranei koe mo te tokorua.
+
+Kei te hiahia koe ki te haere i tenei wa?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Kua tautuhia to kupuhipa.
+
+Tena tirohia to imeera me
+Whaaia te hononga ki te huri
+Tō kupuhipa.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Takiuru</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Kaituhi (s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Kei te hiahiatia kia whakaae koe ki nga whakaritenga raihana e whai ake nei i mua i te haere tonu.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Ko nga putea e whai ake nei e hiahia ana kia whakaae koe ki o raatau raihana raihana i mua i te whakauru.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Kua heke ahau</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Te paato "Kei te whakaae ahau" ko te tikanga ka whakaae koe ki nga raihana raihana mo tenei tono. Mena kaore koe e whakaae ki nga tikanga, paatohia "I heke ahau".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Te paatene "Ka whakaae ahau" te tikanga e whakaae ana koe ki nga raihana raihana mo te mono (s) i runga ake nei. Mena kaore koe e whakaae ki nga tikanga, paatohia "I heke ahau".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Raihana Tirohia</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Whakaaetanga Raihana</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Ka whakaae ahau</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Kakama</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Taipitopito</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Wetetete</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Kua oti</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value> nga kupuhipa kaore e tau</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Kupu whakataha</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Ko to ohaurunga ko
+Inaianei whakaturia ki te [0}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Ka kitea te kaute</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>I rahua te takiuru</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>I rahua te rehitatanga</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>He angitu te rehitatanga!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Tautuhi hapa</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Koha</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>He aha te mea hou</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Kore rawa</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Mutunga kore</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>raukaha</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>toe</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>pupūtanga</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Kua pahemo to utu.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Ko nga poto poto noa iho pea he mea kotahi noa te matua kaore e taea te tohu mo te kaiwhakarewa.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Tō</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Uta i</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Hauā</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Panui! Ko tenei kupuhipa he kowhiringa me te haumarutanga noa. Kua whakauruhia o raraunga, kaore ano kia tohatoha. Ka aukati noa tenei kupuhipa i tetahi kaore koe e utaina ki a Monkeypaste mena ka uru atu ratau ki to papamahi (tahaetia, etc.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Kia mahara ki nga tautuhinga maturuturu mo:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Tirohia te Mono</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Tātari</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Mahi tere</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Toggle Whakatika</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Toggle Poinned</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Ānae</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Kuputuhi</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Tuwhera i te matapihi</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Paatohia + Ctrl ki te whai ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Paatohia + Alt ki te whai ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin ka maturuturu tetahi panui i konei!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Purata</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Ko nga paepae i runga ake 0 ka whakarato i te tae o te tae fuzzy ma te whakamahi i te tawhiti o Euclidean i te RGBA Colorspace.
+
+Hei tauira, mena he whero (# FF0000) ko te kupu rapu me te pango (# 000000) ko te pika i roto i te ahua whakaahua, ko te maaka ma te 510, tae atu ki te horahanga ma</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Ko nga mea katoa e whai ake nei he pono</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Papatahitanga</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kohinga</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Nga Modes kiore</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Tragger</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Nā wai ā</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Tīmata anō</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Ko te Toranga Hou</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Tāpiri tatūkē</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Maataki Mate</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Whakaaturanga</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Tātari ngātahi</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Tapahi</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Te Huihuinga Porohita</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Topggle tahora</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>He tairongo take</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Paepae</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Kupu katoa</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Tuhinga o mua</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Arā Haki</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Mahi</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Papakā</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Kua oti</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Muri atu</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Tōmua</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Mawhiti</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Pūkete Ora?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Te utu o muri</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Ka taea e te rehitatanga te kawe i to ohaurunga utu puta noa i o taputapu katoa (ki te waatea). E kore matou e tarai i to imeera e oati ana matou.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Koha</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Ingoa Kaiwhakamahi</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Me rēhita?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Nga rauemi</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Rerekē, kaore he mea e waatea ana. Ko tetahi mea me mahi he 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Neke</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Me whakaara ano</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Whatutoto</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>He hapa te tango i te mono mai i te '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Ko te Hapa te whakauru i te Mono: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Ko te Hapa te whakauru i te mono '{0}' te hanganga whaiaronga kaore i te tika, kaore ranei. Me noho tonu te maarama ki te '{1}' engari kaore i kitea.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>He hapa te aukati i te whakauru mo te '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Kaore he mono i utaina me te Guid: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} te he</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Ko te Hapa te whakamaori i te mono ki te TOMA Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Ko te he e hoki mai ana '{0}' ki '{1}'. Taipitopito: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Ka patohia te tuhinga ka tukuna aunoa ki te rapu kaore he pouaka kuputuhi e arotahi ana.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Te whakauru rapu aunoa</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>I hinga te huringa kupuhipa</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Tīni</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Hurihia te Kupuhipa</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Purata</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Kupu Kupuhipa</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Toka te manawa</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Rahinga momotuhi ihirangi</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>I te wa e pono ana, ihirangi o waho kua whakauruhia ki te topenga ka whakamahi i nga paanui me te kore e waatea mai i te puna.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Whakapiri, maturuturu, whakapiri ranei me te whakatakotoranga haerenga</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te wareware i te kupuhipa?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Wareware</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Wareware Kupuhipa</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Kōtaha</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Hunaia nga tohu maamaa kaha</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Mena ka taapirihia te ihirangi taapiri hou e kore e aro ki te topenga hou</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Kaua e warewarehia</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>A, no te tau ki te papamahi he topenga kei tua atu, ka whakamahia taua topenga hei utu mo te hanga hou</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Kaua e warewarehia nga taarua hou</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Ko nga huringa o te kopapa mai i te taupānga kaore e tirohia</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Kaua e wareware ki te tirotiro i te papamahi o roto</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Ko nga waahi, nga ripa me nga raina hou ka warewarehia mai i te whai</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Kaua e wareware noa i te waahi ma</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Utaina ki te takiuru</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Matapihi Matapihi</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Tētanga</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Whakaatuhia te whanonga</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Ko te matapihi matua ka whakakitea ma te mahi i te tohu panui i te taha o runga o to aroturuki</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Whakaatuhia te panui mata o runga</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Rōrahi whakamōhiotanga</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Ma tenei tautuhinga ka whai i te punaha - te papapātuhi papapātuhi whanui mo nga tatauranga whakamahinga. Ko tenei korero he mea motuhake, kaore i te tohatoha engari kaore ano hoki i te whakapae. Ko nga hua tika ka hiahia pea ki te whakarato i tetahi whakahau papapātuhi papapātuhi tono motuhake i roto i 'Tautuhinga -&gt; Tārua me te whakapiri -&gt; Potae poto'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Histe History</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>He maha rawa nga topenga tima (penei i nga ripa pūtirotiro) ka taea te pau te mahara nui. Ko te tango i te tuatahi - i - tuatahi - ki waho</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Te kaha pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Ka pa tenei ki nga motuka katoa - nga whakauru whakaoti, ko nga uara iti ka whakapai ake i nga mahi</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Te rohe kuputuhi tata nei</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Kei te mohio koe kei te hiahia koe
+Whakaora i nga manakohanga taunoa?
+
+Kaore e taea te whakakore!
+
+* Ka whakahoutia ano te tono.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tautuhi i nga whakamohiotanga katoa?
+
+* Kaore e taea te whakakore!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Ko te paoho makimaki e whakatakoto ana i te topenga (ka huri) i te wa e pa ana ki tetahi hotaka o waho. Ka mutu tenei &lt;b&gt; ngana &lt;/ b&gt; ki te whakahoki i te ahua o te topenga i muri i te whakapiri o waho.
+
+Kaore e taea te whakamanahia kia kore e tau te whakaora me te whakaiti i te mahi, i te pareparenga ranei i runga i te putake o nga raraunga.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Tautuhi i te kaata i muri i te mokete monikei</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Kaore i taea te muku i te keteroki mono mai i te huarahi: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Ko nga mongani katoa ka tautuhi ano ki te kaupapa taunoa tuatahi</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Cache plugin</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tautuhi i nga mononi katoa kia tau ai?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tautuhi i to kupu huna?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Ko nga kaute poto katoa ka tautuhi ano ki o raatau tohu matua.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Tautuhi i nga pokatata</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Ko nga whakamohiotanga katoa kaore i warewarehia i mua.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Whakaora i nga panui</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Ka taea e te ngoikore te ngoikore) ka whakaiti i te kohi mahara engari ka aukati i etahi waahanga matatau, penei: taapiri, taapiri me te rapu / whakakapi</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Ihirangi nui</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Tautuhi Kupuhipa</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Whakaatuhia nga tohu</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Whakaatuhia i roto i te papa mahi</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Whakaatuhia i roto i te Switcher Mahi</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Whakaatu Taitara</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Ka whakahohea, ka toia mai i tetahi tono ki te tihi o te mata ka whakaatu i te Monkeypaste kia ngawari te heke ki Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Whakaatuhia te toia ki runga o te mata</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Kaupapa oro</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Tirohia te Tohu</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>I te tiimata ka kore e mohiotia te puna o te topenga ka whakawhirinaki ki o tautuhinga haumarutanga ka puta mai te tuhinga mai i tetahi paetukutuku kaore i oti te tono.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Tāpirihia te topenga whakaoho</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Whakarongo ki te kapo i te tiimata</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Whiriwhiri</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Kia tūpato! Ko etahi atu papataata ka tohua ma te whakamahi i nga kanohi kaore e nga kanohi! No reira kia mohio koe kaore pea he rereke o te tae me nga momo taapiri mo te panui.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Tae Kaupapa</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Te kāhua kaupapa</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Ko te horoi horoi paru aunoa ka puta i te tiimata i te waa kua whakaritea.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Horoi horoi</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Āati</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Ko nga rohe kaore pea e pa ki nga mahi</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Whakakorea te rohe</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Kaore he rohe</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Whakamahia ai i roto i te Rapu Kōnae Arā mō te kore momo kōnae</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Kaiwhakamahi - Whakapiri Rapu Rapu</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Rapua ka whakakapi ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Whakapiri i konei</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Hoatu ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Kitenga</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Whakahaere ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Whakaingoa</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>SCORE: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Momo: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Muku tonu</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Tirotiro ki te '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Huri</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Kōkuhu</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Whakaputanga</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Nga rauemi</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Whakaora</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Kōwhiria he whakaahua ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Tae</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Whakahaerehia '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Tuwhera</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Tatari koa ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Tae papamuri</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Horoia katoa</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Nga Puka Takahi</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Mukua te katoa</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Whakatika Taipitopito</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Ingoa</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Kite</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Tae momotuhi</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Pepa Hōp</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> I te kowhiringa</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Whakauruhia te Whakaahua</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Whakauruhia he hononga</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Whakauruhia he ataata</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Taka whakataetae</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Tātauira Hou</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Panuku</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Whakauruhia te tuhinga whakapiri ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Tuhinga o mua</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Whakapuakitanga auau</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Whakakapihia te katoa</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Whakakapi</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Kupu katoa</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Takai</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Poraka</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Rohe</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Kōpaki whakaaturanga</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Wetekina</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Mō</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Tāpiri Poraka</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Whakapaipai</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Tārua</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Tauira</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Tena koa tatari mo te Monkeypaste kei te uta ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Whakamutu</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Pāwhiritia Whakapiri</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Rōpū</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Tātari</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Muku katoa i te katoa</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Whakahokia te katoa</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Mahi</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>Kua riro kē te URL: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Me uru te URL ki roto i te whakatakotoranga tika.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Whakauru atu ki te URL katoa:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Tāpiri url</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Whakauruhia nga uara</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Tāruahia te kuputuhi me nga konae hei tono.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Tāpirihia te {0} {1} i whakahohehia</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Ko nga huringa o te kopapa ka tapiritia inaianei</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>I muri i te taapiri i te aratau whakahohe</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Ko nga huringa o te kopapa ka oti te whakatapu</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>I mua i te taapiri i te aratau i whakahohehia</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Poraka</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Kua whakahokia mai te whanonga Clipboard noa</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Whakapaipai</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Taapiri tapiritia ki runga, te bomom ranei o te topenga</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Te Whakapau Whakahohe</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Inline</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Pukapuka ako</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Taapiri atu ki to kowhiringa o naianei.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Aratau taapiri Tomo</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Ka mutu te kohinga Clipboard</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Tāpiri i te wa</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>I whakahoutia te kohinga Clipboard</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Tāpirihia te hunga kua rite</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te whakaoti i te taapiri?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Ko te whakatika i te Aratau Tohutoro ka tango i nga whakatakotoranga nui katoa. Kei te mohio koe ki te whakarereke i tenei?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Whakatupato Whakapuakanga Raraunga</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Kakama</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Whakahohe</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Meinga iho</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Runga</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>E tu tata ana</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Hua</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Mana</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Ko te hapa kaore e mohiotia.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>e toe ana e toe ana</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Whakauruhia te Kupuhipa</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Whakaū</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Whakapā</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Te wa</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te muku i nga waahanga katoa o te '{0}'?
+
+Kaore e taea te whakakore!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Huatau</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Pūmahara</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} he waatea ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Ka hoki mai ano!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Whakahoutanga Whakauru Whakauru I hinga</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Ko te Whakaaetanga Whakauru mo te angitu</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Ko te Whakauru Whakauru Whakakore</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Ko te Whakaaetanga Whakauru kia pai te angitu</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Hīpoki</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Kua utaina a Monkey whakapiri.
+Ko te whakarongo te Clipboard ko: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Utaina</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Whakaatu</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Aratau Kōwhiringa Auto: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Aratau i hurihia</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Matau matau te aratau Whakatika: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Mono kua whakahoutia</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Paste '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Whakahaerehia te '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Whakahaerehia te '{0}'</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Tīpakohia '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te muku i te '{0}' me nga mahi katoa?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Keu</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te tango i nga mahi katoa - mo te '{0}'? (Ki te kore ka hoki ano ratou ki te '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Tangohia nga whiringa</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Kaute</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Tātari</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Nga mahi tono</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Papatahitanga</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Toka te manawa</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Kaitahuri</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Tikanga-ā-iwi</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Raraunga</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Aronga</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Toia me te maturuturu</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Maturuturu te Ruānuku</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ataahua</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Kaitirotiro</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Āati</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Whakapiri Mahi</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Nga manakohanga</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Rapu</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Pokatata</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Wehewehe</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Oro</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Paepae pūnaha</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kohinga</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Kaupapa</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Tragger</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Nga mahi a te paetukutuku</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Reo</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Ka tautuhia te papapa ki te topenga whakauru.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Kakama</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Ipu</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Koingoingoiwai</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Ko te kaupapa whaanui me te / ranei nga tohu korero mo te raarangi. Ko te mahi mataaratanga kaore e pa ki a raatau whakauru.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Pūrongo</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Makimaki</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Kite wāwā</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Whakaatuhia?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Ko te wahanga o te wa ka whakaatuhia i roto i te hēkona. Ina he 0 te panui me kati i nga wa katoa.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Whakaatuhia nga wa (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Hākiki</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Tangi?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Momo tangi</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Tinge</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Pukapuka</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Tātari ngātahi</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Ka tukatuka i tana topenga whakauru ma te whakamahi i te Takuta Whakatairanga kua tohua.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Ko te ihirangi whakauru ka hono ki te kohinga kua tohua</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Hono i tona topenga whakauru ki te kohinga tohu kua tohua.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tuhinga</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>He raru te take?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Ka taea e tenei te tuhi tuhinga hei whakataurite ki te whakauru me / ki te whakauru ranei i nga taonga kua tohua (ma te paatene tātari) ka arotakehia te tikanga.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Raraunga huru</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>He whiringa JSPATTH ka tono ka whakamahia ki te 'Whakauru Whakauru' i mua i te arotake o te ahuatanga.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Tātari Input</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Ko nga rawa topenga i whakamahia mo tenei mana.
+
+Ko te rawa o te 'whakamutunga' whakamutunga 'e tautokohia ana i tenei wa ka peehia tenei ahuatanga o te mahi tātari me te maha o nga raraunga ka puta i te putanga o te Kaitirotiro Matua.
+
+Mo te raru, whakauruhia he 'mahi mataara' ki tenei matua me te whakarite i te tohu 'karere' a te 'karere' hei whakatau i tenei rawa whakauru. Ma tenei ka arotakehia nga raraunga tuuturu e whakamahia ana mo tenei ahuatanga.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Taonga whakauru</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Ka mahia he whakataunga tuhinga i runga i te topenga whakauru, ki te putanga mahi ranei o mua. Ki te kore e whakataurite (ehara i te mea he whakataetae) kaore he mahi a te tamaiti ka mahia. Ka pera ano me te kuwaha whakaaro.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Ko nga mahi pono, he kino ranei e mahi ana i nga mahi a te tamaiti mehemea he pono te hua.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Āhuatanga</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Katoa</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Ka haere i te wa e taapiri ana te topenga o te momo kua tohua ki te punaha i roto i tetahi ara (tohutoro, toia - me - maturuturu, ka tukuna, ka tātarihia ranei).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Anake te mahi i tenei tohu mena he hou te topenga whakauru, kaore he taarua. He motuhake tenei mo tetahi ahuatanga o te hiahia o te mea kaore e warewarehia, kaore ranei.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Kaua e warewarehia</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Ko nga toki anake o tenei momo ka raru i tenei mahi.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Hono i tona topenga whakauru ki te kohinga tohu kua tohua.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Ka haere i te wa e hono ana te topenga ki te kohinga tohu kua tohua.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kohikohinga</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Ko te nui o te waa i roto i nga milliseconds i tatari i mua i te mahi a nga tamariki</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Whakaroa</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>I te wa ka waihohia, ka whakamahia e te konae putanga te taitara o te Clip Whakauru hei ingoa kōnae.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Ingoa ritenga</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Te whaiaronga ka tuhia te konae.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Rārangi</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Ka tiakina te whakauru ki te kōpaki kua tohua.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>I piri tonu i te wa e rereke ana nga korero o te Kōpaki Kōpaki. Ko te putanga he hou, he mea hou ranei (ka kore e warewarehia te hiahia o te konae) te konae o te konae, i te waahanga ranei i whakarerekehia me te momo whakarereke.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Takanga</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Kōpaki</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Kaua e warewarehia</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Ko te uara o te 0 ka whakahoki ano i nga mahi a nga matua mo ake tonu atu</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Tukurua tatau</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Te nui o te waa i roto i nga milliseconds kia tatari kia oti te mahi a nga matua</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Tukurua whakaroa</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Whakamātautau) i whakamahia mo te hanga i nga koropiko mahi, i nga mahi ranei. A, no te tata tonu, ka mahia ano e ia nga tamariki katoa me tana whakauru tuatahi. I te wa e whakamahi ana i te waa me te kore e whakawhirinaki, me whakakorehia e te kaihoroi, ka taea te whakatika i te tukurua. Ka taea te whai hua mo te pooti pooti, ​​i te miihini ranei o te miihini.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>I whakaatuhia e te poto poto o te ao e tautuhi ana koe. Ki te kaha te Monkeypaste ka ngana ki te whakamahi i te topenga kua tohua (mena he kotahi) hei whakauru. Ki te kore ka ngana ki te whakamahi i te papapa hei whakauru.
+
+FAKATOKANGA: Ka mahia e te kaihoroi poto te kore he whakauru kia kore ai e taea te whakamahi (na reira ka taea e te macro etcro me era atu.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Katihia</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Ka haere i te wa e pa ana te poto poto i nga wa katoa me te topenga o naianei</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Ko tenei mahi me tono te taupānga hei whakaara ake. Kei te hiahia koe ki te mahi i tenei wa?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>He raru ano. Me whakaara ano e koe te tono.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Te tātari me te kaitono</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Katihia</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Ko nga mea hanga i hangaia he panui - anake. Whakahaa ki te whakarereke.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Ā wairua</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Ritenga</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Nanahi</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} nga ra i mua</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 haora i mua</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} haora i mua</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Inaianei</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>He meneti i mua</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} meneti i mua</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>I tērā marama</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0 quare i mua</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>I tērā wiki</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} wiki i mua</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} tau ki muri</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Ānae</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Ingoa tono</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Huarahi tono</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>He tairongo take</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Toka te manawa</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Momo momo</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Momo whakaahua</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Whakapuakitanga auau</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Momo tuhinga</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Taitara</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Taitara URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Kupu katoa</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Ka rite ki te panuku i te taha o te mata o runga kia tuwhera, ka tutakina e tenei te matapihi matua i te wa e tuwhera ana. Te tuku mo te tere ake i te maha o nga waahanga kua whaaia.
+
+* Ko nga kokonga kei runga i o mata katoa, kaua ia te tirotiro.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Whakaatu matapihi me te raka</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Koreutu!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Homai ki a matou nga whetu 5!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Mukua te katoa</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Mukua nga tuhinga katoa</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Kei te hiahia koe ki te muku
+Katoa o toake ?!
+
+* Kaore e taea te whakakore i tenei mahinga!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Ko ahau he devy des koa whakaatu mai i etahi tautoko!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Ka rite ki te monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} anake e whakaae ki te whakauru i nga momo momo ({1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Aratau kape Auto - Ka whakatauhia te huihuinga 'kape' i nga wa katoa ka tukuna te paatene kiore maui.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Matau Paewhiri Paapaa - Whakaritea te huihuinga 'whakapiri i nga huihuinga i nga wa katoa ka tukuna te paatene kiore matau</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Whakatūta</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Whakaatuhia te kōpaki Plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Hau</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Kitenga</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Whakaatuhia nga taputapu</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Ka whakaatuhia e nga kairuri te whakauru i a raatau whakauru, te waihanga i nga topenga hou hei putanga. Me matua whakatau nga tamariki o nga kairuri, ko wai te mea e hiahia ana ratou hei whakauru. Ko te tikanga ko te putanga whakamutunga.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Momo whakauru</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Kaihanga Kaihoahoa '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Whiriwhiria he {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Kaore i kitea ...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} pana</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Ka tirohia te putanga pono, he teka ranei o te ahuatanga ka puta. Na hei tauira, ko te 'ahua' ka riro ko 'kaore e mau'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Kaore e</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Tatari koa ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Kairangi Tae</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Tae te tae whakataetae</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Ka rite ki te huringa poto engari ka peehia te huihuinga matua, ka kiia te 'kape' ka rite ki te kape engari ko te mekameka o nga mahi hei whakamahi i te papamuri Ko nga raraunga tohutoro kape kape.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Tātari Arā</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Hunaia nga whiriwhiringa</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Whakaora i nga whiriwhiringa</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Waihanga Tātari</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Kōwhiringa) i te wa i mahue ai te kopapa ka whakaritea te whakamahi i te whakauru o tenei mahi. Ko nga mea katoa e whakaratohia ana i konei ka kiia he tuhinga noa noa.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Ihirangi mo te topenga</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>I te pono, kaore he topenga ka taapiri i muri i tenei mahi ka whakatauhia te topenga.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Whakaririka</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Kaore he kaitautoko i tohua mo te mahi '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Kaitirotiro mo te mahi '{0}' kaore i kitea</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Matua '{0}' inster anake mo te '{1}' momo tohu me te tātari '{2}' e kore e whiua na te mea kaore i te tautokohia te '</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Kaore he tohu i tohua mo te Clasterfier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag mo te akomanga '{0}' kaore i kitea</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Whakatauhia te uara ka taea noa nga reta, nga nama, nga waahi ranei</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Kaore he tohu i tohua mo te Clip Tagger Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag mo te topenga whakairinga tohu '{0}' kaore i kitea</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Kaore he kōpaki mataara e tohua mo te '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Matakitaki Kōpaki '{0}' Kaore i kitea mo te Trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Ko te huarahi kaituhituhi mo te mahi '{0}' kaore i whakaritea</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Ko te huarahi kaituhituhi te '{0}' mo '{1}' kaore i kitea.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Rata</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Ako mo nga mono</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Whakaora i tenei whirihoranga tātari</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Hurihia te raarangi</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Tena hono atu ki te Ipurangi me te ngana ano i muri mai.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Awhina</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} te putanga hou</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Kei te katoa koe - tae noa ki tenei!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Tirohia mo nga whakahoutanga ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Ko te putanga hou e waatea ana!
+
+Paatohia a konei ki te whakahou i te '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Paatohia i raro hei whakahou i te '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Whakahoutanga e waatea ana!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Whakahoutanga inaianei</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' Kei roto i nga uara tahi. He aha taau e hiahia ai ki te tautuhi?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Purata</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Me horoi i nga rapunga hou</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Tautuhi katoa</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Tautuhi i te tiri</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Tautuhi ano</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Ka tono i te mahi tono kua tohua. Ko nga whakahau tono katoa he kore noa iho, kaore ano hoki e warewarehia a raatau topenga whakauru.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>I te wa kaore e taea te aukati me te ture kaore e taea te ahi, ka mutu te mekameka. He maha nga whakahau ka hiahiatia etahi ahuatanga tono motuhake kia taea ai.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Haere tonu?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Te whakahau ki te mahi.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Whakahau</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Kaore he whakahau i tohua mo te whakahau tono '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Whakahau mo te whakahau tono '{0}' kaore i kitea</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>I whakaritea</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Whakaara</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>He take kei te whakahou i te '{0}'. Hei whakaoti i te whakahoutanga ka hiahia koe ki te whakaara ano me te whakauru i te '{0}' (Kaua e manukanuka ki nga mea katoa ka whakahokia mai).
+
+Ka taea e koe te whakaara inaianei me te whakaoti i te whakahoutanga na te whakauru ano me te whakahou i te waa i muri mai ka whakakorehia ranei te whakahoutanga katoa me te whakamahi tonu i te putanga '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Hapa whakahou</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Kaore i taea te tango i te whakahou</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>I rahua te whakahoutanga</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Hei whakaoti i te whakahou me whakaara ano koe. Kei te hiahia koe ki te whakaara ano i tenei wa ranei?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Whakahou kua rite</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>A taihoa ake</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Tīmataria anō</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Tārewa</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} i whakahoutia pai ki te {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>E hiahiatia ana nga mononi matua, kaore e taea te tango.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Tāuta</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Kei te tatari te whakahou. Tīmata anō ki te whakaoti.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Tārewa</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Kei te tatari te tango. Tena koa ano ki te hiahia koe ki te whakahoki ano ki te whakahoki ano.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Hei whakaoti i te Tango Ka hiahia koe ki te whakaara ano. Kei te hiahia koe ki te whakaara ano i tenei wa ranei?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Whakamutua te Tango?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Kunpua</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>AUTO - I hangaia he tautuhi taunoa mo te '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Kaore he topenga i tohua</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Te tātari i te topenga kua tohua</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Tuhia he poto poto ki te whakahaere '{0}' i runga i te topenga kua tohua</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Whakapiri ao</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Whakatakotoria he poto poto mo te '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Wareware Kupuhipa?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Takiuru</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Manga</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Kaupapa here tūmataiti</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Me whakaara ano) ka uru mai nga korero tātaritanga whakahoahoa ki te konae. Ka taea e tenei te puhoi te mahinga me te whakauru i nga korero whaiaro.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Takiuru ki te konae</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Tuwhera</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Whakatūwhera kōpaki Kōpaki</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Tirohia te Mono</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Pānui pukapuka</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Tuhi</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Tukuna he urupare, he ripoata Bug ranei</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Ka huna noa tenei i te matapihi matua. Katoa etahi atu - Ko nga matapihi korero e whakaatu ana i nga wa katoa i te pae mahi.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Rapu i roto i te '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Tāpiri tātari</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Whakatika Whakauru</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Tangohia tenei whiriwhiringa</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Whakatuwhera awhina mo tenei ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} topenga</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Tīni</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Kore rawa</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Whakakōpā</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Wete</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rekoata</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Tohutoro puna</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' e hiahiatia ana</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(He hapa)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Whāiti</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Pākoro</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Parapara</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Mutunga kore</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Ko tenei taupānga e rite ana ki te panui a te kaipanui korero a te Kaipupuri me nga whakatakotoranga.
+
+Whakahohe, Whakahohe ranei i nga Kaipupuri Panui Panui (mai i te Clipboard Sipboard) kaore e pa ki tenei whirihoranga. Ko nga taupānga noa kaore i kitea, e whai ana i te huinga taunoa.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Ko tenei taupānga e rite ana ki te tuhi tuhi tuhi tuhi me nga whakatakotoranga.
+
+Whakahohe, whakakore ranei i nga kaituhi kaituhi taunoa (mai i te tahataha o Clipboard) kaore e pa ki tenei whirihoranga. Ko nga taupānga noa kaore i kitea, e whai ana i te huinga taunoa.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Hei taapiri i a koe me kore e aro ki te kaiwhakarongo Clipboard (Tray Pūnaha -&gt; Ka hoki ano).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Whakapaihia te waatea</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Kaore he tautuhinga</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ka korero noa ahau i te reo Ingarihi me te Monkeypaste i whakamaoritia ki tenei reo.
+
+Ko nga putanga katoa e tukuna ana me te pakeha Ingarihi na mena ka korero koe i te reo Ingarihi ka taea e koe te whakarereke i te reo ki te waa i muri i tenei huinga (Tautuhinga -&gt; International).
+
+Mena kei te hiahia koe ki te awhina i te whakapai ake i te whakamaoritanga ka pai tatou ki te whakarongo mai i a koe!
+
+urupare@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Ngā mea whakamaori</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Me whakahou koe i te makimaki kia whakamahia ai tenei waahanga.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Whakawhitiwhiti Poto</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Kua monokia te kaiwhakarongo Clipboard</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Ka taea te kaiwhakarongo Clipboard</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Nga Mahi a nga matua '{0}' Kāore e tautoko i te momo whakaurunga whakauru 'putanga whakamutunga'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Ako atu mo nga mahere</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Puka tono</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Keu</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Rīpene</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Tātari ngātahi</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tuhinga</value>
+  </data>
+</root>

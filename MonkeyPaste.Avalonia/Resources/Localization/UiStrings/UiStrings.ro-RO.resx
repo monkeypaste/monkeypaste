@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Nu există caracteristici limitate de abonament, doar capacitate de stocare și pot fi modificate oricând.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Restabiliți -vă contul existent ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Conținutul și gunoiul sunt
+limitat la {0} și {1}
+respectiv clipuri.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Permite până la {2} clipuri de conținut și stocare nelimitată de gunoi.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Conținut nelimitat și nelimitat și stocare de gunoi.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Restabili</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Gratuit</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Nelimitat</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Abonament</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Confidențialitatea dvs. este importantă, iar datele clipboard pot fi foarte personale. Depozitarea este întotdeauna criptată, dar puteți seta o parolă care va fi necesară în cazul în care dispozitivul dvs. este furat sau altcineva folosește dispozitivul dvs.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Când este activat, glisarea de la orice aplicație în partea de sus a ecranului va dezvălui MonkeyPaste pentru a arunca cu ușurință conținutul în Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Activarea „blocării” în stânga sus a ferestrei principale va permite în continuare căderea pe Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Mai multe preferințe ale ferestrei sunt disponibile din meniul „Setări -&gt; preferințe -&gt; fereastră”.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Trageți bananele aici sus!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Drag - la - Deschide</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Comenzile rapide de la tastatură pot fi revizuite sau modificate oricând din meniul „Setări -&gt; comenzi rapide”.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Toate comenzile rapide globale vor fi dezactivate, astfel încât să le puteți configura mai târziu.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Comenzile rapide de clipboard ale Monkeypaste vor fi disponibile în toate aplicațiile.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Intern</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Mod implicit</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profil de gest</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hei! Să configuram câteva lucruri pentru a vă îmbunătăți experiența generală cu Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Bine ati venit</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Pentru a obține cea mai mare utilizare din Monkeypaste, încărcarea automată atunci când vă conectați este o idee bună. Dar, asta depinde în totalitate de tine.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Păstrează -l casual.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Permite</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Încărcați la autentificare?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Când este activat, un gest de defilare în partea de sus a ecranului va dezvălui Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Stânga - făcând clic pe pictograma barei de activități va deschide în continuare MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Mai multe preferințe ale ferestrei sunt disponibile din meniul „Setări -&gt; preferințe -&gt; fereastră”.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Ușor nu?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Derulați aici!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Defilare - la - Deschide</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Monkeypaste este &lt;span color = "roșu&gt; complet integrat &lt;/span&gt; cu drag - și - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Aruncă -l aici!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; În acest fel, Monkeypaste poate fi accesat &lt;br&gt; &lt;span color = "roșu"&gt; fără un clic &lt;/span&gt; sau chiar &lt;span color = "roșu"&gt; Baterea unui ochi &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Trage-ma!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Încearcă!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Încearcă!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Nu există rezultate disponibile.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>A confirma</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Reîmprospăta</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Căutare...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dependențe:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Instalare</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Sunteți sigur că doriți să eliminați „{0}” și toate presetările și comenzile rapide?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Dezinstalați</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' nu are rezultate.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Fără selecție.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Nici unul</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Credite:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Descriere:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Donează:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licență:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL de proiect:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Publicat:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Citește-mă:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Raporteaza abuz:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Etichete:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Actualizați</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versiune:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Deschis în fereastră</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Reîmprospăta</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Alături de ștergere!
+
+Upgrade pentru a evita.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Lângă gunoi!
+
+Upgrade pentru a evita.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Fișiere</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Imagine</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Copiat {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Fișiere | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} linii</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} copii | {1} paste</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Mișcare</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Adăuga</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>A tăia</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Pastă</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Copiați</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Filtru nesemnat</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Te rog selecteaza -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Cititori</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Scriitori</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Manipulatoare</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplicat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Editeaza numele</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Resetează</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Etichete</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Acțiune</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Rutare globală</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>COMUTĂ</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gesturile trebuie să fie unice și pot conține o singură cheie de intrare.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; intern &lt;/b&gt; Toate comenzile rapide sunt limitate la aplicație. Aceasta nu este într -adevăr o opțiune prevăzută, dar poate permite personalizarea celor rapide pe care intenționați să le faceți Global &lt;i&gt; într -o zi &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; implicit &lt;/b&gt; Toate comenzile rapide globale sunt activate. &lt;b&gt; show/ascunde fereastra principală &lt;/b&gt; scurtarea folosește &lt;span color = "roșu"&gt; override &lt;/span&gt; rutarea pentru tasta &lt;b&gt; Caps Lock &lt;/b&gt;. Puteți modifica acea rutare sau gest în orice moment. Dar &lt;span color = "verde"&gt; încearcă să încerce &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;Html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;Dood&gt;
+&lt;H1&gt; Moduri de comenzi rapide globale &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;B&gt; Pasiv &lt;/b&gt; O scurtătură Monkeypaste va asculta în orice aplicație. &lt;br&gt;
+*Aceasta este opțiunea &lt;i&gt; doar &lt;/i&gt; pe Linux deocamdată.
+&lt;/li&gt;
+&lt;li&gt;
+O scurtătură de scurtătură &lt;b&gt; pre &lt;/b&gt; va executa &lt;b&gt; &lt;i&gt; înainte &lt;/i&gt; &lt;/b&gt; este gestionată de aplicația activă. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; scurtătură va executa &lt;b&gt; &lt;i&gt; după &lt;/i&gt; &lt;/b&gt; Este gestionată de aplicația activă. &lt;/li&gt;
+&lt;li&gt;
+&lt;B&gt; Onulare &lt;/b&gt; Când MonkeyPaste aude cheia de intrare (tasta non -modificator) a unei comenzi rapide de anvergură, va ascunde &lt;/i&gt; acea tastă apăsată de la aplicație - nivel de intrare. &lt;br&gt;
+Această opțiune va garanta că scurtătura este declanșată fără conflicte pentru aplicația activă.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Override exclusiv &lt;/b&gt; Acesta este un tip special de mod de anulare proiectat pentru tasta CAPS Block. Permite doar &lt;b&gt; o cheie &lt;/b&gt; (non -modificator) pentru atribuirea sa. &lt;br&gt;
+În modul normal de înlocuire a capacelor, blocajul poate deveni &lt;i&gt; blocat pe &lt;/i&gt; atunci când este apăsat în combinație cu alte taste. &lt;br&gt;
+Deci, indiferent de ce alte taste sunt în scădere, dacă o scurtătură de tip hotkey &lt;/b&gt; este apăsată, va fi depășită și va împiedica să devină &lt;i&gt; blocată pe &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/prood&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Dezactiva</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Încărcați -vă când acest cont de utilizator este conectat, nu pentru alți utilizatori.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Utilizarea contactelor disponibile (necesită un plugin Fetcher) Acest câmp va fi utilizat pentru toate instanțele acestui șablon din acest document sau în orice acesta va fi referit mai târziu. &lt;/p&gt; &lt;p&gt; Deci, de exemplu, dacă selectați adresa de e -mail Aici, apoi câmpul de e -mail al contactului selectat va fi utilizat pentru toate instanțele din acest document. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = an scurt &lt;br/&gt; yyyy = an lung &lt;br/&gt; m = lună (1-12) &lt;br/&gt; mm = lună (01-12) &lt;br/&gt; mmm = luna prescurtare (ianuarie, februarie .. . Dec) &lt;br/&gt; mmmm = luna lungă (ianuarie, februarie ... decembrie) &lt;br/&gt; d = zi (1 - 31) &lt;br/&gt; dd = zi (01 - 31) &lt;br/&gt; ddd = Ziua săptămânii în cuvinte (luni, marți ... duminică) &lt;br/&gt; e = ziua scurtă a săptămânii în cuvinte (mon, tu ... soare) &lt;br/&gt; d - zi ordinală (prima, a 2 -a, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = oră în AM/PM (0-12) &lt;br/&gt; hh = oră în AM/PM (00-12) &lt;Br/Br/ &gt; H = oră în zi (0-23) &lt;br/&gt; hh = oră în zi (00-23) &lt;br/&gt; mm = minut/br/&gt; ss = al doilea &lt;br/&gt; sss = miliseconds &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; p = a.m./p.m. Marker</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Data și/sau ora curente vor fi înlocuite cu șabloanele de date de date atunci când sunt lipite.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Toate evenimentele acestui șablon vor folosi textul furnizat. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Toate evenimentele acestui șablon vor folosi textul furnizat. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Terminați apariția</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Activați bloc</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Activați inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Manual de comutare</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Manual de comutare</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pauză anexa</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Comutați înainte</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Comutați înainte</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Reluați anexa</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Adăuga...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Pastă</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Ac</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Ascunde toate notificările „{0}”</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Ultima aplicație activă necunoscută. Treceți la aplicația intenționată la pasta de maimuță.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Lipiți la: &lt;em&gt; &lt;i class = "paste-tooltip-sufix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimizați</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Va rugam asteptati...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Lacăt</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Cont</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Ajutor</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Copiaza si lipeste</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferințe</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Restabiliti setarile de baza</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtru...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Comitete rapide</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Adăugați aplicație</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Adăugați site -ul web</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bloc?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplicații</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blocați domeniu?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blocați adresa URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domeniu</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Recunoașterea URL -ului sursă depinde de modul în care Clipboard Friendly Aplicația gazdă este astfel încât respingerea nu poate fi garantată</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Site -uri web</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Unele caracteristici Monkeypaste folosesc automatizarea tastaturii pentru a simula evenimente „copiere” în alte aplicații.
+
+Adăugați și/sau selectați aplicația cu comanda rapidă de copiere unică (cum ar fi o consolă sau o shell, de exemplu) pentru a vă asigura că aceste caracteristici funcționează corect.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Scurtatura de copiere</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Nici unul</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Doar presetările selectate vor fi utilizate pentru aplicația specificată. Atunci când nu sunt specificate, se vor folosi presetările implicite găsite în &lt;em&gt; clipboard lateral bara &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Multe caracteristici Monkeypaste folosesc automatizarea tastaturii pentru a interacționa cu alte aplicații.
+
+Unele aplicații (cum ar fi unele console sau cochilii, de exemplu), pot avea o scurtătură de paste care nu este implicită.
+
+Pentru a asigura o interoperabilitate adecvată, înregistrați aici comenzile rapide pentru aplicația respectivă.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Lipeste scurtatura</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Cititori</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Toate monitorizarea clipboardului din aplicațiile respinse vor fi &lt;b&gt; ignorate &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Scriitori</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Editați | ×...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Respins</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Comitete rapide</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Ați dori, de asemenea, să eliminați toate clipurile {0} din '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Scoateți clipurile?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Aplicație</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Căutați la aplicație ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Selectați calea aplicației</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Sunteți sigur că doriți să eliminați comenzile rapide personalizate pentru {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Sunteți sigur că doriți să eliminați formate personalizate pentru {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Nu există formate de clipboard alocate pentru această aplicație. Nu se vor citi date din acesta prin intermediul tăierii/copierii sau încercării unei tracțiuni - și - aruncate în Monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Nu există formate de clipboard alocate pentru această aplicație. Paste automat sau glisare - și - căderea de la Monkeypaste nu va avea niciun impact (datele sale goale).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Ești sigur că vrei să resetezi toate comenzile rapide? Toate comenzile rapide personalizate vor fi eliminate.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Sunteți sigur că doriți să vă schimbați profilul de rutare de scurtătură în „{0}”</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Toate</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Etichete</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Astăzi</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Gunoi</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Despre</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Ușor nu?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Faceți dublu clic pentru a Unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Această combinație intră în conflict cu „{0}” care va fi ștersă dacă este salvată.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Trebuie să fie furnizată o scurtătură.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Aceasta este o scurtătură globală. Asta înseamnă că va încerca să execute ori de câte ori este efectuat. Încercați să îl faceți suficient de unic (sau schimbați „tipul de rutare”) pentru a nu intra în conflict cu comenzile rapide din alte aplicații.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Comanda rapidă trebuie să conțină una și o singură cheie care nu este modificatoare.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Apăsați orice tastă pentru a înregistra ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Alocați scurtătură</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Află mai multe...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Actualizare</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Fix</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignora</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Bine</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Din nou</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Închide</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Trimite</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>da</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Anual</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Lunar</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Încearcă pe gratis!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Ciclu de facturare</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Verificați -vă conexiunea
+si incearca din nou.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Deconectați -vă</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Următoarea plată</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Inregistreaza-te</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E -mailul nu este valabil</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Parolele nu se potrivesc.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Parola trebuie să fie minimă de {0} caractere.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Tine minte?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Verificați -vă e -mailul pentru a vă confirma contul</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Reseteaza parola</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>GRATUIT {0} Trial de zi</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>A existat o problemă de performanță
+achiziția ta.
+
+Verificarea conexiunii dvs. și
+Setările pot ajuta.
+
+Ai vrea să încerci din nou?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Contul dvs. a fost cu succes
+modernizat la:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Cumpărați succes!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Conexiune esuata.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Din nou</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Cont schimbat</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Abonamentul dvs. este acum {0}/{1} cu {2} conținut și {3} stocare de gunoi.
+Dar nu vă faceți griji, nu se pierde date după retrogradare. Doar clipuri noi vor fi evaluate.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Felicitări! Abonamentul dvs. este acum {0}/{1} cu {2} conținut și {3} stocare de gunoi.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Gunoi sau dezlegați ceva
+de la '{0}' pentru a adăuga mai multe.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' stocarea este {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Restabili</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} blocat</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Conținut și capacitate de gunoi atinsă!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' stocarea este {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Capacitatea de conținut atinsă!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Puteți ascunde aceste avertismente prin
+făcând clic pe „ascunde toate” de
+Meniul de opțiuni de mai sus.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Stocarea de gunoi maximă este {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Capacitatea de gunoi atinsă!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} este nevalid</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} trebuie să fie cel puțin {1} caractere</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} poate fi doar {1} caracter</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Lipiți la: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Plata pentru {0}
+abonamentul a fost datorat {1}
+și nu a fost primit.
+
+Vă rugăm să vă actualizați
+informatii de plata.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Plata pentru {0}
+abonamentul a fost datorat {1}
+și nu a fost primit.
+
+Vă rugăm să vă conectați la
+Internet pe dispozitiv
+cu abonamentul dvs. și
+reporniți pentru a continua
+folosind planul {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Plata pentru {0}
+abonamentul a fost datorat {1}
+și nu a fost primit.
+
+Vă rugăm să deschideți sau să reporniți
+Monkeypaste pe dispozitiv
+cu abonamentul dvs. la
+Continuați să folosiți
+{0} plan.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Contul a expirat</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Notă</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store nu permite nivel
+Modificări la suplimentele de abonament.
+
+Trebuie să vă anulați
+{0}/{1} Planificați -vă
+Sau veți fi taxat pentru ambele.
+
+Ai vrea să mergi să faci asta acum?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Parola ta a fost resetata.
+
+Vă rugăm să vă verificați e -mailul și
+Urmați linkul pentru a schimba
+parola Dvs.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autor (autori)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Este necesar să acceptați următorii termeni de licență înainte de a continua.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Următoarele pachete necesită să acceptați termenii de licență înainte de instalare.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Eu refuz</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Făcând clic pe „Accept” înseamnă că sunteți de acord cu condițiile de licență pentru această aplicație. Dacă nu sunteți de acord cu termenii, faceți clic pe „Eu declin”.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Făcând clic pe „Accept” înseamnă că sunteți de acord cu condițiile de licență pentru plugin -urile enumerate mai sus. Dacă nu sunteți de acord cu termenii, faceți clic pe „Eu declin”.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Licență de vizualizare</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Acceptarea licenței</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Activ</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Deconectat</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Neînregistrat</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Terminat</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Parolele nu se potrivesc</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Abonamentul dvs. este
+Acum setați la {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Cont găsit</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Autentificare eșuată</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Inregistrare esuata</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Inregistrare realizata!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Resetare eroare</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Abonament</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Ce mai e nou</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Nelimitat</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>capacitate</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>rămas</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Plata dvs. este datorată.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Comenzile rapide exclusive de înlocuire pot conține doar o cheie și această cheie nu poate fi o cheie modificatoare.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Expirat</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Se încarcă</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Dezactivat</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Notă! Această parolă este opțională și numai pentru o securitate suplimentară. Datele dvs. sunt deja criptate și niciodată partajate. Această parolă pur și simplu împiedică pe cineva a cărui nu tu să încarci Monkeypaste dacă obțin cumva acces la desktop (furat, părăsești camera etc.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Amintiți -vă setările de picătură pentru:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Căutați pluginuri</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>A analiza</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Actiune rapida</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Editați comutați</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Comutați fixat</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Adnotări</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Text simplu</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Deschis în fereastră</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Faceți clic pe + Ctrl pentru a urma ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Faceți clic + alt pentru a urma ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pinați -vă sau aruncați orice suport aici!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>clar</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Pragurile de peste 0 vor oferi o potrivire a culorilor fuzzy folosind distanța euclidiană în spațiul de culori RGBA.
+
+De exemplu, dacă roșu (#FF0000) este termenul de căutare și negru (#000000) este un pixel într -un clip de imagine, atunci distanța de culoare va fi de 255. Distanța de negru până la alb este maximul posibil de 510, inclusiv un canal alpha</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Toate următoarele sunt adevărate</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Colecții</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Moduri de mouse</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Declanșatoare</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pauză</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Relua</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Nou declanșator</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Adăugați presetare</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Vrăjitor</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Presetări</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizor</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>CUTOM</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientarea ciclului</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Comutați aspectul grilei</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Caz sensibil</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Prag</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Intregul cuvant</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Niciun set</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Rutare</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Acțiune</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Grilă</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Terminat</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Următorul</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Ocolire</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Cont existent?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Următoarea plată</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Înregistrarea vă permite să transportați abonamentul plătit pe toate dispozitivele dvs. (la disponibilitate). Nu vă vom spam e -mailul pe care îl promitem 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Abonament</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Nume de utilizator</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Trebuie să vă înregistrați?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Surse</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Ciudat, nimic disponibil. Ceva trebuie să fie greșit 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Necesită repornire</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Avansat</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Eroare la extragerea pluginului din '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Eroare la instalarea pluginului: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Eroare la instalarea pluginului '{0}' Structura directorului corupt sau necorespunzător. Manifestul ar trebui să existe la „{1}”, dar nu a fost găsit.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Eroare de parsing plugin manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Fără plugin încărcat cu Guid: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} eroare</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Plugin de etapă a erorilor la temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Eroare Backing Up '{0}' la '{1}'. Detalii: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Textul tastat va fi aplicat automat la o căutare atunci când nu se concentrează nicio casetă de text.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Intrare de căutare automată</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Schimbarea parolei a eșuat</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Schimbare</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Schimbaţi parola</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>clar</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Parolă clară</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Conţinut</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Dimensiunea fontului conținut</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Când este adevărat, conținutul extern introdus într -un clip va folosi formatarea clipurilor și nu ceea ce este disponibil de la sursă.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Lipiți, aruncați sau anexați cu formatarea destinației</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Ești sigur că vrei să uiți parola?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>A uita</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Parola uitata</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Ascundeți filigranele de capacitate</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Când este anexat conținut nou de clipboard, acesta nu va fi urmărit ca un nou clip</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignorați anexele</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Când clipboard se potrivește cu un clip existent, acel clip va fi utilizat în loc să creeze unul nou</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorați noile duplicate</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Modificările de clipboard din interiorul aplicației nu vor fi urmărite</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignorați urmărirea clipboard -ului intern</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Spațiile, filele și liniile noi vor fi ignorate din urmărire</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignorați doar spațiul alb</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Încărcați la autentificare</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Fereastra animă</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opacitate</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Arată comportamentul</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Fereastra principală va fi dezvăluită prin efectuarea unui gest de defilare pe marginea superioară a monitorului</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Afișați pe defilarea ecranului de sus</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Volumul de notificări</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Această setare va urmări sistemul - numărul larg de paste de tastatură pentru statistici de utilizare. Aceste informații sunt private și nu sunt partajate, dar, de asemenea, nu sunt garantate. Rezultatele exacte pot necesita furnizarea unei comenzi de paste a tastaturii specifice aplicației în „Setări -&gt; Copiere și lipire -&gt; comenzi rapide”.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Istoricul lipit</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Prea multe clipuri fixate (cum ar fi filele browserului) pot consuma memorie semnificativă. Înlăturarea este prin prima - în - primul - afară</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Capacitate de pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Acest lucru se aplică tuturor intrărilor auto -completabile, valorile mai mici vor îmbunătăți performanța</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Limita de text recentă</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Ești sigur că vrei să
+Restaurați preferințele implicite?
+
+Acest lucru nu poate fi anulat!
+
+*Aplicația va reporni odată finalizată.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Ești sigur că vrei să resetezi toate notificările?
+
+*Acest lucru nu poate fi anulat!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste stabilește clipboard -ul (înlocui) atunci când lipiți la un program extern. Acest lucru va încerca &lt;b&gt; &lt;/b&gt; să restaureze starea clipboardului după o pastă externă.
+
+Restaurarea totală nu poate fi garantată și poate reduce performanța sau chiar poate prăbuși Monkeypaste în funcție de sursa datelor.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Resetați clipboard după lipirea maimuței</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nu a putut șterge cache -ul pluginului din calea: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Toate pluginurile vor fi resetate la starea inițială implicită</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Cache plugin</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Sunteți sigur că doriți să resetați toate pluginurile la valorile implicite?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Ești sigur că vrei să îți resetezi parola?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Toate comenzile rapide ale aplicației vor fi resetate la gesturile cheie implicite.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Resetați comenzile rapide</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Toate notificările ignorate au fost stabilite anterior.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Restabiliți notificările</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Activarea poate fi destul de lentă) Dezactivarea formatată va reduce consumul de memorie, dar va inhiba unele caracteristici avansate, cum ar fi: anexa, șabloane, adnotări și găsiți/înlocuiți</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Conținut bogat</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Seteaza parola</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Show Sugests</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Afișați în bara de activități</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Afișați în comutatorul de sarcini</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Arată titluri</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Când este activat, glisarea de la orice aplicație în partea de sus a ecranului va dezvălui MonkeyPaste pentru a arunca cu ușurință conținutul în Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Afișați -vă pe drag în partea de sus a ecranului</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Tema sonoră</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Verificare a ortografiei</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>La pornire, sursa clipboard -ului va fi necunoscută și în funcție de setările dvs. de securitate, conținutul poate proveni de pe un site sau o aplicație exclusă.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Adăugați clipboard de pornire</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Ascultați clipboard la pornire</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Selectați</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Prudență! Alte culori de paletă sunt alese folosind matematica nu ochii! Așadar, fiți conștienți că unele combinații de culoare și stil pot să nu aibă un contrast adecvat pentru lizibilitate.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Culoarea tematică</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Stil tematic</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Curățarea automată a gunoiului va avea loc la pornire la intervalul stabilit.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Curățarea gunoiului</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interfață</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Limitele de anulare ridicate pot afecta performanța</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Anulați limita</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Fara limita</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Utilizat în căutarea fișierelor avansate pentru tipuri de fișiere non presetate</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Utilizator - Extensii de căutare definite</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Găsiți și înlocuiți ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Lipiți aici</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Acțiune...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Vedere</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Administra...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Redenumire</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Scor: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tip: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Ștergeți permanent</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Căutați la „{0}”</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transforma</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Intrare</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Ieșire</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Surse</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Restabili</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Alege Imagine ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Culoare</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Gestionați '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Va rugam asteptati...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Culoare de fundal</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Curata tot</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formate clipboard</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Sterge tot</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Editează detaliile</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Găsi</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Culoarea fontului</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Format vopsea</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> În selecție</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Introduceți imaginea</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Introduceți legătura</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Introduceți videoclipuri</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Caz de potrivire</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Șablon nou</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Următorul șablon</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Introduceți textul paste ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Șablon anterior</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Expresie uzuala</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Înlocuiește-le pe toate</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>A inlocui</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Intregul cuvant</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Înfășurați -vă</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>bloc</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domeniu</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Afișați folderul</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Deblocați</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Despre</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Anexa bloc</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Anexați în linie</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Copiere</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Moduri</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Vă rugăm să așteptați că Monkeypaste se încarcă ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Părăsi</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Faceți clic pe lipire</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>grup</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtru</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Ștergeți permanent toate</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Restabileste tot</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Acțiune</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL există deja: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL -ul trebuie să fie într -un format valid.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Introduceți adresa URL completă:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Adaugă URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Introduceți valori</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Copiați text sau fișiere pentru a aplica.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Anexă {0} {1} activat</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Modificările de clipboard vor fi acum anexate</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>După modul de anexare activat</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Modificările de clipboard vor fi acum preparate</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Înainte de activarea modului de anexare</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>bloc</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Comportamentul normal al clipboardului a fost restaurat</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Apend dezactivat</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Anexe adăugate la top sau botom al clipului</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Modul de anexare este activat</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>În linie</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Anexați la selecția dvs. curentă.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Modul de anexe manual activat</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Acumularea de clipboard s -a oprit</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Anexa a întrerupt</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Acumularea de clipboard a fost reluată</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Anexa a fost reluată</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Ești sigur că vrei să termini apariția?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Editarea în modul de compatibilitate va elimina toate formatarea bogată. Ești sigur că doriți să modificați acest lucru?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Avertisment de degradare a datelor</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Activ</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Activat</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Pe</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Întrerupt</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Rezultat</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>stare</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>A apărut o eroare necunoscută.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>încercări rămase</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Introdu parola</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>A confirma</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>a lua legatura</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Ora datei</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergeți toate utilizările „{0}”?
+
+Acest lucru nu poate fi anulat!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamic</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Static</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} este gol ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Mai multe în curând!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Dezactivarea încărcăturii de conectare a eșuat</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Conectare încărcare dezactivată succesul</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Activarea de încărcare a conectării a eșuat</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Conectare încărcare Activare succes</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Ascunde</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Pasta de maimuță este acum încărcată.
+Ascultarea clipboard este: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Încărcat</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Spectacol</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Mod de selecție automată a copiilor: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Modul schimbat</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Faceți clic dreapta pe Modul de paste: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin actualizat</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Lipiți '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Rulați analizatorul '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Rulați declanșatorul '{0}'</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Selectați '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergeți '{0}' și toate acțiunile asociate?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Declanșator</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Doriți să eliminați toate acțiunile pentru „{0}”? (Altfel, vor fi re -părinți la „{1}”)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Eliminați opțiunile</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Chiar vrei să goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Cont</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analizatoare</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operațiuni de aplicație</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Conţinut</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Convertoare</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Cultură</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Direcţie</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Tragere și plasare</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Vrăjitor de picătură</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Icoane</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interfață</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Lipiți operațiunile</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferințe</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Comitete rapide</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Sunete</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Zona de notificare</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Colecții</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Temă</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Declanșatoare</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operațiuni de site -uri web</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Limba</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Setează clipboard -ul pe clipul de intrare.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alerta</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>BLIP</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>CHIME</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Alerte de mesaje de sunet general și/sau tăvi de sistem. Acțiunile de alertă nu au niciun impact asupra contribuției lor.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Maimuţă</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>previzualizare</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Spectacol?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Mesajul de toast timp este afișat în câteva secunde. Când valoarea este 0, mesajul trebuie să fie închis manual.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Show Time (S)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Sunet?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Tip de sunet</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volum</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizor</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Procesează clipul său de intrare folosind presetarea analizorului atribuit.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Conținutul de intrare este legat de colecția selectată</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Leagă clipul său de intrare la colecția de etichete atribuite.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Etichetă</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Caz sensibil?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Acesta poate fi un text static pentru a compara cu intrarea și/sau includerea proprietăților selectate (prin intermediul butonului filtru) vor fi înlocuite atunci când este evaluată condiția.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Date de condiție</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>O interogare opțională JSONATH care va fi aplicată pe „proprietatea de intrare” selectată înainte de evaluarea condiției.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filtru de intrare</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Proprietatea clipului utilizată pentru acest condiționat.
+
+Proprietatea „Ultima ieșire” este acceptată în prezent numai atunci când acest condiționat este un copil al unei acțiuni de analizor, iar datele furnizate vor varia în funcție de ieșirea analizorului părinte.
+
+Pentru depanare, atașați o „acțiune de alertă” la părintele acestui condiționat și setați parametrul „Mesaj” al alertei pentru a se potrivi cu această proprietate de intrare. Acest lucru va permite revizuirea datelor reale utilizate pentru acest condiționat.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Proprietate de intrare</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Efectuează o comparație de text pe clipul de intrare sau ieșirea anterioară de acțiune. Când compararea nu reușește (nu este o potrivire), nu vor fi executate acțiuni pentru copii. Deci acționează ca o poartă logică.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Toate operațiunile adevărate sau false în care acțiunile copilului vor executa numai dacă rezultatul este adevărat.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Condiție</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Toate</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Declanșat atunci când se adaugă în orice mod un clip de tipul selectat (clipboard, glisare - și - picătură, analizor generat sau duplicat).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Executați acest declanșator numai dacă clipul de intrare este nou și nu este duplicat. Acest lucru este independent de orice setare de preferință a faptului că conținutul nou este ignorat sau nu.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorați duplicatul</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Doar clipuri de acest tip vor declanșa această acțiune.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Leagă clipul său de intrare la colecția de etichete atribuite.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Declanșat atunci când un clip este legat de colecția de etichete specificate.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Colectie</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Perioada de timp în milisecunde a așteptat înainte ca copiii să se execute</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Întârziere</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Experimental) utilizat în principal împreună cu acțiunea repetor pentru sondarea surselor îndepărtate sau a ajutorului cu operațiuni de rulare lungă.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Când este lăsat necompletat, fișierul de ieșire va folosi titlul clipului de intrare ca nume de fișier.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Nume personalizat</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Directorul în care se va scrie fișierul.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Director</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Salvează intrarea în folderul selectat.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Declanșat atunci când conținutul folderului selectat se modifică. Ieșirea va fi un clip de fișier nou sau existent (atunci când este activat preferința de duplicate Ignore Duplicates) a fișierului sau folderului care s -a schimbat odată cu tipul de schimbare ca ultima sa ieșire.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Evenimente</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Pliant</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorați duplicatul</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>O valoare de 0 va repeta acțiunea părinților la nesfârșit</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Număr de repetări</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Perioada de timp din milisecunde pentru a aștepta odată ce se finalizează acțiunea părinților</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Repetă întârziere</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Experimental) utilizat pentru crearea de bucle de acțiune sau sarcini repetare. Când este repetat, acesta va executa din nou toți copiii cu contribuția sa originală. Atunci când utilizați un interval fără un număr de repetări, declanșatorul va trebui să fie dezactivat și redactat pentru a opri repetarea. Poate fi util pentru sondaj sau automatizare de răzuire web.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Declanșat de o scurtătură globală pe care o definiți. Dacă MonkeyPaste este activ, va încerca să utilizeze clipul selectat (dacă există unul) ca intrare. În caz contrar, va încerca să utilizeze clipboard -ul ca intrare.
+
+Notă: Un declanșator de scurtătură va mai executa dacă nu există nicio intrare care să o mențină flexibilă (deci poate fi un declanșator macro etc.), deoarece nu este un eveniment bazat pe date.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Declanșator de comandă rapidă</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Declanșat atunci când scurtătura înregistrată este apăsată oricând cu clipboard -ul curent</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Această acțiune impune ca aplicația să repornească. Ai vrea să faci asta acum?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>A fost o problemă. Trebuie să reporniți manual aplicația.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analizați cu adnotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Adnotați declanșatorul</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Elementele încorporate sunt citite - numai. Duplicat de modificat.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonim</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Personalizat</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Ieri</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} acum zile</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 oră în urmă</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} acum ore</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Chiar acum</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Un minut în urmă</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} acum câteva minute</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Luna trecuta</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} acum luni</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Săptămâna trecută</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} acum săptămâni</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} acum ani</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Adnotări</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Numele aplicatiei</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Calea aplicației</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Caz sensibil</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Conţinut</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Tip fișier</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Tip de imagine</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Expresie uzuala</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tip de text</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titlu</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Titlul URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Intregul cuvant</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Ca și derularea de -a lungul marginii de sus a ecranului pentru a deschide, aceasta va bloca fereastra principală când se va deschide. Permițând fluxuri de lucru mai multi -direcționate mai rapide.
+
+* Colțurile sunt în ceea ce privește toate ecranele dvs., nu pe monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Afișați fereastra și blocați</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Gratuit!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Dă -ne 5 stele!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Sterge tot</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Ștergeți tot conținutul</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>ești sigur că vrei să ștergi
+Toate clipurile tale?!
+
+*Această operație nu poate fi anulată!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Sunt un indy dev, vă rugăm să arătați un sprijin!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Ca Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} acceptă doar intrarea de tip (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Mod de copiere automată - simulează un eveniment „copiere” de fiecare dată când este lansat butonul mouse -ului stâng.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Modul de lipire dreapta - simulează un eveniment „lipit” de fiecare dată când este lansat butonul potrivit de mouse</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Presetare</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Afișați dosarul pluginului</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Raport</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Vedere</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Afișați sfaturi de instrumente</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analizatorii își adnotă intrarea sau creează clipuri noi ca ieșire. Copiii analizatorilor trebuie să decidă care dintre ei au nevoie ca contribuție. Aceasta este de obicei ultima ieșire.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Tip de introducere</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Proiectant de declanșare '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Alegeți un {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nu a fost găsit...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} declanșator</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Când va fi verificat, rezultatul adevărat sau fals al afecțiunii va fi răsturnat. Deci, de exemplu, o condiție „conține” va deveni „nu conține”.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Va rugam asteptati...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Alegetor de culoare</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Alegeți culoarea meciului</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Ca un declanșator de scurtătură, dar când este apăsată combinația de taste, un eveniment „copiere” va fi simulat în aplicația activă, astfel încât acesta funcționează în continuare ca o copie, dar apoi lanțul de acțiuni atașate la declanșatorul de copiere a maimuței va fi executat în fundal folosind ajutorul Datele de clipboard de copiere simulată.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Filtru avansat</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Ascunde filtre</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Restaurați filtrele</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Creați filtru</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opțional) Când este lăsat gol, clipboard -ul va fi setat folosind intrarea acestei acțiuni. Orice lucru furnizat aici va fi tratat doar ca text simplu.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Conținut pentru clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Când este adevărat, nu se va adăuga niciun clip după ce această acțiune stabilește clipboard -ul.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignora</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Niciun analizator selectat pentru acțiunea „{0}”</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analizator pentru acțiune '{0}' nu a fost găsit</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Părintele '{0}' filtre numai pentru „{1}” Tastați conținut și analizor '{2}' nu se vor executa niciodată, deoarece nu acceptă tipul de intrare '{3}'</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Nici o etichetă selectată pentru clasificator '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Etichetă pentru clasificator '{0}' nu a fost găsit</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Compararea valorii poate fi doar litere, numere sau spații</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Nici o etichetă selectată pentru declanșatorul etichetat cu clip '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Etichetă pentru declanșatorul etichetat clip '{0}' nu a fost găsit</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Niciun folder de ceas specificat pentru „{0}”</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Urmăriți folderul '{0}' nu este găsit pentru declanșator '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer Cales for Action '{0}' nu setați</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' pentru „{1}” nu a fost găsit.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Bara de activități</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Aflați mai multe despre pluginuri</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Restabiliți această configurație de analiză</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Jurnal de schimbare</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Vă rugăm să vă conectați la Internet și să încercați din nou mai târziu.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Ajutor</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} este cea mai recentă versiune</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Sunteți cu toții sus - până la - data!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Verifică pentru actualizări...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Noua versiune disponibilă!
+
+Faceți clic aici pentru a actualiza la „{0}” 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Faceți clic mai jos pentru a actualiza la „{0}”</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Actualizare disponibila!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Actualizează acum</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' conține valori partajate. Ce ai vrea să resetezi?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>clar</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Ștergeți căutările recente</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Reseteaza tot</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Resetați partajat</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Resetați nesănătos</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Invocă acțiunea de aplicație alocată. Toate comenzile aplicației sunt apatrite, iar clipul lor de intrare este ignorat.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Când nu este verificată și comanda nu poate trage, lanțul de execuție se va opri. Multe comenzi vor necesita o anumită stare de aplicație specifică pentru a executa.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Continuați mereu?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Comanda de efectuat.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Comanda</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Nicio comandă selectată pentru comanda aplicației '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Comanda pentru comanda aplicației '{0}' nu a fost găsită</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Selectat</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Repornire</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>A fost o problemă de actualizare „{0}”. Pentru a completa actualizarea, va trebui să reporniți și să instalați din nou '{0}' (nu vă faceți griji că toate setările dvs. vor fi restaurate).
+
+Puteți reporni acum și completa actualizarea prin re -instalarea, ignorarea acestui lucru și actualizați -o mai târziu sau anulați actualizarea și continuați să utilizați versiunea '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Actualizare eroare</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nu am putut descărca actualizarea</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Actualizare esuata</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Pentru a finaliza actualizarea, va trebui să reporniți. Doriți să reporniți acum sau mai târziu?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Actualizare gata</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Mai tarziu</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Reporniți acum</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>In asteptarea</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} a fost actualizat cu succes la {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Plugin -urile de bază sunt necesare și nu pot fi eliminate.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instalații</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Actualizarea este în așteptare. Reporniți pentru a finaliza.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>In asteptarea</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>O dezinstalare este în așteptare. Vă rugăm să reporniți dacă doriți să vă instalați.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Pentru a finaliza dezinstalarea, va trebui să reporniți. Doriți să reporniți acum sau mai târziu?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Terminați dezinstalați?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Nepublicat</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - Presetare implicită generată pentru „{0}”</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Nu există niciun clip selectat</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analizați clipul selectat</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Alocați o scurtătură pentru a rula '{0}' pe clipul selectat</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Paste globală</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Alocați scurtătura de paste globală pentru „{0}”</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Aţi uitat parola?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Deconectare</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Politica de confidențialitate</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Necesită repornire) Când se vor înregistra informațiile de diagnosticare activate la fișier. Acest lucru poate încetini performanța și poate conține informații personale.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Conectați -vă la fișier</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Deschideți folderul de jurnale</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Căutați pluginuri</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Citit</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Scrie</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Trimiteți feedback sau raport de erori</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Aceasta ascunde doar fereastra principală. Toate celelalte ferestre care nu sunt de dialog sunt întotdeauna afișate în bara de activități.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Căutați în „{0}”</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Adăugați filtrul</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Editați tipul de alăturare</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Scoateți acest filtru</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Ajutor deschis despre asta ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clipuri</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Schimbare</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>A stabilit</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Fără titlu</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Referință sursă nemartată</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' este necesar</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Are erori)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Limitat</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Depozitare</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Gunoi</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Nelimitat</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>În prezent, această aplicație se potrivește cu presetările și formatele implicite ale cititorului clipboard.
+
+Activarea sau dezactivarea presetărilor implicite ale cititorilor (din bara laterală a clipboard -ului) nu va afecta această configurație. Doar aplicațiile nelistate urmează configurarea implicită.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>În prezent, această aplicație se potrivește cu presetările și formatele implicite de scriitori clipboard.
+
+Activarea sau dezactivarea presetărilor implicite ale scriitorului (din bara laterală a clipboardului) nu va afecta această configurație. Doar aplicațiile nelistate urmează configurarea implicită.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Pentru a adăuga, trebuie să dezactivați ascultătorul clipboard (tava de sistem -&gt; reluare).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Anexa indisponibil</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Nu are setări</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Vorbesc doar engleza și Monkeypaste a fost tradusă în această limbă.
+
+Toate versiunile se livrează cu pachetul englezesc, astfel încât dacă vorbiți engleză, puteți schimba limba în ea oricând după această configurație (Setări -&gt; Preferințe -&gt; Internaționale).
+
+Dacă doriți să ajutați la îmbunătățirea traducerii, ne -ar plăcea să auzim de la voi!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Probleme de traducere</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Trebuie să actualizați Monkeypaste pentru a utiliza această caracteristică.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Comandă rapidă neset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Ascultătorul clipboard dezactivat</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Ascultătorul clipboard activat</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Acțiunea părinte „{0}” nu acceptă tipul de proprietate de intrare „Ultima ieșire”</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Aflați mai multe despre planuri</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Aplicație</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Declanșator</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Clamă</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizor</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Etichetă</value>
+  </data>
+</root>

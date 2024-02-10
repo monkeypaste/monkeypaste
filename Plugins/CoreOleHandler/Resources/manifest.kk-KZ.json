@@ -1,0 +1,12 @@
+{
+  "title": "Аралық буферлік өңдегіш",
+  "description": "Алмасу буферінің әдепкі форматтарын өңдейді",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Өзегі, аралық сақтағыш, өрік, мәтін, RTF, RTF, RTF, HTML, CSV, Image, PNG, ZPG, JPEG, сілтеме",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

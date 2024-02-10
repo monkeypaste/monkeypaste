@@ -6,9 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <DefineConstants>$(DefineConstants);AUX;</DefineConstants>
+    <LangVersion>$(DefaultLangVersion)</LangVersion>
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Plugins\GoogleLiteTextTranslator\GoogleLiteTextTranslator.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin.Localizer\Localizer.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />

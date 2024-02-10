@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>DÜZGÜN BOLANOK</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Bar bolan hasabyňyzy dikelt ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Mazmuny we hapalary
+{0} we {1} bilen çäklenýär}
+degişlilikde klip.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Mazmuny we çäkli hapa ammaryna} 2} kliplerine rugsat berýär.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Çäklendirilmedik we çäksiz mazmun we hapa saklamak.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Dikeltmek</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Mugt</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standart</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Çäksiz</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Abuna</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Şahsy durmuşyňyz möhümdir we bufer maglumatlary gaty şahsy bolup biler. Ammar elmydama şifrlenen bolsa, ýöne enjamyňyz ogurlanan bolsa ýa-da başga biri enjamyňyzy ulanýan bolsa, talap ediljek parol goýup bilersiňiz.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Parol</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Işledilende bar bolan wagtdan ekranyň ýokarsyna süýräp, "MaýtPast" -iň Mazeýpasize bölmäge açar.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Esasy penjiräniň ýokarky çep tarapynda "gulp" -yň "gulpuny" açmak, maýmynpete-de gaçmaga mümkinçilik berer.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>More Penge şikalar ileri tutmalary "Sazlamalar Biller -&gt; Saýlamalar menýusyndan -&gt; penjire 'menýusyndan elýeterlidir.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Bananlary şu ýere çekiň!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Süýräň - - açyk</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>DÜZGÜN Klawiaturamyň gysga ýollary 'Sazlamalar -&gt; gysga ýollary "-dan gözden geçirip ýa-da üýtgedilip bilner.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Ähli global gysga ýollary öçürer, şonuň üçin olary soňrak goýup bilersiňiz.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Maýmpaseiň planşetiň gysgaltmalary ähli programmalarda elýeterli bolar.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Içerki</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Gaýybana</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Yşarat tertibi</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Heý! Maýmilpete bilen umumy tejribäňizi gowulaşdyrmak üçin birnäçe zady guralyň.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Hoş geldiňiz</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Maýerpaste-den iň köp peýdalanmak üçin, awtomatiki usulda ýüklenende awtomatiki ýüklemek gowy pikir. Emma, ​​bu düýbünden size bagly.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Tötänleýin saklaň.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Işletmek</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Girişde ýük?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Işe açanyňyzda, ekranyň ýokarsyndaky aýlaw yşarybany maýmepabany açar.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Çep - Täsin nyşany basyp, maýmynyň hamyrmaýa açar.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>More Penge şikalar ileri tutmalary "Sazlamalar Biller -&gt; Saýlamalar menýusyndan -&gt; penjire 'menýusyndan elýeterlidir.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Aňsat dogrymy?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Ine, şu ýerde aýlaň!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Aýlamak - Opt - Aç-açan</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p deňhumly = "MEDEP"</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Bu ýere taşlaň!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;plenebem, mydama mamempa passe maýkpasse girip bilersiňiz &lt;br&gt; sfera = "Bir sfera =" Gyzyl "&gt; ýa-da &lt;" Red "&gt; &amp; # x1F440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Meni süýräň!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Synap gör!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Synap gör!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Netije ýok.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Tassykla</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Täzele</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Gözläň ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Sazlamalar</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Baglamalar:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Gurmak</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>'{0 0}' we ähli sowgatlaryny we gysga ýollary aýyrmak isleýändigiňize ynanýarsyňyzmy?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Aýyrmak</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' Netije ýok.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Saýlaw ýok.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Hiç</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Karzlar:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Düşündiriş:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Bagyşlaň:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Ygtyýarnamanyň:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Taslama URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Çap edilen:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Meni oka:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Zalymlyk barada hasabat beriň:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Bellikler:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Täzelen</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Wersiýasy:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Penjirede açyk</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Işden aýyrmak</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Täzele</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Tygşytlaň</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Öçürmek üçin indiki!
+
+Gaça durmak üçin täzelenme.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Zibiliň gapdalynda!
+
+Gaça durmak üçin täzelenme.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Faýllar</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Şekil</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Göçürilen {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} FAMASLAR | {1} MBB</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Jors | {1} çyzyklar</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} nusgalary | {1} pastalar</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Hereket et</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Goş</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Göçürmek</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Kes</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Çökdürmek</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} göçüriň</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Goragsyz süzgüç</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Saýlaň -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formatlar</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Okyjylar</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Ýazyjylar</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Derwezeler</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Pozuň</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Dublikat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Ady redaktirläň</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Täzeden düzmek</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Bellikler</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Hereket</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Global marşruta</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Salgylanma</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Jestler özboluşly bolmaly we diňe bir giriş düwmesi bolup biler.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;UL&gt;
+&lt;li&gt;
+&lt;b&gt; Içerki &lt;/ b&gt; ciltmshli salgylanmalaryň hemmesi ulanylmada bilen çäklenýär. Bu hakykatdanam niýetlenen wariant däl, global &lt;I.
+&lt;li&gt;
+&lt;b&gt; Bellenen &lt;/ b&gt; BELL SÖVEGILER WE GEREK. &lt;B&gt; Show&gt; tomaşa etmek / gizlemek &lt;/ b&gt; "gyzyl"&gt; "gyzyl"&gt; "gyzyl" Islän wagtyňyz marşrut ýa-da yşaratlary üýtgedip bilersiňiz. Ýöne &lt;spany reňk = "ýaşyl"&gt; ony synap görüň &lt;/ span&gt; synap görüň
+&lt;/ li&gt;
+&lt;/ UL&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;kelle&gt; &lt;/ kelle&gt;
+&lt;beden&gt;
+&lt;h1&gt; global gysga gysga ýollar &lt;/ h1&gt;
+&lt;UL&gt;
+&lt;li&gt;
+&lt;b&gt; passiw &lt;/ b&gt; gysga ýolda gysga monkePaste islendik anketany diňlär. &lt;br&gt;
+* Bu, häzirlikçe Linux-da diňe &lt;/ i&gt; opsiýasy.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; öňünden &lt;/ b&gt; gysga möhleti &lt;b&gt; i&gt; &lt;i&gt; &lt;i&gt; &lt;i&gt; &lt;i&gt; &lt;/ b&gt; ýerine ýetiren &lt;/ i&gt; &lt;/ b&gt; ýerine ýetirer. &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; POPP
+&lt;li&gt;
+MaýmkePaste aradan çykmagyň giriş düwmesini (deňeşdirmek düwmesini (aňlatma düwmesi
+Bu opsiýa, gysga ýoldan işjeň programma üçin gapma-garşylygsyz ýüze çykýandygyny kepillendirer.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Belli bir deverid &lt;/ b&gt; Bu "Caps gulpy" düwmesi üçin döredilen artykmaç tertip Diňe &lt;b&gt; bir &lt;/ b&gt; açary (birmeňzeş däl
+Adaty artykmaç re modeiminde CAPS Lock-de &lt;/ i&gt; başga düwmeler bilen bilelikde basylanda &lt;/ i.&gt;
+Şeýlelik bilen başga düwmeler aşak insilse-de, a &lt;b&gt; hotlikkey &lt;/ b&gt; gysga ýol basylsa-da, munuň artykmaç bolsa-da &lt;i&gt; Men -e ýapyşmagynyň öňüni alar.
+&lt;/ li&gt;
+&lt;/ UL&gt;
+&lt;/ beden&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Öçürmek</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Bu ulanyjy hasaby, beýleki ulanyjylar üçin hasaba alynmaň.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Elýeterli kontakt ulanyp (fetcher pluginini talap edýär) Bu meýdanyň hemme nyrhlary üçin bu ugurda ýa-da başga bir nagyşlar üçin bu ugurda bu ugurda ulanylar. &lt;/ p&gt; &lt;p&gt; E-poçta salgysyny saýlaň Ine, soňra kontaktyň e-poçta meýdany, bu resminamadaky ähli mysallar üçin saýlamalar üçin ulanylar. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = gysga ýyl &lt;br&gt; &lt;br/&gt; mm = aý (1-12) &lt;br/&gt; aý &lt;br/&gt; mmmm = Uzakly (ýanwar, fewral aýy) &lt;br/&gt; D. Sözleriň güni (duşenbe, sişenbe) &lt;br/&gt; 3-nji, 21-nji, 21-nji, 23-nji, 4-nji oktýabr, 4-nji ... &lt;0-12) &lt;0-12) &gt; H = günde sagat (0-23) A = A = AM / PM Marerer &lt;br/&gt; s = f = A./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Häzirki senä we / ýa-da wagt düwmeleriň ýelmese seadadylaşdyrylan sauşnik şablonlar üçin çalşylar.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Bu şablanyň ähli gyralary berlen teksti ulanar. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Bu şablanyň ähli gyralary berlen teksti ulanar. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Çykyşy tamamlaň</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Blok açyň</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Inline-a mümkinçilik beriň</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Gollanma</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Gollanma</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Truzany arakesme</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Öňem üýtgetmek</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Öňem üýtgetmek</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Hasaplamak</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Goşuldy ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Çökdürmek</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Çeňňek</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Aýyrmak</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>'{0}' habarnamalaryny gizläň</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Işden aýyrmak</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Iň soňky işjeň programma näbelli. Maýmynyň pasta üçin niýetlenen programmany geçiň.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Pasta: &lt;em&gt; &lt;Men synp = "klast =" pasta-0} / i&gt; &lt;/ em&gt; &lt;/ em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Kiçeltmek</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Haýyş et!</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Gulplamak</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Hasaby</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Kömek ediň</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Göçüriň we goýuň</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Saýlamalar</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Defoltlary dikeltmek</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Süzgüç ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Gysga ýollar</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Programma goşuň</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Sahypa goşuň</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blokirlemi?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Ady</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Programmalar</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Domeni blokirlemi?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>URL-ni blokirläňmi?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domen</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Çeşme URL ykrar etmek, "Hostcord" paneliniň "Hostcord" -yň näderejede ret edilmegine baglydyr</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Web sahypalary</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Käbir maýmynPaste aýratynlyklary beýleki degişli programmalardaky wakalary simulasiýa etmek üçin klawiatura awtomatlaşdyryny ulanýarlar.
+
+Şol aýratynlyklaryň işlemegini üpjün etmek üçin "konsol ýa-da" -e "-e) goşuň we / ýa-da saýlaň.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Salgy göçüriň</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Hiç</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Diňe saýlanan anketa üçin diňe saýlanan desga ulanylar. Belli däl, "em&gt;" -de görkezilen deslapky täze sowgatlar &lt;/ em&gt; ulanylar.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>"Maýmpast" aýratynlyklary, beýleki programmalar bilen gatnaşyk saklamak üçin klawiatura awtomatlaşdyrylmagy ulanýarlar.
+
+Käbir programmalar (belli bir derejede gabyklar ýa-da gabyklar ýaly) deslapky däl gapma-garşylyk bolup biler.
+
+Dogry sazlaşyk işini üpjün etmek üçin şu ýerde şol programmalar üçin bu gysga ýollary ýazga alyň.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Gysgaça açyň</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Okyjylar</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Regediledilen programmalardan ähli örtükli gözegçilik gözegçiligi &lt;b&gt; hasaba bermedik &lt;/ b&gt; e-b&gt; ýok eder.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Ýazyjylar</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Redaktirläň ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formatlar</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Ret edildi</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Gysga ýollar</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Şeýle hem hemmesi '{1}' -den ähli {0} klipleri aýyrmak isleýärsiňizmi?</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Klipleri aýyryň?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Amaly</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Programma göz aýlaň ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>TERJIME EDIP BOLMAK</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>{0} üçin adaty gysga ýollary aýyrmak isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>{0} adaty formatlary aýyrmak isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Bu programma üçin bellenen bug banky formatlary ýok. Süýt kesmek / göçürmek / göçürmek ýa-da göçürmek arkaly hiç hili maglumat okalmaýar</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Bu programma üçin bellenen bug banky formatlary ýok. Awtomatlaşdyrylan pasta ýa-da süýräň - monkeptase-den taşlaň (boş maglumatlar).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Colthli gysga ýollary täzeden düzmek isleýändigiňize ynanýarsyňyzmy? Userhli adaty gysga ýollar aýrylar.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Gysga ýoluňyzyň marşrutizasiýa profiliňizi '{0}' -da üýtgetmek isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Hemmesi</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Halanýanlar</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Süzgüçler</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formatlar</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Bellikler</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Bu gün</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Hapa</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Hakda</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Aňsat dogrymy?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Deňeşdirmek üçin iki gezek basyň</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Ýörite</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Bu kombinasiýa halas edilse, '{0 0}' bilen gapma-garşy gapma-garşylyklar bilen üzňüler.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Salgylanma berilmelidir.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Bu global gysga ýol. Diýmek, haçan ýerine ýetirilse ýerine ýetirmäge synanyşjakdygyny aňladýar. Beýleki programmalardan gysga ýollar bilen gapma-garşylyklara laýyk gelmezlik üçin ýeterlik üýtgeşiklik ediň (ýa-da marşrut görnüşini 'üýtgediň').</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Salgylanmada diňe bir we diňe bir modifikasiýa açary bolmaly.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Recordazga almak üçin islendik düwmä basyň ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Salgylanma belläň</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Köpräk oka...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Täzelenmek</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Ýatyr</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Düzediň</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Üns berme</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Ýok</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Bolýar</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Gaýtadan synanyşyň</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Öçür</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Iberiň</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Hawa</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Yeryyllyk</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Aýda</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Mugt synap görüň!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Billingsli sikli</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-poçta</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Baglanyşygyňyzy barlaň
+we gaýtadan synanyşyň.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Hasapdan çykmak</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Indiki töleg</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Parol</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Hasaba al</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E-poçta dogry däl</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Parollar gabat gelenok.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Parol azyndan {0} nyşan bolmaly.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Ýadyňyzdamy?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Hasabyňyzy tassyklamak üçin e-poçtaňyzy barlaň</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Paroly täzeden düzmek</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm / dd / yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Hiç haçan</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Mugt {0} gündelik synag</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Ýerine ýetiriş meselesi bardy
+Satyn aldyňyz.
+
+Baglanyşygyňyzy barlamak we
+Sazlamalar kömek edip biler.
+
+Againene synanyşmak isleýärsiňizmi?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Hasabyňyz üstünlikli boldy
+Öçürildi:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Üstünlik satyn alyň!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Ýalňyşlyk</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Baglanyşyk şowsuz boldy.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Gaýtadan synanyşyň</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Hasap üýtgedildi</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Abunalygyňyz häzirki wagtda {0} / {1 {1 {Mazmuny we {3
+Ýöne alada etme, göz öňüne getirilenden soň hiç hili maglumat ýitirilmeýär. Diňe täze klipler size baha berler.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Gutlaýarys! Abunalygyňyz häzirki wagtda {0} / {1 {1 {Mazmuny we {3</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Zibil ýa-da bir zady gizlemek
+has köp goşmak üçin '{0}' -den.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' ammar {1} '.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Dikeltmek</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} petiklendi</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Mazmuny we hapa kuwwaty gazanyldy!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' ammar {1} '.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Mazmuny ýetdi!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Bu duýduryşlary gizläp bilersiňiz
+'Hemmesini gizlemek' düwmesine basyň
+Varioveokardaky wariantlar menýusyny.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Maks Zibil ammary {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Zibil kuwwaty ýetdim!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} nädogry</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} iň bolmanda {1} nyşan bolmaly</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} diňe {1} nyşan bolup biler</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Pasta: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>{0} üçin töleg
+Abuna ýazylmak {1}
+kabul edilmedi.
+
+Täzelemegiňizi haýyş edýäris
+Töleg maglumatlary.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>{0} üçin töleg
+Abuna ýazylmak {1}
+kabul edilmedi.
+
+Baglanyşyga birikdiriň
+Enjamda internet
+abunalygyňyz bilen we
+Dowam etmek üçin täzeden başlaň
+{0} meýilnamaňyzy ulanmak.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>{0} üçin töleg
+Abuna ýazylmak {1}
+kabul edilmedi.
+
+Açmagyňyzy haýyş edýäris ýa-da täzeden açyň
+Enjamda monkepaste
+abunalygyňyz bilen
+ulanmagy dowam etdiriň
+{0} meýilnamasy.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Hasap möhleti gutardy</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Bellik</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft dükanynda onuň derejesine ýetmäge rugsat bermeýär
+Abunalyk girizilen adalgalaryň üýtgemegi.
+
+Seniňi ýatyrmaly
+{0} / {1} özüňizi meýilleşdiriň
+ýa-da ikiňizem töleg alarsyňyz.
+
+Indi gitmek isleýärsiňizmi?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Parolyňyz täzeden düzüldi.
+
+E-poçtaňyzy barlaň we
+Üýtgetmek üçin baglanyşyga eýeriň
+Parolyňyz</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Awtory (lar)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Dowam etmezden ozal aşakdaky ygtyýarnama şertlerini kabul edilmegiňiz mümkin.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Aşakdaky bukja (ler) gurmazdan ozal ygtyýarnama şertlerini kabul edýändigiňizi talap edýär.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Men peseltýärin</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"Men kabul edýärin" düwmesine bassaňyz, bu anketa üçin ygtyýarnama şertlerine razydygyňyzy aňladýar. Şertlere razy däl bolsaňyz, "Men limerim edýärin" düwmesine basyň.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"Men kabul edýärin" düwmesine bassaňyz, ýokarda görkezilen plugin (lar) üçin ygtyýarnama şertlerine razydygyňyzy aňladýar. Şertlere razy däl bolsaňyz, "Men limerim edýärin" düwmesine basyň.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Ygtyýarnamany görüň</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Ygtyýarnama kabul eti</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Men kabul edýärin</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Işjeň</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Awtonom</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Hasaba alynmadyk</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Edildi</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Parollar gabat gelenok</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Parol</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Abunalygyňyz
+Indi {0} / {1-e düzüldi.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Hasap tapyldy</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Giriş şowsuz</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Hasaba alyş şowsuz boldy</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Hasaba alyş üstünlikli!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Ýalňyşlygy täzeden düzmek</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Abuna</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Täze näme?</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Hiç haçan</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Çäksiz</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kuwwaty</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>galan</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>jemi</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Tölegiňiz ýok.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Aýratyn ýokrylmalar diňe bir açar we bu düwmede bir açar we bu düwmede modeer çapasy bolup bilmez.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Möhleti gutardy</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Ýüklemek</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Maýyp</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Bellik! Bu parol islege bagly däl we diňe goşmaça howpsuzlyk üçin. Maglumatlaryňyz eýýäm şifrlenen we hiç haçan paýlaşylmaýar. Bu paroly diňe iş stoluňyza girýän bolsa, maminket pottasyna girýän bolsa, maýmynyň plýusyna girýän bolsa, maýmpet pürasyny ýüklemekden başga biriniň iberilmeginiň öňüni alýar (ogurlanan, we ş.m.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Düwme sazlamasy:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Pluginlere göz aýlaň</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Derňäň</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Çalt hereket</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Redaktirleme</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Gysylan üýtgetmek</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Düşündirişler</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Ýönekeý tekst</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Penjirede açyk</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Yzarlamak üçin + Ctrl basyň ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Oňa gitmek üçin + ALT basyň ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Islendik mediýa ýa-da bu ýerde haýsydyr bir metbugata düşüriň!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Düşnükli</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0-dan ýokary çäkler Rgba reňk giňişliginde EUCCLIEDEADYR SURMUŞA ulanyp, bulaşyk reňk bererin.
+
+Mysal üçin, gyzyl bolsa (# FF0000) gözleg möhleti we gara (# 000000) piksel, soňra reňk aralygy 255. Gara, ak aralykda 255-e çenli, şol sanda alfa kanalydyr</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Aşakdakylaryň hemmesi dogry</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Paneli</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kolleksiýalar</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Syçan reesimleri</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Triggerler</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pauza</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Dowam et</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Täze trigger</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Deslapky goşuň</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Maýmyn zyňylýan jadygöý</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Beýan edilýär</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizator</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Kesmek</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Sikl ugry</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>GenID düzülişini üýtgetmek</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Ýagdaýa bagly</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Bosagasy</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Tutuş söz</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Hiç biri gurulmady</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Marşrut bermek</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Hereket</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Gözenegiň</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Edildi</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Indiki</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Öňki</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Geçiň</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Bar bolan hasaby?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Indiki töleg</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Hasaba alyş, tölegiňizi ähli enjamlaryňyza (elýeterliligiň dowamynda) götermäge mümkinçilik berýär. E-poçtaňyzy wada bermeris 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Abuna</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Ulanyjy ady</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Hasaba alynmalymy?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Çeşmeler</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Geň, hiç zat ýok. Bir zat ýalňyş bolmaly 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Aýyrmak</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Täzeden başlamagy talap edýär</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Ösen</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>"{0} '-dan säwlik" {0}' -den säwlik säwlik</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Plugin gurmak: '{0}' gurmak säwlik: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Plugin '{0} korrupsiýa ýa-da nädogry katalog gurluş gurluşyny gurmakda säwlik. Görkeziş '{1}' -da bolmaly, ýöne tapylmady.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Plugin manifest 'чer 0 {0}' säwlik säwlik ': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>"Plinin" -ny görkezdi: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} ýalňyşlyk</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Plugin plugin plugin säwlik '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>'{0}' ätiýaçlandyrmak '{1}' -a gaýdyp gelmekde ýalňyşlyk. Jikme-jiklikler: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Tekst ýazylan tekst ýazylmasa gözleg gutusyna awtomatiki usulda ýüz tutular.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Awto gözleg giriş</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Parol üýtgediji şowsuz boldy</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Üýtgetmek</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Paroly üýtgetmek</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Düşnükli</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Paroly arassalaň</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Mazmuny</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Mazmuny şrift</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Clipe hakyky, daşarky mazmuna bölünip çykalanlyk klipleri formatirlemegi täzelemek we çeşmäniň elýeterli zady däl.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Goýlan ýer formatirlemegi pasta goýuň ýa-da goş</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Paroly ýatdan çykarmak isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Ýatdan çykar</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Paroly ýatdan çykaryň</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Mümkinçilik suw belliklerini gizläň</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Täze klip tagtasynyň mazmunyna goşulanda, täze klip hökmünde yzarlanmaz</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Gaýtadan äsgermezlik ediň</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Maslahat bar bolan klipe gabat gelýän bolsa, bu klipiň täze birini döretmegiň ýerine ulanylar</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Täze dublikatlara üns berme</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Programmanyň içindäki tagtanyň üýtgemegi yzarlanmaz</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Içerki klapan banky yzarlamasyna ähmiýet bermäň</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Boşluklar, bellikler we täze setirler yzarlamakdan äsgermezlik eder</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Diňe ak ýer äsgermezlik ediň</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Girişde ýükläň</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animasiýa penjiresi</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>GYSGAÇA</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Özüňi alyp barşyňy görkez</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Esasy penjire monitoryň ýokarky gyrasynda aýlaw hereketini ýerine ýetirmek arkaly aýan eder</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Ýokarky ekranda görkeziň</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Duýduryş mukdary</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Bu şert ulgamy yzarlar - Ulanyş statistikasy üçin giň klawiatura inçitatlaryny görkezýär. Bu maglumatlar şahsy we paýlaşylmaýar, ýöne gujaklaşykly däl. Takyn netijeler, programma sazlamalaryny - göçüriň we pasta göçürmek we passott etmek we plastüklemek we passott etmekde -&gt; gysga ýollar bilen üpjün etmek talap edip biler.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Taryhy pasta goýmak</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Gaty köp sanly klipler (brauzer goýmalary ýaly) (brauzer goýmalary ýaly) möhüm ýady iýip biler. aýyrmak ilki bilen - ilki bilen - ilki bilen</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>PIN kuwwatlylygy</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Bu hemmämiz awto - gutarnykly girişler, pes bahalary, pes bahalary gowulaşdyrar</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Soňky tekst çäkleri</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Isleýändigiňize ynanýarsyňyzmy?
+Bellenen ileri tutmalary dikeltmek?
+
+Bu yzyna gaýtaryp bolmaz!
+
+* Arza doly gutarar.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Thehli habarnamalary täzeden düzmek isleýändigiňize ynanýarsyňyzmy?
+
+* Muny yzyna gaýtaryp bolmaz!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Maýmyn goýy daşarky programma açylanda bu monyp panelini (artykmaç). Bu daşarky pastadan soň buferiň ýagdaýyny dikeltmek üçin &lt;b&gt; STOP&gt; synap görmek
+
+Jemi dikeltmek kepillendirilip bilinmez we maglumatlaryň çeşmä baglylykda öndürijilige ýa-da hatda hamyrmaý pürasyny azaldyp bilmez.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Maýmyn döränden soň bufer sumkasyny täzeden düzmek</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Plugin keşini ýoldan pozup bilmedi: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Pluginleriň hemmesi başlangyç deslapky usulda täzeden başlar</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin keşi</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Ähli pluginleri defoltlara täzeden düzmek isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Parolyňyzy täzeden düzmek isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Applichli programma salgylanmalarynyň hemmesi adaty düwmelerine täzeden düzüler.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Gysga ýollary täzeden düzmek</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Öň goýlan habarnamalar.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Habarnamalary dikeltmek</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Enabling can be rather slow) Disabling formatted will reduce memory consumption but will inhibit some advanced features, such as: append, templates, annotations and find/replace</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Baý mazmun</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Paroly düzüň</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Maslahatlary görkeziň</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Meseleler panelinde görkeziň</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Möhletde bir işçini görkeziň</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Atlary görkeziň</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Işledilende bar bolan wagtdan ekranyň ýokarsyna süýräp, "MaýtPast" -iň Mazeýpasize bölmäge açar.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Ekranyň ýokarsyna süýräp görkeziň</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Ses mowzugy</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Ellazuw barlagy</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Başlamak üçin pyşanyň çeşmesi belli belli bolmaz we howpsuzlyk sazlamalaryna baglylykda mazmun aýrylan web sahypasyndan ýa-da programma gelip biler.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Başlangyç paneli goşuň</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Başlangyç paneli diňläň</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Saýlaň</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Seresap boluň! Beýleki palitrasy reňkleri, matematika gözleri däl-de, matematika saýlanýar! Şonuň üçin käbir reňk we stil kombinasiýalaryny okamagy üçin laýyk tapawut bolmazlygy mümkin.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Mowzuk reňki</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Mowzuk stili</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Awtomatiki zibil arassalamagy, toplum aralyga başlangyçda başlaýar.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Hapa arassalama</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interfeýs</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Ýokary yzyna gaýtaryş çäkleri öndürijiligine täsir edip biler</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Çägi yzyna gaýtarmak</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Çägi ýok</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Öňünden kesgitlenmedik faýl görnüşleri üçin ösen faýl gözleginde ulanylýar</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Ulanyjy - Gözleg giňeldiş giňeltmeleri</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Tap we çalyşyň ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Bu ýerde goýuň</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Paýlaşma ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Görüş</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Dolandyryň ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Adyny üýtgetmek</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Bal: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Görnüşi: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Hemişelik ýok</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>'{0}' diline göz aýlaň</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Üýtgetmek</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Çykyş</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Çeşmeler</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Dikeltmek</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Suraty saýlaň ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Reňk</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>'{0}' dolandyryň ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Açyk</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Haýyş et!</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Arka reňki</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Hemmesini arassala</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Paneli formatlar</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Hemmesini poz</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Maglumatlary redaktirläň</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Ady</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Tap</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Şrift reňk</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formatlamak boýagy</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Saýlamak</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Suraty goýmak</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Baglanyşyk goýuň</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Wideo salyň</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Gabat geliş meselesi</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Täze şablon</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Indiki şablon</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Pasta tekstini giriziň ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Öňki şablon</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Yzygiderli aňlatma</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Hemmesini çalyş</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Çalyş</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Tutuş söz</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Aýlanýar</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blokirlemek</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domen</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Bukjany görkeziň</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Açmak</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Hakda</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Blokirlemek</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Goşundy</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Awto - Göçüriň</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Reesimler</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>"MackiPase" ýüklenmä garaşmagyňyzy haýyş edýäris ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Taşla</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Reight - Pastate basyň</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Topary</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Süzgüç</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Hemmesi hemişelik pozuň</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Hemmesini dikeldiň</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Hereket</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL eýýäm bar: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL dogry formatda bolmaly.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Doly URL-i giriziň:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>URL goşuň</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Bahalary giriziň</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Arza ýa-da faýllary ulanmak üçin göçüriň.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>{0} {1} tertibi işjeňleşdirildi</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Klipiň üýtgemegi indi goşular</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Goşulan goşmaçany işjeňleşdirilenden soň</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Klipiň üýtgemegi indi meýilnama düzer</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>REME-de re modeimini işjeňleşdirmezden ozal</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blokirlemek</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Adaty klip tagtasynyň hereketi dikeldildi</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Ýapyk</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Klipiň ýokarsyna ýa-da botomasyna goşulan baha</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Güýçlendiriş tertibi işjeňleşdirildi</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Içerki sanaw</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Gollanma</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Häzirki saýlawyňyza goşuldy.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Edil şol el bilen düzülen tertipde işjeňleşdirildi</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Mlip banky ýygnamak endigi</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Pyýada goşundy</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Maslahat beriji ýygnamak</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Giriş girizildi</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Çykýandygymy tamamlamak isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Batyrlyk nukdaýnazaryndan redaktirlemek, ähli baý formatirlemegi aýyrar. Muny üýtgetmek isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Maglumatlaryň zaýalanmagy duýduryşy</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Işjeň</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Işledildi</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Ondan offter</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Üstünde</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Dymdy</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Netije</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Ýagdaýy</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Näbelli säwlik ýüze çykdy.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Galan synanyşyklar</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Paroly giriziň</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Tassykla</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Aragatnaşyk</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Sene wagt</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>'{0}' ulanylmagynyň ähli ulanylyşyny pozmak isleýärsiňizmi?
+
+Bu yzyna gaýtaryp bolmaz!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamiki</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statiki</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} boş ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Soonakynda has ýakyn!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Giriş ýükleme öçürilmegi şowsuz</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Giriş ýükleri üstünlikleri öçüriň</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Giriş ýük başlaň</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Giriş ýükleri üstünlige mümkinçilik beriň</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Gizle</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Maýmyn pastasy indi ýüklendi.
+Klip tagtasynyň diňleýjisi: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Ýüklendi</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Görkez</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Awto göçürmek saýlaň Saýlaw re modeimini: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Re modeimi üýtgedi</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Sag bogmak düwmesine basyň: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin täzelendi</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>"{0} 'pasta</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Ylgaň '{0}' analizer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Rs '{0}' trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>'{0}' saýlaň</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>'{0}' we baglanyşykly hereketleri pozmak isleýändigiňize ynanýarsyňyzmy?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Thehli sub-de aýyrmak isleýärsiňizmi - '{0}' üçin hereketleriňiz? .</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Saýlawlary aýyryň</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Hakykatdanam "ч" {0} 'bilen baglanyşmak isleýärsiňizmi?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Hasaby</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Derňewçiler</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Anketalar</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Paneli</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Mazmuny</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Öwrüjiler</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Medeniýeti</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Maglumatlary</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Ugry</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Süýre we goýber</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Jadygöýiň</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Nyşanlary</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Girişjimi</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interfeýs</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Amallary göçürmek</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Saýlamalar</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Gözlemek</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Gysga ýollar</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Sesler</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Ulgam truby</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kolleksiýalar</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Mowzugy</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Triggerler</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Sahypa amallary</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Dili</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Paneli giriş klipine düzetýär.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Hüşgär</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Gyrgyç</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Sime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Umumy maksatly ses we / ýa-da ulgam tarey habar habary duýduryşlary. Duýduryş hereketleriniň girişine täsir etmeýär.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Habar</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Maýmyn</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Deslapky syn</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Görkezýärmi?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Toast Toast Habar sekuntda görkezilýär. Bahasy 0 habar el bilen ýapylmaly bolanda.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Wagt (lar) görkeziň</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Ses?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Ses görnüşi</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>TING</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Göwrümi</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizator</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Bellenen analizatory ulanyp, giriş klipini işledýär.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Giriş mazmuny saýlanan ýygyndy bilen baglanyşyklydyr</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Giriş klipini bellenen bellik ýygyndysyna baglanyşyklar.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Bellik</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Ýagdaýa bagly?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Girişde deňeşdirmek we / ýa-da saýlanan aýratynlyklary (süzgüç düwmesine) (süzgüç düwmesiniň üsti bilen) ornuny tutup biler.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Şertli maglumatlar</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Şerige baha berilmezden ozal saýlanan "giriş emlägine" gerekli "" giriş emlägine "beriljek islege bagly JSONPATHAT.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Giriş süzgüji</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Şerti üçin ulanylýan klipiň häsiýeti.
+
+Häzirki wagtda "Soňky çykyş" emlägi, bu şertli bolsa analiz hereketiniň bolandygyny we berilýän maglumatlar bolsa ene-seljerişeriň çykyşyna baglylykda üýtgeýär.
+
+Näsazlyklary düzeltmek üçin bu şertli ene-atasyna 'Depart hereketine' dagyny goýuň we bu giriş emlägine laýyk gelmek üçin duýduryşyň 'habar' parametrini goşuň. Bu, bu şert üçin ulanylýan hakyky maglumatlary gözden geçirmäge mümkinçilik berer.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Emläk</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Giriş klipinde ýa-da öňki hereketiň çykyşynda tekst komponissiýasyny ýerine ýetirýär. Haçan-da laýyklyk şowsuz bolsa (oýun däl) çaga hereketleri ýok. Şonuň üçin logiki derwezä meňzeýär.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Çaga hereketleriniň diňe netijesi bolsa, diňe bir hakyky ýa-da ýalan amallar ýerine ýetirer.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Ýagdaýy</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Hemmesi</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Saýlanan görnüşdäki klipde ulgama goşulanda (setr paneli - datmak - analiz) emele getirildi ýa-da köpeldilen).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Giriş klipiniň täze we köpelýändigi ýa-da ýokdugyna diňe bu trigger ýerine ýetiriň. Bu, täze mazmunyň üns berilmedikdigini ýa-da ýokdugyny anyklaýyş usulynyň garaşsyzlygyny garaşsyzdyr.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Dublikatyny äsgermezlik ediň</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Bu görnüşiň diňe bu görnüşdäki klipleri bu çäräni döreder.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Giriş klipini bellenen bellik ýygyndysyna baglanyşyklar.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Klip görkezilen bellik ýygyndysyna baglananda ýüze çykanda ýüze çykaryldy.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Ýygyndysy</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Çagalaryň ýerine ýetirmezden ozal millisekuntlaryň mukdary</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Gijikdirmek</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimental) ilkinji nobatda, uzak wagtlap işleýän amallar ýa-da uzak işleýiş amallary bilen örtmek üçin gaýtalamak hereketi bilen bilelikde ulanylýar.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Boş galanda çykyş faýly giriş klipiniň adyny faýlyň ady hökmünde ulanar.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Ýörite ady</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Faýly ýazylýan katalog.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Girişde saýlanan bukja tygşytlaýar.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Saýlanan bukjanyň mazmuny üýtgese ýüze çykýar. Durmuş täze ýa-da bar bolar (äsgermezlik, artykmaçlyk, faýllaryň artykmaç artykmaçlygy açyk däl) iň soňky çykyşy bilen birlikde üýtgän faýl ýa-da bukjanyň faýly ýa-da bukjanyň faýly ýa-da bukjanyň faýly ýa-da bukjanyň faýly ýa-da bukjanyň faýly</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Wakalar</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Bukjasy</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Dublikatyny äsgermezlik ediň</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0 bahasy ene-atanyň hereketini gaýtalap geçirer</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Hasaby gaýtalaň</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Ene-atanyň hereket edeninden soň garaşmak üçin millisconds-yň mukdary</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Gijäni gaýtalaň</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Synagdan) hereket aýlawlary ýa-da gaýtalanýan meseleler döretmek üçin ulanylýar. Gizlin edilende, ähli çagalary öz asyl giriş bilen ýerine ýetirer. Gaýtalama sanjymiz aralygy ulanylanda trigger, aç-açan öçürilmeli we gaýtalanmagy saklamaly bolar. Saýlaw ýa-da web gysgyç awtomatlaşdyrmak üçin peýdaly bolup biler.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Kesgitleýän global gysga ýol bilen ýüze çykypdyr. Maýerpaste işjeň bolsa, saýlanan klipi (biri bar bolsa) giriş hökmünde ulanmaga synanyşar. Otwadan otagy giriş hökmünde ulanmaga synanyşar.
+
+Bellik: w çy mübüt tapmaga girmeýän bolsa, gysga ýol trigger, şonuň üçin maglumat berilmezligi sebäpli, makro Trigger we ş.m. )dan bäri giriş ýok bolsa, gysga ýol trigger henizem ýerine ýetirer.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Salgylanma trigger</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Recordsazga alnan gysga möhlet, häzirki synag tagtasy bilen islän wagtyňyz basylanda sebäp boldy</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Bu hereket, programmany täzeden açmak üçin programmany talap edýär. Indi muny etmek isleýärsiňizmi?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Bir mesele bardy. Programmany el bilen täzeden başlamaly.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Annotator bilen derňäň</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Elementlerde gurlan diňe okalýar - diňe. Üýtgetmek üçin dublikat.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonim</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Ýörite</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Düýn</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} birnäçe gün öň</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 sagat öň</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} sagat öň</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Edil döwrebap</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Bir minut öň</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minut öň</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Geçen aý</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} aý öň</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Geçen hepde</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} hepdtalan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} ýyl mundan ozal</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Düşündirişler</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Amaly ady</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Programma ýoly</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Ýagdaýa bagly</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Mazmuny</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Faýl görnüşi</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Surat görnüşi</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Yzygiderli aňlatma</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tekst görnüşi</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Ady</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL-iň ady</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Tutuş söz</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Ýokarky ekran gyrasynda açmak ýaly, bu aç-açan açylanda esasy penjiräni gulplär. Has çalt köpelmegine ýol bermek - Maksatly iş akymlary.
+
+* Gurluşlar, monitor üçin däl-de, çörekleriňiz bilen çäklenýär.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Penjire we gulp görkeziň</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Mugt!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Bize 5 ýyldyz beriň!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Hemmesini poz</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Mazmuny pozuň</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Öçürmek isleýändigiňize ynanýarsyňyzmy?
+Clipleriňiz?!
+
+* Bu amal yzyna gaýtarylyp bilinmez!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Men indi Dev, käbir goldaw görkezmegiňizi haýyş edýäris!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Muskeepase ýaly?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} diňe görnüşleriň görnüşini kabul edýär: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Awto göçürmek tertibi - Çep syçanjygyň çep düwmesi boşadylandan her gezek "Casp" hadysasyny simulasiýa edýär.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Sag basyň</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Predeta</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Plugin bukjasyny görkez</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Hasabat</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Görüş</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Gurallar görkezmesini görkeziň</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analiz hasaplanýar ýa-da çykyşy hökmünde iň amatly maglumatlar döredýärler. Analitleriň çagalary olaryň giriş bolup biljekdigini kesgitlemeli. Bu, adatça iň soňky çykyş.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Giriş görnüşi</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger dizaýner '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>A {0} saýlaň ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Tapylmady...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Şertnamanyň hakyky ýa-da ýalan netijesini barlananda agdarylýar. Mysal üçin, "öz içine alýar" ýagdaýy 'öz içine almaýar' bolar.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Bolmaýar</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Haýyş et!</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Reňk şekili</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Gabat gelýän reňk saýlaň</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>"Compectioncur" "Activearcomer" basylýan ýaly, esasy programmaa gönükdirilende, "Cöhit" hadysasy tright Consriýadaky goşundy çap edilen zynjyry fonda amala aşyrylar Simulirlenen göçürme paneli maglumatlary.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Giňişleýin süzgüç</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Süzgüçleri gizläň</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Süzgüçleri dikelt</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Süzgüç dörediň</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Meýletin) galan boşluk, bu hereketiň girişini ulanyp, bufer paneli düzüler. Bu ýerde berilýän islendik zat diňe ýönekeý tekst hökmünde garalar.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Magşar üçin mazmun</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Haçan-da bu hereketden soň hiç hili klip goşulmaz, bu hereketde paneli emele getirer.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Üns berme</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Hiç bir hereket üçin hiç bir seljer tarapyndan saýlanan seljer ýok '} 0</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Hereketi '{0}' tapylmady</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Ene-atanyň "{1" {1} '}'-analizator '{2}' säwlikleri '</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Klassifikator üçin saýlanan bellik saýlanmady '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>"ClassyFier" -i "{0}" tapylmady</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Topary deňeşdiriň Diňe harplar, sanlar ýa-da boşluk bolup biler</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Klip bellikli trigger '{0}' üçin bellik saýlanmasy ýok</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Klip bellikli trigger '{0}' tapylmady</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>'Ч 0 {0}' üçin görkezilen seresaplyk bukjasy ýok</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Papkanyň '{0}' trigger '{1}' üçin tapylmady</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>"{0}" goýulmadyk faýl ýazyjysy Faýl ýazyjysy</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Faýl ýazyjy ýoly '{1}' üçin '{1}' tapylmady</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Meseleler paneli</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Pluginleri öwreniň</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Bu derňew konfigurasiýasyny dikelt</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Üýtgeşiklik</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Internete birikdiriň we soňrak synanyşyň.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Kömek</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} iň soňky wersiýa</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Hemmäňiz ýokary - senenagat!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Täzelenmeleri barla...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Täze wersiýa bar!
+
+'{0}' -a täzelemek üçin şu ýere basyň</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>'{0}' -a täzelemek üçin aşak basyň</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Täzelenme!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Indi täzelen</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}'-de umumy bahalary öz içine alýar. Nädip täzeden düzmek isleýärsiňiz?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Düşnükli</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Soňky gözlegleri arassalaň</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Hemmesini täzeden düzmek</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Paýlaşylan</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Gaýtalanmadyk</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Bellenen amaly hereketi çagyrýar. Applicalhli amaly buýrugyň raýatlygy ýok we olaryň giriş klipiniň hasaba alynmaýar.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Haçan-da buýruk mahsusda, jeza zynjyry, ýerine ýetiriliş zynjyry saklanar. Köp buýruk, ýerine ýetirmek üçin ýörite programma döwletini talap eder.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Elmydama dowam edýärmi?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Ýerine ýetirmek buýrugy.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Buýruk</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Programma buýrugy üçin saýlanan buýruk '{0}' üçin saýlanan buýruk ýok</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Programma buýrugy üçin buýruk "{0}" tapylmady</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Saýlandy</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Täzeden başla</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>"Ч 0 {0}" diýen mesele bardy. Täzelenmäni tamamlamak üçin '{0}' ýene-de täzeden başlamaly we "ähli sazlamalaryň hemmesi dikelmezligini gaýtalamagy we gurmaly bolarsyňyz.
+
+Indi täzeden başlap, täzelenmäni täzeden açyp bilersiňiz - guruň, soňra äsgermezlik ediň we täzeläň ýa-da täzeledi we wersiýasyny ýapyň we wersiýasyny ulanmagy dowam etdiriňmi?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Säwligi täzeläň</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Täzelenmäni göçürip alyp bilmedi</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Täzelenme şowsuz</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Täzelenmegi tamamlamak üçin täzeden başlamaly bolarsyňyz. Indi ýa-da soň täzeden açmak isleýärsiňizmi?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Taýýar täzelenme</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Soňrak</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Häzir täzeden açyň</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Garaşylýar</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} {1} üstünlikli täzelendi}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Esasy plaginler talap edilýär we aýrylyp bilinmez.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Gurluş jaýlary</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Täzelenme garaşylýar. Tamamlamak üçin täzeden başlaň.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Garaşylýar</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Aýyrmak garaşylýandyr. RE üýtgetmek isleseňiz täzeden açyň.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Täzeden açmak hökman däl-de, täzeden başlamaly bolarsyňyz. Indi ýa-da soň täzeden açmak isleýärsiňizmi?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Aýyrmak mümkin dälmi?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Göçürilmedik</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - '{0}' üçin girizilen deslapky teklip döretdi</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Saýlanan klip saýlanmady</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Saýlanan klip seljeriş</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Saýlanan klipde '{0}' ylgamak üçin gysga ýol belläň</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Global pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>"Ч 0 {0} 'üçin global bökdençlik belläň</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Paroly ýatdan çykardyňyzmy?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Hasapdan çykmak</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Gizlinlik syýasaty</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>. Bu haýal öndürijiligi üýtgedip biler we şahsy maglumatlary öz içine alyp biler.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Faýla giriň</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Açyk</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Açyk surnal bukjasyny açyň</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Pluginlere göz aýlaň</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Oka</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ýaz</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Seslenme ýa-da bug hasabaty iberiň</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Bu diňe esasy penjiräni gizleýär. Beýleki däl-de, beýleki gepleşik penjireleri hemişe meseleler panelinde görkezilýär.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>'{0}' -da gözläň</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Süzgüç goşmak</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Kömek görnüşini redaktirläň</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Bu süzgüçden aýyryň</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Bu barada kömek aç ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipler</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Üýtgetmek</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Hiç haçan</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Düzmek</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Atsyz</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Ýazgy</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Tötänleýin çeşme salgylanmasy</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' talap edilýär</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Ýalňyşlyklar bar)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Çäklendirilen</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Saklamak</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Hapa</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Çäksiz</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Bu programma häzirki wagtda deslapky masgaralaýja okaýjysyna we formalary gabat gelýär.
+
+Deslapky okyja çykarmak ýa-da öçürmek ýa-da öçürmek Bu konfigurasiýasyna täsir etmez. Diňe sanawdan daşlaşdyrylan programmalar deslapky gurnama yzarlaň.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Bu programma häzirki wagtda deslapky tagta ýazyjysyna we formatlar bilen gabat gelýär.
+
+Deslapky ýazyjynyň deslapky önümlerini açmak ýa-da öçürmek (bufer gapdal panelden) bu konfigurasiýasyna täsir etmez. Diňe sanawdan daşlaşdyrylan programmalar deslapky gurnama yzarlaň.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Clip tagtany diňleýjäni (ulgamyň tagtasy -&gt; Rezýume) öçürmek size öwürmek üçin.</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Elýeterli däl</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Sazlamasy ýok</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Men diňe iňlis we maýynja pastasy gürleýärin.
+
+Iňlis paketi bilen gämisi bilen gämi gämisi bilen gämisi bilen gämini gürleýärsiňiz, şonuň üçin bu gurnama gutarandan soň dili islendik wagtda üýtgedip bilersiňiz (Sazlamalar -&gt; Saýlamalar -&gt; halkara).
+
+Terjimeçini gowulaşdyrmak isleseňiz, sizden eşitmek isleýärin!
+
+Feehlibes@monkePase.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Terjime aladalary</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Bu aýratynlygy ulanmak üçin maýmaýpetini täzelemeli.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Salgylanma</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Klip diňleýji maýyp</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Klip diňleýji açyk</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Ene-ata hereketi '{0}' Giriş emläk görnüşini 'iň soňky çykyş görnüşini' goldamaýar '</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Meýilnamalar barada has giňişleýin öwreniň</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Amaly</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klip</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizator</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Bellik</value>
+  </data>
+</root>

@@ -1,0 +1,49 @@
+{
+  "title": "QR కోడ్ జనరేటర్",
+  "description": "వచనాన్ని QR కోడ్‌గా మారుస్తుంది",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/QrCoder",
+  "packageUrl": "https://github.com/monkeypaste/QrCoder/releases/download/v1.0.0/QrCoder.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/icon.png",
+  "packageType": "Dll",
+  "tags": "కోర్, QR కోడ్, టెక్స్ట్, ఇమేజ్, లింక్, కన్వర్టర్",
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "image": true
+    },
+    "parameters": [
+      {
+        "label": "కన్వర్టర్ కోసం కంటెంట్",
+        "description": "మార్చడానికి స్నిప్పెట్",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "శీర్షిక ఉపసర్గ",
+        "description": "సోర్స్ క్లిప్స్ శీర్షిక ఆధారంగా QR కోడ్ శీర్షికను చేస్తుంది",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{Title}"
+          }
+        ]
+      }
+    ]
+  }
+}

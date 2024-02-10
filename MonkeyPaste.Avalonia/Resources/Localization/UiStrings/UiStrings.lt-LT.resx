@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Jokios funkcijos neapsiriboja prenumerata, tik saugojimo talpa ir bet kada gali būti keičiamos.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Atkurti esamą sąskaitą ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Turinys ir šiukšliadėžė
+ribotas {0} ir {1}
+atitinkamai klipai.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Leidžia iki {2} turinio ir neribotos šiukšlių saugyklos.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Neribotas ir neribotas turinys ir šiukšlių saugykla.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Atkurti</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Laisvas</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standartas</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Neribotas</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Prenumerata</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Jūsų privatumas yra svarbus, o mainų srities duomenys gali būti labai asmeniški. Sauga visada užšifruota, tačiau galite nustatyti slaptažodį, kurio reikės, jei jūsų įrenginys bus pavogtas arba kažkas kitas naudojasi jūsų įrenginiu.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Slaptažodis</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Įgalinus, vilkimas iš bet kurios programos į ekrano viršų atskleis „MonkeYPaste“, kad būtų lengvai įmesta turinio į „MonkeYPaste“.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Įjungus „užraktą“ pagrindinio lango viršutiniame kairėje, vis tiek leis numesti ant beždžionių.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Daugiau langų nuostatų galima rasti meniu „Nustatymai -&gt; nuostatos -&gt; langas“.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Vilkite bananus čia!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Vilkite - į - atidarykite</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Klaviatūros nuorodas galima peržiūrėti arba pakeisti bet kuriuo metu iš meniu „Nustatymai -&gt; nuorodos“.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Visi pasauliniai nuorodos bus išjungti, todėl galite juos nustatyti vėliau.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>„MonkeYPaste“ mainų srities sparčiosios klavišai bus prieinami visose programose.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Vidinis</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Numatytas</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Gesto profilis</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Ei! Nustatykime keletą dalykų, kad pagerintume jūsų bendrą patirtį su „MonkeYPaste“.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Sveiki</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Norint kuo geriau išnaudoti „MonkeYPaste“, automatiškai įkelti, kai prisijungiate, yra gera idėja. Bet tai visiškai priklauso nuo jūsų.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Laikykitės kasdienio.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Įgalinti</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Įkelti prisijungimo?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Įgalinus, slinkties gestas ekrano viršuje atskleis „MonkeYPaste“.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Kairėje - spustelėjus užduočių juostos piktogramą vis tiek bus atidaryta „MonkeYPaste“.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Daugiau langų nuostatų galima rasti meniu „Nustatymai -&gt; nuostatos -&gt; langas“.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Lengva, tiesa?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Slinkite čia!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Slinkite - į - atidarykite</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "centras"&gt; MonkeYPaste yra &lt;span Color = "Raudona&gt; visiškai integruota &lt;/span&gt; su vilkimu - ir - Drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Nuleiskite čia!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "centre"&gt; Tokiu būdu, beždžioninę gali būti pasiekiama &lt;br&gt; &lt;span color = "raudona"&gt; be paspaudimo &lt;/span&gt; ar net &lt;spoch Color = "Raudona"&gt; Mušimas akis &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Vilk mane!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Išbandyk!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Išbandyk!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Nėra rezultatų.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Patvirtinti</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Atnaujinti</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Paieška...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Nustatymai</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Priklausomybės:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Diegti</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Ar tikrai norite pašalinti „{0}“ ir visus jo išankstinius nustatymus ir nuorodas?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Pašalinkite</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' neturi rezultatų.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Nėra atrankos.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Nė vienas</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Kreditai:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Apibūdinimas:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Paaukoti:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licencija:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projekto URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Paskelbta:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Skaityk mane:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Pranešti apie smurtą:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Žymos:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Atnaujinimas</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versija:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Atidarykite lange</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Atleisti</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Atnaujinti</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Sutaupyti</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Šalia ištrinti!
+
+Atnaujinkite, kad išvengtumėte.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Šalia šiukšliadėžės!
+
+Atnaujinkite, kad išvengtumėte.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Failai</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Vaizdas</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Tekstas</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Nukopijuota {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} failai | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} eilutės</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} kopijos | {1} pastos</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Judėti</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Papildyti</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopijuoti</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Supjaustyti</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Įklijuoti</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Kopijuoti</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Neišsaugotas filtras</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Prašome pasirinkti -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formatai</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Skaitytojai</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Rašytojai</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Prižiūrėtojai</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Ištrinti</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Kopija</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Redaguoti vardą</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Atstatyti</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Žymos</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Veiksmas</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Visuotinis maršrutas</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Trumpesnis kelias</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gestai turi būti unikalūs ir gali būti tik vienas įvesties raktas.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Vidiniai &lt;/b&gt; Visi sparčiosios klavišai apsiriboja programa. Tai tikrai nėra numatyta parinktis, tačiau gali leisti pritaikyti tai, kokius nuorodas ketinate padaryti visuotiniu &lt;i&gt; kažkada &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Numatytasis &lt;/b&gt; įjungti visi visuotiniai nuorodos. &lt;b&gt; rodyti/slėpti pagrindinį langą &lt;/b&gt; trumpas klavišas naudoja &lt;spoch Color = "Red"&gt; Override &lt;/span&gt; maršrutizavimas &lt;b&gt; CAPS užraktas &lt;/b&gt; klavišas. Bet kuriuo metu galite pakeisti tą maršrutą ar gestą. Bet &lt;spoch color = "Green"&gt; išbandykite &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;sody&gt;
+&lt;h1&gt; Global Shortcut režimai &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; pasyvus &lt;/b&gt; „Shortcut MonkeYPaste“ klausys bet kurioje programoje. &lt;br&gt;
+*Tai tik &lt;i&gt; tik &lt;/i&gt; parinktis „Linux“ kol kas.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; trumpas klavišas įvykdys &lt;b&gt; &lt;i&gt; prieš &lt;/i&gt; &lt;/b&gt; jį tvarko aktyvi programa. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; trumpas klavišas vykdys &lt;b&gt; &lt;i&gt; po &lt;/i&gt; &lt;/b&gt; jį tvarko aktyvi programa. &lt;/li&gt;
+&lt;li&gt;
+ė
+Ši parinktis garantuos, kad nuoroda sukelta be aktyvios programos konfliktų.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Išskirtinis nepaisymas &lt;/b&gt; Tai yra specialus nepaisymo režimo tipas, skirtas „CAPS Lock“ klavišui. Tai leidžia tik &lt;b&gt; vieną &lt;/b&gt; klavišą (ne - modifikatorių) savo priskyrimui. &lt;br&gt;
+Normaliame nepaisymo režimo dangteliuose užraktas gali būti įstrigęs &lt;/i&gt;, kai paspaudžiama kartu su kitais klavišais. &lt;br&gt;
+Taigi, nesvarbu, kokie kiti klavišai neveikia, jei paspaudžiamas &lt;b&gt; spartusis klavišas, jis bus panaikintas ir neleis jam tapti &lt;i&gt; įstrigęs &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Išjungti</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Įkelkite, kai ši vartotojo abonementas yra prisijungęs, o ne kitiems vartotojams.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Naudojant turimus kontaktus (reikalingas „Fetcher“ papildinys) Šis laukas bus naudojamas visais šio šablono atvejų visame šiame dokumente arba bet kuriame jis bus nurodytas vėliau. &lt;/p&gt; &lt;p&gt; Taigi, pavyzdžiui, jei pasirinkite el. Pašto adresą Tuomet jūsų pasirinktas kontakto el. Pašto laukas bus naudojamas visiems šio dokumento egzemplioriams. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = trumpi metai &lt;br/&gt; yyyy = ilgi metai &lt;br/&gt; m = mėnuo (1-12) &lt;br/&gt; mm = mėnuo (01-12) &lt;br/&gt; mmm = mėnesio santrumpos (sausio mėn., Vasario mėn. . Gruodis) &lt;br/&gt; mmmm = ilgas mėnuo (sausis, vasaris ... gruodis) &lt;br/&gt; d = diena (1 - 31) &lt;br/&gt; dd = diena (01 - 31) &lt;br/&gt; ddd = Savaitės diena žodžiais (pirmadienis, antradienis ... sekmadienis) &lt;br/&gt; e = trumpa savaitės diena žodžiais (pirmadienis, antradienis ... saulė) &lt;br/&gt; d - ordino diena (1, 2 -oji, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = valanda am/pm (0-12) &lt;br/&gt; hh = valanda am/pm (00-12) &lt;br/ &gt; H = valanda dieną (0–23) &lt;br/&gt; hh = valanda dieną (00–23) &lt;br/&gt; mm = minutė &lt;br/&gt; ss = antra &lt;br/&gt; sss = milisekundės &lt;br/&gt; a = am/pm žymeklis &lt;br/&gt; p = a.m./p.m. žymeklis</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Dabartinė data ir (arba) laikas bus pakeistas į „Datetime“ šablonus, kai jie bus įklijuojami.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Visi šio šablono atsiradimai bus naudojami pateiktame tekste. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Visi šio šablono atsiradimai bus naudojami pateiktame tekste. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Baigti pridėti</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Įgalinti bloką</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Įgalinti įterpimą</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Perjunkite vadovą</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Perjunkite vadovą</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pauzė priedas</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Perjungti anksčiau</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Perjungti anksčiau</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Atnaujinti priedą</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Pridėkite ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Įklijuoti</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Kaištis</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Slėpti visus '{0}' pranešimus</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Atleisti</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Paskutinė aktyvi programa nežinoma. Perjunkite į numatytą programą į „Monkey Paste“.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Įklijuokite į: &lt;em&gt; &lt;i class = "Paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Sumažinkite</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Prašau palauk...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Užrakinti</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Sąskaita</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Padėti</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopijuoti įklijuoti</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Nuostatos</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Atkurti numatytuosius nustatymus</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtras...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Nuorodos</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Pridėkite programą</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Pridėkite svetainę</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blokuoti?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>vardas</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Programos</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokuoti domeną?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blokuoti URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domenas</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Šaltinio URL atpažinimas priklauso nuo to, kaip draugiška iškarpų sritis, todėl negalima garantuoti, kad pagrindinės kompiuterio programa yra atmesta</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Svetainės</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Kai kurios „MonkeYPaste“ funkcijos naudoja klaviatūros automatizavimą, kad imituotų „kopijavimo“ įvykius kitose programose.
+
+Pridėkite ir (arba) pasirinkite programą naudodami unikalų kopijavimo nuorodą (pvz., Pvz., Pvz., Konsolę ar apvalkalą), kad užtikrintumėte, jog šios funkcijos tinkamai veikia.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Nukopijuokite nuorodą</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Nė vienas</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Nurodytai programai bus naudojami tik atrinkti išankstiniai nustatymai. Kai nepatikslinus, bus naudojami numatytuosius išankstinius nustatymus, esančius &lt;em&gt; mainų srityje „SideBar &lt;/em&gt;“.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Daugelyje „MonkeYPaste“ funkcijų naudojama klaviatūros automatizavimas, kad sąveikautų su kitomis programomis.
+
+Kai kurios programos (pvz., Kai kurios konsolės ar apvalkalai) gali turėti nuorodą į numatytąją pastos klavišą.
+
+Norėdami užtikrinti tinkamą sąveiką, įrašykite šias programos nuorodas čia.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Įklijuokite nuorodą</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Skaitytojai</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Visos mainų srities stebėjimas iš atmestų programų bus ignoruojamas &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Rašytojai</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Redaguoti...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formatai</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Atstumtas</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Nuorodos</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Ar taip pat norėtumėte pašalinti visus {0} klipus iš '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Pašalinti klipus?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Paraiška</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Naršykite programoje ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Pasirinkite Programos kelią</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Ar tikrai norite pašalinti pasirinktinius {0} nuorodas?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Ar tikrai norite pašalinti pasirinktinius formatus, skirtus {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Šiai programai nėra priskirtų iškarpinės formatų. Jokie duomenys nebus skaitomi iš jo perpjaustydami/kopijuojant arba bandant tempimą - ir - mesti į beždžiones</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Šiai programai nėra priskirtų iškarpinės formatų. Automatizuota pasta arba vilkimas - ir - lašas iš „MonkeYPaste“ neturės įtakos (jo tuščiai duomenys).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Ar tikrai norite iš naujo nustatyti visus nuorodas? Visi pasirinktiniai nuorodos bus pašalinti.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Ar tikrai norite pakeisti savo nuorodos maršruto parinkimo profilį į „{0}“</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Viskas</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Mėgstamiausi</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtrai</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formatai</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Žymos</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Šiandien</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Šiukšliadėžė</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Apie</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Lengva, tiesa?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Dukart spustelėkite, kad pašalintumėte</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Paprotys</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globalus</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Šis derinys prieštarauja „{0}“, kuris bus išvalytas, jei bus išsaugotas.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Turi būti pateiktas nuoroda.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Tai yra visuotinis nuoroda. Tai reiškia, kad jis bandys vykdyti, kai tik bus atlikta. Stenkitės, kad jis būtų pakankamai išskirtinis (arba pakeiskite „maršrutizacijos tipą“), kad jie neprieštarautų kitoms programoms.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globalus</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Spartajame klaviše turi būti vienas ir vienintelis modifikatoriaus raktas.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Paspauskite bet kurį raktą, kad įrašytumėte ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Priskirkite nuorodą</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Sužinokite daugiau...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Patobulinti</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Atšaukti</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Ištaisyti</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignoruoti</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Gerai</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Bandyti</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Išjungti</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Pateikti</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Taip</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Kasmet</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Mėnesinis</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Išbandyk nemokamai!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Atsiskaitymo ciklas</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>El. Paštas</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Prisijungti</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Patikrinkite savo ryšį
+Ir bandykite dar kartą.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Atsijungti</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Kitas mokėjimas</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Slaptažodis</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Registruotis</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>El. Paštas negalioja</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Slaptažodžiai nesutampa.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Slaptažodis turi būti bent {0} simbolių.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Prisiminti?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Patikrinkite savo el. Laišką, kad patvirtintumėte savo sąskaitą</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Atstatyti slaptažodį</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Niekada</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Nemokamas {0} dienos bandymas</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Kilo problemų atlikimas
+Jūsų pirkinys.
+
+Patikrinkite savo ryšį ir
+Nustatymai gali padėti.
+
+Ar norėtumėte bandyti dar kartą?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Jūsų sąskaita buvo sėkmingai
+Atnaujinta iki:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Įsigykite sėkmingai!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Klaida</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Nepavyko prisijungti.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Bandyti</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Pasikeitė sąskaita</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Dabar jūsų prenumerata yra {0}/{1} su {2} turiniu ir {3} šiukšlių saugykla.
+Tačiau nesijaudinkite, po to, kai pažeminus, jokie duomenys neprarandami. Bus įvertinti tik nauji klipai.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Sveikiname! Dabar jūsų prenumerata yra {0}/{1} su {2} turiniu ir {3} šiukšlių saugykla.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Šiukšliadėžė ar ką nors atsiriboti
+iš '{0}' pridėti daugiau.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' saugykla yra {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Atkurti</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} užblokuotas</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Pasiektas turinio ir šiukšlių talpos!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' saugykla yra {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Pasiekta turinio talpa!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Galite paslėpti šiuos įspėjimus
+spustelėjus „Slėpti visus“ nuo
+Aukščiau pateiktas parinkčių meniu.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>„Max“ šiukšliadėžė yra {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Pasiekta šiukšlių talpa!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} neteisinga</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} turi būti bent {1} simboliai</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} gali būti tik {1} simbolis</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Įklijuokite: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Mokėjimas už jūsų {0}
+Prenumerata turėjo būti atlikta {1}
+ir nebuvo gautas.
+
+Atnaujinkite savo
+Mokėjimo informacija.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Mokėjimas už jūsų {0}
+Prenumerata turėjo būti atlikta {1}
+ir nebuvo gautas.
+
+Prisijunkite prie
+Internetas įrenginyje
+su savo prenumerata ir
+paleiskite iš naujo, kad galėtumėte tęsti
+Naudodamiesi savo {0} planu.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Mokėjimas už jūsų {0}
+Prenumerata turėjo būti atlikta {1}
+ir nebuvo gautas.
+
+Prašau atidaryti arba paleisti iš naujo
+Monkeypaste įrenginyje
+Su savo prenumerata
+toliau naudokite savo
+{0} planas.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Sąskaitos galiojimo laikas pasibaigė</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>PASTABA</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>„Microsoft Store“ neleidžia pakopos
+Prenumeratos priedų pakeitimai.
+
+Turite atšaukti savo
+{0}/{1} suplanuokite save
+Arba jūs būsite apmokestinti abiem.
+
+Ar norėtumėte tai padaryti dabar?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Jūsų slaptažodis buvo iš naujo nustatytas.
+
+Patikrinkite savo el. Paštą ir
+Sekite nuorodą, kad pasikeistumėte
+Jūsų slaptažodis.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Prisijungti</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autorius (-ai)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Reikalaujama, kad prieš tęsdami sutiktumėte su šiomis licencijos sąlygomis.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Šis paketas (-ai) reikalauja, kad prieš diegdami priimtumėte jų licencijos sąlygas.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Aš atsisakau</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Spustelėję „Aš sutinku“ reiškia, kad jūs sutinkate su šios programos licencijos sąlygomis. Jei nesutinkate su sąlygomis, spustelėkite „Aš atsisakau“.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Spustelėję „Aš sutinku“ reiškia, kad jūs sutinkate su aukščiau išvardyto (-ų) papildinio (-ų) licencijos sąlygomis. Jei nesutinkate su sąlygomis, spustelėkite „Aš atsisakau“.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Peržiūrėti licenciją</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Licencijos priėmimas</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Aš priimu</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktyvus</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Neprisijungus</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Neregistruotas</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>padaryta</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Slaptažodžiai nesutampa</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Slaptažodis</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Jūsų prenumerata yra
+Dabar nustatykite į {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Rasta sąskaita</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Prisijungimas nepavyko</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registracija nepavyko</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registracija sėkminga!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Atstatymo klaida</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Prenumerata</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Kas naujo</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Niekada</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Neribotas</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>pajėgumas</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>likęs</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>iš viso</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Jūsų mokėjimas yra pradėtas.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Išskirtiniuose nepaisymo sparčiuosiuose klavišuose gali būti tik vienas raktas, o tas raktas negali būti modifikatoriaus raktas.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Pasibaigė</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Pakrauti</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Neįgalus</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Atkreipkite dėmesį! Šis slaptažodis yra neprivalomas ir tik papildomam saugumui. Jūsų duomenys jau užšifruoti ir niekada nebendraujami. Šis slaptažodis tiesiog neleidžia tam, kurio ne jūs įkeliate „MonkeYPaste“, jei jie kažkaip gauna prieigą prie jūsų darbalaukio (pavogtas, jūs išeinate iš kambario ir pan.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Atminkite, kad nuleidžiami parametrai:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Naršykite papildinius</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analizuoti</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Greitas veiksmas</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Perjungimo redagavimas</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Perjungtas prisegtas</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anotacijos</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Paprastas tekstas</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Atidarykite lange</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Spustelėkite + CTRL, jei norite sekti ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Spustelėkite + Alt, kad sektumėte ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Prisijunkite arba numeskite bet kurią laikmeną čia!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Aišku</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Slenksčiai, viršijantys 0, užtikrins neryškų spalvų atitikimą, naudojant Euklido atstumą RGBA spalvų erdvėje.
+
+Pvz., Jei raudona (#FF0000) yra paieškos terminas, o juodas (#000000) yra vaizdo įrašo taškas, tada spalvų atstumas bus 255. Juodos ir baltos spalvos atstumas yra maksimalus įmanomas 510, įskaitant alfa kanalą</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Visi šie dalykai yra teisingi</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Iškarpinė</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kolekcijos</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Pelės režimai</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Suaktyvintojai</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pauzė</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Aprašymas</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Naujas gaidukas</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Pridėkite išankstinį nustatymą</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Beždžionių lašo vedlys</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Išankstiniai nustatymai</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizatorius</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Ciklo orientacija</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Perjunkite tinklelio išdėstymą</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Bylą jautrus</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Slenkstis</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Visas žodis</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Nėra nustatytas</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Maršrutas</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Veiksmas</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Tinklelis</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>padaryta</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Kitas</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Ankstesnis</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Praleisti</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Esama sąskaita?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Kitas mokėjimas</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Registracija leidžia jums atlikti mokamą prenumeratą visuose savo įrenginiuose (esant prieinamumui). Mes neplemime jūsų el. Laiško, pažadame 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Prenumerata</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Vartotojo vardas</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Reikia užsiregistruoti?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Šaltiniai</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Keista, nieko nėra. Kažkas turi būti negerai 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Pašalinti</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Reikalauja iš naujo</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Išplėstinė</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Klaidų ištraukimas iš „{0}“</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Klaida įdiegus papildinį: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Klaidos įdiegimas įskiepio '{0}' sugadinta ar netinkama katalogo struktūra. Manifestas turėtų egzistuoti „{1}“, bet nebuvo rasta.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Klaidų analizės papildinio manifestas '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Nėra įskiepio, įkelto su GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} klaida</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Klaidų pastatymo papildinys, skirtas „Temp Dir“ {0} '</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Klaidos atsarginė kopija '{0}' į '{1}'. Informacija: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Tekstas įvestas bus automatiškai pritaikytas paieškai, kai jokio teksto laukelio nėra sufokusuotas.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Automatinės paieškos įvestis</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Slaptažodžio pakeitimas nepavyko</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Pakeisti</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Pakeisti slaptažodį</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Aišku</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Išvalyti slaptažodį</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Turinys</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Turinio šrifto dydis</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kai tiesa, į klipą įterptas išorinis turinys naudos klipų formatavimą, o ne tai, ką galima įsigyti iš šaltinio.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Įklijuokite, numeskite arba pridėkite su paskirties formatavimu</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Ar tikrai norite pamiršti slaptažodį?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Pamiršk</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Pamiršti slaptažodį</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profilis</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Slėpti talpos vandens ženklus</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Pridėjus naują mainų srities turinį, jis nebus stebimas kaip naujas klipas</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignoruoti priedus</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kai mainų sritis atitinka esamą klipą, tas klipas bus naudojamas, o ne sukuriant naują</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Nepaisykite naujų dublikatų</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Karpinės srities pakeitimai iš programos nebus stebimi</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Nepaisykite vidinės iškarpinės stebėjimo</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Tarpai, skirtukai ir naujos linijos bus ignoruojamos stebint</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Nepaisykite tik baltos erdvės</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Įkelkite prisijungimo</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animacinis langas</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Neskaidrumas</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Parodykite elgesį</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Pagrindinis langas bus atskleistas atliekant slinkties gestą viršutiniame monitoriaus krašte</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Rodyti viršutiniame ekrano slinktyje</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Pranešimo apimtis</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Šis nustatymas stebės sistemą - plačiosios klaviatūros pastos skaičiuoja naudojimo statistiką. Ši informacija yra privati ​​ir nėra dalijama, bet taip pat ne „Guarenteed“. Tikslus rezultatus gali reikėti pateikti specifinę programos klaviatūros įklijavimo komandą „Nustatymai -&gt; Kopijuoti ir įklijuoti -&gt; spartieji klavišai“.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Įklijuokite istoriją</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Per daug prisegtų spaustukų (pvz., Naršyklės skirtukai) gali sunaudoti reikšmingą atmintį. Pašalinimas yra pirmasis - pirmas -</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>PIN talpa</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Tai taikoma visoms automatinėms sąnaudoms, mažesnės vertės pagerins našumą</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Naujausia teksto riba</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Ar tikrai norite
+Atkurti numatytąsias nuostatas?
+
+Tai negali būti panaikinta!
+
+*Programa bus paleista iš naujo, kai tik bus baigta.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Ar tikrai norite iš naujo nustatyti visus pranešimus?
+
+*Tai negali būti panaikinta!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Beždžionių pastas nustato mainų sritį (nepaisoma), kai įklijuojama į išorinę programą. Tai bandys &lt;/b&gt; atkurti mainų srities būseną po išorinės pastos.
+
+Bendras restauravimas negali būti garantuotas ir gali sumažinti našumą ar net sugadinti beždžionių, atsižvelgiant į duomenų šaltinį.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Iš naujo nustatykite mainų sritį po beždžionių įklijavimo</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nepavyko ištrinti papildinio talpyklos iš kelio: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Visi papildiniai bus iš naujo nustatyti į pradinę numatytąją būseną</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Papildinio talpykla</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Ar tikrai norite iš naujo nustatyti visus papildinius, kad galėtumėte numatytiems numatytoms?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Ar tikrai norite iš naujo nustatyti slaptažodį?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Visi programų nuorodos bus iš naujo nustatyti pagal numatytuosius raktų gestus.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Iš naujo nustatykite nuorodas</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Visi anksčiau nebuvo nustatyti pranešimai.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Atkurti pranešimus</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Įgalinimas gali būti gana lėtas) Išjungimas suformatuotas sumažins atminties sunaudojimą, tačiau slopins kai kurias išplėstines funkcijas, tokias kaip: pridėti, šablonai, anotacijos ir rasti/pakeisti/pakeisti</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Turtingas turinys</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Nustatyti slaptažodį</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Rodyti užuominas</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Parodykite užduočių juostoje</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Rodyti užduočių perjungiklį</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Rodyti pavadinimus</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Įgalinus, vilkimas iš bet kurios programos į ekrano viršų atskleis „MonkeYPaste“, kad būtų lengvai įmesta turinio į „MonkeYPaste“.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Rodyti vilkite į ekrano viršų</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Garso tema</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Rašybos tikrinimas</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>„Startup“ mainų srities šaltinis nebus žinomas ir priklausomai nuo jūsų saugos nustatymų, turinys gali būti iš neįtrauktos svetainės ar programos.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Pridėkite paleidimo mainų sritį</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Klausykite iškarpinės paleidimo srityje</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Pasirinkite</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Atsargiai! Kitos paletės spalvos pasirenkamos naudojant matematikos, o ne akis! Taigi atminkite, kad kai kurie spalvų ir stiliaus deriniai gali neturėti tinkamo kontrasto, kad būtų galima skaitomumo.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Temos spalva</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Temos stilius</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automatinis šiukšlių valymas bus pradėtas pradedant nustatytu intervalu.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Šiukšlių valymas</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Sąsaja</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Aukštos panaikinimo ribos gali turėti įtakos našumui</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Anuliuoti riba</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Nėra ribos</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Naudojamas pažangių failų paieškoje nenustatytų failų rūšių</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Vartotojas - apibrėžti paieškos plėtiniai</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Raskite ir pakeiskite ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Įklijuokite čia</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Dalintis...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Vaizdas</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Tvarkykite ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Pervardyti</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Rezultatas: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tipas: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Visam laikui ištrinti</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Naršykite „{0}“</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transformuoti</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Įvestis</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Išvestis</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Šaltiniai</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Atkurti</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Pasirinkite vaizdą ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Spalva</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Tvarkykite '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Atviras</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Prašau palauk...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Fono spalva</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Išvalyti viską</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Iškarpų formatai</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Ištrinti viską</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Redaguoti išsamią informaciją</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>vardas</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Rasti</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Šrifto spalva</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formato dažai</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Atrankoje</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Įterpkite vaizdą</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Įterpti nuorodą</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Įterpti vaizdo įrašą</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Rungtynių atvejis</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Naujas šablonas</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Kitas šablonas</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Įveskite įklijavimo tekstą ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Ankstesnis šablonas</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Įprasta išraiška</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Pakeiskite visus</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Pakeiskite</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Visas žodis</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Apvynioti</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blokuoti</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domenas</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Rodyti aplanką</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Atblokuoti</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Apie</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Pridėti bloką</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Pridėti įdėklą</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopija</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Režimai</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Palaukite, kaip beždžionė kraunasi ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Mesti</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Riga - spustelėkite Įklijuoti</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupė</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtras</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Visam laikui ištrinti visus</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Atkurti visus</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Veiksmas</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL jau egzistuoja: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL turi būti tinkamo formatu.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Įveskite visą URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Pridėti URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Įveskite reikšmes</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Nukopijuokite tekstą ar failus, kad galėtumėte pritaikyti.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Pridėti {0} {1} režimo suaktyvintas</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Dabar pridedami mainų srities pakeitimai</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Suaktyvinus priedo režimą</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Dabar mainų srities pakeitimai bus paruošti</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Prieš įjungus priedo režimą</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blokuoti</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Normalus mainų srities elgesys buvo atkurtas</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Pridėti išjungtą</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Pridedami prie klipo viršaus ar botomo</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>„Extent“ priedo režimas suaktyvinamas</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Intarpas</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Vadovas</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Pridėkite savo dabartinį pasirinkimą.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Aktyvinamas rankinio priedo režimas</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Mainų srities kaupimasis sustabdytas</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Priedas pristabdė</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Karpinės srities kaupimasis atnaujintas</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Pridėti atnaujinta</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Ar tikrai norite baigti pridėti?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Redagavimas suderinamumo režime pašalins visus turtingus formatavimą. Ar tikrai norite tai pakeisti?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Įspėjimas apie duomenis</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktyvus</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Įjungtas</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Išjungtas</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Ant</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Pristabdė</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Rezultatas</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Būsena</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Įvyko nežinoma klaida.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Bandymai liko</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Įvesti slaptažodį</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Patvirtinti</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>kontaktas</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Datos laikas</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Ar tikrai norite ištrinti visus „{0}“ naudojimo būdus?
+
+Tai negali būti panaikinta!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamiškas</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statinis</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} tuščias ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Greitai bus daugiau!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Prisijungimo įkėlimas Išjungti nepavyko</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Prisijunkite Įkelti išjungti sėkmę</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Prisijungimo įkėlimas Įgalinti nepavyko</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Prisijungimo apkrova įgalina sėkmę</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Slėptis</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Beždžionių pasta dabar pakrauta.
+Mainų srities klausymas yra: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Pakrauti</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Rodyti</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Automobilių kopijų pasirinkimo režimas: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Režimas pasikeitė</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Dešiniuoju pelės mygtuku spustelėkite Įklijavimo režimą: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Papildinys atnaujintas</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Įklijuokite '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Paleisti '{0}' analizatorius</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Paleisti '{0}' gaiduką</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Pasirinkite '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Ar tikrai norite ištrinti '{0}' ir visus susijusius veiksmus?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Gaidukas</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Ar norėtumėte pašalinti visus „{0}“ antrinius veiksmus? (Priešingu atveju jie bus pakartotinai susiję su „{1}“)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Pašalinkite parinktis</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Ar tikrai norite goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Sąskaita</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analizatoriai</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Taikymo operacijos</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Iškarpinė</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Turinys</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Keitikliai</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultūra</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Duomenys</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Kryptis</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Tempti ir paleisti</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Piktogramos</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Žirnininkas</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Sąsaja</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Įklijuokite operacijas</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Nuostatos</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Paieška</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Nuorodos</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Rūšiuoti</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Skamba</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Sistemos dėklas</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kolekcijos</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Suaktyvintojai</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Svetainės operacijos</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Kalba</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Nustato mainų sritį į įvesties klipą.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Budrus</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blipas</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Bendrosios paskirties garso ir (arba) sistemos dėklo pranešimų įspėjimai. Įspėjimo veiksmai neturi įtakos jų indėliui.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Pranešimas</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Beždžionė</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Peržiūra</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Rodyti?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Laiko skrebučio pranešimas rodomas per kelias sekundes. Kai vertė yra 0 pranešimas, reikia uždaryti rankiniu būdu.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Rodyti laiką (-us)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonaras</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Garsus?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Garso tipas</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>TING</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Apimtis</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizatorius</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Apdoroja savo įvesties klipą naudodamas priskirtą analizatoriaus nustatymą.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Įvesties turinys yra susietas su pasirinkta kolekcija</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Susieja savo įvesties klipą su priskirta žymų kolekcija.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Žyma</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Bylą jautrus?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Tai gali būti statinis tekstas, kurį galima palyginti su įvestimi ir (arba) įtraukti pasirinktas savybes (per mygtuką Filtru), bus pakeista, kai bus įvertinta sąlyga.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Sąlygų duomenys</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Pasirenkama „JsonPath“ užklausa, kuri bus taikoma pasirinktai „įvesties nuosavybei“ prieš įvertinant sąlygą.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Įvesties filtras</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Šiai sąlyginiam klipo savybei.
+
+Nuosavybė „Paskutinė išvestis“ šiuo metu palaikoma tik tada, kai ši sąlyga yra analizatoriaus veiksmo vaikas, o pateikiami duomenys skirsis priklausomai nuo pirminio analizatoriaus išvesties.
+
+Norėdami atlikti trikčių šalinimą, pridėkite „perspėjimo veiksmą“ prie šio sąlyginio tėvų ir nustatykite perspėjimo „pranešimo“ parametrą, kuris atitiktų šią įvesties savybę. Tai leis peržiūrėti faktinius duomenis, kurie naudojami šiai sąlygai.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Įvesties nuosavybė</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Atlieka teksto palyginimą įvesties klipe arba ankstesniame veiksmo išvestyje. Kai palyginimas nepavyks (tai nėra atitiktis), jokie vaiko veiksmai nebus vykdomi. Taigi jis veikia kaip loginiai vartai.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Visos teisingos ar klaidingos operacijos, kai vaiko veiksmai vykdys tik tuo atveju, jei rezultatas bus teisingas.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Sąlyga</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Viskas</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Suaktyvinamas, kai į sistemą bet kokiu būdu pridedamas pasirinkto tipo spaustukas (mainų sritis, vilkite - ir - lašas, generuotas analizatorius arba dubliuotas).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Vykdykite šį gaiduką tik tuo atveju, jei įvesties klipas yra naujas, o ne kopija. Tai nepriklausoma nuo bet kokio pasirinkimo nustatymo, ar ignoruojamas naujas turinys, ar ne.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Nepaisykite pasikartojimo</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Šį veiksmą sukels tik tokio tipo klipai.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Susieja savo įvesties klipą su priskirta žymų kolekcija.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Suaktyvinamas, kai klipas yra susietas su nurodyta žymų kolekcija.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kolekcija</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Millisekundžių laikas laukė, kol vaikai įvykdys įvykdymą</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Delsimas</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimentinis) Pirmiausia naudojamas kartu su kartotuvo veiksmais, skirtais apklausti nuotolinius šaltinius ar pagalbą atliekant ilgą veiklą.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kai paliekamas tuščias, išvesties failas bus naudojamas įvesties klipo pavadinimas kaip failo pavadinimas.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Individualus vardas</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Katalogas, kuriame bus parašytas failas.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Katalogas</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Išsaugo įvestį į pasirinktą aplanką.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Suaktyvėjo, kai keičiasi pasirinkto aplanko turinys. Išvestis bus naujas arba esamas (kai bus įjungta „Ignoore Dublicates“ pirmenybė) failo ar aplanko, kuris pasikeitė, kartu su pokyčių tipu kaip paskutiniu išvestimi, failo spaustukas.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Įvykiai</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Aplankas</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Nepaisykite pasikartojimo</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0 vertė pakartos tėvų veiksmą neribotą laiką</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Pakartokite skaičiavimą</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Millisekundžių laikas laukti, kai baigsis tėvų veiksmas</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Pakartokite vėlavimą</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimentinis) Naudojamas veiksmo kilpoms kurti ar pasikartojančioms užduotims kurti. Pakartojus, jis vėl vykdys visus vaikus su pradiniu įvestimi. Naudojant intervalą be pakartojimo skaičiaus, gaiduką reikės išjungti ir pakartotinai sustabdyti pakartojimą. Gali būti naudinga apklausos ar interneto grandymo automatizavimui.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Sukeltas visuotinio nuorodos, kurią apibrėžiate. Jei „MonkeYPaste“ yra aktyvus, jis bandys naudoti pasirinktą klipą (jei yra) kaip įvestį. Priešingu atveju ji bandys naudoti mainų sritį kaip savo įvestį.
+
+PASTABA: „Shortcut“ trigeris vis tiek vykdys, jei nėra įvesties, kad jis būtų lankstus (taigi tai gali būti makro gaidukas ir tt), nes tai nėra duomenų, orientuotų įvykis.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Spartusis trigeris</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Suaktyvinamas, kai bet kada paspaudžiamas įrašytas nuoroda, naudojant dabartinę mainų sritį</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Šis veiksmas reikalauja, kad programa būtų paleista iš naujo. Ar norėtumėte tai padaryti dabar?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Ten buvo problema. Turite rankiniu būdu iš naujo paleisti programą.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Išanalizuokite su komentuatoriumi</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Anotacijos trigeris</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Sukurti elementai skaitomi tik. Kopija pakeisti.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anoniminis</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Paprotys</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Vakar</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} prieš kelias dienas</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Prieš 1 valandą</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} prieš valandas</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Dabar</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Prieš minutę</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} prieš kelias minutes</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Praeitą mėnesį</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} prieš mėnesius</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Praeitą savaitę</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} prieš kelias savaites</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} prieš metus</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anotacijos</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Programos pavadinimas</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Taikymo kelias</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Bylą jautrus</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Turinys</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Failo tipas</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Vaizdo tipas</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Įprasta išraiška</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Teksto tipas</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Pavadinimas</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL pavadinimas</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Visas žodis</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Kaip slinkite išilgai viršutinio ekrano krašto, kad atidarytumėte, tai užrakins pagrindinį langą, kai jis atsidarys. Leidžiant greičiau daugialypį darbo eigą.
+
+* Kampai yra atsižvelgiant į visus jūsų ekranus, o ne vienam monitoriui.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Rodyti langą ir užraktą</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Laisvas!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Duok mums 5 žvaigždes!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Ištrinti viską</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Ištrinkite visą turinį</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Ar esate įsitikinę, kad norite ištrinti
+Visi jūsų klipai?!
+
+*Ši operacija negali būti panaikinta!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Aš esu indy dev, prašau parodyti palaikymą!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Kaip beždžionė?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} priima tik (-ų) tipo įvestį: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Automatinio kopijavimo režimas - imituoja įvykį „kopijuoti“ kiekvieną kartą, kai išleidžiamas kairiojo pelės mygtukas.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Dešiniuoju pelės mygtuku spustelėkite Įklijavimo režimą - imituoja „įklijavimo“ įvykį kiekvieną kartą, kai išleidžiamas dešinysis pelės mygtukas</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Iš anksto nustatytas</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Rodyti papildinio aplanką</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Pranešti</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Vaizdas</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Rodyti patarimus</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analizatoriai komentuoja savo įvestį arba sukuria naujus klipus kaip išvestį. Analizatorių vaikai turi nuspręsti, kurio iš jų reikia kaip jų indėlį. Paprastai tai yra paskutinis išėjimas.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Įvesties tipas</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger Designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Pasirinkite {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nerastas...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} trigeris</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Patikrinus tikrąjį ar klaidingą būklės rezultatą. Pavyzdžiui, „Sudėtyje yra“ sąlyga taps „nebus“.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Prašau palauk...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Spalvų pasirinkimas</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Pasirinkite rungtynių spalvą</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Kaip spartusis trigeris, tačiau paspaudus raktų derinį, įvykis „kopijuoti“ bus imituojamas aktyvioje programoje, todėl jis vis tiek veikia kaip kopija, bet tada prie beždžionių kopijavimo gaiduko pritvirtinta veiksmų grandinė bus įvykdyta fone naudojant imituoti kopijavimo iškarpinės duomenis.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Išplėstinis filtras</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Slėpti filtrus</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Atkurti filtrus</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Sukurti filtrą</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Neprivaloma) Kai palikta tuščia, mainų sritis bus nustatyta naudojant šio veiksmo įvestį. Viskas, kas čia pateikta, bus traktuojama tik kaip paprastas tekstas.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Mainų srities turinys</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kai tiesa, po to, kai šis veiksmas nustatys mainų sritį, nebus pridėta jokio klipo.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignoruoti</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Nei vienas analizatorius pasirinktas veiksmui '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>„Analyzer for Action“ {0} 'nerastas</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Tėvų '{0}' filtrai tik '{1}' tipo turiniui ir analizatoriui '{2}' niekada nevykdys, nes jis nepalaiko '{3}' įvesties tipo</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Nėra žymos, skirtos klasifikatoriui '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Klasifikatoriaus „{0}“ žyma nerasta</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Palyginkite vertę gali būti tik raidės, skaičiai ar tarpai</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Nėra žymos, skirtos spaustukui pažymėtam trigeriui '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Žyma, skirta „Clip Tagged Trigger“ {0} 'nerasta</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Nėra „Watch“ aplanko, nurodyto „{0}“</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Žiūrėkite aplanką '{0}' nerastas trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Failų rašytojo kelias, skirtas veiksmui '{0}' nenustatytas</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Failų rašytojo kelias '{0}' už '{1}' nerastas.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Užduočių juosta</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Sužinokite apie papildinius</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Atkurti šią analizės konfigūraciją</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} pakeisti žurnalą</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Prisijunkite prie interneto ir bandykite dar kartą vėliau.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - pagalba</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} yra naujausia versija</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Jūs visi esate - iki pasimatymo!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Tikrinti, ar yra atnaujinimų...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Galima rasti naują versiją!
+
+Spustelėkite čia, jei norite atnaujinti „{0} '🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Spustelėkite žemiau, jei norite atnaujinti „{0}“</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Galimas atnaujinimas!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Atnaujinti dabar</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' yra bendros vertės. Ką norėtumėte iš naujo nustatyti?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Aišku</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Išvalykite naujausias paieškas</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Atstatyti viską</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>RESET BANDAKTAS</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Atstatykite nenusileidusį</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Pasinaudoja priskirtą programos veiksmą. Visos programos komandos yra be pilietybės, o jų įvesties klipas nepaisomas.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kai nepatikrinta ir komanda negali šaudyti, vykdymo grandinė sustabdys. Daugeliui komandų, norint vykdyti, reikės tam tikros programos būsenos.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Visada tęsti?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Komanda atlikti.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Komanda</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Nėra komandos, kuriai taikoma komanda '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Taikymo komanda '{0}' nerasta</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Pasirinktas</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Perkrauti</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Buvo problema atnaujinti '{0}'. Norėdami užbaigti atnaujinimą, turėsite iš naujo paleisti ir įdiegti '{0}' (nesijaudinkite, kad visi jūsų nustatymai bus atkurti).
+
+Galite paleisti iš naujo dabar ir užpildyti atnaujinimą, įdiegdami, nepaisykite to ir atnaujinkite vėliau arba atšaukite atnaujinimą kartu ir toliau naudodamiesi versija „{1}“?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Atnaujinkite klaidą</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nepavyko atsisiųsti atnaujinimo</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Atnaujinimas nepavyko</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Norėdami baigti atnaujinimą, turėsite paleisti iš naujo. Ar norėtumėte iš naujo paleisti dabar ar vėliau?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Atnaujinkite paruoštą</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Vėliau</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Iš naujo paleiskite dabar</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Kol</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} buvo sėkmingai atnaujinta į {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Pagrindiniai papildiniai yra būtini ir negali būti pašalinti.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Įdiegti</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Laukiama atnaujinimo. Iš naujo paleiskite užpildymą.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Kol</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Laukiama neiškinimosi. Paleiskite iš naujo, jei norite iš naujo įdiegti.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Norėdami užpildyti pašalinimą, turėsite paleisti iš naujo. Ar norėtumėte iš naujo paleisti dabar ar vėliau?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Baigti pašalinti?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Neskelbta</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - sugeneruotas numatytasis išankstinis nustatymas „{0}“</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Nėra pasirinkto klipo</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Išanalizuokite pasirinktą klipą</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Pasirinktame klipe priskirkite nuorodą, kad paleistumėte '{0}'</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Visuotinė pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Priskirkite „Global Paste Shortcut“, skirtą „{0}“</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Pamiršote slaptažodį?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Prisijungti</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Atsijungti</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Privatumo politika</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Reikalauja iš naujo), kai įjungta diagnostinė informacija bus registruojama, kad būtų galima pateikti. Tai gali sulėtinti našumą ir joje gali būti asmeninės informacijos.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Prisijunkite prie failo</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Atviras</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Atidaryti žurnalų aplanką</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Naršykite papildinius</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Perskaitykite</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Parašyk</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Siųsti atsiliepimus ar klaidų ataskaitą</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Tai tik slepia pagrindinį langą. Visi kiti dialogo langai ne visada rodomi užduočių juostoje.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Ieškokite '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Pridėti filtrą</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Redaguoti prisijungimo tipas</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Pašalinkite šį filtrą</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Atvira pagalba apie tai ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipai</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Pakeisti</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Niekada</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Nustatytas</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Be pavadinimo</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Įrašas</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Nepaženklinta šaltinio nuoroda</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>„{0}“ reikalingas</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Turi klaidų)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Ribotas</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Saugojimas</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Šiukšliadėžė</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Neribotas</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Šiuo metu ši programa atitinka numatytąjį iškarpų skaitytuvo išankstinius nustatymus ir formatus.
+
+Numatytųjų skaitytuvo išankstinių nustatymų įgalinimas ar išjungimas (iš mainų srities šoninės juostos) neturės įtakos šiai konfigūracijai. Tik neįtrauktos programos seka numatytąją sąranką.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Šiuo metu ši programa atitinka numatytąjį iškarpų rašytojo iš anksto nustatymus ir formatus.
+
+Numatytųjų rašytojų išankstinių nustatymų įgalinimas ar išjungimas (iš mainų srities šoninės juostos) neturės įtakos šiai konfigūracijai. Tik neįtrauktos programos seka numatytąją sąranką.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Norėdami pridėti, turite pakabinti mainų srities klausytoją (sistemos dėklas -&gt; atnaujinti).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Pridėti neprieinamą</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Neturi nustatymų</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Aš kalbu tik angliškai, o beždžionė buvo išversta į šią kalbą.
+
+Visos versijos siunčiamos su „English Pack“, taigi, jei kalbate angliškai, bet kada po šios sąrankos galite pakeisti kalbą į ją (nustatymai -&gt; nuostatos -&gt; International).
+
+Jei norėtumėte padėti patobulinti vertimą, kurį norėtume išgirsti iš jūsų!
+
+atsiliepimai@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Vertimo rūpesčiai</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Norėdami naudoti šią funkciją, turite atnaujinti „MonkeYPaste“.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Spartusis nenustatytas</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Karpinės srities klausytojas išjungtas</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Įjungtas mainų srities klausytojas</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Tėvų veiksmas '{0}' nepalaiko įvesties nuosavybės tipo 'Paskutinis išvestis'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Sužinokite daugiau apie planus</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Paraiška</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Gaidukas</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klipas</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizatorius</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Žyma</value>
+  </data>
+</root>

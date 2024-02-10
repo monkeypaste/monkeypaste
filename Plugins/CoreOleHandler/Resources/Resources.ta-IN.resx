@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>புறக்கணிக்கவும்</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>சரிபார்க்கும்போது {0} வடிவமைப்பு கிளிப்போர்டில் இருந்து படிக்காது அல்லது தரவைப் இழுத்துச் செல்லாது.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>சரிபார்க்கப்பட்டால் {0} வடிவம் கிளிப்போர்டு அல்லது இழுத்தல் மற்றும் சொட்டு தரவுக்கு எழுதப்படாது.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>படி</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>எழுதுங்கள்</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>சி.எஸ்.வி.</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>கோப்புகள்</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF ஏற்கனவே இல்லாதபோது, ​​HTML RTF ஆக மாற்றப்படும். வலை உலாவிகள் மற்றும்/அல்லது சொல் செயலாக்க பயன்பாடுகளுக்கு இடையில் இது பயனுள்ளதாக இருக்கும். (RTF வடிவமைப்பு இயக்கப்பட வேண்டும் மற்றும் ஆதரிக்கப்படும் தளங்களுக்கு மட்டுமே இது)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTF ஆக மாற்றவும்</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>இந்த கோப்பகங்கள் கிளிப்போர்டு அல்லது இழுவை தரவுகளிலிருந்து படிக்காது.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>புறக்கணிக்கப்பட்ட கோப்பகங்கள்</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>புறக்கணிக்கப்பட்ட கோப்பு நீட்டிப்புகள்</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>இந்த கோப்பு வகைகள் கிளிப்போர்டு அல்லது இழுவை தரவுகளிலிருந்து படிக்கப்படாது.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>இந்த கோப்பு வகைகள் கிளிப்போர்டு அல்லது இழுவை தரவுக்கு எழுதப்படாது.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>சரிபார்க்கும்போது, ​​விகித விகிதத்தைத் தக்க வைத்துக் கொள்ளும்போது அதிகபட்ச பரிமாணத்தை விட பெரிய படங்கள் அளவிடப்படும். இது கிளிப்போர்டில் உள்ள படத்தை பாதிக்காது.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>அளவு பெரிதாக்கப்பட்டது</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>பிட்மேப்பை ஒட்டும்போது அல்லது கைவிடும்போது இது இயல்புநிலை கோப்பு வகையாக இருக்கும்</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>இயல்புநிலை ஏற்றுமதி வகை</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>சில நேரங்களில் முழுமையாக வெளிப்படையான படங்கள் கிளிப்போர்டில் காண்பிக்கப்படும், அதன் குழப்பமான.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>வெற்று படங்களை புறக்கணிக்கவும்</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>பெரிய படங்கள் (ஒரு சில எம்.பி. இந்த மதிப்பை குறைவாக வைத்திருக்க முயற்சிக்கவும்.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>அதிகபட்ச உயரம்</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>அதிகபட்ச அகலம்</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>செயல்திறன் கவலைகளுக்கு, அதிகபட்ச அளவு எழுத்துக்கள் தேவை</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>அதிகபட்ச எழுத்துக்கள்</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>உரை (மைம்)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>'{0}' என்பது வெற்று அல்லது வெளிப்படையான தரவைக் கொண்டிருந்தது மற்றும் தடுக்கப்பட்டது</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>வெற்று தரவு தடுக்கப்பட்டது</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'புறக்கணிக்கப்பட்ட' என '{0}' வடிவம் கொடியிடப்படுகிறது</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>வடிவமைப்பு புறக்கணிக்கப்பட்டது</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} வரம்பு {1} மற்றும் தரவு {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>அதிகபட்ச அளவு கண்டறியப்பட்டது</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>கோர் கிளிப்போர்டு ரீடர்</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>கோர் கிளிப்போர்டு எழுத்தாளர்</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>இயல்புநிலை கிளிப்போர்டு வடிவங்களைக் கையாளுகிறது</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>கோர் கிளிப்போர்டு ஹேண்ட்லர்</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>கோர், கிளிப்போர்டு, இழுத்தல் மற்றும் டிராப், உரை, ஆர்.டி.எஃப், பணக்கார உரை, HTML, CSV, படம், PNG, JPG, JPEG, இணைப்பு</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>படம் (பி.என்.ஜி)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML ஏற்கனவே இல்லாதபோது, ​​RTF HTML ஆக மாற்றப்படும். வலை உலாவிகள் மற்றும்/அல்லது சொல் செயலாக்க பயன்பாடுகளுக்கு இடையில் இது பயனுள்ளதாக இருக்கும். (HTML வடிவம் இயக்கப்பட வேண்டும் மற்றும் ஆதரிக்கப்படும் தளங்களுக்கு மட்டுமே இது)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML ஆக மாற்றவும்</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>உரை</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>பெயரிடப்படாதது</value>
+  </data>
+</root>

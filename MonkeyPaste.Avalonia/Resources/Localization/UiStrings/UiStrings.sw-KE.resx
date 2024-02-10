@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Hakuna huduma ambazo ni mdogo na usajili, uwezo wa kuhifadhi tu na unaweza kubadilishwa wakati wowote.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Rejesha akaunti yako iliyopo ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Yaliyomo na takataka ni
+mdogo kwa {0} na {1}
+sehemu mtawaliwa.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Inaruhusu hadi {2} sehemu za yaliyomo na uhifadhi wa takataka usio na kikomo.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Yaliyozuiliwa na yaliyomo kwenye ukomo na uhifadhi wa takataka.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Rejesha</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Bure</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Kiwango</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Isiyo na kikomo</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Usajili</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Usiri wako ni muhimu na data ya clipboard inaweza kuwa ya kibinafsi sana. Hifadhi husimbwa kila wakati lakini unaweza kuweka nywila ambayo itahitajika ikiwa kifaa chako kimeibiwa au mtu mwingine anatumia kifaa chako.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Nenosiri</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Inapowezeshwa, kuvuta kutoka kwa programu yoyote hadi juu ya skrini itaonyesha Monkeypaste ili kushuka kwa urahisi ndani ya Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Kuwezesha 'kufuli' kwenye kushoto juu ya dirisha kuu bado itaruhusu kushuka kwenye Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Mapendeleo zaidi ya dirisha yanapatikana kutoka kwa 'Mipangilio -&gt; Mapendeleo -&gt; Menyu ya Window'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Buruta ndizi hapa!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Drag - kwa - wazi</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Njia za mkato za kibodi zinaweza kukaguliwa au kubadilishwa wakati wowote kutoka kwa menyu ya 'Mipangilio -&gt; Njia za mkato'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Njia zote za mkato za ulimwengu zitalemazwa ili uweze kujiweka mwenyewe baadaye.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Njia za mkato za clipboard za Monkeypaste zitapatikana katika matumizi yote.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Ndani</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Chaguo -msingi</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profaili ya ishara</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hey! Wacha tuanzishe vitu vichache ili kuboresha uzoefu wako wa jumla na Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Karibu</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Ili kupata matumizi zaidi kutoka kwa Monkeypaste, kupakia kiatomati unapoingia ni wazo nzuri. Lakini, hiyo ni juu yako kabisa.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Weka kawaida.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Wezesha</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Mzigo kwenye kuingia?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Inapowezeshwa, ishara ya kusongesha juu ya skrini itaonyesha Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Kushoto - kubonyeza ikoni ya kazi bado itafungua Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Mapendeleo zaidi ya dirisha yanapatikana kutoka kwa 'Mipangilio -&gt; Mapendeleo -&gt; Menyu ya Window'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Rahisi sawa?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Tembeza hapa!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Tembeza - kwa - Fungua</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "kituo"&gt; Monkeypaste ni &lt;span color = "nyekundu&gt; imejumuishwa kikamilifu &lt;/span&gt; na Drag - na - tone &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Tupa hapa!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "kituo"&gt; Kwa njia hii, MonkeyPaste inaweza kupatikana &lt;br&gt; &lt;span color = "nyekundu"&gt; bila kubonyeza &lt;/span&gt; au hata &lt;span color = "nyekundu"&gt; kupiga jicho &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Vuta!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Jaribu!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Jaribu!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Hakuna matokeo yanayopatikana.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Thibitisha</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Tafuta ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Mipangilio</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Utegemezi:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Kuweka</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuondoa '{0}' na vifaa vyake vyote na njia za mkato?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Ondoa</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' haina matokeo.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Hakuna uteuzi.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Hakuna</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Mikopo:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Maelezo:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Changia:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Leseni:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL ya Mradi:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Imechapishwa:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Nisome:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Ripoti unyanyasaji:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Lebo:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Sasisha</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Toleo:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Fungua kwenye dirisha</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Kufukuza</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Kuokoa</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Karibu kufuta!
+
+Boresha ili kuepusha.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Karibu na takataka!
+
+Boresha ili kuepusha.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Mafaili</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Picha</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Maandishi</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kunakiliwa {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} faili | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} mistari</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} nakala | {1} pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Hoja</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>ADD</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Nakala</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Kata</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Bandika</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} nakala</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Kichujio kisichohifadhiwa</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Tafadhali chagua -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Fomati</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Wasomaji</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Waandishi</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Washughulikiaji</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Futa</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Marudio</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Hariri Jina</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Rudisha</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Lebo</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Hatua</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Njia ya Ulimwenguni</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Njia ya mkato</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Ishara lazima ziwe za kipekee na zinaweza kuwa na kitufe kimoja cha kuingiza.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Ndani &lt;/b&gt; njia za mkato zote ni mdogo ndani ya programu. Hii sio chaguo lililokusudiwa lakini inaweza kuruhusu kubadilisha njia za mkato unazokusudia kufanya Global &lt;i&gt; siku moja &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Default &lt;/b&gt; Njia zote za mkato za ulimwengu zimewezeshwa. The &lt;b&gt; onyesha/ficha dirisha kuu &lt;/b&gt; njia ya mkato hutumia &lt;span color = "nyekundu"&gt; override &lt;/span&gt; njia ya ufunguo wa &lt;b&gt; Caps Lock &lt;/b&gt;. Unaweza kubadilisha njia hiyo au ishara wakati wowote. Lakini &lt;span color = "kijani"&gt; jaribu kujaribu &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;ead&gt; &lt;/ead&gt;
+&lt;Dedy&gt;
+&lt;h1&gt; Njia za mkato za ulimwengu &lt;/h1&gt;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Passive &lt;/b&gt; Monkeypaste ya njia ya mkato itasikiliza katika programu yoyote. &lt;br&gt;
+*Hii ndio chaguo la &lt;i&gt; tu &lt;/i&gt; kwenye Linux kwa sasa.
+&lt;/li&gt;
+&lt;li&gt;
+Njia ya mkato ya &lt;b&gt; pre &lt;/b&gt; itatoa &lt;b&gt; &lt;i&gt; kabla ya &lt;/i&gt; &lt;/b&gt; inashughulikiwa na programu inayotumika. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; njia ya mkato itatoa &lt;b&gt; &lt;i&gt; baada ya &lt;/i&gt; &lt;/b&gt; inashughulikiwa na programu inayotumika. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Overside &lt;/b&gt; Wakati MonkeyPaste inasikia kitufe cha kuingiza (kitufe cha modifier) ​​cha njia ya mkato ya kupita kiasi itakuwa &lt;i&gt; Ficha &lt;/i&gt; vyombo vya habari muhimu kutoka kwa Maombi - Kiwango cha Kuingiza. &lt;br&gt;
+Chaguo hili litahakikisha njia ya mkato inasababishwa bila migogoro kwa matumizi ya kazi.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Exclusive Overside &lt;/b&gt; Hii ni aina maalum ya modi ya ziada iliyoundwa kwa kitufe cha kufuli cha Caps. Inaruhusu tu kifungu cha &lt;b&gt; moja &lt;/b&gt; (isiyo ya kurekebisha) kwa mgawo wake. &lt;br&gt;
+Katika kufuli kwa kawaida ya kofia za kawaida kunaweza kuwa &lt;i&gt; kukwama kwenye &lt;/i&gt; wakati wa kushinikiza pamoja na funguo zingine. &lt;br&gt;
+Kwa hivyo haijalishi ni funguo zingine ziko chini, ikiwa njia ya mkato ya &lt;b&gt; hotkey &lt;/b&gt; imesisitizwa itakuwa ya kupindukia na kuizuia isiwe &lt;i&gt; kukwama kwenye &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Lemaza</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Pakia wakati akaunti hii ya mtumiaji imeingia, sio kwa watumiaji wengine.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Kutumia anwani zinazopatikana (inahitaji programu -jalizi ya Fetcher) uwanja huu utatumika kwa visa vyote vya template hii kwenye hati hii au kwa yoyote itarejelewa baadaye. &lt;/p&gt; &lt;p&gt; Kwa mfano ikiwa chagua anwani ya barua pepe Hapa basi uwanja wa barua pepe wa anwani unayochagua utatumika kwa visa vyote kwenye hati hii. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = mwaka mfupi &lt;br/&gt; yyyy = mwaka mrefu &lt;br/&gt; m = mwezi (1-12) &lt;br/&gt; mm = mwezi (01-12) . DEC) &lt;br/&gt; mmmm = mwezi mrefu (Januari, Februari ... Desemba) &lt;br/&gt; d = siku (1 - 31) Siku ya Wiki kwa maneno (Jumatatu, Jumanne ... Jumapili) &lt;br/&gt; e = siku fupi ya wiki kwa maneno (mon, tue ... jua) &lt;br/&gt; d - siku ya kawaida (1, 2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = saa katika am/pm (0-12) &gt; H = saa katika siku (0-23) A = AM/PM alama ya &lt;br/&gt; p = a.m./p.m. alama</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Tarehe ya sasa na/au wakati itabadilishwa kwa templeti za wakati wa wakati zinapowekwa.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Matukio yote ya template hii yatatumia maandishi yaliyotolewa. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Matukio yote ya template hii yatatumia maandishi yaliyotolewa. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Maliza kukabiliana</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Wezesha block</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Wezesha inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Kubadilisha mwongozo</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Kubadilisha mwongozo</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pause append</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Kugeuza kabla</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Kugeuza kabla</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Anza tena</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Ongeza ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Bandika</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pini</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Ficha arifa zote '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Kufukuza</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Programu ya mwisho haijulikani. Badilisha kwa programu iliyokusudiwa kwa kuweka tumbili.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Bandika kwa:</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Punguza</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Tafadhali subiri...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Funga</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Akaunti</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Msaada</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Nakili na ubandike</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Upendeleo</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Rejesha defaults</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Chujio ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Njia za mkato</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Ongeza programu</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Ongeza tovuti</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Block?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Jina</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Programu</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Kuzuia kikoa?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Kuzuia URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Kikoa</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Utambuzi wa URL ya chanzo inategemea jinsi clipboard ya maombi ya mwenyeji ni hivyo kukataliwa hakuwezi kuhakikishiwa</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Tovuti</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Vipengee vingine vya MonkeyPaste hutumia automatisering ya kibodi kuiga matukio ya 'nakala' katika programu zingine.
+
+Ongeza na/au uchague programu na njia ya mkato ya nakala ya kipekee (kama koni au ganda kwa mfano) ili kuhakikisha kuwa huduma hizo zinafanya kazi vizuri.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Nakili njia ya mkato</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Hakuna</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Matumizi tu yaliyochaguliwa yatatumika kwa programu maalum. Wakati haijafafanuliwa, vifaa vya msingi vinavyopatikana katika barabara ya &lt;em&gt; clipboard &lt;/em&gt; itatumika.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Vipengee vingi vya MonkeyPaste hutumia automatisering ya kibodi kuingiliana na programu zingine.
+
+Maombi mengine (kama consoles au ganda kwa mfano) zinaweza kuwa na njia ya mkato isiyo ya msingi.
+
+Ili kuhakikisha ushirikiano mzuri, rekodi njia za mkato za programu hiyo hapa.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Bandika njia ya mkato</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Wasomaji</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ufuatiliaji wote wa clipboard kutoka kwa programu zilizokataliwa utapuuzwa &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Waandishi</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Hariri ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Fomati</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Kukataliwa</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Njia za mkato</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Je! Ungependa pia kuondoa sehemu zote {0} kutoka '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Ondoa sehemu?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Maombi</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Vinjari kwa programu ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Chagua Njia ya Maombi</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuondoa njia za mkato za kawaida kwa {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuondoa fomati maalum kwa {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Hakuna fomati za clipboard zilizopewa za programu hii. Hakuna data itakayosomwa kutoka kwake kupitia kata/nakala au kujaribu kuvuta - na - kushuka kwa Monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Hakuna fomati za clipboard zilizopewa za programu hii. Bandika moja kwa moja au Drag - na - kushuka kutoka Monkeypaste hautakuwa na athari yoyote (data yake tupu).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuweka upya njia zote za mkato? Njia za mkato zote zitaondolewa.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Je! Una uhakika unataka kubadilisha wasifu wako wa njia ya mkato kuwa '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Zote</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Vipendwa</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Vichungi</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Fomati</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Lebo</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Leo</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Takataka</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Kuhusu</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Rahisi sawa?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Bonyeza mara mbili kwa unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Desturi</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Ulimwenguni</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Mchanganyiko huu unagongana na '{0}' ambayo itasafishwa ikiwa imeokolewa.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Njia ya mkato lazima itolewe.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Hii ni njia ya mkato ya ulimwengu. Hiyo inamaanisha itajaribu kutekeleza wakati wowote inafanywa. Jaribu kuifanya iwe ya kipekee ya kutosha (au ubadilishe 'aina ya njia') kutopingana na njia za mkato kutoka kwa programu zingine.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Ulimwenguni</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Njia ya mkato lazima iwe na kitufe kimoja kisicho cha kurekebisha.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Bonyeza kitufe chochote kurekodi ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Agiza njia ya mkato</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Jifunze zaidi...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Boresha</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Ghairi</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Kurekebisha</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Kupuuza</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Hapana</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Sawa</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Jaribu tena</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Kuzimisha</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Wasilisha</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ndio</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Kila mwaka</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Kila mwezi</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Jaribu bure!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Mzunguko wa bili</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Barua pepe</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Ingia</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Angalia unganisho lako
+Na jaribu tena.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Ingia nje</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Malipo yanayofuata</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Nenosiri</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Jisajili</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Barua pepe sio halali</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Nywila hazilingani.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Nenosiri lazima iwe chini ya herufi {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Kumbuka?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Angalia barua pepe yako ili kudhibitisha akaunti yako</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Rudisha nywila</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm D, H: Mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy HH: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Kamwe</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Bure {0} Jaribio la siku</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Kulikuwa na shida kufanya
+Ununuzi wako.
+
+Kuangalia unganisho lako na
+Mipangilio inaweza kusaidia.
+
+Je! Ungependa kujaribu tena?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Akaunti yako imefanikiwa
+iliyosasishwa kwa:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Nunua mafanikio!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Kosa</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Uunganisho umeshindwa.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Jaribu tena</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Akaunti ilibadilishwa</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Usajili wako sasa ni {0}/{1} na {2} yaliyomo na {3} Hifadhi ya takataka.
+Lakini usijali, hakuna data inayopotea baada ya kupungua. Sehemu mpya tu ndizo zitakazotathminiwa.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Hongera! Usajili wako sasa ni {0}/{1} na {2} yaliyomo na {3} Hifadhi ya takataka.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Takataka au unganisha kitu
+kutoka '{0}' kuongeza zaidi.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Hifadhi ya Max '{0}' ni {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Rejesha</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} Imezuiwa</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Yaliyomo na uwezo wa takataka kufikiwa!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Hifadhi ya Max '{0}' ni {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Uwezo wa yaliyomo ulifikiwa!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Unaweza kuficha maonyo haya kwa
+Kubonyeza 'Ficha yote' kutoka
+Chaguzi Menyu hapo juu.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Hifadhi ya takataka max ni {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Uwezo wa takataka ulifikiwa!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} ni batili</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} lazima iwe angalau {1} herufi</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} inaweza kuwa {1} tabia tu</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Bandika kwa: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Malipo ya {0}
+Usajili ulitokana na {1}
+na haijapokelewa.
+
+Tafadhali sasisha yako
+habari ya malipo.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Malipo ya {0}
+Usajili ulitokana na {1}
+na haijapokelewa.
+
+Tafadhali ungana na
+mtandao kwenye kifaa
+na usajili wako na
+Anzisha upya ili uendelee
+Kutumia mpango wako wa {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Malipo ya {0}
+Usajili ulitokana na {1}
+na haijapokelewa.
+
+Tafadhali fungua au uanze tena
+Monkeypaste kwenye kifaa
+na usajili wako kwa
+Endelea kutumia yako
+{0} Mpango.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Akaunti imekwisha</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Kumbuka</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Duka la Microsoft hairuhusu Tier
+Mabadiliko kwa nyongeza za usajili.
+
+Lazima ughairi wako
+{0}/{1} Jipange mwenyewe
+Au utatozwa kwa wote wawili.
+
+Je! Ungependa kwenda kufanya hivyo sasa?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Nenosiri lako limewekwa upya.
+
+Tafadhali angalia barua pepe yako na
+Fuata kiunga cha mabadiliko
+Nenosiri lako.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Ingia</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Mwandishi (S)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Inahitajika kwamba unakubali masharti ya leseni yafuatayo kabla ya kuendelea.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Kifurushi zifuatazo zinahitaji kukubali masharti yao ya leseni kabla ya kusanikisha.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Ninapungua</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Kubonyeza "Ninakubali" inamaanisha kuwa unakubali masharti ya leseni ya maombi haya. Ikiwa haukubali masharti, bonyeza "Ninapungua".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Kubonyeza "Ninakubali" inamaanisha kuwa unakubali masharti ya leseni kwa programu -jalizi zilizoorodheshwa hapo juu. Ikiwa haukubali masharti, bonyeza "Ninapungua".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Tazama Leseni</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Kukubalika kwa leseni</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Nakubali</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Kazi</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Nje ya mtandao</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Haijasajiliwa</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Imekamilika</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>Nywila ⚠️ hazilingani</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Nenosiri</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Usajili wako ni
+sasa weka kwa {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Akaunti imepatikana</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Imeshindikana kujiandikisha kuingia</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Usajili ulishindwa</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Usajili umefanikiwa!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>RESET ERROR</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Usajili</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Nini mpya</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Kamwe</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Isiyo na kikomo</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>Uwezo</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>iliyobaki</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>Jumla</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Malipo yako yamepita.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Njia za mkato za kipekee zinaweza kuwa na ufunguo mmoja tu na ufunguo huo hauwezi kuwa ufunguo wa kurekebisha.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Kumalizika muda wake</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Inapakia</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Walemavu</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Kumbuka! Nenosiri hili ni la hiari na tu kwa usalama wa ziada. Takwimu zako tayari zimesimbwa na hazijashiriki. Nenosiri hili linazuia tu mtu ambaye sio wewe kutokana na kupakia Monkeypaste ikiwa kwa njia fulani watapata desktop yako (iliyoibiwa, unaondoka chumbani, nk).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Kumbuka mipangilio ya kushuka kwa:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Vinjari programu -jalizi</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Kuchambua</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Hatua ya haraka</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Kubadilisha hariri</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Badilika</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Maelezo</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Maandishi wazi</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Fungua kwenye dirisha</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Bonyeza + Ctrl kufuata ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Bonyeza + Alt kufuata ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Piga au toa media yoyote hapa!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Wazi</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Vizingiti hapo juu 0 vitatoa rangi ya kupendeza kwa kutumia umbali wa Euclidean kwenye nafasi ya rangi ya RGBA.
+
+Kwa mfano, ikiwa nyekundu (#FF0000) ni neno la utaftaji na nyeusi (#000000) ni pixel kwenye kipande cha picha, basi umbali wa rangi utakuwa 255. Nyeusi hadi umbali mweupe ndio upeo wa 510, pamoja na kituo cha alpha</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Zote zifuatazo ni kweli</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Makusanyo</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Njia za panya</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Vichocheo</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Sitisha</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Rejea</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Trigger mpya</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Ongeza preset</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Tumbili kuacha mchawi</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>PRESTS</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Mchambuzi</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Mwelekeo wa mzunguko</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Kubadilisha mpangilio wa gridi ya taifa</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Kesi nyeti</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Kizingiti</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Neno lote</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Hakuna seti</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Njia</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Hatua</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Gridi ya taifa</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Imekamilika</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Ifuatayo</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Zamani</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Ruka</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Akaunti iliyopo?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Malipo yanayofuata</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Usajili hukuruhusu kubeba usajili wako wa kulipwa kwa vifaa vyako vyote (juu ya kupatikana). Hatutatumia barua pepe yako tunaahidi 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Usajili</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Jina la Mtumiaji</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Unahitaji kujiandikisha?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Vyanzo</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Isiyo ya kawaida, hakuna kinachopatikana. Kitu lazima kiwe kibaya 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Ondoa</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Inahitaji kuanza tena</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Kosa Kuondoa programu -jalizi kutoka '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Hitilafu ya kusanikisha programu -jalizi: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Kosa kusanikisha programu -jalizi '{0}' muundo wa saraka au isiyofaa. Maonyesho yanapaswa kuwapo kwa '{1}' lakini hayakupatikana.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Makosa ya Kuweka Jalada la Maonyesho '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Hakuna programu -jalizi iliyobeba na GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} kosa</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Kosa la Kuweka Jalada kwa Temp Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Hitilafu Kuunga mkono '{0}' kwa '{1}'. Maelezo: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Maandishi yaliyochapishwa yatatumika kiatomati kwa utaftaji wakati hakuna sanduku la maandishi linalolenga.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Uingizaji wa utaftaji wa kiotomatiki</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Mabadiliko ya nywila yalishindwa</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Mabadiliko</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Badilisha neno la siri</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Wazi</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Wazi nywila</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Yaliyomo</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Saizi ya fonti ya yaliyomo</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Wakati ni kweli, maudhui ya nje yaliyoingizwa kwenye klipu yatatumia fomati ya sehemu na sio kile kinachopatikana kutoka kwa chanzo.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Bandika, toa au ongeza na fomati ya marudio</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kusahau nywila?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Kusahau</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Kusahau nywila</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Wasifu</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Ficha alama za uwezo</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Wakati maudhui mapya ya clipboard yanapoongezewa hayatafuatiliwa kama kipande kipya</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Kupuuza anaomba</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Wakati clipboard inalingana na kipande kilichopo, kipande hicho kitatumika badala ya kuunda mpya</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Puuza nakala mpya</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Mabadiliko ya clipboard kutoka ndani ya programu hayatafuatiliwa</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Puuza ufuatiliaji wa clipboard ya ndani</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Nafasi, tabo na mistari mpya itapuuzwa kutoka kwa kufuatilia</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Puuza nafasi nyeupe tu</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Mzigo kwenye kuingia</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Dirisha la Animate</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Onyesha tabia</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Dirisha kuu litafunuliwa kwa kufanya ishara ya kusongesha kwenye makali ya juu ya mfuatiliaji wako</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Onyesha kwenye kitabu cha juu cha skrini</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Kiasi cha arifa</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Mpangilio huu utafuatilia Mfumo - Hesabu za Kuweka Kibodi kwa Takwimu za Matumizi. Habari hii ni ya kibinafsi na haijashirikiwa lakini pia haijatengwa. Matokeo sahihi yanaweza kuhitaji kutoa amri maalum ya kuweka kibodi katika 'Mipangilio -&gt; Nakili na Bandika -&gt; Njia za mkato'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Bandika historia</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Sehemu nyingi zilizochapwa (kama tabo za kivinjari) zinaweza kutumia kumbukumbu muhimu. Kuondolewa ni kwa kwanza - katika - kwanza - nje</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Uwezo wa pini</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Hii inatumika kwa pembejeo zote za kiotomatiki, maadili ya chini yataboresha utendaji</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Kikomo cha maandishi ya hivi karibuni</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka
+kurejesha upendeleo chaguo -msingi?
+
+Hii haiwezi kutekelezwa!
+
+*Maombi yataanza tena mara moja.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuweka upya arifa zote?
+
+*Hii haiwezi kutekelezwa!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Kuweka tumbili huweka clipboard (oversides) wakati wa kubandika kwa mpango wa nje. Hii itajaribu &lt;/b&gt; kurejesha hali ya clipboard baada ya kuweka nje.
+
+Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata ajali ya Monkeypaste kulingana na chanzo cha data.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Rudisha clipboard baada ya kubandika tumbili</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Haikuweza kufuta kashe ya programu -jalizi kutoka kwa njia: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Programu -jalizi zote zitawekwa upya kwa hali ya msingi ya chaguo -msingi</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Cache ya programu -jalizi</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuweka upya programu -jalizi zote kwa defaults?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kuweka upya nywila yako?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Njia za mkato za matumizi zitawekwa upya kwa ishara zao za msingi.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Rudisha njia za mkato</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Arifa zote zilizopuuzwa zilizowekwa hapo awali.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Rejesha arifa</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Yaliyomo tajiri</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Weka nywila</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Onyesha vidokezo</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Onyesha kwenye Taskbar</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Onyesha kwenye swichi ya kazi</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Onyesha majina</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Inapowezeshwa, kuvuta kutoka kwa programu yoyote hadi juu ya skrini itaonyesha Monkeypaste ili kushuka kwa urahisi ndani ya Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Onyesha kwenye Drag juu ya skrini</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Mada ya Sauti</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Angalia spell</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Wakati wa kuanza chanzo cha clipboard hakijulikani na kulingana na mipangilio yako ya usalama yaliyomo yanaweza kutoka kwa wavuti iliyotengwa au programu.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Ongeza clipboard ya kuanza</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Sikiza clipboard juu ya kuanza</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Chagua</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Tahadhari! Rangi zingine za palette huchaguliwa kwa kutumia Math sio macho! Kwa hivyo ujue mchanganyiko wa rangi na mtindo unaweza kuwa hauna tofauti sahihi kwa usomaji.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Rangi ya mandhari</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Mtindo wa mandhari</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Usafishaji wa takataka moja kwa moja utatokea kwa kuanza kwa muda uliowekwa.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Kusafisha kwa takataka</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Mipaka ya juu inaweza kuathiri utendaji</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Ondoa kikomo</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Hakuna kikomo</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Kutumika katika utaftaji wa faili ya hali ya juu kwa aina za faili zisizo tayari</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Mtumiaji - viongezeo vya utaftaji vilivyoainishwa</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Tafuta na ubadilishe ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Bandika hapa</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Shiriki ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Mtazamo</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Dhibiti ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Badilisha jina</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Alama: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Aina: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Futa kabisa</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Vinjari kwa '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Mabadiliko</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Pembejeo</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Pato</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Vyanzo</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Rejesha</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Chagua picha ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Rangi</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Dhibiti '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Wazi</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Tafadhali subiri...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Rangi ya asili</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Futa zote</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Fomati za clipboard</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Futa yote</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Hariri maelezo</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Jina</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Pata</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Rangi ya fonti</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Rangi ya muundo</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Katika uteuzi</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Ingiza picha</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Ingiza kiunga</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Ingiza video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Kesi ya mechi</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Template mpya</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Kiolezo kinachofuata</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Ingiza maandishi ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Kiolezo cha zamani</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Kujieleza mara kwa mara</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Badilisha yote</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Badilisha</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Neno lote</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Funga pande zote</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Kikoa</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Onyesha folda</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Unblock</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Kuhusu</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Ongeza block</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Ongeza inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Nakili</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Njia</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Tafadhali subiri Monkeypaste inapakia ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Acha</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Bonyeza Bandika</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Kikundi</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Kichujio</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Futa kabisa yote</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Rejesha yote</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Hatua</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL tayari ipo: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL lazima iwe katika muundo halali.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Ingiza URL kamili:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Ongeza URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Ingiza maadili</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Nakili maandishi au faili kuomba.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>APPEND {0} {1} Njia iliyoamilishwa</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Mabadiliko ya clipboard sasa yataongezwa</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Baada ya append modi iliyoamilishwa</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Mabadiliko ya clipboard sasa yatatayarishwa</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Kabla ya Njia ya Append iliyoamilishwa</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Tabia ya kawaida ya clipboard imerejeshwa</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Ongeza deactivated</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Vipimo vilivyoongezwa juu au botom ya kipande</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Njia ya Appent Appent iliyoamilishwa</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Katika mstari</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Mwongozo</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Ongeza kwa uteuzi wako wa sasa.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Njia ya kuongezea ya mwongozo iliyoamilishwa</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Mkusanyiko wa clipboard ulisimamishwa</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Ongeza ilisitishwa</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Mkusanyiko wa clipboard ulianza tena</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Ongeza kuanza tena</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kumaliza kutumia?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Kuhariri katika hali ya utangamano kutaondoa fomati zote tajiri. Je! Una uhakika unataka kurekebisha hii?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Onyo la uharibifu wa data</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Kazi</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Kuwezeshwa</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Mbali</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Alipumzika</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Matokeo</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Hali</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Kosa lisilojulikana limetokea.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>majaribio yaliyobaki</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Ingiza nywila</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Thibitisha</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Wasiliana</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Wakati wa tarehe</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kufuta matumizi yote ya '{0}'?
+
+Hii haiwezi kutekelezwa!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Nguvu</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Tuli</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} haina kitu ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Zaidi inakuja hivi karibuni!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Kuingia mzigo kulemaza umeshindwa</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Ingia mzigo Lemaza mafanikio</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Mzigo wa Ingia Wezesha Imeshindwa</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Ingia mzigo Wezesha mafanikio</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Ficha</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Kuweka tumbili sasa kumejaa.
+Usikilizaji wa clipboard ni: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Kubeba</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Onyesha</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Njia ya uteuzi wa nakala ya kiotomatiki: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Njia ilibadilishwa</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Bonyeza Haki ya Bandika: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin imesasishwa</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Kubandika '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Run '{0}' Analyzer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Run '{0}' trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Chagua '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kufuta '{0}' na vitendo vyote vinavyohusika?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Je! Ungependa kuondoa vitendo vyote vya '{0}'? (Vinginevyo watakuwa na wazazi kwa '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Ondoa chaguzi</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Je! Unataka kweli kupata '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Akaunti</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Wachambuzi</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Shughuli za maombi</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Yaliyomo</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Waongofu</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Utamaduni</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Takwimu</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Mwelekeo</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Buruta na kushuka</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Tone mchawi</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Bandika shughuli</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Upendeleo</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Tafuta</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Njia za mkato</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Aina</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Sauti</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Tray ya mfumo</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Makusanyo</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Mada</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Vichocheo</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Shughuli za wavuti</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Lugha</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Inaweka clipboard kwenye kipande cha pembejeo.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Tahadhari</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Sauti ya jumla ya kusudi na/au arifu za ujumbe wa tray. Hatua za tahadhari hazina athari kwenye pembejeo zao.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Ujumbe</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Tumbili</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Hakikisho</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Onyesha?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Ujumbe wa toast ya wakati unaonyeshwa kwa sekunde. Wakati thamani ni 0 ujumbe lazima kufungwa kwa mikono.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Onyesha wakati (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Sauti?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Aina ya sauti</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Kiasi</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Mchambuzi</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Inashughulikia kipande chake cha pembejeo kwa kutumia preset ya uchambuzi uliopewa.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Yaliyomo ya kuingiza yameunganishwa na mkusanyiko uliochaguliwa</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Inaunganisha kipande chake cha pembejeo na mkusanyiko wa tepe uliyopewa.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Kesi nyeti?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Hii inaweza kuwa maandishi tuli kulinganisha na pembejeo na/au ni pamoja na mali zilizochaguliwa (kupitia kitufe cha kichujio) itabadilishwa wakati hali hiyo itapimwa.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Data ya hali</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Hoja ya hiari ya JSONPATH ambayo itatumika kwa 'mali ya pembejeo' iliyochaguliwa kabla ya hali hiyo kutathminiwa.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Kichujio cha Kuingiza</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Mali ya klipu inayotumika kwa masharti haya.
+
+Mali ya 'pato la mwisho' kwa sasa inasaidiwa tu wakati masharti haya ni mtoto wa hatua ya uchambuzi na data iliyotolewa itatofautiana kulingana na matokeo ya mchambuzi wa mzazi.
+
+Kwa utatuzi wa shida, ambatisha 'hatua ya tahadhari' kwa mzazi wa masharti na uweke paramu ya 'ujumbe' ya tahadhari ili kufanana na mali hii ya pembejeo. Hii itaruhusu kukagua data halisi inayotumika kwa masharti haya.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Mali ya pembejeo</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Inafanya kulinganisha maandishi kwenye kipande cha pembejeo au pato la hatua ya awali. Wakati kulinganisha kunashindwa (sio mechi) hakuna hatua za mtoto zitatekelezwa. Kwa hivyo hufanya kama lango la kimantiki.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Shughuli zote za kweli au za uwongo ambapo vitendo vya watoto vitatekelezwa tu ikiwa matokeo ni kweli.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Hali</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Zote</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Ilisababisha wakati kipande cha aina iliyochaguliwa kinaongezwa kwenye mfumo kwa njia yoyote (clipboard, Drag - na - kushuka, uchambuzi unaozalishwa au unarudiwa).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Tekeleza tu trigger hii ikiwa kipande cha pembejeo ni mpya na sio nakala mbili. Hii ni huru ya mpangilio wowote wa upendeleo wa ikiwa maudhui mapya hayazingatiwi au la.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Puuza nakala mbili</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Sehemu tu za aina hii zitasababisha hatua hii.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Inaunganisha kipande chake cha pembejeo na mkusanyiko wa tepe uliyopewa.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Imesababishwa wakati klipu imeunganishwa na mkusanyiko maalum wa lebo.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Mkusanyiko</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Kiasi cha wakati katika milliseconds kilisubiri kabla ya watoto kutekeleza</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Kuchelewesha</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Wakati wa kushoto wazi, faili ya pato itatumia kichwa cha kipande cha pembejeo kama jina la faili.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Jina la kawaida</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Saraka ambapo faili itaandikwa.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Saraka</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Huokoa pembejeo kwenye folda iliyochaguliwa.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Ilisababisha wakati yaliyomo kwenye folda iliyochaguliwa inabadilika. Matokeo yatakuwa mpya au yaliyopo (wakati upendeleo wa nakala ya kupuuza umewezeshwa) picha ya faili au folda ambayo imebadilika pamoja na aina ya mabadiliko kama matokeo yake ya mwisho.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Matukio</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Folda</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Puuza nakala mbili</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Thamani ya 0 itarudia hatua ya mzazi kwa muda usiojulikana</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Kurudia hesabu</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Kiasi cha wakati katika milliseconds kusubiri mara hatua ya mzazi inakamilisha</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Kurudia kuchelewesha</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Majaribio) inayotumika kwa kuunda vitanzi vya vitendo au kazi za kurudia. Inaporudiwa, itatoa watoto wote tena na pembejeo yake ya asili. Wakati wa kutumia muda bila hesabu ya kurudia, trigger itahitaji kulemazwa na kubadilishwa tena kusitisha kurudia. Inaweza kuwa muhimu kwa kupigia kura au mitambo ya chakavu ya wavuti.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Kusababishwa na njia ya mkato ya ulimwengu unayofafanua. Ikiwa MonkeyPaste inafanya kazi itajaribu kutumia kipande kilichochaguliwa (ikiwa kuna moja) kama pembejeo. Vinginevyo itajaribu kutumia clipboard kama pembejeo yake.
+
+Kumbuka: Trigger ya njia ya mkato bado itafanya ikiwa hakuna pembejeo ya kuiweka rahisi (kwa hivyo inaweza kuwa trigger kubwa nk) kwani sio tukio lake la data.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Njia ya mkato</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Ilisababisha wakati njia ya mkato iliyorekodiwa inasisitizwa wakati wowote na clipboard ya sasa</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Kitendo hiki kinahitaji programu kuanza tena. Je! Ungependa kufanya hivyo sasa?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Kulikuwa na shida. Unahitaji kuanza tena maombi.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Chambua na Annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotate trigger</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Imejengwa katika vitu vinasomwa - tu. Kurudia kubadilika.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Desturi</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Jana</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} siku zilizopita</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Saa 1 iliyopita</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} masaa yaliyopita</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Sasa hivi</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Dakika iliyopita</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} Dakika zilizopita</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Mwezi uliopita</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} miezi iliyopita</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Wiki iliyopita</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} wiki zilizopita</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} miaka iliyopita</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Maelezo</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Jina la Maombi</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Njia ya Maombi</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Kesi nyeti</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Yaliyomo</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Aina ya faili</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Aina ya picha</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Kujieleza mara kwa mara</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Aina ya maandishi</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Kichwa</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Kichwa cha URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Neno lote</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Kama kusonga kando ya skrini ya juu kufungua, hii itafunga dirisha kuu wakati inafungua. Kuruhusu kazi za haraka za walengwa.
+
+* Pembe ni katika suala la skrini zako zote, sio kwa mfuatiliaji.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Onyesha dirisha na funga</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>BURE!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Tupe nyota 5!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Futa yote</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Futa yaliyomo yote</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kufuta
+Sehemu zako zote?!
+
+*Operesheni hii haiwezi kufanywa!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Mimi ni Indy Dev Tafadhali onyesha msaada!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Kama Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} Inakubali tu pembejeo ya aina (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Njia ya Nakala ya kiotomatiki - huiga tukio la 'nakala' kila wakati kitufe cha kushoto cha panya kinatolewa.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Bonyeza Hati ya Bandika - Inaleta tukio la 'kuweka' kila wakati kitufe cha kulia cha panya kinatolewa</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Onyesha folda ya programu -jalizi</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Ripoti</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Mtazamo</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Onyesha vifaa vya zana</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Wachanganuzi huonyesha pembejeo zao au kuunda sehemu mpya kama pato. Watoto wa wachambuzi wanahitaji kuamua ni ipi wanahitaji kama pembejeo yao. Hii kawaida ni pato la mwisho.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Aina ya pembejeo</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Mbuni wa trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Chagua {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Haipatikani...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Wakati wa kukaguliwa matokeo ya kweli au ya uwongo ya hali hiyo yatatolewa. Kwa hivyo kwa mfano, hali ya 'ina' itakuwa 'haina'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Haina</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Tafadhali subiri...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Chaguo la rangi</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Chagua rangi ya mechi</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Kama trigger ya njia ya mkato lakini wakati mchanganyiko muhimu unasisitizwa, tukio la 'nakala' litaundwa katika programu inayotumika kwa hivyo inafanya kazi kama nakala lakini kisha mlolongo wa vitendo vilivyowekwa kwenye Trigger ya Nakala ya Monkey utatekelezwa nyuma kwa kutumia Takwimu ya nakala ya nakala ya nakala.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Kichujio cha hali ya juu</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Ficha vichungi</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Rejesha vichungi</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Unda kichujio</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Hiari) Wakati kushoto tupu clipboard itawekwa kwa kutumia pembejeo ya hatua hii. Chochote kinachotolewa hapa kitachukuliwa kama maandishi wazi tu.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Yaliyomo kwa clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Wakati ni kweli, hakuna klipu itaongezwa baada ya hatua hii kuweka clipboard.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Kupuuza</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Hakuna mchambuzi aliyechaguliwa kwa hatua '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Mchambuzi wa hatua '{0}' Haipatikani</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Vichungi vya mzazi '{0}' tu kwa '1}' aina ya yaliyomo na uchambuzi '</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Hakuna lebo iliyochaguliwa kwa classifier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag kwa classifier '{0}' haipatikani</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Kulinganisha thamani inaweza kuwa herufi, nambari au nafasi tu</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Hakuna lebo iliyochaguliwa kwa clip tagged trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag kwa Clip Tagged Trigger '{0}' Haipatikani</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Hakuna folda ya saa iliyoainishwa kwa '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Tazama folda '{0}' Haipatikani kwa trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Njia ya mwandishi wa faili kwa hatua '{0}' haijawekwa</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Njia ya mwandishi wa faili '{0}' kwa '{1}' haipatikani.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Kazi ya kazi</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Jifunze kuhusu programu -jalizi</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Rejesha usanidi huu wa uchambuzi</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Badilisha logi</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Tafadhali unganisha kwenye mtandao na ujaribu tena baadaye.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Msaada</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} ni toleo la hivi karibuni</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Ninyi nyote mko juu - hadi - tarehe!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Angalia vilivyojiri vipya...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Toleo jipya linapatikana!
+
+Bonyeza hapa kusasisha kwa '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Bonyeza hapa chini kusasisha kwa '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Sasisha inapatikana!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Sasisha sasa</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' ina maadili ya pamoja. Je! Ungependa kuweka upya nini?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Wazi</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Futa utaftaji wa hivi karibuni</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Weka upya yote</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Rudisha pamoja</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Rudisha upya</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Inashawishi hatua ya maombi uliyopewa. Amri zote za Maombi hazina hesabu na kipande chao cha pembejeo kinapuuzwa.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Wakati haijatatuliwa na amri haiwezi moto, mlolongo wa utekelezaji utasimama. Amri nyingi zitahitaji hali fulani ya maombi ili kutekeleza.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Daima endelea?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Amri ya kutekeleza.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Amri</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Hakuna amri iliyochaguliwa kwa amri ya maombi '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Amri ya Amri ya Maombi '{0}' Haipatikani</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Kuchaguliwa</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Anzisha tena</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Kulikuwa na suala la kusasisha '{0}'. Ili kukamilisha sasisho utahitaji kuanza tena na kusanikisha '{0}' tena (usijali mipangilio yako yote itarejeshwa).
+
+Unaweza kuanza tena sasa na kukamilisha sasisho kwa kusanikisha, kupuuza hii na kuisasisha baadaye au kufuta sasisho pamoja na endelea kutumia toleo '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Sasisha kosa</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Haikuweza kupakua sasisho</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Sasisho limeshindwa</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Ili kukamilisha sasisho utahitaji kuanza tena. Je! Ungependa kuanza tena sasa au baadaye?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Sasisha tayari</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Baadae</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Anzisha tena sasa</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Inasubiri</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} ilisasishwa kwa mafanikio kwa {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Plugins za msingi zinahitajika na haziwezi kuondolewa.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Inasanikishwa</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Sasisha inasubiri. Anzisha tena kukamilisha.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Inasubiri</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Kuondolewa kunasubiri. Tafadhali anza tena ikiwa ungetaka kusanikisha.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Kukamilisha kufuta utahitaji kuanza tena. Je! Ungependa kuanza tena sasa au baadaye?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Kumaliza kufuta?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Haijachapishwa</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Otomatiki - preset default ya '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Hakuna kipande kilichochaguliwa</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Chambua kipande kilichochaguliwa</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Agiza njia ya mkato ya kuendesha '{0}' kwenye kipande kilichochaguliwa</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Kuweka Ulimwenguni</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Agiza njia ya mkato ya kuweka kimataifa kwa '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Umesahau nywila?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Ingia</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Kuingia</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Sera ya faragha</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Inahitaji kuanza tena) Wakati habari ya utambuzi iliyowezeshwa itaingia faili. Hii inaweza kupunguza utendaji na inaweza kuwa na habari ya kibinafsi.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Ingia faili</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Wazi</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Fungua folda ya magogo</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Vinjari programu -jalizi</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Soma</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Andika</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Tuma maoni au ripoti ya mdudu</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Hii inaficha tu dirisha kuu. Madirisha mengine yote yasiyo ya mazungumzo yanaonyeshwa kila wakati kwenye Taskbar.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Tafuta katika '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Ongeza Kichujio</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Hariri aina ya jiunge</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Ondoa kichujio hiki</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Fungua msaada juu ya hii ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} sehemu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Mabadiliko</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Kamwe</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Seti</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Isiyo na jina</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rekodi</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Rejea ya chanzo isiyo na msingi</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' inahitajika</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Ana makosa)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Mdogo</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Hifadhi</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Takataka</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Isiyo na kikomo</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Programu hii kwa sasa inalingana na vifaa vya kawaida vya Clipboard Reader na fomati.
+
+Kuwezesha au kulemaza vifaa vya wasomaji wa default (kutoka kwa pembeni ya clipboard) haitaathiri usanidi huu. Programu ambazo hazijaorodheshwa tu hufuata usanidi chaguo -msingi.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Programu hii kwa sasa inalingana na vifaa vya maandishi vya clipboard na fomati.
+
+Kuwezesha au kulemaza presets za mwandishi chaguo -msingi (kutoka kwa ubao wa clipboard) haitaathiri usanidi huu. Programu ambazo hazijaorodheshwa tu hufuata usanidi chaguo -msingi.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Ili kuongezea lazima uchukue msikilizaji wa clipboard (tray ya mfumo -&gt; wasifu).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Ongeza haipatikani</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Haina mipangilio</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ninazungumza tu Kiingereza na Monkeypaste imetafsiriwa kwa lugha hii.
+
+Toleo zote husafirisha na pakiti ya Kiingereza kwa hivyo ikiwa unazungumza Kiingereza unaweza kubadilisha lugha wakati wowote baada ya usanidi huu (Mipangilio -&gt; Mapendeleo -&gt; Kimataifa).
+
+Ikiwa ungetaka kusaidia kuboresha tafsiri tunapenda kusikia kutoka kwako!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Wasiwasi wa tafsiri</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Unahitaji kusasisha Monkeypaste ili kutumia huduma hii.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Njia ya mkato haijatengwa</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Msikilizaji wa clipboard amelemazwa</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Msikilizaji wa Clipboard amewezeshwa</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Kitendo cha mzazi '{0}' hakiungi mkono aina ya mali ya pembejeo 'pato la mwisho'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Jifunze zaidi juu ya mipango</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Maombi</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klipu</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Mchambuzi</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+</root>

@@ -1,0 +1,12 @@
+{
+  "title": "Obsluha",
+  "description": "Zvládne predvolené formáty schránky",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Jadro, schránka, drag and drop, text, rtf, bohatý text, html, csv, image, png, jpg, jpeg, link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

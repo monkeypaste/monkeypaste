@@ -1,0 +1,11 @@
+{
+  "title": "Osnovno besedilo",
+  "description": "Ponuja osnovno podporo za hiperpovezavo za vsebino, ki temelji na besedilu",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Jedro, pripisovanje, besedilo, povezava, barva, razčlenitev, naslov, telefon, e -pošta, valuta, finance"
+}

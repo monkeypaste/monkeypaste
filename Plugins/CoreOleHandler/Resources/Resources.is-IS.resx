@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Hunsa</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Þegar það er athugað {0} sniði verður ekki lesið af klemmuspjaldinu eða drag-og-dropagögnum.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Þegar það er athugað {0} sniði verður ekki skrifað á klemmuspjaldið eða drag-og-sleppa gögnum.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lestu</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Skrifaðu</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Skrár</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Þegar RTF er ekki þegar til staðar verður HTML breytt í RTF. Þetta getur verið gagnlegt milli vafra og/eða ritvinnsluforrit. (Krefst þess að RTF snið sé virkt og er aðeins fyrir studdan vettvang)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Umbreyta í RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Þessar möppur verða ekki lesnar úr klemmuspjaldi eða drag-og-dropagögnum.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Hunsuð möppur</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Hunsaðar skráarviðbyggingar</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Þessar skráartegundir verða ekki lesnar úr klemmuspjaldinu eða drag-og-sleppa gögnum.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Þessar skráartegundir verða ekki skrifaðar á klemmuspjaldið eða drag-og-sleppa gögnum.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Þegar þær eru athugaðar verða myndir sem eru stærri en hámarksvíddir stigstærðar meðan þeir halda stærðarhlutfalli. Þetta hefur ekki áhrif á myndina á klemmuspjaldinu.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Stærð yfirstærð</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Þegar þú límir eða sleppt bitamynd verður þetta sjálfgefin skráartegund</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Sjálfgefin útflutningsgerð</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Stundum birtast fullkomlega gegnsæjar myndir á klemmuspjaldinu, það er ruglingslegt.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Hunsa tómar myndir</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Stórar myndir (meira en fáeinir MB) geta gert drag-og-drop og heildarafköst nokkuð slaka því miður. Reyndu að halda þessu gildi lágu.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Max hæð</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Max breidd</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Fyrir frammistöðu er þörf á hámarksfjárhæð</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max stafir</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Texti (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Snið '{0}' var með tóm eða gagnsæ gögn og var lokað</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Tóm gögn lokuð</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' snið er flaggað sem 'hunsað'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Snið hunsað</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} mörk eru {1} og gögn voru {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Hámarksstærð greind</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Kjarna klemmuspjald lesandi</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Clipboard rithöfundur</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Meðhöndlar sjálfgefið klemmusnið</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Kjarna klemmuspjalds</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Kjarna, klemmuspjald, drag og dropi, texti, rtf, ríkur texti, HTML, CSV, mynd, PNG, JPG, JPEG, hlekkur</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Mynd (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Þegar HTML er ekki þegar til staðar verður RTF breytt í HTML. Þetta getur verið gagnlegt milli vafra og/eða ritvinnsluforrit. (Krefst þess að HTML snið sé virkt og er aðeins fyrir studdan vettvang)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Umbreyta í HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Texti</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+</root>

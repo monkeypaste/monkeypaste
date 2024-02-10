@@ -1,0 +1,82 @@
+{
+  "title": "Fayl konvertori",
+  "description": "Fayllarni rasmlarga yoki matn tarkibiga tarjima qilishga imkon beradi",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "Yadro, matn, rasm, fayl, konvertor, faylga fayl, rasmga fayl",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Aylantirish uchun fayl",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Chiqish turi",
+        "description": "Faqat .png yoki .txt hozir",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Matn",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "Rasm",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Matnga aylantirish",
+        "iconUri": "text.png",
+        "description": "Belgilangan faylni oddiy matnga aylantirishga urinishlar",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Rasmga aylantirish",
+        "description": "Taqdim etilgan faylni in-xotiradagi rasmga aylantirishga urinishlar",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>忽略</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>檢查時，將不會從剪貼板或拖放數據中讀取格式。</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>檢查時{0}格式將不會寫入剪貼板或拖放數據。</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>讀</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>寫</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>當尚未存在RTF時，HTML將轉換為RTF。這在Web瀏覽器和/或文字處理應用程序之間可能很有用。 （需要啟用RTF格式，僅適用於支持的平台）</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>轉換為RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>這些目錄將不會從剪貼板或拖放數據中讀取。</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>忽略目錄</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>忽略文件擴展名</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>這些文件類型將不會從剪貼板或拖放數據中讀取。</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>這些文件類型不會寫入剪貼板或拖放數據。</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>檢查時，在保持縱橫比的同時將縮放大於最大維度的圖像。這不會影響剪貼板上的圖像。</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>比例超大</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>粘貼或刪除位圖時，這將是默認文件類型</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>默認導出類型</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>有時，完全透明的圖像會在剪貼板上顯示，這令人困惑。</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>忽略空圖像</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>不幸的是，大型圖像（超過少數MB）可以使拖放和整體性能變得有些緩慢。嘗試保持該值低。</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>最大高度</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>最大寬度</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>出於性能問題，需要最大的字符</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>最大字符</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML（啞劇）</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>文字（啞劇）</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL（moz）</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>格式'{0}'具有空的或透明的數據，並被阻止</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>空數據被阻止</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}'格式被標記為“忽略”</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>格式被忽略</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0}限制為{1}，數據為{2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>最大尺寸檢測到</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>核心剪貼板讀取器</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>核心剪貼板作家</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>處理默認剪貼板格式</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>核心剪貼板處理程序</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>核心，剪貼板，拖放，文本，RTF，富文本，HTML，CSV，Image，PNG，JPG，JPEG，JPEG，鏈接</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>圖像（PNG）</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>當尚未存在HTML時，RTF將轉換為HTML。這在Web瀏覽器和/或文字處理應用程序之間可能很有用。 （需要啟用HTML格式，僅適用於受支持的平台）</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>轉換為HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>文字</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>無標題</value>
+  </data>
+</root>

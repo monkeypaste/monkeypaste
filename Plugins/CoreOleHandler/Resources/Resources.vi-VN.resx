@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Phớt lờ</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Khi được kiểm tra định dạng {0} sẽ không được đọc từ bảng tạm hoặc dữ liệu kéo và thả.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Khi được kiểm tra định dạng {0} sẽ không được ghi vào bảng tạm hoặc dữ liệu kéo và thả.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Đọc</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Viết</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Các tập tin</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Khi RTF chưa có mặt, HTML sẽ được chuyển đổi thành RTF. Điều này có thể hữu ích giữa các trình duyệt web và/hoặc ứng dụng xử lý văn bản. (Yêu cầu định dạng RTF được bật và chỉ dành cho các nền tảng được hỗ trợ)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Chuyển đổi sang RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Các thư mục này sẽ không được đọc từ clipboard hoặc dữ liệu kéo và thả.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Bỏ qua các thư mục</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Bỏ qua các phần mở rộng tệp</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Các loại tệp này sẽ không được đọc từ bảng tạm hoặc dữ liệu kéo và thả.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Các loại tệp này sẽ không được ghi vào bảng tạm hoặc dữ liệu kéo và thả.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Khi được kiểm tra, hình ảnh lớn hơn kích thước tối đa sẽ được tỷ lệ trong khi giữ tỷ lệ khung hình. Điều này không ảnh hưởng đến hình ảnh trên bảng tạm.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Quy mô quá khổ</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Khi dán hoặc thả bitmap, đây sẽ là loại tệp mặc định</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Loại xuất mặc định</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Đôi khi hình ảnh hoàn toàn minh bạch sẽ hiển thị trên bảng tạm, nó khó hiểu.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Bỏ qua hình ảnh trống</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Hình ảnh lớn (nhiều hơn một vài MB) có thể làm cho hiệu suất kéo và thả và hiệu suất tổng thể hơi chậm chạp. Cố gắng giữ giá trị này thấp.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Chiều cao tối đa</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Chiều rộng tối đa</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Đối với các mối quan tâm về hiệu suất, cần có số lượng nhân vật tối đa</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Ký tự tối đa</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Văn bản (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Định dạng '{0}' có dữ liệu trống hoặc trong suốt và bị chặn</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Dữ liệu trống bị chặn</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Định dạng '{0}' được gắn cờ là 'bị bỏ qua'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Định dạng bị bỏ qua</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} giới hạn là {1} và dữ liệu là {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Kích thước tối đa được phát hiện</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Đầu đọc clipboard cốt lõi</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Nhà văn clipboard cốt lõi</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Xử lý các định dạng Clipboard mặc định</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Người xử lý clipboard cốt lõi</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, clipboard, kéo và thả, văn bản, rtf, văn bản phong phú, html, csv, hình ảnh, png, jpg, jpeg, link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Hình ảnh (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Khi HTML chưa có mặt, RTF sẽ được chuyển đổi thành HTML. Điều này có thể hữu ích giữa các trình duyệt web và/hoặc ứng dụng xử lý văn bản. (Yêu cầu định dạng HTML phải được bật và chỉ dành cho các nền tảng được hỗ trợ)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Chuyển đổi sang HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Chữ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Không có tiêu đề</value>
+  </data>
+</root>

@@ -1,0 +1,12 @@
+{
+  "title": "연설에 텍스트",
+  "description": "제공된 텍스트를 말합니다",
+  "version": "1.0.3.0",
+  "author": "Monkey",
+  "guid": "26436e84-392e-4038-a99c-0abe92b843bd",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/TextToSpeech",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/icon.png",
+  "packageType": "Dll",
+  "tags": "핵심, 오디오, 접근성, 음성, 텍스트"
+}

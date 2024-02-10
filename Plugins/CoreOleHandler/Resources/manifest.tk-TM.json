@@ -1,0 +1,12 @@
+{
+  "title": "Esasy paneli",
+  "description": "Deslapky paneli formatlary tutýar",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Core, planşirlemek, süýrän we taşlaň, stuz, Rtml, CSV, JPG, JPG, LPG, LPGAg, LPGAg, LPG, LING",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

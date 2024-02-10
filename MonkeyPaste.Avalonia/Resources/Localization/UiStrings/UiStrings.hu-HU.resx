@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Az előfizetés, csak a tárolókapacitás nem korlátozza a funkciókat, és bármikor megváltoztatható.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Állítsa vissza a meglévő fiókját ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>A tartalom és a szemét
+a {0} és a {1} -re korlátozva
+klipek.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Lehetővé teszi a {2} tartalom klipeit és a korlátlan szeméttárolót.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Korlátlan és korlátlan tartalom és kukák tárolása.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>visszaállítás</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Ingyenes</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Alapértelmezett</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Korlátlan</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Feliratkozás</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Az Ön adatvédelme fontos, és a vágólap -adatok nagyon személyesek lehetnek. A tárolás mindig titkosítva van, de beállíthat egy jelszót, amelyre szükség lesz, ha az eszközt ellopják, vagy valaki más használja az eszközt.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Jelszó</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Ha engedélyezve van, akkor bármely alkalmazásról a képernyő tetejére húzva felfedi a majompaste -t, hogy könnyen eldobja a tartalmat a majompastaba.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>A főablak bal felső sarkában lévő „zár” engedélyezése továbbra is lehetővé teszi a Monkepaste -ra való leeresztést.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>További ablakpreferenciák érhetők el a 'Beállítások -&gt; Preferenciák -&gt; Ablak' menüben.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Húzza fel itt a banánt!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Húzás - to - nyitva</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>A billentyűparancsok bármikor felülvizsgálhatók vagy megváltoztathatók a 'Beállítások -&gt; Gargikonok' menüben.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Az összes globális hivatkozás le van tiltva, így később beállíthatja őket.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>A MonkyPaste vágólap -parancsikonjai minden alkalmazásban elérhetők lesznek.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Belső</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Mulasztás</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Gesztusprofil</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hé! Állítsunk be néhány dolgot, hogy javítsuk a majompaste -val kapcsolatos általános tapasztalatait.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Üdvözöljük</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Ahhoz, hogy a lehető leghasznosabban használja ki a Monkepaste -t, az automatikus betöltés, amikor bejelentkezik, jó ötlet. De ez teljesen rajtad múlik.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Tartsa alkalmi.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Engedélyezze</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Betöltés a bejelentkezésre?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Ha engedélyezve van, a képernyő tetején lévő görgető gesztus feltárja a majompasztot.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Balra - A tálca ikonra kattintva továbbra is megnyitja a majompasztát.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>További ablakpreferenciák érhetők el a 'Beállítások -&gt; Preferenciák -&gt; Ablak' menüben.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Könnyű, igaz?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Görgessen itt!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Görgessen - to - nyitva</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; majompaszta &lt;span color = "piros&gt; teljesen integrált &lt;/span&gt; drag - and - csepp &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Dobd ide!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Így a MonkyPaste elérhető &lt;br&gt; &lt;span color = "piros"&gt; kattintás nélkül &lt;/span&gt; vagy akár &lt;span color = "piros"&gt; szemet batting &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Húzz!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Próbáld ki!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Próbáld ki!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Nincs eredmény elérhető.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>megerősít</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Frissítés</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Keresés...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Függőségek:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Telepítés</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Biztos benne, hogy el akarja távolítani a '{0}' -t, valamint az összes előre beállított és parancsikont?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Eltávolítás</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>A '{0}' -nek nincs eredménye.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Nincs választás.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Egyik sem</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Hitelek:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Leírás:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Adományoz:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Engedély:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projekt URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Közzétett:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Olvassa el:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Visszaélés jelentése:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Címkék:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Frissít</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Változat:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Nyissa meg az ablakot</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Elbocsát</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Frissítés</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Megment</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>A törlés mellett!
+
+Frissítse az elkerülést.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>A szemét mellett!
+
+Frissítse az elkerülést.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Irat</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Kép</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Szöveg</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Másolt {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} fájlok | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} vonalak</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} másolatok | {1} paszták</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Mozog</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Hozzáad</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Másolat</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Vágott</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Paszta</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} másolat</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Nem mentett szűrő</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Kérlek, válassz -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formátumok</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Olvasók</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Írók</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Kezelők</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Töröl</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Másolat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Név szerkesztése</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Visszaállítás</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Címkék</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Akció</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Globális útválasztás</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Parancsikon</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>A gesztusoknak egyedinek kell lenniük, és csak egy bemeneti kulcsot tartalmazhatnak.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Belső &lt;/b&gt; Az összes parancsikon az alkalmazáson belül korlátozódik. Ez valójában nem egy szándékos lehetőség, de lehetővé teszi a testreszabást, hogy milyen hivatkozásokat kíván tenni a globális &lt;i&gt; napi &lt;/i&gt; -nek. &lt;/li&gt;
+&lt;li&gt;
+&lt;B&gt; Alapértelmezés &lt;/b&gt; Az összes globális hivatkozás engedélyezve van. A &lt;b&gt; megmutatja/elrejti a főablakot &lt;/b&gt; parancsikon &lt;span color = "piros"&gt; felülbírálás &lt;/span&gt; útválasztást használ a &lt;b&gt; Caps Lock &lt;/b&gt; gombhoz. Bármikor megváltoztathatja ezt az útválasztást vagy gesztust. De a &lt;span color = "zöld"&gt; próbálkozzon &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;Head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; Globális gyorsbillentyűi módok &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;B&gt; Passzív &lt;/b&gt; A mamutpaszta bármely alkalmazásban meghallgatja. &lt;br&gt;
+*Ez a &lt;i&gt; csak &lt;/i&gt; opció a Linuxon.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; A parancsikon &lt;b&gt; &lt;i&gt; előtti &lt;/i&gt; &lt;/b&gt; végrehajtja. Az aktív alkalmazás kezeli. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; A parancsikon &lt;b&gt; &lt;i&gt; után &lt;/i&gt; &lt;/b&gt; az aktív alkalmazás kezeli. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; felülbírálás &lt;/b&gt; Amikor a MonkeyPaste meghallja a felülbíráló parancsikon bemeneti kulcsát (nem módosító kulcs).
+Ez az opció garantálja a parancsikont konfliktusok nélkül az aktív alkalmazás számára.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;B&gt; Exkluzív felülbírálás &lt;/b&gt; Ez egy speciális felülbírálási mód, amelyet a CAPS zárkulcshoz terveztek. Csak a &lt;b&gt; egy &lt;/b&gt; gombot (nem módosító) engedélyezi annak hozzárendeléséhez. &lt;br&gt;
+Normál felülbírálási módban a sapkák zárolása &lt;i&gt; elakadhat &lt;/i&gt;
+Tehát függetlenül attól, hogy milyen más kulcsok vannak le, ha a &lt;b&gt; gyorsbillentyű &lt;/b&gt; parancsikont megnyomják, akkor felülbírálják, és megakadályozzák, hogy &lt;i&gt; elakadjon a &lt;/i&gt; -re.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ Body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Letilt</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Töltse fel, amikor ezt a felhasználói fiókot bejelentkezik, nem más felhasználók számára.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; A rendelkezésre álló névjegyek használata (Fetcher plugin szükséges) Ezt a mezőt a sablon minden példányához használják a dokumentumon keresztül, vagy bármelyiken később hivatkozunk. Itt, akkor a kiválasztott kapcsolattartó e -mail mezőt a dokumentum minden példányához használják. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = rövid év &lt;br/&gt; yyyy = hosszú év &lt;br/&gt; m = hónap (1-12) &lt;br/&gt; mm = hónap (01-12) &lt;br/&gt; mmm = hónap rövidítés (január, február .. . DEC) &lt;br/&gt; mmmm = hosszú hónap (január, február ... december) &lt;br/&gt; d = nap (1 - 31) &lt;br/&gt; dd = nap (01 - 31) &lt;br/&gt; ddd = A hét napja szavakkal (hétfő, kedd ... vasárnap) &lt;br/&gt; e = a hét rövid napja szavakban (hétfő, kedd ... nap) 3., 21., 22., 23., 31., 4., 4.) &lt;br/&gt; H = óra AM/PM-ben (0-12) &lt;br/&gt; HH = óra AM/PM-ben (00-12) &lt;BR/ &gt; H = óra a napon (0-23) &lt;br/&gt; hh = óra a napon (00-23) &lt;br/&gt; mm = perc &lt;br/&gt; ss = második &lt;br/&gt; sss = milliszekundum &lt;br/&gt; A = AM/PM marker &lt;br/&gt; p = A.M./P.M. jelző</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Az aktuális dátumot és/vagy az időt helyettesítik a DateTime sablonok beillesztésekor.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Ennek a sablonnak az összes eseménye a megadott szöveget fogja használni. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Ennek a sablonnak az összes eseménye a megadott szöveget fogja használni. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Befejezi a mellékletet</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Engedélyezze a blokkot</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Engedélyezze az inline -t</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Váltókézés</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Váltókézés</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Szüneteltesse a mellékletet</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Váltás előtt</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Váltás előtt</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Folytassa a függeléket</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Mellékel...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Paszta</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Csap</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Kibont</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Elrejtse az összes '{0}' értesítést</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Elbocsát</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Utolsó aktív alkalmazás ismeretlen. Váltson a tervezett alkalmazásra a majompaszta felé.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Paste: &lt;em&gt; &lt;i class = "paste-toolTip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimalizál</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Kérlek várj...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Zár</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Beszámoló</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Segítség</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Másolás beillesztés</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>preferenciák</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Az alapértelmezések visszaállítása</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Szűrő...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Parancsikonok</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Adja meg az alkalmazást</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Hozzáadja a weboldalt</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blokk?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Név</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Alkalmazások</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokk domain?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blokkolja az URL -t?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Tartomány</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>A forrás URL -felismerése attól függ, hogy a vágólap -barát a host alkalmazás, így az elutasítás nem garantálható</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Webhelyek</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Egyes MonkEyPaste szolgáltatások a billentyűzet automatizálását használják a „másolat” események szimulálására más alkalmazásokban.
+
+Hozzáadja és/vagy válassza ki az alkalmazást az egyedi másolási parancsikonnal (például egy konzol vagy héj), hogy biztosítsa, hogy ezek a szolgáltatások megfelelően működjenek.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Másolás parancsikon</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Egyik sem</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>A megadott alkalmazáshoz csak a kiválasztott preseteket fogják használni. Ha nem meghatározták, akkor a &lt;em&gt; Clipboard Sidebar &lt;/em&gt; alapértelmezett előre beállításait használjuk.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Számos majompaste funkció a billentyűzet automatizálását használja más alkalmazásokkal való interakcióhoz.
+
+Egyes alkalmazásoknak (például néhány konzolnak vagy kagylónak) lehet egy nem alapértelmezett paszta parancsikon.
+
+A megfelelő interoperabilitás biztosítása érdekében rögzítse az alkalmazáshoz szükséges parancsikonokat.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Beilleszthető parancsikon</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Olvasók</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Az elutasított alkalmazásokból származó összes vágólap -megfigyelés &lt;b&gt; figyelmen kívül hagyja &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Írók</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Szerkesztés ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formátumok</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Elutasított</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Parancsikonok</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Szeretné eltávolítani az összes {0} klipet a '{1}' -ről</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Távolítsa el a klipeket?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Alkalmazás</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Böngésszen az alkalmazáshoz ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Válassza az Alkalmazás elérési útját</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Biztos benne, hogy el akarja távolítani az egyéni hivatkozásokat a {0} számára?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Biztos benne, hogy el akarja távolítani az egyéni formátumokat a {0} számára?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Ehhez az alkalmazáshoz nincs hozzárendelt vágólap -formátum. A vágás/másolat útján nem olvasható adatok nem olvasnak el.</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Ehhez az alkalmazáshoz nincs hozzárendelt vágólap -formátum. Automatizált paszta vagy húzás - és - a MonkeyPaste -ból való cseppnek nem lesz hatása (annak üres adatai).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Biztosan szeretné visszaállítani az összes parancsikont? Az összes egyedi hivatkozást eltávolítják.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Biztos benne, hogy meg akarja változtatni a parancsikon útválasztási profilját '{0}' -re</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Minden</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Kedvencek</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Szűrők</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formátumok</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Címkék</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Ma</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Szemét</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Ról ről</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Könnyű, igaz?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Kattintson duplán a Unpin elemre</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Egyedi</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globális</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Ez a kombináció ütközik a „{0}” -val, amelyet megmentve törölnek.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Parancsikont kell biztosítani.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Ez egy globális parancsikon. Ez azt jelenti, hogy megpróbálja végrehajtani, amikor végrehajtják. Próbálja meg elég egyedivé tenni (vagy megváltoztatni az „útválasztási típusot”), hogy ne konfliktusson más alkalmazások hivatkozásaival.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globális</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>A parancsikonnak tartalmaznia kell egy és egyetlen nem módosító gombot.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Nyomja meg a rögzítéséhez bármely gombot ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Rendeljen parancsikont</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Tudj meg többet...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Frissítés</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Megszünteti</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Javítás</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Figyelmen kívül hagyni</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Nem</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Rendben</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Próbálja újra</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Leállitás</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Beküldés</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Igen</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Évi</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Havi</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Próbáld ki ingyen!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Számlázási ciklus</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Belépés</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Ellenőrizze a kapcsolatát
+és próbáld újra.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Kijelentkezés</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Következő fizetés</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Jelszó</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Regisztráció</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>az e-mail nem érvényes</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>A jelszavak nem egyeznek.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>A jelszónak legalább {0} karakternek kell lennie.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Emlékezik?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Ellenőrizze e -mailjét a fiók megerősítéséhez</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Jelszó visszaállítása</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Soha</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Ingyenes {0} napi próba</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Volt egy probléma a fellépéssel
+vásárlásod.
+
+Ellenőrizze a kapcsolatát és
+A beállítások segíthetnek.
+
+Szeretné újra kipróbálni?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Fiókja sikeresen megtörtént
+Frissítve:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Vásároljon sikeres!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Hiba</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Kapcsolat nem sikerült.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Próbálja újra</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>A fiók megváltozott</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Az előfizetés most már {0}/{1} {2} tartalommal és {3} szeméttárolóval rendelkezik.
+De ne aggódjon, az adatok lecsökkentése után egyetlen adatok sem vesznek el. Csak új klipeket kell értékelni.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Gratulálunk! Az előfizetés most már {0}/{1} {2} tartalommal és {3} szeméttárolóval rendelkezik.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Szemetet vagy leváljon valamit
+a '{0}' -től a további hozzáadáshoz.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' tároló {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>visszaállítás</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} blokkolva</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Elérte a tartalom és a szemétkapacitás!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' tároló {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Elérte a tartalmi kapacitást!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Elrejtheti ezeket a figyelmeztetéseket
+Az „All elrejtése” gombra kattintva a
+Opciók menü fent.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>A maximális szemetes tároló {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Elérte a szemeteskapacitást!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} érvénytelen</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} legalább {1} karaktereknek kell lennie</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} csak {1} karakter lehet</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Beillesztés: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>A {0} fizetése a fizetés
+Az előfizetés esedékes volt {1}
+és nem fogadták el.
+
+Kérjük, frissítse a
+Fizetési információ.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>A {0} fizetése a fizetés
+Az előfizetés esedékes volt {1}
+és nem fogadták el.
+
+Kérjük, csatlakozzon a
+Internet az eszközön
+előfizetéssel és
+indítsa újra a folytatás érdekében
+a {0} terv használatával.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>A {0} fizetése a fizetés
+Az előfizetés esedékes volt {1}
+és nem fogadták el.
+
+Kérjük, nyissa meg vagy indítsa újra
+Majompaste az eszközön
+Az előfizetéssel
+Folytassa a használatát
+{0} terv.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>A számla lejárt</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>jegyzet</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>A Microsoft Store nem engedélyezi a szintet
+Az előfizetési kiegészítők változásai.
+
+Le kell mondania a
+{0}/{1} Tervezze meg magát
+Vagy mindkettőért számítanak fel.
+
+Szeretne most megcsinálni?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>A jelszavad vissza lett állítva.
+
+Kérjük, ellenőrizze e -mailjét és
+Kövesse a változás linkjét
+a jelszavad.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Belépés</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Szerzői)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Szükség van arra, hogy a folytatás előtt elfogadja a következő licenc feltételeket.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>A következő csomag (ek) megköveteli, hogy a telepítés előtt elfogadja a licencfeltételeket.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Elutasítom</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Az "elfogadom" kattintás azt jelenti, hogy elfogadja a kérelem licencfeltételeit. Ha nem ért egyet a feltételekkel, kattintson az "I Desline" gombra.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Az "elfogadom" kattintás azt jelenti, hogy elfogadja a fent felsorolt ​​plugin (ek) licenc feltételeit. Ha nem ért egyet a feltételekkel, kattintson az "I Desline" gombra.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Licenc megtekintése</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Engedély elfogadása</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Elfogadom</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktív</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Nem regisztrált</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Kész</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ A jelszavak nem egyeznek meg</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Jelszó</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Az előfizetésed az
+Most állítsa be a {0}/{1} értékre.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Számla található</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Bejelentkezés sikertelen</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>A regisztráció meghiúsult</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Sikeres regisztráció!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Visszaállítási hiba</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Feliratkozás</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Mi újság</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Soha</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Korlátlan</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapacitás</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>többi</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>teljes</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>A fizetése esedékes.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Az exkluzív felülírási parancsikonok csak egy kulcsot tartalmazhatnak, és ez a gomb nem lehet módosító kulcs.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Lejárt</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Betöltés</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Tiltva</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Jegyzet! Ez a jelszó nem kötelező, és csak az extra biztonság érdekében. Adatait már titkosítják és soha nem osztják meg. Ez a jelszó egyszerűen megakadályozza azt, aki nem te tölti be a majompaste betöltését, ha valamilyen módon hozzáférést kapnak az asztalhoz (ellopták, elhagyják a helyiséget stb.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Ne feledje, hogy dobja el a beállításokat:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Böngészse a plugineket</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Elemez</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Gyors cselekvés</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Váltás szerkesztés</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Váltva rögzítve</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Kommentárok</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Egyszerű szöveg</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Nyissa meg az ablakot</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Kattintson a + CTRL gombra a követéshez ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Kattintson a + alt gombra a követéshez ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin vagy dobjon ide a médiát!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Egyértelmű</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>A 0 feletti küszöbértékek homályos színű illesztést biztosítanak az euklideai távolság felhasználásával az RGBA ColorsPace -ben.
+
+Például, ha a piros (#ff0000) a keresési kifejezés és a fekete (#000000) egy pixel egy képklipben, akkor a színes távolság 255 lesz. A fekete -fehér távolság az 510 -es maximális lehetséges, beleértve az alfa -csatornát is.</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Az alábbiak mindegyike igaz</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Vágólap</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Gyűjtemények</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Egér üzemmódok</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Triggerek</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Szünet</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Önéletrajz</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Új ravaszt</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Add az előre beállított</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Majomcsepp varázsló</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Előre beállított</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Elemző</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Ciklusorientáció</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>A rács elrendezésének váltása</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Kis-nagybetű érzékeny</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Küszöb</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Egész világ</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Nincs beállítva</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>útvonalválasztás</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Akció</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Rács</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Kész</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Következő</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Előző</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Kihagyás</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Meglévő fiók?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Következő fizetés</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>A regisztráció lehetővé teszi a fizetett előfizetési eszközöket az összes eszközön (a rendelkezésre állás alapján). Nem fogjuk spamolni az e -mailt, amelyet ígérünk 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Feliratkozás</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Felhasználónév</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Regisztrálnia kell?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Források</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Furcsa, semmi sem érhető el. Valaminek kell lennie, hogy nincs rossz 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Eltávolítás</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Újraindítást igényel</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Fejlett</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Hiba a plugin kinyerése a '{0}' -ből</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Hiba a plugin telepítésének hiba: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Hiba a '{0}' beépülő modul telepítésének hibája. Korrupt vagy nem megfelelő könyvtári struktúra. A manifestnek léteznie kell a '{1}' -on, de nem találták meg.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Hiba -elemzés A plugin manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Nincs beépülő modul a GUID -val: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} hiba</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Hiba a beépülő modul elhelyezésére a hőmérsékleten {0} '</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Hiba a '{0}' {1} '-ig történő biztonsági mentés. Részletek: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>A beírt szöveg automatikusan alkalmazza a keresésre, amikor nincs fókuszálva a szövegmező.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Automatikus keresési bemenet</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>A jelszó módosítása sikertelen</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>változás</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Jelszó módosítása</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Egyértelmű</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Jelszó törlése</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Tartalom</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Tartalom betűtípus mérete</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Ha igaz, a klipbe beillesztett külső tartalom a klipek formázását fogja használni, és nem azt, ami a forrásból elérhető.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Beilleszteni, dobni vagy hozzáfűzni a rendeltetési hely formázással</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Biztosan szeretné elfelejteni a jelszót?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Elfelejt</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Elfelejtett jelszo</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Elrejteni a kapacitás vízjeleit</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Amikor az új vágólap tartalmát csatolják, azt nem fogják nyomon követni új klipként</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyja a mellékleteket</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Amikor a vágólap megfelel a meglévő klipnek, akkor ezt a klipet használják egy új létrehozása helyett</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyja az új másolatokat</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>A vágólap változásai az alkalmazáson belül nem lesznek nyomon követni</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyja a belső vágólap követését</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>A szóközöket, a füleket és az új vonalakat figyelmen kívül hagyják a követésből</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Csak a fehér teret hagyja figyelmen kívül</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Töltse be a bejelentkezést</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Élenrésű ablak</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Átlátszatlanság</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Mutasd a viselkedést</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>A főablakot a monitor felső szélén görgető gesztus végrehajtásával fogják ki</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Mutassa meg a felső képernyő -görgetést</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Értesítési kötet</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Ez a beállítás nyomon követi a rendszert - a széles billentyűzet paszta számít a használati statisztikákra. Ez az információ privát és nem megosztott, de nem is garantálja. A pontos eredmények megkövetelhetik az alkalmazás -specifikus billentyűzet paszta parancsot a 'Beállítások -&gt; Másolás és beillesztés -&gt; parancsikonok' címen.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Beillesztési történelem</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Túl sok rögzített klip (mint például a böngésző lapok), jelentős memóriát fogyaszthat. Az eltávolítás az első - be - először - ki.</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Tűkapacitás</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Ez vonatkozik az összes automatikus - kitölthető bemenetre, az alacsonyabb értékek javítják a teljesítményt</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>A legfrissebb szövegkorlátozás</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Biztos, hogy akarod
+Visszaállítja az alapértelmezett preferenciákat?
+
+Ezt nem lehet visszacsinálni!
+
+*Az alkalmazás újraindul, miután befejeződött.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Biztosan szeretné visszaállítani az összes értesítést?
+
+*Ezt nem lehet visszacsinálni!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>A majompaszta beállítja a vágólapot (felülbírálja), amikor egy külső programra beilleszt. Ez &lt;b&gt; megpróbálja &lt;/b&gt; a vágólap állapotának helyreállítását egy külső paszta után.
+
+A teljes helyreállítás nem garantálható, és az adatok forrásától függően csökkentheti a teljesítményt, vagy akár összeomlik a majompaszta.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Visszaállítja a vágólapot a majom beillesztése után</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nem tudta törölni a plugin gyorsítótárat az elérési útról: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Az összes beépülő modul visszaállítja a kezdeti alapértelmezett állapotot</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin gyorsítótár</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Biztosan szeretné visszaállítani az összes beépülő modulot alapértelmezésre?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Biztosan szeretné visszaállítani a jelszavát?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Az összes alkalmazási parancsikon visszaállítja az alapértelmezett kulcs mozdulatait.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>A parancsikonok visszaállítása</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Mindegyik figyelmen kívül hagyta a korábban beállított értesítést.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Az értesítések visszaállítása</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Az engedélyezés meglehetősen lassú lehet) A formázott letiltás csökkenti a memóriafogyasztást, de gátolja néhány fejlett funkciót, például: melléklet, sablonok, kommentárok, és megtalálni/cserélni</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Gazdag tartalom</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Állítsd be a jelszót</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Tippeket mutatni</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Mutasd meg a tálcán</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Mutassa meg a Task Switcher -ben</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>A címek bemutatása</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Ha engedélyezve van, akkor bármely alkalmazásról a képernyő tetejére húzva felfedi a majompaste -t, hogy könnyen eldobja a tartalmat a majompastaba.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Mutasd meg a képernyő tetejére húzáson</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Hangfém</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Helyesírás-ellenőrzés</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Az indításkor a vágólap forrása ismeretlen lesz, és a biztonsági beállításoktól függően a tartalom egy kizárt webhelyről vagy alkalmazásból származhat.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Adjon hozzá indítási vágólapot</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Hallgassa meg a vágólapot az indításkor</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Válasszon</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Vigyázat! A többi paletta színt a matematika, a nem szemmel választják meg! Tehát légy tudatában annak, hogy néhány szín- és stíluskombinációnak nincs megfelelő kontrasztja az olvashatósághoz.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Téma színe</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Téma stílus</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automatikus szemetes tisztítás az indításkor a beállított időközönként történik.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Szemét tisztítás</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Felület</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>A magas visszavonási korlátok befolyásolhatják a teljesítményt</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Visszavonás korlátozás</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Határ nélül</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>A nem előre beállított fájlfájlok Advanced File Search -ben használják</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Felhasználó - Meghatározott keresési kiterjesztések</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Keresse meg és cserélje ki ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Ide törölje</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Ossza meg...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Kilátás</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Kezelje ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Átnevez</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Pontszám: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Típus: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Tartósan törölje</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Böngésszen a '{0}' címre</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Átalakít</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Bemenet</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Kimenet</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Források</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>visszaállítás</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Válassza ki a képet ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Szín</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Kezelje a '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Nyisd ki</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Kérlek várj...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Háttérszín</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Mindent kitöröl</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Vágólap formátumai</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Mindet törölni</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Részletek szerkesztése</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Név</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>megtalálja</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Betű szín</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formátumfesték</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Válogatáskor</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Beilleszteni a képet</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Helyezze be a linket</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Beilleszteni a videót</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Mérkőzés esetén</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Új sablon</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Következő sablon</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Írja be a paszta szöveget ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Előző sablon</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Reguláris kifejezés</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Cserélje ki az összeset</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Cserél</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Egész világ</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Körbeteker</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blokk</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Tartomány</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Mappa megjelenítése</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Felszabadít</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Ról ről</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Függelékblokk</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Beilleszt</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - másolás</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Üzemmód</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Kérjük, várja meg, hogy a majompaste betöltődik ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Kilépés</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - kattintson a Paste kattintással</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Csoport</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Szűrő</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Véglegesen törölje az összeset</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Visszaállítsa az összeset</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Akció</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>Az URL már létezik: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Az URL -nek érvényes formátumban kell lennie.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Írja be a teljes URL -t:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Adjon hozzá URL -t</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Írja be az értékeket</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Másolja az alkalmazandó szöveget vagy fájlokat.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Függelék {0} {1} mód aktiválva</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>A vágólap módosítása most csatolják</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>A függelék módja után aktiválva</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>A vágólap módosítása most előkészíthető</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>A függelék módja aktiválása előtt</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blokk</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>A normál vágólap viselkedése helyreállt</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Függeléket deaktiválták</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>A klip tetejéhez vagy botomjához hozzáadott csatolások</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>A függelék módja aktiválva</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Sorban</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Kézikönyv</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Függeljen a jelenlegi választáshoz.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Kézi függelék üzemmód aktiválva</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>A vágólap felhalmozódása leállt</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>A melléklet szünetet tart</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>A vágólap felhalmozódása folytatódott</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>A függelék folytatódott</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Biztosan szeretné befejezni a mellékletet?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>A kompatibilitási módban történő szerkesztés eltávolítja az összes gazdag formázást. Biztosan szeretné ezt módosítani?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Adatok lebomlásának figyelmeztetése</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktív</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Engedélyezve</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Ki</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Tovább</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Megállt</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Eredmény</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Állapot</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Ismeretlen hiba történt.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>A megmaradó kísérletek</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Írd be a jelszót</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>megerősít</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kapcsolatba lépni</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Dátum idő</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Biztos benne, hogy törölni akarja a '{0}' összes felhasználását?
+
+Ezt nem lehet visszacsinálni!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamikus</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statikus</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} üres ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Hamarosan még több jön!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>A bejelentkezési terhelés letiltása sikertelen</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Bejelentkezés Letöltés letiltsa a sikert</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>A bejelentkezési terhelés engedélyezése sikertelen</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>A bejelentkezési terhelés lehetővé teszi a sikert</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Elrejt</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>A majompaszta most már betöltött.
+A vágólap hallgatása: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Töltött</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Előadás</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Automatikus másolás kiválasztási módja: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Az üzemmód megváltozott</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>A jobb egérgombbal kattintson a beillesztési módra: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>A plugin frissítve</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Paste '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Futtassa a '{0}' analizátort</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Futtassa a '{0}' trigger futtatását</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Válassza a '{0}' lehetőséget</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Biztos benne, hogy törölni akarja a '{0}' és az összes kapcsolódó műveletet?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Indítvány</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Szeretné eltávolítani az összes al -műveletet a '{0}' -hez? (Ellenkező esetben a '{1}' -re) újra felkerülnek)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Távolítsa el az opciókat</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Tényleg azt akarja, hogy '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Beszámoló</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analizátorok</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Alkalmazási műveletek</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Vágólap</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Tartalom</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Átalakítók</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultúra</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Adat</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Irány</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Húzás és csepp</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Csepp varázsló</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikonok</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Fakitermelő</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Felület</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Beillesztési műveletek</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>preferenciák</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Keresés</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Parancsikonok</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Fajta</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Hangok</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Rendszertálca</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Gyűjtemények</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Téma</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Triggerek</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Weboldal -műveletek</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Nyelv</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>A vágólapot beállítja a bemeneti klipre.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Éber</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Radarkép</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Harangjáték</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Általános célú hang- és/vagy rendszer tálca üzenet riasztások. A riasztási műveleteknek nincs hatása a bemenetükre.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Üzenet</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Majom</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Előnézet</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Előadás?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>A pirítós üzenet másodpercben megjelenik. Ha az érték 0 értéke, az üzenetet manuálisan kell bezárni.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Mutassa meg az időt (ek)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Hanglokátor</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Hang?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Hangtípus</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Hangerő</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Elemző</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>A hozzárendelt analizátor előre beállított bemeneti klipjét feldolgozza.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>A bemeneti tartalom a kiválasztott gyűjteményhez kapcsolódik</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Összekapcsolja a bemeneti klipjét a hozzárendelt címke kollekcióval.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Címke</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Kis-nagybetű érzékeny?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Ez lehet statikus szöveg, amely összehasonlítható a bemenetekkel és/vagy a kiválasztott tulajdonságok (a Szűrőgomb segítségével) beilleszthető, ha a feltételt kiértékeljük.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Feltételes adatok</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Egy opcionális JSONPATH lekérdezés, amelyet a feltétlenül kiértékelnének a kiválasztott „bemeneti tulajdonságra”.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Bemeneti szűrő</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Az ehhez a feltételhez használt klip tulajdonság.
+
+Az „utolsó kimenet” tulajdonságot jelenleg csak akkor támogatják, ha ez a feltétel egy analizátor művelet gyermeke, és a megadott adatok a szülő analizátor kimenetétől függően változnak.
+
+A hibaelhárításhoz csatoljon egy „riasztási műveletet” ehhez a feltételes szülőhöz, és állítsa be a riasztás „üzenet” paraméterét, hogy megfeleljen a bemeneti tulajdonságnak. Ez lehetővé teszi az ehhez a feltételhez használt tényleges adatok áttekintését.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Bemeneti tulajdonság</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Szöveges összehasonlítást hajt végre a bemeneti klipre vagy az előző művelet kimenetére. Ha az összehasonlítás meghibásodik (nem egyezik), nem hajtanak végre gyermekkezeléseket. Tehát úgy viselkedik, mint egy logikus kapu.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Minden igaz vagy hamis művelet, ahol a gyermekek cselekedeteit csak akkor hajtják végre, ha az eredmény igaz.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Feltétel</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Minden</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Ha a kiválasztott típusú klipet bármilyen módon hozzáadják a rendszerhez (vágólap, húzás - és - csepp, elemző, előállított vagy duplikált).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Csak akkor hajtsa végre ezt a triggert, ha a bemeneti klip új, és nem másolat. Ez független attól, hogy az új tartalmat figyelmen kívül hagyják -e vagy sem.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyja a másolatot</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Csak az ilyen típusú klipek indítják el ezt a műveletet.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Összekapcsolja a bemeneti klipjét a hozzárendelt címke kollekcióval.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Ha egy klip kapcsolódik a megadott címke gyűjteményéhez, akkor indítható.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Gyűjtemény</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>A milliszekundumban várt időtartam a gyermekek végrehajtása előtt várt</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Késleltetés</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Kísérleti) Elsődlegesen a távoli források vagy a támogatás hosszú távú műveletekkel történő megismétlésére szolgáló ismétlődéssel együtt.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Ha üresen hagyja, a kimeneti fájl a bemeneti Clip címét használja fájlnévként.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Egyedi név</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Az a könyvtár, ahol a fájlt megírják.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Könyvtár</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Menti a bemenetet a kiválasztott mappába.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Kiváltva, amikor a kiválasztott mappa tartalma megváltozik. A kimenet új vagy meglévő lesz (ha az Ignore Duplicates preferencia engedélyezve van) a fájl vagy mappák fájlkapccsal, amely megváltozott az utolsó kimenetként a változás típusával.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Események</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Mappa</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyja a másolatot</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>A 0 érték határozatlan ideig megismétli a szülői műveletet</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Ismételje meg a számot</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>A szülői művelet befejeződésének milliszekundumos időtartamának időtartama</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Ismételje meg a késleltetést</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Kísérleti) Akcióhurok vagy ismétlődő feladatok létrehozására használják. Megismétlés esetén az összes gyermeket az eredeti bemenetével ismét végrehajtja. Ha egy intervallumot ismételt szám nélkül használ, akkor a ravaszt le kell tiltani és újra beolvasni az ismétlést. Hasznos lehet a szavazáshoz vagy a webkaparás automatizálásához.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Egy meghatározott globális parancsikon által kiváltott. Ha a majompast aktív, akkor megpróbálja a kiválasztott klipet (ha van ilyen) felhasználni bemenetként. Ellenkező esetben megpróbálja használni a vágólapot a bemeneteként.
+
+MEGJEGYZÉS: A parancsikon trigger továbbra is végrehajtja, ha nincs bemenet, hogy rugalmas legyen (tehát makróindító stb.), Mivel nem adat -vezérelt esemény.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Parancsikon trigger</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Akkor váltott be, amikor a rögzített parancsikont bármikor megnyomja az aktuális vágólappal</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Ez a művelet megköveteli az alkalmazás újraindítását. Szeretné most megtenni?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Volt egy probléma. Az alkalmazást manuálisan kell újraindítania.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Elemezze a annotátorral</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotate trigger</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>A beépített elemek olvashatók - csak. Másolat, hogy megváltoztassa.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Névtelen</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Egyedi</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Tegnap</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} nappal ezelőtt</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 órával ezelőtt</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} órákkal ezelőtt</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Pont most</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Egy perccel ezelőtt</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} perccel ezelőtt</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Múlt hónap</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} hónappal ezelőtt</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Múlt hét</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} hete</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} évvel ezelőtt</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Kommentárok</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Alkalmazás neve</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Alkalmazási pálya</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Kis-nagybetű érzékeny</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Tartalom</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Fájltípus</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Képtípus</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Reguláris kifejezés</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Szöveges típus</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Cím</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL -cím</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Egész világ</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Mint például a felső képernyő szélén a kinyitáshoz, ez a főablakot rögzíti, amikor kinyílik. Lehetővé téve a gyorsabb, többcélú munkafolyamatokat.
+
+* A sarkok az összes képernyőn, nem monitoronként.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Az ablak és a zár megjelenítése</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Ingyenes!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Adj nekünk 5 csillagot!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Mindet törölni</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Törölje az összes tartalmat</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Biztos vagy benne, hogy törölni akarod
+Az összes kliped?!
+
+*Ezt a műveletet nem lehet visszavonni!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Indy dev vagyok, kérem, mutasson némi támogatást!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Mint a Monkepaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} csak a (S) típusú bemenetet fogadja el: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Automatikus másolat mód - A „másolat” eseményt szimulálja minden alkalommal, amikor a bal egérgomb felszabadul.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>A jobb egérgombbal kattintson a beillesztési módra - Szimulál egy „paszta” eseményt minden alkalommal, amikor a jobb egérgombot elengedi</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Előre beállított</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Mutassa be a plugin mappát</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Jelentés</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Kilátás</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Az eszköztippek megjelenítése</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Az elemzők kommentálják a bemenetet, vagy új klipeket hoznak létre kimenetként. Az elemzők gyermekeinek el kell dönteniük, hogy melyikre van szükségük. Ez általában az utolsó kimenet.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Bemeneti típus</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>A '{0}' indító tervező</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Válasszon egy {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nem található...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Ellenőrzés esetén az állapot valódi vagy hamis eredménye megfordul. Tehát például egy „tartalmaz” feltétel, hogy „nem tartalmaz”.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Nem</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Kérlek várj...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Színválasztó</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Válassza ki a mérkőzés színét</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Mint egy parancsikon trigger, de amikor a kulcskombinációt megnyomják, a „másolat” eseményt az aktív alkalmazásban szimulálják, így továbbra is úgy működik, mint a másolat, de a majom másolat -triggerhez csatolt műveletek lánca a háttérben lesz végrehajtva. Szimulált másolat -vágólap -adatok.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Fejlett szűrő</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Elrejteni a szűrőket</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>A szűrők visszaállítása</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Hozzon létre szűrőt</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opcionális) Ha hagyja üresen, a vágólapot a művelet bemenete segítségével állítják be. Bármit, amit itt megadunk, csak sima szövegként kezeljük.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>A vágólap tartalma</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Ha igaz, akkor nem adnak hozzá klipet, miután ez a művelet beállítja a vágólapot.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Figyelmen kívül hagyni</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Nem választott analizátor a '{0}' művelethez</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analyzer a '{0}' művelethez nem található</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>A '{0}' szülő csak a '{1}' típusú tartalomhoz és az analizátor '{2}' szűrőkhöz soha nem fog végrehajtani, mert nem támogatja a '{3}' bemenet típusa</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Nincs címke kiválasztva az osztályozóhoz '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Címke az osztályozóhoz '{0}' nem található</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Az érték összehasonlítása csak betűk, számok vagy terek lehet</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>A kliphez nem választott címke nincs címkézett trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Címke a clip címkézett trigger '{0}' nem található</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>A '{0}' -hez nincs megadva órás mappa</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Nézze meg a '{0}' mappát, amely nem található a '{1}' triggerhez</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Fájlíró elérési útja a '{0}' művelethez</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>A '{0}' fájlíró elérési útja a '{1}' számára nem található.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Taki</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Ismerje meg a beépülő modulokat</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Helyezze vissza ezt az elemzési konfigurációt</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Változtassa meg a naplót</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Kérjük, csatlakozzon az internethez, és próbálkozzon újra később.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Segítség</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} a legújabb verzió</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Mindannyian fel vagy - dátum!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Frissítések keresése...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Új verzió elérhető!
+
+Kattintson ide a „{0}” 🎉🍾🥳 frissítéshez</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Kattintson az alábbiakra a '{0}' frissítéshez</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Frissítés elérhető!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Frissítse most</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>A '{0}' megosztott értékeket tartalmaz. Mit szeretnél visszaállítani?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Egyértelmű</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Törölje a legfrissebb kereséseket</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Visszaállítsa az összeset</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Visszaállítva megosztva</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Visszaállítva a nem megosztott</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Meghívja a hozzárendelt alkalmazás műveletet. Az összes alkalmazásparancs hontalan, és bemeneti klipjét figyelmen kívül hagyják.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Ha nem jelölik meg, és a parancs nem tud tüzet, a végrehajtás lánca leáll. Sok parancsnak a végrehajtáshoz valamilyen specifikus alkalmazási állapotra van szükség.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Mindig folytassa?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>A végrehajtás parancs.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Parancs</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Nincs parancs a '{0}' alkalmazás parancshoz kiválasztva</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>A '{0}' alkalmazás parancshoz nem található</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Kiválasztott</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Újrakezd</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Volt egy probléma, amely frissítette a '{0}' -t. A frissítés befejezéséhez újra kell indítania és újra kell telepítenie a '{0}' (ne aggódjon, hogy az összes beállítás visszaáll).
+
+Most újraindíthatja, és a frissítést újra telepítheti, ezt nem hagyhatja figyelmen kívül, és később frissítheti, vagy a frissítést együtt törölheti, és folytathatja a '{1}' verzió használatát?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Frissítési hiba</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nem tudtam letölteni a frissítést</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Frissítés sikertelen</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>A frissítés befejezéséhez újra kell indítania. Szeretne újra vagy később újraindítani?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Frissítés kész</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>A későbbiekben</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Újraindítás most</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Függőben levő</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} sikeresen frissítették a {1} -re</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Mag plugin -okra van szükség, és nem lehet eltávolítani.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Telepítés</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>A frissítés függőben van. Indítsa újra a befejezést.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Függőben levő</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Az eltávolítás függőben van. Kérjük, indítsa újra, ha újra telepíteni szeretne.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Az eltávolítás befejezéséhez újra kell indítania. Szeretne újra vagy később újraindítani?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Készítse el az eltávolítást?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Kiadatlan</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - generált alapértelmezett előre beállított '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Nincs kiválasztva klip</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Elemezze a kiválasztott klipet</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Rendeljen egy parancsikont a „{0}” futtatáshoz a kiválasztott klipre</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Globális paszta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Rendelje meg a globális paszta parancsikont a '{0}' -hez</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Elfelejtette a jelszót?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Belépés</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Kijelentkezés</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Adatvédelmi irányelvek</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Újraindítást igényel) Ha az engedélyezve a diagnosztikai információkat a fájlra naplózza. Ez lassíthatja a teljesítményt, és személyes információkat tartalmazhat.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Jelentkezzen be a Fájlba</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Nyisd ki</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Nyissa meg a naplók mappát</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Böngészse a plugineket</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Olvas</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ír</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Küldjön visszajelzést vagy hibajelentést</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Ez csak elrejti a főablakot. Az összes többi nem -párbeszédablakot mindig a tálcán látható.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Keresés a '{0}' -ben</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Adjon hozzá szűrőt</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Szerkesztés JOIN TYPE</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Távolítsa el ezt a szűrőt</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Nyitott segítség erről ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipek</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>változás</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Soha</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Készlet</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Névtelen</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rekord</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Jelöletlen forráshivatkozás</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>A '{0}' szükséges</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Hibái vannak)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Korlátozott</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Tárolás</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Szemét</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Korlátlan</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Ez az alkalmazás jelenleg megegyezik az alapértelmezett Clipboard Reader előre beállításokkal és formátumokkal.
+
+Az alapértelmezett olvasói előre beállítások engedélyezése vagy letiltása (a vágólap oldalsávból) nem befolyásolja ezt a konfigurációt. Csak a nem tőzsdén jegyzett alkalmazások követik az alapértelmezett beállítást.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Ez az alkalmazás jelenleg megegyezik az alapértelmezett Clipboard Writer előre beállításokkal és formátumokkal.
+
+Az alapértelmezett írói előre beállított alapértelmezett írói (a vágólap oldalsávból) történő engedélyezése vagy letiltása nem befolyásolja ezt a konfigurációt. Csak a nem tőzsdén jegyzett alkalmazások követik az alapértelmezett beállítást.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>A csatoláshoz meg kell szüntetnie a vágólap -hallgatót (rendszer tálca -&gt; önéletrajz).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Függelék nem elérhető</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Nincs beállítása</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Csak angolul beszélek, és a majompaszta lefordult erre a nyelvre.
+
+Az összes verzió az angol csomaggal szállít, így ha angolul beszél, akkor a nyelvet bármikor megváltoztathatja a beállítás után (Beállítások -&gt; Preferenciák -&gt; International).
+
+Ha szeretne segíteni a fordítás javításában, szeretnénk hallani rólad!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Fordítási aggodalmak</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>A funkció használatához frissítenie kell a majompaste -t.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Parancsikon nem</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>A vágólap hallgató letiltva</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>A vágólap -hallgató engedélyezve</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>A '{0}' szülői művelet nem támogatja a „utolsó kimenet” bemeneti tulajdonságtípust</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Tudjon meg többet a tervekről</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Alkalmazás</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Indítvány</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Csipesz</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Elemző</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Címke</value>
+  </data>
+</root>

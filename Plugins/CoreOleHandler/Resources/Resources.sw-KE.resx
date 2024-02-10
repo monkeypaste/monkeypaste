@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Kupuuza</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Wakati wa kukaguliwa {0} hautasomwa kutoka kwa ubao wa clipboard au Drag-na-kushuka.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Wakati wa kukaguliwa {0} hautaandikwa kwa ubao wa clipboard au data ya kushuka na kushuka.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Soma</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Andika</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Mafaili</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Wakati RTF haipo tayari, HTML itabadilishwa kuwa RTF. Hii inaweza kuwa muhimu kati ya vivinjari vya wavuti na/au matumizi ya usindikaji wa maneno. (Inahitaji muundo wa RTF kuwezeshwa na ni kwa majukwaa yanayoungwa mkono)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Badilisha kuwa RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Saraka hizi hazitasomwa kutoka kwa clipboard au data ya kushuka na kushuka.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Saraka zilizopuuzwa</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Upanuzi wa faili uliopuuzwa</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Aina hizi za faili hazitasomwa kutoka kwa ubao wa clipboard au Drag-na-kushuka.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Aina hizi za faili hazitaandikwa kwa ubao wa clipboard au Drag-na-kushuka.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Wakati wa kukaguliwa, picha kubwa kuliko mwelekeo wa max zitapunguzwa wakati wa kuhifadhi uwiano wa kipengele. Hii haiathiri picha kwenye clipboard.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Kiwango cha kupindukia</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Wakati wa kubandika au kuacha bitmap hii itakuwa aina ya faili chaguo -msingi</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Aina chaguo -msingi ya kuuza nje</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Wakati mwingine picha za uwazi kabisa zitajitokeza kwenye clipboard, utata wake.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Puuza picha tupu</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Picha kubwa (zaidi ya MBs chache) zinaweza kufanya Drag-na-kushuka na utendaji wa jumla kwa bahati mbaya kwa bahati mbaya. Jaribu kuweka thamani hii chini.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Urefu max</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Upana wa max</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Kwa wasiwasi wa utendaji, herufi kubwa inahitajika</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Wahusika max</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Maandishi (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Fomati '{0}' ilikuwa na data tupu au ya uwazi na ilizuiwa</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Takwimu tupu zimefungwa</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Fomati ya '{0}' imepigwa alama kama 'kupuuzwa'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Muundo umepuuzwa</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} kikomo ni {1} na data ilikuwa {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Saizi kubwa hugunduliwa</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Msomaji wa Clipboard Core</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Mwandishi wa Clipboard ya Core</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Hushughulikia fomati za clipboard chaguo -msingi</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, clipboard, Drag na Drop, maandishi, RTF, maandishi tajiri, HTML, CSV, Picha, PNG, JPG, JPEG, Kiunga</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Picha (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Wakati HTML haipo tayari, RTF itabadilishwa kuwa HTML. Hii inaweza kuwa muhimu kati ya vivinjari vya wavuti na/au matumizi ya usindikaji wa maneno. (Inahitaji muundo wa HTML kuwezeshwa na ni kwa majukwaa yanayoungwa mkono)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Badilisha kuwa HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Maandishi</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Isiyo na jina</value>
+  </data>
+</root>

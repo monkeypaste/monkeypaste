@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>በደንበኞች ምዝገባ የተገደበ, የማከማቸት አቅም ብቻ እና በማንኛውም ጊዜ ሊቀየር አይችልም.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>ያለዎት መለያዎን ይመልሱ ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>ይዘት እና ቆሻሻዎች ናቸው
+የተገደበ በ {0} እና {1}
+ክሊፕስ በቅደም ተከተል.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>ወደ {2} የይዘት ማከማቻ እና ያልተገደበ የቆሻሻ ማከማቻ ማከማቻዎች.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>ያልተገደበ እና ያልተገደበ ይዘት እና ቆሻሻ ማከማቻ.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>ወደነበረበት መመለስ</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>ፍርይ</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>ደረጃ</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>ያልተገደበ</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>ምዝገባ</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>የእርስዎ ግላዊነት አስፈላጊ እና የቅንጥብ ሰሌዳ ውሂብ በጣም የግል ሊሆን ይችላል. ማከማቻ ሁል ጊዜም የተመሰጠረ ነው ግን መሳሪያዎ ተሰረቀ ወይም ሌላ ሰው መሳሪያዎን የሚጠቀም ከሆነ የሚጠየቀውን የይለፍ ቃል ማዘጋጀት ይችላሉ.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>የይለፍ ቃል</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>በሚነቃበት ጊዜ ወደ ማያ ገጽ አናት ላይ ከማንኛውም ትግበራ ወደ ገላጭነት በመጎተት በቀላሉ ወደ ዝነኛነት ወደ ዝነኛነት ለመጣል ያሳያል.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>በ &lt;መቆለፊያ&gt; ከላይ ባለው የ &lt;መቆለፊያ&gt; የላይኛው ክፍል ላይ ማንቀሳቀስ አሁንም ወደ ዝነናሴ ላይ ለመጣል ያስችላል.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>ተጨማሪ የመስኮት ምርጫዎች ከ &lt;ቅንብሮች -&gt; ምርጫዎች -&gt; የመስኮት ምናሌ ይገኛሉ.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>እዚህ ሙዝ ይጎትቱ!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>መጎተት - ለመክፈት - ክፍት</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>የቁልፍ ሰሌዳ አቋራጮች ከ &lt;ቅንብሮች -&gt; አቋራጭ 'ምናሌው በማንኛውም ጊዜ መገምገም ወይም ሊቀየር ይችላል.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>በኋላ ላይ እራስዎን ማዋቀር እንዲችሉ ሁሉም የአለም አቋራጮች ይሰናከላሉ.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>የ Monocapaste የሊፕቶርድ አቋራጮች በሁሉም ማመልከቻዎች ውስጥ ይገኛሉ.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>ውስጣዊ</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>ነባሪ</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>የመሬት አቀማመጥ መገለጫ</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>ሄይ! አጠቃላይ ልምድንዎን ከዘር elseaste ጋር ለማሻሻል ጥቂት ነገሮችን ማዘጋጀት.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>እንኳን ደህና መጣህ</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>ከዘር el ርሳዎች የበለጠ ለመጠቀም, በመለያ ሲገቡ በራስ-ሰር በመጫን ላይ ጥሩ ሀሳብ ነው. ግን, ያ ሙሉ በሙሉ ለእርስዎ ነው.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>ድንገተኛ ሁኑ.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>አንቃ</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>በመለያ መግቢያ ላይ?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>በሚነቃበት ጊዜ በማያ ገጹ አናት ላይ አንድ ጥቅልል ​​ጥቅል ዝርኪሳታን ይገልጣል.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>ግራ - የተግባር አሞሌ አዶን ጠቅ ማድረግ አሁንም onekeopaste ይከፈታል.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>ተጨማሪ የመስኮት ምርጫዎች ከ &lt;ቅንብሮች -&gt; ምርጫዎች -&gt; የመስኮት ምናሌ ይገኛሉ.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>ቀላል?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>እዚህ ወደ ላይ ያሸብልሉ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>ማሸብለል - ወደ - ይክፈቱ - ክፍት</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p lege = "ማእከል"&gt; asikeopase "&gt; rank &lt;ቀይ ቀለም =" ቀይ&gt; ሙሉ በሙሉ የተዋሃዱ &lt;/ p &gt;&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>እዚህ ጣል ያድርጉት!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p ምሰሶ = "ማእከል"&gt; onikeopase "&lt;&lt; &lt;&lt; &lt;&lt; &lt;ቀይ&gt; &gt;&gt; &lt;ቀይ ቀለም = &gt;&gt; &lt;ቀይ" &gt;&gt; &lt;ቀይ "&gt; አይን" &amp; # x1f440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>ጎትት!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>ይሞክሩት!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>ይሞክሩት!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>ምንም ውጤቶች አይገኙም.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>አረጋግጥ</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>አድስ</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>ፈልግ ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>ቅንብሮች</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>ጥገኛዎች-</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>ጫን</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>እርግጠኛ ነዎት '{0}' እና ሁሉንም ቅድመ አያቶቹን እና አቋራጮችን ማስወገድ ይፈልጋሉ?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>ማራገፍ</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0} ምንም ውጤት የለውም.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>ምንም ምርጫ የለም.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>የለም</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>ምስጋናዎች</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>መግለጫ</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>ልገሳ</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>ፈቃድ:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>የፕሮጀክት ዩ አር ኤል</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>ታትሟል</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>አንብብ</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>የአላግባብ መጠቀም ሪፖርት:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>መለያዎች: -</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>ዝመና</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>ስሪት</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>በመስኮት ውስጥ ይክፈቱ</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>ማሰናበት</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>አድስ</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>አስቀምጥ</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>ከመሰረዝ ቀጥሎ!
+
+ለማስቀረት አሻሽል.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>ከቆሻሻ መጣያ ቀጥሎ!
+
+ለማስቀረት አሻሽል.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>ፋይሎች</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>ምስል</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>የተቀዳ {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} ፋይሎች | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} PX</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} ሰንሰለቶች | {1} መስመር</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} ቅጂዎች | {1} መለጠፍ</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>ውሰድ</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>ጨምር</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>ቅጂ</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>መቆረጥ</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>ፓስተር</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} ቅጂ</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>ያልዳነ ማጣሪያ</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>ቅርፀቶች</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>አንባቢዎች</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>ጸሐፊዎች</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>ተቆጣጣሪዎች</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>ሰርዝ</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>የተባዛ</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>ስም አርትዕ</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>ዳግም አስጀምር</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>መለያዎች</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>እርምጃ</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>ግሎባል ማዞሪያ</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>አቋራጭ</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>አካላዊ መግለጫዎች ልዩ መሆን አለባቸው እና አንድ የግቤት ቁልፍ ብቻ መያዝ አለባቸው.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; ውስጣዊ &lt;/ b&gt; ሁሉም አቋራጮች በመተግበሪያው ውስጥ የተገደበ ናቸው. ይህ በእውነቱ የታሰበ አማራጭ አይደለም ነገር ግን ግሎባል &lt;i &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;li&gt;
+&lt;b&gt; ነባሪ &lt;/ b&gt; ሁሉም ዓለም አቀፍ አቋራጮች ነቅተዋል. &lt;B&gt; ዋና መስኮት / ደብቅ መስኮት / ደብቅ &lt;/ b&gt; አቋራጭ ይጠቀማል &lt;/ b&gt; CAPS COPT &lt;/ B&gt; ቁልፍን ይሻላል. ያንን ማዞሪያ ወይም የእጅ ምልክቱ በማንኛውም ጊዜ መለወጥ ይችላሉ. ግን &lt;pan ቀለም = "አረንጓዴ"&gt; ይሞክሩት &lt;/ span&gt;
+&lt;/ mi&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;ጭንቅላት&gt; &lt;/ qu&gt;
+&lt;smound&gt;
+&lt;h1&gt; ዓለም አቀፍ አቋራጭ ሁነታዎች &lt;/ h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+አቋራጭ አቋራጭ &lt;/ b&gt; onicekeaseet በማንኛውም መተግበሪያ ውስጥ ያዳምጣል. &lt;br&gt;
+* ይህ &lt;i&gt; ብቻ &lt;/ i&gt; ሊኑክስን ለዛሬ.
+&lt;/ mi&gt;
+&lt;li&gt;
+&lt;b&gt; ቅድመ-/ B&gt; አቋራጭ &lt;b&gt; &lt;i &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;li&gt;
+&lt;b&gt; Plo ቼዝ &lt;/ b&gt; አቋራጭ ይከናወናል &lt;b&gt; &lt;i&gt; ከ &lt;/ i &gt;&gt;&gt;&gt; በኋላ በንቃት ትግበራ ይከናወናል. &lt;/ li&gt;
+&lt;li&gt;
+የ Scoikeastase የተሽከረከረው አቋራጭ የግብዓት ቁልፍን (ከ &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;i &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+ይህ አማራጭ አቋራጭ ወደ ንቁ ትግበራ የተወሳሰበ መሆኑን ያረጋግጣል.
+&lt;/ mi&gt;
+&lt;li&gt;
+&lt;B&gt; ልዩ የሚሽከረከረው ከ &lt;/ b&gt; ይህ ለ CAP Lock ቁልፍ የተነደፈ ልዩ ዓይነት የተሽከረከር ዓይነት ነው. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) ​​for its assignment.&lt;br&gt;
+በመደበኛ የ Screside ሞድ ሁኔታ CAPS LOCKE CPS COL COLD ሊሆን ይችላል &lt;/ i&gt; ከሌሎች ቁልፎች ጋር በማጣመር በ &lt;/ i&gt; ላይ ተጣብቋል. &lt;br&gt;
+ስለዚህ ምንም ሌሎች ቁልፎች ቢኖሩም አንድ &lt;b&gt; አቋራጭ ሲጫን ከተጫነ በኋላ ከልክ በላይ ይሆናል እናም &lt;i &gt;&gt; &lt;/ i&gt; ላይ እንዳይሆን ይከለክላል.
+&lt;/ mi&gt;
+&lt;/ ul&gt;
+&lt;/ የሰውነት&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>አሰናክል</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>ይህ የተጠቃሚ መለያው በመለያ ሲገባ ለሌላ ተጠቃሚዎች ሳይሆን ይጫናል.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>የሚገኙ እውቂያዎችን በመጠቀም (የፍርድ ቤት ተሰኪዎችን ይፈልጋል) ይህ መስክ በዚህ ሰነድ ውስጥ ወይም በሌላ ሰነድ ውስጥ ለሚጠቀሱ ሁሉ ጥቅም ላይ ይውላል. &lt;/ p&gt; &lt;p&gt; ለምሳሌ ኢሜል አድራሻን ይምረጡ እርስዎ የሚከተሏቸው የኢሜል መስክ በዚህ ሰነድ ውስጥ ለሁሉም አጋጣሚዎች ጥቅም ላይ ይውላሉ. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>አይ = አጭር ዓመት &lt;br/&gt; yyyy/h/200) &lt;br/&gt; &lt;br/11 . የሳምንቱ ቀን በቃላት (ሰኞ, ማክሰኞ ... እሑድ). 3, 21 ኛው, 22 ኛ, 23 ኛ, 23 ቀን ... &gt; H = ሰዓት (0-23) ቀን (0-23) በ &lt;ኤ.ቢ.ኤል. = HH = HH = MM = SS = SS = SS = CRE = SSR = ሚሊሴኮንዶች A = AM / EM / PM Carker &lt;br/ti/h = p = am./p.m. ምልክት ማድረጊያ</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>የወቅቱ ቀን እና / ወይም ጊዜ ሲለቁ ለቀጣዩ ጊዜው አብነት ይተካሉ.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>የዚህ አብነት ሁሉም መሠረቶች የተሰጠውን ጽሑፍ ይጠቀማሉ. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>የዚህ አብነት ሁሉም መሠረቶች የተሰጠውን ጽሑፍ ይጠቀማሉ. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>ማቃጠል ጨርስ</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>ብሎክ አንቃ</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>ውስጤን አንቃ</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>መመሪያን ይቀያይሩ</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>መመሪያን ይቀያይሩ</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>ለአፍታ አቁም</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>ከዚህ በፊት ይቀያይሩ</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>ከዚህ በፊት ይቀያይሩ</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>ከቆመበት ቀጥል</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>ተማርኩ ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>ፓስተር</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>ፒን</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>እየቀነሰ ይሄዳል</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>ሁሉንም '{0} ማስታወቂያዎች</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>ማሰናበት</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>የመጨረሻው ንቁ መተግበሪያ አልታወቀም. ወደ የታቀደ መተግበሪያ ወደ ዝንጀሮ ይለቀሉት.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ለጥፍ ወደ: &lt;ኤም&gt; &lt;እኔ ክፍል = "PAST- Sustry- Sharty-Stratix- ቅጥያ" {0} &lt;/ i&gt; &lt;EM&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>አሳንስ</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>ቆይ በናተህ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>መቆለፊያ</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>መለያ</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>እገዛ</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>ቅዳ ለጥፍ</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>ምርጫዎች</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>ነባሪዎች ወደነበሩበት ይመልሱ</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>ማጣሪያ ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>አቋራጮች</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>መተግበሪያን ያክሉ</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>ድር ጣቢያን ያክሉ</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>አግድ?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>ስም</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>መተግበሪያዎች</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>ጎራ አግድ?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>አግድ ዩ አር ኤል?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>ጎራ</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>ምንጭ ዩ.አር.ኤል. ዕውቅና ማወቂያ ቅንጅት ተስማሚ የአስተናጋጅ ትግበራ ውድቅ ተደርጎ እንደማይችል እርግጠኛ ነው</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>ዩ አር ኤል</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>ድር ጣቢያዎች</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>አንዳንድ የ oneocapastes ባህሪዎች በሌሎች መተግበሪያዎች ውስጥ 'የቅጂ ዝግጅቶችን ለማስመሰል የቁልፍ ሰሌዳ ራስ-ሰር ይጠቀማሉ.
+
+እነዛን ባህሪዎች በትክክል እንዲሰሩ ለማረጋገጥ (እንደ ኮንቴይነር ወይም እንደ shell ል ምሳሌ) መተግበሪያውን ያክሉ እና ይምረጡ.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>አቋራጭ ቅጅ</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>የለም</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ለተጠቀሰው ትግበራ የተመረጡ ቅድመ-ቅምጦች ብቻ ያገለግላሉ. ካልተገለጸ ነባሪው ቅድመ-ቅምጦች በ &lt;ኤም ኤክስፒ&gt; Blipboard የጎን አሞሌ ውስጥ ይገኛሉ &lt;/ ኤም&gt; ጥቅም ላይ ይውላል.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>ብዙ የ Zeocapase ባህሪዎች ከሌሎች መተግበሪያዎች ጋር ለመግባባት የቁልፍ ሰሌዳ አውቶማቲክ ይጠቀማሉ.
+
+አንዳንድ ትግበራዎች (እንደ አንዳንድ ኮርነቶች ወይም እንደ ዛጎሎች ለምሳሌ) ለምሳሌ ነባሪ አልባሳት አቋራጭ ሊኖሩት ይችላል.
+
+ትክክለኛውን ጣልቃ-ገብነት ለማረጋገጥ, ለእነዚያ ማመልከቻዎች እነዚያን ማመልከቻዎች እዚህ ይቅዱ.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>PASTAP አቋራጭ</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>አንባቢዎች</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ተቀባይነት ካላቸው ትግበራዎች ሁሉም ቅንጥብ ሰሌዳዎች &lt;b&gt; ችላ ተብሏል &lt;/ b&gt; ን ችላ ተብሏል.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>ጸሐፊዎች</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>አርትዕ ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>ቅርፀቶች</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>ተቀባይነት አላገኘም</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>አቋራጮች</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>እንዲሁም ሁሉንም {0} ክሊፖችን ከ '{1}' ማስወገድ ይፈልጋሉ?</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>ክሊፖችን ያስወግዱ?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>ትግበራ</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>ወደ መተግበሪያ ያስሱ ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>የትግበራ መንገድ ይምረጡ</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ብጁ አቋራጮችን ለ {0} ማስወገድ እንደሚፈልጉ እርግጠኛ ነዎት?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ብጁ ቅርፀቶችን ለ {0} ማስወገድ ይፈልጋሉ?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>ለዚህ መተግበሪያ ምንም የተዘበራረቀ ቅንጅቶች መብቶች የለም. መጎተት ወይም መጎተት ወይም በመሞከር ላይ ምንም ውሂብ ከእሱ የሚነበብ የለም - እና - ወደ ዝንጀሮ ቅርጽ ይጣላል</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>ለዚህ መተግበሪያ ምንም የተዘበራረቀ ቅንጅቶች መብቶች የለም. ራስ-ሰር PUTAT ወይም መጎተት - እና - ከዘር zastase ጠብታ ምንም ተጽዕኖ የለውም (ባዶው ውሂብ).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ሁሉንም አቋራጮችን ዳግም ማስጀመር ይፈልጋሉ? ሁሉም ብጁ አቋራጮች ይወገዳሉ.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>እርግጠኛ ነዎት አቋራጭ መንገድዎን ወደ '{0}' መለወጥ እንደሚፈልጉ እርግጠኛ ነዎት?</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>ተወዳጆች</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>ማጣሪያዎች</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>ቅርፀቶች</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>መለያዎች</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>ዛሬ</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>መጣያ</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>ስለ</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>ቀላል?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>ሁለቴ ጠቅ ማድረግ</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>ብጁ</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>ግሎባል</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>ይህ ጥምረት ከ "{0} ጋር ግጭቶች ከ" {0} ጋር የሚመላለሱ ግጭቶች ይፀዳሉ.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>አቋራጭ መቅረብ አለበት.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>ይህ ዓለም አቀፍ አቋራጭ ነው. ያ ማለት በተከናወነበት ጊዜ ሁሉ ለመፈፀም ይሞክራል ማለት ነው. ከሌሎች ትግበራዎች ከአጭር መተግበሪያዎች ጋር ግጭት ላለመግባት ለየት ያለ ለየት ያለ (ወይም "የመንገድ ላይ አይነት) ለመለወጥ ይሞክሩ.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>ግሎባል</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>አቋራጭ አንድ እና አንድ ብቻ ያልሆነን ቁልፍ ብቻ መያዝ አለበት.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>ለመመዝገብ ማንኛውንም ቁልፍ ይጫኑ ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>አቋራጭ መድብ</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>ተጨማሪ እወቅ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>ማሻሻል</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>ይቅር</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>ማስተካከያ</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>ችላ በል</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>አይ</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>እሺ</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>እንደገና መሞከር</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>ዝጋው</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>ያስገቡ</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>አዎ</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>በየአመቱ</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>ወርሃዊ</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>በነጻ ሞክር!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>የክፍያ መጠየቂያ ዑደት</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>ኢሜል</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>ግባ</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>ግንኙነትዎን ይፈትሹ
+እና እንደገና ይሞክሩ.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>ውጣ</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>ቀጣይ ክፍያ</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>የይለፍ ቃል</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>ይመዝገቡ</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>ኢሜል ትክክለኛ አይደለም</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>የይለፍ ቃሎች ተመሳሳይ አይደሉም.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>የይለፍ ቃል ቢያንስ 0} ቁምፊዎች መሆን አለበት.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>ያስታውሱ?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>መለያዎን ለማረጋገጥ ኢሜልዎን ይመልከቱ</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>የይለፍ ቃል ዳግም አስጀምር</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM / DD / yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>በጭራሽ</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>ነፃ {0} የቀን ሙከራ</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>አንድ ችግር ፈጣሪ ነበር
+ግ purchase ዎ.
+
+ግንኙነትዎን በመፈተሽ እና
+ቅንብሮች ሊረዱዎት ይችላሉ.
+
+እንደገና መሞከር ይፈልጋሉ?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>የእርስዎ መለያ በተሳካ ሁኔታ ቆይቷል
+ተሻሽሏል
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>ግ purchase ች!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>ስህተት</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>ግንኙነት አልተሳካም.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>እንደገና መሞከር</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>መለያ ተለወጠ</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>የደንበኝነት ምዝገባዎ አሁን {0} / {1} / {2} ይዘት እና {3} ቆሻሻ ማከማቻ.
+ግን አይጨነቁ, ከተበላሸ በኋላ ምንም ውሂብ አይጠፋም. አዲስ ቅንጥቦች ብቻ ይገመገማሉ.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>እንኳን ደስ አለዎት! የደንበኝነት ምዝገባዎ አሁን {0} / {1} / {2} ይዘት እና {3} ቆሻሻ ማከማቻ.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>መጣያ ወይም አንድ ነገር ያገናኛል
+የበለጠ ለመጨመር '{0}'.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>ማክስ '{0} ማከማቻ {1} ነው.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>ወደነበረበት መመለስ</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} ታግ</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>የይዘት እና ቆሻሻ አቅም ደርሷል!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>ማክስ '{0} ማከማቻ {1} ነው.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>የይዘት አቅም ደርሷል!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* እነዚህን ማስጠንቀቂያዎች መደበቅ ይችላሉ በ
+'ሁሉንም' ን ጠቅ ማድረግ 'ከ
+ከላይ ምናባዊ ምናሌ.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>ማክስ ቆሻሻ መጣያ ማከማቻ {0} ነው.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>የቆሻሻ አቅም ደርሷል!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} ልክ ያልሆነ ነው</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} ቢያንስ {1} ቁምፊዎች መሆን አለበት</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} {1} ቁምፊ ብቻ ሊሆን ይችላል</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>ወደ &lt;&lt; &lt;&lt; &lt;0}&gt; ይለጥፉ</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>ለ {0} ክፍያ
+ምዝገባው በ {1}
+አልተቀበለም.
+
+እባክዎ የእርስዎን ያዘምኑ
+የክፍያ መረጃ.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>ለ {0} ክፍያ
+ምዝገባው በ {1}
+አልተቀበለም.
+
+እባክዎ ከ ጋር ይገናኙ
+በመሣሪያው ላይ በይነመረብ
+ከደንበኝነት ምዝገባዎ ጋር እና
+ለመቀጠል እንደገና ያስጀምሩ
+{0} ዕቅድዎን በመጠቀም.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>ለ {0} ክፍያ
+ምዝገባው በ {1}
+አልተቀበለም.
+
+እባክዎን ይክፈቱ ወይም እንደገና ያስጀምሩ
+በመሳሪያው ላይ ዝንጀሮዎች
+ከደንበኝነት ምዝገባዎ ጋር ወደ
+የእርስዎን መጠቀምዎን ይቀጥሉ
+{0} ዕቅድ.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>የሂሳብ ጊዜው አልፎበታል</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>ማስታወሻ</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>የማይክሮሶፍት መደብር ደንብ አይፈቅድም
+የደንበኝነት ምዝገባ አጠባበቅ ምልክቶች ለውጦች.
+
+እርስዎ መሰረዝ አለብዎት
+{0} / {1} ራስዎን እቅድ ያውጡ
+ወይም ለሁለቱም ይከፍላሉ.
+
+አሁን መሄድ ይፈልጋሉ?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>የይለፍ ቃልዎ እንደገና ተጀምሯል.
+
+እባክዎ ኢሜልዎን ያረጋግጡ እና
+ለመቀየር አገናኙን ይከተሉ
+የይለፍ ቃልዎ.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>ግባ</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>ደራሲ (ቶች)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>ከመቀጠልዎ በፊት የሚከተሉትን የፍቃድ ቃላት መቀበልዎን ያስፈልጋል.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>የሚከተለው ጥቅል (ቶች) ከመጫንዎ በፊት የፍቃድ ቃላቸውን እንዲቀበሉ ይጠይቃል.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>አልቀናሁ</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"እቀበላለሁ" ማለት ለዚህ መተግበሪያ በፈቃደኝነት ውሎች ይስማማሉ ማለት ነው. በውሎቹ ካልተስማሙ "እኔ አልበጣም" ጠቅ ያድርጉ.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"እቀበላለሁ" ማለት ከላይ ለተዘረዘሩት ተሰኪዎች (ቶች) ፈቃድ (ቶች) ፈቃድ ይስማማሉ ማለት ነው. በውሎቹ ካልተስማሙ "እኔ አልበጣም" ጠቅ ያድርጉ.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>የፍቃድ ፈቃድ</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>ፈቃድ ተቀባይነት</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>ተቀብያለሁ</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>ንቁ</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>ከመስመር ውጭ</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>ያልተመዘገበ</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>ተከናውኗል</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ የይለፍ ቃላት አይዛመዱም</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>የይለፍ ቃል</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>ምዝገባዎ ነው
+አሁን ወደ {0} / {1} ጋር ተዋቅሯል.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>መለያ ተገኝቷል</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>ሎጎን ፋእለድ</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>ምዝገባ አልተሳካም</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>ምዝገባ ስኬታማ!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>ዳግም ያስጀምሩ</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>ምዝገባ</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>ምን አዲስ ነገር አለ</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>በጭራሽ</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>ያልተገደበ</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>አቅም</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>ቀሪ</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>ጠቅላላ</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>ክፍያዎ ያለፈው ነገር ነው.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>ብቸኛ አቋራጮች አንድ ቁልፍ ብቻ ሊይዝ ይችላል እና ያ ቁልፍ የማሻሻያ ቁልፍ ሊሆን አይችልም.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>ጊዜው አልፎበታል</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>በመጫን ላይ</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>ተሰናክሏል</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>ማስታወሻ! ይህ የይለፍ ቃል አማራጭ ነው እና ለተጨማሪ ደህንነት ብቻ. የእርስዎ ውሂብ አስቀድሞ የተመሰጠረ ነው እና በጭራሽ አይጋራም. ይህ የይለፍ ቃል ከዴስክቶፕዎ (ተሰረቅዎ, ከክፍሉዎ ወዘተ.) ላይ ከጫኑ, ይህ የይለፍ ቃል በቀላሉ የማይጫዎት ሰው በቀላሉ እንዳይጫዎት ይከላከላል.</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>አዝናኝ ቅንብሮች ለ:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>ተሰኪዎችን ያስሱ</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>ትንታኔ</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>ፈጣን እርምጃ</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>አርትዕ ይቀያይሩ</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>የተንሸራታች</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>ማብራሪያዎች</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>በሚነበብ መልኩ</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>በመስኮት ውስጥ ይክፈቱ</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>ለመከታተል + Ctrl ን ጠቅ ያድርጉ ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>ለመከተል + ALT ን ጠቅ ያድርጉ ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>እዚህ የሚዲያውን ሚዲያ ይንከባከቡ ወይም ይጣሉ!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>ማጽዳት</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>ከ 0 በላይ የሆኑ ደረጃዎች ከ 0 በላይ የሆኑ ደረጃዎች በ RGBA ቀለበቶች ውስጥ የኢንጂሊዲየን ርቀት በመጠቀም የፉዝ ቀለምን ያቀርባሉ.
+
+ለምሳሌ, ቀይ (# FF0000) የፍለጋ ጊዜ እና ጥቁር (# 000000) የፒክስል ከ 255 ነው</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>የሚከተሉት ሁሉ እውነት ናቸው</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>ቅንጥብ ሰሌዳ</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>ስብስቦች</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>አይጥ ሁነታዎች</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>ቀስቅሴዎች</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>ለአፍታ አቁም</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>እንደ ገና መጀመር</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>አዲስ ቀስቅሴ</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>ቅድመ-ቅምጥ</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>ዝንጀሮ ግጭት ጠንቃቃ</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>ቅድመ-ቅምጦች</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>ትንታኔ</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>መቆራረጥ</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>ዑደት አቀማመጥ</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>የፍርግርግ አቀማመጥ ይቀያይሩ</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>የጉዳይ ስሜታዊነት</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>ደጃፍ</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>ሙሉ ቃል</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>አልተዋቀረም</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>ማዞሪያ</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>እርምጃ</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>ፍርግርግ</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>ተከናውኗል</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>ቀጥሎም</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>ቀዳሚ</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>ዝለል</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>አሁን ያለው መለያ?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>ቀጣይ ክፍያ</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>ምዝገባ የተከፈለ ምዝገባዎን ምዝገባ በሁሉም መሳሪያዎችዎ (ተገኝነትዎ) እንዲሸከሙ ያስችልዎታል. እኛ የገባን መልእክት አይደለንም 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>ምዝገባ</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>የተጠቃሚ ስም</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>መመዝገብ ያስፈልጋል?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>ምንጮች</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>ያልተለመደ, ምንም የለም. የሆነ ነገር ስህተት መሆን አለበት 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>ያስወግዱ</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>እንደገና ማስጀመር ይፈልጋል</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>የላቀ</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>ተሰኪዎችን ከ '{0}' አውጥቷል</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>ተሰኪን መጫን ስህተት: - '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>ተሰኪ {0} 'ብልሹ ወይም ተገቢ ያልሆነ የማውጫ መዋቅር ላይ ስህተት. {1 {{} 'መኖር አለበት, ግን አልተገኘም.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>ተሰኪን የተተገበረ '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>ምንም ተሰግዘዋል ከ GIGLON ጋር አልተጫነም: - '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} ስህተት</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Dru {{0} '</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>"{0} '{0}' {1} '. ዝርዝሮች: - '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>ጽሑፍ የታየበት ጽሑፍ በራስ-ሰር የጽሑፍ ሳጥን በማይኖርበት ጊዜ በራስ-ሰር ይተገበራል.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>ራስ-ፍለጋ ግብዓት</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>የይለፍ ቃል ለውጥ አልተሳካም</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>ለውጥ</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>የሚስጥር ቁልፍ ይቀይሩ</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>ማጽዳት</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>ይለፍ ቃል ያፅዱ</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>ይዘት</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>የይዘት ቅርጸ-ቁምፊ መጠን</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>እውነት ሆኖ ሲታይ ወደ ክሊፕ ውስጥ ያስገቡ የውጭ ይዘት ክሊፕስ ቅርጸት ቅርጸት ቅርጸት የሚጠቀም እና ከምንጩ የሚገኘውን አይደለም.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>በመድረሻ ቅርጸት ይርቁ, ይጣሉ ወይም ይድገሙ</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት የይለፍ ቃሉን መርሳት ይፈልጋሉ?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>ረሳ</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>የይለፍ ቃል ይረሱ</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>መገለጫ</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>የአቅም ውሃዎችን ደብቅ</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>አዲስ የቅንጥብ ሰሌዳ ይዘት በሚታገደው ጊዜ እንደ አዲስ ክሊፕ አይከታተል ይሆናል</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>የአቅራቢያዎችን ችላ ይበሉ</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>ቅንጥብ ሰሌዳው ከነባር ክሊፕ ጋር በሚዛመድበት ጊዜ, ያ ክሊፕ አዲስ ከመፍጠር ይልቅ ጥቅም ላይ ይውላል</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>አዳዲስ ብዜቶችን ችላ ይበሉ</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>ከመተግበሪያው ውስጥ ያለ ቅንጥብ ሰሌዳ ለውጦች አይከታተሉም</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>የውስጥ ቅንጥብ ሰሌዳ መከታተልን ችላ ይበሉ</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>ቦታዎች, ትሮች እና አዳዲስ መስመሮች ከመከታተል ችላ ተብለዋል</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>ነጭ ቦታን ብቻ ችላ ይበሉ</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>በመለያ ይግቡ</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>የመነሻ መስኮት</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>ኦፊሽን</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>ባህሪን አሳይ</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>በመቆጣጠሪያዎ የላይኛው ጠርዝ ላይ የመሸብጠሪያ ምልክቶችን በማከናወን ዋናው መስኮት ይገለጣል</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>ከላይ ባለው የማዕከላዊ ጥቅልል ​​ላይ አሳይ</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>የማሳወቂያ መጠን</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>ይህ ቅንብር ስርዓት ስርዓት ይከታተላል - ለአጠቃቀም ስታቲስቲክስ ሰፊ የቁልፍ ሰሌዳ ፓስፖርት ይቆማል. ይህ መረጃ የግል እና ያልተጋራ አይደለም ግን ምንም ግድ የላቸውም. ትክክለኛ ውጤት በ &lt;ቅንብሮች -&gt; ቅጂዎች -&gt; ቅጂዎች እና በፓስቲክ -&gt; አቋራጮች 'ውስጥ የትግበራ ልዩ የቁልፍ ሰሌዳ PATE ትዕዛዝ ማቅረብ ሊፈልጉ ይችላሉ.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>የመለጠጥ ታሪክ</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>በጣም ብዙ የተቆራረጡ ክሊፖች (እንደ አሳሽ ትሮች) ጠቃሚ ማህደረ ትውስታን ሊበሉ ይችላሉ. ማስወገጃ በመጀመሪያ - በመጀመሪያ - መጀመሪያ - ውጭ</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>ፒን አቅም</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>ይህ በሁሉም ራስ-ሰር - ተደጋጋሚ ግብዓቶች ይሠራል, ዝቅተኛ እሴቶች አፈፃፀምን ያሻሽላሉ</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>የቅርብ ጊዜ የጽሑፍ ወሰን</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ይፈልጋሉ
+ነባሪ ምርጫዎችን ይመልሱ?
+
+ይህ ሊቀለበስ አይችልም!
+
+* ትግበራው አንዴ ከተጠናቀቀ እንደገና ይጀምራል.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ሁሉንም ማስታወቂያዎች ዳግም ማስጀመር ይፈልጋሉ?
+
+* ይህ ሊቀለበስ አይችልም!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ወደ ውጫዊ ፕሮግራም ሲታገሱ የጦጣ ፓስታ ክሊፕቦርድ (ተበላሽቷል) ያወጣል. ውጫዊ ፓስተር ከደረሰ በኋላ የቅንጥብ ሰሌዳውን ለማደስ የሚቻል &lt;b&gt; ሙከራ &lt;/ b&gt; ይሞክራል.
+
+ጠቅላላ ተሃድሶ ማቋቋም አይቻልም እና በውሂቡ ምንጭ ላይ በመመርኮዝ አፈፃፀምን አልፎ ተርፎም ድንገተኛነትን ሊቀንስ ይችላል.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>ከዝንጀሮ ማገዶ በኋላ ቅንጥብ ሰሌዳውን ዳግም ያስጀምሩ</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>ከመንገድ ላይ ተሰኪ መሸጎጫ መሰረዝ አልተቻለም: - '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>ሁሉም ተሰኪዎች ወደ መጀመሪያው ነባሪ ሁኔታ እንደገና ይጀመራሉ</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>ተሰኪ መሸጎጫ</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ሁሉንም ተሰኪዎች ወደ ነባሪዎች ዳግም ማስጀመር ይፈልጋሉ?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት የይለፍ ቃልዎን እንደገና ማስጀመር ይፈልጋሉ?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>ሁሉም የማመልከቻ አቋራጮች ወደ ነባሪው ቁልፍ ምልክታቸው እንደገና ይጀመራሉ.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>አቋራጮችን ዳግም ያስጀምሩ</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>ሁሉም ችላ የተባሉ ማስታወቂያዎች ከዚህ ቀደም የተዘጋጁት.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>ማሳወቂያዎችን ወደነበሩበት ይመልሱ</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(ቅጠመት) ከዝግግ በታች ሊሆን ይችላል) የተስተካከለ ነው) የማስታወሻ ፍጆታውን ይቀንሳል ነገር ግን እንደ አጠቃላይ የላቁ ባህሪያትን እንደሚቀንስ ይከለክላል, ይደግፋል, አብነቶች, ማብራሪያዎች እና ይተኩ / ይተኩ</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>የበለፀገ ይዘት</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>የይለፍ ቃል ያዘጋጁ</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>ፍንጮችን አሳይ</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>በተግባር አሞሌ ውስጥ አሳይ</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>በተግባር ስዊክ ውስጥ አሳይ</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>ርዕሶችን አሳይ</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>በሚነቃበት ጊዜ ወደ ማያ ገጽ አናት ላይ ከማንኛውም ትግበራ ወደ ገላጭነት በመጎተት በቀላሉ ወደ ዝነኛነት ወደ ዝነኛነት ለመጣል ያሳያል.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>ወደ ማያ ገጽ አናት ላይ ይጎትቱ</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>የድምፅ ጭብጥ</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>ፊደል ማጣሪያ</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>የመነሻ ሰሌዳው ላይ የቅንጥብ ሰሌዳ ምንጭ አይታወቅም እና በደህንነት ቅንብሮችዎ ላይ በመመርኮዝ ይዘቱ ከተካተቱ ድር ጣቢያ ወይም ትግበራ ሊመጣ ይችላል.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>የመነሻ ቅንጅት ያክሉ</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>ጅምር ላይ የቅንጥብ ሰሌዳውን ያዳምጡ</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>ይምረጡ</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>ጥንቃቄ! ሌሎች ቤተ-ስዕሎች ቀለሞች ምርመራዎችን ሳይጠቀሙ ተመርጠዋል! ስለዚህ አንዳንድ የቀለም እና የቅጥ ጥምረት ንፅፅር ላላቸው ትክክለኛ ንፅፅሮች ላይኖራቸው ይችላል.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>ጭብጥ ቀለም</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>ጭብጥ ዘይቤ</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>አውቶማቲክ ቆሻሻ መጣያ ማጽጃ በተዘጋጀው የጊዜ ክፍተት ጅምር ላይ ይከሰታል.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>መጣያ ማጽጃ</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>በይነገጽ</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>ከፍተኛ ቀልብስ ገደቦች አፈፃፀምን ሊነካ ይችላል</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>ገደቡን ይቀልብሱ</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>ምንም ገደብ የለም</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>ለቅድመ ፋይል ላልሆኑ የፋይል አይነቶች የላቀ የፋይል ፍለጋ ውስጥ ጥቅም ላይ የዋለው</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>ተጠቃሚ - የተገለጸ የፍለጋ ቅጥያዎች</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>ይፈልጉ እና ይተኩ ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>እዚህ ይለጥፉ</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>አጋራ ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>እይታ</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>ያቀናብሩ ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>እንደገና ይሰይሙ</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>ውጤት: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>ዓይነት: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>በቋሚነት ሰርዝ</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>{0} '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>መለወጥ</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>ግቤት</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>ውፅዓት</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>ምንጮች</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>ወደነበረበት መመለስ</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>ምስልን ይምረጡ ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>ቀለም</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>'{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>ክፈት</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>ቆይ በናተህ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>የጀርባ ቀለም</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>ሁሉንም ያፅዱ</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ ቅርፀቶች</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>ሁሉንም ሰርዝ</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>ዝርዝሮችን ያርትዑ</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>ስም</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>ይፈልጉ</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>የቅርጸ-ቁምፊ ቀለም</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>ቅርጸት ቀለም</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> በምርጫ ውስጥ</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>ምስልን ያስገቡ</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>አገናኝ ያስገቡ</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>ቪዲዮ ያስገቡ</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> የግጥሚያ ጉዳይ</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>አዲስ አብነት</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>የሚቀጥለው ንድፍ</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>የመለጠጥ ጽሑፍ ያስገቡ ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>ያለፈው አብነት</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> መደበኛ አገላለጽ</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>ሁሉንም ይተኩ</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>ይተኩ</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> ሙሉ ቃል</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> መጠቅለል</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>ብሎክ</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>ጎራ</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>አቃፊ አሳይ</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>ማገድ</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>ስለ</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>አግድ</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>የውስጥ ማውጫ</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>ራስ-ቅጂ</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>ሁነታዎች</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>እባክዎ ሞድ ፔንታቲን እየጫነ ነው ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>አቁም</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Right - ለጥፍ ጠቅ ያድርጉ</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>ማጣሪያ</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>ሁሉንም ሰርዝ</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>ሁሉንም ወደነበረበት መመለስ</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>እርምጃ</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>ዩ አር ኤል ቀድሞውኑ አለ-{0} '</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>ዩ አር ኤል በትክክለኛው ቅርጸት መሆን አለበት.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>ሙሉ ዩአርኤል ያስገቡ</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>ዩ.አር.ኤል. ያክሉ</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>እሴቶችን ያስገቡ</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>ለመተግበር ጽሑፍ ወይም ፋይሎች ይቅዱ.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>AP {0} {1} ሁናቴ ገቢር ሆኗል</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ ለውጦች አሁን ይገለጣሉ</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>ከአዋቂነት ሁኔታ በኋላ ገቢር</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>የ Clipboboard ለውጦች አሁን ታግደዋል</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>የአዕምሮ ሁኔታ ከመነሳት በፊት</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>ብሎክ</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>መደበኛ ቅንጥብ ሰሌዳ ባህሪ ተመልሷል</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>ተበላሽቷል</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>ወደ ክሊፕ አናት ወይም በቡቲም የታጨቁ ናቸው</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>መጠን አወጣጥ ሁኔታ ገቢር ሆኗል</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>በአግባቡ</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>መመሪያ</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>አሁን ያለው ምርጫዎን ያሳድጉ.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>የጉልበት አነጋገር ሁኔታ ገቢር ሆኗል</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>ክሊፕቦርድ ክምችት መቆም</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>ተጎድቷል</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>ክሊፕቦርድ መከለያ እንደገና ተጀምሯል</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>ተጀምሯል</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ማስገቢያዎችን ማጠናቀቅ ይፈልጋሉ?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>በተዋሃደ ሁኔታ አርት editing ት ሁሉንም የበለፀጉ ቅርጸቶችን ያስወግዳል. እርግጠኛ ነዎት ይህንን ለመቀየር ይፈልጋሉ?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>የውሂብ መበላሸት ማስጠንቀቂያ</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>ንቁ</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>ነቅቷል</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>ጠፍቷል</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>በርቷል</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>ቆሟል</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>ውጤት</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>ሁኔታ</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>ያልታወቀ ስህተት ተከስቷል.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>የቀሩት ሙከራዎች</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>የይለፍ ቃል ያስገቡ</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>አረጋግጥ</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>እውቂያ</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>የቀን ሰዓት</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት የ "{0} 'ን መድረስ እንደሚፈልጉ እርግጠኛ ነዎት?
+
+ይህ ሊቀለበስ አይችልም!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>ተለዋዋጭ</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>የማይንቀሳቀስ</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} ባዶ ነው ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>በቅርቡ ይመጣል!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>የመግቢያ ጭነት አልተሳካም</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>የመግቢያ ጭነት ስኬት አሰናክል</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>የመግቢያ ጭነት አልተሳካም</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>የመግቢያ ጭነት ስኬት አንቃ</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>ደብቅ</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>ዝንጀሮ ፓስታ አሁን ተጭኗል.
+ቅንጥብ ሰሌዳ ማዳመጥ: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>የተጫነ</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>አሳይ</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>የመኪና ቅጂ ምርጫ ሁኔታ: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>ሁኔታ ተለው changed ል</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>በቀኝ ጠቅታ የመለጠጥ ሁኔታ: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>ተሰኪ ዘምኗል</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>PAST '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>{0} ትንታኔ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>ሩጫ '{0} trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>{0} 'ን ይምረጡ</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት '{0}' እና ሁሉም ተጓዳኝ እርምጃዎች?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>ቀስቅሴ</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>ሁሉንም ንዑስ-እርምጃዎች - {0} 'ን ማስወገድ ይፈልጋሉ? (ያለበለዚያ እነሱ RE- {1} (1}) እንደገና ይመራሉ)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>አማራጮችን ያስወግዱ</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>በእውነቱ ወደ ጎቶ '{0}' ይፈልጋሉ?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>መለያ</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>ትንታኔዎች</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>የትግበራ ስራዎች</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>ቅንጥብ ሰሌዳ</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>ይዘት</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>መለወጥ</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>ባህል</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>ውሂብ</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>አቅጣጫ</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>ጎትት እና ጣል</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>ጠንቋይ ጣል</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>አዶዎች</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>ሎግጌ</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>በይነገጽ</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>የመለጠጥ ሥራዎች</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>ምርጫዎች</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>ፍለጋ</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>አቋራጮች</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>ደርድር</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>ድም sounds ች</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>የስርዓት ትሪ</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>ስብስቦች</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>ጭብጥ</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>ቀስቅሴዎች</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>የድር ጣቢያ ስራዎች</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>ቋንቋ</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳውን ወደ ግቤት ክሊፕ ያዘጋጃል.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>ማንቂያ</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>ብጥብጥ</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>ቾይ</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>አጠቃላይ ዓላማ ድምፅ እና / ወይም የስርዓት ትሬይ መልእክት ማስጠንቀቂያዎች. ንቁ እርምጃው በግቤትዎ ላይ ተጽዕኖ የለውም.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>መልእክት</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>ዝንጀሮ</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>ቅድመ-እይታ</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>አሳይ?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>የጊዜ አሰጣጥ መልእክት በሰከንዶች ውስጥ ይታያል. ዋጋው 0 መልእክት በ 2 መልእክት መቼ መዘጋት አለበት.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>ጊዜ (ቶች) አሳይ</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>ድምፅ?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>የድምፅ አይነት</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>ድምጽ</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>ትንታኔ</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>የተመደበላቸውን ትንታኔ ቅድመ-ቅምጥ በመጠቀም የግቤት ቅንጥብ ያካሂዳል.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>የግቤት ይዘት ከተመረጠው ክምችት ጋር ተገናኝቷል</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>የግቤት ክሊፕ ለተመደበው መለያ ስብስብ ጋር ያያይዙ.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>መለያ</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>የጉዳይ ስሜታዊ ነው?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>ይህ ከግብዓት ጋር ለማነፃፀር, ከአስቴሩ ጋር ለማነፃፀር እና / ወይም የተመረጡ ንብረቶችን (በማጣሪያ ቁልፍ በኩል), ሁኔታው ​​ሲገመገሙ የሚተካው ይሆናል.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>ሁኔታ ውሂብ</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>ሁኔታው ከመገመገሙ በፊት በተመረጠው 'የግቤት ንብረት' ላይ የሚተገበር አማራጭ የጄንስፓቲ መጠይቅ.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>የግቤት ማጣሪያ</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>ለዚህ ሁኔታ የሚያገለግል የለምዕክት ንብረት.
+
+ይህ ሁኔታ በአሁኑ ጊዜ ትንታኔ ድርጊት ሲባል በአሁኑ ጊዜ የሚደግፈው የሚደግፈው እና የቀረበው መረጃ በወላጅ ተንታኛ ማውጫ ውጤት ላይ በመመርኮዝ ይደግፋል.
+
+ለማይታወቅ ሁኔታ ወደዚህ ዓይነት ሁኔታዊ ወላጅ 'ንቁ እርምጃ' የሚለውን 'ንቁ እርምጃ' ያያይዙ እና የዚህን ግብዓት ንብረት ለማዛመድ የማንቂያውን 'መልእክት መለካት ያዘጋጁ. ይህ ለአስተማማኝ ሁኔታ የሚያገለግለውን ትክክለኛውን ውሂብ ለመገምገም ይፈቅድላቸዋል.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>የግቤት ንብረት</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>በግቤት ቅንጥብ ወይም በቀደመው የድርጊት ውፅዓት ላይ የጽሑፍ ማጠናከሪያን ያካሂዳል. ሲጨምር ሲሳካ (ግጥሚያ አይደለም) የልጆች እርምጃዎች አይከናወኑም. ስለዚህ እንደ አመክንዮ በር ይሠራል.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>የሕፃናት እርምጃዎች ሁሉም እውነተኛ ወይም የሐሰት ሥራዎች ውጤቱ እውነት ከሆነ ብቻ ነው.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>ሁኔታ</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>የተመረጠው ዓይነት ክሊፕ በማንኛውም መንገድ (ክሊፕቦርድ, ጎትት, እና - ጠብታ, ትንታኔ የመነጨ ወይም የሚባባስ) ሲጨምር ተነስቷል.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>የግቤት ክሊፕ አዲስ እና የተባዛ ነገር ካልሆነ ይህንን ቀስቅሴ ብቻ ይፈጽሙ. ይህ አዲስ ይዘት ችላ እንደተባሉ ወይም አለመሆኑን ከማንኛውም ምርጫ ቅንብር ነጻነት ነው.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>የተባዙትን ችላ ይበሉ</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>የዚህ ዓይነቱ ክሊፖች ብቻ ይህንን ተግባር ያነሳሳል.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>የግቤት ክሊፕ ለተመደበው መለያ ስብስብ ጋር ያያይዙ.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>አንድ ክሊፕ ከተጠቀሰው የመለያ ክምችት ጋር በተገናኘ ጊዜ ተነስቷል.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>ክምችት</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>ልጆች ከሚፈጽሙበት ጊዜ በሚሽሰለስ መጠን የሚጠብቁት የጊዜ መጠን</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>መዘግየት</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(የሙከራ) በዋነኝነት የሚጠቀሙበት የርቀት ምንጮችን ለመማር ወይም ረዥም ሩጫ አሠራሮችን ለማርካት ከሚያገለግለው እርምጃ ጋር በተያያዘ.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>ባዶ ሲተው ውፅዓት ፋይል የፋይል ክሊፕዎን የፋይል ስም እንደ የፋይል ስም የግብዓት ክሊፕዎን በር ይጠቀምበታል.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>ብጁ ስም</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>ፋይሉ የሚጻፍበት ማውጫ.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>ማውጫ</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>ለተመረጠው አቃፊ ግብዓት ይቆጥባል.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>የተመረጠው የአቃፊ ይዘት ይዘት ሲቀየር ያስነሳዋል. ውፅዓት አዲስ ወይም ነባር የሚሆን (የተዋሃደ-ተባዮች ምርጫዎች ነቅቷል) እንደ የመጨረሻው ውፅዓት ዓይነት ከለውጥ ዓይነት ጋር የተለወጠው የፋይል ክሊፕ.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>ክስተቶች</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>አቃፊ</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>የተባዙትን ችላ ይበሉ</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>የ 0 እሴት የ 0 እሴት የወላጅ እርምጃን ለዘላለም ይደግማል</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>መድገም</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>የወላጅ እርምጃ ከተጠናቀቀ በኋላ ሚሊሰከሮች ውስጥ የሚገኘው የጊዜ መጠን</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>መድገም</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(ሙከራ) እርምጃዎችን ለመፍጠር ወይም ተደጋጋሚ ተግባሮችን ለመፍጠር የሚያገለግል. በሚደጋገምበት ጊዜ ሁሉንም ልጆችን እንደገና ከመጀመሪያው ግቤት ጋር እንደገና ይፈጸማል. ያለመገገም ቆጠራው ያለበት ልዩነት ሲጠቀሙ, ቀስቅሴው መሰናዶቹን ማሰራጨት እና ተደጋግሞውን ለማስቆም እንደገና ሊቋቋም ይችላል. ለማራመድ ወይም ለድር ማጭበርበር ጠቃሚ ሊሆን ይችላል.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>በሚገልጹበት ዓለም አቀፍ አቋራጭ መንገድ ተነስቷል. ዝንጀሮፓቴ ንቁ ከሆነ የተመረጠውን ክሊፕ (አንዱ ካለ) እንደ ግብዓት ለመጠቀም ይሞክራል. ያለበለዚያ የቅንጥብ ሰሌዳውን እንደ ግብዓት ለመጠቀም ይሞክራል.
+
+ማሳሰቢያ-ተለዋዋጭነት የማይቆይበት ቦታ ከሌለበት አቋራጭ ቀስቅሴ አሁንም ቢሆን የሚገመት ከሆነ (ስለዚህ የመጣው ክስተት ነው.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>አቋራጭ ቀስቅሴ</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>የተመዘገበው አቋራጭ አሁን ካለው የቅንጥብ ሰሌዳ ጋር በማንኛውም ጊዜ ሲጫን ተነስቷል</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>ይህ እርምጃ እንደገና እንዲጀመር መተግበሪያውን ይፈልጋል. ያንን አሁን ማድረግ ይፈልጋሉ?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>አንድ ችግር ነበር. ትግበራውን እራስዎ እንደገና ማስጀመር ያስፈልግዎታል.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>ከማይታወቅ ጋር ይተካል</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>ቀስቅሴ</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>በክፍሎች ውስጥ የተገነባው - ብቻ ይነበራል. ማባዛት እንዲለወጥ</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>ስም-አልባ</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>ብጁ</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>ትናንት</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} ቀናት በፊት</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>ከ 1 ሰዓት በፊት</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} ሰዓታት በፊት</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>ልክ አሁን</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>ከአንድ ደቂቃ በፊት</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} ደቂቃዎች በፊት</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>ባለፈው ወር</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} ወር በፊት</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>ባለፈው ሳምንት</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} ሳምንታት በፊት</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} ከዓመታት በፊት</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>ማብራሪያዎች</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>የትግበራ ስም</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>የትግበራ መንገድ</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>የጉዳይ ስሜታዊነት</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>ይዘት</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>የፋይል አይነት</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>የምስል ዓይነት</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>መደበኛ አገላለጽ</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>የጽሑፍ ዓይነት</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>ርዕስ</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>ዩ አር ኤል</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>ዩ አር ኤል ማዕረግ</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>ሙሉ ቃል</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>ለመክፈት ከላይ ባለው ማያ ገጽ ጠቋሚው ላይ ማሸብለል, ይህ ሲከፈት ዋናውን መስኮት ይዘጋል. ለከባድ ባለ ብዙ - የታለሙ የሥራ ፍሰት መፍቀድ.
+
+* ማዕዘኖች ከ &lt;መቆጣጠሪያዎ&gt; ሁሉም ማያ ገጾች አንፃር ናቸው.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>መስኮት እና መቆለፊያ አሳይ</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>ፍርይ!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>5 ኮከቦችን ስጠን!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>ሁሉንም ሰርዝ</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>ሁሉንም ይዘቶች ይሰርዙ</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት መሰረዝ ይፈልጋሉ
+ሁሉም ቅንጥቦችዎ ?!
+
+* ይህ ክዋኔ ሊቀለበስ አይችልም!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>እኔ Iny dee እኔ አንዳንድ ድጋፍን ያሳዩ!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>እንደ ዝነኛ?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} የአይቲ ዓይነት (ቶች) ግቤትን የሚቀበለው: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>የመኪና ቅጂ ሁኔታ - የግራ አይጤ ቁልፍ በተለቀቀበት ጊዜ 'ቅጂ' ክስተት.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>በቀኝ ጠቅታ የመለጠጥ ሁኔታ - የቀኝ የመዳፊት ቁልፍ በተለቀቀበት ጊዜ 'የመለጠጥ' ክስተት ያስመስላል</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>ቅድመ-ቅምጥ</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>ተሰኪን አሳይ</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>ሪፖርት</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>እይታ</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>የመሳሪያ መሳሪያዎችን አሳይ</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>ትንታኔዎች ግቤታቸውን ያብራራሉ ወይም እንደ ውፅዓት አዲስ ቅንጥቦችን ይፍጠሩ. የጥኔዎች ልጆች የትኛውን እንደገቡት እንደፈለጉ መወሰን አለባቸው. ይህ በተለምዶ የመጨረሻው ውጤት ነው.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>የግቤት ዓይነት</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>አስቂኝ ዲዛይነር ንድፍ አውጪ '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>{0} ይምረጡ ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>አልተገኘም...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} ቀስቅሴ</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>የችግሩን እውነተኛው ወይም የተሳሳተ ውጤት ሲመረመር ሲደናቀፍ ይነፋል. ስለዚህ ለምሳሌ, 'የያዘ' ሁኔታ 'የለውም'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>አላደረገም</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>ቆይ በናተህ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>የቀለም መሾከም</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>ግጥሚያ ቀለም ይምረጡ</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>እንደ አቋራጭ ቀስቅሴ ግን የቁልፍ ጥምረት ሲጫን &lt;ቅጂው &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; የተመሰገነጅ የቅጅ ቅንጅት ውሂብ.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>የላቀ ማጣሪያ</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>ማጣሪያዎችን ደብቅ</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>ማጣሪያዎችን ይመልሱ</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>ማጣሪያ ይፍጠሩ</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(ከተፈለገ) ባዶ ሆኖ ሲቆይ የቅንጦት ሰሌዳው የዚህን የድርጊት ግብዓት በመጠቀም ይዘጋጃል. እዚህ የቀረበው ማንኛውም ነገር እንደ ግልፅ ጽሑፍ ብቻ ይታከማል.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>ለክሊፕቦርድ ይዘት</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>እውነት ነው, ይህ እርምጃ የቅንጦት ሰሌዳውን ከያዘ በኋላ ምንም ክሊፕ አይታከሉም.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>ችላ በል</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>ለድርጊት ምንም ትንታኔ አልተመረጠም '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>ትንታኔ ለድርጊት '{0} አልተገኘም</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>የወላጅ '{0} ማጣሪያዎች' {1} 'ዓይነት ዓይነት ይዘት እና ትንታኔያዊነት ብቻ' {2} በቀጥታ አይገደልም ምክንያቱም {3} የግቤት ዓይነት</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>ለግማሽ {0} 'የተመረጠ መለያ የለም</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>ለክፍለተጃው {0} 'አልተገኘም</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>አነፃፅር እሴት ፊደላት, ቁጥሮች ወይም ቦታዎች ብቻ ሊሆኑ ይችላሉ</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>ለ CLIP የተሰየመ ስያሜ ሰጪው &lt;0}&gt; አልተመረጠም</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>ለ CLIP መለያ መለያ ምልክት የተደረገበት ትራንስፖርት '{0}' አልተገኘም</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>ለ '{0}' የተገለፀው የማየት አቃፊ የለም</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>"{0}" {0} "ለ Trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>የፋይል ጸሐፊ መንገድ ለድርጊት {0} 'አልተዘጋጀም</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>የፋይል ጸሐፊ መንገድ '{0}' ለ '1}' አልተገኘም.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>የተግባር አሞሌ</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>ስለ ተሰኪዎች ይወቁ</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>ይህንን ትንታኔ ውቅር ወደነበረበት ይመልሱ</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} ለውጥ</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>እባክዎ ከበይነመረቡ ጋር ይገናኙ እና በኋላ እንደገና ይሞክሩ.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - እገዛ</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} የቅርብ ጊዜው ስሪት ነው</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>ሁላችሁም ተነስተዋል - ቀን!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>ዝማኔዎችን ይመልከቱ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>አዲስ ስሪት ይገኛል!
+
+ወደ '{0}' ለማዘመን እዚህ ጠቅ ያድርጉ</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>ወደ '{0}' ለማዘመን ከዚህ በታች ጠቅ ያድርጉ</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>ዝመና ይገኛል!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>አሁን አዘምን</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0} የጋራ እሴቶችን ይ contains ል. ዳግም ማስጀመር ምን ይፈልጋሉ?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>ማጽዳት</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>የቅርብ ጊዜ ፍለጋዎችን ያፅዱ</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>ሁሉንም ዳግም አስጀምር</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>የተጋራ የተጋራ</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>ድጋሚ ዳግም ተጀምሯል</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>የተመደበውን ማመልከቻ እርምጃ ይውሰዱ. ሁሉም የማመልከቻ ትዕዛዝ ግዛቶች ናቸው እና የግቤት ቅንጥብዎቻቸው ችላ ተብለዋል.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>ካልተካተቱና ትዕዛዙ እሳት መቼ እንደሚጨናነቅ, የመግደል ሰንሰለት ይቆማል. ብዙ ትዕዛዛት ለመፈፀም የተወሰነ የተወሰነ የመተግበሪያ ሁኔታን ይፈልጋሉ.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>ሁሌም ቀጥል?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>የማከናወን ትእዛዝ.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>ትእዛዝ</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>ለትግበራ ትእዛዝ አልተመረጠም የትእዛዝ ትእዛዝ የለም {0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>ለትግበራ ትእዛዝ ትእዛዝ '{0}' አልተገኘም</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>ተመር selected ል</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>እንደገና ጀምር</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>'{0}' ዝመና '{0}' ነበር. ዝመናውን ለማጠናቀቅ '{0}' እንደገና ማስጀመር እና መጫን ያስፈልግዎታል (እንደገና አይጨነቁ ቅንብሮችዎ እንደገና ይመለሳሉ).
+
+አሁን እንደገና መጀመር እና ማዘመኛውን እንደገና በመጫን እንደገና ማጠናቀቅ, ይህንን እንደገና ማጠናቀቅ, ችላ ይበሉ, በኋላ ላይ ያዘምኑ ወይም ዝመናውን በሙሉ ያዘምኑ ወይም "{1} 'ን መጠቀሙን ይቀጥሉ?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>የስህተት ስህተት</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>ማዘመኛ ማውረድ አልቻለም</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>ዝመና አልተሳካም</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>ዝመናን ለማጠናቀቅ እንደገና መጀመር ያስፈልግዎታል. አሁን ወይም በኋላ እንደገና ማስጀመር ይፈልጋሉ?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>አዘጋጅ</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>በኋላ</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>አሁን እንደገና አስጀምር</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>በመጠባበቅ ላይ</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} በተሳካ ሁኔታ ወደ {1} ተዘምኗል</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>ኮር ተሰኪዎች ያስፈልጋሉ እና ሊወገዱ አይችሉም.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>ጭነቶች</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>ዝመና በመጠባበቅ ላይ ነው. እንደገና መሙላት.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>በመጠባበቅ ላይ</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>ማራገፊያ በመጠባበቅ ላይ ነው. እባክዎን እንደገና መጫን ከፈለጉ እንደገና ያስጀምሩ.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>ማራገፍዎን ለማጠናቀቅ እንደገና መጀመር ያስፈልግዎታል. አሁን ወይም በኋላ እንደገና ማስጀመር ይፈልጋሉ?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>ማራገፊያ ጨርስ?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>ያልታተመ</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>ራስ-ሰር - ለ &lt;{0}&gt;</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>ምንም ቅንጥብ አልተመረጠም</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>የተመረጠውን ክሊፕን ይተንትኑ</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>በተመረጠው ክሊፕ ላይ '{0}' አቋራጭ ይመድቡ</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>ግሎባል ፓስፖርት</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>ለአለም አቀፍ ፓስታ አቋራጭ '{0}' መድብ</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>መክፈቻ ቁልፉን ረሳኽው?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>ግባ</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>ውጣ</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>የ ግል የሆነ</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(በተነቃበት የምርመራ መረጃ ወደ ፋይል ሲገባ እንደገና ማስጀመር ይፈልጋል. ይህ አፈፃፀም ማራገፍ እና የግል መረጃ ሊኖረው ይችላል.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>ወደ ፋይል ይግቡ</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>ክፈት</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>የምዝግብ ማስታወሻዎች አቃፊን ይክፈቱ</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>ተሰኪዎችን ያስሱ</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>ያንብቡ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>ፃፍ</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>ግብረ መልስ ወይም የሳንካ ሪፖርት ይላኩ</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>ይህ ዋና መስኮቱን ብቻ ይደብቃል. ሌሎች ሁሉም ሌሎች ያልሆኑ ያልሆኑ መስኮቶች ሁል ጊዜ በተግባር አሞሌ ውስጥ ይታያሉ.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>{0} '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>ማጣሪያ ያክሉ</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>የአቀላቀል ሁኔታን ያርትዑ</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>ይህንን ማጣሪያ ያስወግዱ</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>ስለዚህ ጉዳይ እገዛ ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} ክሊፖች</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>ለውጥ</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>በጭራሽ</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>አዘጋጅ</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>ላልተሰራ</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>ይመዝግቡ</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>ያልተስተካከለ ምንጭ ማጣቀሻ</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0} ያስፈልጋል</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(ስህተቶች አሉት)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>ውስን</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>ማከማቻ</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>መጣያ</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>ያልተገደበ</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>ይህ መተግበሪያ በአሁኑ ጊዜ ከነባሪ ቅንያ ሰሌዳ አንባቢዎች እና ቅርፀቶች ጋር ይዛመዳል.
+
+ነባሪ የአንባቢያን ቅድመ-ቅጅዎችን ማነቃቃ ወይም ማሰናከል (ከክሊፕቦርዱ የጎን አሞሌ) ይህንን ውቅረት አይጎዳውም. ያልተዘረዘሩ መተግበሪያዎች ብቻ ነባሪውን ማዋቀር ይከተላሉ.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>ይህ መተግበሪያ በአሁኑ ጊዜ ከነባሪ ቅንጅት ቀደዶች እና ቅርፀቶች ጋር ይዛመዳል.
+
+ነባሪ ጸሐፊ የሆኑ ጸሐፊዎችን ማንቃት (ከክሊፕቦርዱ የጎን አሞሌ) ይህንን ውቅረት አይጎዳውም. ያልተዘረዘሩ መተግበሪያዎች ብቻ ነባሪውን ማዋቀር ይከተላሉ.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>ለማሟላት የቅንጥብ ሰሌዳ አድማጭ (የስርዓት ትሪ -&gt; ከቆመበት ቀጥል መሆን አለበት.</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>የአብሪ ማውጫ የለም</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> ቅንብሮች የለውም</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>እኔ እንግሊዝኛ እና ዚኪሳቴቴ ወደዚህ ቋንቋ ተተርጉሟል.
+
+እንግሊዝኛ ካሽኑ ጋር የሚጫወቱት ሁሉም ስሪቶች ይህን እንግሊዝኛ የሚናገሩ ከሆነ ይህ ማዋቀር (ቅንብሮች -&gt; ምርጫዎች -&gt; ዓለም አቀፍ).
+
+የትርጉም ሥራውን ለማሻሻል ከፈለጉ ከእርስዎ መስማት እንፈልጋለን!
+
+ግብረ መልስ @MOKEKEEKEPASTEATETEC</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>የትርጉም ስጋቶች</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>ይህንን ባህሪ ለመጠቀም ዝንጀሮትን ማዘመን ያስፈልግዎታል.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>አቋራጭ ማህተም</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ አድማጭ ተሰናክሏል</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ አድማጭ ነቅቷል</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>የወላጅ እርምጃ '{0}' የግቤት ንብረትን ዓይነት 'የመጨረሻውን ውፅዓት' አይደግፍም</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ስለ እቅዶች የበለጠ ይረዱ</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>ትግበራ</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>ቀስቅሴ</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>ክሊፕ</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>ትንታኔ</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>መለያ</value>
+  </data>
+</root>

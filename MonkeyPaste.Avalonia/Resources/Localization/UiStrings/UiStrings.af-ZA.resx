@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Geen funksies word beperk deur intekening nie, slegs opbergkapasiteit en kan te eniger tyd verander word.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Herstel u bestaande rekening ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Inhoud en asblik is
+beperk tot {0} en {1}
+snitte onderskeidelik.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Laat tot {2} snitte van inhoud en onbeperkte asblikberging.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Onbeperkte en onbeperkte inhoud en afvalstoor.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Restoreer</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Vry</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Onbeperk</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Intekening</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>U privaatheid is belangrik en die klemborddata kan baie persoonlik wees. Berging is altyd geïnkripteer, maar u kan 'n wagwoord instel wat benodig word indien u toestel gesteel word of iemand anders u toestel gebruik.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Wagwoord</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>As dit geaktiveer is, sal dit van enige toepassing na die bokant van die skerm gesleep word om die inhoud maklik in Monkeypaste te laat val.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>As u die 'slot' in die linkerkant van die hoofvenster moontlik maak, kan dit steeds op Monkeypaste val.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Meer venstervoorkeure is beskikbaar in die menu 'Instellings -&gt; Voorkeure -&gt; venster.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Sleep piesangs hierheen!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Sleep - na - oop</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Sleutelbordkortpaaie kan te eniger tyd hersien of verander word in die menu 'Instellings -&gt; Shortcuts'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Alle kortpaaie sal gedeaktiveer word, sodat u dit later self kan opstel.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypaste se kortpaaie van die knipbord sal in alle toepassings beskikbaar wees.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Huishoudelik</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Versuim</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Gebaarprofiel</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Haai! Laat ons 'n paar dinge opstel om u algehele ervaring met Monkeypaste te verbeter.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Welkom</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Dit is 'n goeie idee om die meeste gebruik uit Monkeypaste te kry, is dit 'n goeie idee. Maar dit hang heeltemal van u af.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Hou dit gemaklik.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>In staat stel</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Laai op aanmelding?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>As dit geaktiveer is, sal 'n boekgebaar aan die bokant van die skerm Monkeypaste onthul.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Links - Klik op die taakbalk -ikoon sal steeds ape oopmaak.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Meer venstervoorkeure is beskikbaar in die menu 'Instellings -&gt; Voorkeure -&gt; venster.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Maklik reg?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Blaai hier op!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Blaai - na - oop</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; apeypaste is &lt;span color = "rooi&gt; volledig geïntegreer &lt;/span&gt; met sleep - en - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Laat val dit hier!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Op hierdie manier kan toegang tot aapkaste verkry word &lt;br&gt; &lt;span color = "rooi"&gt; sonder 'n klik &lt;/span&gt; of selfs &lt;span color = "rooi"&gt; kolf 'n oog &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Sleep my!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Probeer dit!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Probeer dit!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Geen resultate beskikbaar nie.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Bevestig</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Verfris</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Soek...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Instellings</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Afhanklikhede:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Installeer</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Is u seker dat u '{0}' en al sy voorafinstellings en kortpaaie wil verwyder?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Verwyder</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' het geen resultate nie.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Geen keuse nie.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Krediete:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Beskrywing:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Skenk:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Lisensie:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projek -URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Gepubliseer:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Lees my:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Rapporteer misbruik:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Opdateer</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Weergawe:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Maak in die venster oop</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Afdank</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Verfris</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Naas om te verwyder!
+
+Opgradeer om te vermy.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Langs asblik!
+
+Opgradeer om te vermy.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Lêers</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Beeld</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Gekopieër {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} lêers | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} karakters | {1} lyne</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} kopieë | {1} Paste</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Verhuis</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Byvoeg</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopieër</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Snit</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Plak</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} kopie</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Ongestoorde filter</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Kies asseblief -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lesers</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Skrywers</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Hanteerders</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Verwyder</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Dupliseer</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Redigeer naam</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Herstel</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Aksie</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Globale routing</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Kortpad</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gedings moet uniek wees en mag slegs een invoertoets bevat.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Interne &lt;/b&gt; Alle kortpaaie is beperk tot binne die toepassing. Dit is nie regtig 'n beoogde opsie nie, maar kan toelaat om aan te pas watter kortpaaie u van plan is om wêreldwye &lt;i&gt; eendag te maak &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Standaard &lt;/b&gt; Alle globale kortpaaie is geaktiveer. Die &lt;b&gt; wys/verberg hoofvenster &lt;/b&gt; kortpad gebruik &lt;span color = "rooi"&gt; oorheers &lt;/span&gt; -roetering vir die &lt;b&gt; caps lock &lt;/b&gt; sleutel. U kan daardie routing of gebaar te eniger tyd verander. Maar &lt;spankleur = "groen"&gt; probeer dit &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;hoof&gt; &lt;/kop&gt;
+&lt;liggaam&gt;
+&lt;h1&gt; Globale kortpadmodusse &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Passief &lt;/b&gt; 'n Kortpad Monkeypaste sal in enige toepassing luister. &lt;br&gt;
+*Dit is die &lt;i&gt; slegs &lt;/i&gt; opsie op Linux vir nou.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; kortpad sal &lt;b&gt; &lt;i&gt; uitvoer voor &lt;/i&gt; &lt;/b&gt; Dit word deur die aktiewe toepassing hanteer. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; POST &lt;/b&gt; Kortpad sal &lt;b&gt; &lt;i&gt; uitvoer na &lt;/i&gt; &lt;/b&gt; word dit deur die aktiewe toepassing hanteer. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; ignoreer &lt;/b&gt; Wanneer Monkeypaste die invoertoets (nie -wysigingsleutel) van 'n kortpad hoor, sal dit &lt;i&gt; verberg &lt;/i&gt; wat die sleutelpers van die toepassing - vlak invoer. &lt;br&gt;
+Hierdie opsie sal waarborg dat die kortpad geaktiveer word sonder konflik met die aktiewe aansoek.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Eksklusiewe oorheersing &lt;/b&gt; Dit is 'n spesiale tipe oorheersingsmodus wat ontwerp is vir die Caps Lock -sleutel. Dit laat slegs &lt;b&gt; een &lt;/b&gt; sleutel (nie - wysiger) vir die opdrag toe. &lt;br&gt;
+In die normale oorheersingsmodus kan Caps -slot &lt;i&gt; vas word op &lt;/i&gt; as dit in kombinasie met ander sleutels gedruk word. &lt;br&gt;
+Dit maak nie saak watter ander sleutels af is nie, as 'n &lt;b&gt; hotkey &lt;/b&gt; kortpad gedruk word, sal dit oorskry word en voorkom dat dit &lt;i&gt; vas word op &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Uitskakel</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Laai op wanneer hierdie gebruikersrekening aangemeld is, nie vir ander gebruikers nie.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Gebruik beskikbare kontakte (benodig 'n fetcher -inprop) Hierdie veld word gebruik vir alle gevalle van hierdie sjabloon oor hierdie dokument, of daar word later verwys. Hier sal die e -posveld van die kontak wat u kies, gebruik word vir alle gevalle in hierdie dokument. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort jaar &lt;br/&gt; yyyy = lang jaar &lt;br/&gt; m = maand (1-12) &lt;br/&gt; mm = maand (01-12) &lt;br/&gt; mmm = maand afkorting (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = lang maand (Januarie, Februarie ... Desember) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; ddd = Dag van die week in woorde (Maandag, Dinsdag ... Sondag) &lt;br/&gt; E = Kort dag van die week in woorde (Ma, Di ... Sun) &lt;br/&gt; D - Ordinale dag (1ste, 2de, 3de, 21ste, 22ste, 23ste, 31ste, 4de ...) &lt;br/&gt; h = uur in am/pm (0-12) &lt;br/&gt; hh = uur in am/pm (00-12) &lt;br/ &gt; H = uur in die dag (0-23) &lt;br/&gt; hh = uur in die dag (00-23) &lt;br/&gt; mm = minuut &lt;br/&gt; ss = tweede &lt;br/&gt; sss = millisekondes &lt;br/&gt; A = AM/PM -merker &lt;br/&gt; p = a.m./p.m. merker</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Die huidige datum en/of tyd sal vervang word met die datumsjablone wanneer dit geplak word.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Alle voorvalle van hierdie sjabloon sal die verskafde teks gebruik. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Alle voorvalle van hierdie sjabloon sal die verskafde teks gebruik. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Voltooi by</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Aktiveer blok</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Aktiveer inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Skakelhandleiding</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Skakelhandleiding</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pouse voeg by</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Wissel voor</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Wissel voor</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Hervat bygevoeg</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Voeg ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Plak</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Speld</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Verberg alle '{0}' kennisgewings</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Afdank</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Laaste aktiewe app onbekend. Skakel oor na die beoogde app na aappasta.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Plak na: &lt;em&gt; &lt;i class = "plak-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Verminder</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Wag asseblief...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Slot</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Rekening</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopieër plak</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Voorkeure</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Herstel standaard</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filter ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Kortpaaie</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Voeg app by</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Voeg webwerf by</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blok?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Programme</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokdomein?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blok url?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>domein</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Bron -URL -herkenning is afhanklik van hoe knipbordvriendelik die gasheer -toepassing is, sodat verwerping nie gewaarborg kan word nie</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Webwerwe</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Sommige Monkeypaste -funksies gebruik sleutelbord -outomatisering om 'kopie' -gebeure in ander toepassings te simuleer.
+
+Voeg die app by en/of kies die app met die unieke kortpad (soos 'n konsole of dop byvoorbeeld) om te verseker dat die funksies behoorlik funksioneer.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopie kortpad</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Slegs die geselekteerde voorafinstellings sal vir die gespesifiseerde toepassing gebruik word. As dit nie gespesifiseer is nie, sal die standaardvoorinstellings wat in die &lt;em&gt; clipboard sidebar &lt;/em&gt; gevind word, gebruik word.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Baie Monkeypaste -funksies gebruik sleutelbord -outomatisering om met ander toepassings te kommunikeer.
+
+Sommige toepassings (soos byvoorbeeld sommige konsoles of skulpe) kan 'n kortpad wat nie standaard pas nie, hê.
+
+Teken die kortpaaie vir die toepassing hier om behoorlike interoperabiliteit te verseker.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Plak kortpad</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lesers</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Alle monitering van die knipbord van verwerpte toepassings sal &lt;b&gt; geïgnoreer word &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Skrywers</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Redigeer ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Verwerp</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Kortpaaie</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Wil u ook alle {0} -knipsels van '{1}' verwyder</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Knipsels verwyder?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Toepassing</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Blaai na app ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Kies toepassingspad</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Is u seker dat u persoonlike kortpaaie vir {0} wil verwyder?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Is u seker dat u persoonlike formate vir {0} wil verwyder?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Daar is geen toegewese knipbordformate vir hierdie app nie. Geen data sal daaruit gelees word via sny/kopie of probeer 'n sleep - en - val in Monkeypaste nie</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Daar is geen toegewese knipbordformate vir hierdie app nie. Outomatiese pasta of sleep - en - val van Monkeypaste sal geen invloed hê nie (sy leë data).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Is u seker dat u alle kortpaaie wil terugstel? Alle pasgemaakte kortpaaie sal verwyder word.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Is u seker dat u u kortpadroeteprofiel wil verander na '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Almal</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Gunstelinge</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Vandag</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Weggooigoed</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Rondom</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Maklik reg?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Dubbelklik om te ontkoppel</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Gebruik</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globaal</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Hierdie kombinasie is in stryd met '{0}' wat skoongemaak sal word as dit gered word.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>'N Kortpad moet voorsien word.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Dit is 'n wêreldwye kortpad. Dit beteken dat dit sal probeer om uit te voer wanneer dit uitgevoer word. Probeer om dit uniek genoeg te maak (of die 'routing tipe' te verander) om nie met kortpaaie van ander toepassings in stryd te wees nie.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globaal</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Kortpad moet een en slegs een nie -wysigingsleutel bevat.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Druk op enige sleutel om op te neem ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Ken kortpad toe</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Leer meer...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Opgradering</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Kanselleer</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Regmaak</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignoreer</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Herver hierdie</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Stilstand</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Indien</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Jaarliks</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Maandeliks</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Probeer gratis!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Faktuursiklus</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E -pos</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Teken aan</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Gaan u verbinding na
+En probeer weer.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Teken uit</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Volgende betaling</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Wagwoord</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E -pos is nie geldig nie</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Wagwoorde stem nie ooreen nie.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Wagwoord moet 'n minimum van {0} karakters wees.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Onthou jy?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Gaan u e -pos na om u rekening te bevestig</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Herstel wagwoord</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, Yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm D, H: Mm TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/jjjj HH: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Nooit</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Gratis {0} dagproef</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Daar was 'n probleem wat presteer het
+U aankoop.
+
+Kontroleer u verbinding en
+instellings kan help.
+
+Wil u weer probeer?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>U rekening was suksesvol
+opgegradeer na:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Koop suksesvol!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Fout</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Verbinding het misluk.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Herver hierdie</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Rekening verander</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>U intekening is nou {0}/{1} met {2} inhoud en {3} asblikberging.
+Maar moenie bekommerd wees nie, geen data gaan verlore na afgradering nie. Slegs nuwe snitte sal geëvalueer word.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Baie geluk! U intekening is nou {0}/{1} met {2} inhoud en {3} asblikberging.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Asblik of iets ontkoppel
+van '{0}' om meer by te voeg.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' berging is {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Restoreer</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} geblokkeer</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Inhoud en afvalvermoë bereik!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' berging is {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Inhoudskapasiteit bereik!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* U kan hierdie waarskuwings verberg deur
+klik op 'verberg alles' van die
+Opsiesmenu hierbo.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Maksimum asblikberging is {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Afvalvermoë bereik!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} is ongeldig</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} moet ten minste {1} karakters wees</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} kan slegs {1} karakter wees</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Plak na: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Die betaling vir u {0}
+Inskrywing was verskuldig {1}
+en is nie ontvang nie.
+
+Dateer asseblief u
+Betaling Inligting.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Die betaling vir u {0}
+Inskrywing was verskuldig {1}
+en is nie ontvang nie.
+
+Koppel asseblief aan die
+Internet op die toestel
+met u intekening en
+Herbegin om voort te gaan
+Gebruik u {0} -plan.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Die betaling vir u {0}
+Inskrywing was verskuldig {1}
+en is nie ontvang nie.
+
+Maak asseblief oop of begin weer
+Apeypaste op die toestel
+met u intekening op
+Hou aan om u
+{0} Plan.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Rekening verval</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Noot</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store laat nie die vlak toe nie
+Veranderings aan intekeningsaddons.
+
+U moet u kanselleer
+{0}/{1} Beplan jouself
+Of u sal vir albei aangekla word.
+
+Wil u dit nou doen?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>U wagwoord is herstel.
+
+Gaan u e -pos na en
+Volg die skakel na verandering
+jou wagwoord.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Teken aan</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Skrywer (s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Dit word vereis dat u die volgende lisensievoorwaardes aanvaar voordat u verder gaan.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Die volgende pakket (s) vereis dat u hul lisensievoorwaardes aanvaar voordat u dit installeer.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Ek weier</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>As u op "Ek aanvaar" klik, beteken u dat u instem tot die lisensievoorwaardes vir hierdie aansoek. As u nie tot die voorwaardes instem nie, klik dan op "Ek weier".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>As u op "Ek aanvaar" klik, beteken u dat u instem tot die lisensievoorwaardes vir die bogenoemde inprop (s). As u nie tot die voorwaardes instem nie, klik dan op "Ek weier".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>View Lisensie</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Lisensie aanvaarding</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Ek aanvaar</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktief</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Aflyn</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Ongeregistreerde</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Gedoen</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Wagwoorde stem nie ooreen nie</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Wagwoord</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>U intekening is
+Stel nou op {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Rekening gevind</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Aanmelding het misluk</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registrasie het misluk</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registrasie suksesvol!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Herstel fout</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Intekening</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Wat's nuut</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Nooit</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Onbeperk</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapasiteit</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>oorblywend</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>totaal</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>U betaling is verby verskuldig.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Eksklusiewe oorheersingskortpaaie mag slegs een sleutel bevat en die sleutel kan nie 'n wysigingsleutel wees nie.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Verstryk</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Laai</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Gebreklik</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Let op! Hierdie wagwoord is opsioneel en slegs vir ekstra sekuriteit. U data is reeds geïnkripteer en word nooit gedeel nie. Hierdie wagwoord verhoed eenvoudig iemand wie se nie -aptepaste laai as hulle op een of ander manier toegang tot u tafelblad kry (gesteel, u die kamer verlaat, ens.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Onthou drop -instellings vir:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Blaai deur plugins</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analiseer</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Vinnige aksie</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Skakel wysig</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Wissel vasgespeld</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Aantekeninge</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Gewone teks</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Maak in die venster oop</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Klik op + Ctrl om te volg ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Klik + Alt om te volg ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin of laat enige media hier neerlê!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Helder</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Drempels bo 0 sal fuzzy kleurpassing bied met behulp van Euklidiese afstand in die RGBA -kleureruimte.
+
+Byvoorbeeld, as rooi (#FF0000) die soekterm is en swart (#000000) 'n pixel in 'n beeldknip is, dan is die kleurafstand 255. Swart tot wit afstand is die maksimum moontlik van 510, insluitend 'n alfa -kanaal</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Al die volgende is waar</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Knipbord</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Versamelings</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Muismodusse</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Snellers</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pouse</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Hervat</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Nuwe sneller</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Voeg voorafbepaling by</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Voorafsette</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Ontleder</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Siklusoriëntasie</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Skakelrooster -uitleg</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Gevalle sensitief</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Drumpel</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Hele woord</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Geen stel nie</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Roete</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Aksie</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Rooster</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Gedoen</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Vervolgens</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Vorige</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Huppel</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Bestaande rekening?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Volgende betaling</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Met registrasie kan u u betaalde intekening oor al u toestelle (by beskikbaarheid) dra. Ons sal nie u e -posadres belowe wat ons belowe nie.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Intekening</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Gebruikersnaam</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Moet u registreer?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Bronne</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Vreemd, niks beskikbaar nie. Iets moet verkeerd wees 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Verwyder</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Vereis herbegin</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Gevorderd</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Fout onttrek inprop uit '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Fout met die installering van inprop: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Fout met die installering van inprop '{0}' korrupte of onbehoorlike gidsstruktuur. Manifes moet bestaan ​​by '{1}', maar is nie gevind nie.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Fout ontleed plugin manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Geen inprop gelaai met GUID nie: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} Fout</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Foutopvoering van inprop na temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Fout rugsteun '{0}' tot '{1}'. Besonderhede: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Teks wat getik is, word outomaties op 'n soektog toegepas wanneer geen teksblokkie gefokus is nie.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Auto -soekinvoer</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Wagwoordverandering het misluk</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Verandering</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Verander wagwoord</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Helder</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Duidelike wagwoord</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Tevrede</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Inhoudsfontgrootte</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>As dit waar is, sal eksterne inhoud wat in 'n snit geplaas is, die CLIPS -formatering gebruik en nie wat by die bron beskikbaar is nie.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Plak, val of voeg by bestemmingsformatering</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Is u seker dat u die wagwoord wil vergeet?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Vergeet</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Vergeet wagwoord</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profiel</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Verberg kapasiteit watermerke</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>As nuwe knipbordinhoud aangeheg word, sal dit nie as 'n nuwe snit opgespoor word nie</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignoreer aanhangsels</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Wanneer die knipbord ooreenstem met 'n bestaande snit, sal die snit gebruik word in plaas daarvan om 'n nuwe een te skep</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignoreer nuwe duplikate</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Knipbordveranderings van binne die app sal nie opgespoor word nie</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignoreer interne knipbordopsporing</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Ruimtes, oortjies en nuwe lyne sal van die opsporing geïgnoreer word</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignoreer slegs wit ruimte</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Laai op aanmelding</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animate Window</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Ondeursigtigheid</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Toon gedrag</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Die hoofvenster word onthul deur 'n skuifgebaar aan die boonste rand van u monitor uit te voer</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Wys op die topskermrol</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Kennisgewingvolume</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Hierdie instelling sal die stelsel opspoor - breë sleutelbordpasta -tellings vir gebruikstatistieke. Hierdie inligting is privaat en nie gedeel nie, maar ook nie gewaarborg nie. Akkurate resultate kan vereis dat 'n toepassingspesifieke sleutelbordpasta -opdrag in 'Instellings -&gt; kopie en plak -&gt; kortpaaie' verskaf word.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Plak geskiedenis</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Te veel vasgemaakte knipsels (soos blaaier -oortjies) kan beduidende geheue verbruik. verwydering is deur eerste - in - eerste - uit</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Speldkapasiteit</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Dit is van toepassing op alle outomatiese insette, laer waardes sal die werkverrigting verbeter</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Onlangse teksbeperking</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Is jy seker jy wil
+Standaardvoorkeure herstel?
+
+Dit kan nie ongedaan gemaak word nie!
+
+*Die aansoek sal weer begin sodra voltooi is.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Is u seker dat u alle kennisgewings wil terugstel?
+
+*Dit kan nie ongedaan gemaak word nie!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste stel die knipbord (oorheers) in wanneer dit op 'n eksterne program geplak word. Dit sal &lt;b&gt; poog &lt;/b&gt; om die toestand van die knipbord na 'n eksterne pasta te herstel.
+
+Afhangend van die bron van die data, kan totale herstel nie gewaarborg word nie en kan die prestasie verminder of selfs ape -apteaste verminder.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Stel die knipbord terug na aapplak</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Kon nie die plugin -kas van die pad verwyder nie: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Alle inproppe sal na die aanvanklike standaardtoestand teruggestel word</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin -kas</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Is u seker dat u alle inproppe na standaard wil terugstel?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Is u seker dat u u wagwoord wil terugstel?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Alle kortpaaie van toepassings sal na hul standaard sleutelgebare teruggestel word.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Stel kortpaaie terug</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Al die kennisgewings wat voorheen geïgnoreer is, het voorheen gestel.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Herstel kennisgewings</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Aktiveer kan taamlik stadig wees) As u geformateer word, sal dit die geheueverbruik verminder, maar sommige gevorderde funksies sal belemmer, soos: voeg, sjablone, aantekeninge en vind/vervang</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Ryk inhoud</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Stel wagwoord in</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Wys wenke</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Wys in die taakbalk</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Wys in die taakskakelaar</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Toon titels</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>As dit geaktiveer is, sal dit van enige toepassing na die bokant van die skerm gesleep word om die inhoud maklik in Monkeypaste te laat val.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Wys op drag na die bokant van die skerm</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Sound Theme</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Speltoets</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>By die aanvang sal die bron van die knipbord onbekend wees, en afhangend van u sekuriteitsinstellings, kan die inhoud van 'n uitgeslote webwerf of toepassing kom.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Voeg opstartborde by</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Luister na die opstart na die knipbord</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Uitkies</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>WAARSKUWING! Ander paletkleure word gekies met behulp van wiskunde nie oë nie! Let dus op sommige kleur- en stylkombinasies het moontlik nie die regte kontras vir leesbaarheid nie.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Temakleur</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Temalietel</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Outomatiese asblikopruiming sal by die opstelling plaasvind by die vasgestelde interval.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Afvalopruiming</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Koppelvlak</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Hoë ongedaan maak limiete kan die prestasie beïnvloed</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Ongedaan</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Geen beperking</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Word gebruik in gevorderde lêer Soek vir nie -ingestelde lêers</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Gebruiker - gedefinieerde soekuitbreidings</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Vind en vervang ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Plak hier</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Deel ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Beskou</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Bestuur ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Hernoem</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Telling: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tik: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Permanent verwyder</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Blaai na '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transform</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Inset lewer</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Produksie</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Bronne</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Restoreer</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Kies Beeld ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Kleur</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Bestuur '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Publiek</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Wag asseblief...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Agtergrondkleur</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Duidelik alles</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Knipbordformate</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Vee alles uit</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Redigeer besonderhede</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Vind</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Lettertipe kleur</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formaat verf</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> In seleksie</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Voeg beeld in</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Voeg skakel in</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Voeg video in</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Vuurhoutjie doos</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Nuwe sjabloon</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Volgende sjabloon</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Voer plak teks in ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Vorige sjabloon</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Gewone uitdrukking</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Vervang alles</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Vervang</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Hele woord</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Wrap rond</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blok</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>domein</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Wys gids</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Onblokkeer</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Rondom</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Voeg blok by</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Voeg inline by</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopie</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Wag asb. Monkeypaste laai ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Laat vaar</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - klik op Plak</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Groep</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Verwyder alles permanent</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Herstel almal</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Aksie</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL bestaan ​​reeds: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL moet in 'n geldige formaat wees.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Voer volledige URL in:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Voeg URL by</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Voer waardes in</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopieer teks of lêers om toe te pas.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Voeg {0} {1} modus geaktiveer</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Knipbordveranderings sal nou aangeheg word</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Na die voegmodus geaktiveer</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Knipbordveranderings sal nou voorgestel word</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Voor die voegmodus geaktiveer</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blok</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Normale knipbordgedrag is herstel</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Voeg gedeaktiveer</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Voeg by aan die bokant of botom van die klem</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Omvang bygevoegde modus geaktiveer</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>In lyn</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Handleiding</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Voeg by u huidige keuse.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Handmatige voegmodus geaktiveer</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Clipboard -opeenhoping gestop</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Voeg bygedra</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Clipboard -opeenhoping hervat</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Voeg hervat</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Is jy seker jy wil klaarmaak?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Redigering in die verenigbaarheidsmodus sal alle ryk formatering verwyder. Is u seker dat u dit wil verander?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Waarskuwing van data -agteruitgang</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktief</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>In staat gestel</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Af</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Op</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Resultaat</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Onbekende fout het voorgekom.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Pogings wat oorbly</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Sleutel wagwoord in</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Bevestig</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontak</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Datum Tyd</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Is u seker dat u alle gebruike van '{0}' wil uitvee?
+
+Dit kan nie ongedaan gemaak word nie!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamies</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Staties</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} is leeg ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Meer kom binnekort!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Aanmeldbelasting Deaktiveer misluk</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Aanmeldbelasting Deaktiveer sukses</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Aanmeldbelading Aktiveer misluk</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Aanmeldbelading Aktiveer sukses</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Vel</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Monkey Pasta is nou gelaai.
+Clipboard -luister is: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Gelaai</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Wys</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Auto -kopie -seleksie -modus: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Modus verander</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Regsklik op Pasta Mode: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Inprop opgedateer</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Plak '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Begin '{0}' Analyzer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Begin '{0}' sneller</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Kies '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Is u seker dat u '{0}' en alle gepaardgaande aksies wil uitvee?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Sneller</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Wil u al die sub -aksies vir '{0}' verwyder? (Andersins sal hulle weer na '{1}') wees</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Verwyder opsies</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Wil u regtig '{0}' gaan?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Rekening</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Ontleders</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Aansoekoperasies</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Knipbord</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Tevrede</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Omskakelaars</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultuur</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Rigting</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Sleep en val</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikone</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Koppelvlak</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Plak operasies</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Voorkeure</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Soek</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Kortpaaie</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sorteer</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>En klink</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Stelselbord</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Versamelings</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Snellers</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Webwerfbedrywighede</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Stel die knipbord op die invoergreep.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alarmsein</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blaas</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Klem</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Algemene doelwitte en/of stelselboodskappe -waarskuwings. Alert -aksie het geen invloed op hul insette nie.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Boodskap</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Aap</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Voorskou</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Wys?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Tyd -roosterbroodboodskap word binne sekondes getoon. Wanneer waarde is, moet 0 boodskap met die hand gesluit word.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Wys tyd (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Sound?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Sound tipe</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Lui</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Ontleder</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Verwerk sy invoerklem met behulp van die toegewese Analyzer Preset.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Invoerinhoud is gekoppel aan die geselekteerde versameling</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Koppel sy invoergreep aan die toegewysde etiketversameling.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tag tag</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Gevalle sensitief?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Dit kan statiese teks wees om met die invoer te vergelyk en/of geselekteerde eienskappe (via die filterknoppie) in te sluit, sal vervang word wanneer die toestand geëvalueer word.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Toestanddata</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>'N Opsionele JSONPath -navraag wat op die geselekteerde' invoereienskap 'toegepas sal word voordat die voorwaarde geëvalueer word.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Insetfilter</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Die clip -eienskap wat vir hierdie voorwaardelike gebruik word.
+
+Die 'laaste uitset' -eienskap word tans slegs ondersteun as hierdie voorwaardelike 'n kind van 'n ontleder -aksie is, en die gegewe data sal afhang van die uitset van die oueranaliseerder.
+
+Vir probleemoplossing, heg 'n 'waarskuwingsaksie' aan die ouer van hierdie voorwaardelike en stel die 'boodskap' -parameter van die waarskuwing in om by hierdie invoer -eienskap te pas. Dit sal toelaat om die werklike data wat vir hierdie voorwaardelike gebruik word, te hersien.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Insetteienskap</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Voer 'n teksvergelyking uit op die invoerklem of vorige aksie -uitset. As vergelyking misluk (dit is nie 'n wedstryd nie), sal geen kinderoptrede uitgevoer word nie. Dit werk dus soos 'n logiese hek.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Alle ware of vals operasies waar kinderaksies slegs sal uitvoer as die resultaat waar is.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Toestand</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Almal</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Geaktiveer wanneer 'n snit van die geselekteerde tipe op enige manier by die stelsel gevoeg word (knipbord, sleep - en - druppel, ontleder gegenereer of gedupliseer).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Voer slegs hierdie sneller uit as die invoergreep nuut is en nie 'n duplikaat nie. Dit is onafhanklik van enige voorkeurinstelling of nuwe inhoud geïgnoreer word of nie.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignoreer duplikaat</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Slegs snitte van hierdie tipe sal hierdie aksie aktiveer.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Koppel sy invoergreep aan die toegewysde etiketversameling.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Geaktiveer wanneer 'n snit gekoppel is aan die gespesifiseerde etiketversameling.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kollekte</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Die hoeveelheid tyd in millisekondes het gewag voordat kinders tereggestel het</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Ophou</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimenteel) word hoofsaaklik gebruik in samewerking met die herhaler -aksie vir die peiling van afgeleë bronne of hulp met lang hardloopbewerkings.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>As dit leeg gelaat word, sal die uitvoerlêer die titel van die invoergreep as die lêernaam gebruik.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Pasgemaakte naam</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Die gids waar die lêer geskryf sal word.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Adresboek</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Stoor insette na die geselekteerde lêergids.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Geaktiveer wanneer die inhoud van die geselekteerde vouer verander. Die uitset sal 'n nuwe of bestaande (wanneer die voorkeur van die ignoreer -duplisate geaktiveer is) lêer klem van die lêer of lêergids wat verander het saam met die tipe verandering as die laaste uitset.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Gebeure</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Omslag</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignoreer duplikaat</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>'N Waarde van 0 sal ouer aksie onbepaald herhaal</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Herhaal die telling</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Die hoeveelheid tyd in millisekondes om te wag sodra oueraksie voltooi is</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Herhaal vertraging</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimenteel) Word gebruik vir die skep van aksielusse of herhalende take. As dit herhaal word, sal dit alle kinders weer met die oorspronklike insette uitvoer. As u 'n interval sonder 'n herhalingstelling gebruik, moet die sneller gedeaktiveer word en heraktiveer word om die herhaling te stop. Kan nuttig wees vir die peiling of outomatisering van die webskrap.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Veroorsaak deur 'n wêreldwye kortpad wat u definieer. As Monkeypaste aktief is, sal dit probeer om die geselekteerde snit (as daar een is) as invoer te gebruik. Andersins sal dit probeer om die knipbord as inset te gebruik.
+
+Opmerking: 'n Kortpad -sneller sal steeds uitvoer as daar geen insette is om dit buigsaam te hou nie (dit kan 'n makro -sneller, ens.), Aangesien dit nie 'n data -gedrewe gebeurtenis is nie.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Kortpad sneller</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Geaktiveer wanneer die opgeneemde kortpad te eniger tyd met die huidige knipbord gedruk word</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Hierdie aksie vereis dat die app weer begin. Wil u dit nou doen?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Daar was 'n probleem. U moet die aansoek handmatig weer begin.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analiseer met annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotate sneller</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>In ingeboude elemente word slegs gelees. Dupliseer om te verander.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anoniem</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Gebruik</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Gister</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} dae gelede</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 uur gelede</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} uur gelede</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Net nou</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>'N Minuut gelede</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minute gelede</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Verlede maand</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} maande gelede</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Verlede week</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} weke gelede</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} jaar gelede</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Aantekeninge</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Aansoeknaam</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Toepassingspad</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Gevalle sensitief</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Tevrede</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Leër tipe</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Beeldtipe</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Gewone uitdrukking</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tekstipe</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL -titel</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Hele woord</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Soos om langs die boonste skerm te blaai om oop te maak, sluit dit die hoofvenster wanneer dit oopmaak. Wat vinniger multi -geteikende werkvloei moontlik maak.
+
+* Hoeke is in terme van al u skerms, nie per monitor nie.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Wys venster en slot</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Vry!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Gee ons 5 sterre!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Vee alles uit</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Verwyder alle inhoud</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Is u seker dat u dit wil uitvee?
+Al jou snitte?!
+
+*Hierdie operasie kan nie ongedaan gemaak word nie!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Ek is 'n Indy Dev. Wys asseblief 'n bietjie ondersteuning!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Soos Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} aanvaar slegs die invoer van tipe (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Auto Copy -modus - simuleer 'n 'kopie' -gebeurtenis elke keer as die linkermuisknop vrygestel word.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Regsklik op Plakmodus - simuleer 'n 'plak' -gebeurtenis elke keer as die regtermuisknoppie vrygestel word</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Voorafbepaling</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Wys inpropmap</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Verslag</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Beskou</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Wys gereedskapstips</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analyzers annoteer hul insette of skep nuwe snitte as uitset. Kinders van ontleders moet besluit watter een hulle nodig het as hul insette. Dit is tipies die laaste uitset.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Insettipe</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Snellerontwerper '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Kies 'n {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nie gevind nie...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} sneller</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>As dit gekontroleer word, sal die ware of vals uitkoms van die toestand omgeslaan word. Dus, byvoorbeeld, 'n 'bevat' -toestand sal 'word nie' nie '.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Doen nie</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Wag asseblief...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Kleur kieser</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Kies wedstrydkleur</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Soos 'n kortpad -sneller, maar wanneer die sleutelkombinasie ingedruk word, sal 'n 'kopie' -gebeurtenis in die aktiewe toepassing gesimuleer word, sodat dit steeds soos kopie werk, maar dan sal die aksies wat aan die aapkopie -sneller gekoppel is, op die agtergrond uitgevoer word met behulp van die Gesimuleerde koppelborddata.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Gevorderde filter</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Verberg filters</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Herstel filters</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Skep filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opsioneel) As dit leeg gelaat word, sal die knipbord met behulp van die inset van hierdie aksie ingestel word. Enigiets wat hier voorsien word, sal slegs as gewone teks behandel word.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Inhoud vir knipbord</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>As dit waar is, sal geen snit bygevoeg word nadat hierdie aksie die knipbord instel nie.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignoreer</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Geen ontleder gekies vir aksie '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analyzer vir aksie '{0}' nie gevind nie</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Ouer '{0}' filters slegs vir '{1}' Type Content and Analyzer '{2}' sal nooit uitvoer nie omdat dit nie '{3}' tipe invoer ondersteun nie</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Geen etiket gekies vir klassifiseerder '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag vir klassifiseerder '{0}' nie gevind nie</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Vergelyk waarde kan slegs letters, getalle of ruimtes wees</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Geen etiket gekies vir clip gemerkte sneller '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag vir clip gemerkte sneller '{0}' nie gevind nie</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Geen kykmap gespesifiseer vir '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Kyk na die lêergids '{0}' nie gevind vir sneller '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Lêerskrywerpad vir aksie '{0}' nie ingestel nie</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Lêerskrywerpad '{0}' vir '{1}' nie gevind nie.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Taakbalk</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Lees meer oor plugins</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Herstel hierdie analise -konfigurasie</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Verander log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Koppel asseblief aan die internet en probeer later weer.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Help</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} is die nuutste weergawe</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Julle is almal op - tot - datum!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Kyk vir opdaterings ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Nuwe weergawe beskikbaar!
+
+Klik hier om op te dateer na '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Klik hieronder om op te dateer na '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Opdatering beskikbaar!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Nou op datum bring</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' bevat gedeelde waardes. Wat wil u weer instel?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Helder</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Duidelike onlangse soektogte</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Herstel alles</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Herstel gedeel</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Ondelend weer instel</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Beroep die toegewese aansoekhandeling aan. Alle toepassingsopdragte is staatloos en hul insetknip word geïgnoreer.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>As dit nie gekontroleer word nie en die opdrag nie kan skiet nie, sal die uitvoeringsketting stop. Baie opdragte sal 'n spesifieke toepassingsstaat benodig om uit te voer.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Altyd voortgaan?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Die opdrag om uit te voer.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Bevel</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Geen opdrag gekies vir die toepassingsopdrag '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Opdrag vir toepassingsopdrag '{0}' nie gevind nie</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Gekies</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Begin oor</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Daar was 'n probleem met die opdatering van '{0}'. Om die opdatering te voltooi, moet u weer begin en '{0}' installeer (moenie bekommerd wees dat al u instellings herstel sal word nie).
+
+U kan nou weer begin en die opdatering voltooi deur dit te installeer, dit te ignoreer en dit later op te dateer of die opdatering alles saam te kanselleer en voort te gaan met die weergawe '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Opdateringsfout</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Kon nie opdatering aflaai nie</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Opdatering misluk</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Om opdatering te voltooi, moet u weer begin. Wil u nou of later weer begin?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Opdatering gereed</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Begin weer oor</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Hangende</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} is suksesvol opgedateer na {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Kernproppe is nodig en kan nie verwyder word nie.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Installeer</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Opdatering is hangende. Herbegin om te voltooi.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Hangende</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>'N Onthulling is hangende. Herbegin asseblief as u wil installeer.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Om die verwydering te voltooi, moet u weer begin. Wil u nou of later weer begin?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Voltooi verwyder?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Ongepubliseer</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Outo - gegenereerde standaardvoorinstelling vir '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Geen snit gekies nie</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Ontleed geselekteerde snit</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Ken 'n kortpad toe om '{0}' op die geselekteerde snit uit te voer</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Globale plak</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Ken globale plakknip vir '{0}' ken</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Wagwoord vergeet?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Teken aan</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Teken uit</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Privaatheidsbeleid</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Vereis herbegin) As dit in staat is om diagnostiese inligting in te dien, sal dit aangemeld word. Dit kan die prestasie vertraag en kan persoonlike inligting bevat.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Log na lêer</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Publiek</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Open Logs -lêergids</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Blaai deur plugins</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lees</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Skryf</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Stuur terugvoer of foutverslag</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Dit verberg net die hoofvenster. Alle ander nie -dialoogvensters word altyd in die taakbalk getoon.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Soek in '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Voeg filter by</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Wysig Join Type</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Verwyder hierdie filter</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Oop hulp hieroor ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} knipsels</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Verandering</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Nooit</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Sit</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Ongetitel</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rekord</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Ongemerkte bronverwysing</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' is nodig</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Het foute)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Beperk</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Bergplek</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Weggooigoed</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Onbeperk</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Hierdie app stem tans ooreen met die voorinstellings en formate van die standaard Clipboard -leser.
+
+As u standaardleser -voorafinstellings (vanaf die klembord -sidebalk) inskakel of deaktiveer), sal dit nie hierdie konfigurasie beïnvloed nie. Slegs ongenoteerde programme volg die standaardopstelling.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Hierdie app stem tans ooreen met die voorafinstellings en formate van die standaardbordskrywer.
+
+As u standaardskrywer voorafinstellings in staat stel of deaktiveer (vanaf die knipbord -sidebar), sal dit nie hierdie konfigurasie beïnvloed nie. Slegs ongenoteerde programme volg die standaardopstelling.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Om by te voeg, moet u die knipbord -luisteraar (stelselbakkie -&gt; CV) ontneem.</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Voeg nie beskikbaar nie</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Het geen instellings nie</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ek praat net Engels en Monkeypaste is in hierdie taal vertaal.
+
+Alle weergawes word met die Engelse pakket gestuur. As u Engels praat, kan u die taal enige tyd na hierdie opstelling (instellings -&gt; voorkeure -&gt; internasionaal) verander.
+
+As u wil help om die vertaling te verbeter, sal ons graag van u hoor!
+
+terugvoer@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Translasieprobleme</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>U moet Monkeypaste opdateer om hierdie funksie te gebruik.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Kortpad ongeset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Clipboard -luisteraar gestremd</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Clipboard -luisteraar geaktiveer</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Oueraksie '{0}' ondersteun nie die invoer -eienskapstipe 'laaste uitset' nie</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lees meer oor planne</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Toepassing</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Sneller</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Knipsel</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Ontleder</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tag tag</value>
+  </data>
+</root>

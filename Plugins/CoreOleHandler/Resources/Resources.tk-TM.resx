@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Üns berme</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Barlanylanda {0} formaty buferden okalmasa ýa-da süýräp, damja maglumatlaryny okalmaz.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Barlanylanda {0} formatda bufer tagtasyna ýa-da süýräp boljak maglumatlara ýazylmaz.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Oka</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ýaz</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Faýllar</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF eýýäm gatnaşmasa, HTML-de RTF-e öwrülmez. Bu, Web brauzerleriniň we / ýa-da söz gaýtadan işleýän programmalaryň arasynda peýdaly bolup biler. (RTF formatyny işlediler we diňe goldanýan platformalar üçin ulanylýar)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTF-e öwüriň</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Bu katalakçylar bu klipden okalmaz ýa-da süýräň.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Kataloglara ähmiýet bermedi</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Anket giňeltmelerini äsgermezlik etdi</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Bu faýl görnüşleri buferden ýa-da süýräp, damja maglumatlaryny okalmaz.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Bu faýl görnüşleri bufer tagtasyna ýa-da süýräp, damja maglumatlara ýazylmaz.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Barlananda, iň uly ölçegden uly ölçegler bilen uly ölçegler bilen has uly şekillendirilip bilner. Bu şerti panelindäki surata täsir etmeýär.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Masştabda ulaldy</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Bitmap goýanyňyzda ýa-da taşlanda bu deslapky faýl görnüşi bolar</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Bellenen ekran meýdany görnüşi</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Kitaphanada doly aç-açan şekiller, bulaşyklygy, bulaşyk.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Boş suratlary äsgermezlik et</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Uly suratlar (birnäçe mbs-den köp) süýräp, damja we umumy öndürijilik gamçany erbetleşdirip biler. Bu bahany pes saklamaga synanyşyň.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maksanyň beýikligi</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maks giňligi</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Öndürijilik aladalary üçin iň ýokary mukdar üçin iň ýokary mukdar gerek</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Maks Nyşan</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Tekst (Mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>"{0 {0} 'formatdy," boş ýa-da aç-açan maglumatlar "formatdy we petiklendi</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Boş maglumatlar petiklendi</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' formaty 'äsgerilmedik' görnüşinde bellendi</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>FORMAT</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} çäk {1} we maglumatlar {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Maks ululygy tapyldy</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Esasy paneli okaýjy</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Esasy paneli ýazyjysy</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Deslapky paneli formatlary tutýar</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Esasy paneli</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, planşirlemek, süýrän we taşlaň, stuz, Rtml, CSV, JPG, JPG, LPG, LPGAg, LPGAg, LPG, LING</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Şekil (png)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML eýýäm gatnaşmasa, RTF HTML -e öwrülmez. Bu, Web brauzerleriniň we / ýa-da söz gaýtadan işleýän programmalaryň arasynda peýdaly bolup biler. (HTML formatyny işlediň we diňe goldanýan platformalar üçin ulanylýar)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML-e öwüriň</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Atsyz</value>
+  </data>
+</root>

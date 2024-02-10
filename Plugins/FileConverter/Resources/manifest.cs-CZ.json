@@ -1,0 +1,82 @@
+{
+  "title": "Převodník souborů",
+  "description": "Umožňuje překládat soubory do obrázků nebo textových typů obsahu",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "Jádro, text, obrázek, soubor, převodník, soubor na text, soubor na obrázek",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Soubor převést",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Typ výstupu",
+        "description": "Pouze .png nebo .txt právě teď",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Text",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "obraz",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Převést na text",
+        "iconUri": "text.png",
+        "description": "Pokusy o převedení poskytnutého souboru na prostý text",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Převést na obrázek",
+        "description": "Pokusy o převedení poskytnutého souboru na obrázek v paměti",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

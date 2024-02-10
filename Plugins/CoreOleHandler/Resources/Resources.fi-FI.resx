@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Jättää huomiotta</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Kun tarkistetaan {0} muotoa ei lue leikepöydältä tai vedä ja pudota.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Kun tarkistetaan {0} muotoa ei kirjoiteta leikepöydälle tai vedä ja pudota.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lukea</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Kirjoittaa</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Tiedostot</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Kun RTF ei ole jo läsnä, HTML muunnetaan RTF: ksi. Tämä voi olla hyödyllistä verkkoselaimien ja/tai sanankäsittelysovellusten välillä. (Vaatii RTF -muodon käytön ja on tarkoitettu vain tuetuille alustoille)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Muunna RTF: ksi</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Näitä hakemistoja ei lue leikepöydältä tai vedä ja pudota.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Sivuutettu hakemistot</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Sivuutettu tiedostolaajennukset</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Näitä tiedostotyyppejä ei lue leikepöydältä tai vedä ja pudota.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Näitä tiedostotyyppejä ei kirjoiteta leikepöydälle tai vedä ja pudota.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Tarkistettaessa kuvat, jotka ovat suurempia kuin maksimiulotte, skaalataan säilyttäen kuvasuhdetta. Tämä ei vaikuta leikepöydän kuvaan.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Asteikko ylimitoitettu</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Kun liittää tai pudottaa bittikartta, tämä on oletustiedostotyyppi</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Oletusviennin tyyppi</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Joskus täysin läpinäkyvät kuvat näkyvät leikepöydällä, sen hämmentäviä.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ohita tyhjät kuvat</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Suuret kuvat (enemmän kuin muutama MB) voivat tehdä valitettavasti vetämistä ja pudottamista ja yleistä suorituskykyä hieman hitaasti. Yritä pitää tämä arvo alhaisena.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Enimmäiskorkeus</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Enimmäisleveys</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Suorituskykyongelmiin tarvitaan enimmäismäärä merkkejä</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max -merkit</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Teksti (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Muodossa '{0}' oli tyhjä tai läpinäkyvä tieto ja se estettiin</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Tyhjät tiedot estetty</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' muoto on merkitty 'huomiotta'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Muoto huomiotta jätetty</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} raja on {1} ja tiedot olivat {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Max -koko havaittu</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Ydinleikepöydän lukija</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Ytimen leikepöydän kirjoittaja</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Käsittelee oletuslevymuotoja</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Ytimen leikepöydän käsittelijä</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Ydin, leikepöytä, vedä ja pudota, teksti, rtf, rikas teksti, html, csv, kuva, png, jpg, jpeg, linkki</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Kuva (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Kun HTML ei ole jo läsnä, RTF muunnetaan HTML: ksi. Tämä voi olla hyödyllistä verkkoselaimien ja/tai sanankäsittelysovellusten välillä. (Vaatii HTML -muodon käytön ja on vain tuetuille alustoille)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Muunna HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Teksti</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Nimettömä</value>
+  </data>
+</root>

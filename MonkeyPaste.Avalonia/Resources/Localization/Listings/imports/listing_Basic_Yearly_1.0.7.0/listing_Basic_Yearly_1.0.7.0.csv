@@ -1,6 +1,348 @@
-Field,ID,Type (Type),default,en-US,ja-JP,zh-CN
-Description,2,Text,,"With this subscription you will receive:
+Field,ID,Type (Type),default,af-ZA,am-ET,ar-AE,ar-BH,ar-DZ,ar-EG,ar-IQ,ar-JO,ar-KW,ar-LB,ar-LY,ar-MA,ar-OM,ar-QA,ar-SA,ar-SY,ar-TN,ar-YE,as-IN,az-Cyrl-AZ,az-Cyrl,az-Latn-AZ,az-Latn,bg-BG,bn-BD,bn-IN,bs-Cyrl-BA,bs-Cyrl,bs-Latn-BA,bs-Latn,ca-ES,cs-CZ,cy-GB,da-DK,de-AT,de-CH,de-DE,de-LI,de-LU,el-GR,en-029,en-AU,en-BZ,en-CA,en-GB,en-HK,en-ID,en-IE,en-IN,en-JM,en-MT,en-MY,en-NZ,en-PH,en-PK,en-SG,en-TT,en-US,en-ZA,en-ZW,es-419,es-AR,es-BO,es-CL,es-CO,es-CR,es-DO,es-EC,es-ES,es-GT,es-HN,es-MX,es-NI,es-PA,es-PE,es-PR,es-PY,es-SV,es-US,es-UY,es-VE,et-EE,fa-IR,fi-FI,fil-PH,fr-029,fr-CD,fr-CI,fr-CM,fr-HT,fr-LU,fr-MA,fr-MC,fr-ML,fr-RE,ga-IE,gu-IN,he-IL,hi-IN,hr-BA,hr-HR,hu-HU,hy-AM,id-ID,is-IS,it-CH,it-IT,ja-JP,ka-GE,kk-KZ,km-KH,kn-IN,ko-KR,ky-KG,lo-LA,lt-LT,lv-LV,mi-NZ,mk-MK,ml-IN,mn-Mong,mr-IN,ms-BN,ms-MY,mt-MT,nb-NO,ne-NP,nl-BE,nl-NL,or-IN,pa-Arab-PK,pa-Arab,pl-PL,pt-BR,pt-PT,ro-RO,ru-RU,sk-SK,sl-SI,sq-AL,sr-Cyrl-BA,sr-Cyrl-ME,sr-Cyrl-RS,sr-Cyrl,sr-Latn-BA,sr-Latn-ME,sr-Latn-RS,sr-Latn,sv-FI,sv-SE,sw-KE,ta-IN,te-IN,th-TH,ti-ET,tk-TM,tr-TR,tt-RU,ug-CN,uk-UA,ur-PK,uz-Cyrl,uz-Latn-UZ,uz-Latn,vi-VN,zh-Hans-CN,zh-Hans-SG,zh-Hans,zh-Hant-HK,zh-Hant-MO,zh-Hant-TW,zh-Hant
+Description,2,Text,,"Met hierdie intekening sal u ontvang:
+● Tot 1 000 snitte inhoud
+● Onbeperkte asblik en argief","በዚህ የደንበኝነት ምዝገባ ይቀበሉዎታል
+The እስከ 1,000 የሚሆኑ ክሊፖች
+● ያልተገደበ ቆሻሻ እና መዝገብ ቤት","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","مع هذا الاشتراك ستتلقى:
+● ما يصل إلى 1000 مقاطع من المحتوى
+● قمامة وأرشيف غير محدود","এই স্বাক্ষৰণৰ সৈতে আপুনি লাভ কৰিব:
+● বিষয়বস্তুৰ ১০০০ টা ক্লিপলৈকে
+● সীমাহীন আৱৰ্জনা আৰু আৰ্কাইভ","Bu abunə ilə alacaqsınız:
+● 1000-ə qədər məzmunlu klip
+● Limitsiz zibil və arxiv","Bu abunə ilə alacaqsınız:
+● 1000-ə qədər məzmunlu klip
+● Limitsiz zibil və arxiv","Bu abunə ilə alacaqsınız:
+● 1000-ə qədər məzmunlu klip
+● Limitsiz zibil və arxiv","Bu abunə ilə alacaqsınız:
+● 1000-ə qədər məzmunlu klip
+● Limitsiz zibil və arxiv","С този абонамент ще получите:
+● До 1000 клипа съдържание
+● Неограничен боклук и архив","এই সাবস্ক্রিপশন সহ আপনি পাবেন:
+Content সামগ্রীর 1000 টি ক্লিপ পর্যন্ত
+● সীমাহীন ট্র্যাশ এবং সংরক্ষণাগার","এই সাবস্ক্রিপশন সহ আপনি পাবেন:
+Content সামগ্রীর 1000 টি ক্লিপ পর্যন্ত
+● সীমাহীন ট্র্যাশ এবং সংরক্ষণাগার","Ovom pretplatom primit ćete:
+● Do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva","Ovom pretplatom primit ćete:
+● Do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva","Ovom pretplatom primit ćete:
+● Do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva","Ovom pretplatom primit ćete:
+● Do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva","Amb aquesta subscripció rebrà:
+● Fins a 1.000 clips de contingut
+● Trash i arxiu il·limitats","S tímto předplatným obdržíte:
+● Až 1 000 klipů obsahu
+● Neomezený odpad a archiv","Gyda'r tanysgrifiad hwn byddwch yn derbyn:
+● Hyd at 1,000 o glipiau o gynnwys
+● Sbwriel ac Archif Diderfyn","Med dette abonnement vil du modtage:
+● Op til 1.000 klip af indhold
+● Ubegrænset papirkurv og arkiv","Mit diesem Abonnement erhalten Sie:
+● Bis zu 1.000 Inhalteclips
+● Unbegrenzter Müll & Archiv","Mit diesem Abonnement erhalten Sie:
+● Bis zu 1.000 Inhalteclips
+● Unbegrenzter Müll & Archiv","Mit diesem Abonnement erhalten Sie:
+● Bis zu 1.000 Inhalteclips
+● Unbegrenzter Müll & Archiv","Mit diesem Abonnement erhalten Sie:
+● Bis zu 1.000 Inhalteclips
+● Unbegrenzter Müll & Archiv","Mit diesem Abonnement erhalten Sie:
+● Bis zu 1.000 Inhalteclips
+● Unbegrenzter Müll & Archiv","Με αυτήν τη συνδρομή θα λάβετε:
+● Έως 1.000 κλιπ περιεχομένου
+● Απεριόριστα σκουπίδια και αρχείο","With this subscription you will receive:
 ● up to 1,000 clips of content 
-● unlimited trash & archive",このサブスクリプションでは、次のものが得られます:,通过此订阅，您将收到：
-Title,4,Text,,Basic - Yearly,基本 - 毎年,基本 - 每年
-StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado","Selle tellimusega saate:
+● kuni 1000 sisuklambrit
+● Piiramatu prügikast ja arhiiv","با این اشتراک دریافت خواهید کرد:
+● حداکثر 1000 کلیپ محتوا
+● سطل زباله و بایگانی نامحدود","Tällä tilauksella saat:
+● Jopa 1 000 sisältöä
+● Rajoittamaton roskakori ja arkisto","Sa subscription na ito ay matatanggap mo:
+● Hanggang sa 1,000 mga clip ng nilalaman
+● Walang limitasyong basurahan at archive","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Avec cet abonnement, vous recevrez:
+● Jusqu'à 1 000 clips de contenu
+● Trash et archives illimitées","Leis an síntiús seo gheobhaidh tú:
+● suas le 1,000 gearrthóg d'ábhar
+● Bruscar & Cartlann Neamhtheoranta","આ સબ્સ્ક્રિપ્શન સાથે તમે પ્રાપ્ત કરશો:
+Content સામગ્રીની 1000 ક્લિપ્સ સુધી
+● અમર્યાદિત કચરો અને આર્કાઇવ","עם מנוי זה תקבל:
+● עד 1,000 קטעי תוכן
+● אשפה וארכיון ללא הגבלה","इस सदस्यता के साथ आपको प्राप्त होगा:
+● सामग्री की 1,000 क्लिप तक
+● असीमित कचरा और संग्रह","Uz ovu pretplatu dobit ćete:
+● do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva","Uz ovu pretplatu dobit ćete:
+● do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva","Ezzel az előfizetéssel megkapja:
+● Legfeljebb 1000 tartalomklip
+● Korlátlan szemét és archívum","Այս բաժանորդագրությամբ դուք կստանաք.
+● Բովանդակության մինչեւ 1000 հոլովակ
+● Անսահմանափակ աղբ եւ արխիվ","Dengan langganan ini Anda akan menerima:
+● Hingga 1.000 klip konten
+● Sampah & arsip tanpa batas","Með þessari áskrift færðu:
+● allt að 1.000 úrklippur af innihaldi
+● Ótakmarkað rusl og skjalasafn","Con questo abbonamento riceverai:
+● Fino a 1.000 clip di contenuti
+● Cestino e archivio illimitati","Con questo abbonamento riceverai:
+● Fino a 1.000 clip di contenuti
+● Cestino e archivio illimitati","このサブスクリプションを使用すると、以下を受け取ります。
+●最大1,000個のコンテンツクリップ
+●無制限のゴミ＆アーカイブ","ამ გამოწერით მიიღებთ:
+● 1000 - მდე შინაარსის კლიპი
+● შეუზღუდავი ნაგავი და არქივი","Осы жазылыммен сіз мыналарды аласыз:
+● Мазмұнның 1000 клипіне дейін
+● Шексіз қоқыс және мұрағат","ជាមួយនឹងការជាវនេះអ្នកនឹងទទួលបាន:
+●មាតិការរហូតដល់ 1.000 ឈុតនៃមាតិកា
+●សំរាមគ្មានដែនកំណត់និងប័ណ្ណសារ","ಈ ಚಂದಾದಾರಿಕೆಯೊಂದಿಗೆ ನೀವು ಸ್ವೀಕರಿಸುತ್ತೀರಿ:
+1 ವಿಷಯದ 1,000 ಕ್ಲಿಪ್‌ಗಳು
+ಅನಿಯಮಿತ ಕಸ ಮತ್ತು ಆರ್ಕೈವ್","이 구독을 사용하면 다음을 받게됩니다.
+● 최대 1,000 개의 컨텐츠 클립
+● 무제한 쓰레기 및 아카이브","Бул жазылуу менен сиз аласыз:
+Мазмундун 1000ге чейин клиптери
+● Чексиз таштанды жана архив","ດ້ວຍການສະຫມັກສະມາຊິກນີ້ທ່ານຈະໄດ້ຮັບ:
+●ຄລິບເນື້ອຫາເຖິງ 1,000
+●ກະຕ່າຂີ້ເຫຍື້ອທີ່ບໍ່ຈໍາກັດແລະຮວບຮວມ","Su šia prenumerata gausite:
+● Iki 1000 turinio klipų
+● Neribotos šiukšliadėžės ir archyvas","Ar šo abonementu jūs saņemsiet:
+● Līdz 1000 satura klipiem
+● Neierobežota miskaste un arhīvs","Ma tenei ohaurunga ka whiwhi koe:
+● ake ki te 1,000 toki o te ihirangi
+● Te paru paru me te puranga","Со оваа претплата ќе ја добиете:
+● до 1.000 клипови со содржина
+● Неограничен ѓубре и архива","ഈ സബ്സ്ക്രിപ്ഷൻ ഉപയോഗിച്ച് നിങ്ങൾക്ക് ലഭിക്കും:
+Fontrage ഉള്ളടക്കത്തിന്റെ 1,000 ക്ലിപ്പുകൾ വരെ
+● പരിധിയില്ലാത്ത ട്രാഷ് & ആർക്കൈവ്","Энэ захиалгыг та хүлээн авах болно:
+● Агуулгын 1000 хүртэлх клипүүд
+● Хязгааргүй хог, архив","या सदस्यता सह आपल्याला प्राप्त होईल:
+Content सामग्रीच्या 1000 पर्यंत क्लिप
+● अमर्यादित कचरा आणि संग्रह","Dengan langganan ini anda akan terima:
+● Sehingga 1,000 klip kandungan
+● Sampah & arkib tanpa had","Dengan langganan ini anda akan terima:
+● Sehingga 1,000 klip kandungan
+● Sampah & arkib tanpa had","B'dan l-abbonament tirċievi:
+● Sa 1,000 klipps ta 'kontenut
+● Trash & Archive Unlimited","Med dette abonnementet vil du motta:
+● Opptil 1000 klipp av innhold
+● Ubegrenset søppel og arkiv","यस सदस्यतासँग तपाईंले प्राप्त गर्नुहुनेछ:
+A सामग्रीको 1,000 क्लिपहरू सम्म
+● असीमित रद्दीटोकरी र अभिलेख","Met dit abonnement ontvangt u:
+● Tot 1.000 content clips
+● Onbeperkt afval en archief","Met dit abonnement ontvangt u:
+● Tot 1.000 content clips
+● Onbeperkt afval en archief","ଏହି ସଦସ୍ୟତା ସହିତ ଆପଣ ପାଇବେ:
+The ବିଷୟବସ୍ତୁର 1000 କ୍ଲିପ୍ |
+U ଅସୀମିତ ଆବର୍ଜନା ଏବଂ ଅଭିଲେଖାଗାର |","ਇਸ ਗਾਹਕੀ ਦੇ ਨਾਲ ਤੁਸੀਂ ਪ੍ਰਾਪਤ ਕਰੋਗੇ:
+Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
+● ਅਸੀਮਤ ਰੱਦੀ ਅਤੇ ਪੁਰਾਲੇਖ","ਇਸ ਗਾਹਕੀ ਦੇ ਨਾਲ ਤੁਸੀਂ ਪ੍ਰਾਪਤ ਕਰੋਗੇ:
+Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
+● ਅਸੀਮਤ ਰੱਦੀ ਅਤੇ ਪੁਰਾਲੇਖ","Dzięki tej subskrypcji otrzymasz:
+● Do 1000 klipów treści
+● Nieograniczone śmieci i archiwum","Com esta assinatura, você receberá:
+● Até 1.000 clipes de conteúdo
+● Lixo e arquivo ilimitados","Com esta assinatura, você receberá:
+● Até 1.000 clipes de conteúdo
+● Lixo e arquivo ilimitados","Cu acest abonament veți primi:
+● Până la 1.000 de clipuri de conținut
+● gunoi și arhivă nelimitate","С этой подпиской вы получите:
+● До 1000 клипов контента
+● Неограниченный мусор и архив","S týmto predplatným dostanete:
+● Až 1 000 klipov obsahu
+● Neobmedzený odpad a archív","S to naročnino boste prejeli:
+● do 1.000 posnetkov vsebine
+● Neomejeni smeti in arhiv","Me këtë pajtim do të merrni:
+● Deri në 1.000 klipe të përmbajtjes
+● plehra dhe arkiv i pakufizuar","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Помоћу ове претплате ћете добити:
+● До 1.000 снимака садржаја
+● Неограничено смеће и архива","Med detta prenumeration får du:
+● Upp till 1 000 klämmor med innehåll
+● Obegränsat skräp och arkiv","Med detta prenumeration får du:
+● Upp till 1 000 klämmor med innehåll
+● Obegränsat skräp och arkiv","Na usajili huu utapokea:
+● Hadi sehemu 1,000 za yaliyomo
+● Takataka na kumbukumbu isiyo na kikomo","இந்த சந்தாவுடன் நீங்கள் பெறுவீர்கள்:
+The உள்ளடக்கம் 1,000 கிளிப்புகள் வரை
+● வரம்பற்ற குப்பை மற்றும் காப்பகம்","ఈ సభ్యత్వంతో మీరు అందుకుంటారు:
+Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
+అపరిమిత చెత్త & ఆర్కైవ్","ด้วยการสมัครรับข้อมูลนี้คุณจะได้รับ:
+●เนื้อหามากถึง 1,000 คลิป
+●ถังขยะและเก็บถาวรไม่ จำกัด","በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
+● ክሳብ 1000 ክሊፕ ትሕዝቶ
+● ደረት ኣልቦ ጓሓፍን ማህደርን","Bu abunalygy bilen alarsyňyz:
+● 1000-e çenli mazmun klipine çenli
+● Çäklendirilmedik hapa we arhiw","Bu abonelikle:
+● 1.000'e kadar klip içerik
+● Sınırsız çöp ve arşiv","Бу язылу белән сез кабул итәрсез:
+Thread ● 1000гә кадәр эчтәлек
+● Чикләнмәгән чүп һәм архив","سىز تاپشۇرۇۋالىدىغان بۇ مۇشتەرىلىك بىلەن:
+● 1000 ھەرپلىك مەزمۇنغا يېتىدۇ
+● چەكلىمىسىز ئەخلەت ۋە ئارخىپ","За допомогою цієї підписки ви отримаєте:
+● До 1000 кліпів вмісту
+● Необмежений сміття та архів","اس رکنیت کے ساتھ آپ کو ملے گا:
+a 1000 تک مواد کے کلپس
+● لامحدود ردی کی ٹوکری اور محفوظ شدہ دستاویزات","Ushbu obuna bilan siz olasiz:
+● 1000 tagacha klip
+● Cheksiz axlat va arxiv","Ushbu obuna bilan siz olasiz:
+● 1000 tagacha klip
+● Cheksiz axlat va arxiv","Ushbu obuna bilan siz olasiz:
+● 1000 tagacha klip
+● Cheksiz axlat va arxiv","Với đăng ký này, bạn sẽ nhận được:
+● tối đa 1.000 clip nội dung
+● Thùng rác & Lưu trữ không giới hạn","通过此订阅，您将收到：
+●最多1,000个内容片段
+●无限垃圾和档案","通过此订阅，您将收到：
+●最多1,000个内容片段
+●无限垃圾和档案","通过此订阅，您将收到：
+●最多1,000个内容片段
+●无限垃圾和档案","通過此訂閱，您將收到：
+●最多1,000個內容片段
+●無限垃圾和檔案","通過此訂閱，您將收到：
+●最多1,000個內容片段
+●無限垃圾和檔案","通過此訂閱，您將收到：
+●最多1,000個內容片段
+●無限垃圾和檔案","通過此訂閱，您將收到：
+●最多1,000個內容片段
+●無限垃圾和檔案"
+Title,4,Text,,Basies - Jaarliks,መሰረታዊ - አመታዊ,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,أساسي - سنوي,Basic - yearly,Əsas - illik,Əsas - illik,Əsas - illik,Əsas - illik,Основен - годишно,বেসিক - বার্ষিক,বেসিক - বার্ষিক,Basic - Godišnje,Basic - Godišnje,Basic - Godišnje,Basic - Godišnje,Bàsic - Anual,Základní - ročně,Sylfaenol - blynyddol,Grundlæggende - årligt,Basic - jährlich,Basic - jährlich,Basic - jährlich,Basic - jährlich,Basic - jährlich,Βασικά - ετήσια,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Basic - Yearly,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Básico - Anual,Põhiline - igal aastal,اساسی - سالانه,Vuosittainen,Pangunahing - taun -taon,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Basique - annuel,Bunúsach - Bliantúil,મૂળભૂત - વાર્ષિક,בסיסי - שנתי,मूल - वार्षिक,Osnovno - godišnje,Osnovno - godišnje,Alap - évente,Հիմնական - տարեկան,Dasar - Tahunan,Grunn - Árlega,BASIC - annuale,BASIC - annuale,基本 - 毎年,ძირითადი - ყოველწლიურად,Негізгі - жыл сайын,មូលដ្ឋាន - ប្រចាំឆ្នាំ,ಮೂಲ - ವಾರ್ಷಿಕ,기본 - 매년,Негизги - Жылдык,ພື້ນຖານ - ປີ,Pagrindinis - kasmet,Pamata - gadā,Taketake - tau,Основно - годишно,അടിസ്ഥാന - വാർഷികം,Үндсэн - Жилийн,मूलभूत - वार्षिक,Asas - tahunan,Asas - tahunan,Bażiku - kull sena,Grunnleggende - årlig,आधारभूत - वार्षिक,BASIS - jaarlijks,BASIS - jaarlijks,ମ basic ଳିକ - ବାର୍ଷିକ |,ਮੁੱ basic ਲੀ - ਸਲਾਨਾ,ਮੁੱ basic ਲੀ - ਸਲਾਨਾ,Podstawowe - roczne,Básico - anual,Básico - anual,BASIC - anual,Базовый - ежегодный,Základné - ročne,Osnovno - letno,Themelore - vjetore,Основно - годишње,Основно - годишње,Основно - годишње,Основно - годишње,Основно - годишње,Основно - годишње,Основно - годишње,Основно - годишње,Grundläggande - årligen,Grundläggande - årligen,Msingi - kila mwaka,அடிப்படை - ஆண்டு,ప్రాథమిక - వార్షిక,พื้นฐาน - รายปี,መሰረታዊ - ዓመት ዓመት,Esasy - ýyl,Temel - Yıllık,Төп - ел саен,ئاساسىي - يىل,Основні - щорічно,بنیادی - سالانہ,Asosiy - yil,Asosiy - yil,Asosiy - yil,Cơ bản - hàng năm,基本 - 一年,基本 - 一年,基本 - 一年,基本 - 一年,基本 - 一年,基本 - 一年,基本 - 一年
+StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png,listing_Basic_Yearly_1.0.7.0/BasicLogo.png

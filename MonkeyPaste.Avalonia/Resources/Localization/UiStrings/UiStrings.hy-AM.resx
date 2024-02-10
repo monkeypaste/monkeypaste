@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Ոչ մի առանձնահատկություն չի սահմանափակվում բաժանորդագրությամբ, միայն պահեստային կարողությամբ եւ կարող եք փոփոխվել ցանկացած պահի:</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Վերականգնել ձեր գոյություն ունեցող հաշիվը ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Բովանդակությունն ու աղբը
+սահմանափակված է {0} եւ {1}
+համապատասխանաբար հոլովակներ:</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Թույլ է տալիս մինչեւ {2} բովանդակության եւ անսահմանափակ աղբարկղի պահոց:</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Անսահմանափակ եւ անսահմանափակ բովանդակություն եւ աղբարկղ:</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Վերականգնել</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Անվճար</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Ստանդարտ</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Անսահմանափակ</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Բաժանորդագրություն</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Ձեր գաղտնիությունը կարեւոր է, եւ Clipboard- ի տվյալները կարող են լինել շատ անձնական: Պահպանումը միշտ կոդավորված է, բայց կարող եք սահմանել գաղտնաբառ, որը կպահանջվի, եթե ձեր սարքը գողանա, կամ մեկ ուրիշը օգտագործում է ձեր սարքը:</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Գաղտնաբառ</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Միացվածության դեպքում էկրանի վերեւում ցանկացած դիմումից քարշ տալը կբացահայտի Monkepaste- ը `պարունակությունը պահելու համար MonkeyPaste:</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Հիմնական պատուհանի վերին ձախ մասում «կողպեքը» միացնելը դեռ թույլ կտա նվազել Monkepaste- ին:</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Պատուհանների ավելի շատ նախասիրություններ հասանելի են «Պարամետրեր -&gt; Նախապատվություններ -&gt; Պատուհանների ցանկ:</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Քաշեք բանան այստեղ:</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Քաշեք - դեպի - բաց</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Ստեղնաշարի դյուրանցումները կարող են վերանայվել կամ փոխվել ցանկացած պահի «Պարամետրեր -&gt; դյուրանցումներ» ընտրացանկից:</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Համաշխարհային բոլոր դյուրանցումները կասելի կլինեն, որպեսզի ավելի ուշ դրանք դնեք:</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkepaste- ի Clipboard- ի դյուրանցումները հասանելի կլինեն բոլոր ծրագրերում:</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Ներքին</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Թերություն</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Ժեստի պրոֆիլ</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Հե! Յ Եկեք մի քանի բան տեղադրենք `ձեր ընդհանուր փորձը` կապիտալի կիսապաշտպանության հետ:</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Ողջույն</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Monkepaste- ից առավելագույն օգտագործումը `ինքնաբերաբար բեռնվելը, երբ մուտք գործեք, լավ գաղափար է: Բայց դա ամբողջովին կախված է ձեզանից:</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Պահպանեք այն պատահական:</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Միացնել</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Բեռը մուտքի վրա:</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Միացվածության դեպքում էկրանի վերեւում պտտվող ժեստը կբացահայտի MonkeyPaste- ը:</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Ձախ - Կտտացնելով Taskbar Icon- ը դեռ կբացվի MonkeyPaste:</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Պատուհանների ավելի շատ նախասիրություններ հասանելի են «Պարամետրեր -&gt; Նախապատվություններ -&gt; Պատուհանների ցանկ:</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Հեշտ է:</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Ոլորեք այստեղ:</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Ոլորեք - դեպի - բաց</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p Align = "Center"&gt; MonkeyPaste է &lt;span colour = "Red&gt; Լիովին ինտեգրված &lt;/ span&gt; Drag - եւ - Drop &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Նետեք այստեղ:</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p Align = "Center"&gt; Այս եղանակը կարող է մուտք գործել &lt;span գույն = "կարմիր" &gt;&gt; առանց սեղմման &lt;/ span &gt;&gt; &amp; # x1f440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Քաշեք ինձ:</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Փորձարկել!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Փորձարկել!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Արդյունքներ չկա:</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Հաստատել</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Թարմացնել</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Որոնում ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Կարգավորումներ</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Կախվածություն.</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Տեղավորել</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք հեռացնել «{0» եւ դրա բոլոր նախադրյալներն ու դյուրանցումները:</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Տեղահանել</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>«{0}» արդյունք չունի:</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Ընտրություն չկա:</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Ոչ ոք</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Վարկեր.</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Նկարագիրը:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Նվիրաբերել:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Արտոնագիր.</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Ծրագրի URL.</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Հրապարակված է.</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Կարդացեք ինձ.</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Հաղորդել չարաշահման մասին.</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Թեմաներ</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Թարմացնել</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Տարբերակ:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Բաց պատուհանում</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Հեռացնել</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Թարմացնել</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Խնայել</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Հաջորդը ջնջելու համար:
+
+Թարմացրեք խուսափելու համար:</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Աղբարկղի կողքին:
+
+Թարմացրեք խուսափելու համար:</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Ֆայլեր</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Պատկեր</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Տեքստ</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Պատճենված {0</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Ֆայլեր | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} Գծեր</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Պատճեններ | {1} մածուկներ</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Շարժվել</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Ավելացնել</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Պատճեն</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Կտրել</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Մածուկ</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Պատճենել</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Չպահված ֆիլտր</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Խնդրում ենք ընտրել -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Ձեւաչափեր</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Ընթերցողներ</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Գրողներ</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Պլլերներ</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Ջնջել</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Կրկնակի</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Խմբագրել անունը</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Վերականգնել</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Պիտակներ</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Գործողություն</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Համաշխարհային երթուղղում</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Դահիճ</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Ժեստերը պետք է լինեն եզակի եւ կարող են ներառել միայն մեկ մուտքային բանալին:</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Ներքին &lt;/ b&gt; Բոլոր դյուրանցումները սահմանափակվում են դիմումի շրջանակներում: Սա իրականում նախատեսված տարբերակ չէ, բայց կարող է թույլ տալ հարմարեցնել, թե ինչ դյուրանցում եք անում գլոբալ &lt;i&gt; Someday &lt;/ i&gt;: &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; default &lt;/ b&gt; Բոլոր գլոբալ դյուրանցումները միացված են: &lt;B&gt; Show ուցադրել / թաքցնել հիմնական պատուհանը &lt;/ b&gt; դյուրանցում Օգտագործում է &lt;span գույնը = "կարմիր"&gt;&gt; գերակշռում է &lt;/ b&gt; caps lock. Դուք կարող եք փոխել այդ ուղղությունը կամ ժեստը ցանկացած պահի: Բայց &lt;span գույն = "Green"&gt;&gt; Փորձեք &lt;/ span&gt;
+&lt;/ li&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;Head&gt; &lt;/ Head&gt;
+&lt;Մարմնի&gt;
+&lt;H1&gt; Global դյուրանցման ռեժիմներ &lt;/ h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Պասիվ &lt;/ b&gt; դյուրանցում Monkepaste- ը կլսի ցանկացած դիմումի համար: &lt;br&gt;
+* Սա է &lt;i&gt; Միայն &lt;/ i&gt; տարբերակն այժմ Linux- ի համար:
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Նախա / B&gt; դյուրանցումը կկատարի &lt;b&gt; &lt;i&gt; առաջ &lt;/ i&gt; &lt;/ b&gt; Այն վարվում է ակտիվ կիրառմամբ: &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/ b&gt; դյուրանցումը կկատարի &lt;b&gt; &lt;i&gt; Հետո &lt;/ i&gt; &lt;/ b&gt; Այն վարվում է ակտիվ կիրառմամբ: &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; գերակայում է &lt;/ b&gt; Երբ MonkeyPaste- ը լսում է գերակշռող դյուրանցման մուտքի ստեղնը (ոչ փոփոխիչ բանալին):
+Այս տարբերակը կապահովի դյուրանցումը առանց հակամարտությունների ակտիվ դիմումի:
+&lt;/ li&gt;
+&lt;li&gt;
+Exclusive override &lt;/ b&gt; Սա հատուկ տիպի գերակշռող ռեժիմ է, որը նախատեսված է CAPS Lock ստեղնաշարի համար: Դա միայն թույլ է տալիս &lt;b&gt; մեկը &lt;/ b&gt; բանալին (ոչ փոփոխիչ) իր հանձնարարության համար: &lt;br&gt;
+Նորմալ գերազանցման ռեժիմում CAPS Lock- ը կարող է դառնալ &lt;i&gt; stuck վրա &lt;/ i&gt; Երբ սեղմվում է այլ ստեղների հետ միասին: &lt;br&gt;
+Այնպես որ, անկախ նրանից, թե ինչ այլ բանալիներ են ընկնում, եթե &lt;b&gt; hotkey &lt;/ b&gt; դյուրանցում է սեղմված, այն գերակա կլինի եւ կանխելու է &lt;/ i&gt;:
+&lt;/ li&gt;
+&lt;/ ul&gt;
+&lt;/ body&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Անջատել</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Բեռնեք, երբ այս օգտվողի հաշիվը մուտք է գործել, այլ ոչ թե այլ օգտվողների համար:</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Առկա կոնտակտներ օգտագործելը (պահանջում է Fetcher plugin) Այս դաշտը կօգտագործվի այս ձեւանմուշի բոլոր դեպքերի համար այս փաստաթղթում կամ ցանկացած դեպքում, եթե ընտրեք էլ. Փոստի հասցե Այստեղ այն դեպքում, երբ ձեր ընտրած կոնտակտի էլփոստի դաշտը կօգտագործվի այս փաստաթղթի բոլոր ատյանների համար: &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = կարճ տարին &lt;br/&gt; YYYY = երկար տարի &lt;br/&gt; մ տարի (1-12) &lt;br/&gt; mm = ամիս (01-12) &lt;br/&gt; mmm = ամսվա կրճատում (հունվար, փետր): . Դեկտեմբեր) &lt;br /&gt; mmmm = երկար ամիս (հունվար, փետրվար ... դեկտեմբեր) &lt;br /&gt; D = Day (1 - 31) &lt;br/&gt; DDD = Շաբաթվա օրը (երկուշաբթի, երեքշաբթի ... կիրակի) &lt;br /&gt; e = շաբաթվա կարճ օրը բառերով (երկուշաբթի, ... Արեւ) &lt;br/&gt; D - 1-ին, 3-րդ, 21-րդ, 22-րդ, 23-րդ, 31-րդ, 4-րդ ...) &lt;br /&gt; AM = ժամ առավոտյան / երեկոյան (0-12) &lt;br/&gt; HH = ժամ AM / PM (00-12) &lt;BR / &gt; H = ժամվա ընթացքում (0-23) &lt;br /&gt; HH = ժամվա ժամ (00-23) &lt;br/&gt; MM = րոպե &lt;br/&gt; &lt;br/&gt; &lt;br/&gt; Ա = AM / PM Մարկեր &lt;br/&gt; p = q.m./p.m. մարկեր</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Ընթացիկ ամսաթիվը եւ (կամ) ժամանակը կփոխարինվի DateTime ձեւանմուշների համար, երբ դրանք տեղադրվեն:</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>Այս ձեւանմուշի բոլոր դեպքերը կօգտագործեն տրամադրված տեքստը: &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>Այս ձեւանմուշի բոլոր դեպքերը կօգտագործեն տրամադրված տեքստը: &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Ավարտեք հավելվածը</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Միացնել բլոկը</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Միացնել inline- ը</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Փոփոխել ձեռնարկը</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Փոփոխել ձեռնարկը</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Դադարացրեք հավելված</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Անցնել նախկինում</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Անցնել նախկինում</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Վերսկսել հավելվածը</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Հավելված ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Մածուկ</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Թոշակ</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Անապաղում</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Թաքցրեք բոլորը «{0» ծանուցումները</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Հեռացնել</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Վերջին ակտիվ ծրագիրը անհայտ է: Անցեք նախատեսված ծրագրին `կապիկ մածուկին:</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Տեղադրեք, &lt;em&gt; &lt;i class = "paste-tooltip-indjox"&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Փոքրացնել</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Խնդրում ենք սպասել...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Կողպել</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Հաշիվ</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Օգնություն</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Պատճենել եւ տեղադրեք</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Նախապատվություններ</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Վերականգնել Նախնականը</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Զտիչ ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Դյուրանցումներ</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Ավելացնել ծրագիր</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Ավելացնել կայք</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Բլոկ?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Անուն</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Ծրագրեր</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Բլոկային տիրույթ:</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Արգելափակել URL:</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Դոմեյն</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Աղբյուրի URL- ի ճանաչումը կախված է նրանից, թե ինչպես է Clipboard ընկերական հյուրընկալող դիմումը, այնքան մերժում չի կարող երաշխավորվել</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Կայքեր</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Որոշ MonkeyPast- ի առանձնահատկություններ Օգտագործեք ստեղնաշարի ավտոմատացում `« Պատճենել »իրադարձությունները այլ ծրագրերում մոդելավորելու համար:
+
+Ավելացնել եւ (կամ) ընտրել ծրագիրը եզակի պատճենահանման դյուրանցմամբ (օրինակ, վահանակ կամ կճեպի նման) `այդ հատկությունների գործառույթը պատշաճ կերպով ապահովելու համար:</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Պատճենել դյուրանցում</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Ոչ ոք</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Նշված հայտի համար կօգտագործվի միայն ընտրված նախադրյալները: Չճշտված, &lt;em&gt; Clipboard Sidebar &lt;/ em&gt; հայտնաբերված լռելյայն նախադրյալները:</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>MonkeyPaste- ի շատ առանձնահատկություններ Օգտագործեք ստեղնաշարի ավտոմատացում `այլ ծրագրերի հետ շփվելու համար:
+
+Որոշ ծրագրեր (օրինակ, որոշ վահանակներ կամ կճեպներ) կարող են ունենալ ոչ լռելյայն մածուկի դյուրանցում:
+
+Պատշաճ փոխգործունակություն ապահովելու համար այդ դիմումի համար գրանցեք այդ դյուրանցումները այստեղ:</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Պաստառ դյուրանցում</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Ընթերցողներ</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Մերժված դիմումներից բոլոր ստեղնաշարի մոնիտորինգը կլինի &lt;b&gt; անտեսված &lt;/ b&gt;:</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Գրողներ</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Խմբագրել ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Ձեւաչափեր</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Մերժված</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Դյուրանցումներ</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Կցանկանայիք նաեւ հեռացնել բոլոր {0} տեսահոլովակները «{1}» -ից:</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Հեռացրեք տեսահոլովակները:</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Ծրագիր</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Զննեք ծրագիրը ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Ընտրեք դիմումի ուղին</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք հեռացնել սովորական դյուրանցումները {0-ի համար:</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք հանել սովորական ձեւաչափերը {0} -ի համար:</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Այս ծրագրի համար նշանակված Clipboard- ի ձեւաչափ չկա: Ոչ մի տվյալ չի կարդա դրանից `կտրվածքի / կրկնօրինակման կամ քարշի փորձի միջոցով եւ - անկում դեպի Monkepaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Այս ծրագրի համար նշանակված Clipboard- ի ձեւաչափ չկա: Ավտոմատացված մածուկը կամ քաշելը եւ - Կապույտից կաթիլը չի ​​ազդի (դրա դատարկ տվյալները):</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք վերականգնել բոլոր դյուրանցումները: Բոլոր սովորական դյուրանցումները կհանվեն:</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք փոխել ձեր դյուրանցման երթուղղման պրոֆիլը «{0}» -ին:</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Բոլորը</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Քողարկյալներ</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Զտիչներ</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Ձեւաչափեր</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Պիտակներ</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Այսօր</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Աղբ</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Մասին</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Հեշտ է:</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Կրկնակի կտտացրեք անսպառ</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Մաքսատուրք</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Համաշխարհային</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Այս համադրությունը հակասում է «{0}» -ով, որը մաքրվելու է, եթե պահպանվի:</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Պետք է դյուրանցում տրամադրվի:</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Սա համաշխարհային դյուրանցում է: Դա նշանակում է, որ այն կփորձի կատարել, երբ այն կատարվի: Փորձեք այն բավարար չափով դարձնել այն եզակի (կամ փոխել «երթուղղման տեսակը») այլ դիմումներից դյուրանցումներին չհանդիպելու համար:</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Համաշխարհային</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Դյուրանցումը պետք է պարունակի մեկ եւ միայն մեկ ոչ փոփոխիչ բանալին:</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Գրանցվելու համար սեղմեք ցանկացած բանալին ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Հանձնարարեք դյուրանցում</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Իմացեք ավելին ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Արդիականացում</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Չեղարկել</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Ուղղել</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Անտեսել</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Ոչ</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Լավ</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Փորձել</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Անջատել</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Ներկայացնել</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Այո</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Ամեն տարի</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Ամսական</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Փորձեք անվճար:</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Բիլինգի ցիկլ</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Էլ</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Մուտք</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Ստուգեք ձեր կապը
+Եվ կրկին փորձեք:</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Դուրս գալ</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Հաջորդ վճարումը</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Գաղտնաբառ</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Ռեստ</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Էլ.փոստը վավեր չէ</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Գաղտնաբառերը չեն համապատասխանում.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Գաղտնաբառը պետք է լինի առնվազն {0 նիշ:</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Հիշեք</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Ստուգեք ձեր էլ. Փոստը `ձեր հաշիվը հաստատելու համար</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Վերականգնել գաղտնաբառը</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, Yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>MMM D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM / DD / YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Երբեք</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Անվճար {0} Day Day Trial</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Կատարված խնդիր է առաջացել
+Ձեր գնումը:
+
+Ստուգելով ձեր կապը եւ
+Պարամետրերը կարող են օգնել:
+
+Կցանկանայիք կրկին փորձել:</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Ձեր հաշիվը հաջողությամբ է եղել
+արդիականացված է.
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Գնեք հաջող:</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Սխալ</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Կապը ձախողվեց.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Փորձել</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Հաշիվը փոխվեց</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Ձեր բաժանորդագրությունն այժմ {0} / {1} է {2} բովանդակություն եւ աղբարկղի պահեստավորում:
+Բայց մի անհանգստացեք, ոչ մի տվյալ չի կորցվում նվազելուց հետո: Միայն նոր տեսահոլովակները կգնահատվեն:</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Շնորհավորում ենք Ձեր բաժանորդագրությունն այժմ {0} / {1} է {2} բովանդակություն եւ աղբարկղի պահեստավորում:</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Աղբը կամ ինչ-որ բան ապացուցել
+«{0}» - ից ավելացնել ավելին:</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' Պահեստավորումն է 1}:</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Վերականգնել</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} արգելափակված</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Բովանդակության եւ աղբի հզորությունը հասավ:</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' Պահեստավորումն է 1}:</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Բովանդակության կարողությունը հասավ:</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Դուք կարող եք թաքցնել այս նախազգուշացումները
+Կտտացնելով «Թաքցնել բոլորը»
+Ընտրանքների մենյու վերը նշված:</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max Trash պահեստը {0 է:</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Աղբարկղի կարողությունը հասավ:</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} անվավեր է</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} Պետք է լինի առնվազն {1} նիշ</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} Կարող է լինել միայն 1} նիշ</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Տեղադրեք, '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Վճարումը ձեր {0
+բաժանորդագրությունը պայմանավորված էր 1}
+եւ չի ստացվել:
+
+Խնդրում ենք թարմացնել ձեր
+Վճարման տեղեկատվություն:</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Վճարումը ձեր {0
+բաժանորդագրությունը պայմանավորված էր 1}
+եւ չի ստացվել:
+
+Խնդրում ենք միանալ
+Ինտերնետը սարքի վրա
+ձեր բաժանորդագրությամբ եւ
+Վերագործարկեք, շարունակելու համար
+Օգտագործելով ձեր {0} պլանը:</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Վճարումը ձեր {0
+բաժանորդագրությունը պայմանավորված էր 1}
+եւ չի ստացվել:
+
+Խնդրում ենք բացել կամ վերագործարկել
+Monkepaste սարքի վրա
+ձեր բաժանորդագրությամբ
+Շարունակեք օգտագործել ձեր
+{0} պլան:</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Հաշիվն ավարտվել է</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Նշում</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store- ը թույլ չի տալիս աստիճանը
+Բաժանորդային հավելումների փոփոխություններ:
+
+Դուք պետք է չեղյալ հայտարարեք ձեր
+{0} / {1} պլանավորել ինքներդ
+կամ ձեզ համար գանձվելու է երկուսի համար:
+
+Կցանկանայիք հիմա գնալ:</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Ձեր գաղտնաբառը վերափոխվել է:
+
+Խնդրում ենք ստուգել ձեր էլ. Փոստը եւ
+Հետեւեք փոփոխության հղմանը
+քո գաղտնաբառը.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Մուտք</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Հեղինակ (ներ)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Պահանջվում է, որ շարունակեք ընդունել հետեւյալ լիցենզիայի պայմանները:</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Հետեւյալ փաթեթը (ներ) ը պահանջում է, որ տեղադրելուց առաջ ընդունեք դրանց լիցենզիայի պայմանները:</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Ես անկում եմ ապրում</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>«Ես ընդունում եմ» կտտացնելը նշանակում է, որ դուք համաձայն եք այս ծրագրի լիցենզիայի պայմաններին: Եթե ​​համաձայն չեք պայմաններին, կտտացրեք «Ես անկում եմ»:</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Կտտացնելով «Ես ընդունում եմ», նշանակում է, որ դուք համաձայն եք վերը թվարկված plugin- ի (ներ) ի լիցենզիայի պայմաններին: Եթե ​​համաձայն չեք պայմաններին, կտտացրեք «Ես անկում եմ»:</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Դիտեք լիցենզիան</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Լիցենզիայի ընդունում</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Համաձայն եմ</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Ակտիվ</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Անցանց</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Չգրանցված</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Կատարած</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ գաղտնաբառերը չեն համընկնում</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Գաղտնաբառ</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Ձեր բաժանորդագրությունն է
+Այժմ տեղադրված է {0} / {1}:</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Գտնվել է հաշիվ</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Մուտքը ձախողվեց</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Գրանցումը ձախողվեց</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Գրանցում հաջող:</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Վերականգնել սխալը</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Բաժանորդագրություն</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Ինչ նորություն կա</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Երբեք</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Անսահմանափակ</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>կարողություն</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>մնացած</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>ընդհանուր</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Ձեր վճարումը անցել է:</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Բացառիկ շրջանցող դյուրանցումները կարող են ներառել միայն մեկ բանալին, եւ այդ բանալին չի կարող լինել փոփոխիչ բանալին:</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Ժամկետանց</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Բեռնում</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Անաշխատունակ</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Նշում! Այս գաղտնաբառը պարտադիր է եւ միայն լրացուցիչ անվտանգության համար: Ձեր տվյալներն արդեն կոդավորված են եւ երբեք չեն կիսվում: Այս գաղտնաբառը պարզապես խանգարում է մեկին, ում ոչ թե դուք չեք բեռնում MONKEYPASTE- ից, եթե նրանք ինչ-որ կերպ օգտվեն ձեր աշխատասեղանին (գողացված, դուք թողնում եք սենյակը եւ այլն):</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Հիշեք Drop պարամետրերը.</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Թերթել plugins</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Վերլուծել</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Արագ գործողություններ</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Փոփոխեք խմբագրել</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Փոքրիկ</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Ծանոթություններ</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Պարզ տեքստ</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Բաց պատուհանում</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Կտտացրեք + Ctrl- ը `հետեւելու ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Կտտացրեք + Alt- ը `հետեւելու ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Քորոց կամ ցանկացած լրատվամիջոցներ այստեղ:</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Պարզ</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0-ից բարձր շեմերը կտրամադրեն Fuzzy գույնի համընկնում, օգտագործելով Euclidean հեռավորությունը RGBA Colorspace- ում:
+
+Օրինակ, եթե կարմիրը (# FF0000) որոնման տերմինը եւ սեւը (# 000000) պատկերային տեսահոլովակում պիքսել է, ապա գույնի հեռավորությունը կլինի 255: Սեւից մինչեւ ալֆա ալիքը հնարավոր է</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>հետեւյալ բոլորը ճշմարիտ են</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Հոլովակ</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Հավաքածուներ</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Մկնիկի ռեժիմներ</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Հրահրում</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Դադար</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Վերսկսել</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Նոր ձգան</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Ավելացնել նախադրված</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Նախադրյալներ</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Անալիզատոր</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Կտրում</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Ցիկլի կողմնորոշում</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Անջատեք ցանցի դասավորությունը</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Գործի զգայուն</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Շեմք</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Ամբողջ բառը</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Ոչ մեկը սահմանված է</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Երթուղղում</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Գործողություն</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Ցանց</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Կատարած</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Հաջորդ</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Նախորդ</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Լքել</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Գոյություն ունեցող հաշիվ:</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Հաջորդ վճարումը</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Գրանցումն հնարավորություն է տալիս ձեր վճարովի բաժանորդագրությունը կրել ձեր բոլոր սարքերով (առկայությունից հետո): Մենք չենք սպամ ձեր էլ. Փոստը, որը մենք խոստանում ենք:</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Բաժանորդագրություն</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Օգտագործողի անունը</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Պետք է գրանցվել:</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Աղբյուրներ</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Տարօրինակ, ոչինչ չկա: Ինչ-որ բան պետք է սխալ լինի</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Հեռացնել</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Պահանջում է վերագործարկում</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Առաջ քաշված</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Սխալ «{0}» հավելվածի արդյունահանումը</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Plugin- ի տեղադրման սխալ. '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>«{0}» կոռումպացված կամ ոչ պատշաճ կառուցվածքի տեղադրման սխալ: Դրսեւորումը պետք է գոյություն ունենա «{1}» - ում, բայց չի գտնվել:</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Սխալ plugin plugin- ի plugest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Ոչ մի plugin բեռնված է ուղեցույցով. '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} Սխալ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Սխալ է Plugin- ը Temp Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Սխալ «{0}» -ին «{1}» -ին կրկնօրինակում: Մանրամասներ. '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Տպված տեքստը ավտոմատ կերպով կկիրառվի որոնման վրա, երբ տեքստի տուփը կենտրոնացած չէ:</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Ավտոմատ որոնման մուտք</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Գաղտնաբառի փոփոխությունը ձախողվեց</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Փոխում</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Փոխել գաղտնաբառը</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Պարզ</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Մաքրել գաղտնաբառը</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Բովանդակություն</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Բովանդակության տառատեսակի չափը</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Երբ ճշմարիտ է, տեսահոլովակի մեջ տեղադրված արտաքին բովանդակությունը կօգտագործի տեսահոլովակների ձեւաչափը եւ ոչ թե այն, ինչ առկա է աղբյուրից:</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Տեղադրեք, թողեք կամ ավելացրեք նպատակակետի ձեւաչափումը</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք մոռանալ գաղտնաբառը:</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Մոռանալ</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Մոռացեք գաղտնաբառը</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Պրոֆիլ</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Թաքցնել հզորության ջրանիշներ</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Երբ նոր Clipboard պարունակությունը կցված է, այն չի հետեւելու որպես նոր տեսահոլովակ</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Անտեսել հավելվածները</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Երբ Clipboard- ը համապատասխանում է գոյություն ունեցող տեսահոլովակի, այդ տեսահոլովակը կօգտագործվի նորը ստեղծելու փոխարեն</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Անտեսել նոր կրկնօրինակները</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Հավելվածի ներսում սեղմիչ փոփոխությունները չեն հետեւելու</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Անտեսեք ներքին ստեղնաշարի հետեւումը</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Տեղերը, ներդիրները եւ նոր տողերը անտեսվելու են հետեւելուց</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Անտեսել միայն սպիտակ տարածությունը</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Բեռը մուտքի վրա</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Անիմացիոն պատուհանը</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Անթափանցիկություն</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Show ույց տալ վարք</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Հիմնական պատուհանը կբացահայտվի, ձեր մոնիտորի վերին եզրին կատարելով ոլորման ժեստ</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Show ուցադրել վերին էկրանի ոլորման</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Ծանուցման ծավալը</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Այս պարամետրը կհետեւի համակարգի - Լայն ստեղնաշարի մածուկի հաշվարկների հաշվարկների համար վիճակագրությունը: Այս տեղեկատվությունը մասնավոր է եւ ոչ թե համօգտագործված, այլեւ երաշխավորված չէ: Acc շգրիտ արդյունքները կարող են պահանջել «Պարամետրեր&gt; Պատճեններ եւ մածուկներ» դիմումի հատուկ հատուկ հրամանի տրամադրում:</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Մածուկի պատմություն</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Շատ քողարկված հոլովակներ (ինչպես զննարկիչի ներդիրները) կարող են սպառում զգալի հիշողություն: Հեռացումը առաջին հերթին `առաջին - դուրս</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Քորոց հզորություն</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Սա վերաբերում է բոլոր ավտո - ավարտվող մուտքերին, ստորին արժեքները կբարելավեն աշխատանքը</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Վերջին տեքստի սահմանը</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Վստահ եք, որ ուզում եք
+Վերականգնել կանխադրված նախասիրությունները:
+
+Սա չի կարող վերացնել:
+
+* Հայտը կվերագործարկվի մեկ անգամ ամբողջական:</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք վերականգնել բոլոր ծանուցումները:
+
+* Սա հնարավոր չէ հետարկել:</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste- ը արտաքին ծրագրին տեղադրելու ժամանակ դահլիճում (գերակայում է): Սա կկազմի &lt;/ b&gt; փորձը `վերականգնելու արտաքին մածուկից հետո clipboard- ի վիճակը:
+
+Ընդհանուր վերականգնումը չի կարող երաշխավորվել եւ կարող է նվազեցնել կատարումը կամ նույնիսկ վթարի ենթարկվել Monkepaste- ը `կախված տվյալների աղբյուրից:</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Կապիկի մակնշվելուց հետո վերափոխեք clipboard- ը</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Հնարավոր չէ ջնջել plugin քեշը ճանապարհից. '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Բոլոր plugins- ը կվերականգնվի նախնական կանխադրված վիճակ</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin cache</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք վերափոխել բոլոր plugins- ը կանխադրված:</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք վերականգնել ձեր գաղտնաբառը:</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Դիմումների բոլոր դյուրանցումները կվերականգնվեն իրենց լռելյայն հիմնական ժեստերին:</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Վերականգնել դյուրանցումները</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Նախկինում բոլոր անտեսված ծանուցագրերը:</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Վերականգնել ծանուցումները</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Հնարավորություն կարող է լինել բավականին դանդաղ) Ձեւաչափված ձեւաչափումը կնվազեցնի հիշողության սպառումը, բայց կխոչընդոտի որոշ առաջադեմ առանձնահատկություններ, ինչպիսիք են. Հավելված, ձեւանմուշներ եւ փոխարինում</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Հարուստ բովանդակություն</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Սահմանել գաղտնաբառ</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Show ույց տալ ակնարկներ</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Show ուցադրել առաջադրանքի սահմանում</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Show ուցադրել առաջադրանքի փոխարկիչում</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Show ույց տալ վերնագրերը</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Միացվածության դեպքում էկրանի վերեւում ցանկացած դիմումից քարշ տալը կբացահայտի Monkepaste- ը `պարունակությունը պահելու համար MonkeyPaste:</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Show ուցադրել քարշը դեպի էկրանի վերեւում</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Ձայնային թեման</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Ուղղագրության ստուգում</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Գործարկման ընթացքում Clipboard- ի աղբյուրը անհայտ կլինի եւ կախված ձեր անվտանգության պարամետրերից, բովանդակությունը կարող է բխել բացառված կայքից կամ դիմումից:</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Ավելացնել գործարկման հոլովակ</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Լսեք Clipboard- ին գործարկման մեջ</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Ընտրել</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Զգուշություն! Այլ պալիտրա գույներն ընտրվում են `օգտագործելով մաթեմատիկական ոչ աչքերը: Ուստի տեղյակ եղեք, որ որոշ գույնի եւ ոճի համադրություններ կարող են պատշաճ հակադրություն չունենալ ընթերցելիության համար:</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Թեման գույն</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Թեմաների ոճը</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Սահմանված ընդմիջումով գործարկման ժամանակ ավտոմատ աղբարկղը տեղի կունենա:</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Աղբի մաքրում</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Միջերես</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Վերականգնման բարձր սահմանները կարող են ազդել կատարման վրա</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Վերացնել սահմանը</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Ոչ մի սահմանափակում</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Օգտագործվում է առաջադեմ ֆայլի որոնում ոչ նախապես ֆայլերի տեսակների համար</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Օգտագործող - Սահմանված որոնման ընդլայնումներ</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Գտեք եւ փոխարինեք ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Մածուկ այստեղ</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Share ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Տեղավորել</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Կառավարեք ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Վերանվանել</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Միավոր: {0</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Տեսակը, {0</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Մշտապես ջնջել</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Զննեք «{0}» -ին</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Ձեվափոխել</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Մուտքագրում</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Արտադիտակ</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Աղբյուրներ</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Վերականգնել</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Ընտրեք Image ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Գույն</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Կառավարեք '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Բաց անել</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Խնդրում ենք սպասել...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Ֆոնի գույնը</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Մաքրել բոլորը</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Clipboard- ի ձեւաչափերը</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Delete նջել բոլորը</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Խմբագրել Մանրամասները</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Անուն</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Գտնել</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Տառատեսակի գույնը</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Ձեւաչափի ներկ</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Ընտրության մեջ</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Տեղադրեք պատկերը</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Տեղադրեք հղումը</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Տեղադրեք տեսանյութը</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Համընկնում</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Նոր ձեւանմուշ</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Հաջորդ ձեւանմուշը</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Մուտքագրեք մածուկի տեքստը ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Նախորդ ձեւանմուշ</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Պարբերաբար արտահայտում</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Փոխարինել բոլորը</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Փոխարինել</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Ամբողջ բառը</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Փաթեթավորեք շուրջը</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Բլոկ</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Դոմեյն</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Ուցադրել թղթապանակը</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Բաց թողնել</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Մասին</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Հավելված բլոկ</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Հավելեք inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - պատճենել</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Եղանակներ</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Խնդրում ենք սպասել, որ Monkepaste- ը բեռնում է ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Թողնել</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Կտտացրեք մածուկը</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Խումբ</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Ֆիլտր</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Մշտապես ջնջել բոլորը</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Վերականգնել բոլորը</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Գործողություն</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL- ն արդեն գոյություն ունի. '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL- ն պետք է լինի վավեր ձեւաչափով:</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Մուտքագրեք ամբողջական URL.</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Ավելացնել URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Մուտքագրեք արժեքները</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Պատճենել տեքստը կամ ֆայլերը կիրառելու համար:</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Հավելված {0} {1} ռեժիմն ակտիվացված է</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Այժմ կցված կլինեն clipboard- ի փոփոխությունները</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Append ռեժիմն ակտիվացնելուց հետո</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Clipboard- ի փոփոխություններն այժմ կտանեն</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Մինչեւ հավելված ռեժիմը ակտիվացված է</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Բլոկ</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Նորմալ clipboard- ի վարքը վերականգնվել է</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Հավելվածը անջատված է</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Տեսահոլովակի վերեւում կամ Botom- ին ավելացված հավելվածները</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Ընդլայնված հավելվածի ռեժիմն ակտիվացված է</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Ներքնաշղթան</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Ձեռնարկ</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Հավելեք ձեր ներկայիս ընտրությանը:</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Ձեռնարկի հավելվածի ռեժիմն ակտիվացված է</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Clipboard- ի կուտակումը դադարեցվել է</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Append դադար տվեց</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Վերսկսվել է Clipboard- ի կուտակումը</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Հավելվածը վերսկսվեց</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք ավարտել հավելվածը:</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Համատեղելիության ռեժիմում խմբագրումը կհեռացնի բոլոր հարուստ ձեւաչափումը: Համոզված եք, որ ցանկանում եք փոփոխել դա:</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Տվյալների քայքայման նախազգուշացում</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Ակտիվ</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Միացված</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Անկայուն</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Վրա</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Դադարել</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Արդյունք</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Կարգավիճակը</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Անհայտ սխալ է տեղի ունեցել:</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Մնացել են փորձերը</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Մուտքագրեք գաղտնաբառ</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Հաստատել</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Կապ</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Ամսաթիվ ժամանակ</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք ջնջել «{0}» -ի բոլոր օգտագործումը:
+
+Սա չի կարող վերացնել:</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Դինամիկ</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Ստատիկ</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} դատարկ է ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Ավելի շուտ շուտ կգա:</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Մուտքի բեռնումը անջատված է</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Մուտք բեռնում Անջատեք հաջողությունը</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Մուտքի բեռը միացնել ձախողվել է</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Մուտք բեռը միացնել հաջողությունը</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Թաքցնել</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Monkey մածուկն այժմ բեռնված է:
+Clipboard Լսելը հետեւյալն է. {0</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Բեռնված</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Ցուցադրում</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Ավտոմատ պատճենման ընտրության ռեժիմը. {0</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Ռեժիմը փոխվել է</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Աջ սեղմեք մածուկի ռեժիմը. {0</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin- ը թարմացվել է</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Մածուկ '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Գործարկել '{0}' անալիզատոր</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Գործարկել '{0}' ձգան</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Ընտրեք «{0}»</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք ջնջել «{0» եւ բոլոր հարակից գործողությունները:</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Ձգան</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Կցանկանայիք հեռացնել բոլոր ենթաօրենսդրությունները '{0}' -ի համար: (Հակառակ դեպքում դրանք նորից կվերածվեն «{1}» - ին)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Հեռացրեք ընտրանքները</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Դուք իսկապես ուզում եք goto '{0}':</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Հաշիվ</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Անալիզատորներ</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Դիմումի գործողություններ</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Հոլովակ</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Բովանդակություն</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Փոխարկիչներ</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Մշակում</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Տվյալներ</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Ուղղություն</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Քաշեք եւ թողեք</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Թողնել հրաշագործ</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Սրբապատկերներ</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Անտառահատ</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Միջերես</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Մածուկի գործողություններ</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Նախապատվություններ</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Որոնել</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Դյուրանցումներ</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Տեսակավորել</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Հնչյուններ</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Համակարգի սկուտեղ</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Հավաքածուներ</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Թեմա</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Հրահրում</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Վեբ կայքերի գործառնություններ</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Լեզու</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Clipboard- ը սահմանում է մուտքային սեղմակով:</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Ահ</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Ապտակ</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Քիթ</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Ընդհանուր նշանակության ձայնային եւ (կամ) համակարգի սկուտեղի հաղորդագրության ազդանշաններ: Alert Action- ը ազդում է դրանց ներդրման վրա:</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Հաղորդագրություն</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Կապիկ</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Նախադիտում</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Ցուցադրում?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Ժամանակի տոստի հաղորդագրությունը ցուցադրվում է վայրկյանների ընթացքում: Երբ արժեքը 0 հաղորդագրությունը պետք է փակվի ձեռքով:</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Show ույց տալ ժամանակը (ներ)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Սոնար</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Ձայն?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Ձայնային տեսակը</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Տրանսբոլ</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Ծավալ</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Անալիզատոր</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Վերամշակում է իր մուտքային տեսահոլովակը, օգտագործելով նշանակված անալիզատորի նախադրվածը:</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Մուտքային բովանդակությունը կապված է ընտրված հավաքածուի հետ</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Հղում է իր մուտքային հոլովակը նշանակված պիտակների հավաքածուի:</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Պիտակ</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Գործի զգայուն:</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Սա կարող է լինել ստատիկ տեքստ `համեմատելու մուտքի եւ (կամ) ընտրված հատկությունները (ֆիլտրի կոճակի միջոցով) կփոխարինվի, երբ վիճակը գնահատվի:</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Վիճակի տվյալներ</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Option անկանոն կամընտիր JPOPP հարցում, որը կկիրառվի ընտրված «մուտքային գույքի» վրա, նախքան վիճակը գնահատելը:</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Մուտքային ֆիլտր</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Այս պայմանական օգտագործման համար օգտագործված տեսահոլովակը:
+
+«Վերջին ելքային» գույքը ներկայումս աջակցվում է միայն այն դեպքում, երբ այս պայմանականը անալիզատորի ակցիայի զավակ է, եւ տրամադրված տվյալները տարբեր կլինեն `կախված ծնողական անալիզատորի արդյունքից:
+
+Խնդիրների լուծման համար «ազդանշանային գործողություն» կցեք այս պայմանական ծնողի հետ եւ նախազգուշացրեք «Հաղորդագրության» պարամետրը `այս մուտքային գույքը համապատասխանելու համար: Սա թույլ կտա վերանայել այս պայմանական պայմանական օգտագործման իրական տվյալները:</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Մուտքային գույք</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Կատարում է տեքստային համեմատություն մուտքային սեղմակի կամ նախորդ գործողությունների արդյունքի վերաբերյալ: Երբ համեմատությունը ձախողվում է (դա ոչ թե խաղ չէ) Երեխայի գործողություններ չեն կատարվի: Այսպիսով, այն գործում է տրամաբանական դարպասի նման:</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Բոլոր իրական կամ կեղծ գործողությունները, որտեղ արդյունքը ճշմարիտ կլինի միայն երեխաների գործողությունները:</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Պայման</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Բոլորը</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Պատրաստված են, երբ ընտրված տիպի տեսակը ցանկացած եղանակով ավելացվում է համակարգին (Clipboard, քաշել - եւ - կաթիլ, վերլուծած կամ կրկնօրինակված):</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Միայն կատարեք այս ձգանը, եթե մուտքի տեսահոլովակը նոր է եւ ոչ թե կրկնօրինակ: Սա անկախ է ցանկացած նախապատվության սահմանման, թե արդյոք նոր բովանդակությունը անտեսվում է, թե ոչ:</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Անտեսել կրկնօրինակը</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Այս տիպի միայն հոլովակները կդարձնեն այս գործողությունը:</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Հղում է իր մուտքային հոլովակը նշանակված պիտակների հավաքածուի:</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Պատրաստված է, երբ հոլովակը կապված է նշված պիտակների հավաքածուի հետ:</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Հավաքածու</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Միլլիսեկոնդերում ժամանակի քանակը սպասել է երեխաների առջեւ</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Ուշանալ</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Փորձնական) հիմնականում օգտագործվում է հեռակառավարվող աղբյուրների կամ օգնություն ցուցաբերելու համար կրկնվող գործողությունների հետ միասին, երկարաժամկետ գործողություններով:</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Մնացած դատարկ, ելքային ֆայլը կօգտագործի մուտքային սեղմիչի վերնագիրը որպես ֆայլի անվանումը:</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Պատվերով անուն</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Գրացուցակը, որտեղ ֆայլը գրվելու է:</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Տեղեկատու</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Պահպանում է մուտքը ընտրված թղթապանակում:</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Առաջացել են, երբ ընտրված թղթապանակի բովանդակությունը փոխվում է: Արդյունքը կլինի նոր կամ գոյություն ունեցող (երբ անտեսման կրկնօրինակների նախապատվությունը հնարավորություն է տրվել) ֆայլի կամ թղթապանակի ֆայլի սեղմակ, որը փոխվել է փոփոխության տեսակի հետ միասին:</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Իրադարձություններ</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Թղթապանակ</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Անտեսել կրկնօրինակը</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0 արժեքը անորոշ ժամանակով կկրկնի ծնողական գործողությունը</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Կրկնեք հաշվել</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Ժամանակի քանակը MillIseconds- ում սպասելու ժամանակ, երբ ծնողական գործողությունը ավարտվի</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Կրկնել հետաձգումը</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Փորձարարական), որն օգտագործվում է գործողությունների օղակների ստեղծման կամ կրկնվող առաջադրանքների ստեղծման համար: Կրկնելիս այն բոլոր երեխաներին կրկին կկատարի իր սկզբնական ներդրմամբ: Առանց կրկնվող հաշվարկի ընդմիջում օգտագործելիս ձգան պետք է անջատվի եւ կրկնօրինակում է կրկնությունը դադարեցնելու համար: Կարող է օգտակար լինել քվեարկության կամ վեբ գրության ավտոմատացման համար:</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Պատրաստված եք համաշխարհային դյուրանցմամբ, որը դուք սահմանում եք: Եթե ​​MonkeyPaste- ը ակտիվ լինի, այն կփորձի օգտագործել ընտրված տեսահոլովակը (եթե կա մեկը) որպես մուտք: Հակառակ դեպքում դա կփորձի օգտագործել clipboard- ը որպես դրա ներդրում:
+
+Նշում. Դյուրանցման ձգան դեռ կկատարվի, եթե չկա մուտք, այն ճկուն պահելու համար (այնպես որ այն կարող է լինել մակրո ձգան եւ այլն):</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Դյուրանցման ձգան</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Առաջացած, երբ գրանցված դյուրանցումը ցանկացած պահի սեղմվում է ընթացիկ clipboard- ով</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Այս գործողությունը ծրագիրը պահանջում է վերագործարկել: Կցանկանայիք դա անել հիմա:</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Խնդիր կար: Դուք պետք է ձեռքով վերագործարկեք դիմումը:</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Վերլուծել անոտորի հետ</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Անոտան ձգան</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Ներկառուցված տարրերի մեջ կարդացվում են միայն: Կրկնօրինակեք փոփոխելու համար:</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Անանուն</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Մաքսատուրք</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Երեկ</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} Օրեր առաջ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 ժամ առաջ</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} ժամ առաջ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Հենց հիմա</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Մի րոպե առաջ</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} րոպե առաջ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Անցած ամիս</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} ամիս առաջ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Անցած շաբաթ</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} շաբաթ առաջ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} տարի առաջ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Ծանոթություններ</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Դիմումի անվանումը</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Դիմումի ուղին</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Գործի զգայուն</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Բովանդակություն</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Ֆայլի տեսակը</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Պատկերի տեսակը</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Պարբերաբար արտահայտում</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Տեքստի տեսակը</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Կոչում</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL տիտղոս</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Ամբողջ բառը</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Բացելու համար վերեւի էկրանի եզրին երկայնքով պտտվելը, սա կբացվի հիմնական պատուհանը, երբ այն բացվի: Թույլ տալով ավելի արագ բազմակողմանի աշխատանքային փուլեր:
+
+* Անկյուններն առկա են ձեր բոլոր էկրանների, ոչ թե ըստ մոնիտորի:</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Show ուցադրել պատուհանը եւ կողպեքը</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Անվճար!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Տվեք մեզ 5 աստղ:</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Delete նջել բոլորը</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Delete նջել բոլոր բովանդակությունը</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Համոզված եք, որ ցանկանում եք ջնջել
+Ձեր բոլոր տեսահոլովակները ?!
+
+* Այս գործողությունը չի կարող վերացնել:</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Ես Indy Dev- ը խնդրում եմ ցույց տալ որոշակի աջակցություն:</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Monkepaste- ի նման:</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} Ընդունում է միայն տիպի (ներ) ի ներդրում. {1</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Auto Copy Mode - Mouse ձախ կոճակը թողարկվում է «Պատճենման» միջոցառումը ամեն անգամ, երբ մկնիկի ձախ կոճակը թողարկվում է:</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Right կտտացրեք մածուկի ռեժիմը - ամեն անգամ մկնիկի աջ կոճակը թողարկվում է «մածուկի» միջոցառմանը</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Նախանշան</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Show ուցադրել plugin թղթապանակը</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Հաղորդել</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Տեղավորել</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Show ույց տալ գործիքներ</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Անալիզատորները նշում են իրենց ներդրումը կամ ստեղծում են նոր տեսահոլովակներ, որպես ելք: Անալիզատորների երեխաները պետք է որոշեն, թե որ մեկը նրանց պետք է որպես դրանց մուտք: Դա սովորաբար վերջին արդյունքն է:</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Մուտքագրեք տեսակը</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger Designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Ընտրեք {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Չի գտնվել...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} ձգան</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Երբ ստուգում է պայմանի իրական կամ կեղծ արդյունքը, կտտացվի: Այսպիսով, օրինակ, «պարունակում է» պայմանը «կդառնա» չի պարունակում »:</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Չի</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Խնդրում ենք սպասել...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Գույնի ընտրություն</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Ընտրեք խաղի գույնը</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Դյուրանցման ձգանման նման, բայց երբ հիմնական համադրությունը սեղմվում է, «Պատճեն» միջոցառումը կմիացվի ակտիվ դիմումում, որպեսզի այն դեռեւս ստեղծվի պատճենահանման հետ ֆոնին, օգտագործելով Սիմուլյացված պատճենահանման տվյալներ:</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Ընդլայնված ֆիլտր</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Թաքցնել ֆիլտրերը</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Վերականգնել ֆիլտրերը</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Ստեղծեք զտիչ</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Ընտրովի) Երբ մնացել է դատարկ, տեղադրելու է այս գործողության ներդրումը: Այստեղ տրամադրված ցանկացած բան վերաբերվելու է որպես միայն պարզ տեքստ:</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Բովանդակություն Clipboard- ի համար</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Երբ այս գործողությունը սայթաքելուց հետո ոչ մի հոլովակ չի ավելացվի:</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Անտեսել</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Ոչ մի անալիզատոր չի ընտրվել «{0}» գործողության համար</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>An անալիզատոր «{0}» գործողության համար չի գտնվել</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Ծնող '{0} «Զտիչները միայն« {1} »տիպի բովանդակությունն ու անալիզատորի համար չեն կարողանա իրականացնել, քանի որ այն չի ապահովում« {3} »մուտքագրման տեսակը</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Դասակարգչի համար ոչ մի պիտակ չի ընտրվում '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Դասակարգչի համար պիտակ «{0}» չի գտնվել</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Համեմատեք արժեքը կարող է լինել միայն տառեր, համարներ կամ տարածքներ</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Ոչ մի պիտակ, որը ընտրված է սեղմիչի համար պիտակավորված ձգան «{0»:</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag For Clip Tagged Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>«{0}» - ի համար նշված թղթապանակ չկա</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Դիտեք թղթապանակը '{0}' Չի գտնվել Trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer ուղի «{0}» գործողության համար չի սահմանվում</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>«{1}» - ի համար ֆայլի գրող ուղի «{1}» - ի համար:</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Առաջադրանք</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Իմացեք plugins- ի մասին</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Վերականգնել վերլուծության այս կազմաձեւը</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Փոխել մատյան</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Խնդրում ենք միանալ ինտերնետին եւ փորձել ավելի ուշ:</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Օգնություն</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} Վերջին տարբերակն է</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Դուք բոլորդ արդի եք:</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Ստուգել թարմացումները...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Նոր տարբերակը մատչելի է:
+
+Կտտացրեք այստեղ `« {0} »թարմացնելու համար</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Կտտացրեք ստորեւ, «{0}» - ի թարմացման համար</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Թարմացրեք մատչելի:</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Թարմացրեք հիմա</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>«{0}» պարունակում է ընդհանուր արժեքներ: Ինչ կցանկանայիք վերականգնել:</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Պարզ</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Մաքրել վերջին որոնումները</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Վերականգնել բոլորը</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Վերագործարկեք համօգտագործված</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Վերագործարկեք անսասան</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Ներկայացնում է նշանակված հայտի գործողությունը: Հայտի բոլոր հրամաններն անչափահաս են, եւ դրանց մուտքային սեղմիչը անտեսվում է:</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Երբ չստուգվածը եւ հրամանը չի կարող կրակել, կատարման շղթան կդադարի: Կատարելու համար շատ հրամաններ կպահանջեն որոշակի հատուկ հայտի վիճակ:</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Միշտ շարունակեք:</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Կատարելու հրամանը:</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Հրաման</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Ոչ մի հրաման չի ընտրվել «{0}» հայտի հրամանի համար</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Հրամանատարի հրամանի հրամանագիր '{0}' չի գտնվել</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Ընտրված</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Վերսկսել</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>«{0}» թարմացմամբ խնդիր կար: Թարմացումը լրացնելու համար ձեզ հարկավոր է վերագործարկել եւ նորից տեղադրել «{0}» (Մի անհանգստացեք ձեր բոլոր պարամետրերը վերականգնվելու են):
+
+Կարող եք վերականգնել հիմա եւ լրացնել թարմացումը Re - տեղադրելով, անտեսեք դա եւ թարմացրեք այն ավելի ուշ կամ չեղյալ համարեք «{1}» տարբերակը:</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Թարմացրեք սխալը</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Չհաջողվեց բեռնել թարմացումը</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Թարմացումը ձախողվեց</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Լրացնելու համար անհրաժեշտ կլինի վերագործարկել: Կցանկանայիք վերագործարկել հիմա կամ ավելի ուշ:</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Թարմացրեք պատրաստ</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Ավելի ուշ</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Վերսկսել հիմա</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Սպասվող</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} հաջողությամբ թարմացվել է {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Հիմնական plugins- ը պահանջվում է եւ հնարավոր չէ հեռացնել:</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Տեղադրում</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Թարմացումը սպասվում է: Վերագործարկեք ավարտելու համար:</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Սպասվող</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Տեղահանելը սպասվում է: Խնդրում ենք վերագործարկել, եթե ցանկանում եք նորից տեղադրել:</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Տեղահանելու համար հարկավոր է վերագործարկել: Կցանկանայիք վերագործարկել հիմա կամ ավելի ուշ:</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Ավարտել տեղահանել:</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Չհրապարակված</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - Ստեղծված կանխադրված նախադրված «{0}» - ի համար</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Ընտրված ոչ մի տեսահոլովակ չկա</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Վերլուծեք ընտրված տեսահոլովակը</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Նշեք դյուրանցում `ընտրված տեսահոլովակի վրա« {0} »գործարկելու համար</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Համաշխարհային մածուկ</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Հանձնարարեք գլոբալ մածուկի դյուրանցում «{0}» - ի համար</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Մոռացել եք գաղտնաբառը?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Մուտք</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Տնկիլ</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Գաղտնիության քաղաքականություն</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Վերագործարկում է վերագործարկում), երբ միացված ախտորոշիչ տեղեկատվությունը մուտք կգործի ֆայլ: Սա կարող է դանդաղեցնել կատարումը եւ կարող է պարունակել անձնական տեղեկատվություն:</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Մուտք գործեք</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Բաց անել</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Բաց տեղեկամատյանների թղթապանակ</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Թերթել plugins</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Կարդալ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Գրել</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Ուղարկել հետադարձ կապի կամ սխալի մասին զեկույց</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Սա միայն թաքցնում է հիմնական պատուհանը: Բոլոր այլ ոչ երկխոսության պատուհանները միշտ ցուցադրվում են առաջադրանքի մեջ:</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Որոնել «{0}» -ում</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Ավելացնել զտիչ</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Խմբագրել Միացեք տեսակը</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Հեռացրեք այս ֆիլտրը</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Բաց օգնություն այս ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} հոլովակներ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Փոխում</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Երբեք</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Սահման</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Անիրական</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Գրառում</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Անպայման աղբյուրի տեղեկանք</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Պահանջվում է '{0}'</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Սխալներ ունի)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Սահմանափակ</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Պահեստ</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Աղբ</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Անսահմանափակ</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Այս ծրագիրը ներկայումս համապատասխանում է Default Clipboard Reader- ի նախադրյալներին եւ ձեւաչափերին:
+
+Լռելյայն ընթերցողի նախադրյալները (Clipboard Sidebar- ից անջատելը) չի ազդի այս կազմաձեւի վրա: Միայն չլսված ծրագրերը հետեւում են լռելյայն կարգավորմանը:</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Այս ծրագիրը ներկայումս համապատասխանում է Default Clipboard գրողի նախադրյալներին եւ ձեւաչափերին:
+
+Լռելյայն գրող նախադրյալների միացումը կամ անջատելը (Clipboard Sidebar- ից) չի ազդի այս կազմաձեւի վրա: Միայն չլսված ծրագրերը հետեւում են լռելյայն կարգավորմանը:</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Հավելված, դուք պետք է անթիվ դիտեք ստեղնաշարի ունկնդիրը (համակարգի սկուտեղ -&gt; ռեզյումե):</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Հավելված անհասանելի</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Չունի պարամետրեր</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ես միայն անգլերեն եմ խոսում, եւ Monkepaste- ը թարգմանվել է այս լեզվով:
+
+Բոլոր տարբերակները նավը անգլիական տուփով, այնպես որ, եթե անգլերեն եք խոսում, կարող եք ցանկացած պահի փոխել այն լեզուն (Պարամետրեր -&gt; Նախապատվություններ):
+
+Եթե ​​ցանկանում եք օգնել բարելավել թարգմանությունը, մենք շատ կցանկանայինք լսել ձեզնից:
+
+feedback@monkepte.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Թարգմանության մտահոգություններ</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Այս հատկությունը օգտագործելու համար հարկավոր է թարմացնել MONKEYPASTE- ն:</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Դյուրանցում անապահով</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Clipboard ունկնդիրը անջատված է</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Clipboard ունկնդիրը միացված է</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>«{0}» ծնողական գործողությունը չի ապահովում «Վերջին ելքը» ներդրման գույքի տեսակը</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Իմացեք ավելին պլանների մասին</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Ծրագիր</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Ձգան</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Սեղմել</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Անալիզատոր</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Պիտակ</value>
+  </data>
+</root>

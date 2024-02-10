@@ -1,0 +1,82 @@
+{
+  "title": "ಫೈಲ್ ಪರಿವರ್ತಕ",
+  "description": "ಫೈಲ್‌ಗಳನ್ನು ಚಿತ್ರಗಳು ಅಥವಾ ಪಠ್ಯ ವಿಷಯ ಪ್ರಕಾರಗಳಾಗಿ ಅನುವಾದಿಸಲು ಅನುಮತಿಸುತ್ತದೆ",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "ಕೋರ್, ಪಠ್ಯ, ಚಿತ್ರ, ಫೈಲ್, ಪರಿವರ್ತಕ, ಪಠ್ಯಕ್ಕೆ ಫೈಲ್ ಮಾಡಿ, ಚಿತ್ರಕ್ಕೆ ಫೈಲ್ ಮಾಡಿ",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "ಪರಿವರ್ತಿಸಲು ಫೈಲ್ ಮಾಡಿ",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Output ಟ್‌ಪುಟ್ ಪ್ರಕಾರ",
+        "description": "ಇದೀಗ .png ಅಥವಾ .txt",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "ಪಠ್ಯ",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "ಚಿತ್ರ",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "ಪಠ್ಯಕ್ಕೆ ಪರಿವರ್ತಿಸಿ",
+        "iconUri": "text.png",
+        "description": "ಒದಗಿಸಿದ ಫೈಲ್ ಅನ್ನು ಸರಳ ಪಠ್ಯಕ್ಕೆ ಪರಿವರ್ತಿಸುವ ಪ್ರಯತ್ನಗಳು",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "ಚಿತ್ರಕ್ಕೆ ಪರಿವರ್ತಿಸಿ",
+        "description": "ಒದಗಿಸಿದ ಫೈಲ್ ಅನ್ನು ಇನ್-ಮೆಮೊರಿ ಚಿತ್ರಕ್ಕೆ ಪರಿವರ್ತಿಸುವ ಪ್ರಯತ್ನಗಳು",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

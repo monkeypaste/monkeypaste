@@ -1,0 +1,49 @@
+{
+  "title": "QR കോഡ് ജനറേറ്റർ",
+  "description": "വാചകം ഒരു ക്യുആർ കോഡിലേക്ക് പരിവർത്തനം ചെയ്യുന്നു",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/QrCoder",
+  "packageUrl": "https://github.com/monkeypaste/QrCoder/releases/download/v1.0.0/QrCoder.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/icon.png",
+  "packageType": "Dll",
+  "tags": "കോർ, ക്യുആർ കോഡ്, ടെക്സ്റ്റ്, ഇമേജ്, ലിങ്ക്, കൺവെർട്ടർ",
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "image": true
+    },
+    "parameters": [
+      {
+        "label": "കൺവെർട്ടറിനുള്ള ഉള്ളടക്കം",
+        "description": "പരിവർത്തനം ചെയ്യാനുള്ള സ്നിപ്പ്",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "ശീർഷകം പ്രിഫിക്സ്",
+        "description": "സോഴ്സ് ക്ലിപ്പുകൾ ശീർഷകം അടിസ്ഥാനമാക്കി QR കോഡ് ശീർഷകം നൽകുന്നു",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{Title}"
+          }
+        ]
+      }
+    ]
+  }
+}

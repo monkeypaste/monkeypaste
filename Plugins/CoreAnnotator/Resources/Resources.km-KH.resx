@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CurrencyLabel" xml:space="preserve">
+    <value>រុបិយវត្ថុ</value>
+  </data>
+  <data name="CurrencyTypesDescription" xml:space="preserve">
+    <value>ទាំងនេះគឺជានិមិត្តសញ្ញារូបិយប័ណ្ណតែមួយគត់ដែលនឹងត្រូវបានកត់សំគាល់។</value>
+  </data>
+  <data name="CurrencyTypesLabel" xml:space="preserve">
+    <value>និមិត្តសញ្ញារូបិយប័ណ្ណ</value>
+  </data>
+  <data name="CurrencyUrlDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CurrencyUrlLabel" xml:space="preserve">
+    <value>តំណរូបិយប័ណ្ណ</value>
+  </data>
+  <data name="DefAnnHint" xml:space="preserve">
+    <value>ចំណារពន្យល់អត្ថបទទាំងអស់ត្រូវបានបើកដំណើរការ</value>
+  </data>
+  <data name="DefAnnLabel" xml:space="preserve">
+    <value>អ្នកកំណត់ចំណូលចិត្តលំនាំដើម</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>អ៊ីមែល</value>
+  </data>
+  <data name="HexLabel" xml:space="preserve">
+    <value>ពណ៌គោលដប់ប្រាំមួយ</value>
+  </data>
+  <data name="OptionsDescription" xml:space="preserve">
+    <value>ជម្រើសដែលបានអនុញ្ញាតនឹងត្រូវបានរកឃើញនៅក្នុងអត្ថបទឃ្លីបហើយបានបម្លែងទៅជាតំណខ្ពស់នៅពេលចាំបាច់។</value>
+  </data>
+  <data name="OptionsLabel" xml:space="preserve">
+    <value>ជម្រើស</value>
+  </data>
+  <data name="PhoneLabel" xml:space="preserve">
+    <value>លេខទូរសព្ទ</value>
+  </data>
+  <data name="PhoneUrlDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PhoneUrlLabel" xml:space="preserve">
+    <value>តំណលេខទូរស័ព្ទតំណ</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ផ្តល់ការគាំទ្រតំណខ្ពស់ជាមូលដ្ឋានសម្រាប់មាតិកាផ្អែកលើអត្ថបទ</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>ស្នូលចំណារពន្យល់អត្ថបទពណ៌មានពណ៌វិញ្ញាបនប័ត្រអាស័យដ្ឋានទូរស័ព្ទអ៊ីមែលអ៊ីមែលរូបិយប័ណ្ណហិរញ្ញវត្ថុ</value>
+  </data>
+  <data name="PluginTitle" xml:space="preserve">
+    <value>អ្នកកំណត់ចំណូលអត្ថបទតូច</value>
+  </data>
+  <data name="UrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+</root>

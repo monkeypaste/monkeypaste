@@ -1,0 +1,49 @@
+{
+  "title": "क्यूआर कोड जनरेटर",
+  "description": "मजकूराला क्यूआर कोडमध्ये रूपांतरित करते",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/QrCoder",
+  "packageUrl": "https://github.com/monkeypaste/QrCoder/releases/download/v1.0.0/QrCoder.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/QrCoder/master/icon.png",
+  "packageType": "Dll",
+  "tags": "कोअर, क्यूआर कोड, मजकूर, प्रतिमा, दुवा, कन्व्हर्टर",
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "image": true
+    },
+    "parameters": [
+      {
+        "label": "कन्व्हर्टरसाठी सामग्री",
+        "description": "रूपांतरित करण्यासाठी स्निपेट",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "शीर्षक उपसर्ग",
+        "description": "स्त्रोत क्लिप्स शीर्षकावर आधारित क्यूआर कोड शीर्षक बनवते",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{Title}"
+          }
+        ]
+      }
+    ]
+  }
+}

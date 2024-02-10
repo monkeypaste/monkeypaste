@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Игнорировать</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>При проверке {0} формат не будет считывается из данных буфера обмена или перетаскивания.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>При проверке {0} формат не будет записан в буфер обмена или перетаскивание данных.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Читать</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Писать</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Файлы</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Когда RTF еще не присутствует, HTML будет преобразован в RTF. Это может быть полезно между веб -браузерами и/или приложениями для обработки текстов. (Требуется включен формат RTF и только для поддерживаемых платформ)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Преобразовать в RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Эти каталоги не будут считываться из буфера обмена или перетаскивания данных.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Игнорируемые каталоги</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Игнорированные расширения файлов</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Эти типы файлов не будут считываться из данных об буфере обмена или перетаскивания.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Эти типы файлов не будут записаны в буфер обмена или перетаскивание данных.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>При проверке изображения, больше максимального размера, будут масштабированы при сохранении соотношения сторон. Это не влияет на изображение в буфер обмена.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Масштаб негабаритный</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>При вставке или сбросе растрового карты это будет тип файла по умолчанию</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Тип экспорта по умолчанию</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Иногда полностью прозрачные изображения будут отображаться в буфере обмена, это сбивает с толку.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Игнорировать пустые изображения</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Крупные изображения (более нескольких МБ) могут сделать перетаскивание и каплю и общую производительность, к сожалению, к сожалению. Старайтесь сохранить это значение низким.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Максимальная высота</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Максимальная ширина</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Для проблем с производительностью необходим максимальное количество символов</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Максимальные персонажи</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Текст (Mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Формат '{0}' имел пустые или прозрачные данные и был заблокирован</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Пустые данные заблокированы</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Формат '{0}' помечено как «игнорируется»</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Формат игнорируется</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} предел равен {1}, а данные были {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Максимальный размер обнаружен</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Основной читатель буфера обмена</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Основной писатель буфера обмена</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Обрабатывает форматы буфера обмена по умолчанию</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Основной обработчик буфера обмена</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Ядро, буфер обмена, перетаскивание, текст, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, ссылка</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Изображение (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Когда HTML еще не присутствует, RTF будет преобразован в HTML. Это может быть полезно между веб -браузерами и/или приложениями для обработки текстов. (Требуется включен формат HTML и только для поддерживаемых платформ)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Преобразовать в HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Без названия</value>
+  </data>
+</root>

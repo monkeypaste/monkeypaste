@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Asnjë veçori nuk është e kufizuar nga pajtimi, vetëm kapaciteti i ruajtjes dhe mund të ndryshohet në çdo kohë.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Rivendosni llogarinë tuaj ekzistuese ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Përmbajtja dhe plehrat janë
+i kufizuar në {0} dhe {1}
+Klipet përkatësisht.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Lejon deri në {2 clips klipe të përmbajtjes dhe ruajtje të pakufizuar të plehrave.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Përmbajtja e pakufizuar dhe e pakufizuar dhe ruajtja e plehrave.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Rivendos</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>I lirë</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>I pakufizuar</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Pajtim</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Privatësia juaj është e rëndësishme dhe të dhënat e klipit mund të jenë shumë personale. Magazinimi është gjithmonë i koduar, por mund të vendosni një fjalëkalim që do të kërkohet në rast se pajisja juaj është vjedhur ose dikush tjetër po përdor pajisjen tuaj.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Fjalëkalim</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Kur të aktivizohet, zvarritja nga çdo aplikacion në krye të ekranit do të zbulojë Monkeypaste për të hequr lehtë përmbajtjen në Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Mundësimi i 'bllokimit' në pjesën e sipërme të majtë të dritares kryesore do të lejojë të bjerë në Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Më shumë preferenca të dritares janë në dispozicion nga menyja 'Cilësimet -&gt; Preferencat -&gt; Dritarja'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Tërhiqni banane këtu!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Zvarrit - në - Hapni</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Shkurtesat e tastierës mund të rishikohen ose ndryshohen në çdo kohë nga menyja 'Cilësimet -&gt; Shkurtorët'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Të gjitha shkurtesat globale do të çaktivizohen, në mënyrë që t'i vendosni vetë më vonë.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Shkurtoret e clipboard të Monkeypaste do të jenë në dispozicion në të gjitha aplikacionet.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>I brendshëm</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Mospagim</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profil gjesti</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hej! Le të krijojmë disa gjëra për të përmirësuar përvojën tuaj të përgjithshme me Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Mirëseardhje</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Për të përfituar sa më shumë nga Monkeypaste, ngarkimi automatikisht kur të hyni është një ide e mirë. Por, kjo varet plotësisht nga ju.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Mbajeni rastësor.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Bëj mundësi</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Ngarkoni në hyrje?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Kur të aktivizohet, një gjest lëvizës në krye të ekranit do të zbulojë Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Majtas - duke klikuar ikonën e shiritit të detyrave do të hapë akoma Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Më shumë preferenca të dritares janë në dispozicion nga menyja 'Cilësimet -&gt; Preferencat -&gt; Dritarja'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>E lehtë apo jo?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Shkoni lart këtu!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Shkoni - për të - hapur</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "Center"&gt; MonkeyPaste është &lt;span color = "Red&gt; plotësisht i integruar &lt;/span&gt; me zvarritje - dhe - Drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Hidhni këtu!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "Center"&gt; Në këtë mënyrë, MonkeyPaste mund të arrihet &lt;br&gt; &lt;span color = "Red"&gt; pa një klikim &lt;/span&gt; apo edhe &lt;span color = "Red"&gt; duke mbushur një sy &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Më tërhiq!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Provoje!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Provoje!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Asnjë rezultat i disponueshëm.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Konfirmoj</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Rifreskoj</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Kërkim ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Varësitë:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Instaloj</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>A jeni i sigurt që doni të hiqni '{0}' dhe të gjitha paravendosjet dhe shkurtesat e saj?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Çinstaloj</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' nuk ka rezultate.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Asnjë përzgjedhje.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Asnje</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Kredi:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Përshkrim:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Dhuroni:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Liçensë:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL e projektit:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Botuar:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Me lexo:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Raporto abuzimin:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Etiketat:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Azhurnim</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Hapni në dritare</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Largoj</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Rifreskoj</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Ruaj</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Pranë për të fshirë!
+
+Përditësoni për të shmangur.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Pranë plehrave!
+
+Përditësoni për të shmangur.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Dosje</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Imazh</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kopjuar {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>Skedarët {0} | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} linja</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Kopje | {1} pasta</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Lëviz</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Shtoj</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopjoj</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Prerje</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Ngjit</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Kopjoni</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Filtër i pa kursyer</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Ju lutem zgjidhni -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lexues</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Shkrimtarët</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Mbajtës</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Nxjerr</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Kopjoj</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Modifikoj</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Rivendos</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Etiketa</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Veprim</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Kurs global</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Shkurtore</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gjestet duhet të jenë unike dhe mund të përmbajnë vetëm një çelës hyrëse.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; E brendshme &lt;/b&gt; Të gjitha shkurtoret janë të kufizuara brenda aplikimit. Ky nuk është me të vërtetë një mundësi e synuar, por mund të lejojë të rregulloni se çfarë shkurtoresh keni ndërmend të bëni një ditë &lt;/i&gt;. &lt;/li&gt;. &lt;/li&gt;.
+&lt;li&gt;
+&lt;b&gt; Default &lt;/b&gt; Të gjitha shkurtesat globale janë të aktivizuara. Shkurtorja e Shfaqjes/Fsheha e Shkurtër &lt;/b&gt; përdor &lt;span color = "Red"&gt; tejkalon kursin &lt;/span&gt; për tastin &lt;b&gt; Caps Lock &lt;/b&gt;. Ju mund ta ndryshoni atë kurs ose gjest në çdo kohë. Por &lt;span color = "jeshile"&gt; provojeni atë &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; Mënyrat Global të Shkurtoreve &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; pasiv &lt;/b&gt; Një MonkeyPaste e Shkurtër do të dëgjojë në çdo kërkesë. &lt;br&gt;
+*Kjo është opsioni &lt;i&gt; vetëm &lt;/i&gt; në Linux tani për tani.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; para &lt;/b&gt; Shkurtorja do të ekzekutojë &lt;b&gt; &lt;i&gt; para &lt;/i&gt; &lt;/b&gt; ajo trajtohet nga aplikacioni aktiv. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; Shkurtorja do të ekzekutojë &lt;b&gt; &lt;i&gt; pasi &lt;/i&gt; &lt;/b&gt; trajtohet nga aplikacioni aktiv. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; tejkaloni &lt;/b&gt; Kur MonkeyPaste dëgjon çelësin e hyrjes (çelësin jo -modifikues) të një shkurtore të tejkaluar do të &lt;i&gt; fsheh &lt;/i&gt; atë shtypje të çelësit nga aplikacioni - input i nivelit. &lt;br&gt;
+Ky opsion do të garantojë shkurtoren është shkaktuar pa konflikte në aplikimin aktiv.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; tejkalimi ekskluziv &lt;/b&gt; Ky është një lloj i veçantë i modalitetit të tejkalimit të dizajnuar për çelësin e bllokimit të kapakëve. Ai vetëm lejon &lt;b&gt; një çelës &lt;/b&gt; (jo -modifikues) për caktimin e tij. &lt;br&gt;
+Në modalitetin normal të tejkalimit të kapakëve bllokimi mund të bëhet &lt;i&gt; i mbërthyer në &lt;/i&gt; kur shtypet në kombinim me çelësat e tjerë. &lt;br&gt;
+Pra, pa marrë parasysh se cilat çelësa të tjerë janë ulur, nëse shtypet një shkurtore &lt;b&gt; hotkey &lt;/b&gt;, ajo do të tejkalohet dhe do të parandalojë që ajo të bëhet &lt;i&gt; mbërthyer në &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Çaktivizoj</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Ngarkoni kur kjo llogari e përdoruesit është regjistruar, jo për përdoruesit e tjerë.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Përdorimi i kontakteve të disponueshme (kërkon një shtojcë fetcher) Kjo fushë do të përdoret për të gjitha rastet e këtij shablloni në të gjithë këtë dokument ose në çfarëdo që do të referohet më vonë. Këtu atëherë fusha e postës elektronike të kontaktit që zgjidhni do të përdoret për të gjitha rastet në këtë dokument. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = vit i shkurtër &lt;br/&gt; yyyy = vit i gjatë &lt;br/&gt; m = muaj (1-12) &lt;br/&gt; mm = muaj (01-12) &lt;br/&gt; mmm = shkurtim i muajit (Jan, Shkurt .. . Dhjetor) &lt;br/&gt; mmmm = muaj i gjatë (janar, shkurt ... dhjetor) &lt;br/&gt; d = ditë (1 - 31) &lt;br/&gt; dd = ditë (01 - 31) &lt;br/&gt; ddd = Dita e javës me fjalë (e hënë, e martë ... e diel) &lt;br/&gt; e = ditë e shkurtër e javës me fjalë (e hënë, e martë ... diell) &lt;br/&gt; d - dita e zakonshme (1, 2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = orë në AM/PM (0-12) &lt;br/&gt; hh = orë në AM/PM (00-12) &lt;Br/ &gt; H = orë në ditë (0-23) &lt;br/&gt; hh = orë në ditë (00-23) &lt;br/&gt; mm = minutë &lt;br/&gt; ss = e dyta &lt;br/&gt; sss = milisekonda &lt;br/&gt; A = AM/PM MARKER &lt;br/&gt; p = a.m./p.m. shënues</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Data aktuale dhe/ose koha do të zëvendësohet për shabllonet e DateTime kur ato ngjiten.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Të gjitha ndodhjet e këtij shablloni do të përdorin tekstin e dhënë. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Të gjitha ndodhjet e këtij shablloni do të përdorin tekstin e dhënë. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Përfundoni Shtojcën</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Aktivizo bllokun</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Aktivizo Inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Manuali i ndryshuar</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Manuali i ndryshuar</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pauzë shtoj</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Toggle më parë</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Toggle më parë</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Rifilloj shtojcën</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Shtoj ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Ngjit</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Gjilpere</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Heq</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Fshihni të gjitha njoftimet '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Largoj</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Aplikacioni i fundit aktiv i panjohur. Kaloni në aplikacionin e synuar në pastën e majmunit.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Paste në: &lt;em&gt; &lt;i class = "paste-Tooltip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimizoj</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Te lutem prit...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Bllokoj</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Llogari</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Ndihmon</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopjimi dhe ngjitja</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferencat</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Rivendosja e paracaktuar</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filter ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Shkurtore</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Shto aplikacionin</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Shto faqen e internetit</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bllok?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Emër</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplikacione</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Bllokoni Domain?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Bllok URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Fushë</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Njohja e URL -së së burimit varet nga mënyra se si miqësore me clipboard Aplikacioni i hostit është aq refuzim nuk mund të garantohet</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Uebfaqe</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Disa tipare të MonkeyPaste përdorin automatizimin e tastierës për të simuluar ngjarjet 'kopjuese' në aplikacione të tjera.
+
+Shtoni dhe/ose zgjidhni aplikacionin me shkurtoren unike të kopjimit (si një tastierë ose guaskë për shembull) për të siguruar që ato tipare të funksionojnë siç duhet.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Shkurtorja e kopjimit</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Asnje</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Vetëm paravendosjet e zgjedhura do të përdoren për aplikacionin e specifikuar. Kur të papërcaktuara, do të përdoren paravendosjet e paracaktuara në shiritin anësor &lt;em&gt; clipboard &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Shumë karakteristika të MonkeyPaste përdorin automatizimin e tastierës për të bashkëvepruar me aplikacione të tjera.
+
+Disa aplikacione (si disa tastierë ose predha për shembull) mund të kenë një shkurtore të paste jo të paracaktuar.
+
+Për të siguruar ndërveprimin e duhur, regjistroni ato shkurtore për atë kërkesë këtu.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Shkurtoj</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lexues</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Të gjitha monitorimet e klipit nga aplikacionet e refuzuara do të injorohen &lt;b&gt; &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Shkrimtarët</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Redakto ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>I kundërt</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Shkurtore</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>A do të dëshironit të hiqni të gjitha klipet {0} nga '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Hiqni klipet?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Aplikacion</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Shfletoni në App ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Zgjidhni Rrugën e Aplikimit</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>A jeni i sigurt që doni të hiqni shkurtesat me porosi për {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>A jeni i sigurt që doni të hiqni formatet me porosi për {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Nuk ka formate të caktuara të clipboard për këtë aplikacion. Asnjë të dhënë nuk do të lexohet prej tij përmes prerjes/kopjimit ose përpjekjes së një zvarritjeje - dhe - bie në Monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Nuk ka formate të caktuara të clipboard për këtë aplikacion. Paste e automatizuar ose zvarritje - dhe - rënie nga MonkeyPaste nuk do të ketë ndikim (të dhënat e tij boshe).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>A jeni i sigurt që doni të rivendosni të gjitha shkurtesat? Të gjitha shkurtoret me porosi do të hiqen.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>A jeni i sigurt që doni të ndryshoni profilin tuaj të kursit të shkurtoreve në '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Të gjithë</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Të preferuarat</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtër</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formate</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Etiketa</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Sot</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Plehra</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Për</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>E lehtë apo jo?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Kliko dy herë për të papjekur</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>I zakonshëm</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Ky kombinim bie ndesh me '{0}' i cili do të pastrohet nëse ruhet.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Duhet të sigurohet një shkurtore.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Kjo është një shkurtore globale. Kjo do të thotë se do të përpiqet të ekzekutojë sa herë që kryhet. Mundohuni ta bëni atë mjaft unik (ose të ndryshoni 'llojin e kursit') për të mos konfliktuar me shkurtoret nga aplikacionet e tjera.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Shkurtore duhet të përmbajë një dhe vetëm një çelës jo -modifikues.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Shtypni çdo çelës për të regjistruar ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Caktoni shkurtore</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Mëso më shumë...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Azhurnim</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Anuloj</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Rregulloj</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Injoroj</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Jo</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Ne rregull</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Rigjykoj</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Fike</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Paraqes</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>po</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Njëvjeçar</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Mujor</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Provo falas!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Cikël faturimi</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Postë elektronike</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Kontrolloni lidhjen tuaj
+Dhe provo përsëri.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Shkyç</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Pagesa tjetër</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Fjalëkalim</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Regjistroj</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Emaili nuk është i vlefshëm</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Fjalëkalimet nuk përputhen.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Fjalëkalimi duhet të jetë minimumi i karaktereve {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Mos harroni?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Kontrolloni emailin tuaj për të konfirmuar llogarinë tuaj</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Rivendosni fjalëkalimin</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Asnjëherë</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Falas {0} Provë ditore</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Kishte një problem kryerjen
+blerja juaj.
+
+Duke kontrolluar lidhjen tuaj dhe
+Cilësimet mund të ndihmojnë.
+
+Dëshironi të provoni përsëri?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Llogaria juaj ka qenë me sukses
+i azhurnuar në:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Bleni i suksesshëm!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Gabim</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Lidhja dështoi.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Rigjykoj</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Llogaria ndryshoi</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Abonimi juaj tani është {0}/{1} me {2} përmbajtje dhe {3} ruajtje të plehrave.
+Por mos u shqetësoni, asnjë të dhënë nuk humbet pas zbritjes. Vetëm klipet e reja do të vlerësohen.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Urime! Abonimi juaj tani është {0}/{1} me {2} përmbajtje dhe {3} ruajtje të plehrave.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Plehra ose zhbllokuar diçka
+Nga '{0}' për të shtuar më shumë.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>MAX '{0}' Ruajtja është {1.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Rivendos</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} i bllokuar</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Kapaciteti i përmbajtjes dhe plehrave të arritur!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>MAX '{0}' Ruajtja është {1.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Kapaciteti i përmbajtjes i arritur!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Ju mund t'i fshehni këto paralajmërime nga
+duke klikuar 'fshehin të gjithë' nga
+Menyja e opsioneve më lart.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Ruajtja maksimale e plehrave është {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Kapaciteti i plehrave të arritur!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} është e pavlefshme</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} duhet të jenë të paktën {1} karaktere</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} mund të jetë vetëm karakter {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Paste në: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Pagesa për {0}
+pajtimi ishte për shkak {1}
+dhe nuk është pranuar.
+
+Ju lutemi azhurnoni tuajin
+informacioni i pageses.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Pagesa për {0}
+pajtimi ishte për shkak {1}
+dhe nuk është pranuar.
+
+Ju lutemi lidheni me
+Interneti në pajisje
+me pajtimin tuaj dhe
+rinisni në mënyrë që të vazhdoni
+duke përdorur planin tuaj {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Pagesa për {0}
+pajtimi ishte për shkak {1}
+dhe nuk është pranuar.
+
+Ju lutemi hapni ose rinisni
+Monkeypaste në pajisje
+me pajtimin tuaj në
+Vazhdoni të përdorni tuajin
+Plani {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Llogaria skadoi</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>shënim</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store nuk lejon nivelin
+Ndryshimet në shtesat e pajtimeve.
+
+Ju duhet të anuloni tuajin
+{0}/{1} Planifikoni veten
+Ose do të akuzoheni për të dy.
+
+Dëshironi të shkoni ta bëni atë tani?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Fjalëkalimi juaj është rivendosur.
+
+Ju lutemi kontrolloni emailin tuaj dhe
+Ndiqni lidhjen për të ndryshuar
+Fjalëkalimi juaj.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autori (S)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Kërkohet që të pranoni kushtet e mëposhtme të licencës përpara se të vazhdoni.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Paketa (et) e mëposhtme kërkojnë që të pranoni kushtet e tyre të licencës para se të instaloni.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Unë nuk pranoj</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Klikimi "Unë pranoj" do të thotë që ju pranoni kushtet e licencës për këtë kërkesë. Nëse nuk jeni dakord me kushtet, klikoni "Unë nuk pranoj".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Klikimi "Unë pranoj" do të thotë që ju pranoni kushtet e licencës për shtojcën (et) e listuar më lart. Nëse nuk jeni dakord me kushtet, klikoni "Unë nuk pranoj".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Shikoni licencën</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Pranimi i licencës</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Unë pranoj</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Jashtë linje</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>I paregjistruar</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>I mbaruar</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ Fjalëkalimet nuk përputhen</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Fjalëkalim</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Abonimi juaj është
+tani vendoset te {0}/{1.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Llogaria e gjetur</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Hyrja dështoi</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Regjistrimi dështoi</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Regjistrimi i suksesshëm!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Rivendosja Gabim</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Pajtim</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Cfare ka te re</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Asnjëherë</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>I pakufizuar</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapacitet</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>i mbetur</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Pagesa juaj është e detyruar për shkak.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Shkurtesat ekskluzive të tejkalimit mund të përmbajnë vetëm një çelës dhe ky çelës nuk mund të jetë një çelës modifikues.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>I skaduar</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Ngarkesë</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>I paaftë</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Shënim! Ky fjalëkalim është opsional dhe vetëm për siguri shtesë. Të dhënat tuaja tashmë janë të koduara dhe nuk janë ndarë kurrë. Kjo fjalëkalim thjesht parandalon dikë që nuk ju nuk jeni ju që të ngarkoni MonkeyPaste nëse ata disi fitojnë qasje në desktopin tuaj (vjedhur, ju largoheni nga dhoma, etj.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Mos harroni cilësimet e rënies për:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Shfletoni shtojcat</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analizoj</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Veprim i shpejtë</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Ndryshoj</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Toggle i varur</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Shënime</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Teksti i thjeshtë</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Hapni në dritare</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Klikoni + Ctrl për të ndjekur ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Kliko + alt për të ndjekur ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin ose lësho ndonjë media këtu!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Qartë</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Pragu mbi 0 do të sigurojë përputhjen e ngjyrave fuzzy duke përdorur distancën Euklidiane në hapësirën e ngjyrave RGBA.
+
+Për shembull, nëse e kuqja (#FF0000) është termi i kërkimit dhe i zi (#000000) është një piksel në një kapëse imazhi, atëherë distanca e ngjyrave do të jetë 255. Distanca e zezë në të bardhë është maksimumi i mundshëm i 510, duke përfshirë një kanal alfa</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Të gjitha sa vijon janë të vërteta</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Tabelë</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Koleksion</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Mënyrat e miut</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Shkas</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Bëj pauzë</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Vazhdoj</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Trigger i ri</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Shtoj paraprakisht</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Magjistar i Monkey Drop</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Parathënie</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizues</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientim i ciklit</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Ndërrimi i paraqitjes së rrjetit</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>I ndjeshëm</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Prag</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Fjalë e plotë</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Asnjë i vendosur</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Ndërtim</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Veprim</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Rrjet</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>I mbaruar</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Tjetër</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>I mëparshëm</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Kalim</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Llogaria ekzistuese?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Pagesa tjetër</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Regjistrimi ju lejon të mbani pajtimin tuaj të paguar në të gjitha pajisjet tuaja (pas disponueshmërisë). Ne nuk do të spam emailin tuaj që premtojmë.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Pajtim</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Emrin e përdoruesit</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Duhet të regjistroheni?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Burime</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>E çuditshme, asgjë në dispozicion. Diçka duhet të jetë e gabuar</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Largoj</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Kërkon rinisjen</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>I avancuar</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Gabim në nxjerrjen e shtojcës nga '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Gabim në instalimin e shtojcës: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Gabim në instalimin e plugin '{0}' Struktura e korruptuar ose e pahijshme e drejtorisë. Manifesti duhet të ekzistojë në '{1}' por nuk u gjet.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Gabim Parsing Plugin Manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Asnjë shtojcë e ngarkuar me GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>Gabim {0}</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Gabim duke organizuar plugin në temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Gabim në mbështetjen e '{0}' to '{1}'. Detaje: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Teksti i shtypur do të aplikohet automatikisht në një kërkim kur të mos përqendrohet asnjë kuti teksti.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Input i Kërkimit Auto</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Ndryshimi i fjalëkalimit dështoi</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Ndryshoj</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Ndrysho fjalekalimin</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Qartë</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Fjalëkalimi i qartë</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Përmbajtje</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Madhësia e shkronjave të përmbajtjes</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kur është e vërtetë, përmbajtja e jashtme e futur në një klip do të përdorë formatimin e Clips dhe jo atë që është në dispozicion nga burimi.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Ngjis, lësho ose shtoj me formatimin e destinacionit</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të harroni fjalëkalimin?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Harroj</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Harroj Fjalekalimin</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Fshihni ujërat e kapacitetit</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Kur të bashkohet përmbajtja e re e clipboard, ajo nuk do të gjurmohet si një klip i ri</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Injoroni Shtojcat</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kur clipboard përputhet me një klip ekzistues, ai klip do të përdoret në vend që të krijojë një të ri</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Injoroni kopje të reja</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Ndryshimet e clipboard nga brenda aplikacionit nuk do të gjurmohen</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Injoroni gjurmimin e brendshëm të clipboard</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Hapësirat, skedat dhe linjat e reja do të injorohen nga ndjekja</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Injoroni vetëm hapësirën e bardhë</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Ngarkoni në hyrje</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Gjallërohem</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Errësirë</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Tregoj</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Dritarja kryesore do të zbulohet duke kryer një gjest lëvizës në skajin e sipërm të monitorit tuaj</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Shfaq në lëvizjen e ekranit të lartë</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Vëllim i njoftimit</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Ky cilësim do të gjurmojë sistemin - Numrat e gjera të pastës së tastierës për statistikat e përdorimit. Ky informacion është privat dhe jo i përbashkët, por gjithashtu jo i garantuar. Rezultatet e sakta mund të kërkojnë sigurimin e një komande specifike të pastës së tastierës në 'Cilësimet -&gt; Kopjimi &amp; Paste -&gt; Shkurtorët'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Ngjit</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Shumë klipe të mbështjellura (si skedat e shfletuesit) mund të konsumojnë memorie të konsiderueshme. Heqja është nga e para - në - e para - jashtë</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Kapacitet pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Kjo vlen për të gjitha inputet automatike, vlerat më të ulëta do të përmirësojnë performancën</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Kufiri i fundit i tekstit</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që dëshironi
+rivendosni preferencat e paracaktuar?
+
+Kjo nuk mund të zhbëhet!
+
+*Aplikacioni do të rindizet një herë të përfundojë.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të rivendosni të gjitha njoftimet?
+
+*Kjo nuk mund të zhbëhet!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Paste majmune vendos clipboard (tejkalon) kur ngjitet në një program të jashtëm. Kjo do të &lt;b&gt; përpjekje &lt;/b&gt; për të rivendosur gjendjen e clipboard pas një paste të jashtme.
+
+Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën ose madje edhe përplasjen e Monkeypaste në varësi të burimit të të dhënave.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Rivendosni clipboard pas ngjitjes së majmunit</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nuk mund të fshijë cache plugin nga shtegu: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Të gjitha shtojcat do të rivendosen në gjendjen fillestare të paracaktuar</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Cache</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të rivendosni të gjitha shtojcat në parazgjedhje?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të rivendosni fjalëkalimin tuaj?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Të gjitha shkurtesat e aplikacionit do të rivendosen në gjestet e tyre të paracaktuara të çelësave.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Rivendosni shkurtore</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Të gjitha njoftimet e injoruara të vendosura më parë.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Rivendosni njoftimet</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Mundësimi mund të jetë mjaft i ngadaltë) Paaftësia e formatuar do të zvogëlojë konsumin e kujtesës, por do të pengojë disa karakteristika të përparuara, siç janë: Shtojca, Modelet, Annotimet dhe Gjeni/Zëvendësoni</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Përmbajtje e pasur</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Vendosni fjalëkalimin</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Tregojnë sugjerime</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Shfaq në shiritin e detyrave</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Shfaq në Task Switcher</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Tregojnë tituj</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Kur të aktivizohet, zvarritja nga çdo aplikacion në krye të ekranit do të zbulojë Monkeypaste për të hequr lehtë përmbajtjen në Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Trego në zvarritje në krye të ekranit</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Temë e shëndoshë</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Kontroll drejtshkrimi</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Në fillimin e burimit të clipboard do të jetë i panjohur dhe në varësi të cilësimeve tuaja të sigurisë përmbajtja mund të vijë nga një uebfaqe ose aplikim i përjashtuar.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Shtoni clipboard startup</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Dëgjoni Clipboard në Startup</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Zgjedh</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Kujdes! Ngjyrat e tjera të paletës janë zgjedhur duke përdorur matematikë jo sy! Pra, jini të vetëdijshëm disa kombinime të ngjyrave dhe stilit mund të mos kenë kontrast të duhur për lexueshmërinë.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Temë</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Stili i temës</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Pastrimi automatik i plehrave do të ndodhë gjatë fillimit në intervalin e caktuar.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Pastrim plehrash</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Ndërfaqe</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Kufijtë e lartë të Undo mund të ndikojnë në performancën</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Zhbëj kufirin</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Pa kufi</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Përdoret në kërkimin e përparuar të skedarëve për lloje të paracaktuara të skedarëve</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Përdoruesi - Zgjatjet e përcaktuara të kërkimit</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Gjeni dhe zëvendësoni ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Ngjis këtu</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Ndaj ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Pamje</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Menaxho ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Riemërtoj</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Rezultati: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Lloji: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Fshij përgjithmonë</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Shfletoni në '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transformoj</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Dalje</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Burime</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Rivendos</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Zgjidhni imazhin ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Ngjyrë</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Menaxho '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>I hapur</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Te lutem prit...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Ngjyrë e sfondit</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Pastroji të gjitha</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formate clipboard</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Fshij te gjitha</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Redakto detajet</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Emër</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Gjej</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Ngjyra e shkronjave</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Bojë formati</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Në përzgjedhje</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Vendosni imazhin</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Vendosni lidhjen</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Fut video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Rast i ndeshjes</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Shabllon i ri</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Modeli tjetër</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Futni tekstin e pastës ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Shablloni i mëparshëm</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Shprehje e rregullt</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Zëvendësoni të gjitha</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Zëvendësoj</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Fjalë e plotë</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Mbështjellë</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Bllok</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Fushë</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Shfaq dosjen</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Zhbllokoj</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Për</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Bllokoj</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Shtoj në linjë</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Kopjoni</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Mënyrat</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Ju lutemi prisni që MonkeyPaste po ngarkohet ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Pushoj</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - kliko Paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupoj</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtër</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Fshini përgjithmonë të gjithë</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Rivendos të gjitha</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Veprim</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL tashmë ekziston: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL duhet të jetë në një format të vlefshëm.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Hyni në URL të plotë:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Shtoj URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Fut vlerat</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopjoni tekstin ose skedarët për të aplikuar.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Shtojca {0} {1} Mode e aktivizuar</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Ndryshimet e clipboard tani do të bashkëngjiten</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Pas aktivizimit të modalitetit të shtojcave</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Ndryshimet e clipboard tani do të përgatiten</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Para se të aktivizohet modaliteti i shtojcës</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Bllok</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Sjellja normale e klipit është rivendosur</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Shtojcat e çaktivizuara</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Shtojcat e shtuara në krye ose botom të klipit</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Modaliteti i Shtojcës Aktivizohet</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Ne rresht</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Shtojcën në zgjedhjen tuaj aktuale.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Modaliteti Manual i Shtojcës Aktivizohet</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Akumulimi i clipboard u ndal</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Shtojcë ndaloi</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Akumulimi i clipboard rifilloi</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Shtojcë rifilloi</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të përfundoni shtojcat?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Redaktimi në modalitetin e pajtueshmërisë do të heqë të gjithë formatimin e pasur. A jeni i sigurt që dëshironi ta modifikoni këtë?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Paralajmërimi i degradimit të të dhënave</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>I mundshëm</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Larg</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Në</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>I ndaluar</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Rezultoj</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Gjendje</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Ndodhi gabim i panjohur.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Përpjekjet e mbetura</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Shkruani fjalëkalimin</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Konfirmoj</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Koha e datës</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të fshini të gjitha përdorimet e '{0}'?
+
+Kjo nuk mund të zhbëhet!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamik</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statik</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} është bosh ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Më shumë së shpejti!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Ngarkesa e hyrjes në çaktivizimin e dështuar</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Hyni ngarkesën e çaktivizimit të suksesit</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Ngarkesa e hyrjes Aktivizo dështoi</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Hyrja e ngarkesës Aktivizo suksesin</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Fsheh</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Pasta e majmunit tani është e ngarkuar.
+Dëgjimi i Clipboard është: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>I ngarkuar</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Shfaqje</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Mënyra e zgjedhjes së kopjimit automatik: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Mënyra e ndryshuar</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Klikoni me të djathtën modaliteti i ngjitjes: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Përditësuar shtojca</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Paste '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Run '{0}' Analyzer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Run '{0}' shkas</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Zgjidhni '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të fshini '{0}' dhe të gjitha veprimet e shoqëruara?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Shkumëzoj</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Dëshironi të hiqni të gjitha nën - veprimet për '{0}'? (Përndryshe ata do të ri -prindërohen në '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Hiq opsionet</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>A doni vërtet të goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Llogari</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analiza</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operacionet e aplikimit</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Tabelë</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Përmbajtje</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Konvertues</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kulturë</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Të dhëna</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Drejtësi</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Tërhiq dhe lësho</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Magjistar</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikona</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Prostitucion</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Ndërfaqe</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Ngjit</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferencat</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Kërkim</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Shkurtore</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Lloj</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Tingull</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Tabaka e sistemit</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Koleksion</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Temë</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Shkas</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operacionet në internet</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Gjuhe</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Vendos clipboard në klipin e hyrjes.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Çarje</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Zile</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Alarme të mesazheve të tingullit të përgjithshëm dhe/ose sistemit të sistemit. Veprimi i alarmit nuk ka asnjë ndikim në kontributin e tyre.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Mesazh</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Shkumë</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Vrojtim</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Shfaqje?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Mesazhi i dolli me kohë tregohet në sekonda. Kur vlera është 0 mesazh duhet të mbyllet me dorë.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Shfaq kohën (et)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Tingull?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Lloj tingulli</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Tufë</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Vëllim</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizues</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Përpunon klipin e tij të hyrjes duke përdorur paracaktimin e Analizës së caktuar.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Përmbajtja e hyrjes është e lidhur me koleksionin e zgjedhur</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Lidh klipin e tij të hyrjes me koleksionin e caktuar të etiketave.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Etiketim</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Rasti i ndjeshëm?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Ky mund të jetë tekst statik për t'u krahasuar me hyrjen dhe/ose të përfshijë vetitë e zgjedhura (përmes butonit të filtrit) do të zëvendësohet kur vlerësohet gjendja.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Të dhëna për gjendjen</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Një pyetje opsionale JSONPATH që do të zbatohet në 'pronën e hyrjes' të zgjedhur para se të vlerësohet gjendja.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filtër hyrëse</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Prona e klipit e përdorur për këtë kushtëzon.
+
+Prona e 'daljes së fundit' aktualisht mbështetet vetëm kur ky i kushtëzuar është një fëmijë i një veprimi të analizuesit dhe të dhënat e dhëna do të ndryshojnë në varësi të prodhimit të analizuesit të prindërve.
+
+Për zgjidhjen e problemeve, bashkëngjitni një 'veprim alarmi' para prindit të këtij kushtëzimi dhe vendosni parametrin e mesazhit të alarmit për të përputhur këtë pronë të hyrjes. Kjo do të lejojë të rishikojë të dhënat aktuale që përdoren për këtë kushtëzues.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Pronë e hyrjes</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Kryen një krahasim të tekstit në klipin e hyrjes ose daljen e mëparshme të veprimit. Kur krahasimi dështon (nuk është një ndeshje) asnjë veprim i fëmijëve nuk do të ekzekutohet. Kështu që vepron si një portë logjike.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Të gjitha operacionet e vërteta ose të rreme ku veprimet e fëmijëve do të ekzekutojnë vetëm nëse rezultati është i vërtetë.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Kusht</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Të gjithë</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Shkaktohet kur një klip i llojit të zgjedhur shtohet në sistem në çfarëdo mënyre (klipboard, zvarritje - dhe - rënie, analizues i gjeneruar ose i kopjuar).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Ekzekutoni vetëm këtë shkas nëse klipi i hyrjes është i ri dhe jo një kopje. Kjo është e pavarur nga çdo përcaktim i preferencës nëse përmbajtja e re injorohet apo jo.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Injoroni kopjimin</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Vetëm klipet e këtij lloji do të shkaktojnë këtë veprim.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Lidh klipin e tij të hyrjes me koleksionin e caktuar të etiketave.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Shkaktohet kur një klip është i lidhur me koleksionin e specifikuar të etiketave.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Grumbullim</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Sasia e kohës në milisekonda të pritur para se fëmijët të ekzekutojnë</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Vonoj</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimentale) e përdorur kryesisht në lidhje me veprimin përsëritës për votimin e burimeve të largëta ose ndihmë me operacione të gjata.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kur lihet bosh, skedari i daljes do të përdorë titullin e klipit të hyrjes si emrin e skedarit.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Emër me porosi</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Drejtoria ku do të shkruhet skedari.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Drejtori</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Ruan input në dosjen e zgjedhur.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Shkaktohet kur përmbajtja e dosjes së zgjedhur ndryshon. Prodhimi do të jetë një skedar i ri ose ekzistues (kur të aktivizohet preferenca e kopjoneve të injoruara) të skedarit ose dosjes së skedarit që ka ndryshuar së bashku me llojin e ndryshimit si prodhimi i tij i fundit.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Ngjarje</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Dosje</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Injoroni kopjimin</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Një vlerë prej 0 do të përsërisë veprimin e prindërve për një kohë të pacaktuar</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Përsëriteni numërimin</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Sasia e kohës në milisekonda për të pritur pasi të përfundojë veprimi i prindërve</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Përsëriteni vonesën</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimentale) e përdorur për krijimin e sytheve të veprimit ose detyrave të përsëritura. Kur të përsëritet, do t'i ekzekutojë të gjithë fëmijët përsëri me kontributin e tij origjinal. Kur përdorni një interval pa një numër të përsëritur, këmbëza do të duhet të çaktivizohet dhe të rigjenerohet për të ndaluar përsëritjen. Mund të jetë i dobishëm për votimin ose automatizimin e scraping në internet.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Shkaktuar nga një shkurtore globale që ju përcaktoni. Nëse MonkeyPaste është aktiv, ajo do të përpiqet të përdorë klipin e zgjedhur (nëse ka një) si input. Përndryshe do të përpiqet të përdorë clipboard si inputin e tij.
+
+Shënim: Një shkas shkurtore do të ekzekutojë akoma nëse nuk ka asnjë input për ta mbajtur atë fleksibël (kështu që mund të jetë një nxitje makro etj.) Meqenëse nuk është një ngjarje e drejtuar nga të dhënat.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Shkas në shkurtore</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Shkaktohet kur shkurtoreja e regjistruar shtypet në çdo kohë me clipboard aktual</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Ky veprim kërkon që aplikacioni të rindizet. Dëshironi ta bëni atë tani?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Kishte një problem. Ju duhet të rindizni manualisht aplikacionin.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analizoni me Annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Shënoj shkas</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Ndërtuar në elementë lexohen - vetëm. Dublikoni për të ndryshuar.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonim</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>I zakonshëm</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Dje</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} ditë më parë</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 orë më parë</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} orë më parë</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Tani</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Një minutë më parë</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minuta më parë</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Muajin e kaluar</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} muaj më parë</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Javen e shkuar</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} javë më parë</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} vite më parë</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Shënime</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Emrin e aplikimit</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Rrugë e aplikimit</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>I ndjeshëm</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Përmbajtje</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Lloji i skedarit</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Lloji i figurës</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Shprehje e rregullt</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Lloj teksti</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titull</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Titulli URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Fjalë e plotë</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Ashtu si lëvizja përgjatë skajit të ekranit të lartë për tu hapur, kjo do të bllokojë dritaren kryesore kur të hapet. Lejimi i rrjedhës së punës më të shpejtë me shumë synime.
+
+* Qoshet janë për sa i përket të gjitha ekraneve tuaj, jo për monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Trego dritaren dhe bllokimin</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>E lirë!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Na jepni 5 yje!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Fshij te gjitha</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Fshini të gjithë përmbajtjen</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të fshini
+Të gjitha klipet tuaja?!
+
+*Ky operacion nuk mund të zhbëhet!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Unë jam një dev indy ju lutem tregoni një mbështetje!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Si Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} pranon vetëm hyrjen e llojit (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Mënyra e kopjimit automatik - simulon një ngjarje 'kopjoni' sa herë që lëshohet butoni i majtë i miut.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Mënyra e ngjitjes së djathtë të klikimit - simulon një ngjarje 'paste' sa herë që lëshohet butoni i djathtë i miut</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Paraprak</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Trego dosjen e shtojcave</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Raportoj</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Pamje</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Shfaqja e mjeteve</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analizuesit shënojnë kontributin e tyre ose krijojnë klipe të reja si dalje. Fëmijët e analizuesve duhet të vendosin se për cilën u nevojitet si kontributi i tyre. Kjo zakonisht është prodhimi i fundit.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Lloji i hyrjes</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Dizajneri i Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Zgjidh një {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nuk u gjet...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} shkas</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Kur kontrollohet rezultati i vërtetë ose i rremë i gjendjes do të rrokulliset. Kështu për shembull, një gjendje 'përmbajtja' do të bëhet 'nuk përmban'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Nuk</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Te lutem prit...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Zgjedhësi i Ngjyrave</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Zgjidh ngjyrën e ndeshjes</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Ashtu si një nxitje e shkurtoreve, por kur shtypet kombinimi kryesor, një ngjarje 'kopjimi' do të simulohet në aplikacionin aktiv, kështu që ai akoma funksionon si kopjimi, por më pas zinxhiri i veprimeve të bashkangjitura në këmbëzën e kopjimit të majmunit do të ekzekutohet në sfond duke përdorur Të dhënat e simuluara të kopjimit.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Filtër i përparuar</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Fshehin filtrat</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Rivendosni filtrat</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Krijoni filtër</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opsionale) Kur lihet bosh, clipboard do të vendoset duke përdorur hyrjen e këtij veprimi. Thingdo gjë e dhënë këtu do të trajtohet vetëm si tekst i thjeshtë.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Përmbajtja për clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kur është e vërtetë, asnjë klip nuk do të shtohet pasi ky veprim të vendosë clipboard.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Injoroj</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Asnjë analizues i zgjedhur për veprim '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analizues për veprim '{0}' nuk u gjet</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Filtrat e prindërve '{0}' vetëm për përmbajtjen dhe analizuesin e tipit '{1}' '{2}' nuk do të ekzekutojnë kurrë sepse nuk e mbështet</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Asnjë etiketë e zgjedhur për klasifikuesin '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag për klasifikuesin '{0}' nuk u gjet</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Krahasoni vlerën mund të jenë vetëm shkronja, numra ose hapësira</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Asnjë etiketë e zgjedhur për shkas të etiketuar me clip '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag për clip Tagged Trigger '{0}' nuk u gjet</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Asnjë dosje shikimi e specifikuar për '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Shikoni dosjen '{0}' nuk u gjet për shkas '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Rruga e Shkrimtarit të Skedarit për Veprim '{0}' nuk është vendosur</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Rruga e shkrimtarit të skedarëve '{0}' për '{1}' nuk u gjet.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Shirit detyre</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Mësoni rreth shtojcave</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Rivendosni këtë konfigurim të analizës</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} ndryshoni regjistrin</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Ju lutemi lidheni në internet dhe provoni përsëri më vonë.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - ndihmë</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} është versioni i fundit</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Ju të gjithë jeni lart - për të - datë!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Kontrolloni për azhurnime ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Version i ri në dispozicion!
+
+Klikoni këtu për të azhurnuar në '{0}'</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Klikoni më poshtë për të azhurnuar në '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Përditësoni në dispozicion!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Azhurnoj tani</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' përmban vlera të përbashkëta. Çfarë do të dëshironit të rivendosni?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Qartë</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Qartë kërkimet e fundit</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Rivendos të gjitha</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Rivendosja e përbashkët</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Rivendohu i padenjë</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Thirret veprimi i caktuar i aplikimit. Të gjitha komandat e aplikimit janë pa shtet dhe klipi i tyre i hyrjes injorohet.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kur nuk kontrollohet dhe komanda nuk mund të ndizet, zinxhiri i ekzekutimit do të ndalet. Shumë komanda do të kërkojnë një gjendje specifike të aplikimit në mënyrë që të ekzekutohen.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Gjithmonë vazhdoni?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Komanda për të kryer.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Komandoj</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Asnjë komandë e zgjedhur për komandën e aplikacionit '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Komanda për komandën e aplikimit '{0}' nuk u gjet</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>I zgjedhur</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Rifillo, fillo përsëri</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Kishte një çështje që azhurnonte '{0}'. Për të përfunduar azhurnimin, do t'ju duhet të rindizni dhe instaloni përsëri '{0}' (mos u shqetësoni të gjitha cilësimet tuaja do të rivendosen).
+
+Ju mund të rindizni tani dhe të plotësoni azhurnimin duke ri -instaluar, ta injoroni këtë dhe ta azhurnoni më vonë ose të anuloni azhurnimin të gjithë së bashku dhe të vazhdoni të përdorni versionin '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Gabim i azhurnimit</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nuk mund të shkarkoj azhurnimin</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Përditësimi i dështuar</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Për të përfunduar azhurnimin, do t'ju duhet të rindizni. Dëshironi të rindizni tani apo më vonë?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Përditësoni gati</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Më vonë</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Rifillo tani</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Në pritje</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} u azhurnua me sukses në {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Shtojcat thelbësore kërkohen dhe nuk mund të hiqen.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instalime</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Përditësimi është në pritje. Rinisni për të përfunduar.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Në pritje</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Një çinstalim është në pritje. Ju lutemi rinisni nëse dëshironi të ri -instaloni.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Për të përfunduar çinstalimin, do t'ju duhet të rindizni. Dëshironi të rindizni tani apo më vonë?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Përfundoni çinstaloni?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>I pabotuar</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - Paravendosja e paracaktuar e paracaktuar për '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Asnjë klip i zgjedhur</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analizoni klipin e zgjedhur</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Caktoni një shkurtore për të ekzekutuar '{0}' në klipin e zgjedhur</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Paste globale</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Caktoni shkurtore globale paste për '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Keni harruar fjalëkalimin?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Shkyç</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Politika e privatësisë</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Kërkon rifillim) Kur aktivizohet informacioni diagnostikues do të regjistrohet për të paraqitur. Kjo mund të ngadalësojë performancën dhe mund të përmbajë informacione personale.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Regjistrohuni për të paraqitur</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>I hapur</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Hapni dosjen e shkrimeve</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Shfletoni shtojcat</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lexoj</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Shkruaj</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Dërgoni Raportin e Reagimit ose Bug</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Kjo fsheh vetëm dritaren kryesore. Të gjitha dritaret e tjera jo të dialogut tregohen gjithmonë në shiritin e detyrave.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Kërkoni në '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Shtoni filtrin</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Redakto llojin e bashkimit</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Hiqni këtë filtër</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Ndihmë e hapur për këtë ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipe</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Ndryshoj</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Asnjëherë</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Vendos</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>I paprekur</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Regjistroj</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Referenca e burimit të pa manguar</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Kërkohet '{0}'</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Ka gabime)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>I kufizuar</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Ruajtje</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Plehra</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>I pakufizuar</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Kjo aplikacion aktualisht përputhet me paravendosjet dhe formatet e lexuesit të parazgjedhur të Clipboard.
+
+Mundësimi ose paaftësimi i paravendosjes së paracaktuar të lexuesit (nga shiriti anësor i klipit) nuk do të ndikojë në këtë konfigurim. Vetëm aplikacionet e palistuara ndjekin konfigurimin e paracaktuar.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Kjo aplikacion aktualisht përputhet me paravendosjet dhe formatet e paracaktuar të shkrimtarëve të Clipboard.
+
+Mundësimi ose paaftësimi i paravendosjeve të paracaktuar të shkrimtarit (nga shiriti anësor i klipit) nuk do të ndikojë në këtë konfigurim. Vetëm aplikacionet e palistuara ndjekin konfigurimin e paracaktuar.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Për të shtuar ju duhet të zhbllokoni dëgjuesin e clipboard (tabaka e sistemit -&gt; rifilloni).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Shtojcë e padisponueshme</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Nuk ka cilësime</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Unë flas vetëm anglisht dhe Monkeypaste është përkthyer në këtë gjuhë.
+
+Të gjitha versionet dërgojnë me paketën angleze, kështu që nëse flisni anglisht mund ta ndryshoni gjuhën në të në çdo kohë pas këtij konfigurimi (Cilësimet -&gt; Preferencat -&gt; Ndërkombëtare).
+
+Nëse dëshironi të ndihmoni në përmirësimin e përkthimit, ne do të dëshironim të dëgjonim nga ju!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Përkthimet kanë të bëjnë me përkthimin</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Ju duhet të azhurnoni MonkeyPaste në mënyrë që të përdorni këtë veçori.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Shkurtim</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Dëgjuesi i Clipboard me aftësi të kufizuara</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Dëgjuesi i klipit të aktivizuar</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Veprimi i Prindërve '{0}' nuk e mbështet llojin e pronës së hyrjes 'Prodhimi i fundit'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Mësoni më shumë rreth planeve</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Aplikacion</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Shkumëzoj</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Kapëse</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizues</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Etiketim</value>
+  </data>
+</root>

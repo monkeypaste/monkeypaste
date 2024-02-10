@@ -1,0 +1,11 @@
+{
+  "title": "ಕೋರ್ ಪಠ್ಯ ಟಿಪ್ಪಣಿ",
+  "description": "ಪಠ್ಯ ಆಧಾರಿತ ವಿಷಯಕ್ಕೆ ಮೂಲ ಹೈಪರ್ಲಿಂಕ್ ಬೆಂಬಲವನ್ನು ಒದಗಿಸುತ್ತದೆ",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "ಕೋರ್, ಟಿಪ್ಪಣಿ, ಪಠ್ಯ, ಲಿಂಕ್, ಬಣ್ಣ, ಪಾರ್ಸಿಂಗ್, ವಿಳಾಸ, ಫೋನ್, ಇಮೇಲ್, ಕರೆನ್ಸಿ, ಹಣಕಾಸು"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "కోర్ టెక్స్ట్ ఉల్లేఖనం",
+  "description": "టెక్స్ట్ ఆధారిత కంటెంట్ కోసం ప్రాథమిక హైపర్ లింక్ మద్దతును అందిస్తుంది",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "కోర్, ఉల్లేఖనం, వచనం, లింక్, రంగు, పార్సింగ్, చిరునామా, ఫోన్, ఇమెయిల్, కరెన్సీ, ఫైనాన్స్"
+}

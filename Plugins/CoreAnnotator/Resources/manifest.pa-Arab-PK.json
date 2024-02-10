@@ -1,0 +1,11 @@
+{
+  "title": "ਕੋਰ ਟੈਕਸਟ ਐਨੋਟੇਟਰ",
+  "description": "ਟੈਕਸਟ ਅਧਾਰਤ ਸਮਗਰੀ ਲਈ ਮੁ Sype ਲੀ ਹਾਈਪਰਲਿੰਕ ਸਹਾਇਤਾ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "ਕੋਰ, ਐਨੋਟੇਟ, ਟੈਕਸਟ, ਲਿੰਕ, ਰੰਗ, ਪਾਰਸਿੰਗ, ਪਤਾ, ਫੋਨ, ਈਮੇਲ, ਮੁਦਰਾ, ਵਿੱਤ"
+}

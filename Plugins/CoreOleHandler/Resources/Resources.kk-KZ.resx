@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Елемеу</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Тексерілген {0} пішімі алмасу буферінен немесе апарып тастау деректерінен оқымайды.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Тексерілген {0} пішімі алмасу буферіне немесе апарып тастау деректеріне жазылмайды.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Оқу</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Жазу</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Файлдар</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF әлі болмаса, HTML RTF-ке өзгертіледі. Бұл веб-браузерлер мен / немесе сөздерді өңдеуге арналған қосымшалар арасында пайдалы болуы мүмкін. (rtf пішімін қосуды қажет етеді және тек қолдау көрсетілетін платформалар үшін)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTF түрлендіріңіз</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Бұл каталогтар алмасу буферінен немесе апарып тастау деректерінен оқылмайды.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Каталогтарды елемеді</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Файлды елемейді</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Бұл файл түрлері алмасу буферінен немесе апарып тастау деректерінен оқылмайды.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Бұл файл түрлері алмасу буферіне немесе апарып тастау деректеріне жазылмайды.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Тексерілген кезде, максималды өлшемнен үлкен кескіндер арақатынас арақатынасымен масштабталады. Бұл алмасу буферіндегі кескінге әсер етпейді.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Масштабты габаритті</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Нүктелік кескінді қою кезінде немесе түсірген кезде бұл әдепкі файл түрі болады</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Әдепкі экспорт түрі</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Кейде толығымен мөлдір суреттер аралық сақтағышта көрінеді, оны шатастырады.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Бос кескіндерді елемеңіз</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Үлкен кескіндер (бірнеше MBS-тен көп) тауар-түлік пен жалпы өнімділікті өкінішке орай Бұл мәнді төмен сақтауға тырысыңыз.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Максимум биіктігі</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Максималды ені</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Мақсатты орындау үшін максималды сома қажет</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Максималды таңбалар</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Мәтін (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>'{0}' форматы бос немесе мөлдір деректер болды және бұғатталды</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Бос деректер бұғатталған</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' пішімі «еленбеген» деп белгіленеді</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Формат еленбейді</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} шегі - {1} және деректер {2} болды</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Максималды өлшем анықталды</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Аралық буфердің оқу құрылғысы</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Аралық буфердің жазушысы</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Алмасу буферінің әдепкі форматтарын өңдейді</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Аралық буферлік өңдегіш</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Өзегі, аралық сақтағыш, өрік, мәтін, RTF, RTF, RTF, HTML, CSV, Image, PNG, ZPG, JPEG, сілтеме</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Сурет (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML әлі болмаса, RTF HTML-ге ауыстырылады. Бұл веб-браузерлер мен / немесе сөздерді өңдеуге арналған қосымшалар арасында пайдалы болуы мүмкін. (HTML пішімін қосу керек және тек қолдау көрсетілетін платформалар үшін)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML-ге түрлендіру</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Мәтін</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Көнгісі жоқ</value>
+  </data>
+</root>

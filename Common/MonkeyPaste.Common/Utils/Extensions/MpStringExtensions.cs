@@ -112,6 +112,12 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+        public static bool ContainsHtml(this string text) {
+            // from ResXManager Extensions
+            HtmlDocument doc = new();
+            doc.LoadHtml(text);
+            return doc.DocumentNode.Descendants().Any(n => n.NodeType != HtmlNodeType.Text);
+        }
         public static int[] IndexOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {
             List<int> allIndexOf = new List<int>();
             int index = text.IndexOf(str, comparisonType);

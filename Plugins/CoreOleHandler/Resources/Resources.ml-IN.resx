@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>അവഗണിക്കുക</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>{0} ഫോർമാറ്റ് പരിശോധിക്കുമ്പോൾ ക്ലിപ്പ്ബോർഡിൽ നിന്നോ ഡ്രാഗ്-ഡ്രോപ്പ് ഡാറ്റയിൽ നിന്നോ വായിക്കില്ല.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>{0} ഫോർമാറ്റ് പരിശോധിക്കുമ്പോൾ ക്ലിപ്പ്ബോർഡ് അല്ലെങ്കിൽ ഡ്രാഗ്-ഡ്രോപ്പ് ഡാറ്റയിലേക്ക് എഴുതിയില്ല.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>വായിക്കുക</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>എഴുതുക</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>സിഎസ്വി</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ഫയലുകൾ</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>ആർടിഎഫ് ഇതിനകം നിലവിലില്ലാത്തപ്പോൾ, HTML ആർടിഎഫിലേക്ക് പരിവർത്തനം ചെയ്യും. വെബ് ബ്ര rowsers സറുകൾക്കും / അല്ലെങ്കിൽ വേഡ് പ്രോസസ്സിംഗ് അപ്ലിക്കേഷനുകൾക്കിടയിൽ ഇത് ഉപയോഗപ്രദമാകും. (പ്രവർത്തനക്ഷമമാക്കുന്നതിന് RTF ഫോർമാറ്റ് ആവശ്യമാണ്, അത് പിന്തുണയ്ക്കുന്ന പ്ലാറ്റ്ഫോമുകൾക്ക് മാത്രമുള്ളതാണ്)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>ആർടിഎഫിലേക്ക് പരിവർത്തനം ചെയ്യുക</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>ഈ ഡയറക്ടറികൾ ക്ലിപ്പ്ബോർഡിൽ നിന്നോ വലിച്ചിടൽ ഡാറ്റ നിന്നോ വായിക്കില്ല.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>ഡയറക്ടറികൾ അവഗണിച്ചു</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>ഫയൽ വിപുലീകരണങ്ങൾ അവഗണിച്ചു</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>ഈ ഫയൽ തരങ്ങൾ ക്ലിപ്പ്ബോർഡിൽ നിന്ന് വായിക്കില്ല അല്ലെങ്കിൽ ഡ്രോപ്പ് ഡാറ്റ ഡാറ്റയിൽ നിന്ന് വായിക്കില്ല.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>ഈ ഫയൽ തരങ്ങൾ ക്ലിപ്പ്ബോർഡ് അല്ലെങ്കിൽ ഡ്രാഗ്-ഡ്രോപ്പ് ഡാറ്റയിലേക്ക് എഴുതാം.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>പരിശോധിച്ചപ്പോൾ, വീക്ഷണാനുപാതം നിലനിർത്തുമ്പോൾ പരമാവധി അളവിനേക്കാൾ വലുത് സ്കെയിൽ ചെയ്യും. ഇത് ക്ലിപ്പ്ബോർഡിലെ ചിത്രത്തെ ബാധിക്കില്ല.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>സ്കെയിൽ വലുതാണ്</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>ഒരു ബിറ്റ്മാപ്പ് ഒട്ടിക്കുമ്പോഴോ ഉപേക്ഷിക്കുമ്പോഴോ ഇത് സ്ഥിരസ്ഥിതി ഫയൽ തരമായിരിക്കും</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>സ്ഥിരസ്ഥിതി കയറ്റുമതി തരം</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>ചിലപ്പോൾ പൂർണ്ണമായും സുതാര്യമായ ചിത്രങ്ങൾ ക്ലിപ്പ്ബോർഡിൽ കാണിക്കും.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>ശൂന്യമായ ചിത്രങ്ങൾ അവഗണിക്കുക</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>വലിയ ചിത്രങ്ങൾ (കുറച്ച് എംബിഎസിനേക്കാൾ) ഡ്രാഗ്-ഡ്രോപ്പ്, മൊത്തത്തിലുള്ള പ്രകടനം നിർഭാഗ്യവശാൽ ഒരു പരിധിവരെ മന്ദഗതിയിലാക്കാൻ കഴിയും. ഈ മൂല്യം കുറയ്ക്കാൻ ശ്രമിക്കുക.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>പരമാവധി ഉയരം</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>മാക്സ് വീതി</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>പ്രകടന ആശങ്കകൾക്ക്, പരമാവധി തുക പ്രതീകങ്ങൾ ആവശ്യമാണ്</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>പരമാവധി പ്രതീകങ്ങൾ</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>വാചകം (മൈം)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (മോസ്)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>ഫോർമാറ്റ് '{0}' ശൂന്യമോ സുതാര്യമോ ആയ ഡാറ്റ ഉണ്ടായിരുന്നു, അത് തടഞ്ഞു</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ശൂന്യമായ ഡാറ്റ തടഞ്ഞു</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' ഫോർമാറ്റ് 'അവഗണിച്ച' എന്ന് ഫ്ലാഗുചെയ്തു</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>ഫോർമാറ്റ് അവഗണിച്ചു</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} പരിധി {1} &amp; ഡാറ്റ {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>പരമാവധി വലുപ്പം കണ്ടെത്തി</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>കോർ ക്ലിപ്പ്ബോർഡ് റീഡർ</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>കോർ ക്ലിപ്പ്ബോർഡ് റൈറ്റർ</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>സ്ഥിരസ്ഥിതി ക്ലിപ്പ്ബോർഡ് ഫോർമാറ്റുകൾ കൈകാര്യം ചെയ്യുന്നു</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>കോർ ക്ലിപ്പ്ബോർഡ് ഹാൻഡ്ലർ</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>കോർ, ക്ലിപ്പ്ബോർഡ്, ഡ്രാഗ്, ഡ്രോപ്പ്, ടെക്സ്റ്റ്, ആർടിഎഫ്, റിച്ച് ടെക്സ്റ്റ്, HTML, CSV, ചിത്രം, PNG, JPG, JPEG, LING, LING</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>ചിത്രം (png)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML ഇതിനകം ഇല്ലെങ്കിൽ, ആർടിഎഫ് HTML- ലേക്ക് പരിവർത്തനം ചെയ്യും. വെബ് ബ്ര rowsers സറുകൾക്കും / അല്ലെങ്കിൽ വേഡ് പ്രോസസ്സിംഗ് അപ്ലിക്കേഷനുകൾക്കിടയിൽ ഇത് ഉപയോഗപ്രദമാകും. (പ്രവർത്തനക്ഷമമാക്കേണ്ട HTML ഫോർമാറ്റ് ആവശ്യമാണ്, അത് പിന്തുണയ്ക്കുന്ന പ്ലാറ്റ്ഫോമുകൾക്ക് മാത്രമുള്ളതാണ്)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML- ലേക്ക് പരിവർത്തനം ചെയ്യുക</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>മൂലഗന്ഥം</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>ശീകരിക്കാത്ത</value>
+  </data>
+</root>

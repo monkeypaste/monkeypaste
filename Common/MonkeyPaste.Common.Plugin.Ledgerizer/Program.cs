@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Avalonia;
+﻿using GoogleLiteTextTranslator;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ namespace Ledgerizer {
         GEN_EMPTY_RESX = 1L << 10,
         GEN_ADDON_LISTING = 1L << 11,
         GEN_PROD_LISTING = 1L << 12,
+        TRANSLATE_RESX = 1L << 13
     }
     internal class Program {
         //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
@@ -69,14 +71,14 @@ namespace Ledgerizer {
 
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            MpLedgerizerFlags.GEN_EMPTY_RESX
+            MpLedgerizerFlags.TRANSLATE_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-            //MpLedgerizerFlags.DO_LOCAL_INDEX
+            //MpLedgerizerFlags.DO_LOCAL_INDEX |
             //MpLedgerizerFlags.MOVE_CORE_TO_DAT
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-            //| MpLedgerizerFlags.LOCALIZE_MANIFESTS
+            //MpLedgerizerFlags.LOCALIZE_MANIFESTS
             ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
@@ -99,6 +101,8 @@ namespace Ledgerizer {
 
         static bool GEN_EMPTY_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EMPTY_RESX);
 
+        static bool TRANS_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.TRANSLATE_RESX);
+
         const string BUILD_CONFIG =
 #if DEBUG
             "Debug";
@@ -117,6 +121,7 @@ namespace Ledgerizer {
         const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
 
         const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
+        const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
 
         static string[] PluginNames => [
             "ChatGpt",
@@ -150,6 +155,7 @@ namespace Ledgerizer {
         static List<string> CulturesFound { get; set; } = [];
         static void Main(string[] args) {
             Console.WriteLine("Press any key to ledgerize!");
+            Console.WriteLine($"Tasks: {LEDGERIZER_FLAGS}");
             Console.ReadKey();
             Console.WriteLine("Starting...");
 
@@ -159,7 +165,9 @@ namespace Ledgerizer {
             Console.ReadLine();
         }
         static void ProcessAll() {
-            var test = WorkingCultures;
+            if (TRANS_RESX) {
+                TranslateAllResxWrapper();
+            }
             if (GEN_EMPTY_RESX) {
                 GenAllEmptyLocalizedResx();
             }
@@ -920,45 +928,13 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         }
 
         static void GenAllEmptyLocalizedResx() {
-            List<string> all_ref_resxs =
-            [
-                //Path.Combine(
-                //    MpCommonHelpers.GetSolutionDir(),
-                //    "MonkeyPaste.Avalonia",
-                //    "Resources",
-                //    "Localization",
-                //    "Listings",
-                //    "ListingStrings.resx"),
-                Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "Enums",
-                    "EnumUiStrings.resx"),
-                //Path.Combine(
-                //    MpCommonHelpers.GetSolutionDir(),
-                //    "MonkeyPaste.Avalonia",
-                //    "Resources",
-                //    "Localization",
-                //    "UiStrings",
-                //    "UiStrings.resx"),
-                //.. PluginNames.Select(x =>
-                //    Path.Combine(
-                //        GetPluginProjDir(x),
-                //        "Resources",
-                //        "Resources.resx")),
-            ];
+            var all_ref_resxs = GetAllNeutralResxPaths();
 
             foreach (string ref_resx_path in all_ref_resxs) {
                 var resx_lookup = MpResxTools.ReadResxFromPath(ref_resx_path);
                 var empty_lookup = resx_lookup.ToDictionary(x => x.Key, x => (string.Empty, string.Empty));
-                string ref_resx_dir = Path.GetDirectoryName(ref_resx_path);
-                string localized_resx_file_name_format = $"{Path.GetFileNameWithoutExtension(ref_resx_path)}.{{0}}.resx";
                 foreach (var cc in WorkingCultures) {
-                    string empty_localized_resx_path = Path.Combine(
-                        ref_resx_dir,
-                        string.Format(localized_resx_file_name_format, cc));
+                    string empty_localized_resx_path = GetLocalizedPathFromNeutral(ref_resx_path, cc);
                     if (empty_localized_resx_path.IsFile()) {
                         continue;
                     }
@@ -972,7 +948,163 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     MpConsole.WriteLine(empty_localized_resx_path);
                 }
             }
+        }
 
+        static void TranslateAllResxWrapper() {
+            var all_neutral_resxs = GetAllNeutralResxPaths();
+            int done_count = 0;
+            async Task RunTranslateAsync(string resx_path) {
+                await TranslateAllResxAsync(resx_path);
+                done_count++;
+            }
+            foreach (string neutral_resx_path in all_neutral_resxs) {
+                int pre_count = done_count;
+                RunTranslateAsync(neutral_resx_path).FireAndForgetSafeAsync();
+                while (pre_count == done_count) {
+                    Thread.Sleep(100);
+                }
+            }
+            PrintResxStats();
+        }
+        static async Task TranslateAllResxAsync(string neutral_resx_path) {
+            foreach (string cc in WorkingCultures) {
+                var sw = Stopwatch.StartNew();
+                await TranslateResxAsync(neutral_resx_path, cc);
+            }
+        }
+        static async Task TranslateResxAsync(string neutral_resx_path, string cc) {
+            var translator = new GoogleLiteTextTranslatorPlugin();
+            int max_len = 5000;
+
+            var neutral_resx_lookup = MpResxTools.ReadResxFromPath(neutral_resx_path);
+
+            string trans_resx_path = GetLocalizedPathFromNeutral(neutral_resx_path, cc);
+            if (!trans_resx_path.IsFile()) {
+                MpResxTools.WriteResxToPath(trans_resx_path, neutral_resx_lookup.ToDictionary(x => x.Key, x => (string.Empty, string.Empty)));
+            }
+            var trans_resx_lookup = MpResxTools.ReadResxFromPath(trans_resx_path);
+            var empty_trans_resx_lookup = trans_resx_lookup.Where(x => x.Value.value.IsNullOrEmpty() && !neutral_resx_lookup[x.Key].value.IsNullOrEmpty());
+            // write invariants
+            neutral_resx_lookup
+                .Where(x => x.Value.comment == "@Invariant" && empty_trans_resx_lookup.Any(y => y.Key == x.Key))
+                .ForEach(x => trans_resx_lookup[x.Key] = x.Value);
+
+            // get non-empty neutral single line keys that aren't html, invariant or have localized data
+            var neutral_single_line_kvps =
+                neutral_resx_lookup
+                .Where(x =>
+                    !x.Value.value.Contains(Environment.NewLine) &&
+                    !x.Value.value.ContainsHtml() &&
+                    !string.IsNullOrEmpty(x.Value.value) &&
+                    string.IsNullOrEmpty(trans_resx_lookup[x.Key].value) &&
+                    x.Value.comment != "@Invariant")
+                .OrderBy(x => x.Key)
+                .ToArray();
+            string splitter = Environment.NewLine;// + "**";
+
+            List<List<string>> batches = new() { new() };
+            for (int i = 0; i < neutral_single_line_kvps.Length; i++) {
+                var batch = batches.Last();
+                var cur_kvp = neutral_single_line_kvps[i];
+                batch.Add(cur_kvp.Value.value);
+                int batch_length = batch.Sum(x => x.Length) + (Math.Max(0, batch.Count - 1) * splitter.Length);
+                if (batch_length > max_len) {
+                    List<string> next_batch = new() { batch.Last() };
+                    batch.RemoveAt(batch.Count - 1);
+                    batches.Add(next_batch);
+                }
+            }
+            int base_idx = 0;
+            for (int i = 0; i < batches.Count; i++) {
+                var batch = batches[i];
+                string neutral_text = string.Join(splitter, batch);
+
+                var resp = await translator.AnalyzeAsync(new() {
+                    culture = "en-US",
+                    items = new List<MpParameterRequestItemFormat>() {
+                            new MpParameterRequestItemFormat() {
+                                paramId = "from",
+                                paramValue = "en-US"
+                            },
+                            new MpParameterRequestItemFormat() {
+                                paramId = "to",
+                                paramValue = cc
+                            },
+                            new MpParameterRequestItemFormat() {
+                                paramId = "text",
+                                paramValue = neutral_text
+                            }
+                        }
+                });
+                if (!resp.dataObjectLookup.TryGetValue(MpPortableDataFormats.Text, out var result_single_line_str_obj) ||
+                        result_single_line_str_obj is not string result_single_line_str) {
+                    return;
+                }
+                var trans_results = result_single_line_str.Split(new string[] { splitter }, StringSplitOptions.None);
+                int expected_count = neutral_text.Split(new string[] { splitter }, StringSplitOptions.None).Length;
+                MpDebug.Assert(trans_results.Length == expected_count, $"Count mismiatch. Source {expected_count} Target {trans_results.Length}");
+
+                for (int j = 0; j < trans_results.Length; j++) {
+                    string key = neutral_single_line_kvps[base_idx].Key;
+                    string val = trans_results[j];
+                    trans_resx_lookup[key] = (val, neutral_single_line_kvps[base_idx].Value.comment);
+                    base_idx++;
+                }
+            }
+            MpDebug.Assert(base_idx == neutral_single_line_kvps.Length, $"Base idx mismatch");
+
+            MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
+            MpConsole.WriteLine(trans_resx_path);
+
+        }
+
+        static IEnumerable<string> GetAllNeutralResxPaths() {
+            return
+            [
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "Listings",
+                    "ListingStrings.resx"),
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "Enums",
+                    "EnumUiStrings.resx"),
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "UiStrings",
+                    "UiStrings.resx"),
+                .. PluginNames.Select(x =>
+                    Path.Combine(
+                        GetPluginProjDir(x),
+                        "Resources",
+                        "Resources.resx")),
+            ];
+        }
+        static string GetLocalizedPathFromNeutral(string ref_resx_path, string cc) {
+            string ref_resx_dir = Path.GetDirectoryName(ref_resx_path);
+            string ref_resx_file_name = Path.GetFileNameWithoutExtension(ref_resx_path);
+            string ref_resx_ext = Path.GetExtension(ref_resx_path).Replace(".", string.Empty);
+            string localized_resx_file_name_format = $"{ref_resx_file_name}.{cc}.{ref_resx_ext}";
+
+            string localized_resx_path = Path.Combine(
+                        ref_resx_dir,
+                        string.Format(localized_resx_file_name_format, cc));
+            return localized_resx_path;
+        }
+        static void PrintResxStats() {
+            var all_neu_resxs = GetAllNeutralResxPaths().First();
+            var all_cultures_per_neu_lookup = MpLocalizationHelpers.FindCulturesInDirectory(Path.GetDirectoryName(all_neu_resxs), inv_code: string.Empty).ToList();
+            var lang_groups = all_cultures_per_neu_lookup.Where(x => !x.Name.IsNullOrEmpty()).GroupBy(x => x.Name.SplitNoEmpty("-").First()).ToList();
+            MpConsole.WriteLine($"Languages: {lang_groups.Count} Dialects: {all_cultures_per_neu_lookup.Count}");
         }
         #endregion
 

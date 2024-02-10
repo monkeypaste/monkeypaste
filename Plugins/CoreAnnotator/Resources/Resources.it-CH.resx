@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CurrencyLabel" xml:space="preserve">
+    <value>Valuta</value>
+  </data>
+  <data name="CurrencyTypesDescription" xml:space="preserve">
+    <value>Questi sono gli unici simboli di valuta che saranno annotati.</value>
+  </data>
+  <data name="CurrencyTypesLabel" xml:space="preserve">
+    <value>Simboli valutari</value>
+  </data>
+  <data name="CurrencyUrlDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CurrencyUrlLabel" xml:space="preserve">
+    <value>Collegamento valutario</value>
+  </data>
+  <data name="DefAnnHint" xml:space="preserve">
+    <value>Tutte le annotazioni di testo sono abilitate</value>
+  </data>
+  <data name="DefAnnLabel" xml:space="preserve">
+    <value>Annotatore predefinito</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="HexLabel" xml:space="preserve">
+    <value>Colore esagonale</value>
+  </data>
+  <data name="OptionsDescription" xml:space="preserve">
+    <value>Le opzioni abilitate verranno trovate nel testo della clip e convertite in collegamenti ipertestuali quando necessario.</value>
+  </data>
+  <data name="OptionsLabel" xml:space="preserve">
+    <value>Opzioni</value>
+  </data>
+  <data name="PhoneLabel" xml:space="preserve">
+    <value>Numero di telefono</value>
+  </data>
+  <data name="PhoneUrlDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PhoneUrlLabel" xml:space="preserve">
+    <value>Collegamento del numero di telefono</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Fornisce supporto ipertestuale di base per il contenuto basato sul testo</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, annotato, testo, link, colore, analisi, indirizzo, telefono, e -mail, valuta, finanza</value>
+  </data>
+  <data name="PluginTitle" xml:space="preserve">
+    <value>Annotatore di testo principale</value>
+  </data>
+  <data name="UrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+</root>

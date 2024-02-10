@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorēt</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Pārbaudot {0} formāts, netiks nolasīts no starpliktuves vai vilkšanas un nomešanas datiem.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Pārbaudot {0} formāts, netiks uzrakstīts starpliktuvē vai vilkšanas un nomešanas datos.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lasīt</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Uzrakstīt</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Faili</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Ja RTF vēl nav klāt, HTML tiks pārveidots par RTF. Tas var būt noderīgi starp tīmekļa pārlūkiem un/vai tekstapstrādes lietojumprogrammām. (Nepieciešams iespējot RTF formātu, un tas ir paredzēts tikai atbalstītajām platformām)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Konvertēt uz RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Šie direktoriji netiks nolasīti no starpliktuves vai vilkšanas un nomešanas datiem.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Ignorētie direktoriji</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Ignorēti failu paplašinājumi</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Šie failu veidi netiks nolasīti no starpliktuves vai vilkšanas un pilināšanas datiem.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Šie failu veidi netiks uzrakstīti starpliktuvē vai vilkšanas un nomešanas datos.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Pārbaudot, attēli, kas ir lielāki par maksimālo izmēru, tiks mērogoti, saglabājot malu attiecību. Tas neietekmē starpliktuves attēlu.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Mēroga lielizmēra</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Ielīmējot vai nometot bitkarti, tas būs noklusējuma faila tips</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Noklusējuma eksporta tips</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Dažreiz uz starpliktuves tiks parādīti pilnīgi caurspīdīgi attēli, kas ir mulsinoši.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignorēt tukšus attēlus</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Lieli attēli (vairāk nekā daži MB) diemžēl var padarīt vilkšanu un pilienu un kopējo sniegumu. Mēģiniet saglabāt zemu šo vērtību.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maksimālais augstums</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maksimālais platums</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Bažām par veiktspēju ir vajadzīgas maksimālās summas rakstzīmes</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Maksimālie rakstzīmes</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Teksts (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Formatam '{0}' bija tukši vai caurspīdīgi dati un tas tika bloķēts</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Tukši dati bloķēti</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' formāts tiek atzīmēts kā 'ignorēts'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Formāts ignorēts</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} ierobežojums ir {1} un dati bija {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Atklāts maksimālais izmērs</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core starpliktu lasītājs</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core starpliktuvju rakstnieks</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Apstrādā noklusējuma starpliktuves formātus</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core starpliktuves apstrādātājs</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, starpliktuvē, vilkšana un piliens, teksts, RTF, bagātīgs teksts, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Attēls (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Ja HTML vēl nav klāt, RTF tiks pārveidots par HTML. Tas var būt noderīgi starp tīmekļa pārlūkiem un/vai tekstapstrādes lietojumprogrammām. (Nepieciešams iespējot HTML formātu, un tas ir paredzēts tikai atbalstītajām platformām)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Konvertēt uz HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Teksts</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Bez nosaukuma</value>
+  </data>
+</root>

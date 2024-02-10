@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>무시하다</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>확인하면 {0} 형식은 클립 보드 또는 드래그 앤 드롭 데이터에서 읽지 않습니다.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>확인하면 {0} 형식은 클립 보드 또는 드래그 앤 드롭 데이터에 기록되지 않습니다.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>읽다</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>쓰다</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF가 아직 존재하지 않으면 HTML은 RTF로 변환됩니다. 이는 웹 브라우저 및/또는 워드 프로세싱 응용 프로그램간에 유용 할 수 있습니다. (RTF 형식이 활성화되어야하며 지원되는 플랫폼에만 해당됩니다)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTF로 변환</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>이 디렉토리는 클립 보드 또는 드래그 앤 드롭 데이터에서 읽지 않습니다.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>디렉토리를 무시했습니다</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>파일 확장을 무시했습니다</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>이 파일 유형은 클립 보드 또는 드래그 앤 드롭 데이터에서 읽지 않습니다.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>이 파일 유형은 클립 보드 또는 드래그 앤 드롭 데이터에 기록되지 않습니다.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>점검하면 종횡비를 유지하면서 최대 치수보다 큰 이미지가 조정됩니다. 클립 보드의 이미지에는 영향을 미치지 않습니다.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>규모의 대형</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>비트 맵을 붙여 넣거나 떨어 뜨릴 때 이것은 기본 파일 유형입니다.</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>기본 내보내기 유형</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>때로는 완전히 투명한 이미지가 클립 보드에 나타납니다.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>빈 이미지를 무시하십시오</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>큰 이미지 (몇 MB 이상)는 불행히도 드래그 앤 드롭과 전반적인 성능을 다소 느리게 만들 수 있습니다. 이 값을 낮게 유지하십시오.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>최대 높이</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>최대 너비</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>성능 문제의 경우 최대 금액이 필요합니다.</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>맥스 캐릭터</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (Mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>텍스트 (마임)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>형식 '{0}'은 비어 있거나 투명한 데이터가 있었고 차단되었습니다.</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>빈 데이터 차단</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}'형식은 '무시'로 표시됩니다.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>형식이 무시됩니다</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} 한계는 {1}이고 데이터는 {2}입니다.</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>최대 크기가 감지되었습니다</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>핵심 클립 보드 리더</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>핵심 클립 보드 작가</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>기본 클립 보드 형식을 처리합니다</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>핵심 클립 보드 핸들러</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>코어, 클립 보드, 드래그 앤 드롭, 텍스트, RTF, 리치 텍스트, HTML, CSV, 이미지, PNG, JPG, JPEG, 링크</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>이미지 (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML이 아직 존재하지 않으면 RTF는 HTML로 변환됩니다. 이는 웹 브라우저 및/또는 워드 프로세싱 응용 프로그램간에 유용 할 수 있습니다. (HTML 형식이 활성화되어야하며 지원되는 플랫폼에만 해당됩니다)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML로 변환하십시오</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>텍스트</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>제목없는</value>
+  </data>
+</root>

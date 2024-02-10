@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Үл тоомсорлох</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Шалгасан {0} формат нь санах ойн самбараас унших эсвэл чирэх, дусал өгөгдлийг уншихгүй.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Шалгасан {0} форматыг санах ойд эсвэл чирэх, дусаах өгөгдлийг бичихгүй.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Уншсан</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Бичих</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>Csv</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Фиднарүүд</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTF байхгүй бол HTML нь RTF-д хөрвүүлнэ. Энэ нь Вэб хөтөч ба / эсвэл үг боловсруулах програмын хооронд ашигтай байж болно. (RTF форматыг идэвхжүүлсэн бөгөөд зөвхөн дэмжсэн платформ дээр ашиглах шаардлагатай).</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTF болгон хөрвүүлэх</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Httl</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Эдгээр лавлах сангууд нь санах ойноос санах самбар, чирэх, дусал өгөгдлийг уншихгүй.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Үл тоомсорлосон лавлах сан</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Файлын өргөтгөлүүдийг үл тоомсорлов</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Эдгээр файлын төрлүүд нь санах ойноос санах самбараас унших эсвэл чирэх өгөгдлийг уншихгүй.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Эдгээр файлын төрлийг санах ойд эсвэл чирэх, буулгах өгөгдлийг бичихгүй.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Шалгаж үзсэн үед зурагнаас том хэмжээтэй зураг нь томоохон харьцааг хадгалахад том хэмжээтэй байх болно. Энэ нь санах ой дээрх зурагт нөлөөлөхгүй.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Хэмжилтийг томилсон</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Bitmap-ийг буулгах эсвэл хаяхдаа энэ нь файлын үндсэн төрөл байх болно</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Экспортын үндсэн төрөл</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Заримдаа бүрэн ил тод дүрсүүд нь санах ой дээр гарч ирэх болно.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Хоосон зургийг үл тоомсорлох</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Том зургууд (цөөн хэдэн mbs-ээс их) нь чирэх, уналт, ерөнхий гүйцэтгэлийг харуулж чаддаг. Энэ утгыг бага байлгахыг хичээ.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Мотын өндөр</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Хамгийн их өргөн</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Гүйцэтгэлийн талаар санаа зовохын тулд хамгийн их хэмжээний тэмдэгт хэрэгтэй байна</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Макс тэмдэгтүүд</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Текст (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Формат '{0}' хоосон эсвэл ил тод өгөгдөлтэй байсан бөгөөд хаагдсан байна</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Хоосон өгөгдлийг хаасан</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0} форматыг' үл тоомсорлосон 'гэж тэмдэглэсэн болно</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Форматыг үл тоомсорлов</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} хязгаар нь {1} ба өгөгдөл {2} байсан</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Хамгийн их хэмжээ илэрсэн</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core Clipboard Reader</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Гол санах ойд зохиолч</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Үндсэн санах ойн форматыг бариул</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Үндсэн санах ойн гар ажиллагаа</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Гол, Clipboard, Clipboard, чирж, текст, текст, remf, rov, csv, csv, jpg, jpg, jpg, jpg, jpg, jpg, jpg, jpg, холбоос</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Зураг (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTML байхгүй бол RTF-ийг HTML болгон хөрвүүлнэ. Энэ нь Вэб хөтөч ба / эсвэл үг боловсруулах програмын хооронд ашигтай байж болно. (HTML форматыг идэвхжүүлсэн бөгөөд зөвхөн дэмжсэн платформ дээр ашиглах боломжтой).</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML болгон хөрвүүлэх</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Сэдэв</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Гарчиггүй</value>
+  </data>
+</root>

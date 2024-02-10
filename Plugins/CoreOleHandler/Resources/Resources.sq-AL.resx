@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Injoroj</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Kur kontrollohet formati {0} nuk do të lexohet nga të dhënat e klipit ose tërheqjes dhe pikës.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Kur kontrollohet formati {0} nuk do të shkruhet në të dhënat e clipboard ose tërheqës.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lexoj</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Shkruaj</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Dosje</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Kur RTF nuk është tashmë e pranishme, HTML do të shndërrohet në RTF. Kjo mund të jetë e dobishme midis shfletuesve të uebit dhe/ose aplikacioneve të përpunimit të fjalëve. (kërkon që formati RTF të aktivizohet dhe është vetëm për platformat e mbështetura)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Kthehu në RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Këto drejtori nuk do të lexohen nga të dhënat e klipit ose zvarritjes dhe pikave.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Drejtoritë e injoruara</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Zgjatjet e injoruara të skedarëve</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Këto lloje skedarësh nuk do të lexohen nga të dhënat e clipboard ose tërheqës.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Këto lloje skedarësh nuk do të shkruhen në të dhënat e clipboard ose tërheqës dhe zvarritje.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Kur kontrollohen, imazhet më të mëdha se dimensioni maksimal do të shkallëzohen ndërsa ruan raportin e aspektit. Kjo nuk ndikon në imazhin në clipboard.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Shkallë e tepërt</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Kur ngjitni ose hedhni një bitmap, kjo do të jetë lloji i paracaktuar i skedarit</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Lloji i eksportit të paracaktuar</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Ndonjëherë imazhet plotësisht transparente do të shfaqen në clipboard, konfuze e saj.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Injoroni imazhet boshe</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Imazhe të mëdha (më shumë se disa MB) mund të bëjnë performancën tërheqëse dhe të përgjithshme disi të ngadalta për fat të keq. Mundohuni ta mbani këtë vlerë të ulët.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Lartësia maksimale</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Gjerësi maksimale</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Për shqetësimet e performancës, nevojitet një sasi maksimale e karaktereve</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Karakteret maksimale</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Teksti (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Formati '{0}' kishte të dhëna boshe ose transparente dhe ishte bllokuar</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Të dhënat boshe të bllokuara</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Formati '{0}' është flamuruar si 'i injoruar'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Formati i injoruar</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} kufiri është {1} dhe të dhënat ishin {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Madhësia maksimale e zbuluar</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Lexuesi thelbësor i clipboard</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Shkrimtar kryesor i klipit</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Merret me formatet e paracaktuar të clipboard</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Mbajtësi thelbësor i klipit</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, Clipboard, Drag and Drop, Tekst, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Imazhi (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Kur HTML nuk është tashmë e pranishme, RTF do të shndërrohet në HTML. Kjo mund të jetë e dobishme midis shfletuesve të uebit dhe/ose aplikacioneve të përpunimit të fjalëve. (kërkon që formati HTML të aktivizohet dhe është vetëm për platformat e mbështetura)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Shndërroni në HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>I paprekur</value>
+  </data>
+</root>

@@ -1,0 +1,82 @@
+{
+  "title": "Kaihuri Kōnae",
+  "description": "Taea ai e nga konae te whakamaoritia ki nga whakaahua, ki nga momo tuhinga tuhinga ranei",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "Core, Kuputuhi, Whakaahua, Kōnae, Whakawhiti, Kōnae ki te Kuputuhi, kōnae ki te Whakaahua",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Kōnae ki te huri",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "Momo Putanga",
+        "description": "Anake .png or .txt ranei inaianei",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Kupu tuhi",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "Pakoko",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Tahuri ki te tuhinga",
+        "iconUri": "text.png",
+        "description": "E ngana ana ki te huri i te konae ki te kuputuhi noa",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Tahuri ki te ahua",
+        "description": "E ngana ana ki te huri i te konae ki te ahua o te mahara-mahara",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

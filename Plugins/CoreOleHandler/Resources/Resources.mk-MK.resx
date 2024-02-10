@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Игнорирај</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Кога се провери {0} формат нема да се прочита од таблата со клип или податоци за влечење и пад.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Кога се провери {0} формат нема да биде напишан на таблата со клип или податоци за влечење и паѓање.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Прочитајте</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Напиши</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Датотеки</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Кога RTF не е веќе присутен, HTML ќе се претвори во RTF. Ова може да биде корисно помеѓу веб -прелистувачи и/или апликации за обработка на текст. (бара формат RTF да биде овозможен и е само за поддржани платформи)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Конвертирајте во RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Овие директориуми нема да бидат прочитани од таблата со клип или податоци за влечење и паѓање.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Игнорирани директориуми</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Игнорирани екстензии на датотеки</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Овие типови датотеки нема да бидат прочитани од таблата со исечоци или податоци за влечење и паѓање.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Овие типови датотеки нема да бидат напишани на таблата со исечоци или податоци за влечење и паѓање.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Кога се проверуваат, сликите поголеми од максималната димензија ќе бидат намалени додека го задржуваат односот на аспект. Ова не влијае на сликата на таблата со клип.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Скала преголема</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Кога залепувате или испуштате битмап, ова ќе биде стандардниот тип на датотека</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Стандарден вид на извоз</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Понекогаш целосно транспарентни слики ќе се појават на таблата со клип, збунувачки.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Игнорирајте празни слики</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Големите слики (повеќе од неколку МБ) можат за жал да направат влечење и паѓање и целокупните перформанси малку слаби. Обидете се да ја задржите оваа вредност на ниско ниво.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Максимална висина</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Максимална ширина</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>За загриженост за перформансите, потребни се максимални знаци</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Макс карактери</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (мими)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Текст (мими)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Формат '{0}' имаше празни или транспарентни податоци и беше блокиран</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Празни податоци блокирани</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Форматот „{0}“ е обележан како „игнориран“</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Формат игнориран</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} Ограничување е {1} и податоците беа {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Откриена максимална големина</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Читател на основни табли</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Писател на основни табли</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Се справува со стандардните формати на таблата со исечоци</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Ракувач на таблата со основни табли</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, Clipboard, Drag and Drop, Text, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, LINK</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Слика (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Кога HTML не е веќе присутен, RTF ќе се претвори во HTML. Ова може да биде корисно помеѓу веб -прелистувачи и/или апликации за обработка на текст. (бара да се овозможи формат HTML и е само за поддржани платформи)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Конвертирајте во HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Без наслов</value>
+  </data>
+</root>

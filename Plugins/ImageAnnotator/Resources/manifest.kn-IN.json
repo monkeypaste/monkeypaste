@@ -1,0 +1,53 @@
+{
+  "title": "ಚಿತ್ರ ಟಿಪ್ಪಣಿ",
+  "description": "ಸಂಪೂರ್ಣವಾಗಿ ಉಚಿತ, ಸ್ಥಳೀಯ ಮತ್ತು ಹಗುರವಾದ ಆಬ್ಜೆಕ್ಟ್ ಡಿಟೆಕ್ಟರ್ 80 ವಿವಿಧ ರೀತಿಯ ವಸ್ತುಗಳ ಮೇಲೆ ತರಬೇತಿ ಪಡೆದಿದೆ.",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/ImageAnnotator",
+  "packageUrl": "https://github.com/monkeypaste/ImageAnnotator/releases/download/v1.0.0/ImageAnnotator.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/icon.png",
+  "packageType": "Dll",
+  "tags": "ಚಿತ್ರ ಪತ್ತೆ, ಟಿಪ್ಪಣಿ, ಚಿತ್ರ, ಎಐ, ಪಠ್ಯ",
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageToken": true
+    },
+    "parameters": [
+      {
+        "label": "ಆತ್ಮವಿಶ್ವಾಸ",
+        "description": "ಪತ್ತೆಯಾದ ನಿಖರತೆಯನ್ನು ಫಿಲ್ಟರ್ ಮಾಡಲು 0 ಮತ್ತು 1 ರ ನಡುವಿನ ಮೌಲ್ಯ",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "minimum": 0,
+        "maximum": 1,
+        "isRequired": true,
+        "paramId": "conf",
+        "values": [
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": "img64",
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      }
+    ]
+  }
+}

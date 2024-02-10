@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Անտեսել</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>{0} ստուգման դեպքում ձեւաչափը չի կարդա Clipboard- ից կամ Drop-Drop- ի տվյալներից:</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>{0} ստուգման դեպքում ձեւաչափը չի գրվելու Clipboard- ին կամ Drop-Drop- ի տվյալներին:</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Կարդալ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Գրել</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Ֆայլեր</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Երբ RTF- ն արդեն առկա չէ, HTML- ը վերածվելու է RTF- ի: Սա կարող է օգտակար լինել վեբ զննարկիչների եւ / կամ բառերի մշակման ծրագրերի միջեւ: (պահանջում է RTF ձեւաչափը միացնել եւ միայն օժանդակ հարթակների համար)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Փոխարկեք RTF- ը</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Այս դիրեկտորիաները չեն կարդա Clipboard- ից կամ Drag-and-Drop- ի տվյալներից:</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Անտեսել գրացուցակները</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Անտեսված ֆայլի ընդարձակումներ</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Այս ֆայլի տեսակները չեն կարդա Clipboard- ից կամ Drop-Drop- ի տվյալներից:</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Այս ֆայլի տեսակները չեն գրվի Clipboard- ին կամ Drop-Drop- ի տվյալների վրա:</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Ստուգվելիս, առավելագույն չափից ավելի պատկերներ կշեռք կշեղվեն, միաժամանակ պահպանելու տեսանկյունից հարաբերակցությունը: Սա չի ազդում Clipboard- ի պատկերի վրա:</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Մասշտաբի չափը</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Bitmap- ի տեղադրման կամ նետելիս սա կլինի լռելյայն ֆայլի տեսակը</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Արտահանման լռելյայն տեսակը</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Երբեմն լիովին թափանցիկ պատկերներ կցուցադրվեն clipboard- ում, դրա խառնաշփոթը:</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Անտեսել դատարկ պատկերները</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Խոշոր պատկերները (մի քանի MB- ից ավելի) կարող են քաշել-կաթիլ եւ ընդհանուր ներկայացում, ցավոք դանդաղորեն: Փորձեք այս արժեքը ցածր պահել:</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Առավելագույն բարձրությունը</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Max լայնությունը</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Կատարողական մտահոգությունների համար անհրաժեշտ է առավելագույն գումարի նիշ</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max նիշ</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Տեքստ (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>«{0}» ձեւաչափը ուներ դատարկ կամ թափանցիկ տվյալներ եւ արգելափակվեց</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Դատարկ տվյալները արգելափակված են</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>«{0}» ձեւաչափը դրոշմված է որպես «անտեսված»</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Ձեւաչափը անտեսվեց</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} Սահմանը {1}} եւ տվյալներն էին 2</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Հայտնաբերվել է առավելագույն չափը</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core Clipboard Reader</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Clipboard Գրող</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Գործում է լռելյայն clipboard- ի ձեւաչափերը</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Հիմնական, clipboard, քաշել եւ թողնել, տեքստ, RTF, հարուստ տեքստ, HTML, CSV, պատկեր, PNG, JPG, JPEG, հղում</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Պատկեր (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Երբ HTML- ն արդեն առկա չէ, RTF- ը կվերափոխվի HTML: Սա կարող է օգտակար լինել վեբ զննարկիչների եւ / կամ բառերի մշակման ծրագրերի միջեւ: (պահանջում է, որ HTML ձեւաչափը միացված լինի եւ միայն օժանդակ հարթակների համար է)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Փոխարկեք HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Տեքստ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Անիրական</value>
+  </data>
+</root>

@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Nid oes unrhyw nodweddion wedi'u cyfyngu gan danysgrifiad, dim ond capasiti storio a gellir ei newid ar unrhyw adeg.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Adfer eich cyfrif presennol ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Mae cynnwys a sbwriel yn
+cyfyngedig i {0} a {1}
+clipiau yn y drefn honno.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Yn caniatáu hyd at glipiau {2} o gynnwys a storio sbwriel diderfyn.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Cynnwys anghyfyngedig a diderfyn a storio sbwriel.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Hatgyweiriff</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Ryddhaem</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Safonol</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Diderfyn</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Tanysgrifiadau</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Mae eich preifatrwydd yn bwysig a gall data clipfwrdd fod yn bersonol iawn. Mae storio bob amser yn cael ei amgryptio ond gallwch chi osod cyfrinair y bydd ei angen rhag ofn bod eich dyfais yn cael ei dwyn neu fod rhywun arall yn defnyddio'ch dyfais.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Gyfrinair</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Pan fydd wedi'i alluogi, bydd llusgo o unrhyw gais i ben y sgrin yn datgelu MonkeyPaste i ollwng cynnwys yn hawdd i MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Bydd galluogi'r 'clo' yn y chwith uchaf o'r brif ffenestr yn dal i ganiatáu gollwng ar MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Mae mwy o ddewisiadau ffenestri ar gael o'r ddewislen 'Gosodiadau -&gt; Dewisiadau -&gt; Ffenestr'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Llusgo bananas i fyny yma!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Llusgo - i - ar agor</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Gellir adolygu neu newid llwybrau byr bysellfwrdd ar unrhyw adeg o'r ddewislen 'Gosodiadau -&gt; Llwybrau Byr.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Bydd pob llwybr byr byd -eang yn anabl fel y gallwch eu sefydlu eich hun yn nes ymlaen.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Bydd llwybrau byr clipfwrdd MonkeyPaste ar gael ym mhob cais.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Fewnol</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Diofyn</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Proffil ystum</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hei! Gadewch i ni sefydlu ychydig o bethau i wella'ch profiad cyffredinol gyda MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Groesawem</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>I gael y defnydd mwyaf allan o MonkeyPaste, mae llwytho'n awtomatig pan fyddwch chi'n mewngofnodi yn syniad da. Ond, chi sydd i benderfynu yn llwyr.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Ei gadw'n achlysurol.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Galluoga</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Llwytho ar fewngofnodi?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Pan fydd wedi'i alluogi, bydd ystum sgrolio ar ben y sgrin yn datgelu monkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Chwith - Bydd clicio eicon y bar tasgau yn dal i agor MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Mae mwy o ddewisiadau ffenestri ar gael o'r ddewislen 'Gosodiadau -&gt; Dewisiadau -&gt; Ffenestr'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Hawdd iawn?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Sgroliwch i fyny yma!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Sgrolio - i - ar agor</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p alin = "Center"&gt; MonkeyPaste yw &lt;Span Color = "Red&gt; yn llawn integredig &lt;/span&gt; gyda llusgo - a - gollwng &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Gollyngwch ef yma!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p alin = "Center"&gt; Fel hyn, gellir cyrchu monkeyPaste &lt;br&gt; &lt;span lliw = "coch"&gt; heb glicio &lt;/span&gt; neu hyd yn oed &lt;span lliw = "coch"&gt; batio llygad &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Llusgwch fi!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Rhowch gynnig arni!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Rhowch gynnig arni!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Nid oes canlyniadau ar gael.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Chadarnhasoch</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Adfywiad</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Chwilio ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Ngosodiadau</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dibyniaethau:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Arsefydlwch</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am gael gwared ar '{0}' a'i holl ragosodiadau a llwybrau byr?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Dadosod</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>Nid oes gan '{0}' unrhyw ganlyniadau.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Dim dewis.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Neb</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Credydau:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Disgrifiad:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Rhoi:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Trwydded:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL y prosiect:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Cyhoeddwyd:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Darllenwch fi:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Riportio Cam -drin:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tagiau:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Diweddara ’</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Fersiwn:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Ar agor yn y ffenestr</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Wfftiwyd</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Adfywiad</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Hiachasit</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Nesaf i ddileu!
+
+Uwchraddio i osgoi.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Wrth ymyl sbwriel!
+
+Uwchraddio i osgoi.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Ffeiliau</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Nelwedd</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Tecstio</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Copïwyd {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Ffeiliau | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} Llinellau</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} copïau | Pastes {1}</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Ysgogwch</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Gyfrifon</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Copïan</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Lladdwch</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Pastia</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>Copi {0}</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Hidlydd heb ei gadw</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- dewiswch -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Fformatau</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Narllenwyr</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Ysgrifenwyr</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Trinwyr</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Croeswn</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Ddyblygwch</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Golygu Enw</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Ail gychwyn</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tagiau</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Weithred</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Llwybro Byd -eang</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Llwybr byr</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Rhaid i ystumiau fod yn unigryw a dim ond un allwedd fewnbwn y gallant eu cynnwys.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Mewnol &lt;/b&gt; Mae'r holl lwybrau byr wedi'u cyfyngu i o fewn y cais. Nid yw hwn yn opsiwn a fwriadwyd mewn gwirionedd ond gall ganiatáu addasu pa lwybrau byr rydych chi'n bwriadu eu gwneud yn fyd -eang &lt;i&gt; someday &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; diofyn &lt;/b&gt; Mae'r holl lwybrau byr byd -eang wedi'u galluogi. Mae'r llwybr byr &lt;b&gt; dangos/cuddio prif ffenestr &lt;/b&gt; yn defnyddio &lt;span lliw = "coch"&gt; diystyru &lt;/span&gt; llwybro ar gyfer yr allwedd clo &lt;b&gt; capiau &lt;/b&gt;. Gallwch chi newid yr llwybro neu'r ystum honno ar unrhyw adeg. Ond &lt;span lliw = "gwyrdd"&gt; rhowch gynnig arni &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/ head&gt;
+&lt;dody&gt;
+&lt;h1&gt; Moddau llwybr byr byd -eang &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; goddefol &lt;/b&gt; bydd monkeypaste llwybr byr yn gwrando amdano mewn unrhyw gais. &lt;br&gt;
+*Dyma'r opsiwn &lt;i&gt; yn unig &lt;/i&gt; ar Linux am y tro.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; cyn &lt;/b&gt; bydd y llwybr byr yn gweithredu &lt;b&gt; &lt;i&gt; cyn &lt;/i&gt; &lt;/b&gt; Mae'n cael ei drin gan y cymhwysiad gweithredol. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; Bydd y llwybr byr yn gweithredu &lt;b&gt; &lt;i&gt; ar ôl &lt;/i&gt; &lt;/b&gt; Mae'n cael ei drin gan y cymhwysiad gweithredol. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; diystyru &lt;/b&gt; Pan fydd monkeyPaste yn clywed yr allwedd fewnbwn (allwedd nad yw'n addasydd) llwybr byr gwrthod trywydd byr, bydd yn cuddio &lt;/i&gt; y wasg allweddol honno o fewnbwn lefel y cais. &lt;br&gt;
+Bydd yr opsiwn hwn yn gwarantu bod y llwybr byr yn cael ei sbarduno heb wrthdaro i'r cais gweithredol.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Diystyru unigryw &lt;/b&gt; Mae hwn yn fath arbennig o fodd diystyru a ddyluniwyd ar gyfer yr allwedd clo CAPS. Dim ond ar gyfer ei aseiniad y mae'n caniatáu &lt;b&gt; un &lt;/b&gt; allwedd (heb fod yn addasydd).
+Mewn modd diystyru arferol gall capiau capiau ddod yn &lt;i&gt; yn sownd ar &lt;/i&gt; wrth gael ei wasgu mewn cyfuniad ag allweddi eraill. &lt;br&gt;
+Felly ni waeth pa allweddi eraill sydd i lawr, os yw llwybr byr &lt;b&gt; hotkey &lt;/b&gt; yn cael ei wasgu, bydd yn cael ei ddiystyru a'i atal rhag dod yn &lt;i&gt; yn sownd ar &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Analluogasech</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Llwythwch i fyny pan fydd y cyfrif defnyddiwr hwn wedi mewngofnodi, nid ar gyfer defnyddwyr eraill.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Gan ddefnyddio'r cysylltiadau sydd ar gael (angen ategyn fetcher) bydd y maes hwn yn cael ei ddefnyddio ar gyfer pob achos o'r templed hwn ar draws y ddogfen hon neu mewn unrhyw un y cyfeirir ato yn ddiweddarach. &lt;/p&gt; &lt;p&gt; Felly er enghraifft os dewiswch gyfeiriad e -bost Yma yna bydd maes e -bost y cyswllt rydych chi'n ei ddewis yn cael ei ddefnyddio ar gyfer pob achos yn y ddogfen hon. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = blwyddyn fer &lt;br/&gt; yyyy = blwyddyn hir &lt;br/&gt; m = mis (1-12) &lt;br/&gt; mm = mis (01-12) &lt;br/&gt; mmm = talfyriad mis (Jan, Chwefror .. . Dec) &lt;br/&gt; mmmm = mis hir (Ionawr, Chwefror ... Rhagfyr) &lt;br/&gt; d = diwrnod (1 - 31) &lt;br/&gt; dd = diwrnod (01 - 31) &lt;br/&gt; ddd = Diwrnod yr Wythnos mewn Geiriau (dydd Llun, dydd Mawrth ... dydd Sul) &lt;br/&gt; e = diwrnod byr yr wythnos mewn geiriau (mon, maw ... haul) &lt;br/&gt; D - Diwrnod Ordinal (1af, 2il, 3ydd, 21ain, 22ain, 23ain, 31ain, 4ydd ...) &lt;br/&gt; h = awr yn am/pm (0-12) &lt;br/&gt; hh = awr yn am/pm (00-12) &lt;br/ &gt; H = awr yn y dydd (0-23) &lt;br/&gt; hh = awr yn y dydd (00-23) &lt;br/&gt; mm = munud &lt;br/&gt; ss = ail &lt;br/&gt; sss = miliseconds &lt;br/&gt; marciwr a = am/pm &lt;br/&gt; p = a.m./p.m. marciwr</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Bydd y dyddiad a/neu'r amser cyfredol yn cael ei amnewid yn lle templedi amser dyddiad pan gânt eu pastio.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Bydd holl ddiaredd y templed hwn yn defnyddio'r testun a ddarperir. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Bydd holl ddiaredd y templed hwn yn defnyddio'r testun a ddarperir. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Gorffen atodi</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Galluogi Bloc</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Galluogi Inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Llawlyfr Toggle</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Llawlyfr Toggle</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Oedi atodi</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Togl o'r blaen</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Togl o'r blaen</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Ailddechrau atodi</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Atodi ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Pastia</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Piniff</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Dadleuon</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Cuddio pob hysbysiad '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Wfftiwyd</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Ap Gweithredol Olaf Anhysbys. Newid i'r app a fwriadwyd i past mwnci.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Gludwch i: &lt;em&gt; &lt;i class = "past-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Gynfaleiddion</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Arhoswch os gwelwch yn dda...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Gloiff</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Cyfrifon</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Helpom</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Copïo a Gludo</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Newisiadau</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Adfer diffygion</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Hidlo ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Llwybrau byr</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Ychwanegu App</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Ychwanegu Gwefan</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bloc?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Henwem</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Apiau</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Parth bloc?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Bloc url?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Mharth</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Mae cydnabyddiaeth URL ffynhonnell yn dibynnu ar ba mor gyfeillgar i glipfwrdd Mae'r cais gwesteiwr felly ni ellir gwarantu gwrthod</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Dryll</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Gwefannau</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Mae rhai nodweddion MonkeyPaste yn defnyddio awtomeiddio bysellfwrdd i efelychu digwyddiadau 'copi' mewn cymwysiadau eraill.
+
+Ychwanegwch a/neu ddewis yr ap gyda'r llwybr byr copi unigryw (fel consol neu gragen er enghraifft) i sicrhau bod y nodweddion hynny'n gweithredu'n iawn.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Copïo llwybr byr</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Neb</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Dim ond y rhagosodiadau a ddewiswyd fydd yn cael eu defnyddio ar gyfer y cais penodedig. Pan fydd yn amhenodol, defnyddir y rhagosodiadau diofyn a geir yn y &lt;em&gt; clipboard SideBar &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Mae llawer o nodweddion MonkeyPaste yn defnyddio awtomeiddio bysellfwrdd i ryngweithio â chymwysiadau eraill.
+
+Efallai y bydd gan rai cymwysiadau (fel rhai consolau neu gregyn er enghraifft) lwybr byr past diofyn.
+
+Er mwyn sicrhau rhyngweithrededd cywir, cofnodwch y llwybrau byr hynny ar gyfer y cais hwnnw yma.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Gludo llwybr byr</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Narllenwyr</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Bydd yr holl fonitro clipfwrdd o gymwysiadau a wrthodwyd yn cael ei anwybyddu &lt;b&gt; &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Ysgrifenwyr</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Golygu ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Fformatau</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Gwrthod</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Llwybrau byr</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Hoffech chi hefyd gael gwared ar yr holl glipiau {0} o '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Tynnu clipiau?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Nghais</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Porwch i ap ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Dewiswch Llwybr Cais</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am gael gwared ar lwybrau byr arfer ar gyfer {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am gael gwared ar fformatau arfer ar gyfer {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Nid oes fformatau clipfwrdd penodedig ar gyfer yr app hon. Ni fydd unrhyw ddata'n cael ei ddarllen ohono trwy dorri/copïo na cheisio llusgo - a - galw heibio i MonkeyPaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Nid oes fformatau clipfwrdd penodedig ar gyfer yr app hon. Ni fydd past neu lusgo awtomataidd - a - gollwng o monkeyPaste yn cael unrhyw effaith (ei ddata gwag).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ailosod pob llwybr byr? Bydd yr holl lwybrau byr arfer yn cael ei dynnu.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am newid eich proffil llwybro llwybr byr i '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>I gyd</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Ffefrynnau</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Hidlwyr</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Fformatau</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tagiau</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Heddiw</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Sbwriel</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Yn ymwneud</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Hawdd iawn?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Cliciwch ddwywaith i Unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Arferol</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Byd -eang</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Mae'r cyfuniad hwn yn gwrthdaro â '{0}' a fydd yn cael ei glirio os caiff ei arbed.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Rhaid darparu llwybr byr.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Llwybr byr byd -eang yw hwn. Mae hynny'n golygu y bydd yn ceisio gweithredu pryd bynnag y caiff ei berfformio. Ceisiwch ei wneud yn ddigon unigryw (neu newid y 'math llwybro') i beidio â gwrthdaro â llwybrau byr o gymwysiadau eraill.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Byd -eang</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Rhaid i'r llwybr byr gynnwys un a dim ond un allwedd nad yw'n addasydd.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Pwyswch unrhyw allwedd i recordio ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Aseinio llwybr byr</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Dysgu mwy...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Huwchraddiasant</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Chansliff</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Sefydlogaf</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Anwybyddem</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Na</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Iawn</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Chyrchwch</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Chaead</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Chyflwynem</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ie</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Flynyddol</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Misol</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Ceisiwch am ddim!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Cylch bilio</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E -bost</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Mewngofnodi</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Gwiriwch eich cysylltiad
+a rhoi cynnig arall arni.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Allgofnodi</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Taliad nesaf</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Gyfrinair</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Gofrestrent</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Nid yw e -bost yn ddilys</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Nid yw cyfrineiriau'n cyfateb.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Rhaid i'r cyfrinair fod yn isafswm o nodau {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Cofiwch?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Gwiriwch eich e -bost i gadarnhau eich cyfrif</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Ailosod cyfrinair</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Byth</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Treial Diwrnod Am Ddim {0}</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Roedd problem yn perfformio
+eich pryniant.
+
+Gwirio'ch cysylltiad a
+gall gosodiadau helpu.
+
+Hoffech chi roi cynnig arall arni?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Mae eich cyfrif wedi bod yn llwyddiannus
+wedi'i uwchraddio i:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Prynu yn llwyddiannus!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Wallau</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Methodd y cysylltiad.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Chyrchwch</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Newidiwyd y Cyfrif</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Mae eich tanysgrifiad bellach yn {0}/{1} gyda chynnwys {2} a storfa sbwriel {3}.
+Ond peidiwch â phoeni, ni chollir unrhyw ddata ar ôl israddio. Dim ond clipiau newydd fydd yn cael eu gwerthuso.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Llongyfarchiadau! Mae eich tanysgrifiad bellach yn {0}/{1} gyda chynnwys {2} a storfa sbwriel {3}.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Sbwriel neu ddadgysylltu rhywbeth
+o '{0}' i ychwanegu mwy.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Storio Max '{0}' yw {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Hatgyweiriff</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} wedi'i rwystro</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Cynhwysedd Cynnwys a Sbwriel Cyrhaeddwyd!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Storio Max '{0}' yw {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Cyrhaeddodd y gallu cynnwys!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Gallwch chi guddio'r rhybuddion hyn gan
+Clicio 'Cuddio Pawb' o'r
+Dewislen opsiynau uchod.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Storio sbwriel Max yw {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Cyrhaeddodd capasiti sbwriel!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>Mae {0} yn annilys</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>Rhaid i {0} fod o leiaf {1} nod</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>Dim ond {1} y gall {0} fod yn gymeriad {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Past i: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Y taliad am eich {0}
+Roedd y tanysgrifiad yn ddyledus {1}
+ac ni dderbyniwyd.
+
+Diweddarwch eich
+Gwybodaeth am dalu.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Y taliad am eich {0}
+Roedd y tanysgrifiad yn ddyledus {1}
+ac ni dderbyniwyd.
+
+Cysylltwch â'r
+Rhyngrwyd ar y ddyfais
+gyda'ch tanysgrifiad a
+ailgychwyn er mwyn parhau
+Gan ddefnyddio'ch cynllun {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Y taliad am eich {0}
+Roedd y tanysgrifiad yn ddyledus {1}
+ac ni dderbyniwyd.
+
+Agor neu ailgychwyn
+MonkeyPaste ar y ddyfais
+gyda'ch tanysgrifiad i
+Parhewch i ddefnyddio'ch
+Cynllun {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Cyfrif wedi dod i ben</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Nodyn</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Nid yw Microsoft Store yn caniatáu haen
+newidiadau i addonau tanysgrifio.
+
+Rhaid i chi ganslo eich
+{0}/{1} Cynlluniwch eich hun
+Neu codir tâl arnoch am y ddau.
+
+Hoffech chi fynd i wneud hynny nawr?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Mae eich cyfrinair wedi'i ailosod.
+
+Gwiriwch eich e -bost a
+Dilynwch y ddolen i newid
+eich cyfrinair.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Mewngofnodi</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Awdur (on)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Mae'n ofynnol eich bod yn derbyn y telerau trwydded canlynol cyn parhau.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Mae'r pecyn (au) canlynol yn mynnu eich bod yn derbyn eu telerau trwydded cyn eu gosod.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Rwy'n dirywio</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Mae clicio "Rwy'n derbyn" yn golygu eich bod yn cytuno i delerau'r drwydded ar gyfer y cais hwn. Os nad ydych yn cytuno â'r telerau, cliciwch "Rwy'n dirywio".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Mae clicio "Rwy'n derbyn" yn golygu eich bod yn cytuno i delerau'r drwydded ar gyfer yr ategyn (au) a restrir uchod. Os nad ydych yn cytuno â'r telerau, cliciwch "Rwy'n dirywio".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Gweld Trwydded</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Derbyn trwydded</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Rwy'n derbyn</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Egnïol</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>All -lein</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Anghofrestredig</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Wedi gwneud</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Nid yw cyfrineiriau'n cyfateb</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Gyfrinair</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Mae eich tanysgrifiad yn
+Nawr wedi'i osod i {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Daethpwyd o hyd i'r cyfrif</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Methodd Mewngofnodi</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Methodd y Cofrestru</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Cofrestru yn llwyddiannus!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Ailosod Gwall</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Tanysgrifiadau</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Beth sy'n Newydd</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Byth</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Diderfyn</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>nghapasiti</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>weddill</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>gyfanswm</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Mae eich taliad yn ddyledus.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Dim ond un allwedd y gall llwybrau byr diystyru unigryw eu cynnwys ac ni all yr allwedd honno fod yn allwedd addasu.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Wedi dod i ben</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Lwythi</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Anabl</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Nodyn! Mae'r cyfrinair hwn yn ddewisol a dim ond ar gyfer diogelwch ychwanegol. Mae eich data eisoes wedi'i amgryptio a byth yn cael ei rannu. Mae'r cyfrinair hwn yn syml yn atal rhywun nad ydych chi rhag llwytho monkeyPaste os ydyn nhw rywsut yn cael mynediad i'ch bwrdd gwaith (wedi'i ddwyn, rydych chi'n gadael yr ystafell, ac ati).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Cofiwch Gosodiadau Gollwng ar gyfer:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Pori ategion</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Ddadelfennith</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Gweithredu cyflym</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Toggle golygu</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Togl pinned</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anodiadau</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Testun plaen</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Ar agor yn y ffenestr</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Cliciwch + Ctrl i ddilyn ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Cliciwch + alt i ddilyn ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin neu ollwng unrhyw gyfryngau yma!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Gliria ’</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Bydd y trothwyon uwchlaw 0 yn darparu paru lliw niwlog gan ddefnyddio pellter Ewclidaidd yn y gofod lliw RGBA.
+
+Er enghraifft, os yw coch (#FF0000) yw'r term chwilio a du (#000000) yn bicsel mewn clip delwedd, yna bydd y pellter lliw yn 255. Pellter Du i Gwyn yw'r uchafswm posibl o 510, gan gynnwys sianel alffa</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Mae pob un o'r canlynol yn wir</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Clipfwrdd</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Nghasgliadau</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Moddau llygoden</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Sbardunau</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Ymbwyllwyf</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Ailymafaelet</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Sbardun newydd</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Ychwanegu Rhagosodiad</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Dewin Gollwng Mwnci</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Rhagosodiadau</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Dadansoddwr</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Simsanau</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Cyfeiriadedd Beicio</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Toggle cynllun grid</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Achos Sensitif</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Nhrothwy</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Gair cyfan</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Dim set</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Lwybrau</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Weithred</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Grid</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Wedi gwneud</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Nesaf</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Cynyddol</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Dychlamon</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Cyfrif presennol?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Taliad nesaf</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Mae cofrestru yn caniatáu ichi gario'ch tanysgrifiad taledig ar draws eich holl ddyfeisiau (ar ôl argaeledd). Ni fyddwn yn sbamio'ch e -bost yr ydym yn addo 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Tanysgrifiadau</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Enw Defnyddiwr</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Angen cofrestru?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Ffynonellau</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Od, dim byd ar gael. Rhaid i rywbeth fod yn anghywir 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Godon</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Angen ailgychwyn</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Uwch</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Gwall yn tynnu ategyn o '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Gwall Gosod ategyn: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Gwall gosod ategyn '{0}' Strwythur cyfeirlyfr llygredig neu amhriodol. Dylai Maniffest fodoli yn '{1}' ond ni ddarganfuwyd.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Gwall Parsing Plugin Manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Dim ategyn wedi'i lwytho â GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>Gwall {0}</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Ategyn llwyfannu gwallau i temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Gwall wrth gefn i fyny '{0}' i '{1}'. Manylion: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Bydd y testun wedi'i deipio yn cael ei gymhwyso'n awtomatig i chwiliad pan nad oes blwch testun yn canolbwyntio.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Mewnbwn Chwilio Auto</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Methodd newid cyfrinair</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Cyfnewidia ’</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Newid cyfrinair</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Gliria ’</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Cyfrinair clir</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Nghynnwys</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Maint Ffont Cynnwys</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Pan fydd yn wir, bydd cynnwys allanol wedi'i fewnosod mewn clip yn defnyddio'r fformatio clipiau ac nid yr hyn sydd ar gael o'r ffynhonnell.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Pastio, gollwng neu atodi gyda fformatio cyrchfan</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am anghofio'r cyfrinair?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Hanghofion</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Anghofiwch Gyfrinair</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Proffil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Cuddio dyfrnodau capasiti</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Pan atodir cynnwys clipfwrdd newydd ni fydd yn cael ei olrhain fel clip newydd</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Anwybyddu atodiadau</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Pan fydd y clipfwrdd yn cyd -fynd â chlip presennol, bydd y clip hwnnw'n cael ei ddefnyddio yn lle creu un newydd</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Anwybyddu dyblygu newydd</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Ni fydd newidiadau clipfwrdd o'r tu mewn i'r app yn cael eu tracio</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Anwybyddu olrhain clipfwrdd mewnol</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Bydd lleoedd, tabiau a llinellau newydd yn cael eu hanwybyddu o olrhain</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Anwybyddu gofod gwyn yn unig</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Llwythwch ar fewngofnodi</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Ffenestr animeiddiedig</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Didreiddedd</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Dangos ymddygiad</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Datgelir y brif ffenestr trwy berfformio ystum sgrolio ar ymyl uchaf eich monitor</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Dangos ar y sgrôl sgrin uchaf</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Cyfrol Hysbysu</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Bydd y gosodiad hwn yn olrhain y system - mae past bysellfwrdd eang yn cyfrif ar gyfer ystadegau defnydd. Mae'r wybodaeth hon yn breifat ac nid yw'n cael ei rhannu ond hefyd nid yn guarenteed. Efallai y bydd canlyniadau cywir yn gofyn am ddarparu gorchymyn past bysellfwrdd penodol yn 'Gosodiadau -&gt; Copi a Gludo -&gt; Llwybrau Byr'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Hanes Gludo</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Gall gormod o glipiau wedi'u pinio (fel tabiau porwr) ddefnyddio cof sylweddol. Mae tynnu trwy gyntaf - yn y cyntaf - allan</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Capasiti pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Mae hyn yn berthnasol i'r holl fewnbynnau awto - cyfuniad, bydd gwerthoedd is yn gwella perfformiad</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Terfyn testun diweddar</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi eisiau gwneud hynny
+adfer dewisiadau diofyn?
+
+Ni ellir dadwneud hyn!
+
+*Bydd y cais yn ailgychwyn unwaith y bydd wedi'i gwblhau.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ailosod yr holl hysbysiadau?
+
+*Ni ellir dadwneud hyn!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Mae past mwnci yn gosod y clipfwrdd (diystyru) wrth ei bastio i raglen allanol. Bydd hyn &lt;b&gt; yn ceisio &lt;/b&gt; i adfer cyflwr y clipfwrdd ar ôl past allanol.
+
+Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed ddamwain monkeyPaste yn dibynnu ar ffynhonnell y data.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Ailosod clipfwrdd ar ôl pastio mwnci</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Methu dileu storfa ategyn o'r llwybr: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Bydd pob ategyn yn cael eu hailosod i'r cyflwr diofyn cychwynnol</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Storfa ategion</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ailosod pob ategyn i ddiffygion?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ailosod eich cyfrinair?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Bydd pob llwybr byr cais yn cael eu hailosod i'w hystumiau allweddol diofyn.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Ailosod llwybrau byr</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Roedd yr holl hysbysiadau a anwybyddwyd yn flaenorol wedi'u gosod.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Adfer Hysbysiadau</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Gall galluogi fod yn eithaf araf) Bydd anablu fformatio yn lleihau'r defnydd o gof ond bydd yn atal rhai nodweddion datblygedig, megis: atodi, templedi, anodiadau a dod o hyd i/disodli</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Cynnwys Cyfoethog</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Gosod Cyfrinair</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Dangos awgrymiadau</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Dangos yn y bar tasgau</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Dangos yn Switcher Tasg</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Dangos teitlau</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Pan fydd wedi'i alluogi, bydd llusgo o unrhyw gais i ben y sgrin yn datgelu MonkeyPaste i ollwng cynnwys yn hawdd i MonkeyPaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Dangos ar lusgo i ben y sgrin</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Thema Sain</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Gwiriad sillafu</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Wrth gychwyn bydd ffynhonnell y clipfwrdd yn anhysbys ac yn dibynnu ar eich gosodiadau diogelwch, gall y cynnwys ddod o wefan neu gymhwysiad sydd wedi'i eithrio.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Ychwanegu Clipfwrdd Cychwyn</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Gwrandewch ar glipfwrdd ar gychwyn</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Ddetholem</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Rhybudd! Dewisir lliwiau palet eraill gan ddefnyddio mathemateg nid llygaid! Felly byddwch yn ymwybodol efallai na fydd gan rai cyfuniadau lliw ac arddull wrthgyferbyniad cywir ar gyfer darllenadwyedd.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Lliw thema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Arddull thema</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Bydd glanhau sbwriel awtomatig yn digwydd wrth gychwyn ar yr egwyl benodol.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Glanhau sbwriel</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Rhyngwyneb</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Gall terfynau dadwneud uchel effeithio ar berfformiad</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Dadwneud Terfyn</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Dim Terfyn</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>A ddefnyddir mewn chwilio ffeiliau uwch am fathau o ffeiliau nad ydynt yn rhagosodedig</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Defnyddiwr - Estyniadau Chwilio Diffiniedig</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Dod o hyd i ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Pastiwch yma</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Rhannwch ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Golygfa</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Rheoli ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Ailenwi</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Sgôr: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Math: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Dileu yn barhaol</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Porwch i '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Trawsffurfiant</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Mewnbynner</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Allbwn</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Ffynonellau</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Hatgyweiriff</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Dewiswch ddelwedd ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Lliwiff</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Rheoli '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Ymagorant</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Arhoswch os gwelwch yn dda...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Lliw cefndir</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Clirio popeth</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Fformatau clipfwrdd</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Dileu popeth</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Golygu Manylion</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Henwem</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Ffeindia</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Lliw ffont</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Paent fformat</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Wrth ddewis</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Mewnosod Delwedd</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Mewnosod dolen</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Mewnosod fideo</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Cydweddu Achos</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Templed newydd</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Templed Nesaf</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Nodwch destun past ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Templed Blaenorol</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Mynegiant rheolaidd</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Disodli popeth</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Hamnewidia ’</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Gair cyfan</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Lapio o gwmpas</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blocied</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Mharth</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Ffolder arddangos</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Dadflocia ’</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Yn ymwneud</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Atod Bloc</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Atodi inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Copi</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Moddau</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Arhoswch fod MonkeyPaste yn llwytho ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Gadawen</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - cliciwch past</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grwpiau</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Hidlech</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Dileu'r cyfan yn barhaol</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Adfer Pawb</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Weithred</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>Mae URL eisoes yn bodoli: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Rhaid i URL fod mewn fformat dilys.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Rhowch URL llawn:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Ychwanegu URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Rhowch werthoedd</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Copïwch destun neu ffeiliau i'w cymhwyso.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Atodiad {0} {1} Modd wedi'i actifadu</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Bydd newidiadau clipfwrdd yn cael eu hatodi nawr</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Ar ôl i'r modd atodi actifadu</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Bydd newidiadau clipfwrdd nawr yn cael eu rhagflaenu</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Cyn i'r modd atodi actifadu</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blocied</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Mae ymddygiad clipfwrdd arferol wedi'i adfer</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Atodi dadactifadu</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Atodiadau wedi'u hychwanegu at ben neu botom y clip</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Maint atodi modd wedi'i actifadu</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Mewn llinell</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Llawlyfr</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Atodi i'ch dewis cyfredol.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Modd atodi â llaw wedi'i actifadu</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Crynhoad clipfwrdd wedi'i atal</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Atodiad oedi</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Ailddechrau cronni clipfwrdd</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Ailddechrau ailddechrau</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am orffen atodi?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Bydd golygu yn y modd Cydnawsedd yn cael gwared ar yr holl fformatio cyfoethog. Ydych chi'n siŵr eich bod chi am addasu hyn?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Rhybudd diraddio data</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Egnïol</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Wedi'i alluogi</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>I ffwrdd</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Ymlaen</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Heibio</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Dilynant</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Statws</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Digwyddodd gwall anhysbys.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Ymdrechion yn weddill</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Rhowch gyfrinair</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Chadarnhasoch</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Nghyswllt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Amser Dyddiad</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ddileu pob defnydd o '{0}'?
+
+Ni ellir dadwneud hyn!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Ddeinamig</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statig</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>Mae {0} yn wag ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Mwy yn dod yn fuan!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Llwyth Mewngofnodi Analluogi Methwyd</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Llwyth Mewngofnodi Analluogi Llwyddiant</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Llwyth Mewngofnodi Galluogi Methwyd</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Llwyth Mewngofnodi Galluogi Llwyddiant</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Celed</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Mae past mwnci bellach wedi'i lwytho.
+Gwrando Clipfwrdd yw: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Lwythedig</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Dangosem</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Modd Dewis Copi Auto: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Newid Modd</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Cliciwch ar y dde Modd Gludo: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Ategyn wedi'i ddiweddaru</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Gludwch '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Rhedeg '{0}' Dadansoddwr</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Rhedeg '{0}' Sbardun</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Dewiswch '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ddileu '{0}' a phob gweithred gysylltiedig?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Sbardun</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Hoffech chi gael gwared ar yr holl is -gamau ar gyfer '{0}'? (Fel arall byddant yn cael eu hail -rifo i '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Tynnwch yr opsiynau</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Ydych chi wir eisiau goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Cyfrifon</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Dadansoddwyr</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Gweithrediadau Cais</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clipfwrdd</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Nghynnwys</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Trawsnewidyddion</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Ddiwylliant</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Nghyfeiriadau</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Llusgo a gollwng</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Dewin Gollwng</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Hiconau</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logwyr</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Rhyngwyneb</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Gweithrediadau Gludo</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Newisiadau</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Chwilotau</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Llwybrau byr</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Didolwch</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Seiniau</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Hambwrdd System</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Nghasgliadau</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Thema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Sbardunau</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Gweithrediadau Gwefan</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Iaith</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Yn gosod y clipfwrdd i'r clip mewnbwn.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Rhybuddion</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Chitabu</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chlyd</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Rhybuddion Negesau Hambwrdd Sain a/neu System Pwrpas Cyffredinol. Nid yw gweithredoedd rhybuddio yn cael unrhyw effaith ar eu mewnbwn.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Neges</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Mwnci</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Rhagolwg</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Dangos?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Dangosir neges tost amser mewn eiliadau. Pan fydd gwerth yn 0 rhaid cau neges â llaw.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Amser (au) Dangos</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Sain?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Math o Sain</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Nghyfrol</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Dadansoddwr</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Yn prosesu ei glip mewnbwn gan ddefnyddio rhagosodiad y dadansoddwr a neilltuwyd.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Mae cynnwys mewnbwn yn gysylltiedig â'r casgliad a ddewiswyd</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Yn cysylltu ei glip mewnbwn â'r casgliad tagiau a neilltuwyd.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tac</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Achos sensitif?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Gall hwn fod yn destun statig i'w gymharu â'r mewnbwn a/neu gynnwys priodweddau dethol (trwy'r botwm hidlo) yn cael ei amnewid pan fydd yr amod yn cael ei werthuso.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Data cyflwr</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Ymholiad JSONPATH dewisol a fydd yn cael ei gymhwyso i'r 'eiddo mewnbwn' a ddewiswyd cyn i'r amod gael ei werthuso.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Hidlydd mewnbwn</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Yr eiddo clip a ddefnyddir ar gyfer yr amodol hwn.
+
+Ar hyn o bryd dim ond pan fydd yr amodol hwn yn blentyn i weithred dadansoddwr y cefnogir yr eiddo 'allbwn olaf' a bydd y data a ddarperir yn amrywio yn dibynnu ar allbwn y dadansoddwr rhiant.
+
+Ar gyfer datrys problemau, atodwch 'weithred rhybuddio' i riant yr amodol hwn a gosod paramedr 'neges' y rhybudd i gyd -fynd â'r eiddo mewnbwn hwn. Bydd hyn yn caniatáu adolygu'r data gwirioneddol sy'n cael ei ddefnyddio ar gyfer yr amodol hwn.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Eiddo Mewnbynnu</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Yn perfformio cymhariaeth testun ar y clip mewnbwn neu allbwn gweithredu blaenorol. Pan fydd cymhariaeth yn methu (nid yw'n cyfateb) ni fydd unrhyw gamau plant yn cael eu cyflawni. Felly mae'n gweithredu fel giât resymegol.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Dim ond os yw'r canlyniad yn wir y bydd pob gweithrediad gwir neu ffug lle bydd gweithredoedd plant yn gweithredu.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Cyflyrwyf</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>I gyd</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Wedi'i sbarduno pan ychwanegir clip o'r math a ddewiswyd at y system mewn unrhyw ffordd (clipfwrdd, llusgo - a - gollwng, dadansoddwr wedi'i gynhyrchu neu ei ddyblygu).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Dim ond os yw'r clip mewnbwn yn newydd ac nid yn ddyblyg y gweithredwch y sbardun hwn. Mae hyn yn annibynnol ar unrhyw osodiad dewis a yw cynnwys newydd yn cael ei anwybyddu ai peidio.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Anwybyddwch ddyblyg</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Dim ond clipiau o'r math hwn fydd yn sbarduno'r weithred hon.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Yn cysylltu ei glip mewnbwn â'r casgliad tagiau a neilltuwyd.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Wedi'i sbarduno pan fydd clip wedi'i gysylltu â'r casgliad tag penodedig.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Nghasgliad</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Roedd yr amser o amser mewn milieiliadau yn aros cyn i blant weithredu</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Hoedo</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Arbrofol) a ddefnyddir yn bennaf ar y cyd â'r weithred ailadrodd ar gyfer pleidleisio ffynonellau anghysbell neu gymorth gyda gweithrediadau hirhoedlog.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Pan adewir yn wag, bydd y ffeil allbwn yn defnyddio teitl y clip mewnbwn fel enw'r ffeil.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Enw Custom</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Y cyfeiriadur lle bydd y ffeil yn cael ei hysgrifennu.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Cyfeiriaduron</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Yn arbed mewnbwn i'r ffolder a ddewiswyd.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Sbarduno pan fydd cynnwys y ffolder a ddewiswyd yn newid. Bydd yr allbwn yn glip ffeil newydd neu bresennol (pan fydd y dewis dyblygu anwybyddu) clip ffeil o'r ffeil neu'r ffolder sydd wedi newid ynghyd â'r math o newid fel ei allbwn olaf.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Digwyddiadau</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Ffolder</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Anwybyddwch ddyblyg</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Bydd gwerth 0 yn ailadrodd gweithredu rhiant am gyfnod amhenodol</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Ailadroddwyd Cyfrif</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Faint o amser mewn milieiliadau i aros unwaith y bydd y rhiant yn cwblhau</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Ailadroddwch oedi</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Arbrofol) a ddefnyddir ar gyfer creu dolenni gweithredu neu dasgau ailadroddus. Pan fydd yn cael ei ailadrodd, bydd yn gweithredu pob plentyn eto gyda'i fewnbwn gwreiddiol. Wrth ddefnyddio egwyl heb ailadrodd cyfrif, bydd angen i'r sbardun fod yn anabl a'i ail -enwi i atal yr ailadrodd. Gall fod yn ddefnyddiol ar gyfer pleidleisio neu awtomeiddio crafu gwe.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Wedi'i sbarduno gan lwybr byr byd -eang rydych chi'n ei ddiffinio. Os yw MonkeyPaste yn weithredol bydd yn ceisio defnyddio'r clip a ddewiswyd (os oes un) fel mewnbwn. Fel arall, bydd yn ceisio defnyddio'r clipfwrdd fel ei fewnbwn.
+
+Nodyn: Bydd sbardun llwybr byr yn dal i weithredu os nad oes mewnbwn i'w gadw'n hyblyg (fel y gall fod yn sbardun macro ac ati) gan nad yw'n ddigwyddiad sy'n cael ei yrru gan ddata.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Sbardun llwybr byr</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Sbarduno pan fydd y llwybr byr wedi'i recordio yn cael ei wasgu ar unrhyw adeg gyda'r clipfwrdd cyfredol</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Mae'r weithred hon yn ei gwneud yn ofynnol i'r ap ailgychwyn. Hoffech chi wneud hynny nawr?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Roedd problem. Mae angen i chi ailgychwyn y cais â llaw.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Dadansoddi gydag anodiad</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Sbardun Anodi</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Darllenir elfennau wedi'u hadeiladu - yn unig. Dyblyg i'w newid.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Dienw</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Arferol</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Ddoe</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} diwrnod yn ôl</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 awr yn ôl</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} awr yn ôl</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Dim ond nawr</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Munud yn ôl</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} munud yn ôl</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Mis diwethaf</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} mis yn ôl</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Wythnos diwethaf</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} wythnos yn ôl</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} mlynedd yn ôl</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anodiadau</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Enw'r Cais</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Llwybr Cais</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Achos Sensitif</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Nghynnwys</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Math o Ffeil</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Math o Ddelwedd</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Mynegiant rheolaidd</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Math o destun</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Teitl</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Dryll</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Teitl URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Gair cyfan</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Fel sgrolio ar hyd ymyl y sgrin uchaf i agor, bydd hyn yn cloi'r brif ffenestr pan fydd yn agor. Gan ganiatáu ar gyfer llifoedd gwaith aml -dargededig.
+
+* Mae corneli o ran eich holl sgriniau, nid fesul monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Dangos ffenestr a chlo</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Am ddim!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Rhowch 5 seren i ni!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Dileu popeth</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Dileu'r holl gynnwys</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ddileu
+Eich holl glipiau ?!
+
+*Ni ellir dadwneud y llawdriniaeth hon!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Rwy'n indy dev dangoswch ychydig o gefnogaeth!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Fel MonkeyPaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>Mae {0} yn derbyn mewnbwn o fath (au) yn unig: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Modd Copi Auto - yn efelychu digwyddiad 'copi' bob tro y bydd botwm y llygoden chwith yn cael ei ryddhau.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Modd Gludo Cliciwch ar y dde - yn efelychu digwyddiad 'past' bob tro y bydd botwm y llygoden dde yn cael ei ryddhau</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Rhagosodwch</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Dangos ffolder ategyn</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Gohebet</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Golygfa</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Dangos Tooltips</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Mae dadansoddwyr yn anodi eu mewnbwn neu'n creu clipiau newydd fel allbwn. Mae angen i blant dadansoddwyr benderfynu pa un sydd ei angen arnynt fel eu mewnbwn. Dyma fel rheol yw'r allbwn olaf.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Math o fewnbwn</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Dylunydd Sbardun '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Dewiswch {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Heb ei ddarganfod ...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Sbardun</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Wrth wirio bydd canlyniad gwir neu ffug y cyflwr yn cael ei fflipio. Felly er enghraifft, bydd cyflwr 'yn cynnwys' yn dod 'nid yw'n cynnwys'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Dim yn</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Arhoswch os gwelwch yn dda...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Dewiswr lliw</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Dewiswch Cydweddu Lliw</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Fel sbardun llwybr byr ond pan fydd y cyfuniad allweddol yn cael ei wasgu, bydd digwyddiad 'copi' yn cael ei efelychu yn y cymhwysiad gweithredol felly mae'n dal i weithio fel copi ond yna bydd y gadwyn o gamau sydd ynghlwm wrth y sbardun copi mwnci yn cael ei ddienyddio yn y cefndir gan ddefnyddio'r data clipfwrdd copi efelychiedig.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Hidlydd uwch</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Cuddio hidlwyr</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Adfer hidlwyr</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Creu hidlydd</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Dewisol) Pan adewir yn wag bydd y clipfwrdd yn cael ei osod gan ddefnyddio mewnbwn y weithred hon. Bydd unrhyw beth a ddarperir yma yn cael ei drin fel testun plaen yn unig.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Cynnwys ar gyfer Clipfwrdd</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Pan fydd yn wir, ni fydd unrhyw glip yn cael ei ychwanegu ar ôl i'r weithred hon osod y clipfwrdd.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Anwybyddem</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Dim dadansoddwr wedi'i ddewis ar gyfer gweithredu '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Dadansoddwr ar gyfer gweithredu '{0}' heb ei ddarganfod</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Rhiant '{0}' Hidlo yn unig ar gyfer '{1}' math o gynnwys a dadansoddwr '{2}' byth yn gweithredu oherwydd nad yw'n cefnogi math o fewnbwn '{3}'</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Dim tag wedi'i ddewis ar gyfer dosbarthwr '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag ar gyfer dosbarthwr '{0}' heb ei ddarganfod</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Dim ond llythyrau, rhifau neu ofodau y gall cymharu gwerth fod</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Dim tag wedi'i ddewis ar gyfer clip wedi'i dagio sbardun '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag am glip wedi'i dagio sbardun '{0}' heb ei ddarganfod</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Dim ffolder gwylio wedi'i nodi ar gyfer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Gwylio Ffolder '{0}' Heb ei ddarganfod ar gyfer Sbardun '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Llwybr ysgrifennwr ffeiliau ar gyfer gweithredu '{0}' ddim wedi'i osod</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Llwybr ysgrifennwr ffeiliau '{0}' ar gyfer '{1}' heb ei ddarganfod.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Dasgau</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Dysgu am ategion</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Adfer y cyfluniad dadansoddi hwn</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} newid log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Cysylltwch â'r Rhyngrwyd a rhoi cynnig arall arni yn nes ymlaen.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Help</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} yw'r fersiwn ddiweddaraf</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Rydych chi i gyd i fyny - i - Dyddiad!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Gwiriwch am ddiweddariadau ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Fersiwn newydd ar gael!
+
+Cliciwch yma i ddiweddaru i '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Cliciwch isod i ddiweddaru i '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Diweddariad ar gael!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Diweddariad Nawr</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>Mae '{0}' yn cynnwys gwerthoedd a rennir. Beth hoffech chi ei ailosod?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Gliria ’</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Chwiliadau diweddar clir</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Ailosod Pawb</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Ailosod wedi'i rannu</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Ailosod heb ei rannu</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Yn galw ar y weithred ymgeisio a neilltuwyd. Mae pob gorchymyn cais yn ddi -wladwriaeth ac anwybyddir eu clip mewnbwn.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Pan fydd heb ei wirio ac ni all y gorchymyn danio, bydd y gadwyn ddienyddio yn stopio. Bydd angen rhywfaint o gyflwr cais penodol ar lawer o orchmynion er mwyn gweithredu.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Parhau bob amser?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Y gorchymyn i berfformio.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Gorchmynnwn</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Dim gorchymyn wedi'i ddewis ar gyfer gorchymyn cais '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Gorchymyn ar gyfer gorchymyn cais '{0}' heb ei ddarganfod</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Dethol</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Ail-ddechrau</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Roedd mater yn diweddaru '{0}'. Er mwyn cwblhau'r diweddariad bydd angen i chi ailgychwyn a gosod '{0}' eto (peidiwch â phoeni y bydd eich holl osodiadau yn cael eu hadfer).
+
+Gallwch ailgychwyn nawr a chwblhau'r diweddariad trwy ail -osod, anwybyddu hyn a'i ddiweddaru yn nes ymlaen neu ganslo'r diweddariad gyda'i gilydd a pharhau i ddefnyddio fersiwn '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Diweddarwch wall</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Methu lawrlwytho diweddariad</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Diweddariad Methwyd</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>I gwblhau diweddariad bydd angen i chi ailgychwyn. Hoffech chi ailgychwyn nawr neu'n hwyrach?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Diweddariad Yn Barod</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Yn ddiweddarach</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Ailddechrau nawr</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Yn yr arfaeth</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>Diweddarwyd {0} yn llwyddiannus i {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Mae angen ategion craidd ac ni ellir eu tynnu.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Gosodiadau</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Mae'r diweddariad yn yr arfaeth. Ailgychwyn i gwblhau.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Yn yr arfaeth</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Mae dadosodiad yn yr arfaeth. Ailgychwynwch os hoffech chi ail -osod.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>I gwblhau dadosod bydd angen i chi ailgychwyn. Hoffech chi ailgychwyn nawr neu'n hwyrach?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Gorffen dadosod?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Anghyhoeddedig</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - a gynhyrchir rhagosodiad diofyn ar gyfer '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Dim clip wedi'i ddewis</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Dadansoddi clip dethol</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Neilltuwch llwybr byr i redeg '{0}' ar y clip a ddewiswyd</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Past byd -eang</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Aseinio llwybr byr past byd -eang ar gyfer '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Wedi anghofio cyfrinair?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Mewngofnodi</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Allgofnodi</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Polisi Preifatrwydd</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Angen Ailgychwyn) Pan fydd gwybodaeth ddiagnostig wedi'i galluogi yn cael ei mewngofnodi i'w ffeilio. Gall hyn arafu perfformiad a gall gynnwys gwybodaeth bersonol.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Log i'r Ffeil</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Ymagorant</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Ffolder logiau agored</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Pori ategion</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Darllenasit</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ysgrifennu</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Anfon Adborth neu Adroddiad Bug</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Dim ond y brif ffenestr sy'n cuddio'r brif ffenestr. Mae pob ffenestr eraill nad ydynt yn ddeialog bob amser yn cael eu dangos yn y bar tasgau.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Chwilio yn '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Ychwanegu Hidlo</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Golygu Math Ymuno</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Tynnwch yr hidlydd hwn</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Help agored am hyn ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clipiau</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Cyfnewidia ’</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Byth</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Hul</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Heb deitl</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Chroniclant</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Cyfeirnod ffynhonnell heb ei labelu</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Mae angen '{0}'</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Wedi gwallau)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Gyfyngedig</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Storfeydd</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Sbwriel</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Diderfyn</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Ar hyn o bryd mae'r ap hwn yn cyfateb i ragosodiadau a fformatau darllenydd clipfwrdd diofyn.
+
+Ni fydd galluogi neu analluogi rhagosodiadau darllenydd diofyn (o far ochr y clipfwrdd) yn effeithio ar y cyfluniad hwn. Dim ond apiau heb eu rhestru sy'n dilyn y setup diofyn.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Ar hyn o bryd mae'r ap hwn yn cyfateb i ragosodiadau a fformatau awdur clipfwrdd diofyn.
+
+Ni fydd galluogi neu analluogi rhagosodiadau ysgrifennwr diofyn (o far ochr y clipfwrdd) yn effeithio ar y cyfluniad hwn. Dim ond apiau heb eu rhestru sy'n dilyn y setup diofyn.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>I atodi rhaid i chi ddad -ffasio'r gwrandäwr clipfwrdd (hambwrdd system -&gt; ailddechrau).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Atodi ddim ar gael</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Heb osodiadau</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Nid wyf ond yn siarad Saesneg ac mae MonkeyPaste wedi cael ei gyfieithu i'r iaith hon.
+
+Mae pob fersiwn yn anfon gyda'r pecyn Saesneg felly os ydych chi'n siarad Saesneg gallwch chi newid yr iaith iddi ar unrhyw adeg ar ôl y setup hwn (Gosodiadau -&gt; Dewisiadau -&gt; Rhyngwladol).
+
+Os hoffech chi helpu i wella'r cyfieithiad byddem wrth ein bodd yn clywed gennych chi!
+
+adborth@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Pryderon cyfieithu</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Mae angen i chi ddiweddaru MonkeyPaste er mwyn defnyddio'r nodwedd hon.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Unset llwybr byr</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Gwrandäwr clipfwrdd yn anabl</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Gwrandäwr clipfwrdd wedi'i alluogi</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Nid yw gweithredu rhiant '{0}' yn cefnogi math o eiddo mewnbwn 'allbwn olaf'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Dysgu mwy am gynlluniau</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Nghais</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Sbardun</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Clipiff</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Dadansoddwr</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tac</value>
+  </data>
+</root>

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorować</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Po sprawdzeniu formatu {0} nie zostanie odczytany z danych schowka lub przeciągania i upuszczania.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Po sprawdzeniu formatu {0} nie zostanie zapisany do danych schowka lub przeciągania i upuszczania.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Czytać</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Pisać</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Akta</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Gdy RTF nie jest jeszcze obecny, HTML zostanie przekonwertowany na RTF. Może to być przydatne między przeglądarkami internetowymi i/lub aplikacjami do edytora tekstu. (Wymaga włączenia formatu RTF i dotyczy tylko obsługiwanych platform)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Konwertuj na RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Te katalogi nie zostaną odczytane z danych schowka lub przeciągania i upuszczania.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Zignorowane katalogi</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Zignorowane rozszerzenia plików</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Te typy plików nie będą odczytywane z danych schowka lub przeciągania i upuszczania.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Te typy plików nie zostaną zapisane do danych schowka lub przeciągania i upuszczania.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Po sprawdzeniu obrazy większe niż maksymalne wymiary zostaną skalowane podczas zachowania współczynnika kształtu. Nie wpływa to na obraz w schowku.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Skala ponadwymiarowa</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Podczas wklejania lub upuszczania mapy bitowej będzie to domyślny typ pliku</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Domyślny typ eksportu</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Czasami w pełni przezroczyste obrazy pojawią się na schowku, jego mylące.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Zignoruj ​​puste obrazy</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Duże obrazy (więcej niż kilka MBS) mogą niestety nieco spowolnić przeciąganie, a ogólna wydajność. Staraj się utrzymać tę wartość niską.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maksymalna wysokość</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Max szerokość</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>W przypadku problemów z wydajnością potrzebne są maksymalna ilość znaków</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max znaki</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Tekst (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format „{0}” miał puste lub przezroczyste dane i został zablokowany</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Puste dane zablokowane</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Format „{0}” jest oznaczony jako „ignorowany”</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format ignorowany</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limit to {1}, a dane wyniosły {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Wykryto maksymalny rozmiar</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Czytnik schowka rdzenia</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Stralboard Writer</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Obsługuje domyślne formaty schowka</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Podstawowy moduł obsługi schowka</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Rdzeń, schowek, przeciągnięcie i upuszczenie, tekst, RTF, Rich Tekst, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Obraz (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Gdy HTML nie jest jeszcze obecny, RTF zostanie przekonwertowany na HTML. Może to być przydatne między przeglądarkami internetowymi i/lub aplikacjami do edytora tekstu. (Wymaga włączenia formatu HTML i dotyczy tylko obsługiwanych platform)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Konwertuj na HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Nieuprawny</value>
+  </data>
+</root>

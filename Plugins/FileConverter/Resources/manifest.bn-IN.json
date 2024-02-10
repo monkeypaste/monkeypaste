@@ -1,0 +1,82 @@
+{
+  "title": "ফাইল রূপান্তরকারী",
+  "description": "ফাইলগুলি চিত্র বা পাঠ্য সামগ্রীর প্রকারে অনুবাদ করার অনুমতি দেয়",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "কোর, পাঠ্য, চিত্র, ফাইল, রূপান্তরকারী, ফাইল থেকে ফাইল, ফাইল থেকে ফাইল",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "রূপান্তর করতে ফাইল",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "আউটপুট টাইপ",
+        "description": "কেবলমাত্র .png বা .txt এখনই",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "পাঠ্য",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "চিত্র",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "পাঠ্য রূপান্তর",
+        "iconUri": "text.png",
+        "description": "প্রদত্ত ফাইলটিকে সরল পাঠ্যে রূপান্তর করার চেষ্টা",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "চিত্র রূপান্তর",
+        "description": "প্রদত্ত ফাইলটিকে মেমরি ইমেজে রূপান্তর করার চেষ্টা",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

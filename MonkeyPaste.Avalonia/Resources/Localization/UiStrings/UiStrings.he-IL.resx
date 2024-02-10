@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>אין תכונות מוגבלות על ידי מנוי, רק קיבולת אחסון וניתן לשנותן בכל עת.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>שחזר את החשבון הקיים שלך ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>תוכן ואשפה הם
+מוגבלת ל {0} ו- {1}
+קליפים בהתאמה.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>מאפשר עד {2} קטעי תוכן ואחסון זבל בלתי מוגבל.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>תוכן בלתי מוגבל ובלתי מוגבל ואחסון אשפה.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>לשחזר</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>חינם</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>תֶקֶן</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>ללא הגבלה</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>מִנוּי</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>הפרטיות שלך חשובה ונתוני הלוח יכולים להיות אישיים מאוד. האחסון תמיד מוצפן אך אתה יכול להגדיר סיסמה שתידרש למקרה שהמכשיר שלך ייגנב או שמישהו אחר משתמש במכשיר שלך.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>סיסמה</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>כאשר מופעל, גרירת כל יישום לראש המסך תחשוף את Monkeypaste להפיל בקלות תוכן ל- Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>הפעלת 'המנעול' בשמאל העליון של החלון הראשי תאפשר עדיין נשירה על קופיפסטה.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>העדפות חלונות נוספות זמינות מתפריט 'הגדרות -&gt; העדפות -&gt; חלון'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>גרור בננות כאן!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>גרור - ל - פתוח</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>ניתן לבחון או לשנות את קיצורי המקלדת או לשנות בכל עת מהתפריט 'הגדרות -&gt; קיצורי דרך'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>כל קיצורי הדרך הגלובליים יושבתו כך שתוכלו להגדיר אותם אחר כך.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>קיצורי דרך הלוח של Monkeypaste יהיו זמינים בכל היישומים.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>פְּנִימִי</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>בְּרִירַת מֶחדָל</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>פרופיל מחווה</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>היי! בואו נקבע כמה דברים כדי לשפר את החוויה הכללית שלך עם Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>ברוך הבא</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>כדי להפיק את המרב מה- Monkeypaste, טעינה אוטומטית כשאתה מתחבר זה רעיון טוב. אבל, זה לגמרי תלוי בך.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>שמור על זה סתמי.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>לְאַפשֵׁר</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>לטעון על הכניסה?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>כאשר מופעל, מחוות גלילה בראש המסך תחשוף את הקופיפסטה.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>משמאל - לחיצה על סמל שורת המשימות עדיין תפתח את Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>העדפות חלונות נוספות זמינות מתפריט 'הגדרות -&gt; העדפות -&gt; חלון'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>קל נכון?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>גלול כאן!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>גלול - ל - פתוח</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste הוא &lt;span color = "red&gt; משולב באופן מלא &lt;/span&gt; עם גרירה - ו- - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>זרוק את זה כאן!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; בדרך זו, ניתן לגשת ל- monkeypaste &lt;br&gt; &lt;span color = "red"&gt; ללא לחיצה &lt;/span&gt; או אפילו &lt;span color = "red"&gt; חבט עין &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>גרור אותי!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>נסה את זה!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>נסה את זה!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>אין תוצאות זמינות.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>לְאַשֵׁר</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>לְרַעֲנֵן</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>לחפש...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>הגדרות</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>תלות:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>להתקין</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>האם אתה בטוח שברצונך להסיר '{0}' ואת כל קביעות ההגעה והקיצורים המוגדרים מראש?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>הסר את ההתקנה</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' אין תוצאות.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>אין בחירה.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>אף אחד</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>נקודות זכות:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>תיאור:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>לִתְרוֹם:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>רישיון:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>כתובת URL לפרויקט:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>יצא לאור:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>תקרא אותי:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>דיווח על התעללות:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>תגיות:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>עדכון</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>גִרְסָה:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>פתוח בחלון</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>לשחרר</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>לְרַעֲנֵן</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>להציל</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>ליד למחוק!
+
+שדרג להימנע.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>ליד האשפה!
+
+שדרג להימנע.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>קבצים</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>תמונה</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>טֶקסט</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>הועתק {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} קבצים | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} תווים | {1} שורות</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} עותקים | {1} משחות</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>מהלך \ לזוז \ לעבור</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>לְהוֹסִיף</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>עותק</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>גזירה</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>לְהַדבִּיק</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} העתק</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>פילטר לא נשמר</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- בבקשה תבחר -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>פורמטים</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>קוראים</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>סופרים</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>מטפלים</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>לִמְחוֹק</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>לְשַׁכְפֵּל</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>ערוך שם</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>אִתחוּל</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>תגיות</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>פעולה</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>ניתוב גלובלי</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>קיצור</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>מחוות חייבות להיות ייחודיות ויכולות להכיל רק מפתח קלט אחד.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; פנימי &lt;/b&gt; כל קיצורי הדרך מוגבלים בתוך היישום. זו לא באמת אפשרות מיועדת אבל יכולה לאפשר להתאים אישית את הקיצורים שאתה מתכוון להפוך את ה &lt;i&gt; גלובלי לדיון אחד &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; ברירת מחדל &lt;/b&gt; כל קיצורי הדרך הגלובליים מופעלים. &lt;b&gt; Show/הסתר את החלון הראשי &lt;/b&gt; קיצור דרך משתמש ב &lt;span color = "red"&gt; עקיפה &lt;/span&gt; ניתוב &lt;b&gt; מקש Lock &lt;/b&gt;. אתה יכול לשנות את הניתוב או המחווה בכל עת. אבל &lt;span color = "ירוק"&gt; נסה זאת &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;גוף&gt;
+&lt;H1&gt; מצבי קיצור דרך גלובליים &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; פסיבי &lt;/b&gt; קוצר קיצור של קיצור דרך יאזין בכל יישום. &lt;br&gt;
+*זו האפשרות &lt;i&gt; רק &lt;/i&gt; ב- Linux לעת עתה.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; קיצור דרך יבצע &lt;b&gt; &lt;i&gt; לפני &lt;/i&gt; &lt;/b&gt; הוא מטופל על ידי היישום הפעיל. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; פוסט &lt;/b&gt; קיצור דרך יבצע &lt;b&gt; &lt;i&gt; לאחר &lt;/i&gt; &lt;/b&gt; הוא מטופל על ידי היישום הפעיל. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; עקיפה &lt;/b&gt; כאשר monkeypaste שומע את מקש הקלט (מקש לא - שינוי) של קיצור דרך עקיפה זה יסתר &lt;/i&gt; מקש זה מכניסה ליישום - קלט ברמה. &lt;br&gt;
+אפשרות זו תבטיח כי קיצור הדרך מופעל ללא קונפליקטים ליישום הפעיל.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; עקיפה בלעדית &lt;/b&gt; זהו סוג מיוחד של מצב עקיפה המיועד למפתח נעילת Caps. זה מאפשר רק &lt;b&gt; מקש אחד &lt;/b&gt; (לא -שינוי) למשימה שלו. &lt;br&gt;
+במנעול כובעים של מצב עקיפה רגיל יכול להיתקע ב &lt;i&gt; ב &lt;/i&gt; כאשר הוא נלחץ בשילוב עם מפתחות אחרים. &lt;br&gt;
+אז לא משנה אילו מפתחות אחרים יורדים, אם נלחץ על קיצור הדרך &lt;b&gt; &lt;/b&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>השבתת</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>טען כאשר חשבון משתמש זה מחובר, לא למשתמשים אחרים.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; שימוש באנשי קשר זמינים (דורש תוסף Fetcher) שדה זה ישמש לכל המקרים של תבנית זו על פני מסמך זה או בכל אחד אז אז שדה הדואר האלקטרוני של ה- Contact You Select ישמש לכל המקרים במסמך זה. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = שנה קצרה &lt;br/&gt; yyyy = שנה ארוכה &lt;br/&gt; m = חודש (1-12) &lt;br/&gt; mm = חודש (01-12) &lt;br/&gt; mmm = קיצור חודש (ינואר, פברואר .. . דצמבר) &lt;br/&gt; mmmm = חודש ארוך (ינואר, פברואר ... דצמבר) &lt;br/&gt; d = יום (1 ​​- 31) &lt;br/&gt; dd = יום (01 - 31) &lt;br/&gt; ddd = יום השבוע במילים (שני, שלישי ... יום ראשון) &lt;br/&gt; e = יום קצר בשבוע במילים (יום שני, יום שלישי ... שמש) &lt;br/&gt; D - יום רגיל (1, 2nd, 3, 21, 22nd, 23, 31, 4 ...) &lt;br/&gt; h = שעה בשעה/pm (0-12) &lt;br/&gt; hh = שעה בשעה/pm (00-12) &lt;br/ &gt; H = שעה ביום (0-23) &lt;br/&gt; hh = שעה ביום (00-23) &lt;br/&gt; mm = דקה &lt;br/&gt; ss = שני &lt;br/&gt; sss = אלפיות שניות &lt;br/&gt; A = AM/PM סמן &lt;br/&gt; p = a.m./p.m. סַמָן</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>התאריך ו/או השעה הנוכחיים יחליפו תבניות של תאריך תאריך כאשר הם מודבקים.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; כל ההופעות של תבנית זו ישתמשו בטקסט המסופק. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; כל ההופעות של תבנית זו ישתמשו בטקסט המסופק. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>לסיים את הוספת</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>אפשר בלוק</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>אפשר מינון</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>מדריך לחלק</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>מדריך לחלק</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>הוספה הוספה</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>לעבור לפני כן</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>לעבור לפני כן</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>לחדש את הוספה</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>לְצַרֵף...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>לְהַדבִּיק</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>פִּין</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>לְהוֹצִיא סִיכָּה</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>הסתר את כל ההודעות '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>לשחרר</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>אפליקציה פעילה אחרונה לא ידועה. עברו לאפליקציה המיועדת להדבק קופים.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>הדבק ל: &lt;em&gt; &lt;i class = "stee-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>לְצַמְצֵם</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>המתן בבקשה...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>לנעול</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>חֶשְׁבּוֹן</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>עֶזרָה</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>העתק הדבק</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>העדפות</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>לשחזר את ברירות מחדל</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>לְסַנֵן...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>קיצורי דרך</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>הוסף אפליקציה</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>הוסף אתר</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>לַחסוֹם?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>שֵׁם</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>אפליקציות</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>חסימת תחום?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>חסום כתובת אתר?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>תְחוּם</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>זיהוי כתובת האתר המקור תלוי עד כמה היישום המארח ידידותי לידידותי, כך שלא ניתן להבטיח דחייה</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>כתובת אתר</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>אתרים</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>תכונות מסוימות של Monkeypaste משתמשות באוטומציה של מקלדת כדי לדמות אירועים 'העתק' ביישומים אחרים.
+
+הוסף ו/או בחר באפליקציה עם קיצור הדרך הייחודי של העתקה (כמו קונסולה או מעטפת למשל) כדי להבטיח שתכונות אלה מתפקדות כראוי.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>העתק קיצור</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>אף אחד</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>רק קביעות מוגדרות מראש שנבחרו ישמשו ליישום שצוין. כאשר לא מוגדרים, ישמשו קביעות מוגדרות מראש המוגדרות כברירת מחדל בסרגל הצד &lt;em&gt; לוח הלוח &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>תכונות רבות של Monkeypaste משתמשות באוטומציה של מקלדת כדי לקיים אינטראקציה עם יישומים אחרים.
+
+יישומים מסוימים (כמו קונסולות או פגזים מסוימים למשל) עשויים להיות בעלי קיצור דרך הדבק ברירת מחדל.
+
+כדי להבטיח יכולת פעולה הדדית נאותה, רשמו קיצורי דרך לאותה יישום כאן.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>הדבק קיצור דרך</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>קוראים</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>כל ניטור הלוח מהיישומים שנדחו יתעלם &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>סופרים</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>לַעֲרוֹך...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>פורמטים</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>נִדחֶה</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>קיצורי דרך</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>האם תרצה גם להסיר את כל הקליפים {0} מ- '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>להסיר קליפים?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>יישום</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>עיין באפליקציה ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>בחר נתיב יישום</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>האם אתה בטוח שברצונך להסיר קיצורי דרך מותאמים אישית עבור {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>האם אתה בטוח שברצונך להסיר פורמטים מותאמים אישית עבור {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>אין פורמטים של לוח לוח שהוקצה לאפליקציה זו. לא יקראו ממנו נתונים באמצעות חתך/העתק או ניסיון גרירה - ו - טייל לקופיפסטה</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>אין פורמטים של לוח לוח שהוקצה לאפליקציה זו. הדבק אוטומטי או גרירה - ו - ירידה מ- monkeypaste לא תהיה השפעה (הנתונים הריקים שלה).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה לאפס את כל קיצורי הדרך? כל קיצורי הדרך המותאמים אישית יוסרו.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>האם אתה בטוח שברצונך לשנות את פרופיל הניתוב של קיצור הדרך שלך ל- '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>את כל</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>מועדפים</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>פילטרים</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>פורמטים</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>תגיות</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>היום</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>אַשׁפָּה</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>על אודות</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>קל נכון?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>לחיצה כפולה כדי לבטל את הפין</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>המותאם אישית</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>גלוֹבָּלִי</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>שילוב זה מתנגש עם '{0}' אשר יימחק אם נשמר.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>יש לספק קיצור דרך.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>זהו קיצור דרך עולמי. המשמעות היא שהיא תנסה לבצע בכל פעם שהיא מבוצעת. נסה להפוך אותו למיוחד מספיק (או לשנות את 'סוג הניתוב') כדי לא להתנגש עם קיצורי דרך מיישומים אחרים.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>גלוֹבָּלִי</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>קיצור הדרך חייב להכיל מפתח אחד בלבד שאינו שינוי.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>לחץ על מקש כלשהו להקלטה ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>הקצה קיצור דרך</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>למד עוד...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>שדרוג</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>לְבַטֵל</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>לתקן</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>להתעלם</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>לא</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>בסדר</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>נסה שוב</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>לכבות</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>שלח</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>כן</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>שְׁנָתִי</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>יַרחוֹן</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>נסה בחינם!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>מחזור חיוב</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>אימייל</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>התחברות</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>בדוק את החיבור שלך
+ותנסה שוב.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>להתנתק</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>התשלום הבא</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>סיסמה</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>הירשם</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>הדוא"ל אינו תקף</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>סיסמאות לא תואמות.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>הסיסמה חייבת להיות מינימום של {0} תווים.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>זכור?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>עיין בדוא"ל שלך כדי לאשר את חשבונך</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>לאפס את הסיסמה</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>מממ ד, יי</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>מממ ד, ח: מ.מ.</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>לעולם לא</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>ניסיון חינם {0} יום</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>הייתה בעיה לביצוע
+רכישתך.
+
+בודק את החיבור שלך ו
+הגדרות עשויות לעזור.
+
+האם ברצונך לנסות שוב?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>חשבונך היה בהצלחה
+משודרג ל:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>לרכוש מוצלח!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>שְׁגִיאָה</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>חיבור נכשל.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>נסה שוב</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>החשבון השתנה</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>המנוי שלך הוא כעת {0}/{1} עם {2} תוכן ו- {3} אחסון זבל.
+אבל אל תדאג, שום נתונים לא אבודים לאחר השדרוג. יוערכו רק קליפים חדשים.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>מזל טוב! המנוי שלך הוא כעת {0}/{1} עם {2} תוכן ו- {3} אחסון זבל.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>זבל או פתח קישור למשהו
+מ- '{0}' להוסיף עוד.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>אחסון מקסימום '{0}' הוא {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>לשחזר</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} חסום</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>תוכן ויכולת האשפה הגיעו!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>אחסון מקסימום '{0}' הוא {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>כושר התוכן הגיע!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* אתה יכול להסתיר את האזהרות הללו על ידי
+לחיצה על 'הסתר הכל' מה-
+תפריט אפשרויות למעלה.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>אחסון זבל מקסימלי הוא {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>יכולת האשפה הושגה!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} אינו חוקי</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} חייב להיות לפחות {1} תווים</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} יכול להיות רק {1} תו</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>הדבק ל: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>התשלום עבור {0} שלך
+המנוי היה אמור להיות {1}
+ולא התקבל.
+
+אנא עדכן את שלך
+פרטי תשלום.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>התשלום עבור {0} שלך
+המנוי היה אמור להיות {1}
+ולא התקבל.
+
+אנא התחבר ל
+אינטרנט במכשיר
+עם המנוי שלך ו
+הפעל מחדש כדי להמשיך
+באמצעות תוכנית {0} שלך.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>התשלום עבור {0} שלך
+המנוי היה אמור להיות {1}
+ולא התקבל.
+
+אנא פתח או הפעל מחדש
+Monkeypaste במכשיר
+עם המנוי שלך ל
+המשך להשתמש שלך
+{0} תוכנית.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>פג החשבון</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>הערה</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>חנות מיקרוסופט אינה מאפשרת שכבה
+שינויים בתוספות מנוי.
+
+עליך לבטל את שלך
+{0}/{1} תכנן את עצמך
+או שתחייב את שניהם.
+
+האם תרצה ללכת לעשות את זה עכשיו?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>הסיסמה שלך אופסה.
+
+אנא בדוק את הדוא"ל שלך ו
+עקוב אחר הקישור לשינוי
+הסיסמה שלך.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>התחברות</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>מחבר (ים)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>נדרש שתקבל את תנאי הרישיון הבאים לפני שתמשיך.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>החבילות / ים הבאות מחייבות לקבל את תנאי הרישיון שלהם לפני ההתקנה.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>אני מסרב</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>לחיצה על "אני מקבל" פירושה שאתה מסכים לתנאי הרישיון לבקשה זו. אם אינך מסכים לתנאים, לחץ על "אני יורד".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>לחיצה על "אני מקבל" פירושה שאתה מסכים לתנאי הרישיון עבור התוסף / ים המופיעים לעיל. אם אינך מסכים לתנאים, לחץ על "אני יורד".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>צפה ברישיון</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>קבלת רישיון</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>אני מקבל</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>פָּעִיל</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>לא מקוון</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>לא רשום</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>בוצע</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>סיסמאות אינן תואמות</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>סיסמה</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>המנוי שלך הוא
+כעת הגדר כ- {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>חשבון נמצא</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>ההתחברות נכשלה</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>הרשמה נכשלה</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>ההרשמה בוצעה בהצלחה!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>אפס שגיאה</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>מִנוּי</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>מה חדש</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>לעולם לא</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>ללא הגבלה</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>קיבולת</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>נוֹתָר</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>סה"כ</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>התשלום שלך עבר.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>קיצורי קיצורי עקיפה בלעדיים עשויים להכיל מפתח אחד בלבד ומפתח זה לא יכול להיות מקש שינוי.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>לא בתוקף</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>טוען</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>נָכֶה</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>הערה! סיסמה זו היא אופציונלית ורק לאבטחה נוספת. הנתונים שלך כבר מוצפנים ולעולם לא משותפים. סיסמה זו פשוט מונעת ממישהו שלא אתה מלהטע את הקוף אם הם איכשהו מקבלים גישה לשולחן העבודה שלך (נגנב, אתה עוזב את החדר וכו ').</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>זכור הגדרות ירידה עבור:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>עיין בתוספים</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>לְנַתֵחַ</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>פעולה מהירה</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>החלף עריכה</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>התחלקות הצמדה</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>הערות</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>טקסט רגיל</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>פתוח בחלון</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>לחץ על + Ctrl כדי לעקוב ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>לחץ על + alt כדי לעקוב ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>הצמד או שחרר כאן מדיה!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>ברור</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>ספים מעל 0 יספקו התאמת צבע מטושטשת באמצעות מרחק אוקלידי במרחב הצבעים RGBA.
+
+לדוגמה, אם אדום (#FF0000) הוא מונח החיפוש והשחור (#000000) הוא פיקסל בקליפ תמונה, אז מרחק הצבע יהיה 255. המרחק השחור עד לבן הוא המקסימום האפשרי של 510, כולל ערוץ אלפא</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>כל הדברים הבאים נכונים</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>לוח</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>אוספים</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>מצבי עכבר</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>מפעילים</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>הַפסָקָה</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>קורות חיים</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>טריגר חדש</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>הוסף מראש מראש</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>אשף קוף קוף</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>מראש מראש</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>מנתח</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>קוטום</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>אוריינטציה של מחזור</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>החלפת פריסת רשת</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>רגיש למקרה</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>מפתן</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>כל העולם</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>אף אחד לא סט</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>ניתוב</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>פעולה</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>רֶשֶׁת</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>בוצע</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>הַבָּא</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>קודם</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>לדלג</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>חשבון קיים?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>התשלום הבא</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>ההרשמה מאפשרת לך לשאת את המנוי המשולם שלך בכל המכשירים שלך (על פי הזמינות). לא נזמין את הדואר האלקטרוני שלך אנו מבטיחים 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>מִנוּי</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>שם משתמש</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>צריך להירשם?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>מקורות</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>מוזר, שום דבר זמין. משהו בטח לא בסדר 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>לְהַסִיר</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>דורש הפעלה מחדש</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>מִתקַדֵם</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>שגיאה בחילוץ תוסף מ- '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>שגיאה בהתקנת תוסף: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>שגיאה בהתקנת תוסף {0} 'מבנה מדריך פגום או לא תקין. ביטוי צריך להתקיים ב '{1}' אך לא נמצא.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>שגיאה בניתוח תוסף התוסף '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>אין תוסף עמוס ב- Guid: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} שגיאה</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>שגיאה שלב תוסף ל- Temp Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>שגיאה בגיבוי '{0}' ל- '{1}'. פרטים: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>טקסט שהוקלד יוחל אוטומטית על חיפוש כאשר אף תיבת טקסט לא ממוקדת.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>קלט חיפוש אוטומטי</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>שינוי הסיסמה נכשל</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>שינוי</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>שנה סיסמא</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>ברור</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>נקה סיסמה</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>תוֹכֶן</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>גודל גופן תוכן</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>כאשר נכון, תוכן חיצוני המוחדר לקליפ ישתמש בעיצוב הקליפים ולא במה שקיים מהמקור.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>הדבק, טיפה או צורף עם עיצוב יעד</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה לשכוח את הסיסמה?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>לשכוח</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>תשכח מהסיסמה</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>פּרוֹפִיל</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>סימני מים הסתר קיבולת</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>כאשר מצורפים תוכן לוח חדש</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>התעלם מתוספות</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>כאשר הלוח תואם לקליפ קיים, הקליפ הזה ישמש במקום ליצור אחד חדש</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>התעלם מכפילויות חדשות</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>לא יעקבו אחר שינויים בלוח מתוך האפליקציה</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>התעלם ממעקב אחר הלוח הפנימי</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>יתעלמו ממרחבים, כרטיסיות וקווים חדשים ממעקב</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>התעלם רק מהמרחב הלבן</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>טען על כניסה</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>חלון אנימציה</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>אֲטִימוּת</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>להראות התנהגות</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>החלון הראשי ייחשף על ידי ביצוע מחוות גלילה בקצה העליון של המסך שלך</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>להראות על גלילה על המסך העליון</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>נפח הודעה</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>הגדרה זו תעקוב אחר המערכת - ספירת הדבק מקלדת רחבה לסטטיסטיקה של שימוש. מידע זה הוא פרטי ולא משותף אך גם אינו מבוטל. תוצאות מדויקות עשויות לדרוש מתן פקודת הדבק מקלדת ספציפית ליישום ב'הגדרות -&gt; העתקה והדבק -&gt; קיצורי דרך '.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>הדבק היסטוריה</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>יותר מדי קליפים מצומצמים (כמו כרטיסיות דפדפן) יכולים לצרוך זיכרון משמעותי. ההסרה היא על ידי ראשונה - ראשונה - החוצה</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>קיבולת סיכה</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>זה חל על כל הכניסות האוטומטיות הניתנות לשלמה, ערכים נמוכים יותר ישפרו את הביצועים</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>מגבלת טקסט אחרונה</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>אתה בטוח שאתה רוצה
+שחזור העדפות ברירת מחדל?
+
+אי אפשר לבטל את זה!
+
+*היישום יופעל מחדש לאחר השלמתו.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה לאפס את כל ההודעות?
+
+*אי אפשר לבטל את זה!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>הדבק קוף מגדיר את הלוח (גובר) בעת הדבקה לתוכנית חיצונית. זה יאהב &lt;b&gt; ניסיון לשחזר את מצב הלוח לאחר משחה חיצונית.
+
+לא ניתן להבטיח שיקום מוחלט ועשוי להפחית את הביצועים או אפילו להתרסק על קוף קוף, תלוי במקור הנתונים.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>אפס את הלוח לאחר הדבקת קופים</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>לא יכול היה למחוק מטמון תוסף מנתיב: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>כל התוספים יאפסו למצב ברירת מחדל ראשוני</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>מטמון תוסף</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה לאפס את כל התוספים לברירות מחדל?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה לאפס את הסיסמה שלך?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>כל קיצורי הדרך של היישומים יאפסו את מחוות המפתח המוגדרות כברירת מחדל שלהם.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>אפס קיצורי דרך</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>כל ההודעות שהתעלמו בעבר נקבעו.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>לשחזר את ההודעות</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(הפעלה יכולה להיות איטית למדי) השבתה מעוצבת תפחית את צריכת הזיכרון אך תעכב כמה תכונות מתקדמות, כגון: הוסף, תבניות, הערות ומצא/החלף</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>תוכן עשיר</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>הגדר סיסמא</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>להראות רמזים</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>להראות בשורת המשימות</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>הצג במתג משימות</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>הצג כותרות</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>כאשר מופעל, גרירת כל יישום לראש המסך תחשוף את Monkeypaste להפיל בקלות תוכן ל- Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>הראה על גרירה לראש המסך</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>נושא קול</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>בדיקת איות</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>בעת ההפעלה מקור הלוח לא יהיה ידוע ותלוי בהגדרות האבטחה שלך, התוכן עשוי להגיע מאתר או יישום לא נכלל.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>הוסף לוח סטארט -אפ</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>האזינו ללוח ב"הפעלה "</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>בחר</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>זְהִירוּת! צבעי פלטה אחרים נבחרים באמצעות מתמטיקה ולא עיניים! אז שימו לב לשילובי צבע וסגנון מסוימים עשויים שלא להיות בעלי ניגודיות נאותה לקריאה.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>צבע נושא</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>סגנון נושא</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>ניקוי אשפה אוטומטי יתרחש בהפעלה במרווח הסט.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>ניקוי אשפה</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>מִמְשָׁק</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>גבולות ביטול גבוהים עשויים להשפיע על הביצועים</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>לבטל גבול</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>אין גבול</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>משמש בחיפוש קבצים מתקדם אחר סוגים שאינם מראש של קבצים</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>משתמש - תוספי חיפוש מוגדרים</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>מצא והחלף...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>הדבק כאן</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>לַחֲלוֹק...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>נוף</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>לנהל...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>שנה שם</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>ציון: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>סוג: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>למחוק לצמיתות</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>דפדף ל- '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>שינוי צורה</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>קֶלֶט</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>תְפוּקָה</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>מקורות</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>לשחזר</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>בחר תמונה ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>צֶבַע</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>נהל '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>לִפְתוֹחַ</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>המתן בבקשה...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>צבע רקע</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>לנקות הכל</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>פורמטים של לוח</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>מחק הכל</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>לערוך את הפרטים</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>שֵׁם</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>למצוא</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>צבע גופן</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>פורמט צבע</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> בבחירה</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>הוסף תמונה</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>הכנס קישור</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>הכנס וידאו</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> מקרה התאמה</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>תבנית חדשה</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>התבנית הבאה</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>הזן טקסט הדבק ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>תבנית קודמת</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> הבעה רגילה</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>החלף הכל</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>החלף</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> כל העולם</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> לעטוף</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>לַחסוֹם</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>תְחוּם</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>להראות תיקיה</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>ביטול חסימה</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>על אודות</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>הוסף בלוק</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>הוספה בשורה</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>אוטומטית - העתק</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>מצבים</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>אנא המתן Monkeypaste טוען ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>לְהַפְסִיק</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - לחץ על הדבק</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>קְבוּצָה</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>לְסַנֵן</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>מחק את הכל לצמיתות</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>שחזר הכל</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>פעולה</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>כתובת אתר כבר קיימת: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>כתובת האתר חייבת להיות בפורמט תקף.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>הזן כתובת אתר מלאה:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>הוסף כתובת אתר</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>הזן ערכים</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>העתק טקסט או קבצים ליישום.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>הוסף {0} {1} מצב מופעל</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>שינויים בלוח יצרפו כעת</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>לאחר הפעלת מצב הוסף</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>כעת יופנו שינויים בלוח</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>לפני שהופעל מצב של הוספה</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>לַחסוֹם</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>התנהגות הלוח הרגילה שוחזרה</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>הוסף מבוטל</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>הוספה מוסיפה לראש או לבוטום של הקליפ</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>היקף מצב הוסף מופעל</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>בשורה</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>מדריך ל</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>הוסף לבחירה הנוכחית שלך.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>מצב הוסף ידני מופעל</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>הצטברות הלוח נעצרה</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>הוספה השתהה</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>הצטברות הלוח התחדשה</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>הוסף התחדש</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה לסיים הוספת?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>עריכה במצב תאימות תסיר את כל העיצוב העשיר. האם אתה בטוח שאתה רוצה לשנות זאת?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>אזהרת השפלה של נתונים</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>פָּעִיל</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>מופעל</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>כבוי</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>עַל</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>מושהה</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>תוֹצָאָה</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>סטָטוּס</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>שגיאה לא ידועה התרחשה.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>נסיונות שנותרו</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>הזן את הסיסמה</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>לְאַשֵׁר</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>איש קשר</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>תאריך שעה</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה למחוק את כל השימושים של '{0}'?
+
+אי אפשר לבטל את זה!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>דִינָמִי</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>סטָטִי</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} ריק ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>עוד בקרוב!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>כניסה לעומס כניסה נכשלה</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>עומס הכניסה להשבית הצלחה</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>עומס הכניסה לאפשר נכשל</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>עומס כניסה לאפשר הצלחה</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>להתחבא</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>משחת קופים טעונה כעת.
+האזנת הלוח היא: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>עמוס</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>הופעה</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>מצב בחירת העתקה אוטומטית: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>המצב השתנה</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>לחץ באמצעות לחצן העכבר הימני על הדבקת מצב: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>עודכן תוסף</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>הדבק '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>הפעל '{0}' מנתח</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>הפעל את ההדק '{0}'</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>בחר '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שאתה רוצה למחוק '{0}' ואת כל הפעולות המשויכות?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>הדק</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>האם ברצונך להסיר את כל פעולות המשנה עבור '{0}'? (אחרת הם יועברו מחדש ל- '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>הסר אפשרויות</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>האם אתה באמת רוצה להתאים '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>חֶשְׁבּוֹן</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>מנתחים</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>פעולות יישום</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>לוח</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>תוֹכֶן</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>ממירים</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>תַרְבּוּת</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>נתונים</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>כיוון</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>גרור ושחרר</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>אשף טיפה</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>סמלים</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>כּוֹרֵת עֵצִים</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>מִמְשָׁק</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>הדבק פעולות</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>העדפות</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>לחפש</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>קיצורי דרך</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>סוג</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>צלילים</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>מגש מערכת</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>אוספים</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>נושא</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>מפעילים</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>פעולות אתרים</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>שפה</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>מגדיר את הלוח לקליפ הקלט.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>עֵרָנִי</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>נְקוּדַת אוֹר</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>צִלצוּל</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>התראות הודעות צליל ו/או מגש מערכת כללי. לפעולות התראה אין השפעה על הקלט שלהן.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>הוֹדָעָה</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>קוֹף</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>תצוגה מקדימה</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>הופעה?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>הודעת טוסט זמן מוצגת תוך שניות. כאשר הערך הוא 0 ההודעה חייבת להיות סגורה ידנית.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>הצג זמן (ים)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>סוֹנָר</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>נשמע?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>סוג קול</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>טינג</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>כרך</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>מנתח</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>מעבד את קליפ הקלט שלו באמצעות מראש מראש שהוקצה.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>תוכן הקלט מקושר לאוסף שנבחר</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>מקשר את קליפ הקלט שלו לאוסף התגים שהוקצה.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>תָג</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>רגיש למקרה?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>זה יכול להיות טקסט סטטי כדי להשוות עם הקלט ו/או לכלול מאפיינים שנבחרו (דרך כפתור המסנן) יחליף את הערכת המצב.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>נתוני מצב</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>שאילתת JsonPath אופציונלית שתוחל על 'מאפיין הקלט' שנבחר לפני הערכת המצב.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>פילטר קלט</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>מאפיין הקליפ המשמש לתנאי זה.
+
+המאפיין 'התפוקה האחרונה' נתמך כרגע רק כאשר תנאי זה הוא ילד של פעולה מנתח והנתונים המקורם ישתנו בהתאם לתפוקה של מנתח ההורים.
+
+לפתרון בעיות, צרף 'פעולת התראה' להורה של תנאי זה והגדר את פרמטר 'ההודעה' של ההתראה כך שיתאים למאפיין קלט זה. זה יאפשר לבדוק את הנתונים בפועל המשמשים לתנאי זה.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>נכס קלט</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>מבצע השוואה בין טקסט בקליפ הקלט או על פלט הפעולה הקודם. כאשר ההשוואה נכשלה (זה לא התאמה) לא יוצאו לבצע פעולות לילד. אז זה מתנהג כמו שער הגיוני.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>כל הפעולות האמיתיות או השגויות בהן פעולות ילדים יבוצעו רק אם התוצאה נכונה.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>מַצָב</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>את כל</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>מופעל כאשר קליפ מהסוג שנבחר מתווסף למערכת בכל דרך שהיא (לוח, גרירה - ו - טיפה, מנתח שנוצר או משוכפל).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>בצע רק טריגר זה אם קליפ הקלט הוא חדש ולא כפול. זה אינו תלוי בכל הגדרת העדפה אם מתעלמים מתוכן חדש או לא.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>התעלם משכפול</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>רק קליפים מסוג זה יפעילו פעולה זו.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>מקשר את קליפ הקלט שלו לאוסף התגים שהוקצה.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>מופעל כאשר קליפ מקושר לאוסף התגים שצוין.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>אוסף</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>משך הזמן באלפיות השנייה חיכה לפני שהילדים מוציאים להורג</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>לְעַכֵּב</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(ניסיוני) משמש בעיקר בשילוב עם פעולת המשחזר עבור סקר מקורות מרוחקים או סיוע בפעולות ריצה ארוכות.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>כשהוא נותר ריק, קובץ הפלט ישתמש בכותרת של קליפ הקלט כשם הקובץ.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>שם תחפושת</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>הספרייה בה ייכתב הקובץ.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>מַדרִיך</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>שומר קלט לתיקיה שנבחרה.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>מופעל כאשר תוכן התיקיה שנבחר משתנה. הפלט יהיה חדש או קיים (כאשר העדפת ההעדפה של הכפילויות מופעלת) קליפ הקובץ של הקובץ או התיקיה שהשתנו יחד עם סוג השינוי כפלט האחרון שלו.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>אירועים</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>תיקיה</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>התעלם משכפול</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>ערך של 0 יחזור על פעולת ההורים ללא הגבלת זמן</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>ספירה חוזרת</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>משך הזמן באלפיות השנייה כדי לחכות לאחר סיום פעולת ההורים</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>חזור על עיכוב</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(ניסיוני) המשמש ליצירת לולאות פעולה או משימות חוזרות ונשנות. כאשר חוזר על עצמו, היא תוציא לפועל שוב את כל הילדים עם הקלט המקורי שלה. בעת שימוש במרווח ללא ספירה חוזרת, יהיה צורך להשבית את ההדק ולהתנשא מחדש כדי לעצור את החזרה. יכול להיות שימושי לסקר או לאוטומציה של גירוד אתרים.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>מופעל על ידי קיצור דרך גלובלי שאתה מגדיר. אם Monkeypaste פעיל הוא ינסה להשתמש בקליפ שנבחר (אם יש כזה) כקלט. אחרת הוא ינסה להשתמש בלוח כקלטו.
+
+הערה: טריגר קיצור דרך עדיין יבצע אם אין קלט כדי לשמור עליו גמיש (כך שזה יכול להיות טריגר מאקרו וכו ') מכיוון שזה לא אירוע מונע נתונים.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>טריגר קיצור דרך</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>מופעל כאשר קיצור הדרך המוקלט נלחץ בכל עת עם הלוח הנוכחי</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>פעולה זו מחייבת את האפליקציה להפעיל מחדש. האם תרצה לעשות את זה עכשיו?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>הייתה בעיה. אתה צריך להפעיל מחדש ידנית את היישום.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>לנתח עם annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>הערת טריגר</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>אלמנטים מובנים נקראים - בלבד. שכפול ל- Alter.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>בעילום שם</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>המותאם אישית</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>אתמול</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} לפני ימים</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>לפני שעה</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} לפני שעות</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>זֶה עַתָה</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>לפני דקה</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} לפני דקות</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>חודש שעבר</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} לפני חודשים</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>שבוע שעבר</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} לפני שבועות</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} לפני שנים</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>הערות</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>שם אפליקציה</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>נתיב יישום</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>רגיש למקרה</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>תוֹכֶן</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>סוג קובץ</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>סוג תמונה</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>הבעה רגילה</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>סוג טקסט</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>כותרת</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>כתובת אתר</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>כותרת כתובת אתר</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>כל העולם</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>כמו לגלול לאורך קצה המסך העליון כדי לפתוח, זה ינעל את החלון הראשי כשנפתח. המאפשר זרימות עבודה מהירות יותר ממוקדות.
+
+* פינות הן מבחינת כל המסכים שלך, ולא לפי צג.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>הצג חלון ומנעול</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>חינם!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>תן לנו 5 כוכבים!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>מחק הכל</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>מחק את כל התוכן</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>אתה בטוח שאתה רוצה למחוק
+כל הקליפים שלך?!
+
+*לא ניתן לבטל פעולה זו!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>אני דיו של אינדי בבקשה תראה תמיכה!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>כמו Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} מקבל רק קלט מסוגים: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>מצב העתק אוטומטי - מדמה אירוע 'העתק' בכל פעם שפורסם כפתור העכבר השמאלי.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>לחץ באמצעות לחצן העכבר הימני על הדבקת מצב - מדמה אירוע 'הדבק' בכל פעם שמשוחרר כפתור העכבר הימני</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>מראש מראש</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>הצג תיקיית תוסף</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>להגיש תלונה</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>נוף</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>הצג תיאורי כלים</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>מנתחים הערת הקלט שלהם או יוצרים קליפים חדשים כפלט. ילדי מנתחים צריכים להחליט איזה מהם הם צריכים כקלט שלהם. בדרך כלל זה הפלט האחרון.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>סוג קלט</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>מעצב ההדק '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>בחר {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>לא נמצא...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} טריגר</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>בבדיקת התוצאה האמיתית או השגויה של המצב תועבר. כך למשל, מצב 'מכיל' יהפוך 'אינו מכיל'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>לא</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>המתן בבקשה...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>בוחר צבעים</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>בחר צבע התאמה</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>כמו טריגר קיצור דרך, אך כאשר נלחץ על שילוב המפתח, אירוע 'העתק' ידומה ביישום הפעיל כך שהוא עדיין עובד כמו עותק אבל אז שרשרת הפעולות המצורפות לטריגר העותק של הקופים תבוצע ברקע באמצעות נתוני לוח עותק מדומים.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>מסנן מתקדם</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>הסתר פילטרים</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>לשחזר פילטרים</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>צור פילטר</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(אופציונלי) כאשר נותר ריק הלוח יוגדר באמצעות קלט פעולה זה. כל דבר שיסופק כאן יתייחס כאל טקסט רגיל בלבד.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>תוכן ללוח</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>כאשר נכון, לא יתווסף קליפ לאחר פעולה זו מגדירה את הלוח.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>להתעלם</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>שום מנתח לא נבחר לפעולה '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>מנתח לפעולה '{0}' לא נמצא</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>הורה '{0}' מסננים רק עבור '{1}' הקלד תוכן ומנתח '{2}' לעולם לא יבצע מכיוון שהוא לא תומך ב'- {3} 'סוג הקלט</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>אין תג שנבחר לסווג '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>תגית לסיווג '{0}' לא נמצא</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>השוואה בין ערך יכול להיות רק אותיות, מספרים או רווחים</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>אין תג שנבחר לקליפ מתויג טריגר '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>תגית לתיוג בקליפ '{0}' לא נמצא</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>אין תיקיית צפייה שצוינה עבור '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>צפו בתיקיה '{0}' לא נמצא עבור Trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>נתיב כותב קבצים לפעולה '{0}' לא מוגדר</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>נתיב כותב קבצים '{0}' עבור '{1}' לא נמצא.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>שורת משימות</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>למדו על תוספים</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>שחזור תצורת ניתוח זו</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} שנה יומן</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>אנא התחבר לאינטרנט ונסה שוב מאוחר יותר.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - עזרה</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} היא הגרסה האחרונה</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>כולכם למעלה - ל - תאריך!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>בדוק עדכונים...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>גרסה חדשה זמינה!
+
+לחץ כאן כדי לעדכן ל- '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>לחץ למטה כדי לעדכן ל- '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>עדכון זמין!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>עדכן כעת</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' מכיל ערכים משותפים. מה תרצה לאפס?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>ברור</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>נקה חיפושים אחרונים</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>לאפס הכל</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>איפוס משותף</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>אפס לא משותף</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>קורא את פעולת היישום שהוקצה. כל פקודות היישום חסרות מדינה ומתעלמים מהקליפ הקלט שלהם.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>כאשר לא מסומנים והפקודה לא יכולה לירות, שרשרת הביצוע תעצור. פקודות רבות ידרשו מצב יישום ספציפי כלשהו כדי לבצע.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>תמיד להמשיך?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>הפקודה לביצוע.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>פקודה</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>אין פקודה שנבחרה לפקודת יישום '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>הפקודה לפקודת יישום '{0}' לא נמצאה</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>נבחר</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>איתחול</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>הייתה בעיה בעדכון '{0}'. על מנת להשלים את העדכון תצטרך להפעיל מחדש ולהתקין שוב את '{0}' (אל תדאג שכל ההגדרות שלך ישוחזרו).
+
+אתה יכול להפעיל מחדש עכשיו ולהשלים את העדכון על ידי התקנה מחדש, להתעלם מכך ולעדכן אותו אחר כך או לבטל את העדכון הכל יחד ולהמשיך להשתמש בגרסה '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>עדכון שגיאה</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>לא יכול היה להוריד עדכון</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>עדכון נכשל</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>להשלמת העדכון תצטרך להפעיל מחדש. האם תרצה להפעיל מחדש עכשיו או אחר כך?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>עדכן מוכן</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>יותר מאוחר</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>אתחל עכשיו</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>ממתין ל</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} עודכן בהצלחה ל- {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>תוספי ליבה נדרשים ולא ניתן להסיר אותם.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>מתקין</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>עדכון ממתין. הפעל מחדש להשלמתו.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>ממתין ל</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>הסרת ההתקנה תלויה ועומדת. אנא הפעל מחדש אם ברצונך להתקין מחדש.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>להשלמת ההתקנה תצטרך להפעיל מחדש. האם תרצה להפעיל מחדש עכשיו או אחר כך?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>לסיים את הסרת ההתקנה?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>לא פורסם</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>אוטומטי - שנוצר מוגדר כברירת מחדל מוגדר כברירת מחדל עבור '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>לא נבחר קליפ</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>נתח קליפ נבחר</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>הקצה קיצור דרך להפעלת '{0}' בקליפ שנבחר</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>עיסה גלובלית</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>הקצה קיצור דרך להדבק גלובלי עבור '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>שכחת את הסיסמא?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>התחברות</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>להתנתק</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>מדיניות הפרטיות</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(דורש הפעלה מחדש) כאשר מידע אבחוני מופעל יירשם לקובץ. זה יכול להאט את הביצועים ועשוי להכיל מידע אישי.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>כניסה לקובץ</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>לִפְתוֹחַ</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>פתח תיקיית יומנים</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>עיין בתוספים</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>לקרוא</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>לִכתוֹב</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>שלח משוב או דוח באגים</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>זה רק מסתיר את החלון הראשי. כל שאר חלונות הדיאלוג האחרים מוצגים תמיד בשורת המשימות.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>חפש ב- '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>הוסף פילטר</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>ערוך סוג הצטרפות</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>הסר את המסנן הזה</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>פתוח עזרה בעניין זה ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} קליפים</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>שינוי</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>לעולם לא</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>מַעֲרֶכֶת</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>ללא כותרת</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>תקליט</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>התייחסות למקור ללא תווית</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' נדרש</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(יש שגיאות)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>מוגבל</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>אִחסוּן</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>אַשׁפָּה</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>ללא הגבלה</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>אפליקציה זו תואמת כיום את הפורמטים של קריאת לוח הליקס ברירת המחדל.
+
+הפעלה או השבת קביעות מוגדרות מראש של קורא ברירת מחדל (מסרגל הצד הלוח) לא תשפיע על תצורה זו. רק אפליקציות לא רשומות עוקבות אחר הגדרת ברירת המחדל.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>אפליקציה זו תואמת כיום את הפורמטים של כותבי הלוח הבריאים לברירת המחדל.
+
+הפעלה או השבתת קביעות מוגדרות מראש של כותב ברירת מחדל (מסרגל הצד הלוח) לא תשפיע על תצורה זו. רק אפליקציות לא רשומות עוקבות אחר הגדרת ברירת המחדל.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>כדי להוסיף עליכם לבטל את עוו של מאזין הלוח (מגש מערכת -&gt; קורות חיים).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>הוסף לא זמין</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> אין הגדרות</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>אני מדבר רק אנגלית וקופיפסטה תורגמה לשפה זו.
+
+כל הגרסאות נשלחות עם החפיסה האנגלית כך שאם אתה מדבר אנגלית אתה יכול לשנות לה את השפה בכל עת לאחר הגדרה זו (הגדרות -&gt; העדפות -&gt; בינלאומי).
+
+אם תרצה לעזור בשיפור התרגום שנשמח לשמוע ממך!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>חששות לתרגום</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>עליך לעדכן את MonkeyPaste כדי להשתמש בתכונה זו.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>קיצור הדרך ביטול הגדרה</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>מאזין הלוח מושבת</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>מאזין הלוח מופעל</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>פעולת ההורה '{0}' אינה תומכת בסוג המאפיין הקלט 'פלט אחרון'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>למידע נוסף על תוכניות</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>יישום</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>הדק</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>לְקַצֵץ</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>מנתח</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>תָג</value>
+  </data>
+</root>

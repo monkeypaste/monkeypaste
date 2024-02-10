@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Níl aon ghnéithe teoranta ag síntiús, ach acmhainn stórála agus is féidir iad a athrú ag am ar bith.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Cuir do chuntas reatha ar ais ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Tá ábhar agus bruscar
+teoranta do {0} agus {1}
+gearrthóga faoi seach.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Ceadaíonn sé suas le {2} gearrthóga d'ábhar agus stóráil bruscair neamhtheoranta.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Ábhar neamhshrianta agus neamhtheoranta agus stóráil bruscair.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Cuir ar an eolas</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Saor</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Caighdeánach</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Neamhtheoranta</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Sintiús</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Tá do phríobháideacht tábhachtach agus is féidir le sonraí gearrthaisce a bheith an -phearsanta. Tá an stóráil criptithe i gcónaí ach is féidir leat pasfhocal a shocrú a bheidh ag teastáil i gcás go ngoidtear do ghléas nó go bhfuil duine eile ag úsáid do ghléas.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Pasfhocal</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Nuair a chuirtear ar chumas é, nochtfaidh monkeypaste as aon iarratas go barr an scáileáin chun an t -ábhar a scaoileadh go héasca i monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Má chuirtear ar chumas an 'ghlais' ar bharr na láimhe clé den phríomhfhuinneog, ligfear dó titim isteach ar mhoncáin.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Tá níos mó roghanna fuinneoige ar fáil ón roghchlár 'Settings -&gt; Preferences -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Tarraing bananaí suas anseo!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Tarraing - go - oscailte</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Is féidir aicearraí méarchláir a athbhreithniú nó a athrú ag am ar bith ón roghchlár 'Settings -&gt; Aicearraí'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Beidh gach aicearra domhanda faoi mhíchumas ionas gur féidir leat iad féin a chur suas níos déanaí.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Beidh aicearraí gearrthaisce Monkeypaste ar fáil i ngach iarratas.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Inmheánach</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Mainneachtain</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Próifíl gotha</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hey! Déanaimis roinnt rudaí a shocrú chun do thaithí fhoriomlán a fheabhsú le monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Fáilte a chur roimh</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Chun an úsáid is mó a bhaint as monkeypaste, is smaoineamh maith é luchtú go huathoibríoch nuair a logálann tú isteach. Ach, is fút féin atá sé sin.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Coinnigh ócáideach é.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Cuónta</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Luchtaigh ar logáil isteach?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Nuair a chuirtear ar chumas é, nochtfaidh gotha ​​scrollbharra ag barr an scáileáin monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Ar chlé - Má chliceálann tú ar an deilbhín Taskbar, osclóidh sé monkeypaste fós.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Tá níos mó roghanna fuinneoige ar fáil ón roghchlár 'Settings -&gt; Preferences -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Ceart éasca?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Scrollaigh suas anseo!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Scrolla - go - oscailte</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Is é monkeypaste &lt;span dath = "red&gt; comhtháite go hiomlán &lt;/span&gt; le tarraing - agus - Drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Buail é anseo!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "lár"&gt; Sa tslí seo, is féidir rochtain a fháil ar monkeypaste &lt;br&gt; &lt;span colot = "dearg"&gt; gan cliceáil &lt;/span&gt; nó fiú &lt;span dath = "dearg"&gt; ag batáil súl &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Tarraing dom!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Iarrai E amach!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Iarrai E amach!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Níl aon torthaí ar fáil.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Daingnigh</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Athscrúdú a dhéanamh ar</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Cuardaigh ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Socruithe</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Spleáchais:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Tar chun</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mian leat '{0}' agus a réamhshocruithe agus a aicearraí go léir a bhaint?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Dhíshuiteáil</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>Níl aon torthaí ag '{0}'.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Gan aon rogha.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Aon</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Creidmheasanna:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>CUSPÓIR:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Síntiús:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Ceadúnas:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL Tionscadail:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Foilsithe:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Léigh Mise:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Mí -úsáid a thuairisciú:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Clibeanna:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>An t -ó nuashonrú a dhéanamh ar</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Leagan:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Oscailte san fhuinneog</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Díbheadh</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Athscrúdú a dhéanamh ar</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Spáráil</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>In aice le scriosadh!
+
+Uasghrádú a sheachaint.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>In aice le bruscar!
+
+Uasghrádú a sheachaint.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Comhaid</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Íomha</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Téacs</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Cóipeáilte {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Comhaid | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} línte</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Cóipeanna | {1} Pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Téigh ar aghaidh</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Cuir le</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Cóip</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Náirithe</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Greab</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Cóip</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Scagaire Unved</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Roghnaigh le do thoil -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formáidí</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Léitheoirí</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Scríbhneoirí</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Láimhseálaithe</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Scrios amach</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Dúblach</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Ainm eagarthóireachta</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Athshocraigh</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Clibeanna</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Caingean</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Ródú domhanda</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Gearrscaoil</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Caithfidh gothaí a bheith uathúil agus ní fhéadfaidh siad ach eochair ionchuir amháin a bheith iontu.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Inmheánach &lt;/b&gt; Tá gach aicearra teoranta laistigh den iarratas. Ní rogha beartaithe é seo i ndáiríre ach is féidir leis a cheadú cad iad na haicearraí a bhfuil sé i gceist agat a dhéanamh ar an domhanda &lt;i&gt; someday &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Réamhshocrú &lt;/b&gt; Cumasaítear gach aicearra domhanda. Úsáideann an t -aicearra &lt;b&gt;/Folaigh an Príomh -Fhuinneog &lt;/b&gt; an t -aicearra &lt;span dath = "dearg"&gt; sárú &lt;/span&gt; ródú don eochair Caipíní &lt;b&gt; Caps &lt;/b&gt;. Is féidir leat an ródú nó an chomhartha sin a athrú ag am ar bith. Ach &lt;span dath = "glas"&gt; Tabhair triail as &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;pordy&gt;
+&lt;h1&gt; Modhanna aicearra domhanda &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; éighníomhach &lt;/b&gt; Éistfidh monkeypaste aicearra in aon iarratas. &lt;br&gt;
+*Is é seo an rogha &lt;i&gt; amháin &lt;/i&gt; ar Linux anois.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Réamh -&lt;/b&gt; Cuirfidh an t -aicearra i gcrích &lt;b&gt; &lt;i&gt; roimh &lt;/i&gt; &lt;/b&gt; Déileálann an t -iarratas gníomhach leis. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; Cuirfidh an t -aicearra i bhfeidhm &lt;b&gt; &lt;i&gt; tar éis &lt;/i&gt; &lt;/b&gt; Déileálann an t -iarratas gníomhach leis. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; sárú &lt;/b&gt; Nuair a chloiseann monkeypaste an eochair ionchuir (eochair neamh -mhionathraithe) de aicearra sáraithe a dhéanfaidh sé &lt;i&gt; i bhfolach &lt;/i&gt; an príomh -phreas sin ón iarratas - ionchur leibhéal. &lt;br&gt; &lt;br&gt;
+Ráthaíonn an rogha seo go spreagfar an t -aicearra gan choinbhleachtaí leis an iarratas gníomhach.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; sárú eisiach &lt;/b&gt; Is cineál speisialta modh sáraithe é seo atá deartha don eochair CAPS Lock. Ní cheadaíonn sé ach &lt;b&gt; eochair one &lt;/b&gt; (neamh -mhionathraitheoir) dá shannadh. &lt;br&gt;
+I ngnáth -mhód sáraithe is féidir caipíní a bheith faoi ghlas &lt;i&gt; greamaithe ar &lt;/i&gt; nuair a bhrúitear iad i gcomhar le heochracha eile. &lt;br&gt; &lt;br&gt;
+Mar sin, is cuma cad iad na heochracha eile atá síos, má bhrúitear aicearra &lt;b&gt; hotkey &lt;/b&gt; go mbeidh sé sáraithe agus go gcuirfidh sé cosc ​​air a bheith i bhfostú ar &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/corp&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Míchumais</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Luchtaigh suas nuair a bhíonn an cuntas úsáideora seo logáilte isteach, ní d'úsáideoirí eile.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Ag baint úsáide as na teagmhálacha atá ar fáil (teastaíonn breiseán fetcher) bainfear úsáid as an réimse seo do gach cás den teimpléad seo ar fud an doiciméid seo nó in aon cheann, déanfar tagairt dó níos déanaí. Anseo ansin bainfear úsáid as réimse ríomhphoist na teagmhála a roghnaíonn tú do gach cás sa doiciméad seo. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = bliain ghearr &lt;br/&gt; yyyy = bliain fhada &lt;br/&gt; m = month (1-12) &lt;br/&gt; mm = mí (01-12) &lt;br/&gt; Mmm = Mí Giorrúchán (Eanáir, Feabhra. Dec) &lt;br/&gt; mmmm = mí fhada (Eanáir, Feabhra ... Nollaig) &lt;br/&gt; d = lá (1 - 31) &lt;br/&gt; dd = lá (01 - 31) &lt;br/&gt; ddd = Lá na seachtaine i bhfocail (Dé Luain, Dé Máirt ... Dé Domhnaigh) &lt;br/&gt; e = lá gearr na seachtaine i bhfocail (Luan, tue ... Sun) &lt;br/&gt; D - Lá Ordaitheach (1ú, 2ú, 3ú, 21ú, 22ú, 23ú, 31ú, 4ú ...) &lt;br/&gt; H = uair an chloig in AM/PM (0-12) &lt;br/&gt; HH = uair an chloig in AM/PM (00-12) &lt;br/ &gt; H = uair an chloig sa lá (0-23) &lt;br/&gt; hh = uair an chloig sa lá (00-23) &lt;br/&gt; mm = nóiméad &lt;br/&gt; ss = an dara &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm marcóir &lt;br/&gt; p = a.m./p.m. marcálaí</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Cuirfear an dáta agus/nó an t -am reatha in ionad teimpléid dhátú nuair a ghreamaítear iad.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Bainfidh gach tarlú den teimpléad seo úsáid as an téacs atá curtha ar fáil. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Bainfidh gach tarlú den teimpléad seo úsáid as an téacs atá curtha ar fáil. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Críochnaigh ag clúdach</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Bloc Cumasaigh</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Cumasaigh inlíne</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Lámhleabhar Toggle</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Lámhleabhar Toggle</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Sos aguisín</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Toggle roimhe seo</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Toggle roimhe seo</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Atosú aguisín</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Aguisín ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Greab</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Bioráin</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Itheacháin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Folaigh gach fógra '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Díbheadh</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>App gníomhach deireanach anaithnid. Athraigh go dtí an aip atá beartaithe go Greamaigh Moncaí.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Greamaigh go: &lt;em&gt; &lt;i class = "greamaigh-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Íoslaghdú</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Fán le do thoil...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Trí</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Bheith den tuairim</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Cabhrú</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Greamaigh cóip</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Roghanna</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Réamhshocruithe a chur ar ais</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Scagaire ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Aicearraí</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Cuir aip leis</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Cuir an suíomh Gréasáin leis</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bloc?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Ainmnigh</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Feidhmchláir</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Fearann ​​bloc?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Bloc url?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Réimse</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Tá aitheantas URL foinse ag brath ar an gcaoi a bhfuil an t -iarratas óstach cairdiúil gearrthaisce mar sin ní féidir a ráthú a ráthú</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Láithreáin ghréasáin</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Baineann roinnt gnéithe monkeypaste úsáid as uathoibriú méarchláir chun imeachtaí 'cóip' a ionsamhlú in iarratais eile.
+
+Cuir agus/nó roghnaigh an feidhmchlár leis an aicearra cóip uathúil (cosúil le consól nó bhlaosc mar shampla) chun a chinntiú go bhfeidhmíonn na gnéithe sin i gceart.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Cóip a dhéanamh de</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Aon</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Ní úsáidfear ach na réamhshocruithe roghnaithe don iarratas sonraithe. Nuair a bhíonn siad neamhshonraithe, bainfear úsáid as na réamhshocruithe réamhshocraithe a fhaightear sa &lt;em&gt; gearrthaisce taobh &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Baineann go leor gnéithe monkeypaste úsáid as uathoibriú méarchláir chun idirghníomhú le hiarratais eile.
+
+D'fhéadfadh go mbeadh aicearra greamaithe neamh -réamhshocraithe ag roinnt iarratas (cosúil le roinnt consóil nó sliogáin mar shampla).
+
+Chun idir -inoibritheacht chuí a chinntiú, déan taifead ar na haicearraí sin don iarratas sin anseo.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Aicearra greamaigh</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Léitheoirí</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Déanfar gach monatóireacht gearrthaisce ó iarratais dhiúltaithe a neamhaird &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Scríbhneoirí</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Cuir in eagar ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formáidí</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Diúltaithe</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Aicearraí</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Ar mhaith leat freisin gach gearrthóg {0} a bhaint as '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Bain gearrthóga?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Iarrchán</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Brabhsáil chun app ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Roghnaigh Conair Iarratais</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat aicearraí saincheaptha a bhaint do {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat formáidí saincheaptha a bhaint do {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Níl aon fhormáidí gearrthaisce sannta don aip seo. Ní léifear aon sonraí uaidh trí ghearradh/cóipeáil nó ag iarraidh tarraing - agus - buail isteach i monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Níl aon fhormáidí gearrthaisce sannta don aip seo. Ní bheidh aon tionchar ag greamaigh uathoibrithe nó tarraing - agus - titim ó mhoncáin (a chuid sonraí folamh).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat gach aicearra a athshocrú? Bainfear gach aicearra saincheaptha.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat do phróifíl ródúcháin aicearra a athrú go '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Uile</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Faoi</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Scarthóir</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formáidí</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Clibeanna</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Inniu</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Bruscar</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Faoi</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Ceart éasca?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Cliceáil faoi dhó chun unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Cur síos</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Domhanda</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Déanann an teaglaim seo coimhlint le '{0}' a ghlanfar má shábháilfear é.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Ní mór aicearra a sholáthar.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Is aicearra domhanda é seo. Ciallaíonn sé sin go ndéanfaidh sé iarracht é a fhorghníomhú aon uair a dhéantar é. Déan iarracht é a dhéanamh uathúil go leor (nó an 'cineál ródúcháin') a athrú chun gan coimhlint le haicearraí ó iarratais eile.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Domhanda</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Ní mór go mbeadh eochair amháin neamh -mhionathóra amháin sa aicearra.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Brúigh aon eochair chun taifead a dhéanamh ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Sannadh aicearra</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Foghlaim níos mó...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Uasghrádú</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Cealaigh</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Cuir suas le</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Neamhaird a thabhairt ar</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Níl</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Go maith</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Ais a chur ar ais</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Múchadh</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Cuir isteach</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Tá</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Inchinne</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Go míosúil</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Bain triail as saor in aisce!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Timthriall billeála</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Ríomhphost a chur</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Logáil isteach</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Seiceáil do nasc
+Agus bain triail eile as.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Logáil Amach</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>An chéad íocaíocht eile</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Pasfhocal</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Cláraigh</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Níl an ríomhphost bailí</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Ní hionann pasfhocail.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Caithfidh pasfhocal a bheith ar a laghad de charachtair {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Cuimhnigh?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Seiceáil do r -phost chun do chuntas a dhearbhú</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Pasfhocal athshocraithe</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Go deo</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Triail lae saor in aisce {0}</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Bhí fadhb ag feidhmiú
+do cheannach.
+
+Seiceáil do nasc agus
+D'fhéadfadh suíomhanna cabhrú leat.
+
+Ar mhaith leat triail a bhaint as arís?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>D'éirigh go maith le do chuntas
+Uasghrádaithe go:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Ceannach rathúil!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Earráid</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Theip ar an nasc.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Ais a chur ar ais</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Athraíodh an cuntas</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Tá do shíntiús anois {0}/{1} le hábhar {2} agus {3} stóráil bruscair.
+Ach ná bíodh imní ort, ní chailltear aon sonraí tar éis íosghrádú. Ní dhéanfar ach gearrthóga nua a mheas.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Comhghairdeas! Tá do shíntiús anois {0}/{1} le hábhar {2} agus {3} stóráil bruscair.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Bruscar nó rud éigin a neamhní
+Ó '{0}' chun níos mó a chur leis.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Is é an stóráil '{0}' ná {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Cuir ar an eolas</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} blocáilte</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Cumas Ábhar &amp; Bruscar Sroicheadh!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Is é an stóráil '{0}' ná {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Cumas ábhair sroichte!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Is féidir leat na rabhaidh seo a cheilt trí
+cliceáil ar 'Hide All' ón
+roghchlár roghanna thuas.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Is é uas -stóráil bruscair {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Cumas bruscair sroichte!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>Tá {0} neamhbhailí</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>Caithfidh {0} a bheith ar a laghad {1} carachtair</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>Ní féidir ach carachtar {1} a bheith {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Greamaigh go: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>An íocaíocht as do {0}
+bhí síntiús dlite {1}
+agus ní bhfuarthas é.
+
+Déan do chuid a nuashonrú le do thoil
+faisnéis íocaíochta.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>An íocaíocht as do {0}
+bhí síntiús dlite {1}
+agus ní bhfuarthas é.
+
+Ceangail le do thoil leis an
+Idirlíon ar an bhfeiste
+le do shuibscríobh agus
+atosaigh chun leanúint ar aghaidh
+Ag baint úsáide as do phlean {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>An íocaíocht as do {0}
+bhí síntiús dlite {1}
+agus ní bhfuarthas é.
+
+Oscail nó atosaigh le do thoil
+Monkeypaste ar an bhfeiste
+le do shíntiús go
+Lean ort ag úsáid do
+{0} plean.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Cuntas imithe in éag</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Nóta</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Ní cheadaíonn Siopa Microsoft Sraith
+Athruithe ar Addons Síntiúis.
+
+Ní mór duit do
+{0}/{1} Pleanáil tú féin
+Nó gearrfar muirear ort as an dá rud.
+
+Ar mhaith leat dul é sin a dhéanamh anois?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Athshocraigh do phasfhocal.
+
+Seiceáil do r -phost agus le do thoil
+Lean an nasc le hathrú
+do phasfhocal.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Logáil isteach</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Údar (í)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Éilítear go nglacfaidh tú leis na téarmaí ceadúnais seo a leanas sula leanann tú ar aghaidh.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Éilíonn an pacáiste / na pacáiste seo a leanas go nglacfaidh tú le téarmaí a gceadúnais sula suiteáiltear iad.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Diúltaím</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Má chliceálann tú "Glacaim leis" Ciallaíonn tú go n -aontaíonn tú le téarmaí an cheadúnais don iarratas seo. Mura n -aontaíonn tú leis na téarmaí, cliceáil "Diúltaíonn mé".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Má chliceálann tú "Glacaim liom", aontaíonn tú leis na téarmaí ceadúnais don bhreiseán / don bhreiseán atá liostaithe thuas. Mura n -aontaíonn tú leis na téarmaí, cliceáil "Diúltaíonn mé".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Féach Ceadúnas</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Glacadh le ceadúnas</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Glacaim</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Gníomhach</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>As líne</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Neamhchláraithe</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Déanta</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Ní hionann pasfhocail</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Pasfhocal</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Tá do shíntiús
+Anois socraithe go {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Cuntas Aimsithe</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Theip ar logáil isteach</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Theip ar chlárú</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Clárú rathúil!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Earráid athshocraithe</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Sintiús</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Cad atá nua</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Go deo</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Neamhtheoranta</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>cumas</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>fágtha leis</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>Iomlán</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Tá d’íocaíocht dlite roimhe seo.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Ní fhéadfaidh aon eochair amháin a bheith i n -aicearraí sáraithe eisiach agus ní féidir leis an eochair sin a bheith ina eochair mhionathraithe.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Imithe in éag</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Lódáil</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Faoi mhíchumas</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Nóta! Tá an focal faire seo roghnach agus gan ach slándáil bhreise a fháil. Tá do chuid sonraí criptithe cheana féin agus níor roinntear iad riamh. Ní choisceann an focal faire seo ach duine nach bhfuil tú ag luchtú monkeypaste má fhaigheann siad rochtain ar do dheasc ar bhealach éigin (goidte, fágann tú an seomra, etc.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Cuimhnigh ar shuíomhanna scaoilte do:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Brabhsáil Breiseáin</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Anailís a dhéanamh ar</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Gníomh tapa</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Scotgle Edit</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Toggle pinnithe</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Nótaí</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Gnáth -théacs</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Oscailte san fhuinneog</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Cliceáil + Ctrl le leanúint ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Cliceáil + alt le leanúint ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>PIN nó scaoil aon mheáin anseo!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Glan amach</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Soláthróidh tairseacha os cionn 0 meaitseáil datha doiléir ag baint úsáide as fad Eoiclídeach i spás dathanna RGBA.
+
+Mar shampla, más é dearg (#FF0000) an téarma cuardaigh agus gur picteilín i ngearrthóg íomhá é an t -achar dubh (#000000), ansin beidh an fad datha 255. Is é an t -achar dubh go bán an t -uasmhéid is féidir de 510, lena n -áirítear cainéal alfa</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Tá gach ceann díobh seo a leanas fíor</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Clár fáiscthe</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Bailiú</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Modhanna luiche</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Spreag</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Brú</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Atosaigh</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Truicir nua</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Cuir réamhshocrú leis</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Draoi Buail Moncaí</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Réamhshocruithe</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Anailíseoir</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Gearradh síos</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Treoshuíomh timthrialla</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Leagan amach greille scoránaigh</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Cáipice</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Tairseach</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Focal iomlán</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Níl aon tacar socraithe</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Ródú</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Caingean</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Eangach</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Déanta</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Ar aghaidh</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Roimhe seo</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Scipeáil</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Cuntas atá ann cheana?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>An chéad íocaíocht eile</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Ligeann an clárú duit do shíntiús íoctha a iompar ar fud do chuid feistí go léir (nuair a bhíonn siad ar fáil). Ní dhéanaimid spam do r -phost a gheallaim 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Sintiús</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Ainm an úsáideora</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>An gá clárú?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Foinsíocht</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Odd, níl aon rud ar fáil. Caithfidh rud éigin a bheith mícheart 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Bain amach</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Éilíonn atosú</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Chun cinn</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Earráid ag baint breiseán as '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Earráid Suiteáil Breiseán: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Earráid a shuiteáil plugin '{0}' struchtúr eolaire truaillithe nó míchuí. Ba chóir go mbeadh léiriú ann ag '{1}' ach níor aimsíodh é.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Earráid Parsing Pressin Léiriú '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Níl aon bhreiseán luchtaithe le GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>Earráid {0}</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Earráid Breiseán chun TEMP DIR '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Earráid ag tacú le '{0}' go '{1}'. Sonraí: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Cuirfear an téacs clóscríofa i bhfeidhm go huathoibríoch ar chuardach nuair nach bhfuil aon bhosca téacs dírithe.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Ionchur cuardaigh uathoibríoch</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Theip ar Athrú Pasfhocal</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Do chuid éadaigh a athrú</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Athraigh do phasfhocal</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Glan amach</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Pasfhocal Glan</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Ábhar</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Méid an chló ábhair</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Nuair a bheidh fíor, bainfidh ábhar seachtrach isteach i ngearrthóg úsáid as formáidiú na gclipeanna agus ní cad atá ar fáil ón bhfoinse.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Greamaigh, scaoil nó cuir isteach le formáidiú ceann scríbe</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat dearmad a dhéanamh ar an bhfocal faire?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Dearmad a dhéanamh ar</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Déan dearmad ar phasfhocal</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Cuir i láthair</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Folaigh comharthaí uisce toilleadh</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Nuair a chuirtear ábhar gearrthaisce nua i gceangal ní dhéanfar é a rianú mar ghearrthóg nua</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Neamhaird a dhéanamh ar aipeanna</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Nuair a mheaitseálann an ghearrthaisce gearrthóg atá ann cheana, bainfear úsáid as an ghearrthóg sin in ionad ceann nua a chruthú</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Neamhaird a dhéanamh ar dhúblach nua</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Ní dhéanfar athruithe gearrthaisce ón taobh istigh den aip a rianú</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Déan neamhaird de rianú gearrthaisce inmheánach</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Déanfar neamhaird ar spásanna, cluaisíní agus línte nua ó rianú</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Neamhaird a dhéanamh ar spás bán amháin</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Luchtaigh ar Logáil Isteach</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Fuinneog bheochana</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Teimhneacht</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Seó iompraíochta</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Nochtfar an phríomhfhuinneog trí chomhartha scrolla a dhéanamh ar imeall uachtair do mhonatóireachta</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Taispeáin ar scrolla scáileán barr barr</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Toirt fógra</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Déanfaidh an suíomh seo rianú ar an gcóras - comhaireamh greamaigh méarchláir leathan le haghaidh staitisticí úsáide. Tá an fhaisnéis seo príobháideach agus níl sé roinnte ach níl sé ráthaithe freisin. D'fhéadfadh torthaí cruinne a bheith ag teastáil chun ordú greamaigh méarchláir a sholáthar i 'Settings -&gt; Cóip &amp; Greamaigh -&gt; aicearraí'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Stair ghreamaithe</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Is féidir leis an iomarca gearrthóga pinnithe (cosúil le cluaisíní brabhsálaí) cuimhne shuntasach a ithe. Is é an chéad uair - an chéad - amach</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Toilleadh bioráin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Baineann sé seo le gach ionchur uathoibríoch - iniompartha, feabhsóidh luachanna níos ísle feidhmíocht</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Teorainn téacs le déanaí</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat
+Roghanna réamhshocraithe a chur ar ais?
+
+Ní féidir é seo a dhíothú!
+
+*Atosaíonn an t -iarratas nuair a bheidh sé críochnaithe.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat gach fógra a athshocrú?
+
+*Ní féidir é seo a dhíscaoileadh!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Socraíonn Monkey Paste an gearrthaisce (sáraíonn sé) nuair a ghreamaíonn sé ar chlár seachtrach. Déanfaidh sé seo iarracht &lt;/b&gt; staid na gearrthaisce a athbhunú tar éis greamaigh sheachtraigh.
+
+Ní féidir an t -athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a laghdú nó fiú monkeypaste tuairteála a laghdú ag brath ar fhoinse na sonraí.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Athshocraigh gearrthaisce tar éis pasting moncaí</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Níorbh fhéidir taisce breiseáin a scriosadh ón gcosán: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Déanfar gach forlíontán a athshocrú go dtí an stát réamhshocraithe tosaigh</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Taisce breiseáin</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat na forlíontáin go léir a athshocrú go mainneachtainí?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat do phasfhocal a athshocrú?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Déanfar gach aicearra iarratais a athshocrú go dtí a n -eochair -gothaí réamhshocraithe.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Athshocrú aicearraí</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Rinne gach duine neamhaird ar fhógraí a socraíodh roimhe seo.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Fógraí a chur ar ais</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Ábhar saibhir</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Socraigh pasfhocal</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Taispeáin leideanna</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Taispeáin i Taskbar</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Taispeáin i Switcher Tasc</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Taispeáin Teidil</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Nuair a chuirtear ar chumas é, nochtfaidh monkeypaste as aon iarratas go barr an scáileáin chun an t -ábhar a scaoileadh go héasca i monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Taispeáin ar tharraingt go barr an scáileáin</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Téama fuaime</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Seiceáil litrithe</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Ar am tosaithe ní bheidh foinse na gearrthaisce anaithnid agus ag brath ar do shocruithe slándála is féidir go dtiocfaidh an t -ábhar ó shuíomh gréasáin nó ó iarratas eisiata.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Cuir gearrthaisce tosaithe leis</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Éist le gearrthaisce ar am tosaithe</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Ar leith</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Rabhadh! Roghnaítear dathanna eile pailéad ag baint úsáide as mata ní súile! Mar sin, bí ar an eolas go mb'fhéidir nach mbeadh codarsnacht cheart ag roinnt teaglaim datha agus stíle maidir le hinléiteacht.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Dath téama</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Stíl théama</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Tarlóidh glantachán bruscair uathoibríoch ar am tosaithe ag an eatramh socraithe.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Glanta bruscair</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Comhéadadh</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>D’fhéadfadh tionchar a bheith ag teorainneacha ardchiontachta ar fheidhmíocht</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Teorainn Undo</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Gan aon teorainn</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>A úsáidtear i gcuardach ardchomhad le haghaidh cineálacha comhaid neamh -réamhshocraithe</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Úsáideoir - síntí cuardaigh sainithe</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Faigh agus cuir in ionad ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Greamaigh anseo</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Comhroinn ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Amharc ar</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Bainistigh ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Athainmnigh</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Scór: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Clóscríobh: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Scrios go buan</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Brabhsáil go '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Trasfhoirm</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Ionchur</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Aschur</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Foinsíocht</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Cuir ar an eolas</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Roghnaigh Íomhá ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Dath</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Bainistigh '{0}' ... ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Ar oscailt</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Fán le do thoil...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Dath an chúlra</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Soiléir ar fad</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formáidí gearrthaisce</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Scrios gach duine</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Sonraí a chur in eagar</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Ainmnigh</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Faigh amach</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Cló dath</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Péint fhormáid</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Agus é ag roghnú</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Cuir isteach íomhá</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Cuir isteach nasc</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Cuir isteach físeán</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Cás an chluiche</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Teimpléad nua</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>An chéad teimpléad eile</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Iontráil téacs greamaigh ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Teimpléad roimhe seo</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Léiriú rialta</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Ionadaigh go léir</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Cuir isteach</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Focal iomlán</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Timfhilleadh timpeall</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Bac a chur ar</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Réimse</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Fillteán taispeána</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Taobh -bhac</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Faoi</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Bloc aguisín</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Cuir inlíne inlíne</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Cóip</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Móbheanna</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Fan le do thoil go bhfuil monkeypaste ag luchtú ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Éirí as</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Cliceáil Greamaigh</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grúp-</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Scagaire</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Scrios go buan gach duine</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Athchóirigh GACH</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Caingean</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>Tá URL ann cheana féin: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Caithfidh URL a bheith i bhformáid bhailí.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Iontráil URL Iomlán:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Cuir url leis</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Luachanna a iontráil</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Cóipeáil téacs nó comhaid le cur i bhfeidhm.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Cuir {0} {1} mód gníomhachtaithe</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Cuirfear athruithe gearrthaisce i gceangal anois</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Tar éis an modh a chur i ngníomh gníomhachtaithe</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Déanfar athruithe gearrthaisce a ullmhú anois</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Sula gcuirtear an modh i ngníomh</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Bac a chur ar</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Tá gnáth -iompar gearrthaisce athchóirithe</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Aguisín díghníomhaithe</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Aguisíní curtha leis an mbarr nó botom den ghearrthóg</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Méid an Mód Append Gníomhachtaithe</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>I líne</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Lámhleabhar</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Cuir le do rogha reatha.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Mód Append Lámhleabhar Gníomhachtaithe</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Stop carnadh gearrthaisce</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Aguisín Sos</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Athchlódh carnadh gearrthaisce</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Atosú ag an Aguisín</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat a bheith ag teacht le chéile?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Bainfidh eagarthóireacht i mód comhoiriúnachta gach formáidiú saibhir. An bhfuil tú cinnte gur mian leat é seo a athrú?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Rabhadh díghrádaithe sonraí</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Gníomhach</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Cumasaithe</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Ar</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Ar</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Sosaithe</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Togha!</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Stádas</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Tharla earráid anaithnid.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Iarrachtaí fágtha</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Iontráil pasfhocal</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Daingnigh</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Lionsa</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Dáta Am</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mian leat gach úsáid de '{0}' a scriosadh?
+
+Ní féidir é seo a dhíothú!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinimiciúil</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statach</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>Tá {0} folamh ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Níos mó ag teacht go luath!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Theip ar ualach logála isteach</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Logáil isteach Logáil isteach Díchumasaigh rath</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Logáil Is féidir an t -ualach logála isteach</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Logáil isteach Logáil Is féidir le rath rath</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Coinnigh faoi cheilt</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Tá greamaigh moncaí luchtaithe anois.
+Éisteacht gearrthaisce ná: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Luchtaithe</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Taispeáin</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Mód Roghnúcháin Cóipeála Auto: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Modh athraithe</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Cliceáil ar dheis Mód Greamaithe: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Breiseán Nuashonraithe</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Greamaigh '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Rith '{0}' Anailíseoir</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Rith '{0}' truicir</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Roghnaigh '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mian leat '{0}' agus gach gníomh gaolmhar a scriosadh?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Trosc</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Ar mhaith leat na fo -ghníomhartha go léir a bhaint le haghaidh '{0}'? (Ar shlí eile déanfar iad a athdhíriú ar '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Bain na roghanna</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>An bhfuil tú i ndáiríre ag iarraidh Goto '{0}' a dhéanamh?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Bheith den tuairim</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Anailíseoirí</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Oibríochtaí iarratais</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clár fáiscthe</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Ábhar</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Tiontairí</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Saothrúchán</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Sonraí</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Treo</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Tarraing agus titim</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Titim draoi</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logálaí</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Comhéadadh</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Oibríochtaí greamaithe</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Roghanna</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Cíor</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Aicearraí</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sórtáil</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Fuaimeanna</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Tráidire córais</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Bailiú</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Téama</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Spreag</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Oibríochtaí Gréasáin</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Teanga</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Socraíonn sé an ghearrthaisce ar an ghearrthóg ionchuir.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Foláireamh</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Seilip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Tascradh</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Cuspóir Ginearálta Foláirimh Teachtaireachta Trádála Fuaime agus/nó Córais. Níl aon tionchar ag gníomh foláirimh ar a n -ionchur.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Gar</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Monnach</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Réamhamharc</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Seó?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Taispeántar teachtaireacht toast ama i soicindí. Nuair a bhíonn luach 0 ní mór teachtaireacht a dhúnadh de láimh.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Taispeáin am (í)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonr</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Fuaim?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Cineál fuaime</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Rib</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Toirt</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Anailíseoir</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Próiseálann sé a ghearrthóg ionchuir ag baint úsáide as an réamhshocrú anailíseora sannta.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Tá ábhar ionchuir nasctha leis an mbailiúchán roghnaithe</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Nascann sé a ghearrthóg ionchuir leis an mbailiúchán clibe sannta.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Lipéad</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Cás íogair?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Féadann sé seo a bheith ina théacs statach chun comparáid a dhéanamh leis an ionchur agus/nó a chur san áireamh, cuirfear airíonna roghnaithe (tríd an gcnaipe scagaire) in ionad nuair a dhéantar an coinníoll a mheas.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Sonraí Coinníollacha</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Iarratas roghnach jsonpath a chuirfear i bhfeidhm ar an 'réadmhaoin ionchuir' roghnaithe sula ndéantar an coinníoll a mheas.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Scagaire ionchuir</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>An ghearrthóg a úsáidtear don choinníollach seo.
+
+Ní thacaítear leis an réadmhaoin 'aschuir dheiridh' ach amháin nuair is leanbh de ghníomh anailíseora é an coinníollach seo agus beidh na sonraí a sholáthraítear ag brath ar aschur an thuismitheora.
+
+Le haghaidh fabhtcheartaithe, ceangail 'gníomh foláirimh' le tuismitheoir an choinníollach seo agus socraigh paraiméadar 'teachtaireacht' an fholáirimh chun an mhaoin ionchuir seo a mheaitseáil. Ligfidh sé seo athbhreithniú a dhéanamh ar na sonraí iarbhír atá á n -úsáid don choinníollach seo.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Maoin ionchuir</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Déanann sé comparáid téacs ar an ghearrthóg ionchuir nó aschur gnímh roimhe seo. Nuair a theipeann ar chomparáid (ní cluiche é) Ní dhéanfar aon ghníomhartha leanaí a fhorghníomhú. Mar sin feidhmíonn sé mar gheata loighciúil.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Gach oibríocht fíor nó bréagach ina ndéanfaidh gníomhartha leanaí ach amháin má tá an toradh fíor.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Coinníollacha a chur le</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Uile</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Spreagtha nuair a chuirtear gearrthóg den chineál roghnaithe leis an gcóras ar bhealach ar bith (gearrthaisce, tarraing - agus - titim, anailíseoir a ghintear nó a dhúbailt).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Ná déan an spreagadh seo ach amháin má tá an gearrthóg ionchuir nua agus ní dúblach é. Tá sé seo neamhspleách ar aon suíomh tosaíochta maidir le cibé an ndéantar neamhaird ar ábhar nua nó nach bhfuil.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Déan neamhaird de dhúblach</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Ní spreagfaidh ach gearrthóga den chineál seo an gníomh seo.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Nascann sé a ghearrthóg ionchuir leis an mbailiúchán clibe sannta.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Spreagtha nuair a bhíonn gearrthóg nasctha leis an mbailiúchán clib sonraithe.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Bailiúchán</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>An méid ama i milleasoicindí a d'fhan sula bhforghníomhaíonn leanaí</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Moill</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Turgnamhach) a úsáidtear go príomha i gcomhar leis an ngníomh athsheoltóra chun foinsí cianda a vótáil nó cúnamh a fháil le hoibríochtaí fadtréimhseacha.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Nuair a bheidh sé fágtha folamh, úsáidfidh an comhad aschuir teideal an ghearrthóg ionchuir mar ainm an chomhaid.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Ainm an chealaide</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>An t -eolaire ina scríobhfar an comhad.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Comhadlann</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Sábhálann ionchur don fhillteán roghnaithe.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Spreagtha nuair a athraíonn ábhar an fhillteáin roghnaithe. Beidh an t -aschur ina ghearrthóg chomhaid den chomhad nó den fhillteán atá athraithe mar aon leis an gcineál athraithe mar an t -aschur deireanach mar an t -aschur nó atá ann cheana féin (nuair a bheidh an rogha neamhshuimithe.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Ócáidí</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Fillteán</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Déan neamhaird de dhúblach</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Déanfaidh luach 0 athrá ar an tuismitheoir ar feadh tréimhse éiginnte ar feadh tréimhse éiginnte</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Athléiriú arís</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>An méid ama i milleasoicindí le fanacht nuair a chríochnaíonn gníomhaíocht tuismitheora</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Déan an athrá arís</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Turgnamhach) a úsáidtear chun lúba gnímh nó tascanna athchleachtach a chruthú. Nuair a dhéantar é a athdhéanamh, cuirfidh sé gach leanbh i gcrích arís lena ionchur bunaidh. Nuair a bhíonn eatramh á úsáid gan comhaireamh athuair, beidh gá leis an truicir a bheith faoi mhíchumas agus a chur in iúl chun stop a chur leis an athrá. Is féidir leis a bheith úsáideach le haghaidh uathoibriú vótála nó scríobtha gréasáin.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Spreagtha ag aicearra domhanda a shainíonn tú. Má tá monkeypaste gníomhach déanfaidh sé iarracht an ghearrthóg roghnaithe a úsáid (má tá ceann ann) mar ionchur. Seachas sin déanfaidh sé iarracht an gearrthaisce a úsáid mar ionchur.
+
+Tabhair faoi deara: Beidh tús áite ag an aicearra fós mura bhfuil aon ionchur ann chun é a choinneáil solúbtha (mar sin is féidir leis a bheith ina macra -truicir srl.) Ós rud é nach imeacht faoi thiomáint sonraí é.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Truicear aicearra</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Spreagtha nuair a bhrúitear an aicearra taifeadta ag am ar bith leis an ghearrthaisce reatha</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Éilíonn an gníomh seo ar an aip atosú. Ar mhaith leat é sin a dhéanamh anois?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Bhí fadhb ann. Ní mór duit an t -iarratas a atosú de láimh.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Anailís a dhéanamh ar antaitheoir</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Truicir anótáilte</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Léitear eilimintí tógtha - amháin. Dúblach a athrú.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Gan ainm</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Cur síos</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>An lá inné</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} lá ó shin</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 uair ó shin</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} uair an chloig ó shin</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Anois féin</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Nóiméad ó shin</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} nóiméad ó shin</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>An mhí seo caite</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} mí ó shin</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>An tseachtain seo caite</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} seachtainí ó shin</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} bliain ó shin</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Nótaí</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Ainm iarratais</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Cosán iarratais</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Cáipice</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Ábhar</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Cineál comhaid</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Cineál íomhá</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Léiriú rialta</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Cineál téacs</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Ceart</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Teideal URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Focal iomlán</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Cosúil le scrollaigh feadh an imeall scáileáin uachtair le hoscailt, cuirfidh sé seo an phríomhfhuinneog faoi ghlas nuair a osclaíonn sé. Ag ceadú sreafaí oibre il -spriocdhírithe níos tapúla.
+
+* Tá coirnéil i dtéarmaí do scáileáin go léir, ní in aghaidh an mhonatóra.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Taispeáin fuinneog agus glas</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Saor!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Tabhair 5 réalta dúinn!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Scrios gach duine</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Scrios an t -ábhar go léir</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat a scriosadh
+Gach do chuid gearrthóga ?!
+
+*Ní féidir an oibríocht seo a dhíscaoileadh!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Is Dev Indy mé Taispeáin roinnt tacaíochta le do thoil!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Cosúil le monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>Ní ghlacann {0} ach le hionchur de chineál (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Mód Cóipeála Auto - Insamhladh imeacht 'cóip' gach uair a scaoiltear an cnaipe luiche ar chlé.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Mód Greamaithe Cliceáil ar dheis - Insamhladh imeacht 'greamaigh' gach uair a scaoiltear an cnaipe luiche ceart</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Réamhshocraithe</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Taispeáin fillteán breiseán</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Tuairisciú a dhéanamh ar</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Amharc ar</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Taispeáin Tips Tooltips</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Déanann anailíseoirí a n -ionchur a anódú nó gearrthóga nua a chruthú mar aschur. Ní mór do leanaí na n -anailíseoirí cinneadh a dhéanamh maidir leis an gceann a theastaíonn uathu mar ionchur. Is é seo an t -aschur deireanach de ghnáth.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Cineál Ionchuir</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Dearthóir Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Roghnaigh {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Níor aimsíodh ...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Nuair a sheiceáiltear é, déanfar toradh fíor nó bréagach an choinníll a chasadh. Mar sin, mar shampla, ní bheidh coinníoll 'ann' a bheith '.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ní</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Fán le do thoil...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Díon daite</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Roghnaigh Dath Match</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Cosúil le truicir aicearra ach nuair a bhrúitear an príomh -chomhcheangal, déanfar imeacht 'cóip' a insamhladh san iarratas gníomhach ionas go n -oibríonn sé mar chóip fós ach ansin cuirfear an slabhra gníomhartha a ghabhann leis an mbreacán cóipe moncaí chun báis sa chúlra ag úsáid an Sonraí gearrthaisce cóipeála insamhlaithe.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Scagaire ardleibhéil</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Scagairí Folaigh</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Scagairí a chur ar ais</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Cruthaigh Scagaire</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Roghnach) Nuair a fhágtar folamh é socrófar an ghearrthaisce ag baint úsáide as ionchur an ghnímh seo. Déileálfar le rud ar bith a sholáthraítear anseo mar ghnáth -théacs amháin.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Ábhar le haghaidh gearrthaisce</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Nuair a bhíonn sé fíor, ní chuirfear aon ghearrthóg leis tar éis don ghníomh seo an gearrthaisce a leagan síos.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Neamhaird a thabhairt ar</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Níor roghnaíodh aon anailíseoir le haghaidh gnímh '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Anailíseoir le haghaidh Gníomhaíochta '{0}' Níor aimsíodh</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Ní dhéanfaidh an tuismitheoir '{0}' scagairí amháin le haghaidh '{1}' Cineál ábhair agus anailíseoir '{2}' a fhorghníomhú toisc nach dtacaíonn sé le cineál ionchuir '{3}'</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Níor roghnaítear clibe le haghaidh aicmitheora '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Clib le haghaidh aicmitheora '{0}' nár aimsíodh</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Comparáid a dhéanamh idir luach nach féidir ach litreacha, uimhreacha nó spásanna a bheith i gcomparáid</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Níor roghnaíodh aon chlib le haghaidh gearrthóg clibeáilte '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Clib le haghaidh gearrthóg clibeáilte '{0}' nár aimsíodh</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Níl aon fhillteán faire sonraithe le haghaidh '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Féach ar an bhfillteán '{0}' nach bhfuarthas le haghaidh trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Cosán scríbhneora comhaid le haghaidh gnímh '{0}' gan a bheith socraithe</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Cosán scríbhneora comhaid '{0}' le haghaidh '{1}' nár aimsíodh.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Barranna tasc</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Foghlaim faoi fhorlíontáin</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Athchóirigh an chumraíocht anailíse seo</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Athraigh Log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Ceangail leis an idirlíon le do thoil agus bain triail eile as níos déanaí.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Cabhair</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>Is é {0} an leagan is déanaí</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Tá tú go léir suas - go dtí dáta!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Seiceáil do nuashrónaithe...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Leagan nua ar fáil!
+
+Cliceáil anseo chun nuashonrú a dhéanamh ar '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Cliceáil thíos chun nuashonrú a dhéanamh ar '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Nuashonrú ar fáil!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Nuashonrú anois</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>Tá luachanna comhroinnte i '{0}'. Cad ba mhaith leat a athshocrú?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Glan amach</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Cuardach soiléir le déanaí</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Athshocraigh gach duine</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Athshocrú roinnte</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Athshocraigh Unshared</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Iarrann sé an gníomh iarratais sannta. Tá gach ordú iarratais gan stát agus déantar neamhshuim dá ghearrthóg ionchuir.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Nuair nach féidir é a sheiceáil agus nach féidir leis an ordú tine a dhéanamh, stopfaidh an slabhra forghníomhaithe. Éileoidh go leor orduithe roinnt stáit iarratais ar leith chun é a fhorghníomhú.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Lean ar aghaidh i gcónaí?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>An t -ordú le feidhmiú.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Fabhar</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Níor roghnaítear aon ordú le haghaidh ordú iarratais '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Ordú don Ordú Iarratais '{0}' nár aimsíodh</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>A roghnófar</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Tosaigh arís</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Bhí saincheist ag nuashonrú '{0}'. Chun an nuashonrú a chomhlánú beidh ort a atosú agus a shuiteáil '{0}' arís (ná bíodh imní ort go ndéanfar do chuid socruithe go léir a athchóiriú).
+
+Is féidir leat atosú anois agus an nuashonrú a chomhlánú trí ath -shuiteáil, neamhaird a dhéanamh air seo agus é a nuashonrú níos déanaí nó an nuashonrú a chealú le chéile agus leanúint ar aghaidh ag baint úsáide as leagan '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Earráid Nuashonraithe</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Níorbh fhéidir nuashonrú a íoslódáil</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Theip ar nuashonrú</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Chun an nuashonrú a chríochnú beidh ort atosú. Ar mhaith leat atosú anois nó níos déanaí?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Nuashonrú réidh</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Ina dhiaidh sin</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Atosú anois</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Ar feitheamh</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>Nuashonraíodh {0} go rathúil go {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Teastaíonn bunchlocha agus ní féidir iad a bhaint.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Suiteálacha</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Tá an nuashonrú ar feitheamh. Atosaigh a chríochnú.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Ar feitheamh</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Tá díshuiteáil ar feitheamh. Atosaigh le do thoil más mian leat a shuiteáil.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Chun díshuiteáil a chomhlánú beidh ort atosú. Ar mhaith leat atosú anois nó níos déanaí?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Críochnaigh Díshuiteáil?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Neamhfhoilsithe</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto -réamhshocrú réamhshocraithe do '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Níor roghnaíodh aon ghearrthóg</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Anailís a dhéanamh ar ghearrthóg roghnaithe</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Sann aicearra chun '{0}' a rith ar an ghearrthóg roghnaithe</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Greamaigh dhomhanda</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Aicearra Greamaithe Domhanda a shannadh do '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Dearmad ar pasfhocal?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Logáil isteach</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Logáil Amach</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Beartas Príobháideachais</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Éilíonn sé atosú) Nuair a bheidh faisnéis dhiagnóiseach chumasaithe logáilte isteach chun comhad a dhéanamh. Féadann sé seo feidhmíocht a mhaolú agus d'fhéadfadh faisnéis phearsanta a bheith ann.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Logáil chun File</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Ar oscailt</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Fillteán logaí oscailte</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Brabhsáil Breiseáin</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Léamh</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Cum</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Seol aiseolas nó tuarascáil fabht</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Ní chuireann sé seo ach an phríomhfhuinneog i bhfolach. Taispeántar gach fuinneog neamh -dialóige eile i gcónaí i dTascbharra.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Cuardaigh i '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Cuir Scagaire leis</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Cuir Cineál Ceangail in eagar</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Bain an scagaire seo</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Cabhair oscailte faoi seo ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} gearrthóga</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Do chuid éadaigh a athrú</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Go deo</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Cóirigh</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Gan teideal</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Taifead</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Tagairt foinse neamh -lipéadaithe</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Teastaíonn '{0}'</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Tá earráidí aige)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Áirithe</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Stóráil</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Bruscar</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Neamhtheoranta</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Faoi láthair tá an feidhmchlár seo ag teacht le réamhshocruithe agus formáidí léitheora gearrthaisce réamhshocraithe.
+
+Ní bheidh tionchar ag Réamhshocrú Réamhshocraithe ar Réamhshocrú Réamhshocraithe (ón mbarra taobh na gearrthaisce) ar an gcumraíocht seo. Ní leanann ach apps neamhliostaithe an thus réamhshocraithe.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Faoi láthair tá an feidhmchlár seo ag teacht le réamhshocruithe agus formáidí scríbhneoir gearrthaisce réamhshocraithe.
+
+Ní bheidh tionchar ag an scríbhneoir réamhshocraithe a chumasú nó a dhíchumasú (ón mbarra gearrthaisce) ar an gcumraíocht seo. Ní leanann ach apps neamhliostaithe an thus réamhshocraithe.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Chun an t -éisteoir gearrthaisce a chur i gceangal leis an éisteoir gearrthaisce (Tráidire córais -&gt; atosú).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Ag an am gan a bheith ar fáil</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Níl aon socruithe ann</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ní labhraím ach Béarla agus tá monkeypaste aistrithe go dtí an teanga seo.
+
+Gach leagan leaganacha leis an bpacáiste Béarla mar sin má labhraíonn tú Béarla is féidir leat an teanga a athrú ag am ar bith tar éis an tsocraithe seo (Socruithe -&gt; Preferences -&gt; International).
+
+Más mian leat cuidiú leis an aistriúchán a fheabhsú ba bhreá linn cloisteáil uait!
+
+aisckback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Imní aistriúcháin</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Ní mór duit monkeypaste a nuashonrú chun an ghné seo a úsáid.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Aicearra neamhshocraithe</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Éisteoir gearrthaisce faoi mhíchumas</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Éisteoir gearrthaisce cumasaithe</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Ní thacaíonn gníomh tuismitheora '{0}' le cineál maoine ionchuir 'aschur deireanach'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Níos mó a fhoghlaim faoi phleananna</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Iarrchán</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trosc</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Fipu lán</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Anailíseoir</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Lipéad</value>
+  </data>
+</root>

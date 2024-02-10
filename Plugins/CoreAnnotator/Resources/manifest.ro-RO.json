@@ -1,0 +1,11 @@
+{
+  "title": "Core Text Adnotator",
+  "description": "Oferă suport de bază hyperlink pentru conținut bazat pe text",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Core, adnotat, text, link, culoare, analiză, adresă, telefon, e -mail, monedă, finanțare"
+}

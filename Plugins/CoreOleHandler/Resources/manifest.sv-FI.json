@@ -1,0 +1,12 @@
+{
+  "title": "Kärnklippshanterare",
+  "description": "Handtag standardklippsformat",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Kärna, urklipp, dra och släpp, text, RTF, rik text, HTML, CSV, Image, PNG, JPG, JPEG, Link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

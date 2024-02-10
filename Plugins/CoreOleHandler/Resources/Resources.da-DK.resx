@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorere</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Når kontrolleret {0} format læses ikke fra udklipsholderen eller træk-og-slip-data.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Når kontrolleret {0} format vil ikke blive skrevet til udklipsholderen eller træk-og-slip-data.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Læs</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Skrive</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Filer</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Når RTF ikke allerede er til stede, konverteres HTML til RTF. Dette kan være nyttigt mellem webbrowsere og/eller tekstbehandlingsapplikationer. (kræver, at RTF -format er aktiveret og er kun til understøttede platforme)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Konverter til RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Disse mapper læses ikke fra udklipsholder- eller træk-og-slip-data.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Ignorerede mapper</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Ignorerede filforlængelser</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Disse filtyper læses ikke fra udklipsholderen eller træk-og-slip-data.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Disse filtyper skrives ikke til udklipsholderen eller træk-og-slip-data.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Når de kontrolleres, skaleres billeder, der er større end MAX -dimensionen, mens de bevarer billedforholdet. Dette påvirker ikke billedet på udklipsholderen.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Skala overdimensioneret</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Når du indsætter eller slipper en bitmap, vil dette være standardfiltypen</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Standardeksporttype</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Nogle gange vises fuldt gennemsigtige billeder på udklipsholderen, dets forvirrende.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignorer tomme billeder</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Store billeder (mere end et par MBS) kan desværre gøre træk-og-slip og samlet præstation noget træg. Prøv at holde denne værdi lav.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maks. Højde</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maks. Bredde</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>For problemer med ydeevne er der behov for et tegn på maksimalt beløb</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max tegn</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Tekst (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format '{0}' havde tomme eller gennemsigtige data og blev blokeret</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Tomme data blokeret</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' format er markeret som 'ignoreret'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format ignoreret</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} grænsen er {1} og data var {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Maksisk størrelse detekteret</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Kerne klippebordlæser</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Clipboard Writer</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Håndterer standardklippebordformater</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Kerne, udklipsholder, træk og slip, tekst, RTF, rig tekst, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Image (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Når HTML ikke allerede er til stede, konverteres RTF til HTML. Dette kan være nyttigt mellem webbrowsere og/eller tekstbehandlingsapplikationer. (kræver, at HTML -format er aktiveret og er kun til understøttede platforme)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Konverter til HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>UNTITLED</value>
+  </data>
+</root>

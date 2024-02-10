@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Ühtegi funktsiooni ei piira tellimus, ainult salvestusmaht ja neid saab igal ajal muuta.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Taastage oma olemasolev konto ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Sisu ja prügikast on
+piiratud {0} ja {1} -ga
+Klipid vastavalt.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Võimaldab kuni {2} sisu klippe ja piiramatut prügikasti salvestusruumi.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Piiramatu ja piiramatu sisu ja prügikastide salvestamine.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Taastama</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Vaba</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Piiramatu</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Tellimus</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Teie privaatsus on oluline ja lõikelaua andmed võivad olla väga isiklikud. Salvestus on alati krüptitud, kuid saate seada parooli, mis on vajalik juhuks, kui teie seade varastatakse või kui keegi teine ​​teie seadet kasutab.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Parool</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Kui see on lubatud, kuvatakse mis tahes rakendusest ekraani ülaossa lohistamine ahvipaste, et sisu hõlpsalt ahveypastesse visata.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Peaakna vasakus ülanurgas oleva luku lubamine võimaldab ikkagi ahveypastale kukkuda.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Rohkem aknaeelistusi on saadaval menüüst „Seaded -&gt; Eelistused -&gt; Aken”.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Lohistage banaanid siia!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Lohistage - avage</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Klaviatuuri otseteid saab igal ajal menüüst „Seaded -&gt; otseteed” üle vaadata või muuta.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Kõik globaalsed otseteed on keelatud, nii et saate need hiljem ise üles seada.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypaste lõikelaua otseteed on saadaval kõigis rakendustes.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Sisemine</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Täitmata jätmine</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Žestiprofiil</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hei! Seadistame mõned asjad, et parandada oma üldist kogemust ahveypastaga.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Tere tulemast</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Monkeypaste'ist enim kasutamiseks on hea mõte automaatselt sisselogimisel laadida. Kuid see on täielikult teie enda otsustada.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Hoidke seda juhuslikult.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Lubama</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Laadige sisselogimine?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Kui see on lubatud, kuvatakse ekraani ülaosas asuv kerimisžest.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Vasakul - ikooni Taskbari ikoonil klõpsamine avab endiselt Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Rohkem aknaeelistusi on saadaval menüüst „Seaded -&gt; Eelistused -&gt; Aken”.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Lihtne eks?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Kerige siit üles!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Kerige - kuni - avatud</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "keskus"&gt; ahv on &lt;span color = "punane&gt; täielikult integreeritud &lt;/span&gt; lohistamisega ja - tilk &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Laske see siia!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "keskus"&gt; Sel viisil pääseb ahvipastale &lt;br&gt; &lt;span color = "punane"&gt; ilma klõpsuta &lt;/span&gt; või isegi &lt;span color = "punane"&gt; Silma löömine &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Lohista mind!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Proovi!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Proovi!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Tulemusi pole saadaval.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Kinnitama</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Värskendama</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Otsing...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Sätted</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Sõltuvused:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Paigaldama</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Kas olete kindel, et soovite eemaldada '{0}' ja kõik selle eelseaded ja otseteed?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Desinstallima</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' pole tulemusi.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Valikut pole.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Mitte ükski</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Krediidid:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Kirjeldus:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Annetage:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Litsents:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projekti URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Avaldatud:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Lugege mind:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Teata väärkasutusest:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Sildid:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Värskendama</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versioon:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Aknas avatud</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Vabaks laskma</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Värskendama</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Kokkuhoid</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Kustutamise kõrval!
+
+VÄLJASTAMISEKS.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Prügikasti kõrval!
+
+VÄLJASTAMISEKS.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Faisid</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Pilt</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kopeeritud {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} failid | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} read</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} koopiad | {1} pasta</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Kolimine</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Lisama</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Koopia</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Kärpimine</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} koopia</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Edastamata filter</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formaadid</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Lugejad</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Kirjanikud</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Käitlejad</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Kustutama</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplikaat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Redigeerimisnimi</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Lähtestamine</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Sildid</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Toiming</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Ülemaailmne marsruutimine</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Otsetee</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Žestid peavad olema ainulaadsed ja võivad sisaldada ainult ühte sisendvõtit.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Sisemine &lt;/b&gt; Kõik otseteed on piiratud rakenduses. See pole tegelikult kavandatud võimalus, kuid võib lubada kohandada, milliseid otseteid kavatsete teha globaalseks &lt;i&gt; kunagi &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Vaikimisi &lt;/b&gt; Kõik globaalsed otseteed on lubatud. &lt;b&gt; show/peida peaakna &lt;/b&gt; otsetee kasutab &lt;span color = "punane"&gt; alistamine &lt;/span&gt; marsruutimine &lt;b&gt; CAPS Lock &lt;/b&gt; jaoks. Seda marsruuti või žesti saate igal ajal muuta. Aga &lt;span color = "roheline"&gt; proovige seda &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;Head&gt; &lt;/ Head&gt;
+&lt;keha&gt;
+&lt;h1&gt; globaalsed otseteede režiimid &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Passiivne &lt;/b&gt; otsetee ahvivaba kuulab igas rakenduses. &lt;br&gt;
+*See on praegu Linuxi suvand &lt;i&gt; ainult &lt;/i&gt;.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; otsetee käivitab &lt;b&gt; &lt;i&gt; enne &lt;/i&gt; &lt;/b&gt; seda haldab aktiivne rakendus. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; otsetee käivitab &lt;b&gt; &lt;i&gt; pärast &lt;/i&gt; &lt;/b&gt; seda haldab aktiivne rakendus. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; alistamine &lt;/b&gt; Kui Monkeypaste kuuleb alistamise otsetee sisendvõtit (mitte -modifikaatori klahvi), see on &lt;i&gt; peida &lt;/i&gt;, et klahv vajutage rakenduse - taseme sisend. &lt;br&gt; &lt;br&gt; &lt;br&gt;
+See suvand tagab, et otsetee käivitatakse ilma aktiivse rakendusega konfliktideta.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Eksklusiivne ületamine &lt;/b&gt; See on CAPS Lock -klahvi jaoks mõeldud spetsiaalne alistamise režiim. See võimaldab selle määramiseks ainult &lt;b&gt; ühte &lt;/b&gt; klahvi (mitte -modifikaator). &lt;br&gt;
+Normaalse alistamise režiimi korral võib CAPS lukk saada &lt;i&gt; kinni &lt;/i&gt;, kui vajutada koos teiste klahvidega. &lt;br&gt;
+Nii et ükskõik, millised muud klahvid on maas, kui a &lt;b&gt; hotkey &lt;/b&gt; otseteele vajutatakse, on see ülepaisutatud ja takistab seda &lt;i&gt; kinni &lt;/i&gt; kinni jäämist.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Keelama</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Laadige see kasutajakonto sisse logitud, mitte teiste kasutajate jaoks.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Kättesaadavate kontaktide kasutamine (nõuab Fetcheri pistikprogrammi) Seda välja kasutatakse selle malli kõigi juhtumite jaoks kogu selle dokumendi korral või mis tahes mis tahes sellele viidatakse sellele hilisemas. &lt;/p&gt; &lt;p&gt; Nii et näiteks kui valige e -posti aadress Seejärel kasutatakse valitud kontakti e -posti valdkonda kõigi selle dokumendi eksemplaride jaoks. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = lühike aasta &lt;br/&gt; yyyy = pikk aasta &lt;br/&gt; m = kuu (1-12) &lt;br/&gt; mm = kuu (01-12) &lt;br/&gt; mmm = kuu lühend (jaanuar, veebruar .. . Detsember) &lt;br/&gt; mmmm = pikk kuu (jaanuar, veebruar ... detsember) &lt;br/&gt; d = päev (1 - 31) &lt;br/&gt; dd = päev (01 - 31) &lt;br/&gt; ddd = Nädalapäev sõnades (esmaspäev, teisipäev ... pühapäev) &lt;br/&gt; e = lühikese nädala päev sõnades (esmaspäev, teisipäev ... päike) &lt;br/&gt; d - ordinaalne päev (1., 2., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = tund am/pm (0-12) &lt;br/&gt; hh = tund am/pm (00-12) &lt;br/ &gt; H = tund päevas (0-23) &lt;br/&gt; hh = tund päeval (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = sekund &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm marker &lt;br/&gt; p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Praegune kuupäev ja/või kellaaeg asendatakse nende kleepimisel DateTime'i mallidega.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Selle malli kõik esinemised kasutavad esitatud teksti. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Selle malli kõik esinemised kasutavad esitatud teksti. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Lõpeta lisamine</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Luba blokeerimine</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Lubage sisemine</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Lülitusjuhend</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Lülitusjuhend</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pausi lisama</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Enne</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Enne</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Jätkata lisa</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Lisa ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Nööpnõel</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Lahti keelama</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Peida kõik '{0}' teatised</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Vabaks laskma</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Viimane aktiivne rakendus teadmata. Lülitage kavandatud rakendusele ahvipasta juurde.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Kleebi: &lt;em&gt; &lt;i class = "pasta-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimeerima</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Palun oota...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Lukk</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Abi</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopeeri kleebi</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Eelistused</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Taasta algseaded</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filter ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Otseteed</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Lisage rakendus</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Lisage veebisait</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Block?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nimetus</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Rakendused</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokeeri domeen?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blokeerida URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domeen</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Allika URL -i äratundmine sõltub sellest, kui lõikelaua sõbralik hostrakendus on, nii et tagasilükkamist ei saa tagada</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Veebisaidid</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Mõned Monkeypasta funktsioonid kasutavad klaviatuuri automatiseerimist, et simuleerida 'koopia' sündmusi teistes rakendustes.
+
+Lisage ja/või valige rakendus unikaalse koopiaga otsetee (näiteks konsool või kest), et need funktsioonid korralikult toimivad.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopeeri otsetee</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Mitte ükski</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Määratud rakenduse jaoks kasutatakse ainult valitud eelseadeid. Määratlemata kasutatakse lõikelaua külgriba &lt;/em&gt; leitud vaikeseadet.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Paljud Monkeypasta funktsioonid kasutavad teiste rakendustega suhtlemiseks klaviatuuri automatiseerimist.
+
+Mõnel rakendusel (näiteks mõnel konsoolil või kestal) võib olla vaikepasta otsetee.
+
+Nõuetekohase koostalitlusvõime tagamiseks salvestage siin selle rakenduse otseteed.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Pasta otsetee</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Lugejad</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Kogu lõikelaua jälgimine tagasilükatud rakendustest on &lt;b&gt; ignoreeritud &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Kirjanikud</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Redigeerimine ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formaadid</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Tagasi lükatud</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Otseteed</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Kas soovite ka kõik {0} klipid eemaldada '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Eemaldage klambrid?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Rakendus</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Sirvige rakendust ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Valige rakenduse tee</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Kas olete kindel, et soovite {0} jaoks kohandatud otseteed eemaldada?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Kas olete kindel, et soovite {0} jaoks kohandatud vorminguid eemaldada?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Selle rakenduse jaoks pole määratud lõikelaua vorminguid. Sellest ei loeta andmeid lõigatud/kopeerimise või lohistamise proovimise kaudu ja - langege ahvipastesse</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Selle rakenduse jaoks pole määratud lõikelaua vorminguid. Automatiseeritud pasta või lohistamine - ja - tilk Monkeypaste'ist ei mõjuta (selle tühjad andmed).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Kas olete kindel, et soovite lähtestada kõik otseteed? Kõik kohandatud otseteed eemaldatakse.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Kas olete kindel, et soovite oma otsetee marsruutimisprofiili muuta '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Kõik</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Lemmikud</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtrid</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formaadid</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Sildid</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Täna</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Prügikast</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Ümber</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Lihtne eks?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Topeltklõpsake lahti</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Ülemaailmne</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>See kombinatsioon on vastuolus '{0}' -ga, mis kustutatakse, kui salvestatakse.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Tuleb esitada otsetee.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>See on ülemaailmne otsetee. See tähendab, et see üritab teostada igal ajal. Proovige muuta see piisavalt ainulaadseks (või muuta marsruutimistüüpi), et mitte vastuolus muude rakenduste otseteedega.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Ülemaailmne</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Otsetee peab sisaldama ühte ja ainult ühte modifikaatori klahvi.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Salvestamiseks vajutage mis tahes klahvi ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Määrake otsetee</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Lisateave ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Uuendus</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Tühistama</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Fikseerima</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignoreerima</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Mitte</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Okei</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Uuesti proovima</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Lülita välja</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Esita</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Jah</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Igal aastal</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Igakuine</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Proovige tasuta!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Arveldustsükkel</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E -kiri</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Logi sisse</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Kontrollige oma ühendust
+ja proovige uuesti.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Logi välja</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Järgmine makse</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Parool</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Registreeri</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E -post ei kehti</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Paroolid ei kattu.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Parool peab olema minimaalne {0} tähemärgid.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Kas mäletate?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Konto kinnitamiseks kontrollige oma e -posti aadressi</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Lähtestage parool</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/aayy HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Mitte kunagi</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Tasuta {0} päevakatse</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Oli probleem esineda
+Teie ost.
+
+Oma ühenduse kontrollimine ja
+Seaded võivad aidata.
+
+Kas soovite uuesti proovida?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Teie konto on olnud edukalt
+uuendatud:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Osta edukas!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Viga</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Ühendus nurjus.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Uuesti proovima</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Konto muudetud</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Teie tellimus on nüüd {0}/{1} koos {2} sisu ja {3} prügikasti salvestusruumiga.
+Kuid ärge muretsege, pärast alandamist ei kaotata andmeid. Hinnatakse ainult uusi klippe.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Palju õnne! Teie tellimus on nüüd {0}/{1} koos {2} sisu ja {3} prügikasti salvestusruumiga.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Prügikast või midagi lahti lüüa
+alates '{0}', et rohkem lisada.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' Storage on {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Taastama</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} blokeeritud</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Sisu ja prügikasti maht on saavutatud!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' Storage on {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Sisu maht saavutas!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Võite neid hoiatusi varjata
+klõpsates nuppu "Peida kõik"
+Ülaltoodud suvandite menüü.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max prügikasti salvestusruum on {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Prügikasti maht saavutas!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} on vale</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} peab olema vähemalt {1} tähemärgid</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} saab olla ainult {1} tähendus</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Kleebi: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Makse teie {0} eest
+Tellimine pidi olema {1}
+ja pole vastu võetud.
+
+Palun värskendage oma
+makseteave.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Makse teie {0} eest
+Tellimine pidi olema {1}
+ja pole vastu võetud.
+
+Palun ühendage
+Internet seadmes
+oma tellimusega ja
+taaskäivitage jätkamiseks
+kasutades oma {0} plaani.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Makse teie {0} eest
+Tellimine pidi olema {1}
+ja pole vastu võetud.
+
+Palun avage või taaskäivitage
+Ahvivaba seadmesse
+Teie tellimusega
+Jätkake oma kasutamist
+{0} plaan.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Konto aegunud</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Märge</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsofti pood ei luba astmet
+Muudatused tellimis lisad.
+
+Peate oma tühistama
+{0}/{1} planeeri ennast
+või võetakse teie eest tasu.
+
+Kas soovite seda nüüd teha?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Teie parool on lähtestatud.
+
+Palun kontrollige oma e -posti ja
+Muutuste saamiseks järgige linki
+Teie parool.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Logi sisse</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autor (s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Enne jätkamist nõutakse järgmiste litsentsitingimuste vastuvõtmist.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Järgmine pakett (d) nõuab enne installimist nende litsentsitingimusi.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Ma keeldun</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"Ma aktsepteerin" klõpsamist tähendab, et nõustute selle rakenduse litsentsitingimustega. Kui te ei nõustu tingimustega, klõpsake nuppu "Ma keeldun".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"Ma aktsepteerin" klõpsamist tähendab, et nõustute ülaltoodud pistikprogrammi (te) litsentsitingimustega. Kui te ei nõustu tingimustega, klõpsake nuppu "Ma keeldun".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Vaatamislitsents</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Litsentsi aktsepteerimine</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Ma nõustun</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktiivne</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Võrguühenduseta</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Registreerimata</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Tehtud</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ paroolid ei ühti</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Parool</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Teie tellimus on
+Nüüd seatud {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Konto leitud</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Sisselogimine ebaõnnestus</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registreerimine ebaõnnestus</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registreerimine edukas!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Lähtestamise viga</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Tellimus</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Mis on uut</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Mitte kunagi</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Piiramatu</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>võimsus</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>järelejäänud</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>kogusumma</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Teie makse on tähtaeg.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Eksklusiivsed otseteed võivad sisaldada ainult ühte võtit ja see võti ei saa olla modifikaatori võti.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Aegunud</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Laadimine</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Puudega</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Märge! See parool on valikuline ja ainult täiendava turvalisuse tagamiseks. Teie andmed on juba krüptitud ja pole kunagi jagatud. See parool takistab lihtsalt kedagi, kelle mitte ahveypaste laadida, kui nad pääsevad teie töölauale (varastatud, lahkute ruumist jne).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Pidage meeles tilkade seadeid:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Sirvige pistikprogramme</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analüüsima</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Kiire tegevus</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Lülitage redigeerimine</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Lülitage kinnitatud</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Märkused</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Tavatekst</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Aknas avatud</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Klõpsake + CTRL -i jälgimiseks ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Jälgimiseks klõpsake nuppu + ALT ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pinkige või tilgutage siin meediat!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Selge</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Üle 0 kohal olevad künnised tagavad häguse värvi sobitamise, kasutades RGBA Colorspace'i eukleidist kaugust.
+
+Näiteks kui punane (#FF0000) on otsingutermin ja must (#000000) on piltide klipis piksl, siis on värvikaugus 255. Must kuni valge kaugus on maksimaalne võimalik 510, sealhulgas alfa -kanal</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Kõik järgmised on tõesed</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Lõikelaud</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kollektsioonid</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Hiirerežiimid</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Päästikud</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Jätka</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Uus päästik</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Lisa eelseade</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Ahvide tilk võlur</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Eelsöötis</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analüsaator</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Jalgratta orientatsioon</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Lülitage võre paigutus</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Juhtumitundlik</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Lävi</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Terve sõna</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Puudub</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Marsruutimine</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Toiming</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Ruudustik</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Tehtud</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Järgmine</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Eelnev</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Vahele jätma</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Olemasolev konto?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Järgmine makse</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Registreerimine võimaldab teil kanda oma tasulist tellimust kõigis seadmetes (saadavuse korral). Me ei rämps teie meili, mida lubame 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Tellimus</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Kasutajanimi</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Kas peate registreeruma?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Allikad</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Veider, midagi pole saadaval. Midagi peab olema valesti 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Eemaldama</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Nõuab taaskäivitamist</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Arenenud</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Viga pistikprogrammi ekstraheerimisel '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Viga pistikprogrammi installimisel: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Viga pistikprogrammi '{0}' installimine rikutud või ebaõige kataloogistruktuur. Manifest peaks eksisteerima aadressil {1}, kuid seda ei leitud.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Viga pistikprogrammi manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>GUID -ga laaditud pistikprogrammi: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} viga</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Viga plugina temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Viga '{0}' varundamine väärtusele '{1}'. Üksikasjad: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Tüüpi kirjutatud tekst rakendatakse automaatselt otsingule, kui tekstikasti ei keskendu.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Automaatse otsingu sisend</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Parooli muutmine ebaõnnestus</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Vahetus</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Muuda salasõna</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Selge</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Selge parool</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Sisu</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Sisu fondi suurus</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kui see on tõsi, kasutab klippi sisestatud väline sisu klambrite vormindamist, mitte seda, mida allikast saadab.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Kleebi, langeda või lisage sihtkoha vormindamisega</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite parooli unustada?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Unustama</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Unustage parool</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profiil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Peida vesimärgid</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Kui uus lõikelaua sisu on lisatud</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignoreeri lisandeid</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kui lõikelaud sobib olemasoleva klambriga, kasutatakse seda klappi uue loomise asemel</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignoreeri uusi duplikaate</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Lõikelaua muudatusi rakenduses ei jälgita</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignoreerige lõikelaua jälgimist</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Jälgimisel ignoreeritakse ruume, sakke ja uusi read</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignoreeri ainult valget ruumi</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Laadige sisselogimine</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animaalne aken</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Läbipaistmatus</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Näitama käitumist</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Peaaken paljastatakse, tehes kuvari ülaosas kerimisliigutust</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Kuva ülakraani kerimisel</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Teavitamismaht</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>See säte jälgib süsteemi - laia klaviatuuripasta loendusi kasutamise statistika jaoks. See teave on privaatne ja ei jagata, kuid pole ka garanteeritud. Täpsed tulemused võivad nõuda rakendusepõhise klaviatuurikäsu pakkumist jaotises „Seaded -&gt; Kopeeri ja pasta -&gt; otseteed”.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Pasta ajalugu</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Liiga palju kinnitatud klippe (nagu brauseri vahelehed) võivad tarbida olulist mälu. Eemaldamine on esmalt - esimene - välja</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Tihvtimaht</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>See kehtib kõigi automaatsete sisendite kohta, madalamad väärtused parandavad jõudlust</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Hiljutine tekstipiirang</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite
+Kas taastada vaikimisi eelistused?
+
+Seda ei saa olematuks teha!
+
+*Rakendus taaskäivitub, kui see on valmis.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite lähtestada kõik teatised?
+
+*Seda ei saa olematuks teha!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Ahvipasta seab lõikelaua (alistab) välisele programmile kleepimisel. See on &lt;b&gt; katse &lt;/b&gt; taastada lõikelaua seisund pärast välist pastat.
+
+Terve taastamist ei saa tagada ja see võib sõltuvalt andmete allikast vähendada jõudlust või isegi krahhi ahvivast.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Lähtestage lõikelaud pärast ahvi kleepimist</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Pistikprogrammi vahemälu ei saanud teelt kustutada: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Kõik pistikprogrammid lähtestatakse esialgse vaikeseisundisse</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Pistikprogrammi vahemälu</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite lähtestada kõik pistikprogrammid vaikimisi?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite oma parooli lähtestada?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Kõik rakenduse otseteed lähtestatakse nende vaikevõtme žestidele.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Lähtestage otseteed</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Kõik ignoreeritud teatised, mis on varem seatud.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Teatised taastada</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Võimaldamine võib olla üsna aeglane) Vormindatud keelamine vähendab mälu tarbimist, kuid pärsib mõningaid täiustatud funktsioone, näiteks: lisa, mallid, märkused ja leidmine/asendamine</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Rikas sisu</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Määra parool</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Näpunäiteid näitama</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Näita Taskbaris</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Näita tööülesannete vahetuses</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Näitama pealkirju</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Kui see on lubatud, kuvatakse mis tahes rakendusest ekraani ülaossa lohistamine ahvipaste, et sisu hõlpsalt ahveypastesse visata.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Kuva ekraani ülaossa</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Heliteema</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Õigekirja kontroll</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Käivitamisel pole lõikelaua allikas teadmata ja sõltuvalt teie turvaseadetest võib sisu pärineda välistatud veebisaidilt või rakendusest.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Lisage startup lõikelaud</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Kuulake alustamisel lõikelauda</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Valima</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Ettevaatust! Muud palettvärvid valitakse matemaatika, mitte silmade abil! Nii et olge teadlik, et mõnel värvi- ja stiilikombinatsioonil ei pruugi olla loetavuse jaoks sobiv kontrast.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Teemavärv</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Teemastiil</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automaatne prügikasti puhastamine toimub käivitamisel seatud intervalli korral.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Prügikastide puhastamine</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Liides</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Kõrged tühistamispiirid võivad mõjutada jõudlust</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Piiranguid tühistama</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Pole limiiti</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Kasutatakse täiustatud failide otsimisel mitte eelseatud faililiikide jaoks</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Kasutaja - määratletud otsingulaiendid</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Leidke ja asendage ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Kleebi siia</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Jaga ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Vaade</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Haldama ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Nimetage ümber nimetama</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Skoor: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tüüp: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Püsivalt kustutama</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Sirvige '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Ümber kujundama</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Sisend</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Väljund</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Allikad</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Taastama</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Valige pilt ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Värvus</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Halda '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Avatud</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Palun oota...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Taustavärv</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Kustuta kõik</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Lõikelauavormingud</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Kustutada kõik</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Redigeerimise üksikasjad</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nimetus</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Leidma</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Fondi värv</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Vormingus värv</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Valimisel</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Sisestage pilt</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Sisestage link</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Sisestage video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Tikutoos</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Uus mall</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Järgmine mall</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Sisestage pasta tekst ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Eelmine mall</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Regulaarne väljendus</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Asendage kõik</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Asendama</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Terve sõna</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Ümber mähkima</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Plokk</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domeen</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Näitama kausta</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Lahti lükkama</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Ümber</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Lisaplokki</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Lisama</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopeerimine</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Režiimid</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Palun oodake, et Monkeypaste laadib ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Loobuma</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - klõpsake pasta</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupp</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Kustutage kõik püsivalt</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Taasta kõik</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Toiming</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL on juba olemas: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL peab olema kehtiv vormingus.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Sisestage täielik URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Lisage URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Sisestama väärtused</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopeerige tekst või failid.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Lisa {0} {1} režiim aktiveeritud</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Lõikelaua muudatused on nüüd lisatud</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Pärast Appendi režiimi aktiveerimist</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Lõikelaua muudatused valmistatakse nüüd</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Enne lisamisrežiimi aktiveerimist</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Plokk</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Tavaline lõikelaua käitumine on taastatud</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Lisatud deaktiveeritud</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Klipi ülaosale või potomile lisatud lisad</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Ulatus lisarežiim aktiveeritud</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Järjekorras</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Käsiraamat</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Lisage oma praegusele valikule.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Käsitsi lisarežiim aktiveeritud</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Lõikelaua kogunemine peatus</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Lisama</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Lõikelaua kogunemine jätkati</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Jätkutud lisa</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite lisamise lõpetada?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Redigeerimine ühilduvusrežiimis eemaldab kogu rikkaliku vormingu. Kas olete kindel, et soovite seda muuta?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Andmete halvenemise hoiatus</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktiivne</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Lubatud</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Väljas</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Peal</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Pausi</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Tulemus</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Olek</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Tekkis tundmatu viga.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Katsed järelejäänud</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Sisestage parool</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Kinnitama</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Kuupäev Kellaaeg</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite kustutada kõik '{0}' kasutusalad?
+
+Seda ei saa olematuks teha!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dünaamiline</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Staatiline</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} on tühi ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Veel varsti!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Sisselogimise koormus keelamine ebaõnnestus</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Sisselogimise koormus Keelake edu</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Sisselogimise koormus lubamine ebaõnnestus</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Sisselogimise koormus võimaldab edu</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Varjama</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Ahvipasta on nüüd laaditud.
+Lõikelaua kuulamine on: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Koormatud</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Näitama</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Autokoopia valiku režiim: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Režiim muudetud</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Paremklõpsake pastarežiimi: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Pistikprogramm värskendatud</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Kleebi '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Käivitage '{0}' Analyzer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Käivitage '{0}' päästik</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Valige '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite kustutada '{0}' ja kõik seotud toimingud?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Päästik</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Kas soovite eemaldada kõik alamtoimingud {0} jaoks? (Vastasel juhul on nad vanemad</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Eemaldage valikud</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Kas soovite tõesti GOTO '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analüsaatorid</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Rakendusoperatsioonid</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Lõikelaud</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Sisu</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Muundurid</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultuur</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Andmed</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Suund</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Tõmba ja lase lahti</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Tilk võlur</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikoonid</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logija</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Liides</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Pastaoperatsioonid</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Eelistused</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Otsing</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Otseteed</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Helid</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Süsteemialus</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kollektsioonid</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Teema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Päästikud</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Veebisaidi toimingud</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Keel</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Määrab lõikelaua sisendklambri külge.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Märguanne</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Pilgutama</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Hele</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Üldotstarbelised heli- ja/või süsteemialuse teadete märguanded. Häirete tegevus ei mõjuta nende panust.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Teade</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Ahv</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Eelvaade</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Näita?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Aja röstsaia teade kuvatakse sekunditega. Kui väärtus on 0, tuleb teade käsitsi sulgeda.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Näita aega (d)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Heli?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Helitüüp</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Kipitus</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Maht</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analüsaator</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Töötleb sisendklippi, kasutades määratud analüsaatori eelseadet.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Sisendisisu on lingitud valitud kollektsiooniga</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Linkib oma sisendklipi määratud sildi kogumiga.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Silt</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Juhtumitundlik?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>See võib olla staatiline tekst, mida võrrelda sisendiga ja/või lisada valitud atribuudid (filtri nupu kaudu) asendatakse tingimuse hindamisel.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Tingimuste andmed</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Valikuline JSONPathi päring, mida rakendatakse enne tingimuse hindamist valitud sisestusomandile.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Sisendfilter</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Selle tingimuslikuks jaoks kasutatud klambri omadus.
+
+Viimast väljundi atribuuti toetatakse praegu ainult siis, kui see tingimuslik on analüsaatori toimingu laps ja esitatud andmed varieeruvad sõltuvalt vanemaanalüsaatori väljundist.
+
+Tõrkeotsinguks kinnitage selle tingimusliku lapsevanemale „hoiatusoperatsioon” ja määrake parameeter Alert'i sõnum, et see vastaks sellele sisendomadusele. See võimaldab üle vaadata selle tingimuslikult kasutatavad tegelikud andmed.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Sisendomadus</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Viib läbi sisendklambri või eelneva toimingu väljundi teksti võrdluse. Kui võrdlus ebaõnnestub (see pole vaste), ei teostata lapsetoiminguid. Nii et see toimib nagu loogiline värav.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Kõik tõelised või valeoperatsioonid, kus laste toimingud teostavad ainult siis, kui tulemus on tõene.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Tingimus</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Kõik</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Käivitatakse siis, kui valitud tüübi klipp lisatakse süsteemile mis tahes viisil (lõikelaud, lohistage - ja - tilk, analüsaator genereeritakse või dubleeritakse).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Käivitage see päästik ainult siis, kui sisendklipp on uus ja mitte duplikaat. See sõltub mis tahes eelistuste seadistusest, kas uut sisu eiratakse või mitte.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Eirata duplikaati</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Ainult seda tüüpi klipid käivitavad selle toimingu.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Linkib oma sisendklipi määratud sildi kogumiga.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Käivitatud, kui klipp on ühendatud määratud sildikoguga.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kogumine</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Millisekundites ootas aeg enne laste täitmist</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Viivitus</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimentaalne), mida kasutatakse peamiselt koos reporteerimismeetmega kaugemate allikate küsitluseks või pikkade toimingute abistamiseks.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kui jäetakse tühjaks, kasutab väljundfail failinimena sisendklambri pealkirja.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Kohandatud nimi</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Kataloog, kus fail kirjutatakse.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Kataloog</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Salvestab sisendi valitud kausta.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Käivitati, kui valitud kausta sisu muutub. Väljund on uus või olemasolev (kui ignore duplikaadid on lubatud) faili või kausta failiklipp, mis on muutunud koos muutuste tüübiga viimase väljundina.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Sündmused</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Kaust kaust</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Eirata duplikaati</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Väärtus 0 kordab vanemate tegevust lõputult</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Kordus loendus</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Kui vanemate tegevuse lõppeb, on millisekundites oodata</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Korrata viivitust</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimentaalne), mida kasutatakse toimingute silmuste või korduvate ülesannete loomiseks. Kordamisel täidab see kõik lapsed uuesti oma algse sisendiga. Intervalli kasutamisel ilma korduvate loenduseta tuleb kordumise peatamiseks päästik keelata ja uuesti kokku saada. Võib olla kasulik küsitluseks või veebi kraapimise automatiseerimiseks.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Käivitatud ülemaailmse otsetee poolt, mille määratlete. Kui Monkeypaste on aktiivne, proovib see sisendina kasutada valitud klippi (kui see on olemas). Vastasel juhul proovib ta sisendina kasutada lõikelaua.
+
+MÄRKUS. Kruttide päästik käivitub ikkagi, kui pole sisendit selle paindlikuks hoidmiseks (nii et see võib olla makro päästik jne), kuna see pole andmed - juhitud sündmus.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Otsetee päästik</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Käivitatakse, kui salvestatud otsetee surutakse praeguse lõikelauaga igal ajal</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>See toiming nõuab rakenduse taaskäivitamist. Kas soovite seda nüüd teha?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Seal oli probleem. Peate rakenduse käsitsi taaskäivitama.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analüüsige annotaatoriga</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotaadi päästik</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Sisseehitatud elemente loetakse - ainult. Duplikaat muuta.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonüümne</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Eile</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} päeva tagasi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 tund tagasi</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} tundi tagasi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Just praegu</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Minut tagasi</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minut tagasi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Eelmine kuu</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} kuud tagasi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Eelmine nädal</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} nädalat tagasi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} aastat tagasi</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Märkused</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Rakenduse nimi</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Rakendustee</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Juhtumitundlik</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Sisu</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Faili tüüp</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Pilditüüp</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Regulaarne väljendus</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tekstiliik</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Tiitel</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL -i pealkiri</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Terve sõna</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Nagu avamiseks ülemise ekraani serva kerimine, lukustab see peaakna avanemisel. Võimaldades kiiremat mitmekordset töövoogu.
+
+* Nurgad on kõigi teie ekraanide, mitte monitori kohta.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Kuva aken ja lukk</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Tasuta!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Andke meile 5 tärni!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Kustutada kõik</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Kustutage kogu sisu</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite kustutada
+Kõik teie klipid?!
+
+*Seda toimingut ei saa tagasi võtta!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Olen Indy dev, palun näidake mõnda tuge!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Nagu ahveypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} aktsepteerib ainult tüübi sisendit: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Automaatne kopeerimisrežiim - simuleerib sündmust 'koopia' iga kord, kui vasakpoolne hiirenupp välja antakse.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Paremklõpsake pastarežiimi - simuleerib sündmust „Kleebi” iga kord, kui hiire õige nupp vabastatakse</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Eelseade</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Kuva plugina kausta</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Aruanne</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Vaade</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Kuva tööriistakatted</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analüsaatorid märgivad oma sisendit või loovad väljundina uusi klippe. Analüsaatorite lapsed peavad otsustama, millist nad oma panusena vajavad. Tavaliselt on see viimane väljund.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Sisendüüp</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Päästiku kujundaja '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Valige {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Ei leitud...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} päästik</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Kontrollimisel pööratakse tingimuse tõelist või valet tulemust. Nii et näiteks ei saa „sisaldab” tingimuseks 'ei sisalda'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ei ole</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Palun oota...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Värvi valija</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Valige vastevärv</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Nagu otsetee päästik, kuid kui võtmekombinatsiooni vajutatakse, simuleeritakse aktiivses rakendusesündmust „koopia”, nii et see töötab ikkagi nagu koopia, kuid siis käivitatakse ahvi koopia päästikule lisatud toimingute ahel taustal, kasutades Simuleeritud koopia lõikelaua andmed.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Täiustatud filter</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Peida filtrid</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Filtrid taastada</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Loo filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Valikuline) Kui tühjaks jäetakse, seatakse lõikelaud selle toimingu sisendi abil. Midagi siin pakutavat käsitletakse ainult lihttekstidena.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Lõikelaua sisu</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kui see on tõene, ei lisata klappi pärast seda, kui see toiming lõikelaua seab.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignoreerima</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Toiminguks '{0}' valitud analüsaatorit ei valitud</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analüsaator toimingute jaoks '{0}' ei leitud</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Vanem '{0}' filtrid ainult '{1}' tüüpi sisu ja analüsaatori '{2}' jaoks ei käivitu kunagi, kuna see ei toeta '{3}' sisendi tüüpi</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Klassifikaatori '{0}' jaoks pole valitud silti</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Sild klassifikaatori '{0}' jaoks pole leitud</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Võrdle väärtus võib olla ainult tähed, numbrid või ruumid</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Clip -märgistatud päästiku '{0}' jaoks pole valitud silti</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Clip -märgistatud päästiku '{0}' silt ei leitud</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>'{0}' jaoks ei täpsustata kellakausta</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Vaata kausta '{0}' ei leitud päästiku '{1}' jaoks</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Faili kirjutaja tee toimingule '{0}' pole seatud</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Failikirjutaja tee '{0}' jaoks '{1}' pole leitud.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Tööriba</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Tutvuge pistikprogrammide kohta</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Taastada see analüüsi konfiguratsioon</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} muutke logi</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Võtke ühendust Internetiga ja proovige hiljem uuesti.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - abi</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} on uusim versioon</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Sa oled kõik üleval - kuni kuupäevani!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Kontrolli kas uuendused on saadaval...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Saadaval uus versioon!
+
+'{0}' 🎉🍾🥳 värskendamiseks klõpsake siin</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>'{0}' värskendamiseks klõpsake allpool allpool</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Uuendus saadaval!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Uuendage kohe</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' sisaldab jagatud väärtusi. Mida soovite lähtestada?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Selge</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Selge hiljutised otsingud</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Lähtestage kõik</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Lähtestage jagatud</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Lähtestage jagamata</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Kutsub üles määratud rakenduse toimingu. Kõik rakenduse käsud on kodakondsuseta ja nende sisendklippi eiratakse.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kui kontrollimata ja käsk ei saa tulistada, peatub hukkamisahel. Paljud käsud nõuavad käivitamiseks mõnda konkreetset rakenduse olekut.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Jätkake alati?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Käsk esineda.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Käsk</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Rakenduse käsku '{0}' pole valitud käsku</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Käsk rakenduse käsk '{0}' ei leitud</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Valitud</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Taaskäivita</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Seal oli probleem, mis värskendas '{0}'. Värskenduse lõpuleviimiseks peate uuesti taaskäivitama ja installima '{0}' (ärge muretsege, et kõik teie sätted taastatakse).
+
+Saate nüüd taaskäivitada ja värskenduse lõpule viia, installides, ignoreerida seda ja värskendada hiljem või tühistada värskendus kõik koos ning jätkate versiooni '{1}' kasutamist?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Värskendusviga</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Ei saanud värskendust alla laadida</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Uuendus ebaõnnestus</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Värskenduse lõpuleviimiseks peate taaskäivitama. Kas soovite taaskäivitada nüüd või hiljem?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Värskendage valmis</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Hiljem</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Taaskäivita kohe</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Pooleliolev</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} värskendati edukalt {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Põhipluginad on vajalikud ja neid ei saa eemaldada.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Installimine</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Värskendus on ootel. Taaskäivitage.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Pooleliolev</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Desinstallimine on ootel. Palun taaskäivitage, kui soovite uuesti - installida.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Desinstalli lõpuleviimiseks peate taaskäivitama. Kas soovite taaskäivitada nüüd või hiljem?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Lõpetada desinstall?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Avaldamata</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Automaatne - genereeritud vaikimisi eelseade '{0}' jaoks</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Klippi pole valitud</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analüüsige valitud klippi</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Määrake valitud klambril '{0}' käivitamiseks otsetee</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Ülemaailmne pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Määrake globaalne pasta otsetee '{0}' jaoks</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Unustasid parooli?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Logi sisse</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Logi välja</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Privaatsuspoliitika</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Nõuab taaskäivitamist) Kui lubatud diagnostiline teave logitakse faili. See võib jõudlust aeglustada ja sisaldada isiklikku teavet.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Logi faili</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Avatud</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Avage Logs kaust</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Sirvige pistikprogramme</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lugema</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Kirjutama</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Saada tagasiside või veateade</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>See peidab ainult peaaken. Kõik muud dialoogi aknad on alati näidatud Taskbaris.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Otsige '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Lisa filter</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Redigeerige liitumistüüpi</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Eemalda see filter</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Avatud abi selle kohta ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipid</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Vahetus</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Mitte kunagi</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Komplekt</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Pealkirjata</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rekord</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Märgistamata allika viide</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' on vajalik</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(On vigu)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Piiratud</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Ladustamine</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Prügikast</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Piiramatu</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>See rakendus vastab praegu vaikelõikelaua lugeja eelseadetele ja vormingutele.
+
+Vaikelugeja eelseadete lubamine või keelamine (lõikelaua külgribalt) ei mõjuta seda konfiguratsiooni. Ainult loetlemata rakendused järgivad vaikimisi seadistamist.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>See rakendus vastab praegu vaikeklappide kirjutajatele eelseadetele ja vormingutele.
+
+Vaikekirjanike eelseadete (lõikelaua külgribalt) lubamine või keelamine ei mõjuta seda konfiguratsiooni. Ainult loetlemata rakendused järgivad vaikimisi seadistamist.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Lisateabe saamiseks peate lõikelaua kuulaja (süsteemisalv -&gt; jätka).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Lisama</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Pole seadeid</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Ma räägin ainult inglise keelt ja sellesse keelde on tõlgitud ahveypaste.
+
+Kõik versioonid tarnivad ingliskeelse pakiga, nii et kui räägite inglise keelt, saate seda pärast seda seadistamist igal ajal muuta (sätted -&gt; eelistused -&gt; rahvusvahelised).
+
+Kui soovite tõlget parandada, tahaksime teid hea meelega kuulda!
+
+tagasiside@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Tõlkeprobleemid</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Selle funktsiooni kasutamiseks peate värskendama Monkeypaste.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Otsetee unset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Lõikelaua kuulaja puudega</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Lõikelaua kuulaja lubatud</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Vanemate toiming '{0}' ei toeta sisendomandi tüüpi 'Viimane väljund'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lisateave plaanide kohta</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Rakendus</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Päästik</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klamber</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analüsaator</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Silt</value>
+  </data>
+</root>

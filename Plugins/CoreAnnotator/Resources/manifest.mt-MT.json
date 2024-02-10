@@ -1,0 +1,11 @@
+{
+  "title": "Annotatur tat-test tal-qalba",
+  "description": "Jipprovdi appoġġ bażiku ta 'hyperlink għal kontenut ibbażat fuq it-test",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Core, Annotate, Test, Link, Color, Parsing, Indirizz, Telefon, Email, Munita, Finanzi"
+}

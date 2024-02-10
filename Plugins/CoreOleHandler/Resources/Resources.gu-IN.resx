@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>અવગણવું</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>જ્યારે તપાસવામાં આવે ત્યારે {0} ફોર્મેટ ક્લિપબોર્ડ અથવા ડ્રેગ-એન્ડ-ડ્રોપ ડેટામાંથી વાંચવામાં આવશે નહીં.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>જ્યારે તપાસવામાં આવે ત્યારે {0} ફોર્મેટ ક્લિપબોર્ડ અથવા ડ્રેગ-એન્ડ-ડ્રોપ ડેટા પર લખવામાં આવશે નહીં.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>વાંચવું</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>લખવું</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>સી.એસ.વી.</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ફાઈલો</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>જ્યારે આરટીએફ પહેલાથી હાજર નથી, ત્યારે એચટીએમએલ આરટીએફમાં રૂપાંતરિત થશે. આ વેબ બ્રાઉઝર્સ અને/અથવા વર્ડ પ્રોસેસિંગ એપ્લિકેશનો વચ્ચે ઉપયોગી થઈ શકે છે. (આરટીએફ ફોર્મેટને સક્ષમ કરવું જરૂરી છે અને તે ફક્ત સપોર્ટેડ પ્લેટફોર્મ માટે છે)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>આરટીએફમાં કન્વર્ટ કરો</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>આ ડિરેક્ટરીઓ ક્લિપબોર્ડ અથવા ડ્રેગ-એન્ડ-ડ્રોપ ડેટામાંથી વાંચવામાં આવશે નહીં.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>અવગણવામાં આવેલી ડિરેક્ટરીઓ</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>ફાઇલ એક્સ્ટેંશનની અવગણના</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>આ ફાઇલ પ્રકારો ક્લિપબોર્ડ અથવા ડ્રેગ-એન્ડ-ડ્રોપ ડેટામાંથી વાંચવામાં આવશે નહીં.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>આ ફાઇલ પ્રકારો ક્લિપબોર્ડ અથવા ડ્રેગ-એન્ડ-ડ્રોપ ડેટા પર લખવામાં આવશે નહીં.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>જ્યારે તપાસવામાં આવે છે, ત્યારે મેક્સ પરિમાણ કરતા મોટી છબીઓ પાસા રેશિયો જાળવી રાખતી વખતે સ્કેલ કરવામાં આવશે. આ ક્લિપબોર્ડ પરની છબીને અસર કરતું નથી.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>ધોરણ -કદનું</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>જ્યારે બીટમેપને પેસ્ટ કરો અથવા છોડશો ત્યારે આ ડિફ default લ્ટ ફાઇલ પ્રકાર હશે</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>ડિફોલ્ટ નિકાસ પ્રકાર</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>કેટલીકવાર સંપૂર્ણ પારદર્શક છબીઓ ક્લિપબોર્ડ પર દેખાશે, તે મૂંઝવણમાં મૂકે છે.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>ખાલી છબીઓને અવગણો</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>મોટી છબીઓ (થોડા એમબીથી વધુ) કમનસીબે ડ્રેગ-એન્ડ-ડ્રોપ અને એકંદર પ્રદર્શન કંઈક અંશે સુસ્ત કરી શકે છે. આ મૂલ્ય ઓછું રાખવાનો પ્રયત્ન કરો.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>મહત્તમ .ંચાઈ</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>મહત્તમ પહોળાઈ</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>પ્રભાવની ચિંતા માટે, મહત્તમ રકમ અક્ષરોની જરૂર છે</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>મહત્તમ અક્ષરો</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>એચટીએમએલ (માઇમ)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>ટેક્સ્ટ (માઇમ)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (મોઝ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>'{0}' ફોર્મેટમાં ખાલી અથવા પારદર્શક ડેટા હતો અને અવરોધિત હતો</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ખાલી ડેટા અવરોધિત</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' ફોર્મેટને 'અવગણવામાં' તરીકે ફ્લેગ કરવામાં આવે છે</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>ફોર્મેટ અવગણવામાં</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} મર્યાદા {1} છે અને ડેટા {2} હતો</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>મહત્તમ કદ મળી</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>મુખ્ય ક્લિપબોર્ડ રીડર</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>મુખ્ય ક્લિપબોર્ડ લેખક</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ડિફ default લ્ટ ક્લિપબોર્ડ ફોર્મેટ્સને હેન્ડલ કરે છે</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>મૂળ</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>કોર, ક્લિપબોર્ડ, ખેંચો અને ડ્રોપ, ટેક્સ્ટ, આરટીએફ, સમૃદ્ધ ટેક્સ્ટ, એચટીએમએલ, સીએસવી, ઇમેજ, પીએનજી, જેપીજી, જેપીઇજી, લિંક</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>છબી (પીએનજી)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>જ્યારે એચટીએમએલ પહેલાથી હાજર નથી, ત્યારે આરટીએફ એચટીએમએલમાં રૂપાંતરિત થશે. આ વેબ બ્રાઉઝર્સ અને/અથવા વર્ડ પ્રોસેસિંગ એપ્લિકેશનો વચ્ચે ઉપયોગી થઈ શકે છે. (એચટીએમએલ ફોર્મેટને સક્ષમ કરવું જરૂરી છે અને તે ફક્ત સપોર્ટેડ પ્લેટફોર્મ માટે છે)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML માં કન્વર્ટ કરો</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>આર.ટી.એફ.</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>લખાણ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>અનાવશ્યક</value>
+  </data>
+</root>

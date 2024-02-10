@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>ไม่สนใจ</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>เมื่อตรวจสอบรูปแบบ {0} จะไม่ถูกอ่านจากคลิปบอร์ดหรือข้อมูลการลากและวาง</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>เมื่อตรวจสอบรูปแบบ {0} จะไม่ถูกเขียนลงในคลิปบอร์ดหรือข้อมูลการลากและวาง</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>อ่าน</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>เขียน</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ไฟล์</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>เมื่อ RTF ยังไม่ปรากฏตัว HTML จะถูกแปลงเป็น RTF สิ่งนี้อาจเป็นประโยชน์ระหว่างเว็บเบราว์เซอร์และ/หรือแอปพลิเคชันการประมวลผลคำ (ต้องเปิดใช้งานรูปแบบ RTF และใช้สำหรับแพลตฟอร์มที่รองรับเท่านั้น)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>แปลงเป็น RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>ไดเรกทอรีเหล่านี้จะไม่ถูกอ่านจากคลิปบอร์ดหรือข้อมูลการลากแล้วปล่อย</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>ไม่สนใจไดเรกทอรี</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>ส่วนขยายไฟล์ที่ถูกละเว้น</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>ประเภทไฟล์เหล่านี้จะไม่ถูกอ่านจากคลิปบอร์ดหรือข้อมูลลากแล้วปล่อย</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>ประเภทไฟล์เหล่านี้จะไม่ถูกเขียนลงในคลิปบอร์ดหรือข้อมูลการลากและวาง</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>เมื่อตรวจสอบภาพที่มีขนาดใหญ่กว่าขนาดสูงสุดจะถูกปรับขนาดในขณะที่ยังคงรักษาอัตราส่วนภาพไว้ สิ่งนี้ไม่ส่งผลกระทบต่อภาพบนคลิปบอร์ด</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>ขนาดใหญ่</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>เมื่อวางหรือวางบิตแมปนี่จะเป็นประเภทไฟล์เริ่มต้น</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>ประเภทการส่งออกเริ่มต้น</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>บางครั้งภาพโปร่งใสอย่างเต็มที่จะปรากฏขึ้นบนคลิปบอร์ดซึ่งทำให้เกิดความสับสน</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>ไม่สนใจภาพที่ว่างเปล่า</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>ภาพขนาดใหญ่ (มากกว่าสองสาม MBs) สามารถทำให้การลากแล้วหยดและประสิทธิภาพโดยรวมค่อนข้างช้าน่าเสียดาย พยายามรักษาค่านี้ให้ต่ำ</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>ความสูงสูงสุด</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>ความกว้างสูงสุด</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>สำหรับข้อกังวลด้านประสิทธิภาพจำเป็นต้องมีอักขระจำนวนสูงสุด</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>อักขระสูงสุด</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>ข้อความ (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>รูปแบบ '{0}' มีข้อมูลที่ว่างเปล่าหรือโปร่งใสและถูกบล็อก</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ข้อมูลที่ว่างเปล่าถูกบล็อก</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>รูปแบบ '{0}' ถูกตั้งค่าสถานะเป็น 'ละเว้น'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>รูปแบบที่ละเว้น</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} ขีด จำกัด คือ {1} และข้อมูลคือ {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>ตรวจพบขนาดสูงสุด</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>เครื่องอ่าน Core Clipboard</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>นักเขียน Core Clipboard</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>จัดการรูปแบบคลิปบอร์ดเริ่มต้น</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, คลิปบอร์ด, ลากและวาง, ข้อความ, RTF, ข้อความที่หลากหลาย, HTML, CSV, รูปภาพ, PNG, JPG, JPEG, ลิงก์</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>รูปภาพ (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>เมื่อ HTML ยังไม่ปรากฏตัว RTF จะถูกแปลงเป็น HTML สิ่งนี้อาจเป็นประโยชน์ระหว่างเว็บเบราว์เซอร์และ/หรือแอปพลิเคชันการประมวลผลคำ (ต้องเปิดใช้งานรูปแบบ HTML และใช้สำหรับแพลตฟอร์มที่รองรับเท่านั้น)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>แปลงเป็น html</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>ข้อความ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>ไม่มีชื่อ</value>
+  </data>
+</root>

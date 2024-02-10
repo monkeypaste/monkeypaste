@@ -1,0 +1,12 @@
+{
+  "title": "Osnovna ručka međuspremnika",
+  "description": "Rukuje se na zadanim formatima međuspremnika",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Jezgra, međuspremnik, povlačenje i pad, tekst, RTF, bogat tekst, html, csv, slika, png, jpg, jpeg, link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

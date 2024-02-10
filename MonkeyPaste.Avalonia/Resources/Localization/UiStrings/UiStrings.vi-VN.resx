@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Không có tính năng nào bị giới hạn bởi đăng ký, chỉ có dung lượng lưu trữ và có thể được thay đổi bất cứ lúc nào.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Khôi phục tài khoản hiện tại của bạn ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Nội dung và rác rưởi là
+giới hạn ở {0} và {1}
+clip tương ứng.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Cho phép {2} clip nội dung và lưu trữ rác không giới hạn.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Nội dung không giới hạn và không giới hạn và lưu trữ rác.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Khôi phục</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Miễn phí</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Tiêu chuẩn</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Vô hạn</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Đăng ký</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Quyền riêng tư của bạn là quan trọng và dữ liệu clipboard có thể rất cá nhân. Lưu trữ luôn được mã hóa nhưng bạn có thể đặt mật khẩu sẽ được yêu cầu trong trường hợp thiết bị của bạn bị đánh cắp hoặc người khác đang sử dụng thiết bị của bạn.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Mật khẩu</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Khi được bật, việc kéo từ bất kỳ ứng dụng nào lên đầu màn hình sẽ tiết lộ khỉ để dễ dàng thả nội dung vào khỉ.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Kích hoạt 'khóa' ở trên cùng bên trái của cửa sổ chính vẫn sẽ cho phép thả xuống khỉ.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Nhiều tùy chọn cửa sổ có sẵn từ menu 'Cài đặt -&gt; Tùy chọn -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Kéo chuối lên đây!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Kéo - đến - mở</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Các phím tắt có thể được xem xét hoặc thay đổi bất cứ lúc nào từ menu 'Cài đặt -&gt; phím tắt'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Tất cả các phím tắt toàn cầu sẽ bị vô hiệu hóa để bạn có thể tự thiết lập chúng sau.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Các phím tắt clipboard của Monkeypaste sẽ có sẵn trong tất cả các ứng dụng.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Nội bộ</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Mặc định</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Hồ sơ cử chỉ</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Chào! Hãy thiết lập một vài điều để cải thiện trải nghiệm tổng thể của bạn với khỉ.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Chào mừng</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Để tận dụng nhiều nhất từ ​​khỉ, tải tự động khi bạn đăng nhập là một ý tưởng tốt. Nhưng, điều đó hoàn toàn phụ thuộc vào bạn.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Giữ nó bình thường.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Cho phép</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Tải vào đăng nhập?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Khi được bật, một cử chỉ cuộn ở đầu màn hình sẽ tiết lộ khỉ.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Bên trái - Nhấp vào biểu tượng thanh tác vụ vẫn sẽ mở khỉ.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Nhiều tùy chọn cửa sổ có sẵn từ menu 'Cài đặt -&gt; Tùy chọn -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Dễ dàng phải không?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Cuộn lên đây!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Cuộn - để - mở</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>nó</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Thả nó ở đây!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "centre"&gt; Cách này, có thể truy cập vào khỉ &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Kéo tôi!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Hãy thử nó!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Hãy thử nó!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Không có kết quả có sẵn.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Xác nhận</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Làm cho khỏe lại</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Tìm kiếm...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Sự phụ thuộc:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa '{0}' và tất cả các cài đặt trước và phím tắt của nó?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Gỡ cài đặt</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' không có kết quả.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Không có sự lựa chọn nào.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Không có</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Tín dụng:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Sự miêu tả:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Quyên tặng:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Giấy phép:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Dự án URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Được phát hành:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Đọc tôi:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Báo cáo lạm dụng:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Phiên bản:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Mở trong cửa sổ</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Miễn nhiệm</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Làm cho khỏe lại</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Cứu</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Bên cạnh xóa!
+
+Nâng cấp để tránh.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Bên cạnh thùng rác!
+
+Nâng cấp để tránh.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Các tập tin</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Hình ảnh</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Chữ</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Được sao chép {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Tệp | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} dòng</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Bản sao | {1} bột nhão</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Di chuyển</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Thêm vào</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Cắt</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Dán</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Bản sao</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Bộ lọc chưa được lưu</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Vui lòng chọn -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Định dạng</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Độc giả</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Nhà văn</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Người xử lý</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Xóa bỏ</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Nhân bản</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Chỉnh sửa tên</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Cài lại</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Hoạt động</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Định tuyến toàn cầu</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Đường tắt</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Cử chỉ phải là duy nhất và chỉ có thể chứa một khóa đầu vào.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Nội bộ &lt;/b&gt; Tất cả các phím tắt được giới hạn trong ứng dụng. Đây không thực sự là một tùy chọn dự định nhưng có thể cho phép tùy chỉnh những phím tắt bạn định làm toàn cầu &lt;i&gt; một ngày nào đó &lt;/i&gt;. &lt;/Li&gt;
+&lt;li&gt;
+&lt;b&gt; Mặc định &lt;/b&gt; Tất cả các phím tắt toàn cầu được bật. &lt;b&gt; hiển thị/ẩn cửa sổ chính &lt;/b&gt; phím tắt sử dụng &lt;span color = "red"&gt; Ghi đè &lt;/span&gt; định tuyến cho khóa &lt;b&gt; caps khóa &lt;/b&gt;. Bạn có thể thay đổi định tuyến hoặc cử chỉ đó bất cứ lúc nào. Nhưng &lt;span color = "màu xanh lá cây"&gt; Hãy thử &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;Html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;Body&gt;
+&lt;H1&gt; Chế độ phím tắt toàn cầu &lt;/H1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; thụ động &lt;/b&gt; Một con khỉ phím tắt sẽ lắng nghe trong bất kỳ ứng dụng nào. &lt;br&gt;
+*Đây là tùy chọn &lt;i&gt; &lt;/i&gt; trên Linux bây giờ.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; phím tắt sẽ thực thi &lt;b&gt; &lt;i&gt; trước &lt;/i&gt; &lt;/b&gt; Nó được xử lý bởi ứng dụng hoạt động. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; phím tắt sẽ thực thi &lt;b&gt; &lt;i&gt; sau &lt;/i&gt; &lt;/b&gt; Nó được xử lý bởi ứng dụng hoạt động. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Ghi đè &lt;/b&gt; Khi Khỉ Keypaste nghe khóa đầu vào (khóa không điều chỉnh) của phím tắt ghi đè, nó sẽ &lt;i&gt; ẩn &lt;/i&gt; phím đó nhấn từ đầu vào cấp ứng dụng. &lt;br&gt;
+Tùy chọn này sẽ đảm bảo phím tắt được kích hoạt mà không có xung đột với ứng dụng hoạt động.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Ghi đè độc quyền &lt;/b&gt; Đây là một loại chế độ ghi đè đặc biệt được thiết kế cho khóa khóa Caps. Nó chỉ cho phép &lt;b&gt; một &lt;/b&gt; phím (không sửa đổi) cho bài tập của nó. &lt;br&gt;
+Trong chế độ ghi đè bình thường, khóa Caps có thể trở thành &lt;i&gt; bị kẹt trên &lt;/i&gt; khi được nhấn kết hợp với các khóa khác. &lt;br&gt;
+Vì vậy, bất kể các phím khác là gì, nếu một phím tắt &lt;b&gt; hotkey &lt;/b&gt; được nhấn, nó sẽ bị ghi đè và ngăn không cho nó trở thành &lt;i&gt; bị kẹt trên &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/Body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Vô hiệu hóa</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Tải lên khi tài khoản người dùng này được đăng nhập, không phải cho người dùng khác.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Sử dụng các liên hệ có sẵn (yêu cầu plugin Fetcher) Trường này sẽ được sử dụng cho tất cả các trường hợp của mẫu này trên tài liệu này hoặc trong bất kỳ nó sẽ được tham chiếu sau. &lt;/P&gt; &lt;p&gt; Vì vậy, ví dụ nếu chọn địa chỉ email Tại đây, trường email của liên hệ bạn chọn sẽ được sử dụng cho tất cả các trường hợp trong tài liệu này. &lt;/P&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = năm ngắn &lt;br/&gt; yyyy = năm dài &lt;br/&gt; m = tháng (1-12) &lt;br/&gt; mm = tháng (01-12) &lt;br/&gt; MMM = Tháng viết tắt (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = tháng dài (tháng 1, tháng 2 ... tháng 12) &lt;br/&gt; d = ngày (1 - 31) &lt;br/&gt; dd = ngày (01 - 31) &lt;br/&gt; ddd = Ngày trong tuần bằng lời nói (Thứ Hai, Thứ Ba ... Chủ nhật) &lt;br/&gt; E = Ngày ngắn trong tuần bằng lời nói (Thứ Hai, Tue ... Mặt trời) &lt;br/&gt; D - Ngày thứ tự (1, thứ 2, thứ 2, 3, 21, 22, 23, 31, 4th ...) &lt;br/&gt; h = giờ vào sáng/chiều (0-12) &gt; H = giờ trong ngày (0-23) &lt;br/&gt; hh = giờ trong ngày (00-23) &lt;br/&gt; mm = phút &lt;br/&gt; ss = thứ hai &lt;br/&gt; sss = miliseconds &lt;br/&gt; A = AM/pm điểm đánh dấu &lt;br/&gt; p = a.m./p.m. đánh dấu</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Ngày và/hoặc thời gian hiện tại sẽ được thay thế cho các mẫu DateTime khi chúng được dán.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Tất cả các sự cố của mẫu này sẽ sử dụng văn bản được cung cấp. &lt;/P&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Tất cả các sự cố của mẫu này sẽ sử dụng văn bản được cung cấp. &lt;/P&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Hoàn thành việc nối thêm</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Bật khối</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Bật nội tuyến</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Chuyển đổi hướng dẫn sử dụng</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Chuyển đổi hướng dẫn sử dụng</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Tạm dừng nối thêm</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Chuyển đổi trước</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Chuyển đổi trước</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Tiếp tục nối tiếp</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Nối thêm ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Dán</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Ghim</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Giải nén</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Ẩn tất cả '{0}' Thông báo</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Miễn nhiệm</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Ứng dụng hoạt động cuối cùng không xác định. Chuyển sang ứng dụng dự định sang dán khỉ.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Dán thành: &lt;em&gt; &lt;i class = "Paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Giảm thiểu</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Vui lòng chờ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Khóa</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Giúp đỡ</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Sao chép dán</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Sở thích</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Khôi phục mặc định</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Lọc...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Thêm ứng dụng</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Thêm trang web</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Khối?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Ứng dụng</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Khối miền?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Chặn url?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Lãnh địa</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Nhận dạng URL nguồn phụ thuộc vào cách ứng dụng máy chủ thân thiện với clipboard nên không thể đảm bảo từ chối</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Trang web</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Một số tính năng khỉ sử dụng tự động hóa bàn phím để mô phỏng các sự kiện 'sao chép' trong các ứng dụng khác.
+
+Thêm và/hoặc chọn ứng dụng với phím tắt sao chép duy nhất (như bảng điều khiển hoặc shell chẳng hạn) để đảm bảo các tính năng đó hoạt động đúng.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Sao chép phím tắt</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Không có</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Chỉ các cài đặt trước được chọn sẽ được sử dụng cho ứng dụng được chỉ định. Khi không được xác định, các cài đặt trước mặc định được tìm thấy trong &lt;em&gt; thanh bên clipboard &lt;/em&gt; sẽ được sử dụng.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Nhiều tính năng khỉ sử dụng tự động hóa bàn phím để tương tác với các ứng dụng khác.
+
+Một số ứng dụng (như một số bảng điều khiển hoặc shells chẳng hạn) có thể có phím tắt dán không mặc định.
+
+Để đảm bảo khả năng tương tác thích hợp, hãy ghi lại các phím tắt cho ứng dụng đó ở đây.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Dán phím tắt</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Độc giả</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Tất cả các giám sát viên clipboard từ các ứng dụng bị từ chối sẽ được &lt;b&gt; bị bỏ qua &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Nhà văn</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Biên tập...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Định dạng</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Vật bị loại bỏ</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Bạn cũng muốn xóa tất cả các clip {0} khỏi '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Xóa clip?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Ứng dụng</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Duyệt đến ứng dụng ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Chọn Đường dẫn ứng dụng</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa các phím tắt tùy chỉnh cho {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa các định dạng tùy chỉnh cho {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Không có định dạng clipboard được chỉ định cho ứng dụng này. Không có dữ liệu nào được đọc từ nó thông qua cắt/sao chép hoặc cố gắng kéo - và - rơi vào khỉ</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Không có định dạng clipboard được chỉ định cho ứng dụng này. Dán tự động hoặc kéo - và - thả từ khỉ sẽ không có ảnh hưởng (dữ liệu trống của nó).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn đặt lại tất cả các phím tắt? Tất cả các phím tắt tùy chỉnh sẽ được gỡ bỏ.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn thay đổi cấu hình định tuyến phím tắt của mình thành '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Yêu thích</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Định dạng</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Hôm nay</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Rác</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Về</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Dễ dàng phải không?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Nhấp đúp vào unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Phong tục</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Toàn cầu</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Sự kết hợp này xung đột với '{0}' sẽ được xóa nếu được lưu.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Một lối tắt phải được cung cấp.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Đây là một lối tắt toàn cầu. Điều đó có nghĩa là nó sẽ cố gắng thực hiện bất cứ khi nào nó được thực hiện. Cố gắng làm cho nó đủ độc đáo (hoặc thay đổi 'loại định tuyến') để không xung đột với các phím tắt từ các ứng dụng khác.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Toàn cầu</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Phím tắt phải chứa một và chỉ một khóa không điều chỉnh.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Nhấn bất kỳ phím nào để ghi ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Gán phím tắt</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Tìm hiểu thêm ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Nâng cấp</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Hủy bỏ</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Sửa chữa</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Phớt lờ</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>KHÔNG</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Được rồi</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Thử lại</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Tắt</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Nộp</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Đúng</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Hàng năm</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Hàng tháng</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Thử miễn phí!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Chu kỳ thanh toán</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Kiểm tra kết nối của bạn
+và thử lại.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Thanh toán tiếp theo</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Mật khẩu</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Đăng ký</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Email không hợp lệ</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Mất khẩu không hợp lệ.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Mật khẩu phải là tối thiểu các ký tự {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Nhớ?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Kiểm tra email của bạn để xác nhận tài khoản của bạn</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Đặt lại mật khẩu</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Không bao giờ</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Thử nghiệm miễn phí {0} ngày</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Có một vấn đề thực hiện
+Mua hàng của bạn.
+
+Kiểm tra kết nối của bạn và
+Cài đặt có thể giúp.
+
+Bạn có muốn thử lại không?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Tài khoản của bạn đã thành công
+Nâng cấp lên:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Mua thành công!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Kết nối thất bại.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Thử lại</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Tài khoản đã thay đổi</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Đăng ký của bạn bây giờ là {0}/{1} với nội dung {2} và lưu trữ thùng rác {3}.
+Nhưng đừng lo lắng, không có dữ liệu nào bị mất sau khi hạ cấp. Chỉ những clip mới sẽ được đánh giá.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Chúc mừng! Đăng ký của bạn bây giờ là {0}/{1} với nội dung {2} và lưu trữ thùng rác {3}.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Rác rưởi hoặc không liên kết một cái gì đó
+từ '{0}' để thêm nhiều hơn.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' lưu trữ là {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Khôi phục</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} bị chặn</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Nội dung &amp; năng lực rác rưởi đạt được!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' lưu trữ là {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Năng lực nội dung đạt được!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Bạn có thể che giấu những cảnh báo này bằng cách
+Nhấp vào 'Ẩn tất cả' từ
+Menu Tùy chọn ở trên.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Lưu trữ rác tối đa là {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Khả năng rác rưởi đạt được!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} không hợp lệ</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} phải ít nhất là {1} ký tự</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} chỉ có thể là {1} ký tự</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Dán để: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Thanh toán cho {0} của bạn
+Đăng ký là do {1}
+và chưa được nhận.
+
+Vui lòng cập nhật của bạn
+Thông tin thanh toán.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Thanh toán cho {0} của bạn
+Đăng ký là do {1}
+và chưa được nhận.
+
+Vui lòng kết nối với
+Internet trên thiết bị
+với đăng ký của bạn và
+Khởi động lại để tiếp tục
+Sử dụng gói {0} của bạn.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Thanh toán cho {0} của bạn
+Đăng ký là do {1}
+và chưa được nhận.
+
+Vui lòng mở hoặc khởi động lại
+Khỉ trên thiết bị
+với đăng ký của bạn đến
+Tiếp tục sử dụng của bạn
+{0} Kế hoạch.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Tài khoản đã hết hạn</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store không cho phép cấp
+Thay đổi để đăng ký addons.
+
+Bạn phải hủy bỏ
+{0}/{1} tự lên kế hoạch
+Hoặc bạn sẽ bị tính phí cho cả hai.
+
+Bạn có muốn đi làm điều đó bây giờ không?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Mật khẩu của bạn đã được thiết lập lại.
+
+Vui lòng kiểm tra email của bạn và
+Theo liên kết để thay đổi
+mật khẩu của bạn.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>(Các) tác giả</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Cần phải chấp nhận các điều khoản cấp phép sau khi tiếp tục.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Các gói sau đây yêu cầu bạn chấp nhận các điều khoản cấp phép của họ trước khi cài đặt.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Tôi từ chối</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Nhấp vào "Tôi chấp nhận" có nghĩa là bạn đồng ý với các điều khoản cấp phép cho ứng dụng này. Nếu bạn không đồng ý với các điều khoản, hãy nhấp vào "Tôi từ chối".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Nhấp vào "Tôi chấp nhận" có nghĩa là bạn đồng ý với các điều khoản cấp phép cho (các) plugin được liệt kê ở trên. Nếu bạn không đồng ý với các điều khoản, hãy nhấp vào "Tôi từ chối".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Xem giấy phép</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Chấp nhận giấy phép</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Tôi chấp nhận</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Tích cực</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Ngoại tuyến</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Chưa đăng ký</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Xong</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>Mật khẩu không khớp</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Mật khẩu</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Đăng ký của bạn là
+Bây giờ được đặt thành {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Tài khoản được tìm thấy</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Đăng nhập thất bại</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Đăng ký không thành công</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Đăng ký thành công!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Đặt lại lỗi</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Đăng ký</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Có gì mới</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Không bao giờ</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Vô hạn</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>dung tích</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>còn lại</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>tổng cộng</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Thanh toán của bạn là quá hạn.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Các phím tắt ghi đè độc quyền chỉ có thể chứa một khóa và khóa đó không thể là khóa sửa đổi.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Hết hạn</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Đang tải</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Tàn tật</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Ghi chú! Mật khẩu này là tùy chọn và chỉ để bảo mật thêm. Dữ liệu của bạn đã được mã hóa và không bao giờ chia sẻ. Mật khẩu này chỉ đơn giản là ngăn chặn ai đó không phải bạn tải khỉ nếu họ bằng cách nào đó có quyền truy cập vào máy tính để bàn của bạn (bị đánh cắp, bạn rời khỏi phòng, v.v.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Hãy nhớ cài đặt thả cho:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Duyệt plugin</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Phân tích</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Hành động nhanh chóng</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Chuyển đổi chỉnh sửa</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Chuyển đổi ghim</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Chú thích</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Văn bản thô</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Mở trong cửa sổ</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Nhấp + Ctrl để theo dõi ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Nhấp + Alt để theo dõi ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Ghim hoặc thả bất kỳ phương tiện truyền thông ở đây!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Thông thoáng</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Ngưỡng trên 0 sẽ cung cấp kết hợp màu mờ bằng khoảng cách Euclide trong không gian màu RGBA.
+
+Ví dụ: nếu màu đỏ (#ff0000) là thuật ngữ tìm kiếm và màu đen (#000000) là một pixel trong clip hình ảnh, thì khoảng cách màu sẽ là 255. khoảng cách đen đến trắng là tối đa có thể là 510, bao gồm cả kênh alpha</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Tất cả những điều sau đây đều đúng</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Bảng tạm</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Bộ sưu tập</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Chế độ chuột</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Gây nên</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Tạm ngừng</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Bản tóm tắt</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Trình kích hoạt mới</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Thêm đặt trước</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Khỉ thả thuật sĩ</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Cài đặt trước</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Máy phân tích</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>CẮT</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Định hướng chu kỳ</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Chuyển đổi bố cục lưới</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Trường hợp nhạy cảm</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Ngưỡng</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Cả từ</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Không có thiết lập</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Lộ trình</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Hoạt động</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Lưới</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Xong</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Kế tiếp</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Trước</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Nhảy</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Tài khoản hiện có?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Thanh toán tiếp theo</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Đăng ký cho phép bạn thực hiện đăng ký trả phí trên tất cả các thiết bị của mình (theo tính khả dụng). Chúng tôi sẽ không spam email của bạn, chúng tôi hứa.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Đăng ký</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Tên tài khoản</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Cần đăng ký?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Odd, không có gì có sẵn. Có gì đó không sai 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Di dời</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Yêu cầu khởi động lại</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Trình độ cao</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Trích xuất lỗi plugin từ '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Lỗi cài đặt plugin: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Lỗi cài đặt plugin '{0}' Cấu trúc thư mục tham nhũng hoặc không chính xác. Biểu hiện nên tồn tại tại '{1}' nhưng không được tìm thấy.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Trình bày plugin phân tích lỗi '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Không có plugin được tải với GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} lỗi</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Plugin sắp xếp lỗi thành temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Lỗi sao lưu '{0}' thành '{1}'. Chi tiết: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Text gõ sẽ được tự động áp dụng cho tìm kiếm khi không tập trung vào hộp văn bản.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Đầu vào tìm kiếm tự động</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Thay đổi mật khẩu không thành công</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Thay đổi</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Đổi mật khẩu</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Thông thoáng</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Mật khẩu rõ ràng</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Nội dung</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Kích thước phông chữ nội dung</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Khi đúng, nội dung bên ngoài được chèn vào clip sẽ sử dụng định dạng clip chứ không phải những gì có sẵn từ nguồn.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Dán, thả hoặc nối với định dạng đích</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn quên mật khẩu?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Quên</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Quên mật khẩu</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Hồ sơ</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Ẩn hình mờ năng lực</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Khi nội dung clipboard mới được thêm vào, nó sẽ không được theo dõi như một clip mới</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Bỏ qua việc bổ sung</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Khi bảng tạm phù hợp với một clip hiện có, clip đó sẽ được sử dụng thay vì tạo một clip mới</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Bỏ qua các bản sao mới</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Clipboard thay đổi từ bên trong ứng dụng sẽ không được theo dõi</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Bỏ qua theo dõi clipboard nội bộ</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Không gian, tab và dòng mới sẽ bị bỏ qua khỏi việc theo dõi</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Chỉ bỏ qua không gian trắng</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Tải vào đăng nhập</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Cửa sổ động</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Độ mờ</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Hiển thị hành vi</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Cửa sổ chính sẽ được tiết lộ bằng cách thực hiện một cử chỉ cuộn ở cạnh trên cùng của màn hình của bạn</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Hiển thị trên màn hình trên cùng</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Khối lượng thông báo</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Cài đặt này sẽ theo dõi hệ thống - số bàn phím rộng cho số liệu thống kê sử dụng. Thông tin này là riêng tư và không được chia sẻ nhưng cũng không bảo đảm. Kết quả chính xác có thể yêu cầu cung cấp lệnh dán bàn phím cụ thể của ứng dụng trong 'Cài đặt -&gt; Sao chép &amp; Dán -&gt; phím tắt'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Dán lịch sử</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Quá nhiều clip được ghim (như tab trình duyệt) có thể tiêu thụ bộ nhớ quan trọng. loại bỏ là vào đầu tiên - trong - đầu tiên - ra</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Dung lượng pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Điều này áp dụng cho tất cả các đầu vào tự động có thể hoàn thành, các giá trị thấp hơn sẽ cải thiện hiệu suất</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Giới hạn văn bản gần đây</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Bạn có chắc bạn muốn
+Khôi phục tùy chọn mặc định?
+
+Điều này không thể được hoàn tác!
+
+*Ứng dụng sẽ khởi động lại khi hoàn tất.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn đặt lại tất cả các thông báo?
+
+*Điều này không thể được hoàn tác!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste đặt bảng tạm (ghi đè) khi dán vào một chương trình bên ngoài. Điều này sẽ &lt;b&gt; cố gắng &lt;/b&gt; để khôi phục trạng thái của clipboard sau khi dán bên ngoài.
+
+Tổng số phục hồi không thể được đảm bảo và có thể giảm hiệu suất hoặc thậm chí gặp sự cố khỉ tùy thuộc vào nguồn dữ liệu.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Đặt lại Clipboard sau khi dán khỉ</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Không thể xóa bộ nhớ cache plugin khỏi đường dẫn: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Tất cả các plugin sẽ được đặt lại về trạng thái mặc định ban đầu</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Bộ đệm plugin</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn đặt lại tất cả các plugin về mặc định?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn đặt lại mật khẩu của mình không?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Tất cả các phím tắt ứng dụng sẽ được đặt lại về các cử chỉ khóa mặc định của chúng.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Đặt lại phím tắt</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Tất cả các thông báo bị bỏ qua đã đặt trước.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Khôi phục thông báo</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Nội dung phong phú</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Đặt mật khẩu</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Hiển thị gợi ý</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Hiển thị trong Thanh nhiệm vụ</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Hiển thị trong Trình chuyển đổi nhiệm vụ</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Hiển thị tiêu đề</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Khi được bật, việc kéo từ bất kỳ ứng dụng nào lên đầu màn hình sẽ tiết lộ khỉ để dễ dàng thả nội dung vào khỉ.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Hiển thị trên đường đến trên màn hình</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Chủ đề âm thanh</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Kiểm tra chính tả</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Khi khởi động, nguồn của bảng tạm sẽ không được biết và tùy thuộc vào cài đặt bảo mật của bạn, nội dung có thể đến từ một trang web hoặc ứng dụng bị loại trừ.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Thêm clipboard khởi động</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Nghe Clipboard khi khởi động</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Lựa chọn</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Thận trọng! Các màu bảng màu khác được chọn bằng cách sử dụng toán học không phải mắt! Vì vậy, hãy nhận biết một số kết hợp màu sắc và phong cách có thể không có độ tương phản thích hợp cho khả năng đọc.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Màu chủ đề</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Phong cách chủ đề</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Tự động dọn rác sẽ xảy ra khi khởi động trong khoảng thời gian đặt.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Dọn dẹp thùng rác</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Giao diện</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Giới hạn hoàn tác cao có thể ảnh hưởng đến hiệu suất</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Hoàn tác giới hạn</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Không giới hạn</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Được sử dụng trong tìm kiếm tệp nâng cao cho các loại tệp không đặt trước</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Người dùng - Tiện ích mở rộng tìm kiếm được xác định</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Tìm và thay thế...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Dán ở đây</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Chia sẻ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Xem</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Quản lý...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Đổi tên</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Điểm: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Loại: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Xóa vĩnh viễn</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Duyệt đến '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Biến đổi</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Đầu vào</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Đầu ra</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Khôi phục</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Chọn hình ảnh ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Màu sắc</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Quản lý '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Vui lòng chờ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Màu nền</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Làm sạch tất cả</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Định dạng bảng tạm</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Xóa hết</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Chỉnh sửa chi tiết</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Tìm thấy</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Màu chữ</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Định dạng sơn</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Trong lựa chọn</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Chèn hình ảnh</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Chèn đường dẫn</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Chèn video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Trường hợp khớp</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Bản mẫu mới</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Mẫu tiếp theo</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Nhập văn bản Paste ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Mẫu trước</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Biểu hiện thông thường</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Thay thế tất cả</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Thay thế</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Cả từ</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Quấn quanh</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Khối</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Lãnh địa</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Hiển thị thư mục</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Mở khóa</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Về</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Chất nối khối</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Nối dây nội tuyến</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Tự động - Sao chép</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Chế độ</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Vui lòng đợi khỉ đang tải ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Từ bỏ</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Nhấp vào Dán</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Lọc</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Xóa vĩnh viễn tất cả</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Khôi phục lại tất cả</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Hoạt động</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL đã tồn tại: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL phải ở định dạng hợp lệ.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Nhập URL đầy đủ:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Thêm URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Nhập giá trị</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Sao chép văn bản hoặc tệp để áp dụng.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Phụ lục {0} {1} chế độ được kích hoạt</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Thay đổi bảng tạm bây giờ sẽ được thêm vào</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Sau khi được kích hoạt chế độ nối</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Thay đổi bảng tạm bây giờ sẽ được chuẩn bị</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Trước khi kích hoạt chế độ nối</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Khối</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Hành vi clipboard bình thường đã được khôi phục</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Phụ lục bị vô hiệu hóa</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Thêm vào đầu hoặc botom của clip</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Chế độ phụ lục được kích hoạt</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Nội tuyến</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Thủ công</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Nối vào lựa chọn hiện tại của bạn.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Chế độ phụ lục thủ công được kích hoạt</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Tích lũy clipboard tạm dừng</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Nối bị tạm dừng</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Tích lũy clipboard được nối lại</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Nối lại được nối lại</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn hoàn thành việc nối thêm?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Chỉnh sửa trong chế độ tương thích sẽ loại bỏ tất cả các định dạng phong phú. Bạn có chắc là bạn muốn sửa đổi điều này?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Cảnh báo suy thoái dữ liệu</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Tích cực</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Đã bật</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Tắt</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>TRÊN</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Tạm dừng</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Kết quả</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Đã xảy ra lỗi không xác định.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>những nỗ lực còn lại</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Nhập mật khẩu</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Xác nhận</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Liên hệ</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Ngày giờ</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa tất cả các cách sử dụng của '{0}' không?
+
+Điều này không thể được hoàn tác!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Năng động</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Tĩnh</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} trống ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Sắp có thêm!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Tải trọng đăng nhập không thể vô hiệu hóa</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Đăng nhập tải vô hiệu hóa thành công</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Đăng nhập tải Bật không thành công</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Đăng nhập tải cho phép thành công</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Trốn</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Monkey Paste hiện được tải.
+Clipboard Lắng nghe là: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Nạp vào</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Trình diễn</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Chế độ chọn bản sao tự động: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Chế độ thay đổi</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Nhấp chuột phải vào chế độ Dán: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin được cập nhật</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Dán '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Chạy '{0}' Trình phân tích</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Chạy '{0}' Trình kích hoạt</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Chọn '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa '{0}' và tất cả các hành động được liên kết?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Cò súng</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Bạn có muốn xóa tất cả các hành động phụ cho '{0}' không? (Nếu không, chúng sẽ được tái hiện thành '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Xóa các tùy chọn</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Bạn có thực sự muốn goto '{0}' không?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Máy phân tích</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Hoạt động ứng dụng</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Bảng tạm</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Nội dung</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Bộ chuyển đổi</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Văn hoá</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Dữ liệu</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Phương hướng</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Kéo và thả</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Thả thuật sĩ</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Biểu tượng</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Tiều phu</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Giao diện</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Hoạt động dán</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Sở thích</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Tìm kiếm</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Âm thanh</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Khay hệ thống</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Bộ sưu tập</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Chủ đề</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Gây nên</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Hoạt động trang web</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Đặt bảng tạm cho clip đầu vào.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Báo động</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>BLIP</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Kêu vang</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Thông báo thông báo thông báo khay và/hoặc thông báo khay hệ thống chung. Cảnh báo hành động không có ảnh hưởng đến đầu vào của họ.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Tin nhắn</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Con khỉ</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Xem trước</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Trình diễn?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Thông báo bánh mì nướng thời gian được hiển thị trong giây. Khi giá trị là 0 tin nhắn phải được đóng bằng tay.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Lịch chiếu phim)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Âm thanh?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Loại âm thanh</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Âm lượng</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Máy phân tích</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Xử lý clip đầu vào của nó bằng cách sử dụng cài đặt trước phân tích được chỉ định.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Nội dung đầu vào được liên kết với bộ sưu tập đã chọn</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Liên kết clip đầu vào của nó với bộ sưu tập thẻ được gán.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Nhãn</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Trường hợp nhạy cảm?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Điều này có thể là văn bản tĩnh để so sánh với đầu vào và/hoặc bao gồm các thuộc tính được chọn (thông qua nút bộ lọc) sẽ được thay thế khi điều kiện được đánh giá.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Điều kiện dữ liệu</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Một truy vấn JsonPath tùy chọn sẽ được áp dụng cho 'thuộc tính đầu vào' đã chọn trước khi điều kiện được đánh giá.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Bộ lọc đầu vào</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Thuộc tính clip được sử dụng cho điều kiện này.
+
+Thuộc tính 'đầu ra cuối cùng' hiện chỉ được hỗ trợ khi điều kiện này là một đứa trẻ của một hành động phân tích và dữ liệu được cung cấp sẽ thay đổi tùy thuộc vào đầu ra của trình phân tích mẹ.
+
+Để khắc phục sự cố, hãy đính kèm 'hành động cảnh báo' vào cha mẹ của điều kiện này và đặt tham số 'tin nhắn' của cảnh báo để khớp với thuộc tính đầu vào này. Điều này sẽ cho phép xem xét dữ liệu thực tế đang được sử dụng cho điều kiện này.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Tài sản đầu vào</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Thực hiện so sánh văn bản trên clip đầu vào hoặc đầu ra hành động trước đó. Khi so sánh thất bại (nó không phải là một trận đấu), không có hành động con nào sẽ được thực thi. Vì vậy, nó hoạt động như một cổng logic.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Tất cả các hoạt động đúng hoặc sai trong đó các hành động của con sẽ chỉ thực thi nếu kết quả là đúng.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Tình trạng</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Được kích hoạt khi một clip thuộc loại được chọn được thêm vào hệ thống theo bất kỳ cách nào (Clipboard, kéo - và - thả, phân tích được tạo hoặc nhân đôi).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Chỉ thực thi kích hoạt này nếu clip đầu vào là mới và không phải là trùng lặp. Điều này độc lập với bất kỳ cài đặt ưu tiên nào về việc liệu nội dung mới có bị bỏ qua hay không.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Bỏ qua trùng lặp</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Chỉ các clip của loại này sẽ kích hoạt hành động này.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Liên kết clip đầu vào của nó với bộ sưu tập thẻ được gán.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Được kích hoạt khi một clip được liên kết với bộ sưu tập thẻ được chỉ định.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Bộ sưu tập</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Lượng thời gian tính bằng mili giây đã chờ đợi trước khi trẻ thực hiện</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Trì hoãn</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Thử nghiệm) chủ yếu được sử dụng cùng với hành động lặp lại cho các nguồn từ xa hoặc viện trợ với các hoạt động chạy dài.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Khi để trống, tệp đầu ra sẽ sử dụng tiêu đề của clip đầu vào làm tên tệp.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Tên tùy chỉnh</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Thư mục nơi tệp sẽ được viết.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Danh mục</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Lưu đầu vào vào thư mục đã chọn.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Được kích hoạt khi nội dung của thư mục đã chọn thay đổi. Đầu ra sẽ là một ứng dụng mới hoặc hiện có (khi bỏ qua các tùy chọn sao chép được bật) clip tệp của tệp hoặc thư mục đã thay đổi cùng với loại thay đổi là đầu ra cuối cùng của nó.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Thư mục</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Bỏ qua trùng lặp</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Giá trị 0 sẽ lặp lại hành động cha mẹ vô thời hạn</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Lặp lại số lượng</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Lượng thời gian tính bằng mili giây để chờ đợi khi hành động của cha mẹ hoàn thành</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Chậm trễ lặp lại</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Thử nghiệm) Được sử dụng để tạo các vòng lặp hành động hoặc các tác vụ lặp lại. Khi được lặp lại, nó sẽ thực hiện tất cả trẻ em một lần nữa với đầu vào ban đầu của nó. Khi sử dụng một khoảng thời gian mà không có số lần lặp lại, kích hoạt sẽ cần phải bị vô hiệu hóa và tái hiện để tạm dừng lặp lại. Có thể hữu ích cho việc bỏ phiếu hoặc tự động hóa web.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Được kích hoạt bởi một phím tắt toàn cầu mà bạn xác định. Nếu khỉ hoạt động, nó sẽ cố gắng sử dụng clip đã chọn (nếu có) làm đầu vào. Nếu không, nó sẽ cố gắng sử dụng bảng tạm làm đầu vào của nó.
+
+Lưu ý: Trình kích hoạt phím tắt vẫn sẽ thực thi nếu không có đầu vào để giữ cho nó linh hoạt (vì vậy nó có thể là trình kích hoạt macro, v.v.) vì nó không phải là sự kiện do dữ liệu - điều khiển.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Trình kích hoạt phím tắt</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Được kích hoạt khi nhấn phím tắt được ghi lại bất cứ lúc nào với bảng tạm hiện tại</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Hành động này yêu cầu ứng dụng phải khởi động lại. Bạn có muốn làm điều đó bây giờ không?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Có một vấn đề. Bạn cần khởi động lại ứng dụng theo cách thủ công.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Phân tích với chú thích</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Chú thích kích hoạt</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Được xây dựng trong các yếu tố được đọc - chỉ. Trùng lặp để thay đổi.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Vô danh</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Phong tục</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Hôm qua</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} ngày trước</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 giờ trước</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} giờ trước</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Vừa rồi</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Một phút trước</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} phút trước</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Tháng trước</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} tháng trước</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Tuần trước</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} tuần trước</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} năm trước</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Chú thích</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Tên ứng dụng</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Đường dẫn ứng dụng</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Trường hợp nhạy cảm</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Nội dung</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Loại tệp</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Lọai hình ảnh</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Biểu hiện thông thường</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Dạng văn bản</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Tiêu đề</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Tiêu đề URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Cả từ</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Giống như cuộn dọc theo cạnh màn hình trên cùng để mở, điều này sẽ khóa cửa sổ chính khi mở. Cho phép các quy trình công việc được nhắm mục tiêu nhanh hơn.
+
+* Các góc về tất cả các màn hình của bạn, không phải trên mỗi màn hình.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Hiển thị cửa sổ và khóa</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Miễn phí!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Cho chúng tôi 5 sao!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Xóa hết</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Xóa tất cả nội dung</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa
+Tất cả các clip của bạn?!
+
+*Hoạt động này không thể hoàn tác!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Tôi là một nhà phát triển Indy, vui lòng hiển thị một số hỗ trợ!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Giống như khỉ?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} chỉ chấp nhận đầu vào loại (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Chế độ sao chép tự động - Mô phỏng sự kiện 'sao chép' mỗi khi nút chuột trái được phát hành.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Nhấp chuột phải vào chế độ Dán - Mô phỏng sự kiện 'Dán' mỗi khi nút chuột phải được phát hành</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Đặt trước</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Hiển thị thư mục plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Báo cáo</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Xem</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Hiển thị chú giải công cụ</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Máy phân tích chú thích đầu vào của họ hoặc tạo clip mới làm đầu ra. Trẻ em của máy phân tích cần phải quyết định cái nào chúng cần làm đầu vào của chúng. Đây thường là đầu ra cuối cùng.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Kiểu đầu vào</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trình thiết kế kích hoạt '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Chọn một {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Không tìm thấy...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trình kích hoạt</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Khi được kiểm tra kết quả đúng hoặc sai của điều kiện sẽ được lật. Vì vậy, ví dụ, điều kiện 'chứa' sẽ trở thành 'không chứa'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Không làm</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Vui lòng chờ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Người chọn màu</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Chọn màu khớp</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Giống như một trình kích hoạt phím tắt nhưng khi nhấn kết hợp khóa, sự kiện 'sao chép' sẽ được mô phỏng trong ứng dụng hoạt động để nó vẫn hoạt động như bản sao nhưng sau đó chuỗi hành động được gắn vào trình kích hoạt bản sao khỉ sẽ được thực thi trong nền bằng cách sử dụng Mô phỏng sao chép dữ liệu clipboard.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Bộ lọc nâng cao</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Ẩn bộ lọc</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Khôi phục bộ lọc</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Tạo bộ lọc</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Tùy chọn) Khi trống trống, bảng tạm sẽ được đặt bằng đầu vào của hành động này. Bất cứ điều gì được cung cấp ở đây sẽ chỉ được coi là văn bản đơn giản.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Nội dung cho clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Khi đúng, sẽ không có clip nào được thêm vào sau khi hành động này đặt bảng tạm.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Phớt lờ</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Không có trình phân tích được chọn cho hành động '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Trình phân tích cho hành động '{0}' không tìm thấy</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Phụ huynh '{0}' chỉ các bộ lọc cho '{1}' Kiểu nội dung và trình phân tích '{2}' sẽ không bao giờ thực thi vì nó không hỗ trợ '{3}' loại đầu vào</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Không có thẻ được chọn cho phân loại '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag cho Classifier '{0}' không tìm thấy</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>So sánh giá trị chỉ có thể là các chữ cái, số hoặc khoảng trống</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Không có thẻ được chọn cho clip được gắn thẻ kích hoạt '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag cho clip được gắn thẻ kích hoạt '{0}' không tìm thấy</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Không có thư mục đồng hồ được chỉ định cho '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Thư mục xem '{0}' không tìm thấy cho Trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>PIRITER PATH PATH cho hành động '{0}' không đặt</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Không tìm thấy đường dẫn của người viết tệp '{0}' cho '{1}'.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Thanh nhiệm vụ</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Tìm hiểu về các plugin</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Khôi phục cấu hình phân tích này</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Thay đổi nhật ký</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Vui lòng kết nối với Internet và thử lại sau.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - trợ giúp</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} là phiên bản mới nhất</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Tất cả các bạn đã lên - đến ngày!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Kiểm tra cập nhật...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Phiên bản mới có sẵn!
+
+Nhấn vào đây để cập nhật lên '{0}'</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Nhấp vào bên dưới để cập nhật lên '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Cập nhật có sẵn!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Cập nhật bây giờ</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' chứa các giá trị được chia sẻ. Bạn muốn thiết lập lại những gì?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Thông thoáng</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Xóa các tìm kiếm gần đây</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Đặt lại tất cả</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Đặt lại chia sẻ</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Đặt lại không được chia sẻ</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Gọi các hành động ứng dụng được chỉ định. Tất cả các lệnh của ứng dụng đều không trạng thái và clip đầu vào của chúng bị bỏ qua.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Khi không được kiểm soát và lệnh không thể bắn, chuỗi thực thi sẽ dừng lại. Nhiều lệnh sẽ yêu cầu một số trạng thái ứng dụng cụ thể để thực thi.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Luôn tiếp tục?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Lệnh để thực hiện.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Không có lệnh được chọn cho lệnh ứng dụng '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Lệnh cho lệnh ứng dụng '{0}' không tìm thấy</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Đã chọn</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Khởi động lại</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Có một vấn đề cập nhật '{0}'. Để hoàn thành bản cập nhật, bạn sẽ cần khởi động lại và cài đặt '{0}' một lần nữa (đừng lo lắng tất cả các cài đặt của bạn sẽ được khôi phục).
+
+Bạn có thể khởi động lại ngay bây giờ và hoàn thành bản cập nhật bằng cách cài đặt lại, bỏ qua điều này và cập nhật nó sau hoặc hủy cập nhật tất cả cùng nhau và tiếp tục sử dụng phiên bản '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Cập nhật lỗi</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Không thể tải xuống cập nhật</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Cập nhật không thành công</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Để hoàn thành cập nhật, bạn sẽ cần phải khởi động lại. Bạn có muốn khởi động lại bây giờ hay muộn không?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Cập nhật sẵn sàng</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Sau đó</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Khởi động lại ngay bây giờ</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Chưa giải quyết</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} đã được cập nhật thành công thành {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Các plugin lõi được yêu cầu và không thể loại bỏ.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Cập nhật đang chờ xử lý. Khởi động lại để hoàn thành.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Chưa giải quyết</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Một sự gỡ cài đặt đang chờ xử lý. Vui lòng khởi động lại nếu bạn muốn cài đặt lại.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Để hoàn thành việc gỡ cài đặt, bạn sẽ cần phải khởi động lại. Bạn có muốn khởi động lại bây giờ hay muộn không?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Hoàn thành việc gỡ cài đặt?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Chưa được công bố</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Tự động - Đã tạo cài đặt trước mặc định cho '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Không có clip được chọn</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Phân tích clip được chọn</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Gán một phím tắt để chạy '{0}' trên clip đã chọn</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Dán toàn cầu</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Gán phím tắt dán toàn cầu cho '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Quên mật khẩu?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Chính sách bảo mật</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Yêu cầu khởi động lại) Khi thông tin chẩn đoán được bật sẽ được đăng nhập vào hồ sơ. Điều này có thể làm chậm hiệu suất và có thể chứa thông tin cá nhân.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Đăng nhập vào tập tin</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Mở thư mục nhật ký</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Duyệt plugin</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Đọc</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Viết</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Gửi phản hồi hoặc báo cáo lỗi</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Điều này chỉ giấu cửa sổ chính. Tất cả các cửa sổ hộp thoại không phải khác luôn được hiển thị trong Thanh tác vụ.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Tìm kiếm trong '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Thêm bộ lọc</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Chỉnh sửa loại tham gia</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Xóa bộ lọc này</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Mở giúp đỡ về điều này ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clip</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Thay đổi</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Không bao giờ</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Bộ</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Không có tiêu đề</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Ghi</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Tài liệu tham khảo nguồn không nhãn</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' được yêu cầu</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Có lỗi)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Giới hạn</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Kho</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Rác</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Vô hạn</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Ứng dụng này hiện phù hợp với các cài đặt và định dạng đầu đọc Clipboard Clipboard mặc định.
+
+Kích hoạt hoặc vô hiệu hóa các cài đặt trước đầu đọc mặc định (từ thanh bên bên trong) sẽ không ảnh hưởng đến cấu hình này. Chỉ các ứng dụng chưa niêm yết theo thiết lập mặc định.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Ứng dụng này hiện phù hợp với các cài đặt và định dạng của người viết clipboard mặc định.
+
+Kích hoạt hoặc vô hiệu hóa các cài đặt trước của người viết mặc định (từ thanh bên clipboard) sẽ không ảnh hưởng đến cấu hình này. Chỉ các ứng dụng chưa niêm yết theo thiết lập mặc định.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Để nối tiếp, bạn phải tháo gỡ người nghe Clipboard (Khay hệ thống -&gt; Sơ yếu lý lịch).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Nối không có sẵn</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Không có cài đặt</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Tôi chỉ nói tiếng Anh và khỉ đã được dịch sang ngôn ngữ này.
+
+Tất cả các phiên bản giao hàng với gói tiếng Anh, vì vậy nếu bạn nói tiếng Anh, bạn có thể thay đổi ngôn ngữ thành bất cứ lúc nào sau khi thiết lập này (Cài đặt -&gt; Tùy chọn -&gt; Quốc tế).
+
+Nếu bạn muốn giúp cải thiện bản dịch, chúng tôi rất muốn nghe từ bạn!
+
+Phản hồi@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Mối quan tâm dịch thuật</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Bạn cần cập nhật khỉ để sử dụng tính năng này.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Phím tắt không được đặt</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Người nghe clipboard bị vô hiệu hóa</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Người nghe clipboard được bật</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Hành động cha '{0}' không hỗ trợ loại đầu vào 'đầu ra cuối cùng'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Tìm hiểu thêm về các kế hoạch</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Ứng dụng</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Cò súng</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Kẹp</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Máy phân tích</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Nhãn</value>
+  </data>
+</root>

@@ -1,0 +1,11 @@
+{
+  "title": "Anotador de texto central",
+  "description": "Proporciona soporte básico de hipervínculo para contenido basado en texto",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Núcleo, anotar, texto, enlace, color, análisis, dirección, teléfono, correo electrónico, moneda, finanzas"
+}

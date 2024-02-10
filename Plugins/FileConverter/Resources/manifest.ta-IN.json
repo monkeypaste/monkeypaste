@@ -1,0 +1,82 @@
+{
+  "title": "கோப்பு மாற்றி",
+  "description": "கோப்புகளை படங்கள் அல்லது உரை உள்ளடக்க வகைகளில் மொழிபெயர்க்க அனுமதிக்கிறது",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/FileConverter",
+  "packageUrl": "https://github.com/monkeypaste/FileConverter/releases/download/v1.0.0/FileConverter.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/FileConverter/master/icon.png",
+  "tags": "கோர், உரை, படம், கோப்பு, மாற்றி, உரைக்கு கோப்பு, படத்திற்கு கோப்பு",
+  "packageType": "Dll",
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "மாற்ற கோப்பு",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      },
+      {
+        "label": "வெளியீட்டு வகை",
+        "description": ".Png அல்லது .txt இப்போது",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "உரை",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "படம்",
+            "value": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "உரைக்கு மாற்றவும்",
+        "iconUri": "text.png",
+        "description": "வழங்கப்பட்ட கோப்பை எளிய உரையாக மாற்ற முயற்சிகள்",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "படத்திற்கு மாற்றவும்",
+        "description": "வழங்கப்பட்ட கோப்பை நினைவகப் படமாக மாற்றுவதற்கான முயற்சிகள்",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

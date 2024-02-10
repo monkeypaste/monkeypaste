@@ -1,0 +1,53 @@
+{
+  "title": "Annotatore di immagini",
+  "description": "Un rilevatore di oggetti totalmente gratuito, locale e leggero addestrato su 80 diversi tipi di oggetti.",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/ImageAnnotator",
+  "packageUrl": "https://github.com/monkeypaste/ImageAnnotator/releases/download/v1.0.0/ImageAnnotator.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/icon.png",
+  "packageType": "Dll",
+  "tags": "Rilevamento dell'immagine, annotazione, immagine, ai, testo",
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageToken": true
+    },
+    "parameters": [
+      {
+        "label": "Fiducia",
+        "description": "Un valore compreso tra 0 e 1 per filtrare la precisione",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "minimum": 0,
+        "maximum": 1,
+        "isRequired": true,
+        "paramId": "conf",
+        "values": [
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": "img64",
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      }
+    ]
+  }
+}

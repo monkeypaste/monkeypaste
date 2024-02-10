@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>L-ebda karatteristiċi ma huma limitati mis-sottoskrizzjoni, biss kapaċità ta 'ħażna u jistgħu jinbidlu f'kull ħin.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Irrestawra l-kont eżistenti tiegħek ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Il-kontenut u t-trash huma
+Limitat għal {0} u {1}
+klipps rispettivament.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Jippermetti sa {2} klipps ta 'kontenut u ħażna mingħajr limitu.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Kontenut mhux ristrett u illimitat u ħażna ta 'trash.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Irrestawra</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>B'xejn</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Bla limitu</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Abbonament</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Il-privatezza tiegħek hija importanti u d-dejta tal-clipboard tista 'tkun personali ħafna. Il-ħażna hija dejjem kriptata imma tista 'tissettja password li tkun meħtieġa f'każ li t-tagħmir tiegħek ikun misruq jew xi ħadd ieħor qed juża t-tagħmir tiegħek.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Meta tkun attivata, it-tkaxkir minn kwalunkwe applikazzjoni sal-parti ta 'fuq tal-iskrin jiżvela l-monkeypaste biex iwaqqa' l-kontenut faċilment fil-monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Li tippermetti s- "serratura" fin-naħa ta 'fuq tax-xellug tat-tieqa prinċipali xorta tippermetti li twaqqa' fuq il-monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Aktar preferenzi tat-twieqi huma disponibbli mill-menu 'Settings -&gt; Preferenzi -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Drag il-banana hawn!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Drag - to - miftuħa</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Shortcuts tat-tastiera jistgħu jiġu riveduti jew mibdula f'kull ħin mill-menu 'Settings -&gt; Shortcuts'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Il-shortcuts globali kollha se jkunu diżattivati ​​sabiex tkun tista 'twaqqafhom lilek innifsek aktar tard.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Il-shortcuts tal-clipboard ta 'MonkeyPaste se jkunu disponibbli fl-applikazzjonijiet kollha.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Intern</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profil tal-ġest</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Ħej! Ejja nwaqqfu ftit affarijiet biex intejbu l-esperjenza ġenerali tiegħek ma 'MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Merħba</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Biex tikseb l-iktar użu mill-monkeypaste, it-tagħbija awtomatikament meta tidħol hija idea tajba. Iżda, dak hu kompletament f'idejk.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Żommha każwali.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Jippermetti</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Tagħbija fuq login?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Meta jkun attivat, ġest tal-iscroll fil-parti ta 'fuq tal-iskrin jiżvela l-monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Xellug - Meta tikklikkja l-ikona taskbar xorta se tiftaħ MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Aktar preferenzi tat-twieqi huma disponibbli mill-menu 'Settings -&gt; Preferenzi -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Faċli?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Skrollja hawn!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Scroll - to - Open</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; MonkeyPaste huwa &lt;span color = "aħmar&gt; integrat kompletament &lt;/span&gt; bi tkaxkir - u - qatra &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Waqqa 'hawn!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; B'dan il-mod, il-monkeypaste jista 'jkun aċċessat &lt;br&gt; &lt;span color = "aħmar"&gt; Mingħajr klikk &lt;/span&gt; jew saħansitra &lt;span color = "aħmar"&gt; batting għajn &lt;/span&gt; &amp; # x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Drag me!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Ipprovaha!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Ipprovaha!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>L-ebda riżultat disponibbli.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Ikkonferma</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Aġġornament</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Tfittxija ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dipendenzi:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Installa</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Int żgur li trid tneħħi '{0}' u l-presets u shortcuts kollha tagħha?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>"{0}" m'għandux riżultat.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>L-ebda għażla.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Xejn</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Krediti:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Deskrizzjoni:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Donazzjoni:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Liċenzja:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL tal-Proġett:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Ippubblikat:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Aqra lili:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Irrapporta abbuż:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Aġġornament</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Verżjoni:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Iftaħ fit-tieqa</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Tiċħad</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Aġġornament</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Ħlief</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Maġenb Ħassar!
+
+Aġġornament biex tevita.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Ħdejn Trash!
+
+Aġġornament biex tevita.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Fajls</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Immaġni</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Ikkupjat {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} fajls | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} linji</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} kopji | {1} Pasti</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Mossa</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Żid</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopja</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Aqta '</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} kopja</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Filtru mhux salvat</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Jekk jogħġbok agħżel -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Qarrejja</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Kittieba</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Handlers</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Ħassar</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplikat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Editja Isem</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Irrisettja</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Azzjoni</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Rotta globali</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Shortcut</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Il-ġesti għandhom ikunu uniċi u jista 'jkun fihom biss ċavetta ta' input waħda.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; intern &lt;/b&gt; il-shortcuts kollha huma limitati għal fl-applikazzjoni. Din mhix verament għażla maħsuba imma tista 'tippermetti li tippersonalizza liema shortcuts biħsiebek tagħmel globali &lt;i&gt; xi darba &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; default &lt;/b&gt; il-shortcuts globali kollha huma attivati. It-tieqa &lt;b&gt; turi / taħbi t-tieqa ewlenija &lt;/b&gt; shortcut tuża &lt;span color = "aħmar"&gt; Override &lt;/span&gt; Rotta għall-buttuna &lt;b&gt; Lock &lt;/b&gt;. Tista 'tbiddel dak ir-rotta jew ġest fi kwalunkwe ħin. Imma &lt;span color = "aħdar"&gt; ipprovaha &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;H1&gt; modi ta 'shortcut globali &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; passiv &lt;/b&gt; Monkeypaste shortcut se jisma 'fi kwalunkwe applikazzjoni. &lt;br&gt;
+* Din hija l-għażla &lt;i&gt; biss &lt;/i&gt; fuq Linux għalissa.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; shortcut se tesegwixxi &lt;b&gt; &lt;i&gt; qabel &lt;/i&gt; &lt;/b&gt; hija mmaniġġjata mill-applikazzjoni attiva. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; shortcut se tesegwixxi &lt;b&gt; &lt;i&gt; wara &lt;/i&gt; &lt;/b&gt; hija mmaniġġjata mill-applikazzjoni attiva. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Override &lt;/b&gt; Meta MonkeyPaste jisma 'ċ-ċavetta tal-input (ċavetta mhux modifikatur) ta' shortcut override se &lt;i&gt; Hide &lt;/i&gt; dik iċ-ċavetta tagħfas mill-applikazzjoni - livell ta 'input. &lt;br&gt;
+Din l-għażla tiggarantixxi li s-shortcut jiġi attivat mingħajr kunflitti għall-applikazzjoni attiva.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; override esklussiv &lt;/b&gt; Dan huwa tip speċjali ta 'modalità ta' override iddisinjata għaċ-ċavetta tas-serratura Caps. Jippermetti biss &lt;b&gt; ċavetta waħda &lt;/b&gt; (mhux modifikatur) għall-assenjazzjoni tagħha. &lt;br&gt;
+Fil-modalità ta 'override normali, is-serratura tista' ssir &lt;i&gt; mwaħħla fuq &lt;/i&gt; meta tkun ippressat flimkien ma 'ċwievet oħra. &lt;br&gt;
+Allura irrispettivament minn liema ċwievet oħra huma 'l isfel, jekk A &lt;b&gt; Hotkey &lt;/b&gt; shortcut huwa ppressat, se jkun overriden u jevitaha milli ssir &lt;i&gt; mwaħħla fuq &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Itfi</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Tagħbija meta dan il-kont tal-utent ikun illoggjat, mhux għal utenti oħra.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Uża l-kuntatti disponibbli (teħtieġ plugin Fetcher) Dan il-qasam se jintuża għall-każijiet kollha ta 'dan il-mudell f'dan id-dokument jew f'kull wieħed minnhom se jkun referenzjat aktar tard. &lt;/p&gt; &lt;p&gt; Allura pereżempju jekk tagħżel l-indirizz elettroniku Hawnhekk allura l-kamp tal-email tal-kuntatt li tagħżel se jintuża għall-każijiet kollha f'dan id-dokument. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = sena qasira &lt;br/&gt; yyyy = sena twila &lt;br/&gt; m = xahar (1-12) &lt;br/&gt; mm = xahar (01-12) &lt;br/&gt; mmm = Arevrevediment ta 'xahar (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = xahar twil (Jannar, Frar ... Diċembru) &lt;br/&gt; d = jum (1 - 31) &lt;br/&gt; dd = jum (01 - 31) &lt;br/&gt; ddd = Jum tal-Ġimgħa fi kliem (it-Tnejn, it-Tlieta ... il-Ħadd) &lt;br/&gt; E = Jum Qasir tal-Ġimgħa bil-Kliem (Tnejn, Tue ... Sun) &lt;br/&gt; D - Jum Ordinal (1, it-2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; H = siegħa f'Am / PM (0-12) &lt;br/&gt; hh = siegħa f'Am / PM (00-12) &lt;br / &gt; H = siegħa fil-jum (0-23) &lt;br/&gt; hh = siegħa fil-jum (00-23) &lt;br/&gt; mm = minuta &lt;br/&gt; ss = it-tieni &lt;br/&gt; sss = millisekondi &lt;br/&gt; A = AM / PM markatur &lt;br/&gt; p = a.m./p.m. markatur</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Id-data kurrenti u / jew il-ħin jiġu sostitwiti għal mudelli ta 'datetime meta jiġu mwaħħlin.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; L-okkorrenzi kollha ta 'dan il-mudell jużaw it-test provdut. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; L-okkorrenzi kollha ta 'dan il-mudell jużaw it-test provdut. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Tispiċċa l-apping</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Enable Block</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Jippermettu inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Toggle Manwal</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Toggle Manwal</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Nieqaf append</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Toggle qabel</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Toggle qabel</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Ibda mill-ġdid append</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Append ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pin</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Aħbi n-notifiki kollha '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Tiċħad</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>L-aħħar app attiva mhux magħrufa. Aqleb għal app maħsuba għal pejst tax-xadini.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Ippejstja lil: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Timminimizza</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Stenna...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Kont</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Għajnuna</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopja u pasta</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferenzi</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Irrestawra n-nuqqasijiet</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Iffiltra ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Żid app</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Żid il-websajt</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blokka?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Isem</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Applikazzjonijiet</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokk tad-Dominju?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blokk URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Dominju</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Ir-rikonoxximent tal-URL tas-sors jiddependi fuq kif il-clipboard favur l-applikazzjoni ospitanti huwa hekk li ċ-ċaħda ma tistax tiġi garantita</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Websajts</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Xi karatteristiċi ta 'MonkeyPaste jużaw l-awtomazzjoni tat-tastiera biex jissimulaw avvenimenti' kopja 'f'applikazzjonijiet oħra.
+
+Żid u / jew agħżel l-app bil-shortcut tal-kopja unika (bħal console jew qoxra pereżempju) biex tiżgura li dawk il-karatteristiċi jiffunzjonaw kif suppost.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopja shortcut</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Xejn</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Il-presets magħżula biss se jintużaw għall-applikazzjoni speċifikata. Meta mhux speċifikat, il-presets default misjuba fil-ġenb &lt;em&gt; clipboard &lt;/em&gt; se jintużaw.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Ħafna karatteristiċi ta 'MonkeyPaste jużaw l-awtomazzjoni tat-tastiera biex jinteraġixxu ma' applikazzjonijiet oħra.
+
+Xi applikazzjonijiet (bħal xi consoles jew qxur pereżempju) jista 'jkollhom shortcut tal-pejst mhux default.
+
+Biex tiżgura interoperabilità xierqa, irreġistra dawk is-shortcuts għal dik l-applikazzjoni hawn.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Paste shortcut</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Qarrejja</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Il-monitoraġġ kollu tal-clipboard minn applikazzjonijiet rifjutati se jkun &lt;b&gt; injorat &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Kittieba</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Edit ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Miċħuda</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Tixtieq ukoll tneħħi l-klipps kollha {0} minn '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Neħħi l-klipps?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Applikazzjoni</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Ibbrawżja għall-app ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Agħżel it-triq tal-applikazzjoni</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Int żgur li trid tneħħi shortcuts tad-dwana għal {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Int żgur li trid tneħħi formati tad-dwana għal {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>M'hemm l-ebda formati ta 'clipboard assenjati għal din l-app. L-ebda dejta ma tinqara minnha permezz ta 'cut / copy jew tipprova tkaxkir - u - waqqa' fil-monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>M'hemm l-ebda formati ta 'clipboard assenjati għal din l-app. Pejst awtomatizzat jew tkaxkir - u - qatra minn MonkeyPaste ma jkollha l-ebda effett (id-dejta vojta tagħha).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Int żgur li trid tirrisettja l-shortcuts kollha? Il-shortcuts kollha tad-dwana se jitneħħew.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Int żgur li trid tibdel il-profil tar-rotta ta 'shortcut tiegħek għal "{0}"</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Kollha</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favourites</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtri</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Illum</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Trash</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Madwar</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Faċli?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Ikklikkja darbtejn biex tgħolli</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Drawwa</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globali</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Din il-kombinazzjoni tkun f'kunflitt ma '' {0} 'li se jiġu kklerjati jekk jiġu salvati.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Għandha tiġi pprovduta shortcut.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Din hija shortcut globali. Dan ifisser li se tipprova tesegwixxi kull meta titwettaq. Ipprova tagħmilha unika biżżejjed (jew ibiddel it- "tip ta 'rotta") biex ma tkunx f'kunflitt ma' shortcuts minn applikazzjonijiet oħra.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globali</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Shortcut għandu jkun fih ċavetta waħda u waħda biss mhux modifikatur.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Agħfas kwalunkwe ċavetta biex tirrekordja ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Assenja shortcut</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Itagħllem iżjed...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Aġġornament</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Ikkanċella</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Waħħal</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Tinjora</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>LE</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Kollox sew</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Erġa 'erġa'</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Għalaq</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Issottometti</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>IVA</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Kull sena</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Kull xahar</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Ipprova b'xejn!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Ċiklu tal-kontijiet</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Idħol</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Iċċekkja l-konnessjoni tiegħek
+U erġa 'pprova.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Oħroġ</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Il-ħlas li jmiss</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Irreġistra</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>L-email mhix valida</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Il-passwords ma jaqblux.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Il-password trid tkun minimu ta 'karattri {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Tiftakar?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Iċċekkja l-email tiegħek biex tikkonferma l-kont tiegħek</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Irrisettja l-password</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm / dd / yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Qatt</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>B'XEJN {0} Trial ta 'Jum</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Kien hemm problema li twettaq
+ix-xiri tiegħek.
+
+Iċċekkja l-konnessjoni tiegħek u
+settings jistgħu jgħinu.
+
+Tixtieq terġa 'tipprova?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Il-kont tiegħek kien b'suċċess
+Aġġornat għal:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Xiri ta 'suċċess!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Żball</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Il-konnessjoni falliet.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Erġa 'erġa'</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Kont mibdul</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>L-abbonament tiegħek issa huwa {0} / {1} b'kontenut ta '{2} u {3} Ħażna ta' Trash.
+Imma tinkwetax, l-ebda dejta ma tintilef wara li tnaqqas. Klipps ġodda biss se jiġu evalwati.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Prosit! L-abbonament tiegħek issa huwa {0} / {1} b'kontenut ta '{2} u {3} Ħażna ta' Trash.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Trash jew Unrink xi ħaġa
+Minn '{0}' biex iżżid aktar.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Il-ħażna Max '{0}' hija {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Irrestawra</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} imblukkat</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Il-kontenut u l-kapaċità ta 'trash milħuqa!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Il-ħażna Max '{0}' hija {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Il-kapaċità tal-kontenut milħuqa!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Tista 'taħbi dawn it-twissijiet minn
+tikklikkja 'Aħbi Kollha' mill -
+Menù tal-Għażliet hawn fuq.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Il-ħażna massima tat-trash hija {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Il-kapaċità tat-trash milħuqa!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} huwa invalidu</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} għandhom ikunu mill-inqas {1} karattri</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} jista 'jkun biss {1} karattru</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Paste to: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Il-ħlas għal {0} tiegħek
+Is-sottoskrizzjoni kienet dovuta {1}
+u ma rċeviex.
+
+Jekk jogħġbok aġġorna tiegħek
+informazzjoni dwar il-ħlas.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Il-ħlas għal {0} tiegħek
+Is-sottoskrizzjoni kienet dovuta {1}
+u ma rċeviex.
+
+Jekk jogħġbok qabbad mal-
+Internet fuq l-apparat
+bl-abbonament tiegħek u
+Irristartja sabiex tkompli
+Uża l-pjan {0} tiegħek.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Il-ħlas għal {0} tiegħek
+Is-sottoskrizzjoni kienet dovuta {1}
+u ma rċeviex.
+
+Jekk jogħġbok Iftaħ jew Ibda
+Monkeypaste fuq l-apparat
+bl-abbonament tiegħek għal
+Kompli uża tiegħek
+{0} pjan.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Kont skadut</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store ma tippermettix livelli
+bidliet fl-addons ta 'abbonament.
+
+Trid tikkanċella tiegħek
+{0} / {1} Ippjana lilek innifsek
+Jew int tkun inkarigat għat-tnejn.
+
+Tixtieq tmur tagħmel hekk issa?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Il-password tiegħek ġiet irrisettjata.
+
+Jekk jogħġbok iċċekkja l-email tiegħek u
+Segwi l-link għall-bidla
+il-password tiegħek.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Idħol</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Awtur (i)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Huwa meħtieġ li taċċetta t-termini tal-liċenzja li ġejjin qabel ma tkompli.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Il-pakkett (i) li ġejjin jirrikjedu li taċċetta t-termini tal-liċenzja tagħhom qabel ma tinstalla.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Nirrifjuta</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Meta tikklikkja "Naċċetta" tfisser li taqbel mat-termini tal-liċenzja għal din l-applikazzjoni. Jekk ma taqbilx mat-termini, ikklikkja "I jirrifjuta".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Meta tikklikkja "Naċċetta" tfisser li taqbel mat-termini tal-liċenzja għall-plugin (i) elenkati hawn fuq. Jekk ma taqbilx mat-termini, ikklikkja "I jirrifjuta".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Ara liċenzja</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Aċċettazzjoni tal-liċenzja</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Naċċetta</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Attiv</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Mhux irreġistrat</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Magħmul</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Il-passwords ma jaqblux</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Is-sottoskrizzjoni tiegħek hija
+Issa ssettja għal {0} / {1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Kont misjub</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Login falla</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Ir-reġistrazzjoni falliet</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Reġistrazzjoni ta 'suċċess!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Irrisettja żball</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Abbonament</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>X'hemm ġdid</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Qatt</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Bla limitu</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapaċità</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>fadal</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>totali</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Il-ħlas tiegħek huwa dovut.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Shortcuts ta 'override esklussivi jista' jkun fihom biss ċavetta waħda u dik iċ-ċavetta ma tistax tkun ċavetta modifikatur.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Skada</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Tagħbija</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>B'diżabilità</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Nota! Din il-password mhix obbligatorja u biss għal sigurtà żejda. Id-dejta tiegħek hija diġà kriptata u qatt ma tinqasam. Din il-password sempliċement tipprevjeni lil xi ħadd li mhux int milli tgħabbi l-monkeypaste jekk b'xi mod jiksbu aċċess għad-desktop tiegħek (misruqa, titlaq mill-kamra, eċċ.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Ftakar settings tal-waqgħa għal:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Ibbrawżja plugins</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Tanalizza</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Azzjoni rapida</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Toggle Edit</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Toggle imqabbad</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Annotazzjonijiet</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Test sempliċi</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Iftaħ fit-tieqa</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Ikklikkja + Ctrl biex issegwi ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Ikklikkja + Alt biex issegwi ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin jew waqqa 'kwalunkwe midja hawn!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Ċar</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Il-limiti 'l fuq minn 0 se jipprovdu tqabbil tal-kulur imħawwad bl-użu ta' distanza Ewklideana fil-kuluri RGBA.
+
+Pereżempju, jekk aħmar (# FF0000) huwa t-terminu tat-tfittxija u l-iswed (# 000000) huwa pixel fi klipp tal-immaġni, allura d-distanza tal-kulur se tkun 255. Id-distanza sewda sa bajda hija l-massimu possibbli ta '510, inkluż kanal alfa</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Dawn kollha li ġejjin huma veri</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Kollezzjonijiet</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Modi tal-ġurdien</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Triggers</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pawża</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Kompli</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Trigger ġdid</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Żid issettjat minn qabel</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Wizard Drop Monkey</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizzatur</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orjentazzjoni taċ-ċiklu</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Toggle Grid Layout</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Sensittiv għall-każ</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Limitu</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Kelma sħiħa</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Xejn Sett</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Rotta</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Azzjoni</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Grilja</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Magħmul</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Sussegwentement</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Preċedenti</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Aqbeż</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Kont eżistenti?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Il-ħlas li jmiss</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Ir-reġistrazzjoni tħallik iġġorr l-abbonament imħallas tiegħek fuq it-tagħmir kollu tiegħek (wara d-disponibbiltà). Aħna mhux se spam l-email tiegħek aħna nwiegħdu 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Abbonament</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Isem tal-Utent</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Għandek bżonn tirreġistra?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Sorsi</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Fard, xejn disponibbli. Xi ħaġa trid tkun ħażina 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Neħħi</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Teħtieġ terġa 'tibda</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Avvanzat</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Żball Estrazzjoni ta 'Plugin minn "{0}"</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Żball Installa Plugin: "{0}"</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Żball Installazzjoni tal-plugin '{0}' struttura korrotta jew direttorja mhux xierqa. Manifest għandu jeżisti f '"{1}" iżda ma nstabx.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Żball Parsing Plugin Manifest "{0}": {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>L-ebda plugin mgħobbi bil-GUID: "{0}"</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} żball</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Żball tal-plugin tal-waqfien biex temp dir '{0}</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Żball li jappoġġja '{0}' sa '{1}'. Dettalji: "{2}"</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>It-test ittajpjat jiġi applikat awtomatikament għal tfittxija meta l-ebda kaxxa tat-test ma tkun iffokata.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Input ta 'tfittxija awtomatika</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Il-bidla fil-password falliet</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Bidla</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Biddel il-password</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Ċar</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Password ċara</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Kontenut</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Daqs tat-tipa tal-kontenut</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Meta jkun veru, kontenut estern imdaħħal fi klipp juża l-ifformattjar tal-klipps u mhux dak li huwa disponibbli mis-sors.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Ippejstja, qatra jew tehmeż bl-ifformattjar tad-destinazzjoni</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Int żgur li trid tinsa l-password?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Tinsa</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Tinsa l-password</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Aħbi l-Watermarks tal-Kapaċità</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Meta jiġi mehmuż kontenut ġdid ta 'clipboard mhux se jiġi ssorveljat bħala klipp ġdid</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Tinjora l-appends</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Meta l-clipboard jaqbel ma 'klipp eżistenti, dak il-klipp se jintuża minflok joħloq waħda ġdida</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Tinjora duplikati ġodda</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Il-bidliet tal-clipboard minn ġewwa l-app mhux se jiġu rintraċċati</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Injora l-intraċċar intern tal-clipboard</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Spazji, tabs u linji ġodda se jiġu injorati mill-intraċċar</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Tinjora l-ispazju abjad biss</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Tagħbija fuq login</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Anima tieqa</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opaċità</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Uri l-imġieba</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>It-tieqa ewlenija tiġi żvelata billi twettaq ġest tal-iscroll fit-tarf ta 'fuq tal-monitor tiegħek</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Uri fuq l-iscreen scroll ta 'fuq</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Volum ta 'Notifika</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Dan l-issettjar se jsegwi l-pejst tat-tastiera tas-sistema wiesgħa għall-istatistiċi tal-użu. Din l-informazzjoni hija privata u mhix maqsuma iżda wkoll mhux guarenteed. Riżultati preċiżi jistgħu jeħtieġu li jipprovdu applikazzjoni speċifika għall-kmand tal-pejst tat-tastiera f '' Settings -&gt; Copy &amp; Paste -&gt; Shortcuts '.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Istorja tal-pejst</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Wisq klipps imqaxxra (bħal tabs tal-browser) jistgħu jikkunsmaw memorja sinifikanti. It-tneħħija hija mill-ewwel - fl - l-ewwel - barra</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Kapaċità tal-brilli</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Dan japplika għall-inputs kollha tal-karozzi awtomatiċi, valuri aktar baxxi jtejbu l-prestazzjoni</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Limitu reċenti tat-test</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Int żgur li trid
+Irrestawra l-preferenzi awtomatiċi?
+
+Dan ma jistax jitneħħa!
+
+* L-applikazzjoni terġa 'tibda ladarba titlesta.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Int żgur li trid tirrisettja n-notifiki kollha?
+
+* Dan ma jistax jitneħħa!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste tistabbilixxi l-clipboard (twarrab) meta twaħħal ma 'programm estern. Dan &lt;b&gt; attentat &lt;/b&gt; biex jerġa 'jġib l-istat tal-clipboard wara pejst estern.
+
+Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew saħansitra ħabta ta' monkeypaste skont is-sors tad-dejta.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Irrisettja l-clipboard wara pasta tax-xadini</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Ma setgħetx tħassar il-cache tal-plugin minn Path: "{0}"</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Il-plugins kollha jiġu ssettjati mill-ġdid għall-istat inadempjenti inizjali</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin cache</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Int żgur li trid terġa 'tissettja l-plugins kollha għal nuqqasijiet?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Int żgur li trid terġa 'tissettja l-password tiegħek?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Il-shortcuts kollha tal-applikazzjoni se jerġgħu jiġu ssettjati mill-ġdid għall-ġesti ewlenin tagħhom.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Irrisettja shortcuts</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>In-notifiki kollha injorati qabel issettjati.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Irrestawra n-notifiki</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(L-abilitazzjoni tista 'tkun pjuttost bil-mod) Id-diżattivazzjoni tifformata se tnaqqas il-konsum tal-memorja iżda tinibixxi xi karatteristiċi avvanzati, bħal: tehmeż, mudelli, annotazzjonijiet u ssib / tissostitwixxi</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Kontenut għani</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Issettja l-password</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Uri ħjiel</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Uri fit-Taskbar</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Uri fit-Task Switcher</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Uri titli</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Meta tkun attivata, it-tkaxkir minn kwalunkwe applikazzjoni sal-parti ta 'fuq tal-iskrin jiżvela l-monkeypaste biex iwaqqa' l-kontenut faċilment fil-monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Uri fuq Drag to Top of Screen</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Tema tal-ħoss</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Iċċekkjar tal-jespliċitaw</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Fl-istartjar is-sors tal-clipboard mhux magħruf u skont is-settings tas-sigurtà tiegħek il-kontenut jista 'jiġi minn websajt jew applikazzjoni eskluża.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Żid il-clipboard tal-istartjar</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Isma 'Clipboard fuq Startup</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Agħżel</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Attenzjoni! Kuluri oħra tal-paletta huma magħżula bl-użu tal-Matematika Mhux Għajnejn! Allura kun konxju li xi kombinazzjonijiet ta 'kulur u stil jista' ma jkollhomx kuntrast xieraq għall-leġġibilità.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Kulur tat-Tema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Stil tat-tema</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Tindif awtomatiku tat-Trash se jseħħ fl-istartjar fl-intervall stabbilit.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Tindif tat-Trash</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Limiti ta 'tneħħija għoljin jistgħu jaffettwaw il-prestazzjoni</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Ħoll il-limitu</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>L-ebda limitu</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Użat fit-tfittxija tal-fajl avvanzat għal tipi ta 'fajl mhux issettjati minn qabel</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Utent - Estensjonijiet tat-Tiftix definiti</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Sib u ibdel ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Pasta hawn</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Aqsam ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Veduta</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Immaniġġja ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Semmi mill-ġdid</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Punteġġ: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tip: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Ħassar b'mod permanenti</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Ibbrawżja għal "{0}"</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Tittrasforma</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Sorsi</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Irrestawra</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Agħżel Image ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Kulur</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Immaniġġja "{0}" ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Miftuħa</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Stenna...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Kulur fl-isfond</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Żbarazza kollox</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formati tal-clipboard</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Ħassar kollox</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Editja d-dettalji</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Isem</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Sib</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Kulur tat-tipa</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Format taż-żebgħa</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Fl-għażla</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Daħħal l-immaġni</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Daħħal link</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Daħħal vidjow</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Każ tal-partita</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Mudell ġdid</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Mudell li jmiss</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Daħħal it-test tal-pejst ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Mudell preċedenti</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Espressjoni regolari</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Ibdel kollox</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Ibdel</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Kelma sħiħa</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Kebbeb</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blokka</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Dominju</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Uri folder</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Żblokka</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Madwar</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Append Block</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Append inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Kopja</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Modi</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Jekk jogħġbok stenna li l-MonkeyPaste qed jitgħabba ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Nieqaf</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Ikklikkja Paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupp</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtru</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Ħassar b'mod permanenti kollox</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Irrestawra kollox</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Azzjoni</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL diġà teżisti: "{0}"</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>L-URL trid tkun f'format validu.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Daħħal URL sħiħ:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Żid url</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Daħħal il-valuri</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Ikkopja test jew fajls biex tapplika.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Append {0} {1} modalità attivata</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Il-bidliet fil-clipboard issa se jiġu mehmuża</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Wara l-modalità ta 'append attivat</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Il-bidliet fil-clipboard issa se jiġu ppreparati</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Qabel il-modalità ta 'append attivat</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blokka</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>L-imġieba normali tal-clipboard ġiet restawrata</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Appended diżattivat</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Tehmeż miżjud mal-quċċata jew il-botom tal-klipp</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Estensjoni tal-modalità tal-append attivata</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>F'konformità</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manwal</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Append għall-għażla attwali tiegħek.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Manwal Mod Attivat Attivat</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>L-akkumulazzjoni tal-clipboard waqfet</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Appendiet waqfa qasira</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>L-akkumulazzjoni tal-clipboard reġgħet bdiet</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>L-append jerġa 'jibda</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Int żgur li trid tispiċċa tehmeż?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>L-editjar fil-modalità ta 'kompatibilità se jneħħi l-ifformattjar rikk kollu. Int żgur li tixtieq timmodifika dan?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Twissija ta 'Degradazzjoni tad-Dejta</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Attiv</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Attivat</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Fuq</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Waqfa qasira</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Riżultat</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Seħħ żball mhux magħruf.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>tentattivi li fadal</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Daħħal il-password</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Ikkonferma</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kuntatt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Ħin tad-data</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Int żgur li trid tħassar l-użi kollha ta '' {0} '?
+
+Dan ma jistax jitneħħa!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamiku</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statiku</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} huwa vojt ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Aktar ġej dalwaqt!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Tagħbija tal-login Itfi Falla</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Login Load Iddiżattiva s-Suċċess</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Tagħbija tal-login Enable Falla</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Tagħbija tal-Login Ippermetti s-Suċċess</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Aħbi</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Paste tax-xadini issa huwa mgħobbi.
+Is-smigħ tal-clipboard huwa: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Mgħobbi</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Juru</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Mod ta 'Għażla ta' Kopja Auto: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Mod mibdul</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Ikklikkja dritt fuq il-modalità: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin aġġornat</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Pasta '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Mexxi Analizzatur "{0}"</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Ħaddem '{0}' grillu</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Agħżel "{0}"</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Int żgur li trid tħassar '{0}' u l-azzjonijiet kollha assoċjati?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Tixtieq tneħħi s-sotto-azzjonijiet kollha għal '{0}'? (Inkella se jerġgħu jiġu mmarkati ma '' {1} ')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Neħħi l-għażliet</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Int verament trid goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Kont</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analizzaturi</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operazzjonijiet ta 'applikazzjoni</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Kontenut</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Konvertituri</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultura</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Direzzjoni</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Drag u qatra</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Qatra saħħar</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikoni</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Pejst Operazzjonijiet</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferenzi</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Tfittxija</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Ħsejjes</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Tray tas-Sistema</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Kollezzjonijiet</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Triggers</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operazzjonijiet tal-websajt</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Lingwa</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Twaqqaf il-clipboard fuq il-filmat tal-input.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Twissija</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Twissijiet ta 'Messaġġi ta' Trej tal-Ħoss u / jew tas-Sistema ta 'Għan Ġenerali. L-azzjoni ta 'twissija m'għandha l-ebda effett fuq l-input tagħhom.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Messaġġ</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Xadina</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Juru</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Messaġġ tal-ħin toast jidher f'sekondi. Meta l-valur huwa 0 messaġġ għandu jingħalaq manwalment.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Uri l-Ħin (i)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Ħoss?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Tip ta 'ħoss</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volum</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizzatur</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Jipproċessa l-filmat tal-input tiegħu billi juża l-analizzatur assenjat preset.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Il-kontenut ta 'input huwa marbut mal-kollezzjoni magħżula</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Tgħaqqad il-filmat tal-input tagħha mal-ġbir tat-tikketta assenjata.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Każ sensittiv?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Dan jista 'jkun test statiku biex jitqabbel ma' l-input u / jew jinkludi proprjetajiet magħżula (permezz tal-buttuna tal-filtru) se jiġi sostitwit meta l-kundizzjoni tiġi evalwata.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Dejta tal-kundizzjoni</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Mistoqsija jsonpath mhux obbligatorja li se tiġi applikata għall-'pjetà ta 'input' magħżula qabel ma tiġi evalwata l-kundizzjoni.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filtru tal-input</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Il-propjetà tal-klipp użata għal dan il-kundizzjoni.
+
+Il-propjetà 'l-aħħar output' bħalissa hija appoġġjata biss meta dan il-kundizzjoni huwa tifel ta 'azzjoni ta' analizzatur u d-dejta pprovduta tvarja skont il-produzzjoni tal-analizzatur tal-ġenituri.
+
+Għal issolvi l-problemi, waħħal 'azzjoni ta' twissija 'mal-ġenitur ta' dan il-kondizzjonali u issettja l-parametru ta '' messaġġ 'ta' twissija biex taqbel ma 'din il-propjetà ta' input. Dan se jippermetti li tirrevedi d-dejta attwali li qed tintuża għal dan il-kondizzjonali.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Propjetà ta 'input</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Twettaq tqabbil ta 'test fuq il-klipp ta' input jew output ta 'azzjoni preċedenti. Meta l-paragun ifalli (ma jaqbilx) l-ebda azzjonijiet tat-tfal ma jiġu eżegwiti. Allura taġixxi bħal bieb loġiku.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>L-operazzjonijiet veri jew foloz kollha fejn l-azzjonijiet tat-tfal se jeżegwixxu biss jekk ir-riżultat ikun veru.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Kundizzjoni</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Kollha</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Attivat meta klipp tat-tip magħżul jiġi miżjud mas-sistema bl-ebda mod (clipboard, drag - u - qatra, analizzatur iġġenerat jew duplikat).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Eżegwixxi dan il-grillu biss jekk il-klipp tal-input huwa ġdid u mhux duplikat. Dan huwa indipendenti minn kwalunkwe issettjar ta 'preferenza ta' jekk kontenut ġdid hu injorat jew le.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Tinjora duplikat</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Il-klipps ta 'dan it-tip biss se jqanqlu din l-azzjoni.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Tgħaqqad il-filmat tal-input tagħha mal-ġbir tat-tikketta assenjata.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Attivat meta klipp huwa marbut mal-kollezzjoni ta 'tikketti speċifikata.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Kollezzjoni</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>L-ammont ta 'ħin f'millisekondi stenniet qabel it-tfal jeżegwixxu</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Dewmien</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Esperimentali) Użat primarjament flimkien ma 'l-azzjoni ta' ripetitur għal sorsi remoti tal-votazzjoni jew għajnuna b'operazzjonijiet ta 'tħaddim fit-tul.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Meta jitħalla vojt, il-fajl tal-ħruġ juża t-titlu tal-clip tal-input bħala l-isem tal-fajl.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Isem tad-dwana</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Id-direttorju fejn se jkun miktub il-fajl.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Direttorju</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Iffranka l-input fil-folder magħżul.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Attivat meta l-kontenut tal-fowlder magħżul jinbidel. L-output se jkun ġdid jew eżistenti (meta l-preferenza tad-duplikati Injora hija attivata) filmat tal-fajl jew folder li nbidel flimkien mat-tip ta 'bidla bħala l-aħħar output tagħha.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Avvenimenti</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Tinjora duplikat</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Valur ta '0 jirrepeti l-azzjoni ġenitur b'mod indefinit</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Repeti l-għadd</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>L-ammont ta 'ħin f'millisekondi biex tistenna ladarba l-azzjoni tal-ġenitur tlesti</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Irrepeti dewmien</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Sperimentali) Użat għall-ħolqien ta 'linji ta' azzjoni jew kompiti ripetittivi. Meta tkun ripetuta, hija terġa 'tesegwixxi t-tfal kollha bl-input oriġinali tagħha. Meta tuża intervall mingħajr għadd ta 'ripetizzjoni, il-grillu jkollu bżonn ikun diżattivat u jerġa' jwaqqaf ir-ripetizzjoni. Jista 'jkun utli għall-istħarriġ jew l-awtomazzjoni tal-brix tal-web.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Attivat minn shortcut globali li tiddefinixxi. Jekk il-monkeypaste huwa attiv, jipprova juża l-klipp magħżul (jekk hemm wieħed) bħala input. Inkella se tipprova tuża l-clipboard bħala l-input tagħha.
+
+Nota: Trigger ta 'shortcut xorta se tesegwixxi jekk ma jkun hemm l-ebda input biex iżżommha flessibbli (għalhekk jista' jkun makro-grillu eċċ.) Peress li l-avveniment immexxi tad-dejta tiegħu.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Shortcut Trigger</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Attivat meta l-shortcut irreġistrat jiġi ppressat f'kull ħin bil-clipboard attwali</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Din l-azzjoni tirrikjedi li l-app terġa 'tibda. Tixtieq tagħmel dan issa?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Kien hemm problema. Għandek bżonn terġa 'tibda manwalment l-applikazzjoni.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analizza bl-annotatur</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Trigger Annotat</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Jibnu fl-elementi jinqraw - biss. Duplikat biex tbiddel.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonimu</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Drawwa</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Il-bieraħ</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} jiem ilu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Siegħa ilu</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} sigħat ilu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Issa</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Minuta ilu</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minuti ilu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Ix-xahar li għadda</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} xhur ilu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Il-gimgha l-ohra</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} ġimgħat ilu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} snin ilu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Annotazzjonijiet</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Isem tal-Applikazzjoni</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Triq tal-Applikazzjoni</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Sensittiv għall-każ</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Kontenut</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Tip ta 'fajl</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Tip ta 'Immaġni</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Espressjoni regolari</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tip ta 'Test</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titlu</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Titlu tal-URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Kelma sħiħa</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Bħall-iscroll tul it-tarf tal-iskrin ta 'fuq biex tiftaħ, dan se jissakkar it-tieqa prinċipali meta tiftaħ. Li tippermetti flussi tax-xogħol multi-aktar immirati.
+
+* Il-kantunieri huma f'termini tal-iskrins kollha tiegħek, mhux għal kull monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Uri tieqa u illokkja</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>B'xejn!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Agħtina 5 stilel!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Ħassar kollox</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Ħassar il-kontenut kollu</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Int żgur li trid tħassar
+Il-klipps kollha tiegħek?!
+
+* Din l-operazzjoni ma tistax titneħħa!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Jien Indy Dev jekk jogħġbok uri xi appoġġ!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Bħal MonkeyPaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} jaċċetta biss l-input tat-tip (i): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Mod ta 'Kopja Auto - jissimula avveniment' kopja 'kull darba li l-buttuna tal-maws tax-xellug tiġi rilaxxata.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Ikklikkja dritt fuq il-modalità tal-pejst - jissimula avveniment 'pejst' kull darba li l-buttuna tal-maws it-tajba tiġi rilaxxata</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Issettjat minn qabel</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Uri folder tal-plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Rapport</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Veduta</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Uri l-għodda tal-għodda</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>L-analizzaturi jannotaw l-input tagħhom jew joħolqu klipps ġodda bħala output. It-tfal tal-analizzaturi għandhom bżonn jiddeċiedu liema waħda għandhom bżonn bħala l-kontribut tagħhom. Dan tipikament huwa l-aħħar produzzjoni.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Tip ta 'input</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger Designer "{0}"</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Agħżel {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Ma nstabx...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Meta jiġi kkontrollat ​​ir-riżultat veru jew falz tal-kundizzjoni se jkun flipped. Allura pereżempju, kundizzjoni ta '' fih 'se ssir' ma fihax '.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ma</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Stenna...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Kulur li jagħżel</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Aqbad il-kulur tal-partita</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Bħal shortcut grillu imma meta l-kombinazzjoni taċ-ċavetta tiġi ppressata, avveniment 'kopja' se jkun simulat fl-applikazzjoni attiva u għalhekk xorta jaħdem bħal kopja imma mbagħad il-katina ta 'azzjonijiet mehmuża mal-krigg tal-kopja tax-xadina se tiġi eżegwita fl-isfond bl-użu ta' Dejta simulata ta 'kopja ta' clipboard.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Filtru avvanzat</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Aħbi filtri</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Irrestawra filtri</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Oħloq filtru</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Mhux obbligatorju) Meta titħalla vojta l-clipboard se jkun issettjat bl-użu ta 'din l-azzjoni. Kull ħaġa pprovduta hawnhekk se tiġi ttrattata bħala test sempliċi biss.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Kontenut għall-clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Meta jkun veru, l-ebda klipp ma jiżdied wara li din l-azzjoni tistabbilixxi l-clipboard.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Tinjora</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>L-ebda analizzatur magħżul għall-azzjoni "{0}"</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analizzatur għall-azzjoni "{0}" ma nstabx</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Ġenitur "{0}" filtri biss għal kontenut tat-tip "{1}" u analizzatur "{2}" qatt ma jeżegwixxi għaliex ma jappoġġjax "{3}" tip ta 'input</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>L-ebda tikketta magħżula għall-klassifikatur "{0}"</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag għall-klassifikatur "{0}" ma nstabx</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Qabbel il-valur jista 'jkun biss ittri, numri jew spazji</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>L-ebda tikketta magħżula għal clip tagged grillu "{0}"</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag għall-klipp tagged grillu "{0}" ma nstabx</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>L-ebda folder tal-għassa speċifikat għal '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Watch Folder "{0}" ma nstabx għall-grillu "{1}"</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Triq tal-Kittieb tal-File għall-Azzjoni "{0}" Mhux issettjat</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path "{0}" għal "{1}" ma nstabx.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Taskbar</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Tgħallem dwar plugins</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Irrestawra din il-konfigurazzjoni tal-analiżi</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} tibdel il-log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Jekk jogħġbok qabbad mal-internet u erġa 'pprova aktar tard.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Għajnuna</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} hija l-aħħar verżjoni</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Intom kollha - sa - data!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Iċċekkja għal aġġornamenti ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Verżjoni ġdida disponibbli!
+
+Ikklikkja hawn biex taġġorna għal '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Ikklikkja hawn taħt biex taġġorna għal '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Aġġornament disponibbli!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Aġġorna issa</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>"{0}" fih valuri maqsuma. X'tixtieq terġa 'tissettja?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Ċar</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Ċara tfittxijiet riċenti</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Irrisettja kollha</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Irrisettja maqsuma</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Irrisettja mhux maqtugħ</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Jinvoka l-azzjoni ta 'applikazzjoni assenjata. Il-kmand tal-applikazzjoni kollha huma mingħajr stat u l-filmat tal-input tagħhom jiġi injorat.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Meta mhux ikkontrollat ​​u l-kmand ma jistax jispara, il-katina ta 'l-eżekuzzjoni se tieqaf. Ħafna kmandi jeħtieġu xi stat ta 'applikazzjoni speċifiku sabiex jiġu eżegwiti.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Dejjem Kompli?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Il-kmand biex twettaq.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Kmand</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>L-ebda kmand magħżul għall-kmand tal-applikazzjoni "{0}"</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Kmand għall-Kmand tal-Applikazzjoni "{0}" ma nstabx</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Magħżula</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Erġa ibda</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Kien hemm kwistjoni ta 'aġġornament "{0}". Sabiex tlesti l-aġġornament ser ikollok bżonn terġa 'tibda u tinstalla' {0} 'mill-ġdid (tinkwetax li l-issettjar kollu tiegħek jiġi rrestawrat).
+
+Tista 'terġa' tibda issa u tlesti l-aġġornament billi terġa 'tinstalla, tinjora dan u taġġornah aktar tard jew tikkanċella l-aġġornament kollha flimkien u tkompli tuża l-verżjoni "{1}"?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Aġġorna l-iżball</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Ma stajtx tniżżel aġġornament</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>L-aġġornament falla</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Biex tlesti l-aġġornament ser ikollok bżonn terġa 'tibda. Tixtieq terġa 'tibda issa jew wara?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Aġġorna lesta</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Aktar tard</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Irristartja issa</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Pendenti</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} ġie aġġornat b'suċċess għal {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Il-plugins tal-qalba huma meħtieġa u ma jistgħux jitneħħew.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Tinstalla</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>L-aġġornament huwa pendenti. Irristartja biex tlesti.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Pendenti</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>L-installazzjoni hija pendenti. Jekk jogħġbok erġa 'ibda jekk tixtieq terġa' tinstalla.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Biex tlesti l-uninstall ser ikollok bżonn terġa 'tibda. Tixtieq terġa 'tibda issa jew wara?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Tispiċċa uninstall?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Mhux ippubblikat</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - Iġġenerat minn qabel għal '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>L-ebda klipp magħżul</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analizza l-klipp magħżul</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Assenja shortcut biex tmexxi '{0}' fuq il-klipp magħżul</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Pejst globali</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Assenja shortcut tal-pejst globali għal '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Insejt il-password?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Idħol</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Oħroġ</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Regoli tal-privatezza</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Teħtieġ terġa 'tibda) Meta l-informazzjoni dijanjostika attivata tkun illoggjata għall-fajl. Dan jista 'jnaqqas il-prestazzjoni u jista' jkun fih informazzjoni personali.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Idħol fil-fajl</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Miftuħa</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Iftaħ il-folder tal-zkuk</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Ibbrawżja plugins</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Aqra</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Ikteb</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Ibgħat Feedback jew Rapport tal-Bug</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Dan jaħbi biss it-tieqa ewlenija. It-twieqi l-oħra kollha mhux tad-djalogu huma dejjem murija fit-taskbar.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Fittex f '' {0} '</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Żid filtru</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Editja t-tip ta 'għaqda</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Neħħi dan il-filtru</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Għajnuna miftuħa dwar dan ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipps</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Bidla</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Qatt</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Issettjat</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Bla titlu</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Rekord</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Referenza tas-sors bla tikketta</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>"{0}" huwa meħtieġ</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Għandu żbalji)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Limitat</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Ħażna</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Trash</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Bla limitu</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Din l-app bħalissa taqbel ma 'presets u formati tal-qarrej tal-clipboard default.
+
+Li tippermetti jew tiddiżattiva l-presets tal-qarrej default (mill-sidebar tal-clipboard) ma taffettwax din il-konfigurazzjoni. Applikazzjonijiet mhux ikkwotati biss isegwu s-setup default.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Din l-app bħalissa taqbel ma 'presets u formati tal-kittieb clipboard default.
+
+Li tippermetti jew tiddiżattiva l-presets tal-kittieb default (mill-sidebar tal-clipboard) ma taffettwax din il-konfigurazzjoni. Applikazzjonijiet mhux ikkwotati biss isegwu s-setup default.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Biex tehmeż trid ma titħallasx is-semmiegħ tal-clipboard (System Tray -&gt; jerġa 'jibda).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Tehmeż mhux disponibbli</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> M'għandux settings</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Nitkellem biss bl-Ingliż u l-monkeypaste ġie tradott f'din il-lingwa.
+
+Il-verżjonijiet kollha jibagħtu mal-pakkett Ingliż u għalhekk jekk titkellem bl-Ingliż tista 'tbiddel il-lingwa magħha f'kull ħin wara din is-setup (settings -&gt; preferenzi -&gt; internazzjonali).
+
+Jekk tixtieq tgħin biex ittejjeb it-traduzzjoni nixtiequ nisimgħu mingħandek!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Tħassib dwar it-traduzzjoni</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Għandek bżonn taġġorna l-monkeypaste sabiex tuża din il-karatteristika.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Shortcut mhux issettjat</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Is-semmiegħ tal-clipboard b'diżabilità</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Is-semmiegħ tal-clipboard attivat</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Azzjoni tal-Ġenituri "{0}" ma tappoġġjax it-tip ta 'propjetà ta' input "L-Aħħar Output"</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Tgħallem aktar dwar il-pjanijiet</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Applikazzjoni</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Filmat</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizzatur</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+</root>

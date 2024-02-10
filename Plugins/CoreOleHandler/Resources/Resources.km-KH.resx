@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>មិនអើបើ</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>នៅពេលបានធីកទ្រង់ទ្រាយ {0} ទ្រង់ទ្រាយនឹងមិនត្រូវបានអានពីក្តារតម្បៀតខ្ទាស់ឬទិន្នន័យអូសនិងទម្លាក់ទេ។</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>នៅពេលបានធីកទ្រង់ទ្រាយ {0} ទ្រង់ទ្រាយនឹងមិនត្រូវបានសរសេរទៅក្តារតម្បៀតខ្ទាស់ឬទិន្នន័យអូសនិងទម្លាក់ទេ។</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>អាន</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>សរសេរ</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>ស៊ីអេសអេស</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ឯកសារ</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>នៅពេលដែល RTF មិនមានរួចហើយទេ HTML នឹងត្រូវបានបម្លែងទៅជា RTF ។ នេះអាចមានប្រយោជន៍រវាងកម្មវិធីរុករកគេហទំព័រនិង / ឬកម្មវិធីដំណើរការពាក្យ។ (ត្រូវការទ្រង់ទ្រាយ RTF ដែលត្រូវបើកដំណើរការហើយសម្រាប់តែវេទិកាដែលបានគាំទ្រប៉ុណ្ណោះ)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>បំលែងទៅជា RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>ថតទាំងនេះនឹងមិនត្រូវបានអានពីក្តារតម្បៀតខ្ទាស់ឬបិទទិន្នន័យអូសនិងទម្លាក់ទេ។</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>មិនអើពើនឹងថត</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>មិនអើពើនឹងការបន្ថែមឯកសារ</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>ប្រភេទឯកសារទាំងនេះនឹងមិនត្រូវបានអានពីក្តារតម្បៀតខ្ទាស់ឬទិន្នន័យអូសនិងទម្លាក់ទេ។</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>ប្រភេទឯកសារទាំងនេះនឹងមិនត្រូវបានសរសេរទៅក្តារតម្បៀតខ្ទាស់ឬទិន្នន័យអូសនិងទម្លាក់ទេ។</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>នៅពេលធីករូបភាពធំជាងវិមាត្រអតិបរិមានឹងត្រូវបានធ្វើមាត្រដ្ឋានខណៈពេលដែលសមាមាត្រសមាមាត្រ។ នេះមិនប៉ះពាល់ដល់រូបភាពនៅលើក្តារតម្បៀតខ្ទាស់ទេ។</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>ខ្នាតធំ</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>នៅពេលបិទភ្ជាប់ឬទម្លាក់រូបភាពវានឹងជាប្រភេទឯកសារលំនាំដើម</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>ប្រភេទនាំចេញលំនាំដើម</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>ពេលខ្លះរូបភាពដែលមានតម្លាភាពពេញលេញនឹងបង្ហាញនៅលើក្តារតម្បៀតខ្ទាស់ដែលវាច្រឡំ។</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>មិនអើពើនឹងរូបភាពទទេ</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>រូបភាពធំ ៗ (ច្រើនជាងពីរបីម។ ម) អាចធ្វើឱ្យអូសនិងទម្លាក់និងការសម្តែងជាទូទៅយឺត ៗ ជាអកុសល។ ព្យាយាមរក្សាតម្លៃនេះឱ្យទាប។</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>កម្ពស់អតិបរមា</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>ទទឹងអតិបរមា</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>សម្រាប់ការព្រួយបារម្ភការសម្តែងចំនួនទឹកប្រាក់អតិបរមាដែលត្រូវការ</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>តួអក្សរអតិបរមា</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>អត្ថបទ (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>ទ្រង់ទ្រាយ '{0}' មានទិន្នន័យទទេឬតម្លាភាពហើយត្រូវបានរារាំង</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ទិន្នន័យទទេត្រូវបានរារាំង</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>ទ្រង់ទ្រាយ '{0}' ត្រូវបានដាក់ទង់ថាជា "មិនអើពើ"</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>ទ្រង់ទ្រាយមិនអើពើ</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} ដែនកំណត់ {1} ហើយទិន្នន័យគឺ {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>បានរកឃើញទំហំអតិបរមា</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>អ្នកអានក្តារតម្បៀតខ្ទាស់ស្នូល</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>អ្នកនិពន្ធក្តារតម្បៀតខ្ទាស់</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ទាញយកទ្រង់ទ្រាយឃ្លីបលំនាំដើម</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>ឧបករណ៍ដោះស្រាយក្តារតម្បៀតខ្ទាស់ស្នូល</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>ក្តារតម្បៀតខ្ទាស់អូសអូសអូសនិងទម្លាក់អត្ថបទឯកសារ RTF, អត្ថបទសម្បូរ, HTML, CSV, រូបភាព, PNG, JPEG, jpe, តំណភ្ជាប់</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>រូបភាព (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>នៅពេលដែល HTML មិនមានរួចហើយទេ RTF នឹងត្រូវបានបម្លែងទៅជា HTML ។ នេះអាចមានប្រយោជន៍រវាងកម្មវិធីរុករកគេហទំព័រនិង / ឬកម្មវិធីដំណើរការពាក្យ។ (ទាមទារទ្រង់ទ្រាយ HTML ដែលត្រូវបើកដំណើរការហើយសម្រាប់តែវេទិកាដែលបានគាំទ្រប៉ុណ្ណោះ)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>បំលែងទៅជា HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>អត្ថបត</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>មិនមានចំណងជើង</value>
+  </data>
+</root>

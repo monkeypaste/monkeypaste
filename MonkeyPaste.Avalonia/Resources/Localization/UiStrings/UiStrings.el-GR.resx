@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Κανένα χαρακτηριστικό δεν περιορίζεται από τη συνδρομή, μόνο χωρητικότητα αποθήκευσης και μπορεί να αλλάξει ανά πάσα στιγμή.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Επαναφέρετε τον υπάρχοντα λογαριασμό σας ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Το περιεχόμενο και τα σκουπίδια είναι
+περιορίζεται σε {0} και {1}
+κλιπ αντίστοιχα.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Επιτρέπει μέχρι {2} κλιπ περιεχομένου και απεριόριστη αποθήκευση απορριμμάτων.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Απεριόριστο και απεριόριστο περιεχόμενο και αποθήκευση απορριμμάτων.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Επαναφέρω</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Ελεύθερος</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Πρότυπο</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Απεριόριστος</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Συνδρομή</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Το απόρρητό σας είναι σημαντικό και τα δεδομένα του πρόχειρου μπορεί να είναι πολύ προσωπικά. Η αποθήκευση είναι πάντα κρυπτογραφημένη, αλλά μπορείτε να ορίσετε έναν κωδικό πρόσβασης που θα απαιτηθεί σε περίπτωση που η συσκευή σας κλαπεί ή κάποιος άλλος χρησιμοποιεί τη συσκευή σας.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Κωδικός πρόσβασης</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Όταν είναι ενεργοποιημένη, η σύρσιμο από οποιαδήποτε εφαρμογή στο επάνω μέρος της οθόνης θα αποκαλύψει το MonkeyPaste για να πέσει εύκολα το περιεχόμενο σε πιθήκους.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Η ενεργοποίηση της «κλειδαριάς» στο επάνω αριστερό μέρος του κύριου παραθύρου θα επιτρέψει ακόμα να πέσει στο MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Περισσότερες προτιμήσεις παραθύρων διατίθενται από το μενού "Ρυθμίσεις -&gt; Προτιμήσεις -&gt; Παράθυρο".</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Σύρετε τις μπανάνες επάνω εδώ!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Σύρετε - σε - Ανοίξτε</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Οι συντομεύσεις πληκτρολογίου μπορούν να αναθεωρηθούν ή να αλλάξουν ανά πάσα στιγμή από το μενού 'Ρυθμίσεις -&gt; Συντομεύσεις.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Όλες οι παγκόσμιες συντομεύσεις θα απενεργοποιηθούν, ώστε να μπορείτε να τις ρυθμίσετε αργότερα.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Οι συντομεύσεις του MonkeyPaste's Propboard θα είναι διαθέσιμες σε όλες τις εφαρμογές.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Εσωτερικός</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Προκαθορισμένο</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Προφίλ χειρονομίας</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Γεια! Ας ρυθμίσουμε μερικά πράγματα για να βελτιώσουμε τη συνολική σας εμπειρία με το MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>καλως ΗΡΘΑΤΕ</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Για να αποκτήσετε το μεγαλύτερο μέρος του MonkeyPaste, η φόρτωση αυτόματα όταν συνδεθείτε είναι μια καλή ιδέα. Αλλά, αυτό εξαρτάται εξ ολοκλήρου από εσάς.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Κρατήστε το casual.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>επιτρέπω</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Φορτώστε την σύνδεση;</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Όταν ενεργοποιηθεί, μια χειρονομία κύλισης στην κορυφή της οθόνης θα αποκαλύψει το MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Αριστερά - κάνοντας κλικ στο εικονίδιο της γραμμής εργασιών θα ανοίξει ακόμα το MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Περισσότερες προτιμήσεις παραθύρων διατίθενται από το μενού "Ρυθμίσεις -&gt; Προτιμήσεις -&gt; Παράθυρο".</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Εύκολο, σωστά;</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Μετακινηθείτε εδώ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Κύλλος - σε - Ανοίξτε</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste είναι &lt;span color = "red&gt; πλήρως ενσωματωμένο &lt;/span&gt; με drag - και - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Πετάξτε το εδώ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Με αυτόν τον τρόπο, το monkeypaste μπορεί να προσεγγιστεί &lt;br&gt; &lt;span color = "red"&gt; χωρίς κλικ &lt;/span&gt; ή ακόμα και &lt;span color = "red"&gt; batting ένα μάτι &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Σύρε με!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Δοκίμασέ το!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Δοκίμασέ το!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Δεν υπάρχουν διαθέσιμα αποτελέσματα.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Επιβεβαιώνω</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Φρεσκάρω</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Αναζήτηση...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Εξαρτήσεις:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Εγκαθιστώ</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να καταργήσετε το '{0}' και όλες τις προεπιλογές και τις συντομεύσεις του;</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Απεγκαθιστώ</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' δεν έχει αποτελέσματα.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Χωρίς επιλογή.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Κανένας</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Πιστώσεις:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Περιγραφή:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Προσφέρω:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Αδεια:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL έργου:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Δημοσίευσε:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Διαβάστε με:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Αναφορά κατάχρησης:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Ετικέτες:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Εκσυγχρονίζω</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Εκδοχή:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Ανοίξτε στο παράθυρο</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Απολύω</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Φρεσκάρω</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Αποθηκεύσετε</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Δίπλα στο Delete!
+
+Αναβαθμίστε για να αποφύγετε.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Δίπλα στα σκουπίδια!
+
+Αναβαθμίστε για να αποφύγετε.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Αρχεία</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Εικόνα</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Κείμενο</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Αντιγραφή {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Αρχεία | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} γραμμές</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} αντίγραφα | {1} πάστες</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Κίνηση</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Προσθήκη</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>αντίγραφο</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Τομή</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Επικόλληση</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} αντίγραφο</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Μη αποθηκευμένο φίλτρο</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Παρακαλώ επιλέξτε -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Μορφές</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Αναγνώστες</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Συγγραφείς</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Χειριστές</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Διαγράφω</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Αντίγραφο</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Επεξεργασία όνομα</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Επαναφορά</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Ετικέτες</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Δράση</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Παγκόσμια δρομολόγηση</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Συντομότερος τρόπος</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Οι χειρονομίες πρέπει να είναι μοναδικές και μπορεί να περιέχουν μόνο ένα κλειδί εισόδου.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Εσωτερικές &lt;/b&gt; Όλες οι συντομεύσεις περιορίζονται σε μέσα στην εφαρμογή. Αυτό δεν είναι πραγματικά μια επιδιωκόμενη επιλογή, αλλά μπορεί να επιτρέψει να προσαρμόσει τις συντομεύσεις που σκοπεύετε να φτιάξετε παγκόσμια &lt;i&gt; κάποια μέρα &lt;/i&gt; &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Προεπιλογή &lt;/b&gt; Όλες οι παγκόσμιες συντομεύσεις είναι ενεργοποιημένες. Το &lt;b&gt; show/απόκρυψη κύριου παραθύρου &lt;/b&gt; χρησιμοποιεί δρομολόγηση &lt;/b&gt;. Μπορείτε να αλλάξετε αυτή τη δρομολόγηση ή τη χειρονομία ανά πάσα στιγμή. Αλλά &lt;span color = "πράσινο"&gt; Δοκιμάστε το &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;HTML&gt;
+&lt;ead&gt; &lt;/head&gt;
+&lt;side&gt;
+&lt;H1&gt; Παγκόσμιες λειτουργίες συντόμευσης &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; παθητικό &lt;/b&gt; Μια συντόμευση monkeypaste θα ακούσει σε οποιαδήποτε εφαρμογή. &lt;br&gt;
+*Αυτή είναι η επιλογή &lt;i&gt; μόνο &lt;/i&gt; στο Linux για τώρα.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; Η συντόμευση θα εκτελέσει &lt;b&gt; &lt;i&gt; Πριν &lt;/i&gt; &lt;/b&gt; αντιμετωπίζεται από την ενεργή εφαρμογή. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; Η συντόμευση θα εκτελέσει &lt;b&gt; &lt;i&gt; Μετά το &lt;/i&gt; &lt;/b&gt; αντιμετωπίζεται από την ενεργή εφαρμογή. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; override &lt;/b&gt; Όταν ο MonkeyPaste ακούει το πλήκτρο εισόδου (πλήκτρο μη τροποποιητή) μιας συντόμευσης override, θα κρύψει &lt;/i&gt; το πλήκτρο από την Application - επίπεδο εισόδου. &lt;br&gt;
+Αυτή η επιλογή θα εγγυηθεί ότι η συντόμευση ενεργοποιείται χωρίς συγκρούσεις στην ενεργό εφαρμογή.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Αποκλειστική παράκαμψη &lt;/b&gt; Αυτός είναι ένας ειδικός τύπος λειτουργίας override σχεδιασμένο για το κλειδί κλειδώματος CAPS. Επιτρέπει μόνο το &lt;b&gt; ένα κλειδί &lt;/b&gt; (μη τροποποιητής) για την ανάθεση του. &lt;br&gt;
+Σε κανονική παράκαμψη, η κλειδαριά των καλύμματος λειτουργίας μπορεί να γίνει κολλημένη σε &lt;/i&gt; όταν πατηθεί σε συνδυασμό με άλλα κλειδιά. &lt;br&gt;
+Έτσι, ανεξάρτητα από το τι άλλα κλειδιά είναι κάτω, εάν ένα &lt;b&gt; hotkey &lt;/b&gt; συντομεύεται, θα ξεπεράσει και θα την αποτρέψει να γίνει &lt;i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/σώμα&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Καθιστώ ανίκανο</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Φορτώστε όταν αυτός ο λογαριασμός χρήστη έχει συνδεθεί, όχι για άλλους χρήστες.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Χρησιμοποιώντας τις διαθέσιμες επαφές (απαιτεί ένα plugin fetcher) Αυτό το πεδίο θα χρησιμοποιηθεί για όλες τις περιπτώσεις αυτού του προτύπου σε αυτό το έγγραφο ή σε οποιοδήποτε που θα αναφερθεί αργότερα. Εδώ τότε το πεδίο ηλεκτρονικού ταχυδρομείου της επαφής που επιλέξετε θα χρησιμοποιηθεί για όλες τις περιπτώσεις σε αυτό το έγγραφο. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = σύντομο έτος &lt;br/&gt; yyyy = long year &lt;br/&gt; m = μήνας (1-12) &lt;br/&gt; mm = μήνας (01-12) &lt;br/&gt; mmm = μήνας συντομογραφία (Jan, Feb .. . Δεκ) Ημέρα της εβδομάδας με λόγια (Δευτέρα, Τρίτη ... Κυριακή) &lt;br/&gt; E = σύντομη ημέρα της εβδομάδας με λέξεις (Mon, Tue ... Sun) &lt;br/&gt; D - Ορτική ημέρα (1η, 2η, 3η, 21η, 22η, 23η, 31η, 4η ...) &lt;br/&gt; h = ώρα σε am/pm (0-12) &lt;br/&gt; hh = ώρα σε am/pm (00-12) &lt;Br/ &gt; H = ώρα την ημέρα (0-23) &lt;br/&gt; hh = ώρα την ημέρα (00-23) &lt;br/&gt; mm = λεπτό &lt;br/&gt; ss = δεύτερο &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm marker &lt;br/&gt; p = a.m./p.m. σημάδι</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Η τρέχουσα ημερομηνία ή/και ο χρόνος θα αντικατασταθούν για πρότυπα ημερομηνίας όταν είναι επικολλημένες.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Όλες οι εμφανίσεις αυτού του προτύπου θα χρησιμοποιήσουν το παρεχόμενο κείμενο. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Όλες οι εμφανίσεις αυτού του προτύπου θα χρησιμοποιήσουν το παρεχόμενο κείμενο. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Ολοκληρώστε την κατάρτιση</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Ενεργοποίηση μπλοκ</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Ενεργοποίηση inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Εγχειρίδιο εναλλαγής</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Εγχειρίδιο εναλλαγής</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Παύση προσθέτει</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Εναλλαγή πριν</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Εναλλαγή πριν</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Επαναλαμβάνω προσθέστε</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Προσαρτώ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Επικόλληση</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Καρφίτσα</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Ξεκαρφιτσώνω</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Απόκρυψη όλων των ειδοποιήσεων {0} '</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Απολύω</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Τελευταία ενεργή εφαρμογή άγνωστη. Μεταβείτε στην προβλεπόμενη εφαρμογή σε πάστα μαϊμού.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Επικόλληση σε: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Ελαττώνω</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Παρακαλώ περιμένετε...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Κλειδαριά</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>λογαριασμός</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Βοήθεια</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Αντιγραφή επικόλληση</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Προτιμήσεις</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Επαναφέρετε τις προεπιλογές</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Φίλτρο...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Συντομεύσεις</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Προσθήκη εφαρμογής</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Προσθήκη ιστότοπου</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>ΟΙΚΟΔΟΜΙΚΟ ΤΕΤΡΑΓΩΝΟ?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Ονομα</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Εφαρμογές</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Μπλοκ πεδίου;</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Μπλοκ URL;</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Τομέα</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Η αναγνώριση URL πηγής εξαρτάται από το πώς δεν μπορεί να εγγυηθεί φιλική προς το πρόχειρο ότι η εφαρμογή υποδοχής είναι τόσο η απόρριψη</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Διευθύνουσα ίππων</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Ιστοσελίδες</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Ορισμένα χαρακτηριστικά MonkeyPaste χρησιμοποιούν αυτοματοποίηση πληκτρολογίου για να προσομοιώσουν συμβάντα «αντιγραφής» σε άλλες εφαρμογές.
+
+Προσθέστε και/ή επιλέξτε την εφαρμογή με τη μοναδική συντόμευση αντιγραφής (όπως μια κονσόλα ή κέλυφος για παράδειγμα) για να διασφαλίσετε ότι αυτά τα χαρακτηριστικά λειτουργούν σωστά.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Συντόμευση αντιγραφής</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Κανένας</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Μόνο οι επιλεγμένες προεπιλογές θα χρησιμοποιηθούν για την καθορισμένη εφαρμογή. Όταν δεν είναι καθορισμένο, θα χρησιμοποιηθούν οι προεπιλεγμένες προεπιλογές που βρίσκονται στην πλαϊνή γραμμή &lt;/em&gt; &lt;em&gt; &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Πολλά χαρακτηριστικά MonkeyPaste χρησιμοποιούν αυτοματοποίηση πληκτρολογίου για να αλληλεπιδρούν με άλλες εφαρμογές.
+
+Ορισμένες εφαρμογές (όπως μερικές κονσόλες ή κελύφη για παράδειγμα) ενδέχεται να έχουν μη συντομεύσεις με προεπιλεγμένη επικόλληση.
+
+Για να εξασφαλιστεί η σωστή διαλειτουργικότητα, καταγράψτε αυτές τις συντομεύσεις για αυτήν την εφαρμογή εδώ.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Συντόμευση επικόλλησης</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Αναγνώστες</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Όλη η παρακολούθηση του πρόχειρου από απορριφθείσες εφαρμογές θα αγνοηθεί &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Συγγραφείς</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Επεξεργασία...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Μορφές</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Απορριπτόμενος</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Συντομεύσεις</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Θα θέλατε επίσης να αφαιρέσετε όλα τα κλιπ {0} από το '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Αφαιρέστε τα κλιπ;</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Εφαρμογή</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Περιηγηθείτε στην εφαρμογή ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Επιλέξτε Διαδρομή εφαρμογής</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να αφαιρέσετε προσαρμοσμένες συντομεύσεις για {0};</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να αφαιρέσετε προσαρμοσμένες μορφές για {0};</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Δεν υπάρχουν μορφές εκχώρησης προχειριζόμενων για αυτήν την εφαρμογή. Δεν θα διαβαστούν τα δεδομένα από αυτό μέσω κοπής/αντιγραφής ή από την προσπάθεια έλξης - και - πέφτουν στο MonkeyPaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Δεν υπάρχουν μορφές εκχώρησης προχειριζόμενων για αυτήν την εφαρμογή. Η αυτοματοποιημένη πάστα ή η σύρετε - και - η πτώση από το MonkeyPaste δεν θα έχει καμία επίδραση (τα κενά δεδομένα).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις συντομεύσεις; Όλες οι προσαρμοσμένες συντομεύσεις θα αφαιρεθούν.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να αλλάξετε το προφίλ δρομολόγησης συντόμευσης σε '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Ολα</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Αγαπημένα</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Φίλτρα</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Μορφές</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Ετικέτες</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Σήμερα</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Σκουπίδια</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Σχετικά με</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Εύκολο, σωστά;</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Κάντε διπλό κλικ για unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Εθιμο</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Παγκόσμια</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Αυτός ο συνδυασμός έρχεται σε σύγκρουση με το '{0}' που θα εκκαθαριστεί εάν αποθηκευτεί.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Πρέπει να παρέχεται συντόμευση.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Αυτή είναι μια παγκόσμια συντόμευση. Αυτό σημαίνει ότι θα προσπαθήσει να εκτελέσει όποτε εκτελείται. Προσπαθήστε να το κάνετε αρκετά μοναδικό (ή να αλλάξετε τον «τύπο δρομολόγησης») για να μην έρχονται σε σύγκρουση με συντομεύσεις από άλλες εφαρμογές.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Παγκόσμια</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Η συντόμευση πρέπει να περιέχει ένα και μόνο ένα μη -τροποποιητή κλειδί.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Πατήστε οποιοδήποτε πλήκτρο για καταγραφή ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Αναθέστε τη συντόμευση</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Μάθε περισσότερα...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Αναβαθμίζω</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Ματαίωση</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Διορθώσετε</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Αγνοώ</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Οχι</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Εντάξει</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Ξαναδοκιμάσετε</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>ΤΕΡΜΑΤΙΣΜΟΣ ΛΕΙΤΟΥΡΓΙΑΣ</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>υποβάλλουν</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ναί</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Ετήσια</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Μηνιαίο</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Δοκίμασε δωρεάν!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Κύκλος χρέωσης</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΕΥΘΥΝΣΗ</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Σύνδεση</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Ελέγξτε τη σύνδεσή σας
+Και δοκιμάστε ξανά.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Αποσύνδεση</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Επόμενη πληρωμή</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Κωδικός πρόσβασης</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Κανω ΕΓΓΡΑΦΗ</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Το email δεν είναι έγκυρο</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Οι κωδικοί πρόσβασης δεν ταιριάζουν.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Ο κωδικός πρόσβασης πρέπει να είναι τουλάχιστον {0} χαρακτήρες.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Θυμάμαι?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Ελέγξτε το email σας για να επιβεβαιώσετε τον λογαριασμό σας</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Επαναφέρετε τον κωδικό πρόσβασης</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Μμμ, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Ποτέ</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Δωρεάν δοκιμή {0} ημέρας</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Υπήρχε πρόβλημα εκτέλεσης
+η αγορά σας.
+
+Έλεγχος της σύνδεσής σας και
+Οι ρυθμίσεις μπορούν να βοηθήσουν.
+
+Θέλετε να δοκιμάσετε ξανά;</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Ο λογαριασμός σας ήταν με επιτυχία
+αναβαθμισμένο σε:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Αγορά επιτυχώς!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Λάθος</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Αποτυχημένη σύνδεση.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Ξαναδοκιμάσετε</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Ο λογαριασμός άλλαξε</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Η συνδρομή σας είναι τώρα {0}/{1} με {2} περιεχόμενο και {3} αποθήκευση απορριμμάτων.
+Αλλά μην ανησυχείτε, δεν χάνονται δεδομένα μετά την υποβάθμιση. Θα αξιολογηθούν μόνο νέα κλιπ.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Συγχαρητήρια! Η συνδρομή σας είναι τώρα {0}/{1} με {2} περιεχόμενο και {3} αποθήκευση απορριμμάτων.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Σκουπίδια ή αποσυνδέστε κάτι
+από '{0}' για να προσθέσετε περισσότερα.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' αποθήκευση είναι {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Επαναφέρω</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} μπλοκαρισμένο</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Η χωρητικότητα περιεχομένου και σκουπιδιών επιτυγχάνεται!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' αποθήκευση είναι {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Η χωρητικότητα περιεχομένου επιτυγχάνεται!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Μπορείτε να αποκρύψετε αυτές τις προειδοποιήσεις από
+κάνοντας κλικ στο "Απόκρυψη όλων" από το
+Επιλογές μενού παραπάνω.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Το Max Stork Storage είναι {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Η χωρητικότητα των σκουπιδιών έφτασε!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} δεν είναι έγκυρο</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} πρέπει να είναι τουλάχιστον {1} χαρακτήρες</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} μπορεί να είναι μόνο {1} χαρακτήρας</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Επικόλληση σε: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Η πληρωμή για το {0} σας
+Η συνδρομή οφειλόταν {1}
+και δεν έχει ληφθεί.
+
+Ενημερώστε το δικό σας
+Πληροφορίες Πληρωμής.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Η πληρωμή για το {0} σας
+Η συνδρομή οφειλόταν {1}
+και δεν έχει ληφθεί.
+
+Συνδεθείτε στο
+Διαδίκτυο στη συσκευή
+με τη συνδρομή σας και
+επανεκκίνηση για να συνεχίσετε
+Χρησιμοποιώντας το σχέδιο {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Η πληρωμή για το {0} σας
+Η συνδρομή οφειλόταν {1}
+και δεν έχει ληφθεί.
+
+Ανοίξτε ή επανεκκινήστε
+Monkeypaste στη συσκευή
+με τη συνδρομή σας στο
+Συνεχίστε να χρησιμοποιείτε το δικό σας
+{0} σχέδιο.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Έληξε ο λογαριασμός</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Σημείωση</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Το Microsoft Store δεν επιτρέπει τη βαθμίδα
+Αλλαγές σε πρόσθετα συνδρομής.
+
+Πρέπει να ακυρώσετε το δικό σας
+{0}/{1} Σχεδιάστε τον εαυτό σας
+Ή θα χρεωθείτε και για τα δύο.
+
+Θα θέλατε να το κάνετε τώρα;</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Ο κωδικός πρόσβασής σας έχει επαναφερθεί.
+
+Ελέγξτε το email σας και
+Ακολουθήστε τον σύνδεσμο για αλλαγή
+ο κωδικός σας.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Σύνδεση</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Συγγραφέας (ες)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Απαιτείται να αποδεχτείτε τους ακόλουθους όρους άδειας πριν συνεχίσετε.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Τα ακόλουθα πακέτα απαιτούν να αποδεχτείτε τους όρους άδειας πριν την εγκατάσταση.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Αρνούμαι</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Κάνοντας κλικ στο "I Accound" σημαίνει ότι συμφωνείτε με τους όρους άδειας για αυτήν την αίτηση. Εάν δεν συμφωνείτε με τους όρους, κάντε κλικ στο κουμπί "Απορρίφω".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Κάνοντας κλικ στο "I Accound" σημαίνει ότι συμφωνείτε με τους όρους άδειας για τα plugin που αναφέρονται παραπάνω. Εάν δεν συμφωνείτε με τους όρους, κάντε κλικ στο κουμπί "Απορρίφω".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Άδεια προβολής</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Αποδοχή άδειας</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Δέχομαι</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Ενεργός</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Εκτός σύνδεσης</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Αδήλωτος</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Εγινε</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>Οι κωδικοί πρόσβασης δεν ταιριάζουν</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Κωδικός πρόσβασης</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Η συνδρομή σας είναι
+Τώρα ρυθμίστε σε {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Κρίθηκε ο λογαριασμός</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Η σύνδεση απέτυχε</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Η εγγραφή απέτυχε</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Επιτυχής Εγγραφή!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Σφάλμα επαναφοράς</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Συνδρομή</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Τι νέα</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Ποτέ</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Απεριόριστος</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>χωρητικότητα</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>παραμένων</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>σύνολο</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Η πληρωμή σας έχει περάσει.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Οι συντομεύσεις αποκλειστικής παράκαμψης μπορεί να περιέχουν μόνο ένα κλειδί και αυτό το κλειδί δεν μπορεί να είναι ένα κλειδί τροποποιητή.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>έχει λήξει</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Φόρτωση</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>άτομα με ειδικές ανάγκες</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Σημείωση! Αυτός ο κωδικός πρόσβασης είναι προαιρετικός και μόνο για επιπλέον ασφάλεια. Τα δεδομένα σας είναι ήδη κρυπτογραφημένα και ποτέ δεν μοιράζονται. Αυτός ο κωδικός πρόσβασης αποτρέπει απλώς κάποιον του οποίου όχι εσείς από τη φόρτωση πιθήκων, εάν αποκτήσουν πρόσβαση στην επιφάνεια εργασίας σας (κλαπεί, αφήνετε το δωμάτιο κ.λπ.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Θυμηθείτε τις ρυθμίσεις πτώσης για:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Αναζήτηση προσθηκών</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Αναλύει</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Γρήγορη δράση</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Επεξεργασία εναλλαγής</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Εναλλαγή</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Σχολιασμοί</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Απλό κείμενο</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Ανοίξτε στο παράθυρο</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Κάντε κλικ στο + Ctrl για να ακολουθήσετε ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Κάντε κλικ + alt για να ακολουθήσετε ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>PIN ή ρίξτε οποιαδήποτε μέσα εδώ!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Σαφή</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Τα κατώτατα όρια πάνω από το 0 θα παρέχουν ασαφή αντιστοίχιση χρωμάτων χρησιμοποιώντας ευκλείδειο απόσταση στο χώρο χρώματος RGBA.
+
+Για παράδειγμα, εάν το κόκκινο (#FF0000) είναι ο όρος αναζήτησης και ο μαύρος (#000000) είναι ένα εικονοστοιχείο σε ένα κλιπ εικόνας, τότε η απόσταση χρώματος θα είναι 255. Η μαύρη έως η λευκή απόσταση είναι η μέγιστη δυνατή του 510, συμπεριλαμβανομένου ενός καναλιού άλφα</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Όλα τα παρακάτω είναι αληθινά</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Πρόχειρο</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Συλλογές</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Τρόπους ποντικιού</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Ενεργοποιεί</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Παύση</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>ΒΙΟΓΡΑΦΙΚΟ</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Νέα σκανδάλη</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Προσθέστε προκαθορισμένη</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Πιθήκου</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Προετοιμασία</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Αναλυτής</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Κομμωτήριο</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Προσανατολισμός κύκλου</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Εναλλακτική διάταξη πλέγματος</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Θήκη ευαίσθητος</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Κατώφλι</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Ολος ο κοσμος</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Κανένας σετ</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Δρομολόγηση</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Δράση</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Πλέγμα</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Εγινε</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Επόμενο</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Προηγούμενος</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Παραλείπω</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Υπάρχων λογαριασμός?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Επόμενη πληρωμή</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Η εγγραφή σας επιτρέπει να μεταφέρετε τη συνδρομή σας σε όλες τις συσκευές σας (μετά τη διαθεσιμότητα). Δεν θα ανεπιθύμητα το email σας υπόσχουμε 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Συνδρομή</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Ονομα χρήστη</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Θέλετε να εγγραφείτε;</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Πηγές</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Περίεργο, τίποτα διαθέσιμο. Κάτι πρέπει να είναι λάθος 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Αφαιρώ</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Απαιτεί επανεκκίνηση</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Προχωρημένος</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Σφάλμα εξαγωγής plugin από '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Εγκατάσταση σφάλματος Plugin: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Σφάλμα εγκατάστασης plugin '{0}' διεφθαρμένη ή ακατάλληλη δομή καταλόγου. Το δηλωτικό θα πρέπει να υπάρχει στο '{1}' αλλά δεν βρέθηκε.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Σφάλμα PARSING Plugin Manvest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Χωρίς πρόσθετο φορτωμένο με GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} σφάλμα</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Σφάλμα στάσης Σφάλμα plugin σε temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Δημιουργία αντιγράφων ασφαλείας σφαλμάτων '{0}' σε '{1}'. Λεπτομέρειες: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Η πληκτρολόγηση κειμένου θα εφαρμοστεί αυτόματα σε μια αναζήτηση όταν δεν έχει επικεντρωθεί το πλαίσιο κειμένου.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Εισαγωγή αυτόματης αναζήτησης</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Η αλλαγή κωδικού πρόσβασης απέτυχε</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Αλλαγή</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Άλλαξε κωδικό</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Σαφή</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Καθαρός κωδικός πρόσβασης</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Περιεχόμενο</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Μέγεθος γραμματοσειράς περιεχομένου</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Όταν είναι αληθινό, το εξωτερικό περιεχόμενο που εισάγεται σε ένα κλιπ θα χρησιμοποιήσει τη μορφοποίηση των κλιπ και όχι αυτό που είναι διαθέσιμο από την πηγή.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Επικόλληση, πτώση ή προσάρτηση με μορφοποίηση προορισμού</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να ξεχάσετε τον κωδικό πρόσβασης;</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Ξεχνάμε</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Ξεχάστε τον κωδικό πρόσβασης</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Προφίλ</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Απόκρυψη υδατογραφημάτων χωρητικότητας</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Όταν προσαρτάται νέο περιεχόμενο πρόχειρου, δεν θα παρακολουθείται ως νέο κλιπ</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Αγνοήστε τις προσαρτήσεις</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Όταν το πρόχειρο ταιριάζει με ένα υπάρχον κλιπ, αυτό το κλιπ θα χρησιμοποιηθεί αντί να δημιουργήσει ένα νέο</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Αγνοήστε νέα αντίγραφα</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Οι αλλαγές στο πρόχειρο από την εφαρμογή δεν θα παρακολουθούνται</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Αγνοήστε την εσωτερική παρακολούθηση του πρόχειρου</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Οι χώροι, οι καρτέλες και οι νέες γραμμές θα αγνοηθούν από την παρακολούθηση</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Αγνοήστε μόνο τον λευκό χώρο</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Φορτώστε σε σύνδεση</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Εικονικό παράθυρο</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Αδιαφάνεια</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Συμπεριφορά εμφάνισης</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Το κύριο παράθυρο θα αποκαλυφθεί με την εκτέλεση μιας χειρονομίας κύλισης στην κορυφή της οθόνης σας</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Εμφάνιση στην επάνω οθόνη κύλιση</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Όγκος ειδοποίησης</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Αυτή η ρύθμιση θα παρακολουθεί το σύστημα - ευρεία πάστα πληκτρολογίου μετράει για στατιστικά στοιχεία χρήσης. Αυτές οι πληροφορίες είναι ιδιωτικές και δεν μοιράζονται, αλλά και δεν εγγυώνται. Τα ακριβή αποτελέσματα ενδέχεται να απαιτούν την παροχή μιας εντολής επικόλλησης πληκτρολογίου ειδικής εφαρμογής στο 'Ρυθμίσεις -&gt; Αντιγραφή &amp; επικόλληση -&gt; συντομεύσεις'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Ιστορικό επικόλλησης</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Πάρα πολλά καρφικά κλιπ (όπως καρτέλες του προγράμματος περιήγησης) μπορούν να καταναλώνουν σημαντική μνήμη. η απομάκρυνση είναι πρώτα - πρώτα -</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Χωρητικότητα</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Αυτό ισχύει για όλες τις αυτόματες εισόδους, οι χαμηλότερες τιμές θα βελτιώσουν την απόδοση</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Πρόσφατο όριο κειμένου</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Είστε σίγουροι ότι θέλετε να
+Επαναφορά προεπιλεγμένων προτιμήσεων;
+
+Αυτό δεν μπορεί να αναιρεθεί!
+
+*Η εφαρμογή θα επανεκκινήσει μόλις ολοκληρωθεί.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις ειδοποιήσεις;
+
+*Αυτό δεν μπορεί να αναιρεθεί!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Το Monkey Paste θέτει το πρόχειρο (παρακάμπτεται) όταν επικολλείται σε ένα εξωτερικό πρόγραμμα. Αυτό θα προσπαθήσει &lt;b&gt; &lt;/b&gt; να αποκαταστήσει την κατάσταση του πρόχειρου μετά από μια εξωτερική πάστα.
+
+Η συνολική αποκατάσταση δεν μπορεί να εγγυηθεί και μπορεί να μειώσει την απόδοση ή ακόμα και να συντρίψει πιθήκους ανάλογα με την πηγή των δεδομένων.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Επαναφέρετε το πρόχειρο μετά την επικόλληση των μαϊμού</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η διαγραφή της προσθήκης προσθήκης από τη διαδρομή: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Όλα τα plugins θα επαναφέρονται στην αρχική προεπιλεγμένη κατάσταση</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Μνήμη προσθήκης</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλα τα plugins σε προεπιλογές;</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε τον κωδικό πρόσβασής σας;</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Όλες οι συντομεύσεις εφαρμογών θα επαναφέρονται στις προεπιλεγμένες βασικές χειρονομίες τους.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Επαναφορά συντομεύσεων</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Όλες οι ειδοποιήσεις αγνοούσαν προηγουμένως.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Επαναφέρετε τις ειδοποιήσεις</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Η ενεργοποίηση μπορεί να είναι μάλλον αργή) Η απενεργοποίηση του μορφοποιημένου θα μειώσει την κατανάλωση μνήμης, αλλά θα εμποδίσει ορισμένα προηγμένα χαρακτηριστικά, όπως: προσαρτήματα, πρότυπα, σχολιασμοί και εύρεση/αντικατάσταση</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Πλούσιο περιεχόμενο</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Ορίστε κωδικό</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Εμφάνιση συμβουλών</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Εμφάνιση στη γραμμή εργασιών</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Εμφάνιση στο Switcher Task</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Εμφάνιση τίτλων</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Όταν είναι ενεργοποιημένη, η σύρσιμο από οποιαδήποτε εφαρμογή στο επάνω μέρος της οθόνης θα αποκαλύψει το MonkeyPaste για να πέσει εύκολα το περιεχόμενο σε πιθήκους.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Εμφάνιση στο drag στην κορυφή της οθόνης</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Θέμα ήχου</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Ορθογραφικός έλεγχος</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Κατά την εκκίνηση, η πηγή του πρόχειρου θα είναι άγνωστη και ανάλογα με τις ρυθμίσεις ασφαλείας σας, το περιεχόμενο μπορεί να προέρχεται από εξαιρούμενη ιστοσελίδα ή εφαρμογή.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Προσθήκη πρόχειρου εκκίνησης</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Ακούστε το πρόχειρο κατά την εκκίνηση</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Επιλέγω</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Προσοχή! Άλλα χρώματα παλέτας επιλέγονται χρησιμοποιώντας μαθηματικά όχι μάτια! Έτσι, να γνωρίζετε ότι ορισμένοι συνδυασμοί χρωμάτων και στυλ μπορεί να μην έχουν την κατάλληλη αντίθεση για την αναγνωσιμότητα.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Θεματικό χρώμα</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Θεματικό στυλ</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Η αυτόματη εκκαθάριση απορριμμάτων θα πραγματοποιηθεί κατά την εκκίνηση στο διάστημα καθορισμένου.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Καθαρισμός σκουπιδιών</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Διεπαφή</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Τα υψηλά όρια αναίρεσης ενδέχεται να επηρεάσουν την απόδοση</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Αναιρέσεως όριο</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Κανένα όριο</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Χρησιμοποιείται σε προηγμένη αναζήτηση αρχείων για μη προκαθορισμένα είδη αρχείων</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Χρήστης - καθορισμένες επεκτάσεις αναζήτησης</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Βρίσκω και αντικαθιστώ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Επικόλληση εδώ</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Μερίδιο...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Θέα</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Διαχειρίζονται...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Μετονομάζω</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Βαθμολογία: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Τύπος: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Διαγράψτε μόνιμα</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Περιηγηθείτε στο '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Μεταμορφώνω</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Εισαγωγή</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Παραγωγή</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Πηγές</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Επαναφέρω</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Επιλέξτε Εικόνα ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Χρώμα</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Διαχειριστείτε '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Ανοιξε</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Παρακαλώ περιμένετε...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Χρώμα του φόντου</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Τα καθαρίζω όλα</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Μορφές προφίλ</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Διαγραφή όλων</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Επεξεργασία λεπτομερειών</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Ονομα</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Εύρημα</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Γραμματοσειρά</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Βαφή μορφής</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Σε επιλογή</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Εισαγάγετε εικόνα</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Εισαγάγετε σύνδεσμο</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Εισαγάγετε βίντεο</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Υπόθεση αγώνα</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Νέο πρότυπο</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Επόμενο πρότυπο</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Εισαγάγετε κείμενο επικόλλησης ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Προηγούμενο πρότυπο</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Κοινή έκφραση</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Αντικαταστήστε όλα</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Αντικαθιστώ</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Ολος ο κοσμος</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Τυλίγομαι γύρω</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>ΟΙΚΟΔΟΜΙΚΟ ΤΕΤΡΑΓΩΝΟ</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Τομέα</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Φάκελος εκδήλωσης</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Ξεβουλώνω</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Σχετικά με</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Προσάρτημα μπλοκ</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Προσθέστε ενσωματωμένη</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Αντιγραφή</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Τρόπους</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Περιμένετε ότι η MonkeyPaste φορτώνει ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Εγκαταλείπω</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Κάντε κλικ στην επιλογή Paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Ομάδα</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Φίλτρο</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Διαγράψτε μόνιμα όλα</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Επαναφορά όλων</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Δράση</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>Το URL υπάρχει ήδη: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Η διεύθυνση URL πρέπει να είναι σε έγκυρη μορφή.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Εισαγάγετε πλήρη διεύθυνση URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Προσθήκη διεύθυνσης URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Εισαγάγετε τιμές</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Αντιγραφή κειμένου ή αρχεία για εφαρμογή.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Προσάρτημα {0} {1} ενεργοποιημένη λειτουργία</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Οι αλλαγές στο πρόχειρο θα προσληφθούν τώρα</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Μετά την ενεργοποίηση της λειτουργίας προσάρτησης</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Οι αλλαγές στο πρόχειρο θα είναι τώρα ετοιμασμένες</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Πριν ενεργοποιηθεί η λειτουργία προσάρτησης</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>ΟΙΚΟΔΟΜΙΚΟ ΤΕΤΡΑΓΩΝΟ</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Η κανονική συμπεριφορά του πρόχειρου έχει αποκατασταθεί</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Προσαρμόζεται απενεργοποιημένο</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Οι προσθέσεις προστέθηκαν στην κορυφή ή το botom του κλιπ</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Ενεργοποιημένη λειτουργία προσάρτησης έκτασης</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Στη γραμμή</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Εγχειρίδιο</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Προσθέστε την τρέχουσα επιλογή σας.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Ενεργοποιημένη λειτουργία χειροκίνητης προσάρτησης</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Η συσσώρευση πρόχειρου σταμάτησε</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Το προσάρτημα σταμάτησε</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Η συσσώρευση του πρόχειρου συνεχίστηκε</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Προσαρμογή συνεχίστηκε</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να ολοκληρώσετε την προσθήκη;</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Η επεξεργασία σε λειτουργία συμβατότητας θα καταργήσει όλες τις πλούσιες μορφοποίησης. Είστε βέβαιοι ότι θέλετε να το τροποποιήσετε;</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Προειδοποίηση υποβάθμισης δεδομένων</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Ενεργός</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Ενεργοποιημένος</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Μακριά από</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Επί</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Παύση</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Αποτέλεσμα</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Κατάσταση</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Παρουσιάστηκε άγνωστο σφάλμα.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Απομένει να παραμείνει</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Εισάγετε τον κωδικό πρόσβασης</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Επιβεβαιώνω</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Επικοινωνία</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Ημερομηνία ώρα</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε όλες τις συνήθειες του '{0}';
+
+Αυτό δεν μπορεί να αναιρεθεί!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Δυναμικός</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Στατικός</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} είναι άδειο ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Περισσότερα σε λίγο!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Η απενεργοποίηση φόρτωσης σύνδεσης απέτυχε</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Η επιτυχία της φόρτωσης σύνδεσης</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Η ενεργοποίηση φόρτωσης σύνδεσης απέτυχε</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>LOAD LOAD Ενεργοποίηση επιτυχίας</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Κρύβω</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Η πάστα μαϊμού είναι τώρα φορτωμένη.
+Η ακρόαση με πρόχειρο είναι: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Φορτωμένος</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>προβολή</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Λειτουργία επιλογής αυτόματου αντιγράφου: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Η λειτουργία άλλαξε</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Κάντε δεξί κλικ στη λειτουργία Paste: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Ενημερώθηκε το plugin</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Επικόλληση '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Εκτελέστε {0} 'αναλυτής</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Εκτελέστε {0} 'σκανδάλη</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Επιλέξτε '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε '{0}' και όλες τις σχετικές ενέργειες;</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Δώσει το έναυσμα για</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Θα θέλατε να καταργήσετε όλες τις υπο -ενέργειες για το '{0}'; (Διαφορετικά, θα ανασταλούν σε '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Κατάργηση επιλογών</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Θέλετε πραγματικά να GOTO '{0}';</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>λογαριασμός</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Αναλυτές</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Λειτουργίες αίτησης</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Πρόχειρο</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Περιεχόμενο</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Μετατροπείς</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Πολιτισμός</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Δεδομένα</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Κατεύθυνση</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Σύρετε και πτώση</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Πτώση μάγουλο</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Εικονίδια</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Κόπτων δέντρα διά ξυλείαν</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Διεπαφή</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Επικόλληση</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Προτιμήσεις</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Αναζήτηση</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Συντομεύσεις</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Είδος</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Ήχοι</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Δίσκος συστήματος</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Συλλογές</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Θέμα</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Ενεργοποιεί</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Λειτουργίες ιστοσελίδων</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Γλώσσα</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Ορίζει το πρόχειρο στο κλιπ εισόδου.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Συναγερμός</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Χυλό</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Αρμονική κωδωνοκρουσία</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Ειδοποιήσεις μηνυμάτων γενικού σκοπού ή/και ειδοποιήσεων μηνυμάτων συστήματος. Η δράση ειδοποίησης δεν έχει καμία επίδραση στην εισήγησή τους.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Μήνυμα</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Πίθηκος</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Προεπισκόπηση</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Προβολή?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Το μήνυμα τοστ εμφανίζεται σε δευτερόλεπτα. Όταν η τιμή είναι 0 το μήνυμα πρέπει να είναι κλειστό με το χέρι.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Εμφάνιση χρόνου (ες)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Υποβρύχιο ραντάρ</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Ήχος?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Τύπος ήχου</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ηχώ</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Ενταση ΗΧΟΥ</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Αναλυτής</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Επεξεργάζεται το κλιπ εισόδου χρησιμοποιώντας την προκαθορισμένη προκαθορισμένη αναλυτή.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Το περιεχόμενο εισόδου συνδέεται με την επιλεγμένη συλλογή</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Συνδέει το κλιπ εισόδου της στη συλλογή ετικετών που έχει εκχωρηθεί.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Ετικέτα</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Θήκη ευαίσθητη;</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Αυτό μπορεί να είναι στατικό κείμενο για να συγκριθεί με την είσοδο ή/και να συμπεριλάβει επιλεγμένες ιδιότητες (μέσω του κουμπιού φίλτρου) θα αντικατασταθεί όταν αξιολογηθεί η κατάσταση.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Συνθήκες δεδομένων</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Ένα προαιρετικό ερώτημα JSONPATH που θα εφαρμοστεί στην επιλεγμένη «ιδιότητα εισόδου» πριν από την αξιολόγηση της κατάστασης.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Φίλτρο εισόδου</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Η ιδιότητα κλιπ που χρησιμοποιείται για αυτό το υπό όρους.
+
+Η ιδιότητα "Τελευταία έξοδος" υποστηρίζεται αυτή τη στιγμή μόνο όταν αυτή η υπό όρους είναι παιδί μιας δράσης αναλυτή και τα παρεχόμενα δεδομένα θα διαφέρουν ανάλογα με την έξοδο του γονέα αναλυτή.
+
+Για την αντιμετώπιση προβλημάτων, επισυνάψτε μια «δράση ειδοποίησης» στον γονέα αυτού του υπό όρους και ρυθμίστε την παράμετρο «μηνύματος» της ειδοποίησης για να ταιριάζει με αυτήν την ιδιότητα εισόδου. Αυτό θα επιτρέψει την αναθεώρηση των πραγματικών δεδομένων που χρησιμοποιούνται για αυτό το υπό όρους.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Ιδιότητα εισόδου</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Εκτελεί σύγκριση κειμένου στο κλιπ εισόδου ή στην προηγούμενη έξοδο ενέργειας. Όταν η σύγκριση αποτυγχάνει (δεν είναι ένας αγώνας), δεν θα εκτελεστούν ενέργειες παιδιών. Έτσι λειτουργεί σαν μια λογική πύλη.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Όλες οι αληθινές ή ψευδείς λειτουργίες όπου οι ενέργειες των παιδιών θα εκτελούν μόνο εάν το αποτέλεσμα είναι αληθινό.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Κατάσταση</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Ολα</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Που ενεργοποιείται όταν ένα κλιπ του επιλεγμένου τύπου προστίθεται στο σύστημα με οποιονδήποτε τρόπο (πρόχειρο, σύρσιμο - και - πτώση, αναλυτής που παράγεται ή διπλασιάζεται).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Εκτελέστε μόνο αυτήν την σκανδάλη εάν το κλιπ εισόδου είναι καινούργιο και όχι ένα αντίγραφο. Αυτό είναι ανεξάρτητο για οποιαδήποτε ρύθμιση προτιμήσεων για το εάν το νέο περιεχόμενο αγνοείται ή όχι.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Αγνοήστε το αντίγραφο</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Μόνο κλιπ αυτού του τύπου θα ενεργοποιήσουν αυτήν την ενέργεια.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Συνδέει το κλιπ εισόδου της στη συλλογή ετικετών που έχει εκχωρηθεί.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Που ενεργοποιείται όταν ένα κλιπ συνδέεται με την καθορισμένη συλλογή ετικετών.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Συλλογή</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Ο χρόνος σε χιλιοστά του δευτερολέπτου περίμενε πριν από την εκτέλεση των παιδιών</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Καθυστέρηση</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Πειραματική) που χρησιμοποιείται κυρίως σε συνδυασμό με τη δράση του επαναλήπτη για εκλογές απομακρυσμένες πηγές ή βοήθεια με μακροχρόνιες λειτουργίες.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Όταν αφεθεί κενό, το αρχείο εξόδου θα χρησιμοποιήσει τον τίτλο του κλιπ εισόδου ως το όνομα του αρχείου.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Προσαρμοσμένο όνομα</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Ο κατάλογος όπου θα γραφτεί το αρχείο.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Ευρετήριο</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Εξοικονομεί είσοδο στον επιλεγμένο φάκελο.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Που ενεργοποιείται όταν αλλάζει το περιεχόμενο του επιλεγμένου φακέλου. Η έξοδος θα είναι ένα νέο ή υπάρχον (όταν είναι ενεργοποιημένη η προτίμηση των αντιγράφων DIGNORE) του αρχείου ή του φακέλου που έχει αλλάξει μαζί με τον τύπο της αλλαγής ως την τελευταία έξοδο του.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Εκδηλώσεις</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Ντοσιέ</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Αγνοήστε το αντίγραφο</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Μια τιμή 0 θα επαναλάβει την γονική δράση επ 'αόριστον</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Επανάληψη</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Το χρονικό διάστημα σε χιλιοστά του δευτερολέπτου για να περιμένετε μόλις ολοκληρωθεί η γονική δράση</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Επανάληψη καθυστέρησης</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Πειραματικό) που χρησιμοποιείται για τη δημιουργία βρόχων δράσης ή επαναλαμβανόμενες εργασίες. Όταν επαναλαμβάνεται, θα εκτελέσει ξανά όλα τα παιδιά με την αρχική του είσοδο. Όταν χρησιμοποιείτε ένα διάστημα χωρίς έναν αριθμό επανάληψης, η σκανδάλη θα πρέπει να απενεργοποιηθεί και να επανατοποθετηθεί για να σταματήσει την επανάληψη. Μπορεί να είναι χρήσιμο για την εκλογή ή τον αυτοματισμό απόξεσης ιστού.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Που ενεργοποιείται από μια παγκόσμια συντόμευση που ορίζετε. Εάν το monkeypaste είναι ενεργό, θα προσπαθήσει να χρησιμοποιήσει το επιλεγμένο κλιπ (αν υπάρχει ένα) ως είσοδος. Διαφορετικά, θα προσπαθήσει να χρησιμοποιήσει το πρόχειρο ως είσοδο του.
+
+ΣΗΜΕΙΩΣΗ: Μια σκανδάλη συντόμευσης θα εξακολουθεί να εκτελεί εάν δεν υπάρχει εισροή για να διατηρηθεί η ευέλικτη (έτσι ώστε να είναι μια μακροεντολή κλπ.), Αφού δεν είναι ένα γεγονός που οδηγείται από δεδομένα.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Σκανδάλη συντόμευσης</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Ενεργοποιείται όταν η καταγεγραμμένη συντόμευση πιέζεται ανά πάσα στιγμή με το τρέχον πρόχειρο</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Αυτή η ενέργεια απαιτεί την επανεκκίνηση της εφαρμογής. Θέλετε να το κάνετε τώρα;</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Υπήρξε ένα πρόβλημα. Πρέπει να επανεκκινήσετε με μη αυτόματο τρόπο την εφαρμογή.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Αναλύστε με σχολιαστή</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Σχολιασμός σκανδάλης</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Χτισμένα σε στοιχεία διαβάζονται - μόνο. Αντίγραφα για να αλλάξετε.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Ανώνυμος</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Εθιμο</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Εχθές</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} πριν από ημέρες</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Πριν από 1 ώρα</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} πριν από ώρες</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Μόλις τώρα</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Πριν από ένα λεπτό</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} πριν από λεπτά</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Τον προηγούμενο μήνα</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} πριν από μήνες</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Την προηγούμενη εβδομάδα</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} πριν από εβδομάδες</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} πριν από χρόνια</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Σχολιασμοί</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Όνομα εφαρμογής</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Διαδρομή εφαρμογής</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Θήκη ευαίσθητος</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Περιεχόμενο</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Τύπος αρχείου</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Τύπος εικόνας</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Κοινή έκφραση</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Τύπος κειμένου</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Τίτλος</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Διευθύνουσα ίππων</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Τίτλος url</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Ολος ο κοσμος</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Όπως και η κύλιση κατά μήκος της επάνω άκρης της οθόνης για να ανοίξει, αυτό θα κλειδώσει το κύριο παράθυρο όταν ανοίξει. Επιτρέποντας για ταχύτερες πολλαπλές ροές εργασίας.
+
+* Οι γωνίες είναι από την άποψη όλων των οθονών σας, όχι ανά οθόνη.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Εμφάνιση παραθύρου και κλειδώματος</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Ελεύθερος!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Δώστε μας 5 αστέρια!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Διαγραφή όλων</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Διαγράψτε όλο το περιεχόμενο</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε
+Όλα τα κλιπ σας;!
+
+*Αυτή η λειτουργία δεν μπορεί να ανατραπεί!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Είμαι indy dev παρακαλώ δείξτε κάποια υποστήριξη!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Όπως το Monkeypaste;</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} Αποδέχεται μόνο την είσοδο τύπου: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Αυτόματη λειτουργία αντιγραφής - προσομοιώνει ένα συμβάν «αντιγραφής» κάθε φορά που απελευθερώνεται το αριστερό κουμπί του ποντικιού.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Κάντε δεξί κλικ στην λειτουργία Paste - προσομοιώνει ένα συμβάν «πάστα» κάθε φορά που κυκλοφορεί το σωστό κουμπί του ποντικιού</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Προκαθορισμένος</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Εμφάνιση φακέλου plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Κανω ΑΝΑΦΟΡΑ</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Θέα</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Εμφάνιση εργαλείων</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Οι αναλυτές σχολιάζουν την εισροή τους ή δημιουργούν νέα κλιπ ως έξοδο. Τα παιδιά των αναλυτών πρέπει να αποφασίσουν ποια χρειάζονται ως εισροή τους. Αυτό είναι συνήθως η τελευταία έξοδος.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Τύπος εισόδου</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Σχεδιαστής ενεργοποίησης {0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Διαλέξτε ένα {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Δεν βρέθηκε...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} σκανδάλη</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Όταν ελέγχετε το αληθινό ή ψευδές αποτέλεσμα της κατάστασης θα αναστραφεί. Έτσι, για παράδειγμα, μια «κατάσταση» θα γίνει "δεν περιέχει".</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Δεν</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Παρακαλώ περιμένετε...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Χρωματικός επιλογέας</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Χρώμα αγώνα</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Όπως μια σκανδάλη συντόμευσης, αλλά όταν πατηθεί ο συνδυασμός κλειδιών, ένα συμβάν αντιγραφής θα προσομοιωθεί στην ενεργή εφαρμογή, ώστε να λειτουργεί ακόμα σαν αντίγραφο, αλλά στη συνέχεια η αλυσίδα των ενεργειών που συνδέονται με το σκανδάλη αντιγράφων πιθήκων θα εκτελεστεί στο παρασκήνιο χρησιμοποιώντας το προσομοιωμένα δεδομένα αντιγράφων.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Προχωρημένο φίλτρο</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Απόκρυψη φίλτρων</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Επαναφορά φίλτρων</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Δημιουργία φίλτρου</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Προαιρετικό) Όταν αφεθεί άδειο, το πρόχειρο θα ρυθμιστεί χρησιμοποιώντας την είσοδο αυτής της ενέργειας. Οτιδήποτε παρέχεται εδώ θα αντιμετωπίζεται μόνο ως απλό κείμενο.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Περιεχόμενο για πρόχειρο</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Όταν είναι αληθές, δεν θα προστεθεί κλιπ μετά από αυτή τη δράση θέτει το πρόχειρο.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Αγνοώ</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Κανένας αναλυτής που επιλέχθηκε για δράση {0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Αναλυτής για δράση '{0}' Δεν βρέθηκε</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Γονέας '{0}' φίλτρα μόνο για '{1}' Περιεχόμενο και αναλυτής '{2}' δεν θα εκτελέσει ποτέ επειδή δεν υποστηρίζει '{3}' τύπος εισόδου</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Δεν έχει επιλεγεί ετικέτα για ταξινομητή {0} '</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Ετικέτα για ταξινομητή '{0}' Δεν βρέθηκε</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Η σύγκριση της τιμής μπορεί να είναι μόνο γράμματα, αριθμοί ή χώροι</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Καμία ετικέτα που επιλέχθηκε για Trigger με ετικέτα με κλιπ '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Ετικέτα για clip tagged trigger '{0}' Δεν βρέθηκε</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Κανένας φάκελος ρολογιού που καθορίζεται για το '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Παρακολουθήστε το φάκελο '{0}' Δεν βρέθηκε για σκανδάλη '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Διαδρομή συγγραφέα αρχείων για δράση '{0}' Δεν έχει οριστεί</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Path Writer Writer '{0}' για '{1}' Δεν βρέθηκε.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Γραμμή εργασιών</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Μάθετε για τα plugins</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Επαναφορά αυτής της διαμόρφωσης ανάλυσης</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Αλλαγή αρχείου καταγραφής</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Συνδεθείτε στο Διαδίκτυο και δοκιμάστε ξανά αργότερα.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - βοήθεια</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} είναι η τελευταία έκδοση</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Είστε όλοι επάνω - σε - ημερομηνία!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Ελεγχος για ενημερώσεις...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Διαθέσιμη νέα έκδοση!
+
+Κάντε κλικ εδώ για ενημέρωση για '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Κάντε κλικ παρακάτω για ενημέρωση στο '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Διαθέσιμη ενημέρωση!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Ενημέρωση τώρα</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' περιέχει κοινές τιμές. Τι θα θέλατε να επαναφέρετε;</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Σαφή</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Καθαρίστε τις πρόσφατες αναζητήσεις</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Επαναφορά όλων</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Επαναφορά Κοινόχρηστου</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Επαναφορά Unshared</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Επικαλείται την εκχωρημένη ενέργεια εφαρμογής. Όλες οι εντολές εφαρμογής είναι απάθειες και το κλιπ εισόδου τους αγνοείται.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Όταν δεν ελέγχεται και η εντολή δεν μπορεί να πυροβολήσει, η αλυσίδα εκτέλεσης θα σταματήσει. Πολλές εντολές θα απαιτήσουν κάποια συγκεκριμένη κατάσταση εφαρμογής για να εκτελεστούν.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Συνεχίστε πάντα;</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Την εντολή να εκτελέσει.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Εντολή</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Δεν έχει επιλεγεί εντολή για εντολή εφαρμογής {0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Εντολή για εντολή εφαρμογής {0} 'δεν βρέθηκε</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Επιλεγμένος</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Επανεκκίνηση</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Υπήρχε ένα ζήτημα ενημέρωσης '{0}'. Για να ολοκληρώσετε την ενημέρωση θα χρειαστεί να επανεκκινήσετε και να εγκαταστήσετε ξανά '{0}' (μην ανησυχείτε ότι όλες οι ρυθμίσεις σας θα αποκατασταθούν).
+
+Μπορείτε να κάνετε επανεκκίνηση τώρα και να ολοκληρώσετε την ενημέρωση με την εγκατάσταση, να αγνοήσετε αυτό και να το ενημερώσετε αργότερα ή να ακυρώσετε την ενημέρωση όλοι μαζί και να συνεχίσετε να χρησιμοποιείτε την έκδοση '{1}';</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Σφάλμα ενημέρωσης</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η λήψη ενημέρωσης</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Ενημέρωση απέτυχε</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Για να ολοκληρώσετε την ενημέρωση θα χρειαστεί να κάνετε επανεκκίνηση. Θέλετε να κάνετε επανεκκίνηση τώρα ή αργότερα;</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Ενημέρωση έτοιμη</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Αργότερα</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Επανεκκίνηση τώρα</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>εκκρεμής</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} ενημερώθηκε με επιτυχία στο {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Απαιτούνται πυρήνα plugins και δεν μπορούν να αφαιρεθούν.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Εγκαθιστώ</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Η ενημέρωση εκκρεμεί. Επανεκκίνηση για ολοκλήρωση.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>εκκρεμής</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Εκκρεμεί μια απεγκατάσταση. Επανεκκινήστε εάν θέλετε να εγκαταστήσετε ξανά.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Για να ολοκληρώσετε την απεγκατάσταση θα χρειαστεί να κάνετε επανεκκίνηση. Θέλετε να κάνετε επανεκκίνηση τώρα ή αργότερα;</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Τελειώστε την απεγκατάσταση;</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Αδημοσίευτος</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Αυτόματη προεπιλεγμένη προεπιλογή για '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Δεν επιλεγμένο κλιπ</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Αναλύστε το επιλεγμένο κλιπ</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Εκχωρήστε μια συντόμευση για να εκτελέσετε '{0}' στο επιλεγμένο κλιπ</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Παγκόσμια πάστα</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Αναθέστε τη συντόμευση παγκόσμιας πάστα για το '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Ξεχάσατε τον κωδικό;</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Σύνδεση</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Αποσύνδεση</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Πολιτική απορρήτου</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Απαιτεί την επανεκκίνηση) Όταν οι ενεργοποιημένες πληροφορίες διαγνωστικών θα καταγραφούν στο αρχείο. Αυτό μπορεί να επιβραδύνει την απόδοση και μπορεί να περιέχει προσωπικά στοιχεία.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Σύνδεση στο αρχείο</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Ανοιξε</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Ανοίξτε το φάκελο καταγραφής</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Αναζήτηση προσθηκών</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Ανάγνωση</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Γράφω</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Αποστολή σχολίων ή αναφοράς σφαλμάτων</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Αυτό κρύβει μόνο το κύριο παράθυρο. Όλα τα άλλα παράθυρα διαλόγου δεν εμφανίζονται πάντα στη γραμμή εργασιών.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Αναζήτηση στο '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Προσθέστε φίλτρο</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Επεξεργασία τύπου Join</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Αφαιρέστε αυτό το φίλτρο</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Ανοίξτε τη βοήθεια για αυτό ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} κλιπ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Αλλαγή</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Ποτέ</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Σειρά</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Χωρίς τίτλο</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Ρεκόρ</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Ανεξάρτητη αναφορά πηγής</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' απαιτείται</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Έχει σφάλματα)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Περιορισμένος</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Αποθήκευση</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Σκουπίδια</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Απεριόριστος</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Αυτή η εφαρμογή ταιριάζει επί του παρόντος προεπιλεγμένες προεπιλογές και μορφές αναγνώστη πρόχειρων.
+
+Η ενεργοποίηση ή η απενεργοποίηση των προεπιλογενών προεπιλεγμένων αναγνώστη (από την πλαϊνή γραμμή του πρόχειρου) δεν θα επηρεάσει αυτή τη διαμόρφωση. Μόνο οι μη καταχωρημένες εφαρμογές ακολουθούν την προεπιλεγμένη ρύθμιση.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Αυτή η εφαρμογή ταιριάζει επί του παρόντος προεπιλεγμένες προεπιλογές και μορφές συγγραφέα πρόχειρων.
+
+Η ενεργοποίηση ή η απενεργοποίηση των προεπιλεγμένων προεπιλογών συγγραφέων (από την πλαϊνή γραμμή του πρόχειρου) δεν θα επηρεάσει αυτή τη διαμόρφωση. Μόνο οι μη καταχωρημένες εφαρμογές ακολουθούν την προεπιλεγμένη ρύθμιση.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Για να προσθέσετε, πρέπει να μην προωθήσετε τον ακροατή του πρόχειρου (δίσκος συστήματος -&gt; βιογραφικό).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Προσαρμόζεται μη διαθέσιμο</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Δεν έχει ρυθμίσεις</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Μιλάω μόνο αγγλικά και το Monkeypaste έχουν μεταφραστεί σε αυτή τη γλώσσα.
+
+Όλες οι εκδόσεις μεταφέρονται με το αγγλικό πακέτο, οπότε αν μιλάτε Αγγλικά, μπορείτε να αλλάξετε τη γλώσσα σε αυτήν ανά πάσα στιγμή μετά από αυτή τη ρύθμιση (Ρυθμίσεις -&gt; Προτιμήσεις -&gt; Διεθνές).
+
+Εάν θέλετε να βοηθήσετε στη βελτίωση της μετάφρασης, θα θέλαμε να σας ακούσουμε!
+
+feedble@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Ανησυχίες μετάφρασης</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Πρέπει να ενημερώσετε το MonkeyPaste για να χρησιμοποιήσετε αυτήν τη λειτουργία.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Συντόμευση</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Ο ακροατής του πρόχειρου απενεργοποιήθηκε</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Ενεργοποιημένος ακροατής</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Η γονική δράση '{0}' δεν υποστηρίζει τον τύπο ιδιότητας εισόδου 'τελευταία έξοδο'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Μάθετε περισσότερα σχετικά με τα σχέδια</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Εφαρμογή</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Δώσει το έναυσμα για</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Συνδετήρας</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Αναλυτής</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Ετικέτα</value>
+  </data>
+</root>

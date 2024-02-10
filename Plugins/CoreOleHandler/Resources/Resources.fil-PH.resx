@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Huwag pansinin</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Kapag naka-check {0} format ay hindi babasahin mula sa clipboard o drag-and-drop data.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Kapag naka-check {0} format ay hindi isusulat sa clipboard o drag-and-drop data.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Basahin</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Sumulat</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Mga file</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Kapag hindi pa naroroon ang RTF, ang HTML ay mai -convert sa RTF. Maaaring maging kapaki -pakinabang ito sa pagitan ng mga web browser at/o mga aplikasyon sa pagproseso ng salita. (Nangangailangan ng format ng RTF na paganahin at para lamang sa mga suportadong platform)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Mag -convert sa RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ang mga direktoryo na ito ay hindi babasahin mula sa clipboard o drag-and-drop data.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Hindi pinansin ang mga direktoryo</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Hindi pinansin ang mga extension ng file</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ang mga uri ng file na ito ay hindi babasahin mula sa clipboard o drag-and-drop data.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ang mga uri ng file na ito ay hindi isusulat sa clipboard o drag-and-drop data.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Kapag nasuri, ang mga imahe na mas malaki kaysa sa sukat ng max ay mai -scale habang pinapanatili ang ratio ng aspeto. Hindi ito nakakaapekto sa imahe sa clipboard.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Scale oversized</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Kapag ang pag -paste o pag -drop ng isang bitmap ito ang magiging default na uri ng file</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Uri ng default na pag -export</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Minsan ang ganap na transparent na mga imahe ay lalabas sa clipboard, nakalilito.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Huwag pansinin ang mga walang laman na imahe</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Ang mga malalaking imahe (higit sa ilang mga MB) ay maaaring gumawa ng drag-and-drop at pangkalahatang pagganap na medyo tamad sa kasamaang palad. Subukang panatilihing mababa ang halagang ito.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Hangganan ng taas</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Lapad ng max</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Para sa mga alalahanin sa pagganap, kinakailangan ang isang maximum na halaga ng mga character</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max character</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Teksto (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>Url (moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Ang format na '{0}' ay walang laman o transparent na data at naharang</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Walang laman ang data na naka -block</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Ang format na '{0}' ay na -flag bilang 'hindi pinansin'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Hindi pinansin ang format</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limitasyon ay {1} at ang data ay {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Nakita ang laki ng max</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core Clipboard Reader</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Clipboard Writer</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Humahawak ng mga default na format ng clipboard</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, Clipboard, Drag at Drop, Text, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Larawan (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Kapag hindi pa naroroon ang HTML, ang RTF ay mai -convert sa HTML. Maaaring maging kapaki -pakinabang ito sa pagitan ng mga web browser at/o mga aplikasyon sa pagproseso ng salita. (Nangangailangan ng format na HTML na paganahin at para lamang sa mga suportadong platform)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Mag -convert sa HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Teksto</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Hindi pamagat</value>
+  </data>
+</root>

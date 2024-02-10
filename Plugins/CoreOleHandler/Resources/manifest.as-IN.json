@@ -1,0 +1,12 @@
+{
+  "title": "Core Clipboard Handler",
+  "description": "অবিকল্পিত ক্লিপবোৰ্ড বিন্যাস নিয়ন্ত্ৰণ কৰে",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "কোৰ, ক্লিপবৰ্ড, ড্ৰেগ এণ্ড ড্ৰপ, টেক্সট, আৰটিএফ, ৰিচ টেক্সট, এইচটিএমএল, চিএছভি, ছবি, পিএনজি, জেপিজি, জেপিইজি, লিংক",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

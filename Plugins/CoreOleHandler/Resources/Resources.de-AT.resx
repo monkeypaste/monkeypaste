@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorieren</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Wenn {0} -Format überprüft wird, wird nicht aus der Zwischenablage oder Drag-and-Drop-Daten gelesen.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Wenn das {0} -Format überprüft wird, wird nicht in die Zwischenablage- oder Drag &amp; drop-Daten geschrieben.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lesen</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Schreiben</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Dateien</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Wenn RTF nicht bereits vorhanden ist, wird HTML in RTF konvertiert. Dies kann zwischen Webbrowsern und/oder Textverarbeitungsanwendungen nützlich sein. (Erfordert das RTF -Format aktiviert und gilt nur für unterstützte Plattformen.)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>In RTF konvertieren</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Diese Verzeichnisse werden nicht aus der Zwischenablage oder Drag-and-Drop-Daten gelesen.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Verzeichnisse ignoriert</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Ignorierte Dateierweiterungen</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Diese Dateitypen werden nicht aus der Zwischenablage oder Drag-and-Drop-Daten gelesen.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Diese Dateitypen werden nicht in die Zwischenablage- oder Drag &amp; Drop-Daten geschrieben.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Bei der Überprüfung werden Bilder, die größer als die maximale Dimension sind, skaliert, während das Seitenverhältnis beibehält. Dies wirkt sich nicht auf das Bild in der Zwischenablage aus.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Übergroßen skalieren</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Wenn Sie eine Bitmap einfügen oder fallen lassen</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Standard -Exporttyp</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Manchmal werden vollständig transparente Bilder in der Zwischenablage angezeigt, und es ist verwirrend.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Leere Bilder ignorieren</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Große Bilder (mehr als ein paar MBs) können leider die Drag &amp; Drop und die Gesamtleistung etwas träge machen. Versuchen Sie, diesen Wert niedrig zu halten.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maximale Höhe</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maximale Breite</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Für Leistungsbedenken ist eine maximale Menge Zeichen erforderlich</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Max -Zeichen</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Text (Mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format '{0}' hatte leere oder transparente Daten und wurde blockiert</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Leere Daten blockiert</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Das Format '{0}' wird als "ignoriert" gekennzeichnet.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format ignoriert</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} Limit ist {1} und die Daten waren {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Maximale Größe erkannt</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>CORE -Zwischenablageleser</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Core Clipboard Writer</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Verarbeitet Standard -Zwischenablageformate</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard -Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Kern, Zwischenablage, Drag und Drop, Text, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, Link</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Bild (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Wenn HTML nicht bereits vorhanden ist, wird RTF in HTML konvertiert. Dies kann zwischen Webbrowsern und/oder Textverarbeitungsanwendungen nützlich sein. (Erfordert das HTML -Format aktiviert und gilt nur für unterstützte Plattformen.)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>In HTML konvertieren</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Ohne Titel</value>
+  </data>
+</root>

@@ -1,0 +1,12 @@
+{
+  "title": "कोर क्लिपबोर्ड हैंडलर",
+  "description": "डिफ़ॉल्ट क्लिपबोर्ड स्वरूपों को संभालता है",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "कोर, क्लिपबोर्ड, ड्रैग एंड ड्रॉप, टेक्स्ट, आरटीएफ, रिच टेक्स्ट, एचटीएमएल, सीएसवी, इमेज, पीएनजी, जेपीजी, जेपीईजी, लिंक",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

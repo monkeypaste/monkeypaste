@@ -1,0 +1,11 @@
+{
+  "title": "核心文本註釋",
+  "description": "為基於文本的內容提供基本的超鏈接支持",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "核心，註釋，文本，鏈接，顏色，解析，地址，電話，電子郵件，貨幣，財務"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "He Kaitoha ColPablat Core",
+  "description": "Te whakahaere i nga whakatakotoranga tohutao taunoa",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Core, topenga, toia me te maturuturu, te kuputuhi, te kNF, te html, te html, te whakaahua, te kng, te jpeg, te jpeg, te jpeg, JPG, hono",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

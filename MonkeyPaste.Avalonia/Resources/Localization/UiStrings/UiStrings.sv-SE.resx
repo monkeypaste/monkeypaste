@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Inga funktioner begränsas av prenumeration, endast lagringskapacitet och kan ändras när som helst.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Återställ ditt befintliga konto ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Innehåll och skräp är
+Begränsad till {0} och {1}
+klipp respektive.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Tillåter upp till {2} klipp av innehåll och obegränsad skräplagring.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Obegränsat och obegränsat innehåll och skräplagring.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Obegränsat</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Prenumeration</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Din integritet är viktig och urklippsdata kan vara mycket personliga. Lagring är alltid krypterad men du kan ställa in ett lösenord som kommer att krävas om din enhet är stulen eller någon annan använder din enhet.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Lösenord</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>När det är aktiverat kommer att dra från alla applikationer på toppen av skärmen att avslöja monkeypasta för att enkelt släppa innehåll i monkeypasta.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Att möjliggöra "låset" längst upp till vänster om huvudfönstret kommer fortfarande att släppa på monkeypasta.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Fler fönsterpreferenser är tillgängliga från menyn "Inställningar -&gt; Fönster -&gt; Fönster".</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Dra bananer här uppe!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Dra - till - öppna</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Kortkommandon kan granskas eller ändras när som helst från menyn "Inställningar -&gt; genvägar".</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Alla globala genvägar kommer att inaktiveras så att du kan ställa in dem själv senare.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypaste's Clipboard -genvägar kommer att finnas tillgängliga i alla applikationer.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Inre</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Gestprofil</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hallå! Låt oss ställa in några saker för att förbättra din totala upplevelse med monkeypasta.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Välkommen</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>För att få det mest användningen av monkeypasta är det en bra idé att ladda automatiskt när du loggar in. Men det är helt upp till dig.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Håll det avslappnat.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Gör det möjligt</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Ladda på inloggning?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>När det är aktiverat kommer en rullgest högst upp på skärmen att avslöja monkeypasta.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Vänster - Klicka på aktivitetsfältets ikon öppnar fortfarande monkeypasta.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Fler fönsterpreferenser är tillgängliga från menyn "Inställningar -&gt; Fönster -&gt; Fönster".</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Lätt rätt?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Bläddra här!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Bläddra - till - öppen</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste är &lt;span color = "röd&gt; helt integrerad &lt;/span&gt; med drag - och - dropp &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Släpp det!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; på detta sätt kan monkeypasta nås &lt;br&gt; &lt;span color = "röd"&gt; utan klick &lt;/span&gt; eller till och med &lt;span color = "rött"&gt; batting ett öga &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Dra mig!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Testa!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Testa!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Inga resultat tillgängliga.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Bekräfta</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Uppdatera</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Sök...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>inställningar</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Beroenden:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Installera</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort '{0}' och alla dess förinställningar och genvägar?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Avinstallera</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' har inga resultat.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Inget val.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Krediter:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Beskrivning:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Donera:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licens:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Projekt URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Publicerad:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Läs mig:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Rapportera missbruk:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Taggar:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Uppdatering</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Öppna i fönstret</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Avfärda</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Uppdatera</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Bredvid radera!
+
+Uppgradera för att undvika.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Bredvid skräp!
+
+Uppgradera för att undvika.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Filer</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Bild</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kopierad {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} filer | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} rader</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Kopior | {1} Pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Flytta</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Lägg till</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopiera</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Skära</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Klistra</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} kopia</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Oavslutat filter</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Vänligen välj -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Läsare</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Författare</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Hanterare</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Radera</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplicera</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Redigera namn</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Återställa</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Taggar</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Handling</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Global routing</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Genväg</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gester måste vara unika och får bara innehålla en ingångsnyckel.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; intern &lt;/b&gt; Alla genvägar är begränsade till inom applikationen. Detta är egentligen inte ett avsett alternativ men kan tillåta att anpassa vilka genvägar du tänker göra Global &lt;i&gt; en dag &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Standard &lt;/b&gt; Alla globala genvägar är aktiverade. &lt;b&gt; show/dölj huvudfönstret &lt;/b&gt; genväg använder &lt;span color = "röd"&gt; åsidosättande &lt;/span&gt; routing för &lt;b&gt; caps -lås &lt;/b&gt; -tangenten. Du kan ändra den routing eller gest när som helst. Men &lt;span color = "green"&gt; prova &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; Globala genvägslägen &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Passiv &lt;/b&gt; En genvägsmonkeypasta lyssnar på i alla applikationer. &lt;br&gt;
+*Detta är &lt;i&gt; enda &lt;/i&gt; -alternativet på Linux för nu.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; genväg kommer att köras &lt;b&gt; &lt;i&gt; före &lt;/i&gt; &lt;/b&gt; Det hanteras av den aktiva applikationen. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; genväg kommer att utföra &lt;b&gt; &lt;i&gt; efter &lt;/i&gt; &lt;/b&gt; Det hanteras av den aktiva applikationen. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; åsidosättande &lt;/b&gt; När monkeypasta hör ingångsnyckeln (icke -modifieringsnyckel) för en åsidosättande genväg kommer det &lt;i&gt; att dölja &lt;/i&gt; den tangentpressen från applikationsnivåinmatning. &lt;br&gt;
+Detta alternativ garanterar genvägen utlöses utan konflikter till den aktiva applikationen.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Exklusivt åsidosättande &lt;/b&gt; Detta är en speciell typ av åsidosättande läge utformat för Caps Lock -nyckeln. Det tillåter bara &lt;b&gt; en &lt;/b&gt; -nyckel (icke -modifierare) för sin uppgift. &lt;br&gt;
+I normalt överskridande lägeslås kan lås &lt;i&gt; fastnat på &lt;/i&gt; när du trycker på i kombination med andra nycklar. &lt;br&gt;
+Så oavsett vilka andra nycklar som är nere, om en &lt;b&gt; hotkey &lt;/b&gt; genväg trycks kommer det att åsidosättas och förhindra att den blir &lt;i&gt; fastnat på &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Inaktivera</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Ladda upp när detta användarkonto är inloggat, inte för andra användare.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; med tillgängliga kontakter (kräver en Fetcher -plugin) Detta fält kommer att användas för alla fall av denna mall över detta dokument eller i någon kommer det att hänvisas till senare. &lt;/p&gt; &lt;p&gt; så till exempel om du väljer e -postadress Här kommer e -postfältet för kontakten du väljer att användas i alla fall i detta dokument. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort år &lt;br/&gt; yyyy = långt år &lt;br/&gt; m = månad (1-12) &lt;br/&gt; mm = månad (01-12) &lt;br/&gt; mmm = månadsförkortning (Jan, februari .. . Dec) &lt;br/&gt; mmmm = lång månad (januari, februari ... december) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; ddd = Veckodagen i ord (måndag, tisdag ... söndag) &lt;br/&gt; e = Kort veckodag i ord (mån, tis ... sol) &lt;br/&gt; d - ordinal dag (1: a, 2: a, 3: e, 21, 22: e, 23: e, 31, 4: e ...) &lt;br/&gt; h = timme i AM/PM (0-12) &lt;br/&gt; hh = timme i AM/PM (00-12) &lt;br/ &gt; H = timme i dag (0-23) &lt;br/&gt; hh = timme i dag (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = andra &lt;br/&gt; ss = millisekunder &lt;br/&gt; A = AM/PM -markör &lt;br/&gt; p = a.m./p.m. markör</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Det aktuella datumet och/eller tiden kommer att ersättas med DateTime -mallar när de klistras in.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Alla förekomster i denna mall kommer att använda den medföljande texten. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Alla förekomster i denna mall kommer att använda den medföljande texten. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Slutföra</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Aktivera block</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Aktivera inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Växla manual</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Växla manual</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pausa bifogas</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Växla innan</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Växla innan</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Återuppta</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Bifoga...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Klistra</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Stift</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Lutande</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Dölj alla '{0}' aviseringar</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Avfärda</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Senaste aktiva appen okänd. Byt till avsedd app till Monkey Paste.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Klistra in: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimera</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Vänta...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Låsa</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>konto</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Hjälp</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopiera klistra in</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Återgå till grundinställningarna</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtrera...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Genvägar</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Lägg till app</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Lägg till webbplats</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blockera?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>namn</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Appar</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blockdomän?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blockera URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domän</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Käll -URL -erkännande är beroende av hur Urklippsvänlig värdapplikationen är så att avslag inte kan garanteras</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Webbplatser</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Vissa monkeypaste -funktioner använder tangentbordsautomation för att simulera "kopiering" -händelser i andra applikationer.
+
+Lägg till och/eller välj appen med den unika kopieringsgenvägen (som en konsol eller skal till exempel) för att säkerställa att dessa funktioner fungerar korrekt.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopiera genväg</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Endast de valda förinställningarna kommer att användas för den angivna applikationen. När den är ospecificerad kommer standardförinställningarna som finns i &lt;em&gt; urklippets sidofält &lt;/em&gt; att användas.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Många monkeypasta -funktioner använder tangentbordsautomation för att interagera med andra applikationer.
+
+Vissa applikationer (som vissa konsoler eller skal till exempel) kan ha en kortkommando som inte är standardpasta.
+
+För att säkerställa korrekt interoperabilitet, registrera genvägarna för den applikationen här.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Klistra in genvägen</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Läsare</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>All urklippsövervakning från avvisade applikationer kommer att ignoreras &lt;b&gt; &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Författare</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Redigera...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>avvisade</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Genvägar</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Vill du också ta bort alla {0} klipp från '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Ta bort klipp?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Ansökan</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Bläddra till appen ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Välj applikationsväg</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort anpassade genvägar för {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort anpassade format för {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Det finns inga tilldelade urklippformat för den här appen. Inga data kommer att läsas från det via klipp/kopia eller försöka dra - och - släpp in Monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Det finns inga tilldelade urklippformat för den här appen. Automatiserad pasta eller dra - och - släpp från Monkeypaste kommer inte att påverka (dess tomma data).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Är du säker på att du vill återställa alla genvägar? Alla anpassade genvägar kommer att tas bort.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Är du säker på att du vill ändra din genvägsrutningsprofil till '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Allt</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favoriter</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Taggar</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>I dag</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Skräp</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Handla om</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Lätt rätt?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Dubbelklicka för att ta upp</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Beställnings</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Denna kombination strider mot '{0}' som kommer att rensas om den sparas.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>En genväg måste tillhandahållas.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Detta är en global genväg. Det betyder att det kommer att försöka utföra när den utförs. Försök att göra det unikt nog (eller ändra "routingtyp") för att inte konflikt med genvägar från andra applikationer.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Genvägen måste innehålla en och endast en icke -modifierare.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Tryck på vilken knapp som helst för att spela in ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Tilldela genväg</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Lär dig mer ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Uppgradera</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Annullera</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Fixera</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignorera</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Försök igen</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Stänga av</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Skicka in</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Årlig</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>En gång i månaden</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Prova gratis!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Faktureringsperiod</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Kontrollera din anslutning
+och försök igen.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Nästa betalning</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Lösenord</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Registrera</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E-post är inte giltig</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Lösenorden matchar inte.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Lösenordet måste vara ett minimum av {0} tecken.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Kom ihåg?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Kontrollera din e -post för att bekräfta ditt konto</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Återställ lösenord</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, YYYY</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Aldrig</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Gratis {0} dagstest</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Det var ett problem att utföra
+ditt köp.
+
+Kontrollera din anslutning och
+Inställningar kan hjälpa.
+
+Vill du försöka igen?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Ditt konto har varit framgångsrikt
+uppgraderad till:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Köp framgångsrikt!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Anslutningen misslyckades.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Försök igen</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Kontot ändrades</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Ditt prenumeration är nu {0}/{1} med {2} innehåll och {3} skräplagring.
+Men oroa dig inte, ingen data går förlorad efter nedgradering. Endast nya klipp utvärderas.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Grattis! Ditt prenumeration är nu {0}/{1} med {2} innehåll och {3} skräplagring.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Skräp eller loss något
+från '{0}' för att lägga till mer.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' lagring är {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} blockerad</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Innehåll och skräpkapacitet nådde!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' lagring är {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Innehållskapacitet nådde!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Du kan dölja dessa varningar av
+klicka på 'göm alla' från
+Alternativmeny ovan.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max Trash -lagring är {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Papperskorgen nådde!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} är ogiltig</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} måste vara minst {1} tecken</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} kan bara vara {1} karaktär</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Klistra in: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Betalningen för din {0}
+Prenumeration berodde på {1}
+och har inte mottagits.
+
+Uppdatera din
+Betalningsinformation.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Betalningen för din {0}
+Prenumeration berodde på {1}
+och har inte mottagits.
+
+Anslut till
+Internet på enheten
+med ditt prenumeration och
+starta om för att fortsätta
+Använda din {0} plan.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Betalningen för din {0}
+Prenumeration berodde på {1}
+och har inte mottagits.
+
+Vänligen öppna eller starta om
+Monkeypasta på enheten
+med ditt prenumeration på
+Fortsätt använda din
+{0} Plan.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Kontot gick ut</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Notera</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store tillåter inte nivå
+Ändringar av prenumerationstillägg.
+
+Du måste avbryta din
+{0}/{1} Planera dig själv
+Eller så kommer du att debiteras för båda.
+
+Vill du göra det nu?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Ditt lösenord har blivit återställt.
+
+Kontrollera din e -post och
+Följ länken för att ändra
+ditt lösenord.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Författare</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Det krävs att du accepterar följande licensvillkor innan du fortsätter.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Följande paket (er) kräver att du accepterar deras licensvillkor innan du installerar.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Jag avböjer</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Om du klickar på "Jag accepterar" betyder du att du samtycker till licensvillkoren för den här ansökan. Om du inte samtycker till villkoren klickar du på "Jag avvisar".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Om du klickar på "Jag accepterar" betyder du att du samtycker till licensvillkoren för plugin (er) som anges ovan. Om du inte samtycker till villkoren klickar du på "Jag avvisar".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Visa licens</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Licensacceptans</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Jag accepterar</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktiva</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Off-line</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Oregistrerad</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Gjort</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ Lösenord matchar inte</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Lösenord</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Ditt prenumeration är
+nu inställd på {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Konto hittades</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Inloggningen misslyckades</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registreringen misslyckades</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registrering lyckad!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Återställningsfel</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Prenumeration</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Vad är nytt</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Aldrig</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Obegränsat</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapacitet</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>återstående</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Din betalning är förfallen.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Exklusiva genvägar kan bara innehålla en nyckel och den nyckeln kan inte vara en modifiernyckel.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Utgånget</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Läser in</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Inaktiverad</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Notera! Detta lösenord är valfritt och endast för extra säkerhet. Dina data är redan krypterade och delas aldrig. Detta lösenord förhindrar helt enkelt någon vars inte du laddar monkeypasta om de på något sätt får tillgång till ditt skrivbord (stulen, du lämnar rummet etc.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Kom ihåg droppinställningar för:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Bläddra plugins</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analysera</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Snabb handling</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Växla redigera</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Vippläst</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Kommentationer</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Oformatterad text</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Öppna i fönstret</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Klicka på + Ctrl för att följa ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Klicka på + Alt för att följa ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin eller släpp några medier här!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Tröskelvärden över 0 kommer att ge fuzzy färgmatchning med hjälp av euklidiskt avstånd i RGBA -färgområdet.
+
+Till exempel, om rött (#FF0000) är söktermen och svart (#000000) är en pixel i ett bildklipp, kommer färgavståndet att vara 255. Svart till vitt avstånd är maximalt möjligt 510, inklusive en Alpha -kanal</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Alla följande är sanna</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Urklipp</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Samlingar</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Muslägen</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Triggers</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Återuppta</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Ny trigger</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Lägg till förinställd</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Förinställningar</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analysator</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Cykelorientering</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Växla rutnät</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Skiftlägeskänsliga</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Tröskel</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Hela världen</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Ingen uppsättning</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Routing</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Handling</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Rutnät</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Gjort</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Nästa</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Tidigare</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Hoppa</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Befintligt konto?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Nästa betalning</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Registrering låter dig bära ditt betalda prenumeration över alla dina enheter (vid tillgänglighet). Vi kommer inte att skräppost din e -post, vi lovar 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Prenumeration</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Användarnamn</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Behöver du registrera dig?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Källor</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Udda, inget tillgängligt. Något måste vara fel 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Avlägsna</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Kräver omstart</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Avancerad</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Error Extracting -plugin från '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Fel att installera plugin: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Fel att installera plugin '{0}' korrupt eller felaktig katalogstruktur. Manifest bör existera på '{1}' men hittades inte.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Fel att analysera plugin manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Ingen plugin laddad med GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} fel</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Fel iscensättning plugin till temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Fel säkerhetskopiering '{0}' till '{1}'. Detaljer: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Text som skrivs kommer automatiskt att tillämpas på en sökning när ingen textruta är fokuserad.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Autosökningsingång</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Lösenordsändring misslyckades</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Förändra</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Ändra lösenord</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Tydligt lösenord</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Innehåll</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Innehållsteckensnittsstorlek</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>När det är sant kommer externt innehåll som infogas i ett klipp att använda klippformateringen och inte vad som finns tillgängligt från källan.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Klistra in, släpp eller bifoga med destinationsformatering</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill glömma lösenordet?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Glömma</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Glöm lösenord</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Dölj kapacitet vattenmärken</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>När nytt urklippsinnehåll bifogas kommer det inte att spåras som ett nytt klipp</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignorera bifogade</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>När urklippet matchar ett befintligt klipp kommer det klippet att användas istället för att skapa ett nytt</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorera nya duplikat</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Urklippsändringar från appen kommer inte att spåras</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignorera intern urklippsspårning</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Utrymmen, flikar och nya linjer kommer att ignoreras från spårning</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignorera bara vitt utrymme</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Laddar på inloggning</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animera fönster</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opacitet</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Visa beteende</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Huvudfönstret kommer att avslöjas genom att utföra en rullgest på den övre kanten av din bildskärm</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Visa på toppskärmen Scroll</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Anmälningsvolym</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Den här inställningen kommer att spåra systemet - brett tangentbordspasta räknas för användningsstatistik. Denna information är privat och inte delad men inte heller garanterad. Exakta resultat kan kräva att du tillhandahåller ett applikationsspecifikt tangentbordspasta -kommando i 'Inställningar -&gt; Kopiera och klistra in -&gt; genvägar'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Klistra in historien</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>För många fästade klipp (som webbläsarflikar) kan konsumera betydande minne. Avlägsnande är först - in - först - ut</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Stiftkapacitet</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Detta gäller alla auto -fullständiga ingångar, lägre värden kommer att förbättra prestandan</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Senaste textgränsen</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill
+Återställ standardpreferenser?
+
+Detta kan inte göras ogjort!
+
+*Applikationen startas om när den är klar.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Är du säker på att du vill återställa alla aviseringar?
+
+*Detta kan inte göras ogjort!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste Ställer in urklipp (åsidosätter) när du klistrar in i ett externt program. Detta kommer att försöka &lt;/b&gt; att återställa urklippets tillstånd efter en yttre pasta.
+
+Total restaurering kan inte garanteras och kan minska prestanda eller till och med krascha monkeypasta beroende på källan till data.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Återställ urklipp efter apa klistra in</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Kunde inte ta bort plugin -cache från sökvägen: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Alla plugins återställs till det första standardtillståndet</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugincache</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill återställa alla plugins till standardvärden?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill återställa ditt lösenord?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Alla genvägar kommer att återställas till deras standardnyckelgester.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Återställ genvägar</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Alla ignorerade meddelanden som tidigare har ställts in.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Återställa aviseringar</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Aktivering kan vara ganska långsam) inaktivering av formaterad kommer att minska minnesförbrukningen men kommer att hämma vissa avancerade funktioner, till exempel: bifogas, mallar, kommentarer och hitta/ersätta</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Rikt innehåll</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Välj lösenord</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Visa tips</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Visa i aktivitetsfältet</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Visa i Task Switcher</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Visa titlar</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>När det är aktiverat kommer att dra från alla applikationer på toppen av skärmen att avslöja monkeypasta för att enkelt släppa innehåll i monkeypasta.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Visa på drag till toppen av skärmen</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Ljudtema</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Stavnings kontroll</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Vid start kommer källan till urklippet att vara okänd och beroende på dina säkerhetsinställningar kan innehållet komma från en utesluten webbplats eller applikation.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Lägg till startklipp</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Lyssna på Urklipp vid start</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Välj</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Varning! Andra palettfärger väljs med matematik inte ögon! Så var medveten om att vissa färg- och stilkombinationer kanske inte har korrekt kontrast för läsbarhet.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Temafärg</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Temastil</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automatisk soptensning kommer att ske vid start vid det inställda intervallet.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Skräpprensning</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Gränssnitt</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Höga ångra gränser kan påverka prestanda</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Ångra gränsen</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Ingen gräns</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Används i avancerad filsökning efter icke -förinställda filtyper</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Användare - definierade sökförlängningar</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Hitta och ersätta...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Klistra in här</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Dela med sig...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Se</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Hantera...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Döp om</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Poäng: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Typ: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Radera permanent</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Bläddra till '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Omvandla</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Inmatning</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Produktion</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Källor</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Välj bild ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Färg</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Hantera '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Öppen</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Vänta...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Bakgrundsfärg</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Rensa alla</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Urklippsformat</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Radera allt</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Redigera detaljer</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>namn</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Hitta</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Fontfärg</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formatfärg</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> I urval</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Infoga bild</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Infoga länk</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Infoga video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Liknande fall</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Ny mall</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Nästa mall</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Ange pasta text ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Föregående mall</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Vanligt uttryck</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Ersätt alla</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Byta ut</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Hela världen</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Vira runt</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blockera</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domän</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Visa mapp</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Avblockera</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Handla om</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Bifoga block</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Bifoga inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopia</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Läge</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Vänta att Monkeypaste laddas ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Sluta</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - klicka klistra in</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupp</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtrera</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Radera alla</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Återställa alla</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Handling</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL finns redan: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL måste vara i giltigt format.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Ange full url:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Lägg till URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Ange värden</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopiera text eller filer som ska tillämpas.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Bifoga {0} {1} läge aktiverad</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Urklippsändringar kommer nu att bifogas</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Efter tilläggsläge aktiverat</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Urklippsändringar kommer nu att förberedas</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Innan tilläggsläge aktiveras</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blockera</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Normalt urklippbeteende har återställts</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Bifoga inaktiverad</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Bifogar läggs till toppen eller botom i klippet</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Omfattning Append -läge aktiverad</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>I kö</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Tillägg till ditt nuvarande val.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Manuell tilläggsläge aktiverad</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Urklippsansamling stoppad</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Lägg till paus</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Urklippsanslutning återupptogs</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Bifoga återupptagen</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Är du säker på att du vill avsluta tillagning?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Redigering i kompatibilitetsläge tar bort all rik formatering. Är du säker på att du vill ändra detta?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Varning för datamängder</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktiva</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Aktiverad</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>På</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Paus</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Resultat</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Okänt fel inträffade.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>återstående försök</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Skriv in lösenord</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Bekräfta</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Datum Tid</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort alla användningar av '{0}'?
+
+Detta kan inte göras ogjort!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dynamisk</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statisk</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} är tomt ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Mer kommer snart!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Inloggningsbelastning inaktiverad misslyckades</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Inloggningsbelastning Inaktivera framgång</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Inloggningsbelastning aktiverad misslyckad</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Inloggningsbelastning möjliggör framgång</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Dölj</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Monkey -pasta är nu laddad.
+Urklipps lyssnande är: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Lastad</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Auto Copy Selection Mode: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Läge ändrades</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Högerklicka klickar in läge: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin uppdaterad</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Klistra in '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Kör '{0}' analysator</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Kör '{0}' trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Välj '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort '{0}' och alla tillhörande åtgärder?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Utlösare</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Vill du ta bort alla sub -åtgärder för '{0}'? (Annars kommer de att återföras till '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Ta bort alternativ</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Vill du verkligen goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>konto</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analysatorer</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Ansökningsoperationer</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Urklipp</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Innehåll</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Omvandlare</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultur</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Riktning</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Dra och släpp</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Droppguide</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikoner</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Timmer</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Gränssnitt</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Klistra in</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Sök</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Genvägar</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sortera</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Ljud</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Systemfältet</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Samlingar</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Triggers</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Webbplatsoperationer</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Språk</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Ställer in urklippet på ingångsklippet.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Varna</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Slip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Klämta</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Allmänt Sound Sound och/eller systemfackmeddelande varningar. Alert Action's har ingen påverkan på deras insatser.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Meddelande</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Apa</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Förhandsvisning</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Show?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Tid toastmeddelande visas på några sekunder. När värdet är 0 måste meddelandet stängas manuellt.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Visa tid (er)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Ekolod</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Ljud?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Ljudtyp</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volym</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analysator</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Bearbetar sitt ingångsklipp med den tilldelade analysatorinställningen.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Inmatningsinnehåll är länkat till den valda samlingen</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Länkar sitt ingångsklipp till den tilldelade taggsamlingen.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Märka</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Skiftlägeskänsliga?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Detta kan vara statisk text för att jämföra med ingången och/eller inkludera valda egenskaper (via filterknappen) kommer att ersättas när tillståndet utvärderas.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Konditiondata</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>En valfri JSONPATH -fråga som kommer att tillämpas på den valda "Input -egenskapen" innan villkoret utvärderas.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Ingångsfilter</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Klippegenskapen som används för denna villkorade.
+
+Egenskapen "Last Output" stöds för närvarande endast när detta villkorat är ett barn av en analysator och de tillhandahållna uppgifterna kommer att variera beroende på utgången från moderanalysatorn.
+
+För felsökning, bifoga en "Alert Action" till denna villkores förälder och ställ in varningens "meddelande" -parameter för att matcha denna inmatningegenskap. Detta gör det möjligt att granska de faktiska uppgifterna som används för denna villkorade.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Inmatningsegenskap</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Utför en textjämförelse på ingångsklippet eller tidigare åtgärdsutgång. När jämförelse misslyckas (det är inte en match) kommer inga barnåtgärder att genomföras. Så det fungerar som en logisk grind.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Alla sanna eller falska operationer där barnåtgärder endast kommer att utföra om resultatet är sant.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Skick</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Allt</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Utlöses när ett klipp av den valda typen läggs till i systemet på något sätt (urklipp, dra - och - släpp, analysator genererad eller duplicerad).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Kör bara denna utlösare om ingångsklippet är nytt och inte ett duplikat. Detta är oberoende av alla preferensinställningar för om nytt innehåll ignoreras eller inte.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorera duplikat</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Endast klipp av denna typ kommer att utlösa denna åtgärd.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Länkar sitt ingångsklipp till den tilldelade taggsamlingen.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Utlöses när ett klipp är länkat till den angivna taggsamlingen.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Samling</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Mängden tid i millisekunder väntade innan barn avrättas</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Dröjsmål</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Experimentellt) främst används i samband med repeateråtgärden för polling av fjärrkällor eller hjälp med lång löpande operationer.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>När det är tomt kommer utdatafilen att använda inmatningsklippets titel som filnamn.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Anpassningsnamn</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Katalogen där filen kommer att skrivas.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Sparar inmatning till den valda mappen.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Utlöses när den valda mappens innehåll ändras. Utgången kommer att vara en ny eller befintlig (när Ignorera duplikatpreferens är aktiverat) Filklipp i filen eller mappen som har ändrats tillsammans med typen av förändring som dess sista utgång.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>evenemang</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Mapp</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorera duplikat</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Ett värde på 0 kommer att upprepa föräldersåtgärder på obestämd tid</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Upprepning</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Mängden tid i millisekunder att vänta när föräldrarnas åtgärder är klar</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Upprepa förseningen</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Experimentellt) som används för att skapa handlingsslingor eller repetiva uppgifter. När den upprepas kommer den att utföra alla barn igen med sin ursprungliga input. När du använder ett intervall utan upprepningsantal måste avtryckaren inaktiveras och återaktiveras för att stoppa upprepningen. Kan vara användbart för omröstnings- eller webbskrapningsautomation.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Utlöses av en global genväg du definierar. Om monkeypaste är aktiv kommer den att försöka använda det valda klippet (om det finns ett) som input. Annars kommer den att försöka använda urklippet som ingång.
+
+Obs: En genvägsutlösare kommer fortfarande att köras om det inte finns någon inmatning för att hålla den flexibel (så det kan vara en makroutlösare etc.) eftersom det inte är en data -driven händelse.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Genvägsavtryckare</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Utlöses när den inspelade genvägen trycks när som helst med den aktuella urklippet</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Denna åtgärd kräver att appen startar om. Vill du göra det nu?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Det var ett problem. Du måste starta om applikationen manuellt.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analysera med annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotera trigger</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Inbyggda element läses - endast. Duplicera att ändra.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonym</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Beställnings</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>I går</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} dagar sedan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 timme sedan</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} timmar sedan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Precis nu</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>För en minut sedan</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minuter sedan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Förra månaden</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} månader sedan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Förra veckan</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} veckor sedan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} år sedan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Kommentationer</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>applikationsnamn</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Applikationsväg</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Skiftlägeskänsliga</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Innehåll</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Filtyp</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Bildtyp</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Vanligt uttryck</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Texttyp</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Url -titel</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Hela världen</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Som att bläddra längs den övre skärmkanten för att öppna, kommer detta att låsa huvudfönstret när det öppnas. Tillåter snabbare multi -riktade arbetsflöden.
+
+* Hörn är i termer av alla dina skärmar, inte per bildskärm.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Visa fönster och lås</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Fri!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Ge oss 5 stjärnor!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Radera allt</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Ta bort allt innehåll</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Är du säker att du vill radera
+Alla dina klipp?!
+
+*Denna operation kan inte ångras!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Jag är en Indy -dev, visa lite stöd!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Som monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} accepterar endast inmatning av typ (er): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Auto Copy Mode - Simulerar en "kopiering" -händelse varje gång den vänstra musknappen släpps.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Högerklicka på pasta -läge - Simulerar en "pasta" -händelse varje gång den högra musknappen släpps</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Förinställa</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Visa plugin -mapp</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Rapportera</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Se</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Visa verktygstips</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analysatorer kommenterar sina ingångar eller skapar nya klipp som utgång. Barn till analysatorer måste bestämma vilken de behöver som deras input. Detta är vanligtvis den sista utgången.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Ingångstyp</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Välj en {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Hittades inte...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>När det är kontrollerat kommer det verkliga eller falska resultatet av tillståndet att vändas. Så till exempel kommer ett "innehåller" tillstånd att bli "inte innehåller".</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Gör inte</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Vänta...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Färgväljare</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Välj matchfärg</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Som en genvägsutlösare men när nyckelkombinationen trycks in kommer en "kopiering" -händelse att simuleras i den aktiva applikationen så att den fortfarande fungerar som kopia men sedan kommer kedjan av åtgärder som är kopplade till apa -kopieringsutlösaren att köras i bakgrunden med hjälp av Simulerade kopieringsklippsdata.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Avancerat filter</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Dölj filter</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Återställ filter</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Skapa filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Valfritt) När du är tom kommer urklippet att ställas in med den här åtgärdens ingång. Allt som tillhandahålls här kommer endast att behandlas som vanlig text.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Innehåll för urklipp</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>När det är sant kommer inget klipp att läggas till efter att denna åtgärd ställer in urklippet.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignorera</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Ingen analysator vald för action '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analysator för action '{0}' hittades inte</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Överordnad '{0}' filter endast för '{1}' typ innehåll och analysator '{2}' kommer aldrig att köras eftersom det inte stöder '{3}' typ av input</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Ingen tagg vald för klassificerare '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tagg för klassificerare '{0}' hittades inte</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Jämför värde kan bara vara bokstäver, siffror eller utrymmen</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Ingen tagg vald för klipp märkt trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tagg för clip -tagged trigger '{0}' inte hittat</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Ingen klocka mapp som anges för '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Titta på mappen '{0}' hittades inte för trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Filförfattare sökväg för åtgärder '{0}' inte set</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Filförfattare sökväg '{0}' för '{1}' inte hittat.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Aktivitetsfält</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Lär dig om plugins</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Återställ denna analyskonfiguration</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Ändra logg</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Anslut till Internet och försök igen senare.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - hjälp</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} är den senaste versionen</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Ni är alla uppe - till datum!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Sök efter uppdateringar...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Ny version tillgänglig!
+
+Klicka här för att uppdatera till '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Klicka nedan för att uppdatera till '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Uppdatering tillgänglig!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Uppdatera nu</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' innehåller delade värden. Vad vill du återställa?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Rensa senaste sökningar</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Återställ allt</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Återställ delad</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Återställa odelad</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Åberopar den tilldelade ansökan. Alla applikationskommando är statslösa och deras ingångsklipp ignoreras.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>När avmarkerad och kommandot inte kan avfyras kommer kedjan för körning att stoppa. Många kommandon kommer att kräva något specifikt applikationstillstånd för att utföra.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Fortsätt alltid?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Kommandot att utföra.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Kommando</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Inget kommando valt för applikationskommando '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Kommando för applikationskommando '{0}' hittades inte</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Vald</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Omstart</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Det fanns en fråga som uppdaterade '{0}'. För att slutföra uppdateringen måste du starta om och installera '{0}' igen (oroa dig inte för att alla dina inställningar återställs).
+
+Du kan starta om nu och slutföra uppdateringen genom att installera, ignorera detta och uppdatera den senare eller avbryta uppdateringen tillsammans och fortsätta använda version '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Uppdateringsfel</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Kunde inte ladda ner uppdatering</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Uppdateringen misslyckades</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>För att slutföra uppdateringen måste du starta om. Vill du starta om nu eller senare?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Uppdatera redo</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Senare</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Starta om nu</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>I väntan på</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} uppdaterades framgångsrikt till {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Kärnplugins krävs och kan inte tas bort.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Installation</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Uppdateringen väntar. Starta om för att slutföra.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>I väntan på</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>En avinstallation väntar. Starta om om du vill installera om igen.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>För att slutföra avinstallera måste du starta om. Vill du starta om nu eller senare?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Avsluta avinstallera?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Opublicerad</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - genererad standardinställning för '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Inget klipp valt</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analysera vald klipp</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Tilldela en genväg för att köra '{0}' på det valda klippet</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Global pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Tilldela Global Paste -genväg för '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Glömt ditt lösenord?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Integritetspolicy</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Kräver omstart) När aktiverad diagnostisk information kommer att loggas att arkiveras. Detta kan bromsa prestanda och kan innehålla personlig information.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Logga att arkivera</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Öppen</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Open Logs -mapp</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Bläddra plugins</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Läsa</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Skriva</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Skicka feedback eller bugrapport</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Detta döljer bara huvudfönstret. Alla andra icke -dialogfönster visas alltid i aktivitetsfältet.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Sök i '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Lägg till filter</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Redigera anslutningstyp</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Ta bort detta filter</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Öppen hjälp om detta ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} Klipp</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Förändra</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Aldrig</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Uppsättning</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Ofrälse</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Spela in</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Omärkta källreferens</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' krävs</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Har fel)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Begränsad</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Lagring</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Skräp</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Obegränsat</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Den här appen matchar för närvarande standardklippsläsare förinställningar och format.
+
+Att aktivera eller inaktivera standardläsarförinställningar (från urklippets sidofält) påverkar inte denna konfiguration. Endast onoterade appar följer standardinställningen.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Den här appen matchar för närvarande standardklippsförfattare förinställningar och format.
+
+Att aktivera eller inaktivera standardförfattare förinställningar (från urklippets sidofält) kommer inte att påverka denna konfiguration. Endast onoterade appar följer standardinställningen.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>För att bifoga måste du ta upp Urklippslyssnaren (System Tray -&gt; CV).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Bifoga otillgänglig</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Har inga inställningar</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Jag talar bara engelska och monkeypaste har översatts till detta språk.
+
+Alla versioner skickas med det engelska paketet så om du talar engelska kan du ändra språket till det när som helst efter denna installation (inställningar -&gt; Inställningar -&gt; International).
+
+Om du vill hjälpa till att förbättra översättningen skulle vi gärna höra från dig!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Översättningsproblem</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Du måste uppdatera monkeypasta för att använda den här funktionen.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Genvägen</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Urklipps lyssnar inaktiverad</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Urklipps lyssnare aktiverad</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Överordnad action '{0}' stöder inte inmatningsegenskapstyp 'Last Output'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lär dig mer om planer</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Ansökan</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Utlösare</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klämma</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analysator</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Märka</value>
+  </data>
+</root>

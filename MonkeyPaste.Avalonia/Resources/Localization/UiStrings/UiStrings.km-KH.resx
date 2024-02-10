@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>មិនមានលក្ខណៈពិសេសកំណត់ដោយការជាវទេមានតែសមត្ថភាពផ្ទុកហើយអាចប្តូរបានគ្រប់ពេល។</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>ស្តារគណនីដែលមានស្រាប់របស់អ្នកឡើងវិញ ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>មាតិកានិងសំរាមគឺ
+កំណត់ត្រឹម {0} និង {1}
+ឈុតរៀងៗខ្លួន។</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>អនុញ្ញាតឱ្យឡើងទៅ {2} ឈុតនៃមាតិកានិងការផ្ទុកសំរាមគ្មានដែនកំណត់។</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>មាតិកានិងការផ្ទុកធុងសំរាមគ្មានកំណត់។</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>ចយសចុល</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>ដេលមានសេរីផាប</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>កមរុ</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>គ្មានដែនកំណត់</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>ការចាវចារបចាម</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>ភាពឯកជនរបស់អ្នកមានសារៈសំខាន់និងក្តារតម្បៀតខ្ទាស់អាចមានលក្ខណៈផ្ទាល់ខ្លួន។ ការផ្ទុកតែងតែត្រូវបានអ៊ិនគ្រីបប៉ុន្តែអ្នកអាចកំណត់ពាក្យសម្ងាត់ដែលនឹងត្រូវបានទាមទារក្នុងករណីដែលឧបករណ៍របស់អ្នកត្រូវបានលួចឬនរណាម្នាក់ផ្សេងទៀតកំពុងប្រើឧបករណ៍របស់អ្នក។</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>ហក្យសមងាត់</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>នៅពេលបើកដំណើរការអូសពីកម្មវិធីណាមួយទៅផ្នែកខាងលើនៃអេក្រង់នឹងបង្ហាញ moysypaste ដើម្បីទម្លាក់មាតិកាឱ្យបានយ៉ាងងាយស្រួលទៅក្នុង monkeysyysyypee ។</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>ការបើកដំណើរការ 'ចាក់សោ' នៅខាងឆ្វេងខាងលើនៃបង្អួចមេនឹងនៅតែអនុញ្ញាតឱ្យធ្លាក់ចុះនៅលើ monkeysyysysyysysysysysyysysypocke ។</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>ចំណូលចិត្តបង្អួចច្រើនទៀតអាចរកបានពី 'ការកំណត់ -&gt; ចំណូលចិត្ត -&gt; ម៉ឺនុយ' បង្អួច។</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>អូសចេកឡើងនៅទីនេះ!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>អូស - ទៅ - បើក</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>ផ្លូវកាត់ក្តារចុចអាចត្រូវបានពិនិត្យឡើងវិញឬផ្លាស់ប្តូរនៅពេលណាមួយពីម៉ឺនុយ 'ការកំណត់ -&gt; ផ្លូវកាត់' ។</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>ផ្លូវកាត់សកលទាំងអស់នឹងត្រូវបានបិទដូច្នេះអ្នកអាចកំណត់វាដោយខ្លួនឯងនៅពេលក្រោយ។</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>ផ្លូវកាត់ក្តារតម្បៀតខ្ទាស់ឃ្លីបរបស់ព្រះសង្ឃនឹងមាននៅក្នុងកម្មវិធីទាំងអស់។</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>ខាងក្នុង</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>ការមិនកោរបតាមសន្យា</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>ទម្រង់កាយវិការ</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>ហេ! តោះរៀបចំរឿងមួយចំនួនដើម្បីកែលម្អបទពិសោធន៍ទូទៅរបស់អ្នកជាមួយ monkeypeeke ។</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>ការសវាកមន៍</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>ដើម្បីទទួលបានការប្រើច្រើនបំផុតចេញពី monkeypeaste, ផ្ទុកដោយស្វ័យប្រវត្តិនៅពេលអ្នកចូលគឺជាគំនិតល្អ។ ប៉ុន្តែវាអាស្រ័យលើអ្នកទាំងស្រុង។</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>រក្សាវាឱ្យធម្មតា។</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>បើកដៃ</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>ផ្ទុកនៅលើការចូល?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>នៅពេលបើកដំណើរការកាយវិការរមូរនៅផ្នែកខាងលើនៃអេក្រង់នឹងបង្ហាញ monkeypocke ។</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>ខាងឆ្វេង - ការចុចរូបតំណាងរបារភារកិច្ចនៅតែបើកចំហ monkyypeex ។</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>ចំណូលចិត្តបង្អួចច្រើនទៀតអាចរកបានពី 'ការកំណត់ -&gt; ចំណូលចិត្ត -&gt; ម៉ឺនុយ' បង្អួច។</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>ត្រឹមត្រូវមែនទេ?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>រមូរឡើងលើនៅទីនេះ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>រមូរ - ដើម្បី - បើក</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p តម្រឹម = "មជ្ឈមណ្ឌល"&gt; MonkeypeyS. &lt;span ពណ៌ = "ក្រហម&gt; រួមបញ្ចូលពេញលេញ &lt;/ span&gt; ជាមួយអូស - និង - ទម្លាក់ &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>ទម្លាក់វានៅទីនេះ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p តម្រឹម = "មជ្ឈមណ្ឌល"&gt; វិធីនេះ monkeysysypouse អាចចូលបាន &lt;br&gt; ពណ៌ខ្លី = "ក្រហម"&gt; ដោយគ្មានការចុច &lt;/ span &lt;sprorm ពណ៌ = # x1f440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>អូសខ្ញុំ!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>សាកល្បង​វា​មើល!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>សាកល្បង​វា​មើល!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>មិនមានលទ្ធផលទេ។</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>បហ្ជាក់</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>ធ្វើ​ឱ្យ​ស្រស់</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>ស្វែងរក ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>ការកំណត់</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>ភាពអាស្រ័យ:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>ដាក់ដមនេង</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>តើអ្នកប្រាកដជាចង់លុប '{0}' និងកំណត់ជាមុននិងផ្លូវកាត់របស់វាទាំងអស់ទេ?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>លុប</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' គ្មានលទ្ធផលទេ។</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>គ្មានជម្រើស។</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>ឥតមានអវីសោហ</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>ឥណទាន:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>ការពិពណ៌នាសង្ខេប:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>បរិច្ចាគ:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>អាជ្ញាប័ណ្ណ:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL គម្រោង:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>បានចុះផ្សាយ:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>អានខ្ញុំ:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>របាយការណ៍ការរំលោភបំពាន:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>ស្លាក:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>ធេវីអាេយយរមយរ</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>កំណែ:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>បើកក្នុងបង្អួច</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>បន្ដេញចោល</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>ធ្វើ​ឱ្យ​ស្រស់</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>សរេង្គាហ</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>បន្ទាប់ដើម្បីលុប!
+
+ធ្វើឱ្យប្រសើរឡើងដើម្បីជៀសវាង។</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>នៅជាប់នឹងធុងសំរាម!
+
+ធ្វើឱ្យប្រសើរឡើងដើម្បីជៀសវាង។</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>ឯកសារ</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>ធម្ផារម្ផន៍</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>អត្ថបត</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>ថតចម្លង {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} ឯកសារ | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} ឆានែល | {1} បន្ទាត់</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} ច្បាប់ចម្លង | {1} បិទភ្ជាប់</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>ធេវីចលនា</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>បុក / ករ</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>ការចម្លង</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>ចមនេក</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>រេនាយោហរការ</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} ចម្លង</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>តម្រងដែលមិនបានរក្សាទុក</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- សូមជ្រើសរើស -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>ទ្រង់ទ្រាយ</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>បុរសអត្ថវន៍</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>អ្នកសរសេរ</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>ក្លូនដៃ</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>របៅបេលរសច</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>ច្បាប់ចម្លង</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>កែសម្រួលឈ្មោះ</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>កំណត់ឡើងវិញ</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>ស្លាក</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>កិច្ច</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>ផ្លូវសកល</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>ផ្លូវកាត់</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>កាយវិការត្រូវតែមានតែមួយគត់ហើយអាចមានកូនសោបញ្ចូលតែមួយប៉ុណ្ណោះ។</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; ផ្លូវកាត់ផ្ទៃក្នុងទាំងអស់ត្រូវបានកំណត់ក្នុងកម្មវិធី។ នេះមិនមែនជាជំរើសដែលបានគ្រោងទុកទេប៉ុន្តែអាចអនុញ្ញាតឱ្យប្តូរតាមបំណងតើអ្នកមានបំណងធ្វើឱ្យសកលលោក &lt;i&gt; នៅថ្ងៃណាមួយ &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; ផ្លូវកាត់សកលទាំងអស់ត្រូវបានបើក។ ប៊ូតុង &lt;b&gt; បង្ហាញ / លាក់បង្អួចធំ &lt;/ b&gt; ប្រើ &lt;Span Color = "Red"&gt; បដិសេធ &lt;/ spand &lt;/ span&gt; បញ្ជូនសម្រាប់គ្រាប់ចុច &lt;b&gt; កូនសោ Lock Key ។ អ្នកអាចផ្លាស់ប្តូរការធ្វើដំណើរនោះឬកាយវិការនៅពេលណាមួយ។ ប៉ុន្តែ &lt;SPAN Color = "បៃតង" ផ្តល់ឱ្យវាសាកល្បង &lt;/ span&gt;
+&lt;/ li&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;HTML&gt;
+&lt;ក្បាល&gt; &lt;/ stest&gt;
+&lt;រាងកាយ&gt;
+&lt;h1&gt; របៀបផ្លូវកាត់សកល &lt;/ h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; អកម្ម &lt;/ b&gt; សត្វចម្លែកផ្លូវកាត់នឹងស្តាប់ក្នុងកម្មវិធីណាមួយ។ &lt;br&gt;
+* នេះគឺជាជំរើស &lt;i&gt; តែលើលីនុចសម្រាប់ពេលនេះ។
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; ផ្លូវកាត់ &lt;/ b&gt; នឹងប្រតិបត្តិ &lt;b&gt; &lt;1&gt; &lt;/ b&gt; មុន &lt;/ i&gt; &lt;/ b&gt; វាត្រូវបានគ្រប់គ្រងដោយពាក្យសុំសកម្ម។ &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; ផ្លូវកាត់ &lt;/ b&gt; នឹងប្រតិបត្តិ &lt;b&gt; &lt;b&gt; &lt;‧&gt; បន្ទាប់ពី &lt;/ i&gt; &lt;/ b&gt; វាត្រូវបានគ្រប់គ្រងដោយពាក្យសុំសកម្ម។ &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; បដិសេធ &lt;/ b&gt; នៅពេលដែល monkeypockech កូនសោបញ្ចូល (មិនកែប្រែគ្រាប់ចុចដែលមិនផ្លាស់ប្តូរ) នៃផ្លូវកាត់បដិសេធវានឹង &lt;i&gt; លាក់សារព័ត៌មានដ៏សំខាន់របស់នោះពីការបញ្ចូលកម្រិត។ &lt;br&gt;
+ជម្រើសនេះនឹងធានាថាផ្លូវកាត់ត្រូវបានបង្កឡើងដោយគ្មានទំនាស់ចំពោះកម្មវិធីសកម្ម។
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; ការបដិសេធផ្តាច់មុខ &lt;/ b&gt; នេះគឺជាប្រភេទពិសេសនៃរបៀបបដិសេធដែលត្រូវបានរចនាឡើងសម្រាប់គ្រាប់ចុច Caps Lock ។ វាអនុញ្ញាតឱ្យ &lt;b&gt; មួយ &lt;/ b&gt; key (មិនមែនអ្នកកែប្រែ) សម្រាប់កិច្ចការរបស់វា។ &lt;br&gt;
+នៅក្នុងរបៀបនៃការចាក់សោរបៀបនៃរបៀបបដិសេធធម្មតាអាចក្លាយជា &lt;i&gt; ជាប់នៅលើ &lt;/ i&gt; នៅពេលចុចបញ្ចូលគ្នាជាមួយគ្រាប់ចុចផ្សេងទៀត។ &lt;br&gt;
+ដូច្នេះមិនថាកូនសោផ្សេងទៀតធ្លាក់ចុះក៏ដោយប្រសិនបើ A &lt;/ b&gt; ហ្វុកស៍ &lt;/ b&gt; ផ្លូវកាត់ត្រូវបានចុចវានឹងត្រូវបានធ្វើឱ្យប្រសើរឡើងហើយរារាំងវាពីការក្លាយជា &lt;i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ។
+&lt;/ li&gt;
+&lt;/ ul&gt;
+&lt;/ រាងកាយ&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>ផ្លាស់ប្តូរ</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>ផ្ទុកឡើងនៅពេលដែលគណនីអ្នកប្រើនេះចូលមិនមែនសម្រាប់អ្នកប្រើប្រាស់ផ្សេងទៀតទេ។</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; ការប្រើប្រាស់ទំនាក់ទំនងដែលមាន (តម្រូវឱ្យមានកម្មវិធីជំនួយការទទួលយក) វាលនេះនឹងត្រូវបានប្រើសម្រាប់គ្រប់គំរូនៃគំរូនេះនៅទូទាំងឯកសារនេះឬនៅក្នុងអ្វីដែលវានឹងត្រូវបានយោងនៅពេលក្រោយ។ &lt;/ p&gt; &lt;p&gt; ប្រសិនបើជ្រើសរើសអាសយដ្ឋានអ៊ីមែល នេះនៅទីនេះវាលអ៊ីម៉ែលនៃទំនាក់ទំនងដែលអ្នកជ្រើសរើសនឹងត្រូវបានប្រើសម្រាប់វត្ថុទាំងអស់នៅក្នុងឯកសារនេះ។ &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>ybr/&gt; ybr/&gt; ybr/&gt; ybryy = broma មួយឆ្នាំ &lt;br/&gt; m = ខែ (1-12 MM = ខែ (01-12 អក្សរកាត់ MMM = ខែ ab, ។ ខែធ្នូ) &lt;br/&gt; ខែ unture (មករាកុម្ភៈ ... ខែធ្នូ) &lt;br/&gt; D = ថ្ងៃ (3-13) &lt;br/&gt; DD = ថ្ងៃ (01 - 3) &lt;br/&gt; DDD = ថ្ងៃនៃសប្តាហ៍នៅក្នុងពាក្យ (ថ្ងៃច័ន្ទថ្ងៃអង្គារ ... ថ្ងៃអាទិត្យ) &lt;br/&gt; អ៊ី = ថ្ងៃខ្លីនៃសប្តាហ៍នៅក្នុងពាក្យ (ច័ន្ទ, True) &lt;br&gt; ទី 1 ទី 3 ទី 21 ថ្ងៃទី 22 ទី 23, ទី 4 ទី 4 ... ) &lt;br/&gt; H = ម៉ោងនៅ AM / PM (0-12) &lt;br /&gt; ម៉ោង (00-12) &lt;br / sm (00-12) &gt; ម៉ោង H = ម៉ោងក្នុងមួយថ្ងៃ (0-23) &lt;br/&gt; HH = ម៉ោងក្នុងមួយថ្ងៃ (00&gt; MM = នាទី &lt;br/&gt; អេសអេស = Milliseconds = MilliseConds = A = am សញ្ញាសម្គាល់សញ្ញាសម្គាល់ &lt;br/&gt; ទំ = a.m.m./p.m ។ សញ្ញាសម្គាល់</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>កាលបរិច្ឆេទបច្ចុប្បន្ននិង / ឬពេលវេលានឹងត្រូវបានជំនួសសម្រាប់គំរូ DETETINE នៅពេលពួកគេបានបិទភ្ជាប់។</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; ការកើតឡើងទាំងអស់នៃគំរូនេះនឹងប្រើអត្ថបទដែលបានផ្តល់។ &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; ការកើតឡើងទាំងអស់នៃគំរូនេះនឹងប្រើអត្ថបទដែលបានផ្តល់។ &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>បញ្ចប់ការបន្ថែម</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>បើកដំណើរការប្លុក</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>បើកដំណើរការក្នុងជួរ</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>បិទបើកសៀវភៅណែនាំ</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>បិទបើកសៀវភៅណែនាំ</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>ការផ្អាកផ្អាក</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>បិទបើកមុន</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>បិទបើកមុន</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>ការបន្ថែមបន្តទៀត</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>បន្ថែមទៀត ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>រេនាយោហរការ</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>ម្ជុល</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>អក្គោអិន</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>លាក់ការជូនដំណឹង {0} 'ទាំងអស់</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>បន្ដេញចោល</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>មិនស្គាល់កម្មវិធីសកម្មចុងក្រោយ។ ប្តូរទៅកម្មវិធីដែលបានបម្រុងទុកដើម្បីបិទភ្ជាប់ស្វា។</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>បិទភ្ជាប់ទៅ: &lt;em&gt; &lt;1 ថ្នាក់ = "បិទភ្ជាប់ - ព័ត៌មានជំនួយ - បច្ច័យ"&gt; {0} &lt;/} &lt;/ em &lt;em &lt;/ em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>អត្ដសបអុ្លាក់តិច</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>សូមរង់ចាំ ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>សោ</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>កននេយ្យ</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>ការចយយ</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>ចម្លងនិងបិទភ្ជាប់</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>ចំណូលចិត្ត</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>ស្តារលំនាំដើមឡើងវិញ</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>ត្រង ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>ផ្លូវកាត់</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>បន្ថែមកម្មវិធី</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>បន្ថែមគេហទំព័រ</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>រារាំង?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>ឈ្ផោហ</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>កម្មវិធី</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>ដែនប្លុក?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>រារាំង URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>ពិបិindស្ថាននាងឥនិត្យដែន</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>ការទទួលស្គាល់ URL URL គឺពឹងផ្អែកលើរបៀបដែលការឃ្លីបឃ្លីបមិត្តភាពកម្មវិធីរបស់ម៉ាស៊ីនគឺដូច្នេះការបដិសេធមិនអាចត្រូវបានធានា</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>គេហទំព័រ</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>លក្ខណៈពិសេសនៃព្រះសង្ឃមួយចំនួនប្រើស្វ័យប្រវត្តិកម្មក្តារចុចដើម្បីក្លែងធ្វើ 'ចម្លង' ព្រឹត្តិការណ៍នៅក្នុងកម្មវិធីផ្សេងទៀត។
+
+បន្ថែមនិង / ឬជ្រើសកម្មវិធីជាមួយនឹងផ្លូវកាត់ចម្លងតែមួយគត់ (ដូចជាកុងសូលឬសែលឧទាហរណ៍) ដើម្បីធានាបាននូវមុខងារទាំងនោះឱ្យបានត្រឹមត្រូវ។</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>ចម្លងផ្លូវកាត់</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>ឥតមានអវីសោហ</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>មានតែ Pritets ដែលបានជ្រើសរើសប៉ុណ្ណោះដែលត្រូវបានប្រើសម្រាប់កម្មវិធីដែលបានបញ្ជាក់។ នៅពេលមិនបានបញ្ជាក់ឯកសារកំណត់ជាមុនត្រូវបានរកឃើញនៅក្នុងរបារចំហៀងបន្ទាត់ &lt;em&gt; ក្តារតម្បៀតខ្ទាស់ &lt;/ em&gt; នឹងត្រូវបានប្រើ។</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>លក្ខណៈពិសេសនៃព្រះសង្ឃជាច្រើនប្រើស្វ័យប្រវត្តិកម្មក្តារចុចដើម្បីធ្វើអន្តរកម្មជាមួយកម្មវិធីផ្សេងទៀត។
+
+កម្មវិធីមួយចំនួន (ដូចជាកុងតឺន័រឬសំបកខ្លះឧទាហរណ៍) អាចមានផ្លូវកាត់បិទភ្ជាប់ដែលមិនចុះសម្រុង។
+
+ដើម្បីធានាបាននូវអន្តរប្រតិបត្តិការត្រឹមត្រូវកត់ត្រាផ្លូវកាត់ទាំងនោះសម្រាប់កម្មវិធីនោះនៅទីនេះ។</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>បិទភ្ជាប់ផ្លូវកាត់</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>បុរសអត្ថវន៍</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ការត្រួតពិនិត្យក្តារតម្បៀតខ្ទាស់ទាំងអស់ពីកម្មវិធីដែលបានច្រានចោលនឹងមាន &lt;b&gt; មិនអើពើ &lt;/ b&gt; ។</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>អ្នកសរសេរ</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>កែសម្រួល ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>ទ្រង់ទ្រាយ</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>បដិសេធ</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>ផ្លូវកាត់</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>តើអ្នកចង់យកកំណែ {0} ទាំងអស់ចេញពី '{1}' ទេ</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>យកក្លីបចេញ?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>ការស្ម័រក</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>រកមើលកម្មវិធី ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>ជ្រើសរើសផ្លូវកម្មវិធី</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់យកផ្លូវកាត់ផ្ទាល់ខ្លួនចេញសម្រាប់ {0} មែនទេ?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបទ្រង់ទ្រាយផ្ទាល់ខ្លួនសម្រាប់ {0} មែនទេ?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>មិនមានទ្រង់ទ្រាយក្តារតម្បៀតខ្ទាស់ដែលបានកំណត់សម្រាប់កម្មវិធីនេះទេ។ មិនមានទិន្នន័យណាមួយត្រូវបានអានពីវាតាមរយៈការកាត់ / ចម្លងឬប៉ុនប៉ងអូស - ហើយ - ទម្លាក់ទៅក្នុង MonkeysyySpeeke</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>មិនមានទ្រង់ទ្រាយក្តារតម្បៀតខ្ទាស់ដែលបានកំណត់សម្រាប់កម្មវិធីនេះទេ។ បិទភ្ជាប់ស្វ័យប្រវត្តិកម្មឬអូស - ហើយ - ទម្លាក់ពី Monkeypocke នឹងមិនមានផលប៉ះពាល់ទេ (ទិន្នន័យទទេរបស់វា) ។</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់កំណត់ផ្លូវកាត់ទាំងអស់ឡើងវិញមែនទេ? ផ្លូវកាត់ផ្ទាល់ខ្លួនទាំងអស់នឹងត្រូវដកចេញ។</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់ផ្លាស់ប្តូរទម្រង់ផ្លូវកាត់ផ្លូវកាត់របស់អ្នកទៅ '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>តាមងអស់</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>សេវesព្រះអង្គ</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>រុរ៉ូ</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>ទ្រង់ទ្រាយ</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>ស្លាក</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>ថៃនេហ</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>សម្ការក្ផានតមលៃ</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>អមបី</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>ត្រឹមត្រូវមែនទេ?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>ចុចទ្វេដងលើ UNPIN</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>តមន្យេមតមលាប់</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>ដេលមុលដុចបាល់</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>ការរួមបញ្ចូលគ្នារវាងការរួមបញ្ចូលគ្នារវាង '{0}' ដែលនឹងត្រូវបានសម្អាតប្រសិនបើបានរក្សាទុក។</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>ផ្លូវកាត់ត្រូវតែផ្តល់ជូន។</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>នេះគឺជាផ្លូវកាត់សកល។ នោះមានន័យថាវានឹងព្យាយាមប្រតិបត្តិនៅពេលណាដែលវាត្រូវបានអនុវត្ត។ ព្យាយាមធ្វើឱ្យវាមានលក្ខណៈពិសេសគ្រប់គ្រាន់ (ឬផ្លាស់ប្តូរ 'ប្រភេទនាំផ្លូវ') ដើម្បីមិនមានទំនាស់ជាមួយផ្លូវកាត់ពីកម្មវិធីផ្សេងទៀត។</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>ដេលមុលដុចបាល់</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>ផ្លូវកាត់ត្រូវតែមានគ្រាប់ចុចដែលមិនមែនជាអ្នកកែប្រែមួយហើយមានតែអ្នកកែប្រែប៉ុណ្ណោះ។</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>ចុចគ្រាប់ចុចណាមួយដើម្បីកត់ត្រា ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>ចាត់តាំងផ្លូវកាត់</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>ស្វែង​យល់​បន្ថែម...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>ធេវីសកម្មទឹក</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>លប់ចោល</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>ចយសចុល</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>មិនអើបើ</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>ដេលក្ផាន</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>យល់ព្រម</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>ាប់រេគ្រប់យ៉ាងបី</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>បិទ</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>ដាក់រេកាមបង្គាប់</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>បាត</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>ប្រចាំឆ្នាំ</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>របចាមខេ</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>ព្យាយាមដោយឥតគិតថ្លៃ!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>វដ្តវិក័យប័ត្រ</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>អ៊ីមែល</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>ចូល</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>ពិនិត្យការភ្ជាប់របស់អ្នក
+ហើយព្យាយាមម្តងទៀត។</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>ចាកចេញ</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>ការទូទាត់បន្ទាប់</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>ហក្យសមងាត់</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>ការចុហបហ្ជី</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>អ៊ីមែលមិនត្រឹមត្រូវទេ</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>ពាក្យសម្ងាត់មិនត្រូវគ្នា។</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>លេខសម្ងាត់ត្រូវតែជាតួអក្សរអប្បបរមានៃ {0} តួអក្សរ។</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>ចងចាំទេ?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>ពិនិត្យអ៊ីមែលរបស់អ្នកដើម្បីបញ្ជាក់គណនីរបស់អ្នក</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>កំណត់ពាក្យសម្ងាត់ឡើងវិញ</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>MMM D, YYYY</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>MMM D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM / DD / YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>មិនដេលមាន</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>ការជំនុំជម្រះក្តី {0} ដោយឥតគិតថ្លៃ</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>មានបញ្ហាដែលដំណើរការ
+ការទិញរបស់អ្នក។
+
+ពិនិត្យមើលការភ្ជាប់របស់អ្នកនិង
+ការកំណត់អាចជួយបាន។
+
+តើអ្នកចង់ព្យាយាមម្តងទៀតទេ?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>គណនីរបស់អ្នកបានជោគជ័យ
+បានធ្វើឱ្យប្រសើរឡើងទៅ:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>ទិញទទួលបានជោគជ័យ!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>កមហុស</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>ការ​ត​ភ្ជាប់​បាន​បរាជ័យ។</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>ាប់រេគ្រប់យ៉ាងបី</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>គណនីបានផ្លាស់ប្តូរ</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>ការជាវរបស់អ្នកឥឡូវនេះគឺ {0} / {1} ជាមួយមាតិកា {2} មាតិកានិងការផ្ទុកសំរាមក្នុងធុងសំរាម 3 {3} ។
+ប៉ុន្តែកុំបារម្ភគ្មានទិន្នន័យត្រូវបានបាត់បង់បន្ទាប់ពីការធ្លាក់ចុះ។ មានតែឈុតថ្មីប៉ុណ្ណោះដែលត្រូវបានវាយតម្លៃ។</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>អបអរសាទរ! ការជាវរបស់អ្នកឥឡូវនេះគឺ {0} / {1} ជាមួយមាតិកា {2} មាតិកានិងការផ្ទុកសំរាមក្នុងធុងសំរាម 3 {3} ។</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>សំរាមឬ inlink អ្វីមួយ
+ពី '{0}' ដើម្បីបន្ថែមទៀត។</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>ការផ្ទុក '{0}' គឺ {1} ។</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>ចយសចុល</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} បានរារាំង</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>សមត្ថភាពនិងសមត្ថភាពសំរាមបានឈានដល់!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>ការផ្ទុក '{0}' គឺ {1} ។</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>សមត្ថភាពមាតិកាបានមកដល់!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* អ្នកអាចលាក់ការព្រមានទាំងនេះដោយ
+ចុច 'លាក់ទាំងអស់' ពីឯកសារ
+ម៉ឺនុយជម្រើសខាងលើ។</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>ការផ្ទុកសំរាមអតិបរមាគឺ {0} ។</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>សមត្ថភាពសំរាមបានឈានដល់!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} មិនត្រឹមត្រូវ</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} ត្រូវតែមានយ៉ាងហោចណាស់តួអក្សរ {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} អាចជាតួអក្សរ {1} តួអក្សរ</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>បិទភ្ជាប់ទៅ: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>ការទូទាត់សម្រាប់ {0} របស់អ្នក
+ការជាវគឺដោយសារតែ {1}
+ហើយមិនបានទទួលទេ។
+
+សូមធ្វើបច្ចុប្បន្នភាពរបស់អ្នក
+ព​ត៌​មាន​ទូទាត់ប្រាក់។</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>ការទូទាត់សម្រាប់ {0} របស់អ្នក
+ការជាវគឺដោយសារតែ {1}
+ហើយមិនបានទទួលទេ។
+
+សូមភ្ជាប់ទៅឯកសារ
+អ៊ិនធឺរណែតនៅលើឧបករណ៍
+ជាមួយនឹងការជាវរបស់អ្នកនិង
+ចាប់ផ្តើមឡើងវិញដើម្បីបន្ត
+ដោយប្រើផែនការ {0} របស់អ្នក។</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>ការទូទាត់សម្រាប់ {0} របស់អ្នក
+ការជាវគឺដោយសារតែ {1}
+ហើយមិនបានទទួលទេ។
+
+សូមបើកឬចាប់ផ្តើមឡើងវិញ
+monkeypeaste នៅលើឧបករណ៍
+ជាមួយនឹងការជាវរបស់អ្នកទៅ
+បន្តប្រើប្រាស់របស់អ្នក
+{0} ផែនការ។</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>គណនីផុតកំណត់</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>វិក័យប័រត</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store មិនអនុញ្ញាតឱ្យថ្នាក់ទេ
+ការផ្លាស់ប្តូរការជាវបាន។
+
+អ្នកត្រូវតែបោះបង់របស់អ្នក
+{0} / {1} គ្រោងដោយខ្លួនឯង
+ឬអ្នកនឹងត្រូវបានគិតប្រាក់សម្រាប់ទាំងពីរ។
+
+តើអ្នកចង់ទៅធ្វើឥឡូវនេះទេ?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>ពាក្យសម្ងាត់របស់អ្នកត្រូវបានកំណត់ឡើងវិញ។
+
+សូមពិនិត្យមើលអ៊ីមែលរបស់អ្នកនិង
+សូមអនុវត្តតាមតំណភ្ជាប់ដើម្បីផ្លាស់ប្តូរ
+លេខសំងាត់​របស់​អ្នក។</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>ចូល</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>អ្នកនិពន្ធ</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>វាតម្រូវឱ្យអ្នកទទួលយកល័ក្ខខ័ណ្ឌអាជ្ញាប័ណ្ណខាងក្រោមមុនពេលបន្ត។</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>កញ្ចប់ខាងក្រោមតម្រូវឱ្យអ្នកទទួលយកលក្ខខណ្ឌអាជ្ញាប័ណ្ណរបស់ពួកគេមុនពេលដំឡើង។</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>ខ្ញុំ​បដិសេធ</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>ចុច "ខ្ញុំទទួលយក" មានន័យថាអ្នកយល់ព្រមនឹងលក្ខខណ្ឌអាជ្ញាប័ណ្ណសម្រាប់កម្មវិធីនេះ។ ប្រសិនបើអ្នកមិនយល់ព្រមនឹងលក្ខខណ្ឌសូមចុច "ខ្ញុំអូសទាញ" ។</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>ចុចលើ "ខ្ញុំទទួលយក" មានន័យថាអ្នកយល់ព្រមនឹងលក្ខខណ្ឌអាជ្ញាប័ណ្ណសម្រាប់កម្មវិធីជំនួយដែលបានចុះបញ្ជីខាងលើ។ ប្រសិនបើអ្នកមិនយល់ព្រមនឹងលក្ខខណ្ឌសូមចុច "ខ្ញុំអូសទាញ" ។</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>មើលអាជ្ញាប័ណ្ណ</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>ការទទួលយកអាជ្ញាប័ណ្ណ</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>ខ្ញុំ​ទទួល​យក</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>សកម្ម</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>ក្រៅប្រព័ន្ធ</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>ត្រឡប់ថ្ងៃទីសេចក្តីក្រោយ</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>រ្យេឱដេនោ</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ពាក្យសម្ងាត់មិនត្រូវគ្នា</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>ហក្យសមងាត់</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>ការជាវរបស់អ្នកគឺ
+ឥឡូវកំណត់ {0} / {1} ។</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>រកឃើញគណនី</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>បានបរាជ័យ</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>ការ​ចុះឈ្មោះ​បរាជ័យ</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>ការចុះឈ្មោះទទួលបានជោគជ័យ!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>កំណត់កំហុសឡើងវិញ</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>ការចាវចារបចាម</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>តើមានអ្វីថ្មី</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>មិនដេលមាន</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>គ្មានដែនកំណត់</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>មុខងារ</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>ដេលសល់</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>បុកសរុប</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>ការទូទាត់របស់អ្នកហួសកំណត់ហើយ។</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>ផ្លូវកាត់បដិសេធទាំងស្រុងអាចមានគន្លឹះមួយហើយគ្រាប់ចុចនោះមិនអាចជាកូនសោរកែប្រែបានទេ។</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>ផុតសុក</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>កំពុងផ្ទុក</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>កាយវិកលកម្ផ</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>ចំណាំ! ពាក្យសម្ងាត់នេះគឺស្រេចចិត្តហើយសម្រាប់សុវត្ថិភាពបន្ថែម។ ទិន្នន័យរបស់អ្នកត្រូវបានអ៊ិនគ្រីបរួចហើយហើយមិនដែលចែករំលែក។ ពាក្យសម្ងាត់នេះគ្រាន់តែរារាំងអ្នកដែលមិនមានអ្នកពីការផ្ទុកសត្វស្វាប្រសិនបើពួកគេចូលប្រើផ្ទៃតុរបស់អ្នក (លួចអ្នកចាកចេញពីបន្ទប់។ ល។ ) ។</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>ចងចាំការកំណត់ការធ្លាក់ចុះសម្រាប់:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>រកមើលកម្មវិធីជំនួយ</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>វិផាក</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>សកម្មភាពរហ័ស</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>បិទបើកកែប្រែ</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>បិទបើកខ្ទាស់</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>ចំណាប់អារម្មណ៍</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>អត្ថបទ​ធម្មតា</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>បើកក្នុងបង្អួច</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>ចុច "CTRL ដើម្បីតាមដាន ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>ចុច + ជំនួសដើម្បីធ្វើតាម ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>ម្ជុលឬទម្លាក់លើមេឌៀណាមួយនៅទីនេះ!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>ផ្លឺ</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>ការចាប់ផ្តើមខ្ពស់ខាងលើ 0 នឹងផ្តល់នូវការផ្គូផ្គងពណ៌ស្រពិចស្រពិលដោយប្រើចម្ងាយ Euclidean ក្នុង RGBA Colorspace ។
+
+ឧទាហរណ៍ប្រសិនបើក្រហម (# FF0000) គឺជាពាក្យស្វែងរកនិងខ្មៅ (# 000000) គឺជាភីកសែលក្នុងឈុតរូបភាពបន្ទាប់មកចម្ងាយពណ៌នឹងមានចម្ងាយស្មើនឹង 510 រួមទាំងប៉ុស្តិ៍អាល់ហ្វា។</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>ទាំងអស់ខាងក្រោមនេះគឺជាការពិត</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>ក្តារចុច</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>បក</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>របៀបកណ្តុរ</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>កដមបីរបកម្ផ</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>បេលឈប់សរមាក</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>ប្រវត្តិរូប</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>កេះថ្មី</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>បន្ថែម Preset</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>អ្នកជំនួយការស្វាទម្លាក់</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>បានកំណត់ជាមុន</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>អ្នកវិផាក</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>ចមលោហ</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>ការតំរង់ទិសវដ្ត</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>បិទបើកប្លង់ក្រឡាចត្រង្គ</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>ប្រកាន់​តួអក្សរ​តូច​ធំ</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>ការចាប់ផ្ដើម</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>ពាក្យទាំងមូល</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>គ្មានសំណុំ</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>ការបមរើន</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>កិច្ច</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>បប្យេសី</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>រ្យេឱដេនោ</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>បន្ទាប់បិនេហ</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>ចាដមបុង</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>លោតផ្លោហ</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>គណនីដែលមានស្រាប់?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>ការទូទាត់បន្ទាប់</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>ការចុះឈ្មោះអនុញ្ញាតឱ្យអ្នកអនុវត្តការជាវបង់ប្រាក់របស់អ្នកនៅលើឧបករណ៍របស់អ្នកទាំងអស់ (នៅពេលដែលមាន) ។ យើងនឹងមិនផ្ញើសារមកអ៊ីមែលរបស់អ្នកដែលយើងសន្យា😇ទេ។</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>ការចាវចារបចាម</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>ឈ្មោះ​អ្នកប្រើប្រាស់</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>ត្រូវការចុះឈ្មោះ?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>បមលក់</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>សេសគ្មានអ្វីទេ។ អ្វីមួយត្រូវតែខុស😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>រមកមិ avad ចេញ</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>តម្រូវឱ្យចាប់ផ្តើមឡើងវិញ</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>ខាងមុខ</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>កំហុសក្នុងការដកស្រង់កម្មវិធីជំនួយពី '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>កំហុសក្នុងការដំឡើងកម្មវិធីជំនួយ: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>កំហុសក្នុងការដំឡើងកម្មវិធីជំនួយ '{0}' រចនាសម្ព័ន្ធខូចឬរចនាសម្ព័ន្ធមិនត្រឹមត្រូវ។ សម្តែងគួរតែមាននៅ '{1}' ប៉ុន្តែរកមិនឃើញទេ។</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>កំហុសក្នុងការញែកកម្មវិធីជំនួយការបង្ហាញ '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>មិនមានកម្មវិធីជំនួយផ្ទុកដោយការណែនាំ: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} កំហុស</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>កំហុសក្នុងការធ្វើឱ្យកម្មវិធីជំនួយដំណាក់កាលទៅ temp temp '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>កំហុសក្នុងការគាំទ្រ '{0}' ទៅ '{1}' ។ ព័ត៌មានលម្អិត: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>អត្ថបទវាយនឹងត្រូវបានអនុវត្តដោយស្វ័យប្រវត្តិទៅការស្វែងរកនៅពេលដែលគ្មានប្រអប់អត្ថបទត្រូវបានគេផ្តោតអារម្មណ៍។</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>ការបញ្ចូលស្វែងរកដោយស្វ័យប្រវត្តិ</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>ការផ្លាស់ប្តូរពាក្យសម្ងាត់បានបរាជ័យ</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>ការប្ដូរ</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>ផ្លាស់ប្តូរលេខសម្ងាត់</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>ផ្លឺ</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>បញ្ជាក់ពាក្យសម្ងាត់</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>ដេលបេញចិត្ដ</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>ទំហំពុម្ពអក្សរមាតិកា</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>នៅពេលដែលពិត, មាតិកាខាងក្រៅដែលបានបញ្ចូលទៅក្នុងឈុតមួយនឹងប្រើការធ្វើទ្រង់ទ្រាយឈុតហើយមិនមែនជាអ្វីដែលមានពីប្រភពនោះទេ។</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>បិទភ្ជាប់ការទម្លាក់ឬបន្ថែមជាមួយនឹងការធ្វើទ្រង់ទ្រាយទិសដៅ</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់ភ្លេចលេខសំងាត់មែនទេ?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>ផ្លេច</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>ភ្លេចលេខសម្ងាត់</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>ចមហ្យេង</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>លាក់កំបាំងសមត្ថភាពសមត្ថភាព</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>នៅពេលដែលមាតិកាក្តារតម្បៀតខ្ទាស់ថ្មីត្រូវបានបន្ថែមវានឹងមិនត្រូវបានតាមដានជាឈុតថ្មីទេ</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>មិនអើពើបន្ទាប់</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>នៅពេលឃ្លីបឃ្លីបផ្គូផ្គងឈុតដែលមានស្រាប់នោះឈុតនឹងត្រូវបានប្រើជំនួសឱ្យការបង្កើតថ្មី</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>មិនអើពើស្ទួនថ្មី</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>ការផ្លាស់ប្តូរក្តារតម្បៀតខ្ទាស់ពីក្នុងកម្មវិធីនឹងមិនត្រូវបានតាមដានទេ</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>មិនអើពើការតាមដានក្តារតម្បៀតខ្ទាស់ខាងក្នុង</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>ចន្លោះ, ផ្ទាំងនិងបន្ទាត់ថ្មីនឹងត្រូវបានមិនអើពើពីការតាមដាន</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>មិនអើពើតែចន្លោះពណ៌ស</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>ផ្ទុកលើការចូល</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>បង្អួចមានចលនា</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>អយត</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>បង្ហាញឥរិយាបទ</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>បង្អួចមេនឹងត្រូវបានបង្ហាញដោយការអនុវត្តកាយវិការរមូរនៅលើគែមខាងលើនៃម៉ូនីទ័ររបស់អ្នក</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>បង្ហាញនៅលើរមូរអេក្រង់ខាងលើ</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>បរិមាណការជូនដំណឹង</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>ការកំណត់នេះនឹងតាមដានប្រព័ន្ធក្តារចុចទទេសម្រាប់រាប់សម្រាប់ស្ថិតិប្រើប្រាស់។ ព័ត៌មាននេះគឺជាលក្ខណៈឯកជនហើយមិនត្រូវបានចែករំលែកទេប៉ុន្តែក៏មិនមានចំនួនផងដែរ។ លទ្ធផលត្រឹមត្រូវប្រហែលជាត្រូវការការផ្តល់ពាក្យសុំក្តារចុចជាក់លាក់នៃពាក្យបញ្ជាក្នុង 'ការកំណត់ -&gt; ចម្លងនិងបិទភ្ជាប់ -&gt; ផ្លូវកាត់' ។</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>បិទភ្ជាប់ប្រវត្តិសាស្ត្រ</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>ឈុតខ្លីៗជាច្រើន (ដូចជាផ្ទាំងកម្មវិធីរុករក) អាចទទួលបានការចងចាំគួរឱ្យកត់សម្គាល់។ ការដកចេញគឺដោយដំបូង - ក្នុង - ដំបូង - ចេញ</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>សមត្ថភាពម្ជុល</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>នេះអនុវត្តចំពោះការបញ្ចូលដែលអាចបំពេញបានទាំងអស់គឺតម្លៃទាបនឹងធ្វើឱ្យប្រសើរឡើងនូវការអនុវត្ត</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>ដែនកំណត់អត្ថបទថ្មីៗ</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់
+ស្តារចំណូលចិត្តលំនាំដើមវិញ?
+
+នេះមិនអាចធ្វើវិញបានទេ!
+
+* កម្មវិធីនឹងចាប់ផ្តើមម្តងទៀត។</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់កំណត់ការជូនដំណឹងទាំងអស់ឡើងវិញឬ?
+
+* នេះមិនអាចធ្វើវិញបានទេ!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ស្វាបិទភ្ជាប់ឈុតក្តារតម្បៀតខ្ទាស់ (បដិសេធ) នៅពេលបិទភ្ជាប់ទៅកម្មវិធីខាងក្រៅ។ នេះនឹង &lt;b&gt; ការប៉ុនប៉ង &lt;/ b&gt; ដើម្បីស្តារស្ថានភាពនៃក្តារតម្បៀតខ្ទាស់បន្ទាប់ពីការបិទភ្ជាប់ខាងក្រៅ។
+
+ការស្ដារឡើងវិញនៃការស្ដារឡើងវិញទាំងស្រុងមិនអាចត្រូវបានធានាទេហើយអាចកាត់បន្ថយការសម្តែងឬសូម្បីតែការបុកសត្វព្រាបអាស្រ័យលើប្រភពទិន្នន័យ។</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>កំណត់ក្តារតម្បៀតខ្ទាស់បន្ទាប់ពីការបិទភ្ជាប់ស្វា</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>មិនអាចលុបឃ្លាំងសម្ងាត់កម្មវិធីជំនួយពីផ្លូវ: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>កម្មវិធីជំនួយទាំងអស់នឹងត្រូវបានកំណត់ឡើងវិញទៅស្ថានភាពលំនាំដើមដំបូង</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>ឃ្លាំងសម្ងាត់កម្មវិធីជំនួយ</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់កំណត់កម្មវិធីជំនួយទាំងអស់ទៅលំនាំដើមវិញឬ?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់កំណត់ពាក្យសម្ងាត់របស់អ្នកឡើងវិញឬ?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>ផ្លូវកាត់កម្មវិធីទាំងអស់នឹងត្រូវបានកំណត់ឡើងវិញទៅនឹងកាយវិការគន្លឹះលំនាំដើមរបស់ពួកគេ។</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>កំណត់ផ្លូវកាត់ឡើងវិញ</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>រាល់ការជូនដំណឹងដែលបានព្រងើយកន្តើយបានកំណត់ពីមុន។</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>ស្តារការជូនដំណឹង</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(ការបើកដំណើរការអាចយឺតជាង) ការបិទដំណើរការបានធ្វើទ្រង់ទ្រាយនឹងកាត់បន្ថយការប្រើប្រាស់សតិប៉ុន្តែនឹងរារាំងលក្ខណៈពិសេសកម្រិតខ្ពស់មួយចំនួនដូចជា: បន្ថែមគំរូចំណារពន្យល់និងស្វែងរក</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>ខ្លឹមសារសម្បូរបែប</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>កំណត់ពាក្យសម្ងាត់</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>បង្ហាញព័ត៌មានជំនួយ</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>បង្ហាញនៅក្នុងរបារភារកិច្ច</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>បង្ហាញនៅក្នុងឧបករណ៍ប្តូរភារកិច្ច</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>បង្ហាញចំណងជើង</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>នៅពេលបើកដំណើរការអូសពីកម្មវិធីណាមួយទៅផ្នែកខាងលើនៃអេក្រង់នឹងបង្ហាញ moysypaste ដើម្បីទម្លាក់មាតិកាឱ្យបានយ៉ាងងាយស្រួលទៅក្នុង monkeysyysyypee ។</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>បង្ហាញនៅលើអូសទៅផ្នែកខាងលើនៃអេក្រង់</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>ប្រធានបទសំឡេង</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>ពិនិត្យអក្ខរាវិរុទ្ធ</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>នៅពេលចាប់ផ្តើមប្រភពនៃក្តារតម្បៀតខ្ទាស់នឹងមិនត្រូវបានគេមិនស្គាល់ហើយអាស្រ័យលើការកំណត់សុវត្ថិភាពរបស់អ្នកមាតិកាអាចមកពីគេហទំព័រឬកម្មវិធីដែលមិនរាប់បញ្ចូល។</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>បន្ថែមក្តារតម្បៀតខ្ទាស់ចាប់ផ្តើម</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>ស្តាប់ក្តារតម្បៀតខ្ទាស់នៅពេលចាប់ផ្តើម</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>រេចីសរើស</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>ការប្រុងប្រយ័ត្ន! ពណ៌ក្ដារលាយផ្សេងទៀតត្រូវបានជ្រើសរើសដោយប្រើគណិតវិទ្យាមិនមែនភ្នែក! ដូច្នេះត្រូវដឹងអំពីបន្សំពណ៌និងរចនាប័ទ្មមួយចំនួនប្រហែលជាមិនមានភាពផ្ទុយគ្នាសម្រាប់ការអានបានទេ។</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>ពណ៌ស្បែក</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>រចនាប័ទ្មស្បែក</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>ការសម្អាតសំរាមដោយស្វ័យប្រវត្តិនឹងកើតឡើងនៅពេលចាប់ផ្តើមនៅចន្លោះពេលដែលបានកំណត់។</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>ការសម្អាតសំរាម</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>វេបតិបប</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>ការកំណត់មិនធ្វើវិញខ្ពស់អាចប៉ះពាល់ដល់ដំណើរការ</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>មិនធ្វើវិញកំរិត</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>គ្មាន​ដែន​កំណត់</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>ប្រើក្នុងការស្វែងរកឯកសារកម្រិតខ្ពស់សម្រាប់ប្រភេទឯកសារដែលមិនបានកំណត់ជាមុន</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>ផ្នែកបន្ថែមស្វែងរកអ្នកប្រើ - កំណត់</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>រកនិងជំនួស ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>បិទភ្ជាប់នៅទីនេះ</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>ចែករំលែក ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>កមហើញ</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>គ្រប់គ្រង ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>រេច្យងញម</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>ពិន្ទុ: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>ប្រភេទ: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>លុបជាអចិន្ត្រៃយ៍</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>រកមើលទៅ '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>របមផលាក់</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>បហ្ចូល</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>ផលិតផល</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>បមលក់</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>ចយសចុល</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>ជ្រើសរើសរូបភាព ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>ប៍ន</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>គ្រប់គ្រង '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>ដេលចមហរ</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>សូមរង់ចាំ ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>ពណ៌ផ្ទៃខាងក្រោយ</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>លុបចេញ​ទាំងអស់</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>ទំរង់ឃ្លិបបក</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>លុប​ទាំងអស់</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>កែសម្រួលព័ត៌មានលំអិត</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>ឈ្ផោហ</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>រកឃើញ</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>ពណ៌ពុម្ពអក្សរ</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>ធ្វើទ្រង់ទ្រាយថ្នាំលាបទ្រង់ទ្រាយ</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> ក្នុងការជ្រើសរើស</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>បញ្ចូលរូបភាព</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>បញ្ចូលតំណ</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>បញ្ចូលវីដេអូ</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> ករណី​ការ​ប្រកួត</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>គំរូថ្មី</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>គំរូបន្ទាប់</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>បញ្ចូលអត្ថបទបិទភ្ជាប់ ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>គំរូមុន</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> កន្សោមធម្មតា</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>ជំនួសទាំងអស់</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>ដាក់លើងវិញ</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> ពាក្យទាំងមូល</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> រុំជុំវិញ</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>រារាមង</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>ពិបិindស្ថាននាងឥនិត្យដែន</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>បង្ហាញថតឯកសារ</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>ការមិនលឺ</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>អមបី</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>បងាផនបន្ថែម</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>បន្ថែមលើបន្ទាត់</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>ចម្លងដោយស្វ័យប្រវត្តិ</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>របៀប</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>សូមរង់ចាំការអូសញ៉ៃកំពុងផ្ទុក ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>ចាកចេញ</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>ជិត - ចុចបិទភ្ជាប់</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>រកុម</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>តរមង</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>លុបទាំងអស់ចេញជាអចិន្ត្រៃយ៍</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>ស្តារទាំងអស់</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>កិច្ច</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL មានរួចហើយ: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL ត្រូវតែមានទម្រង់ត្រឹមត្រូវ។</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>បញ្ចូល URL ពេញ:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>បន្ថែម URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>បញ្ចូលតម្លៃ</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>ចម្លងអត្ថបទឬឯកសារដែលត្រូវអនុវត្ត។</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>បន្ថែម {0} {1} បានធ្វើឱ្យសកម្ម</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>ការផ្លាស់ប្តូរក្តារតម្បៀតខ្ទាស់នឹងត្រូវបានបន្ថែមនៅខាងចុង</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>បន្ទាប់ពីរបៀបបន្ថែមបានធ្វើឱ្យសកម្ម</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>ការផ្លាស់ប្តូរក្តារតម្បៀតខ្ទាស់នឹងត្រូវបានបញ្ចប់</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>មុនពេលបញ្ចូលរបៀបបន្ថែម</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>រារាមង</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>ឥរិយាបថក្តារតម្បៀតខ្ទាស់ធម្មតាត្រូវបានស្តារឡើងវិញ</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>ធ្វើឱ្យអសកម្មបន្ថែម</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>បន្ថែមលើកំពូលឬ botom នៃឈុតនេះ</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>របៀបបន្ថែមរបៀបវិសាលភាពដែលបានធ្វើឱ្យសកម្ម</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>ក្នុងបេនុបក្នា</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>ហត្ថកម្ម</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>បន្ថែមទៅជម្រើសបច្ចុប្បន្នរបស់អ្នក។</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>របៀបភ្ជាប់ដោយដៃដែលបានធ្វើឱ្យសកម្ម</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>ការប្រមូលផ្តុំក្តារតម្បៀតខ្ទាស់ត្រូវបានបញ្ឈប់</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>បន្ថែមបន្ថែមដែលបានផ្អាក</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>ការប្រមូលផ្តុំក្តារតម្បៀតខ្ទាស់បានបន្ត</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>បន្ថែមបន្ថែម</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>តើអ្នកប្រាកដទេថាអ្នកចង់បញ្ចប់ការបញ្ចប់?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>ការកែសម្រួលក្នុងរបៀបនៃការលូតលាស់របស់នឹងលុបរាល់ទ្រង់ទ្រាយសំបូរបែប។ តើអ្នកប្រាកដជាចង់កែប្រែវាទេ?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>ការព្រមានអំពីការរិចរិលទិន្នន័យ</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>សកម្ម</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>ការបើកបហ្ចុហន៍ន៍</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>រលត់</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>លើ</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>ផ្អាក</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>លត្ធផល</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>ច្បាប់</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>កំហុសមិនស្គាល់បានកើតឡើង។</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>ការប៉ុនប៉ងនៅសល់</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>បញ្ចូលពាក្យសម្ងាត់</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>បហ្ជាក់</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>ការតាក់តង</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>ពេល​ណាត់ជួប</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបការប្រើប្រាស់ទាំងអស់នៃ '{0}' ទេ?
+
+នេះមិនអាចធ្វើវិញបានទេ!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>ដេលក្ផានមងាង</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>ដេលឋិតរមដដែល</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} គឺទទេ ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>ចូលមកឆាប់ៗនេះ!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>ចូលដំណើរការចូលបានបរាជ័យ</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>ចូលផ្ទុកការចូលដំណើរការជោគជ័យ</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>ធាតុចូលបានបរាជ័យ</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>ចូលផ្ទុកចូលទទួលបានជោគជ័យ</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>លាក់</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>ការបិទភ្ជាប់ស្វាឥឡូវត្រូវបានផ្ទុកហើយ។
+ការស្តាប់ឃ្លិបបតគឺ {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>ផ្ទុក</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>បង្ហាញ</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>របៀបជ្រើសរើសចម្លងចម្លងដោយស្វ័យប្រវត្តិ: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>បានផ្លាស់ប្តូររបៀប</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>ចុចខាងស្តាំបិទភ្ជាប់របៀប: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>កម្មវិធីជំនួយបានធ្វើឱ្យទាន់សម័យ</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>បិទភ្ជាប់ '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>រត់ '{0}' អ្នកវិភាគ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>រត់ '{0}' កេះ</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>ជ្រើសរើស '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុប '{0}' និងសកម្មភាពដែលជាប់ទាក់ទងទាំងអស់ទេ?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>កៃ</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>តើអ្នកចង់លុបរាល់សកម្មភាពរងទាំងអស់ចេញសម្រាប់ '{0}' ទេ? (បើមិនដូច្នោះទេពួកគេនឹងត្រូវបានបង្កើតឡើងវិញដោយមានឪពុកម្តាយទៅ '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>យកជម្រើសចេញ</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់ទទួលបាន '{0}' ទេ?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>កននេយ្យ</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>អ្នកវិភាគ</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>ប្រតិបត្តិការកម្មវិធី</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>ក្តារចុច</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>ដេលបេញចិត្ដ</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>ឯកសារ</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>វប្បធម៍</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>តិន្នន័យ</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>សេចក្ដីនេនាម</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>អូសនិងទម្លាក់</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>ទម្លាក់អ្នកជំនួយការ</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>រូបតំណាង</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>ឃាដ</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>វេបតិបប</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>បិទភ្ជាប់ប្រតិបត្តិការ</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>ចំណូលចិត្ត</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>ការឆេកឆេ</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>ផ្លូវកាត់</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>ញេក</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>សំឡេង</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>ថាសប្រព័ន្ធ</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>បក</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>និក្ខេបត</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>កដមបីរបកម្ផ</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>ប្រតិបត្តិការគេហទំព័រ</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>ផាសា</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>កំណត់ក្តារតម្បៀតខ្ទាស់ទៅនឹងឈុតបញ្ចូល។</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>ផាបរបុងចើងការ</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>របមខ្លួន</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>ឈក្យល</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>សំឡេងមានគោលបំណងទូទៅនិង / ឬការដាស់តឿនសារថាសប្រព័ន្ធ។ សកម្មភាពដាស់តឿនមិនមានឥទ្ធិពលលើការបញ្ចូលរបស់ពួកគេទេ។</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>ប៍តមាន</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>សវា</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>បុរេតសសន៍</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>បង្ហាញ?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>សារ Time Toast ត្រូវបានបង្ហាញជាវិនាទី។ នៅពេលដែលតម្លៃ 0 ត្រូវបិទសារដោយដៃ។</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>បង្ហាញពេលវេលា</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>សាររសី</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>សំឡេង?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>ប្រភេទសំឡេង</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>ចមនយន</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>អ្នកវិផាក</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>ដំណើរការឈុតបញ្ចូលរបស់វាដោយប្រើសំណង់សំណង់ដែលបានកំណត់ជាមុន។</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>មាតិកាបញ្ចូលត្រូវបានភ្ជាប់ទៅនឹងការប្រមូលដែលបានជ្រើសរើស</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>ភ្ជាប់ឃ្លីបបញ្ចូលរបស់វាទៅក្នុងការប្រមូលស្លាកដែលបានកំណត់។</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>រាបសប</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>ប្រកាន់​តួអក្សរ​តូច​ធំ?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>នេះអាចជាអត្ថបទឋិតិវន្តដើម្បីប្រៀបធៀបជាមួយការបញ្ចូលនិង / ឬរួមបញ្ចូលលក្ខណសម្បត្តិដែលបានជ្រើសរើស (តាមរយៈប៊ូតុងតម្រង) នឹងត្រូវបានជំនួសនៅពេលដែលលក្ខខណ្ឌត្រូវបានវាយតម្លៃ។</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>ទិន្នន័យលក្ខខណ្ឌ</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>សំណួរ Jsonpation ស្រេចចិត្តដែលនឹងត្រូវបានអនុវត្តចំពោះ 'លក្ខណសម្បត្តិបញ្ចូលដែលបានជ្រើសរើសមុនពេលលក្ខខណ្ឌត្រូវបានវាយតម្លៃ។</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>តម្រងបញ្ចូល</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>អចលនទ្រព្យឈុតដែលត្រូវបានប្រើសម្រាប់លក្ខខណ្ឌនេះ។
+
+ទ្រព្យសម្បត្តិ 'លទ្ធផលចុងក្រោយរបស់ទិន្នផលត្រូវបានគាំទ្រនៅពេលដែលមានលក្ខខណ្ឌនេះគឺជាកូនរបស់សកម្មភាពវិភាគហើយទិន្នន័យដែលបានផ្តល់នឹងខុសគ្នាអាស្រ័យលើលទ្ធផលរបស់អ្នកវិភាគរបស់ឪពុកម្តាយ។
+
+សម្រាប់ការដោះស្រាយបញ្ហាសូមភ្ជាប់ "ការដាស់តឿន" ទៅឪពុកម្តាយដែលមានលក្ខខណ្ឌនេះហើយកំណត់ប៉ារ៉ាម៉ែត្រ 'សារ' របស់ប្រុងប្រយ័ត្នដើម្បីផ្គូផ្គងទ្រព្យសម្បត្តិបញ្ចូលនេះ។ នេះនឹងអនុញ្ញាតឱ្យពិនិត្យមើលទិន្នន័យជាក់ស្តែងដែលកំពុងប្រើសម្រាប់លក្ខខណ្ឌនេះ។</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>អចលនទ្រព្យបញ្ចូល</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>អនុវត្តការប្រៀបធៀបអត្ថបទនៅលើបន្ទាត់បញ្ចូលឬលទ្ធផលសកម្មភាពមុន។ នៅពេលប្រៀបធៀបការប្រៀបធៀបមិនបាន (វាមិនមែនជាការប្រកួត) គ្មានសកម្មភាពរបស់កុមារនឹងត្រូវបានប្រតិបត្តិទេ។ ដូច្នេះវាដើរតួដូចជាទ្វារឡូជីខល។</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>រាល់ប្រតិបត្តិការពិតឬមិនពិតទាំងអស់ដែលសកម្មភាពកុមារនឹងត្រូវប្រតិបត្តិប្រសិនបើលទ្ធផលពិត។</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>ស្ថានផាប</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>តាមងអស់</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>កេះនៅពេលដែលឈុតនៃប្រភេទនៃប្រភេទដែលបានជ្រើសរើសត្រូវបានបន្ថែមទៅក្នុងប្រព័ន្ធតាមរបៀបណាមួយ (ឃ្លីបឃ្លីបអូសនិងទម្លាក់អ្នកវិភាគដែលបានបង្កើតឬស្ទួន) ។</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>អនុវត្តតែកេះនេះប្រសិនបើឈុតបញ្ចូលថ្មីហើយមិនមែនជាលេខមួយស្ទួនទេ។ នេះគឺជាឯករាជ្យនៃចំណូលចិត្តណាមួយដែលបានកំណត់ថាតើមាតិកាថ្មីមិនត្រូវបានគេមិនអើពើឬអត់។</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>មិនអើពើស្ទួន</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>មានតែឈុតខ្លីៗនៃប្រភេទនេះប៉ុណ្ណោះដែលនឹងបង្កឱ្យមានសកម្មភាពនេះ។</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>ភ្ជាប់ឃ្លីបបញ្ចូលរបស់វាទៅក្នុងការប្រមូលស្លាកដែលបានកំណត់។</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>កេះនៅពេលឃ្លីបត្រូវបានភ្ជាប់ទៅនឹងការប្រមូលស្លាកដែលបានបញ្ជាក់។</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>ការរបមុល</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>ចំនួនពេលវេលាគិតជាមិល្លីវិនាទីបានរង់ចាំមុនពេលដែលកុមារប្រតិបត្តិ</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>បន្យាបេល</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(ពិសោធន៍) ត្រូវបានប្រើជាចម្បងក្នុងការភ្ជាប់ជាមួយសកម្មភាពអ្នកកែលម្អសម្រាប់ការបោះឆ្នោតជ្រើសរើសប្រភពពីចម្ងាយឬជំនួយដែលមានប្រតិបត្តិការយូរអង្វែង។</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>នៅពេលដែលទុកចោលឯកសារលទ្ធផលនឹងប្រើចំណងជើងរបស់ CLIP 'ឈ្មោះឯកសារ។</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>ឈ្មោះផ្ទាល់ខ្លួន</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>ថតឯកសារដែលនឹងត្រូវបានសរសេរ។</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>ថតចងល</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>រក្សាទុកការបញ្ចូលទៅក្នុងថតដែលបានជ្រើសរើស។</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>កេះនៅពេលដែលមាតិការបស់ថតដែលបានជ្រើសរើសផ្លាស់ប្តូរ។ លទ្ធផលនឹងជាថ្មីឬដែលមានស្រាប់ (នៅពេលដែលមិនត្រឹមត្រូវ) ឈុតឯកសារចម្លង) ឯកសារឃ្លីបរបស់ឯកសារឬថតឯកសារដែលបានផ្លាស់ប្តូរជាមួយនឹងប្រភេទនៃការផ្លាស់ប្តូរដែលជាលទ្ធផលចុងក្រោយរបស់វា។</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>ព្រឹត្តិការណ៍ផ្សេងៗ</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>រកដាសបត់ចាបីរ</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>មិនអើពើស្ទួន</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>តម្លៃ 0 នឹងធ្វើសកម្មភាពមាតាឬបិតាម្តងទៀត</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>រាប់ម្តងទៀត</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>ចំនួនពេលវេលាគិតជាមិល្លីវិនាទីដើម្បីរង់ចាំនៅពេលដែលសកម្មភាពឪពុកម្តាយបញ្ចប់</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>ការពន្យាពេលម្តងទៀត</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(ពិសោធន៍) ប្រើសម្រាប់បង្កើតរង្វិលជុំសកម្មភាពឬភារកិច្ចដដែលៗ។ នៅពេលធ្វើម្តងទៀតវានឹងប្រតិបត្តិកុមារទាំងអស់ម្តងទៀតជាមួយនឹងការបញ្ចូលដើមរបស់វា។ នៅពេលប្រើចន្លោះពេលដោយគ្មានការរាប់ម្តងទៀតគន្លឹះនឹងត្រូវបានបិទហើយភ្ជាប់ឡើងវិញដើម្បីបញ្ឈប់ការធ្វើម្តងទៀត។ អាចមានប្រយោជន៍សម្រាប់ការស្ទង់មតិឬបណ្តាញស្វ័យប្រវត្តិកម្ម។</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>បណ្តាលឱ្យផ្លូវកាត់សកលដែលអ្នកកំណត់។ ប្រសិនបើការ monkeypouse សកម្មវានឹងព្យាយាមប្រើឈុតដែលបានជ្រើសរើស (ប្រសិនបើមានមួយ) ជាការបញ្ចូល។ បើមិនដូច្នោះទេវានឹងព្យាយាមប្រើក្តារតម្បៀតខ្ទាស់ដែលជាការបញ្ចូលរបស់វា។
+
+សម្គាល់ៈកេះផ្លូវកាត់នឹងនៅតែប្រតិបត្តិប្រសិនបើគ្មានការបញ្ចូលដើម្បីរក្សាវាឱ្យមានភាពបត់បែន (ដូច្នេះវាអាចជាកេះម៉ាក្រូ។ ល។ ) ចាប់តាំងពីវាមិនមែនជាព្រឹត្តិការណ៍ដែលបានជំរុញ។</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>កេះផ្លូវកាត់</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>កេះនៅពេលដែលផ្លូវកាត់ដែលបានកត់ត្រាត្រូវបានចុចនៅពេលណាក៏បានជាមួយក្តារតម្បៀតខ្ទាស់បច្ចុប្បន្ន</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>សកម្មភាពនេះតម្រូវឱ្យកម្មវិធីចាប់ផ្តើមឡើងវិញ។ តើអ្នកចង់ធ្វើវាឥឡូវនេះទេ?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>មានបញ្ហាមួយ។ អ្នកត្រូវចាប់ផ្តើមកម្មវិធីឡើងវិញដោយដៃ។</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>វិភាគជាមួយអ្នកកំណត់ចំណាំ</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>ចំណីអាហារចំណីអាហារ</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>បានសាងសង់នៅក្នុងធាតុគឺបានអាន - តែប៉ុណ្ណោះ - តែប៉ុណ្ណោះ។ ស្ទួនគ្នាដើម្បីផ្លាស់ប្តូរ។</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>អនាមិក</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>តមន្យេមតមលាប់</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>បីមសិលមិញ</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} ថ្ងៃមុន</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 ម៉ោងកន្លងទៅ</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} ម៉ោងមុន</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>ឥឡូវនេះ</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>មួយនាទីមុន</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} នាទីមុន</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>ខែមុន</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} ខែមុន</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>សប្ដាហ៍​មុន</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} ប៉ុន្មានសប្តាហ៍មុន</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} ឆ្នាំមុន</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>ចំណាប់អារម្មណ៍</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>ឈ្មោះពាក្យសុំ</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>ផ្លូវដាក់ពាក្យ</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>ប្រកាន់​តួអក្សរ​តូច​ធំ</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>ដេលបេញចិត្ដ</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>ប្រភេទឯកសារ</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>ប្រភេទរូបភាព</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>កន្សោមធម្មតា</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>ប្រភេទអត្ថបទ</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>ចមនងចើង</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>ចំណងជើង URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>ពាក្យទាំងមូល</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>ដូចជាការរមូរតាមគែមអេក្រង់ខាងលើដើម្បីបើកវានឹងចាក់សោបង្អួចមេនៅពេលវាបើក។ អនុញ្ញាតឱ្យលំហូរការងារច្រើនដែលមានគោលដៅលឿនជាងមុន។
+
+* ជ្រុងមាននៅក្នុងលក្ខខណ្ឌនៃអេក្រង់របស់អ្នកទាំងអស់មិនដល់អ្នកត្រួតពិនិត្យទេ។</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>បង្ហាញបង្អួចនិងចាក់សោ</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>ឥតគិតថ្លៃ!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>ផ្តល់ឱ្យយើងនូវផ្កាយចំនួន 5!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>លុប​ទាំងអស់</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>លុបមាតិកាទាំងអស់</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុប
+ទាំងអស់របស់អ្នក?!
+
+* ប្រតិបត្ដិការនេះមិនអាចធ្វើវិញបានទេ!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>ខ្ញុំជាអ្នកវង្វេងស្មារតីសូមបង្ហាញការគាំទ្រមួយចំនួន!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>ដូចសត្វស្វាយទេ?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} ទទួលយកតែការបញ្ចូលប្រភេទនៃប្រភេទ: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>របៀបចម្លងដោយស្វ័យប្រវត្តិ - ធ្វើត្រាប់តាមព្រឹត្តិការណ៍ 'ចម្លង' រាល់ពេលប៊ូតុងកណ្តុរខាងឆ្វេងត្រូវបានចេញផ្សាយ។</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>ចុចខាងស្តាំលើរបៀបបិទភ្ជាប់ - ធ្វើត្រាប់តាមព្រឹត្តិការណ៍បិទភ្ជាប់ "បិទភ្ជាប់" រាល់ពេលប៊ូតុងកណ្តុរខាងស្តាំត្រូវបានចេញផ្សាយ</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>ថ្ផី altening chaneet</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>បង្ហាញថតឯកសារជំនួយ</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>ធេវីរបាយការន៍</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>កមហើញ</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>បង្ហាញព័ត៌មានជំនួយ</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>អ្នកវិភាគពន្យល់ចំណារការបញ្ចូលរបស់ពួកគេឬបង្កើតក្លីបថ្មីនៅពេលលទ្ធផល។ កុមារនៃអ្នកវិភាគចាំបាច់ត្រូវសម្រេចថាតើមួយណាដែលពួកគេត្រូវការជាការបញ្ចូលរបស់ពួកគេ។ នេះជាធម្មតាគឺជាលទ្ធផលចុងក្រោយ។</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>ប្រភេទបញ្ចូល</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>អ្នករចនាម៉ូដ '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>រើសយក {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>រក​មិន​ឃើញ...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} កេះ</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>នៅពេលពិនិត្យមើលលទ្ធផលពិតឬមិនពិតនៃស្ថានភាពនឹងត្រូវបានត្រឡប់។ ដូច្នេះឧទាហរណ៍ 'មានលក្ខខណ្ឌ' នឹងក្លាយជា 'មិនមាន' ។</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>មិន</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>សូមរង់ចាំ ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>អ្នកជ្រើសរើសពណ៌</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>រើសពណ៌ការប្រកួត</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>ដូចជាកេះផ្លូវកាត់ប៉ុន្តែនៅពេលដែលការបញ្ចូលដ៏សំខាន់ត្រូវបានចុចព្រឹត្តិការណ៍ "ថតចម្លង" នឹងត្រូវបានធ្វើត្រាប់តាមក្នុងកម្មវិធីសកម្មដូច្នេះវានៅតែដំណើរការដូចដើមវិញខ្សែសង្វាក់នៃសកម្មភាពដែលបានភ្ជាប់ទៅនឹងការចម្លងច្បាប់ចម្លងស្វានឹងត្រូវបានប្រតិបត្តិក្នុងផ្ទៃខាងក្រោយដោយប្រើឯកសារ។ ចម្លងទិន្នន័យក្តារតម្បៀតខ្ទាស់។</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>តម្រងកម្រិតខ្ពស់</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>លាក់តម្រង</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>ស្តារតម្រងឡើងវិញ</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>បង្កើតតម្រង</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(ស្រេចចិត្ត) នៅពេលដែលទុកឱ្យទទេក្តារតម្បៀតខ្ទាស់នឹងត្រូវបានកំណត់ដោយប្រើការបញ្ចូលសកម្មភាពនេះ។ អ្វីដែលបានផ្តល់នៅទីនេះនឹងត្រូវបានចាត់ទុកជាអត្ថបទធម្មតាតែប៉ុណ្ណោះ។</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>មាតិកាសម្រាប់ក្តារតម្បៀតខ្ទាស់</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>នៅពេលដែលការពិតមិនមានឃ្លីបនឹងត្រូវបានបន្ថែមទេបន្ទាប់ពីសកម្មភាពនេះកំណត់ក្តារតម្បៀតខ្ទាស់។</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>មិនអើបើ</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>គ្មានអ្នកវិភាគដែលបានជ្រើសរើសសម្រាប់សកម្មភាព '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>អ្នកវិភាគសម្រាប់សកម្មភាព '{0}' រកមិនឃើញ</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>"{0} 'សម្រាប់តែមាតិកា' {1} 'ប្រភេទមាតិកានិងអ្នកវិភាគ' {2} 'នឹងមិនប្រតិបត្តិទេព្រោះវាមិនគាំទ្រប្រភេទនៃការបញ្ចូល' {3} '</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>មិនមានស្លាកដែលបានជ្រើសរើសសម្រាប់ classifier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>ស្លាកសម្រាប់ Claspier '{0}' រកមិនឃើញ</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>ប្រៀបធៀបតម្លៃអាចគ្រាន់តែជាអក្សរលេខឬចន្លោះ</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>មិនមានស្លាកដែលបានជ្រើសរើសសម្រាប់ឈុតដាក់ស្លាក trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>ស្លាកសម្រាប់ Clip ដាក់ស្លាក Trigger '{0}' រកមិនឃើញ</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>មិនមានថតឃ្លាំមើលដែលបានបញ្ជាក់សម្រាប់ '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>ថត Watch '{0}' រកមិនឃើញសម្រាប់ការកេះ '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>ផ្លូវឯកសារ Wile Actor សម្រាប់សកម្មភាព '{0}' មិនបានកំណត់ទេ</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>ផ្លូវឯកសារ Wile '{0}' រកមិនឃើញ 'រកមិនឃើញ' រកមិនឃើញទេ។</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>របារភារកិច្ច</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>ស្វែងយល់អំពីកម្មវិធីជំនួយ</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>ស្តារការកំណត់រចនាសម្ព័ន្ធវិភាគនេះឡើងវិញ</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} ផ្លាស់ប្តូរកំណត់ហេតុ</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>សូមភ្ជាប់ទៅអ៊ីនធឺណិតហើយព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - ជំនួយ</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} គឺជាកំណែចុងក្រោយបង្អស់</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>អ្នកទាំងអស់គ្នាបានឡើង - ទៅ - កាលបរិច្ឆេទ!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>ពិនិត្យរកបច្ចុប្បន្នភាព ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>មានកំណែថ្មី!
+
+ចុចត្រង់នេះដើម្បីធ្វើបច្ចុប្បន្នភាពទៅ '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>សូមចុចនៅខាងក្រោមដើម្បីធ្វើបច្ចុប្បន្នភាពទៅ '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>មានបច្ចុប្បន្នភាព!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>ធ្វើបច្ចុប្បន្នភាពឥឡូវ</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' មានតំលៃដែលបានចែករំលែក។ តើអ្នកចង់កំណត់អ្វី?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>ផ្លឺ</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>ជម្រះការស្វែងរកថ្មីៗ</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>កំណត់ឡើងវិញទាំងអស់</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>កំណត់ឡើងវិញបានចែករំលែក</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>កំណត់ឡើងវិញដោយមិនដំណើរការ</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>ហៅសកម្មភាពដែលបានចាត់តាំង។ ពាក្យបញ្ជាពាក្យសុំទាំងអស់គឺគ្មានប្រទេសហើយឃ្លីបបញ្ចូលរបស់ពួកគេមិនត្រូវបានអើពើទេ។</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>នៅពេលមិនបានត្រួតពិនិត្យហើយពាក្យបញ្ជាមិនអាចបាញ់បានទេខ្សែសង្វាក់នៃការប្រហារជីវិតនឹងបញ្ឈប់។ ពាក្យបញ្ជាជាច្រើននឹងត្រូវការរដ្ឋកម្មវិធីជាក់លាក់មួយចំនួនដើម្បីប្រតិបត្តិ។</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>បន្តជានិច្ច?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>ពាក្យបញ្ជាដើម្បីសំដែង។</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>ការបង្គាប់</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>គ្មានពាក្យបញ្ជាដែលបានជ្រើសរើសសម្រាប់ពាក្យបញ្ជាពាក្យបញ្ជា '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>ពាក្យបញ្ជាសម្រាប់ពាក្យបញ្ជាពាក្យបញ្ជា '{0}' រកមិនឃើញ</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>បានជ្រើស</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>រ្យេដិតនោ</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>មានបញ្ហាក្នុងការធ្វើបច្ចុប្បន្នភាព '{0}' ។ ដើម្បីបញ្ចប់ការធ្វើបច្ចុប្បន្នភាពអ្នកនឹងត្រូវចាប់ផ្តើមឡើងវិញហើយដំឡើង '{0}' ម្តងទៀត (កុំបារម្ភរាល់ការកំណត់របស់អ្នកនឹងត្រូវបានស្តារឡើងវិញ) ។
+
+អ្នកអាចចាប់ផ្តើមការធ្វើបច្ចុប្បន្នភាពឡើងវិញដោយដំឡើងឡើងវិញមិនអើពើនឹងវាហើយធ្វើបច្ចុប្បន្នភាពវានៅពេលក្រោយឬបោះបង់ការធ្វើបច្ចុប្បន្នភាពជាមួយគ្នាហើយបន្តប្រើកំណែ '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>កំហុសក្នុងការធ្វើបច្ចុប្បន្នភាព</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>មិនអាចទាញយកបច្ចុប្បន្នភាពបានទេ</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>ការធ្វើបច្ចុប្បន្នភាពបានបរាជ័យ</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>ដើម្បីបញ្ចប់ការធ្វើបច្ចុប្បន្នភាពអ្នកនឹងត្រូវការចាប់ផ្តើមឡើងវិញ។ តើអ្នកចង់ចាប់ផ្តើមឡើងវិញទេឥឡូវនេះឬនៅពេលក្រោយ?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>ត្រៀមរួចជាស្រេច</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>បន្ទាប់មក</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>ចាប់ផ្តើម​ឡើងវិញ​ឥឡូវនេះ</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>ដេលមិនតាន់សរមច</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} ត្រូវបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យទៅ {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>កម្មវិធីជំនួយស្នូលត្រូវបានទាមទារហើយមិនអាចយកចេញបានទេ។</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>តំឡើង</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>ការធ្វើបច្ចុប្បន្នភាពកំពុងរង់ចាំ។ ចាប់ផ្តើមឡើងវិញដើម្បីបញ្ចប់។</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>ដេលមិនតាន់សរមច</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>ការលុបការតំឡើងកំពុងរង់ចាំ។ សូមចាប់ផ្តើមឡើងវិញប្រសិនបើអ្នកចង់ដំឡើងឡើងវិញ។</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>ដើម្បីបញ្ចប់ការលុបអ្នកនឹងត្រូវការចាប់ផ្តើមឡើងវិញ។ តើអ្នកចង់ចាប់ផ្តើមឡើងវិញទេឥឡូវនេះឬនៅពេលក្រោយ?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>បញ្ចប់ការលុបមែនទេ?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>ប៍សប៍នមិនបានផ្សាយរេកា</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>កំណត់ជាមុនដែលបានបង្កើតលំនាំដើមដែលបានបង្កើតដោយស្វ័យប្រវត្តិសម្រាប់ '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>គ្មានឈុតត្រូវបានជ្រើសរើសទេ</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>វិភាគឈុតដែលបានជ្រើសរើស</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>កំណត់ផ្លូវកាត់ដើម្បីដំណើរការ '{0}' នៅលើឈុតដែលបានជ្រើសរើស</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>បិទភ្ជាប់សកល</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>កំណត់ផ្លូវកាត់បិទភ្ជាប់ជាសកលសម្រាប់ '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>ភ្លេច​លេខសំងាត់​?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>ចូល</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>ចាកចេញ</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>គោលការណ៍​ភាព​ឯកជន</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(ទាមទារការចាប់ផ្តើមឡើងវិញ) នៅពេលដែលបានបើកព័ត៌មានធ្វើរោគវិនិច្ឆ័យនឹងត្រូវបានចូលទៅកាន់ឯកសារ។ នេះអាចបន្ថយដំណើរការយឺតហើយអាចមានព័ត៌មានផ្ទាល់ខ្លួន។</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>ចូលទៅឯកសារ</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>ដេលចមហរ</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>បើកថតឯកសារកំណត់ហេតុ</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>រកមើលកម្មវិធីជំនួយ</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>អាន</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>សរសេរ</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>ផ្ញើមតិប្រតិកម្មឬរបាយការណ៍កំហុស</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>នេះលាក់បង្អួចមេ។ បង្អួចមិនមែនអ៊ីនធឺណេតផ្សេងទៀតតែងតែត្រូវបានបង្ហាញនៅក្នុងរបារភារកិច្ច។</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>ស្វែងរកក្នុង '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>បន្ថែមតម្រង</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>កែសម្រួលប្រភេទចូលរួម</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>យកតម្រងនេះចេញ</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>បើកជំនួយអំពីរឿងនេះ ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} ឈុត</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>ការប្ដូរ</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>មិនដេលមាន</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>តសសនីយផាប</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>មិនមានចំណងជើង</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>ការកត់តុក</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>ឯកសារយោងប្រភពដែលមិនធ្លាប់មាន</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' ត្រូវបានទាមទារ</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(មានកំហុស)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>រចក</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>ការដាក់អាេយនោមយយកន្លេង</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>សម្ការក្ផានតមលៃ</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>គ្មានដែនកំណត់</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>បច្ចុប្បន្ននេះកម្មវិធីនេះត្រូវនឹងកម្មវិធីអាននិងទម្រង់អានឃ្លីបឃ្លីបលំនាំដើម។
+
+ការបើកដំណើរការឬបិទការកំណត់កំណត់ត្រាអ្នកអានលំនាំដើម (ពីរបារចំហៀងក្តារតម្បៀតខ្ទាស់) នឹងមិនប៉ះពាល់ដល់ការកំណត់រចនាសម្ព័ន្ធនេះទេ។ មានតែកម្មវិធីដែលមិនបានចុះបញ្ជីប៉ុណ្ណោះសូមអនុវត្តតាមតំឡើងលំនាំដើម។</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>បច្ចុប្បន្ននេះកម្មវិធីនេះត្រូវនឹងអ្នកនិពន្ធឃ្លិបបដបកដែលបានកំណត់ជាមុននិងទ្រង់ទ្រាយ។
+
+ការបើកដំណើរការឬបិទម៉ាស៊ីនលំនាំដើមដែលបានកំណត់ជាមុនដែលបានកំណត់ជាមុន (ពីរបារចំហៀងក្តារតម្បៀតខ្ទាស់) នឹងមិនប៉ះពាល់ដល់ការកំណត់រចនាសម្ព័ន្ធនេះទេ។ មានតែកម្មវិធីដែលមិនបានចុះបញ្ជីប៉ុណ្ណោះសូមអនុវត្តតាមតំឡើងលំនាំដើម។</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>ដើម្បីបន្ថែមអ្នកត្រូវតែមិនអនុញ្ញាតឱ្យអ្នកស្តាប់ឃ្លិបបត (ថាសប្រព័ន្ធ -&gt; ប្រវត្តិរូប) ។</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>បន្ថែមបន្ទាប់មិនមាន</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> មិនមានការកំណត់ទេ</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>ខ្ញុំគ្រាន់តែនិយាយភាសាអង់គ្លេសហើយ Monkyykey ត្រូវបានបកប្រែជាភាសានេះ។
+
+គ្រប់ជំនាន់ទាំងអស់ដែលមានកញ្ចប់ភាសាអង់គ្លេសដូច្នេះប្រសិនបើអ្នកនិយាយភាសាអង់គ្លេសអ្នកអាចផ្លាស់ប្តូរភាសាទៅវាបានគ្រប់ពេលបន្ទាប់ពីការរៀបចំនេះ (ការកំណត់ -&gt; ចំណូលចិត្ត -&gt; អន្ដរជាតិ) ។
+
+ប្រសិនបើអ្នកចង់ជួយធ្វើឱ្យប្រសើរឡើងនូវការបកប្រែយើងនឹងចូលចិត្តស្តាប់ពីអ្នក!
+
+feedback@monkeypales.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>ការព្រួយបារម្ភការបកប្រែ</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>អ្នកត្រូវធ្វើបច្ចុប្បន្នភាព Monkeyposte ក្នុងគោលបំណងដើម្បីប្រើលក្ខណៈពិសេសនេះ។</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>ផ្លូវកាត់មិនត្រឹមត្រូវ</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>អ្នកស្តាប់ឃ្លិបបតពិការ</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>អ្នកស្តាប់ឃ្លិបបតដែលបានអនុញ្ញាត</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>សកម្មភាពឪពុកម្តាយ '{0}' មិនគាំទ្រប្រភេទចុងក្រោយរបស់អចលនទ្រព្យ 'លទ្ធផលចុងក្រោយឡើយ</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ស្វែងយល់បន្ថែមអំពីផែនការ</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>ការស្ម័រក</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>កៃ</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>កាត់តុច</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>អ្នកវិផាក</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>រាបសប</value>
+  </data>
+</root>

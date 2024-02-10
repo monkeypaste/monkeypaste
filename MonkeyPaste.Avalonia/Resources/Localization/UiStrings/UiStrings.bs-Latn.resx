@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Ne mogu se ograničiti pretplatom, samo kapacitetom za pohranu i mogu se mijenjati u bilo koje vrijeme.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Vratite svoj postojeći račun ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Sadržaj i smeće su
+ograničeno na {0} i {1}
+isječci respektivno.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Omogućuje do {2} isječke sadržaja i neograničenog skladištenja smeća.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Neograničen i neograničen sadržaj i spremanje smeća.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Vratiti</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Slobodan</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Neograničen</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Pretplata</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Vaša privatnost je važni i podaci međuspremnika mogu biti vrlo lični. Skladištenje je uvijek šifrirano, ali možete postaviti lozinku koja će biti potrebna u slučaju da je vaš uređaj ukraden ili neko drugi koristi vaš uređaj.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Lozinka</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Kada je omogućeno, povlačenje iz bilo koje aplikacije na vrh ekrana otkrit će monkeypaste da lako ispušta sadržaj u mankena.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Omogućavanje 'zaključavanja' u gornjem lijevom dijelu glavnog prozora i dalje će omogućiti kako se spuštaju na majmune.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Više postavki prozora dostupno je iz izbornika "Postavke -&gt; -&gt; prozor".</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Povucite banane gore!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Povucite - na - otvorite</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Prečice na tastaturi mogu se pregledati ili mijenjati u bilo kojem trenutku iz izbornika "Podešavanja -&gt; prečice".</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Sve globalne prečice bit će onemogućene tako da ih možete kasnije postaviti.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Prečice međuspremnika monkeypaste bit će dostupni u svim aplikacijama.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Unutrašnji</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Podrazumevano</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profil geste</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hej! Postavimo nekoliko stvari za poboljšanje vašeg ukupnog iskustva sa monskim listom.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Dobrodošli</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Da biste dobili najviše korištenja iz MonkeyyPaste, automatski se učitava kada se prijavite je dobra ideja. Ali, to je u potpunosti na vama.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Neka bude povremeni.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Omogućiti</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Učitajte na prijavu?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Kada je omogućeno, gesta za pomicanje na vrhu ekrana otkrit će majmune.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Lijevo - klikom na ikonu trake zadataka i dalje će otvoriti monkeypup.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Više postavki prozora dostupno je iz izbornika "Postavke -&gt; -&gt; prozor".</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Jednostavno desno?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Pomičite se gore!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Pomičite se - do - otvorite</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p Align = "Centar"&gt; MONKEYPASTE je &lt;span color = "crveni&gt; potpuno integriran &lt;/ span&gt; s povlačenjem - i - padom &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Baci ga ovde!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P Center "&gt; na ovaj način, monkeyypust može se pristupiti u &lt;span color =" crveno "&gt; bez klika &lt;/ span&gt; ili čak &lt;span color =" crvena "&gt; &amp; # x1f440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Povuci me!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Isprobaj!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Isprobaj!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Nema dostupnih rezultata.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Potvrditi</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Osvježiti</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Pretraga ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Postavke</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Ovisnosti:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Instalirati</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Jeste li sigurni da želite ukloniti '{0}' i sve njegove prečice i prečice?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Deinstalirati</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' nema rezultata.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Nema odabira.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Nijedan</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Krediti:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Opis:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Donirati:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licenca:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL projekta:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Objavljeno:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Pročitaj me:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Prijavi zloupotrebu:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Oznake:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Ažurirati</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Verzija:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Otvoren u prozoru</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Otpustiti</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Osvježiti</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Sačuvati</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Pored brisanja!
+
+Nadogradnja da se izbjegne.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Pored smeća!
+
+Nadogradnja da se izbjegne.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Datoteke</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Slika</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kopirano {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Datoteke | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} linije</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Kopije | {1} paste</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Pomaknuti se</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Dodati</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopija</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Rezati</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Zalijepiti</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Kopiraj</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Nezavencioni filter</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Čitaoci</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Pisci</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Rukovaoci</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Izbrisati</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplikat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Ime uredi</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Resetovati</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Oznake</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Akcija</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Globalno usmjeravanje</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Prečac</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Pokreti moraju biti jedinstveni i mogu sadržavati samo jednu tipku za unos.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Interni &lt;/ b&gt; Sve prečice su ograničene na unutar aplikacije. Ovo zapravo nije predviđena opcija, ali može omogućiti prilagoditi ono što prečice nameravate napraviti globalni &lt;i&gt; jednog dana &lt;/ i&gt;. &lt;/ Li&gt;
+&lt;li&gt;
+&lt;b&gt; Default &lt;/ b&gt; Sve globalne prečice su omogućene. The &lt;b&gt; prikaži / sakrij glavni prozor &lt;/ b&gt; Prečac koristi &lt;span color = "crveni"&gt; prevladavanje &lt;/ span&gt; rutiranje za &lt;b&gt; ključ &lt;/ b&gt; ključ. Možete promijeniti to usmjeravanje ili gestu u bilo kojem trenutku. Ali &lt;span color = "zelena"&gt; dajte ga pokušaj &lt;/ span&gt;
+&lt;/ li&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/ head&gt;
+&lt;tijelo&gt;
+&lt;h1&gt; Globalni režimi prečaca &lt;/ h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; pasivan &lt;/ b&gt; prečac monkeypaste će slušati u bilo kojoj aplikaciji. &lt;br&gt;
+* Ovo je samo opcija &lt;/ i&gt; na Linuxu za sada.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/ b&gt; Prečica će izvršiti &lt;b&gt; &lt;i&gt; prije &lt;/ i&gt; &lt;/ b&gt; da ga upravlja aktivnom aplikacijom. &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/ b&gt; Prečica će izvršiti &lt;b&gt; &lt;i&gt; nakon &lt;/ i&gt; &lt;/ b&gt; da ga upravlja aktivnom aplikacijom. &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Prevladavanje &lt;/ b&gt; Kada MonkeyyPaste čuje tipku za unos (tipka za modifikaciju) prečaca za poništavanje da će sakriti &lt;i&gt; sakriti da taster pritisnete iz aplikacije - unos nivoa. &lt;br&gt;
+Ova opcija će garantovati prečicu aktivira se bez sukoba na aktivnu aplikaciju.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Ekskluzivno preglasanje &lt;/ b&gt; Ovo je poseban tip nadležnog načina dizajniran za ključ za zaključavanje CAPS. Omogućuje samo tipku &lt;b&gt; jedan &lt;/ b&gt; (ne-modifikator) za svoj zadatak. &lt;br&gt;
+U normalnom režimu nadjačanja kape za zaključavanje može postati &lt;i&gt; zaglavljeno na &lt;/ i&gt; kada se pritisne u kombinaciji sa drugim tasterima. &lt;br&gt;
+Dakle, bez obzira koji su drugi tasteri isključeni, ako se pritisne prečica &lt;b&gt; hotkey &lt;/ b&gt; da će biti nadjačana i spriječiti da postane &lt;i&gt; zaglavio na &lt;/ i&gt;.
+&lt;/ li&gt;
+&lt;/ ul&gt;
+&lt;/ telo&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Onesposobiti</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Učitajte kada je ovaj korisnički račun prijavljen, a ne za druge korisnike.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Korištenje dostupnih kontakata (zahtijeva dodatak za dohvaćanje) Ovo polje će se koristiti za sve instance ovog predloška u ovom dokumentu ili u bilo kojem slučaju, referencirat će se kasnije. &lt;/ p&gt; &lt;p&gt; tako na primjer ako odaberite adresu e-pošte Evo tada će se polje e-pošte kontakt odabrati za sve slučajeve u ovom dokumentu. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kratka godina &lt;br/&gt; yyyy = dugačka godina &lt;br/&gt; m = mjesec (1-12) &lt;br/&gt; mm = mjesec (01-12) &lt;br/&gt; mmm = mjesečna skraćenica (januar, februar .. . Dec) &lt;br/&gt; mmmm = dugi mjesec (januar, februar ... decembar) &lt;br/&gt; d = dan (1 - 31) &lt;br/&gt; dd = dan (01 - 31) &lt;br/&gt; ddd = Dan u sedmici riječi (ponedjeljak, utorak ... nedjelja) &lt;br/&gt; E = kratak dan u sedmici riječi (pon, utočište ... sunce) &lt;br/&gt; D - ordinalni dan (1., 2., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; H = sat u AM / PM (0-12) &lt;br/&gt; HH = sat / pm (00-12) &lt;br / br / &gt; H = sat u danu (0-23) &lt;br/&gt; HH = sat dnevno (00-23) &lt;br/&gt; mm = minuta &lt;br/&gt; ss = sekunda &lt;br/&gt; sss = milisekundi &lt;br/&gt; A = AM / PM marker &lt;br/&gt; p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Trenutni datum i / ili vrijeme bit će supstituirani za predloške dateTime kada su zalijepili.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Sva pojava ovog predloška koristit će navedeni tekst. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Sva pojava ovog predloška koristit će navedeni tekst. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Završite dodavanje</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Omogućiti blok</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Omogućite inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Prebacite priručnik</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Prebacite priručnik</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pauzirajte dodatak</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Prebacivati ​​se prije</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Prebacivati ​​se prije</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Nastavite doprinositi</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Dodavanje ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Zalijepiti</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pin</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Otrcati</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Sakrij sve obavijesti '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Otpustiti</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Posljednja aktivna aplikacija nepoznata. Prebacite se na namjeravanu aplikaciju na majmunske paste.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Zalijepite na: &lt;em&gt; &lt;i class = "Paste-Tooltip-sufiks"&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimizirati</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Molimo pričekajte ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Zaključati</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Račun</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Pomoći</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopiraj zalijepi</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferencije</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Vratite zadane postavke</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filter ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Prečice</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Dodajte aplikaciju</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Dodajte web stranicu</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blok?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Ime</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplikacije</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blokirati domenu?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blok url?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domena</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Prepoznavanje izvora URL-a ovisi o tome kako je međusobna povezanost približno host aplikacija toliko odbacivanja ne može se garantovati</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Web stranice</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Neke monkeyyplaste koriste automatizaciju tipkovnice kako bi simulirali "kopiranje" događaja u drugim aplikacijama.
+
+Dodajte i / ili odaberite aplikaciju s jedinstvenom prečicom za kopiranje (poput konzole ili ljuske na primjer) kako bi se te funkcije ispravno funkcionirale.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Prečica za kopiranje</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Nijedan</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Za navedenu aplikaciju koristit će se samo odabrane prethodno postavljene postavke. Kada se ne odredi, koristit će se zadane postavke na &lt;em&gt; bočni nosač međuspremnika &lt;/ em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Mnoge monkeyplaste karakteristike koriste automatizaciju tipkovnice za interakciju s drugim aplikacijama.
+
+Neke aplikacije (poput nekih konzola ili granata) mogu imati nerazumnu prečicu za paste.
+
+Da biste osigurali pravilnu interoperabilnost, evidentirajte one prečice za tu aplikaciju.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Prečicu zalijepite</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Čitaoci</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Svi nadgledanje međuspremnika od odbijenih aplikacija bit će &lt;b&gt; zanemaren &lt;/ b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Pisci</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Uredi ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Odbijen</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Prečice</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Da li biste željeli ukloniti sve {0} isječke iz '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Uklonite kopče?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Primjena</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Pregledajte aplikaciju ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Odaberite Put aplikacije</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Jeste li sigurni da želite ukloniti prilagođene prečice za {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Jeste li sigurni da želite ukloniti prilagođene formate za {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Za ovu aplikaciju nema dodijeljenih formata međuspremnika. Nijedan podatak neće biti pročitani putem rezanja / kopiranja ili pokušaja povlačenja - i - pad u monkeyypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Za ovu aplikaciju nema dodijeljenih formata međuspremnika. Automatizirana pasta ili povlačenje - i - pad iz monuka nema uticati (njegovi prazni podaci).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Jeste li sigurni da želite resetirati sve prečice? Sve prilagođene prečice bit će uklonjene.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Jeste li sigurni da želite promijeniti profil prečaca za prečicu na '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Sve</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favoriti</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filteri</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Oznake</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Danas</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Smeće</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Jednostavno desno?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Dvaput kliknite na UNFIN</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Običaj</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globalan</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Ovaj kombinirani sukobi sa '{0}' koji će se očistiti ako se sačuva.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Mora se pružiti prečica.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Ovo je globalna prečica. To znači da će se pokušati izvršiti kad god se izvrši. Pokušajte učiniti dovoljno jedinstvenim (ili promijeniti "vrstu usmjeravanja") da se ne sukobljavate s prečicom iz drugih aplikacija.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globalan</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Prečac mora sadržavati jedan i samo jedan ne-modifikator tipke.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Pritisnite bilo koji tipku za snimanje ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Dodijelite prečicu</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Nauči više...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Nadogradnja</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Otkazati</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Popraviti</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Zanemariti</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Uredu</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Pokušati</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Ugasiti</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Predati</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Godišnje</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Mjesečno</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Pokušajte besplatno!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Ciklus naplate</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-pošta</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Ulogovati se</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Provjerite vezu
+I pokušaj ponovo.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Odjaviti se</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Sledeća uplata</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Lozinka</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Upisati</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E-pošta nije valjana</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Lozinke se ne podudaraju.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Lozinka mora biti najmanje {0} znakova.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Zapamtite?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Provjerite svoju e-poštu da biste potvrdili svoj račun</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Reset lozinke</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm / dd / yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Nikad</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Besplatno {0} jednodnevno suđenje</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Došlo je do problema
+Vaša kupovina.
+
+Provjera veze i
+Podešavanja mogu pomoći.
+
+Želite li pokušati ponovo?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Vaš račun je uspješno
+nadograđen na:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Kupite uspješno!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Greška</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Veza nije uspjela.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Pokušati</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Račun se promijenio</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Vaša pretplata je sada {0} / {1} sa {2} sadržajem i {3} spremište za smeće.
+Ali ne brinite, ne gubi se podaci nakon smanjenja. Procjenjivat će se samo novi isječci.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Čestitamo! Vaša pretplata je sada {0} / {1} sa {2} sadržajem i {3} spremište za smeće.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Smeće ili otključajte nešto
+od '{0}' da dodam više.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' skladištenje je {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Vratiti</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} Blokiran</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Sadržaj i kapacitet smeća dostigli su!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' skladištenje je {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Sadržajni kapacitet dostignut!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Možete sakriti ta upozorenja od strane
+Klikom na 'Sakrij sve' iz
+gornji izbornik opcija iznad.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max Skladište smeća je {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Snaga kapaciteta smeća dosegnuta!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} je nevažeći</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} mora biti barem {1} znakovi</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} može biti samo {1} lik</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Zalijepite na: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Plaćanje za vaše {0}
+Pretplata je bila {1}
+i nije primljen.
+
+Ažurirajte svoje
+Informacije o plaćanju.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Plaćanje za vaše {0}
+Pretplata je bila {1}
+i nije primljen.
+
+Molim vas povežite se s
+Internet na uređaju
+Uz vašu pretplatu i
+Ponovo pokrenite kako biste nastavili
+koristeći svoj {0} plan.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Plaćanje za vaše {0}
+Pretplata je bila {1}
+i nije primljen.
+
+Molim vas otvorite ili ponovo pokrenite
+MonkeyPaste na uređaju
+Uz vašu pretplatu na
+Nastavite koristiti svoje
+{0} plan.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Račun je istekao</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Bilješka</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store ne dopušta sloj
+Promjene u dodacima pretplate.
+
+Morate otkazati svoje
+{0} / {1} planirajte se
+ili će vam se naplaćivati ​​za oboje.
+
+Želite li to sada ići?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Vaša lozinka je resetirana.
+
+Provjerite svoju e-poštu i
+Slijedite vezu za promjenu
+Vaša lozinka.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Ulogovati se</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autor (i)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Potrebno je da prihvatite sljedeće uvjete licence prije nastavka.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Sljedeći paket (i) zahtijevaju da prihvatite njihove uvjete licence prije instaliranja.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Odbijam</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Klikom na "prihvaćam" znači da se slažete sa licencnim uvjetima za ovu aplikaciju. Ako se ne slažete sa pojmovima, kliknite "I ODLUČIM".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Klikom na "prihvaćam" znači da se slažete sa gore navedenim licencom za dodatke navedene gore. Ako se ne slažete sa pojmovima, kliknite "I ODLUČIM".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Pogledajte licencu</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Prihvatanje licence</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Prihvatam</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktivan</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Neregistriran</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Gotov</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Lozinke se ne podudaraju</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Lozinka</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Vaša pretplata je
+Sada postavite na {0} / {1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Račun pronađen</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Prijava nije uspjela</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registracija nije uspjela</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registracija uspješna!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Poništi grešku</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Pretplata</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Šta je novo</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Nikad</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Neograničen</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapacitet</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>preostao</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>ukupno</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Vaša uplata je prošla.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Ekskluzivne prečice za poništavanje mogu sadržavati samo jednu tipku i ta tipka ne može biti modifikator tipke.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Istekao</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Učitavanje</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Invalid</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Bilješka! Ova lozinka nije obavezna i samo za dodatnu sigurnost. Vaši podaci su već šifrirani i nikada se ne dijele. Ova lozinka jednostavno sprječava nekoga čiji vam ne učitate majmunske liste ako nekako dobiju pristup vašoj radnoj površini (ukradeni, napuštate sobu itd.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Zapamtite DEPONTE postavke za:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Pregledajte dodatke</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analiza</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Brza akcija</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Prebacivanje u uređivanja</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Prebacite se</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Napomene</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Običan tekst</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Otvoren u prozoru</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Kliknite + Ctrl da biste pratili ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Kliknite + Alt za praćenje ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin ili ispustite bilo koji medij ovdje!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Jasan</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Thresholds iznad 0 pružit će nejasno podudaranje boja pomoću euklidske udaljenosti u RGBA Colorpace.
+
+Na primjer, ako je crveno (# FF0000) pojam za pretraživanje i crni (# 000000) je piksel u snimku slike, a zatim će udaljenost boja biti 255. Crna do bijele udaljenosti maksimalno je moguće 510, uključujući alfa kanal</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Sve su sljedeće istinite</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Međuspremnik</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Zbirke</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Načini miša</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Okidači</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pauza</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Nastaviti</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Novi okidač</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Dodajte unaprijed</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Čarobnjak od majmuna</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Unaprijed</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analizator</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>CUTOM</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orijentacija ciklusa</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Izgled prebacivanja mreže</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Velika i mala slova</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Prag</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Cijela riječ</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Nijedan nijedan</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Usmjeravanje</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Akcija</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Rešetka</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Gotov</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Sljedeći</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Prethodni</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Preskočiti</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Postojeći račun?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Sledeća uplata</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Registracija omogućava vam da prenesete plaćenu pretplatu na svim svojim uređajima (po dostupnosti). Nećemo nežeti spam sa vašom e-poštom koji obećavamo 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Pretplata</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Korisničko ime</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Treba se registrirati?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Izvori</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Čudno, ništa nije dostupno. Nešto mora biti pogrešno 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Ukloniti</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Zahtijeva ponovno pokretanje</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Napredan</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Pogreška u vaši dodatka iz '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Pogreška prilikom instaliranja dodatka: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Pogreška prilikom instaliranja dodatka "{0}" korumpirane ili nepravilne strukture direktorija. Manifest treba postojati na "{1}", ali nije pronađen.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Pogreška prilikom raščlanjivanja dodataka manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Nijedan dodatak nije učitan sa GUID-om: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} Greška</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Postanak pogreške prilikom temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Pogreška prilikom sigurnosne kopije '{0}' na '{1}'. Detalji: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Tekst upisano će se automatski primijeniti na pretragu kada nijedan tekst nije fokusiran.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Automatski ulaz za pretraživanje</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Promjena lozinke nije uspjela</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Promijeniti</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Promijenite lozinku</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Jasan</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Jasna lozinka</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Sadržaj</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Veličina sadržaja fonta</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kada se istinita, vanjski sadržaj umetnute u isječak koristit će oblikovanje isječaka, a ne ono što je dostupno iz izvora.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Zalijepite, ispustite ili dodajte s odredišnim formatiranjem</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite zaboraviti lozinku?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Zaboraviti</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Zaboravite lozinku</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Sakrij vodene žigove kapaciteta</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Kada se doda novi sadržaj međuspremnika, neće se pratiti kao novi isječak</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Zanemariti dodaje</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kada međuspremnik odgovara postojećem isječku, taj će isječak koristiti umjesto da stvara novi</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Zanemariti nove duplikate</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Izmjene međuspremnika iz aplikacije se neće pratiti</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Zanemarite unutrašnji praćenje međuspremnika</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Prostori, jezičke i nove linije bit će zanemareni od praćenja</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Zanemariti samo bijeli prostor</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Učitavanje na prijavu</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animirani prozor</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Neprozirnost</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Pokazati ponašanje</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Glavni prozor bit će otkriven izvođenjem geste za pomicanje na gornjem rubu vašeg monitora</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Prikaži na gornjem pomicanju ekrana</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Volumen notifikacije</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Ova postavka će pratiti sistem - široka tastatura za paste tastature za statistiku upotrebe. Ove su informacije privatne i ne dijele se, ali i ne garantiraju. Precizni rezultati mogu zahtijevati pružanje aplikacije specifična naredba za paste tipkovnice u "Settings -&gt; Copy &amp; Paste -&gt; prečice '.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Istorija paste</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Previše stezanih klipova (poput kartica pretraživača) može konzumirati značajnu memoriju. Uklanjanje je prvo - u - prvo - izlazi</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Kapacitet pina</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>To se odnosi na sve automatsko - dovršavajuće ulaze, niže vrijednosti će poboljšati performanse</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Nedavna limita teksta</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite
+Vratite zadane postavke?
+
+Ovo se ne može poništiti!
+
+* Aplikacija će se ponovo pokrenuti nakon završetka.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Jeste li sigurni da želite resetirati sve obavijesti?
+
+*Ovo se ne može poništiti!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Meney Paste postavlja međuspremnik (poništavanje) prilikom zalijevanja na vanjski program. Ovo će &lt;/ b&gt; pokušati &lt;/ b&gt; za obnovu stanja međuspremnika nakon vanjske paste.
+
+Ukupna restauracija ne može se zagarantovati i može smanjiti performanse ili čak mankerke pasti, ovisno o izvoru podataka.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Resetirajte međuspremnik nakon punjenja majmuna</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nije mogao izbrisati predmemoriju dodataka sa staze: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Svi će dodaci biti resetirani na početno zadano stanje</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin predmemorija</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite resetirati sve dodatke na zadane vrijednosti?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite resetirati lozinku?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Sve prečice aplikacija bit će resetirani na zadane geste ključeva.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Resetiranje prečica</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Sve su prethodno zanemarene obavijesti.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Vrati obavijesti</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Omogućavanje može biti prilično sporo) Onemogućavanje formatiranih smanjit će potrošnju memorije, ali će inhibirati neke napredne funkcije, kao što su: dodatak, predloške, napomene i pronalaženje / zamjenu</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Bogati sadržaj</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Podesite lozinku</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Prikaži savjete</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Prikaži u traci zadataka</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Prikaži u prekidaču zadataka</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Prikaži naslove</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Kada je omogućeno, povlačenje iz bilo koje aplikacije na vrh ekrana otkrit će monkeypaste da lako ispušta sadržaj u mankena.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Prikaži na prevuku na vrh ekrana</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Zvučna tema</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Provjera pravopisa</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Pri pokretanju izvor međuspremnika bit će nepoznat i ovisno o sigurnosnim postavkama, sadržaj može doći sa isključene web stranice ili aplikacije.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Dodajte početni međuspremnik</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Slušajte međuspremnik na pokretanju</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Odabrati</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Oprez! Ostale boje palete biraju se pomoću matematike a ne očiju! Zato budite svjesni neke kombinacije boja i stila možda neće imati odgovarajući kontrast za čitljivost.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Boja tema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Tematski stil</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Automatsko čišćenje smeća pojavit će se pri pokretanju u postavljenom intervalu.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Sjaj za smeće</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Sučelje</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Visoka poništačka ograničenja mogu utjecati na performanse</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>ONTO Limit</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Nema ograničenja</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Koristi se u naprednoj pretrazi datoteka za neredet datoteke</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Korisnik - Definisana proširenja pretraživanja</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Pronađite i zamijenite ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Zalijepite ovdje</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Podijelite ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Pogled</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Upravljanje ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Preimenovati</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Ocjena: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tip: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Trajno izbrisati</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Pregledajte '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transformisati</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Ulaz</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Izlaz</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Izvori</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Vratiti</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Odaberite sliku ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Boja</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Upravljajte '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Otvoren</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Molimo pričekajte ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Boja pozadine</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Očistiti sve</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Rezultati međuspremnika</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Izbrisati sve</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Uređivanje detalja</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Ime</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Pronaći</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Boja fonta</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Format Boja</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> U izboru</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Umetni sliku</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Umetni vezu</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Umetnite video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Slučaj podudaranja</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Novi predložak</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Sljedeći predložak</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Unesite Paste za paste ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Prethodni predložak</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Redovni izraz</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Zamijenite sve</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Zamijeniti</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Cijela riječ</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Smota</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blok</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domena</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Prikaži mapu</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Deblokirati</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Dodatak</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Dodatak</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - kopija</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Modusi</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Molimo pričekajte da monkeyyypaste se učita ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Prestati</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - kliknite zalijepi</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupa</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Trajno izbrisati sve</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Vrati sve</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Akcija</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL već postoji: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL mora biti u važećem formatu.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Unesite potpuni URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Dodajte URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Unesite vrijednosti</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopirajte tekst ili datoteke za prijavu.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Dodavanje {0} {1} Način aktiviran</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Promjene međuspremnika sada će se dodavati</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Nakon aktiviranja načina dodavanja dodatka</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Promjene međuspremnika sada će se pripremiti</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Prije nego što je aktiviran način dodavanja</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blok</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Obnovljeno je normalno ponašanje međuspremnika</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Dodatak deaktiviran</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Dodaje se dodavanje na vrh ili botom isječke</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Aktiviran unesite način dodavanja</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>U redu</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Priručnik</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Dodajte svom trenutnom odabiru.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Aktiviran ručni način dodavanja</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Akumulacija međuspremnika zaustavljena</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Dodatak je pauziran</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Akumulacija međuspremnika nastavljena je</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Dostupna je nastavljena</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Jeste li sigurni da želite završiti dodavanje?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Uređivanje u načinu kompatibilnosti uklonit će sve bogato oblikovanje. Jeste li sigurni da želite ovo modificirati?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Upozorenje o degradaciji podataka</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktivan</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Omogućen</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Isključeno</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Na</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Pauziran</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Rezultat</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Došlo je do nepoznate greške.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Preostale pokušaje</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Unesite lozinku</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Potvrditi</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Datum Vrijeme</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite izbrisati sve upotrebe '{0}'?
+
+Ovo se ne može poništiti!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamičan</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statički</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} je prazan ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Više dolazi uskoro!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Učitavanje za prijavu Onemogući nije uspjelo</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Upućivanje Učitaj Uspjeh</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Učitavanje za prijavu Omogućeno nije uspjelo</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Load Load Omogući uspjeh</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Sakriti</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Sada se učitava majmunska pasta.
+Slušanje međuspremnika je: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Napunjeno</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Pokazati</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Način odabira automatska kopija: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Način se promijenio</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Desni klik za paste režim: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Dodatak je ažuriran</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Zalijepite '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Pokrenite analizator '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Pokrenite okidač '{0}'</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Odaberite '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite izbrisati '{0}' i sve povezane akcije?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Okidač</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Želite li ukloniti sve sub - akcije za '{0}'? (U suprotnom će biti re - roditelj za '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Uklonite opcije</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Da li stvarno želite da krenete '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Račun</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analizatori</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operacije aplikacija</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Međuspremnik</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Sadržaj</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Pretvarači</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultura</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Podaci</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Smjer</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Povucite i pad</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Pad čarobnjaka</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikone</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Loger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Sučelje</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Paste operacije</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferencije</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Pretražiti</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Prečice</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sortirati</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Zvukovi</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Sistemska ladica</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Zbirke</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Okidači</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Website operacije</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Jezik</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Postavlja međuspremnik na ulazni isječak.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Upozoriti</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Policajac</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Upozorenja o zvuku i / ili sistemske poruke o sistemu opće namjene. Alert akcije nemaju utjecaj na njihov ulaz.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Poruka</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Majica</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Pregled</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Prikaži?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Poruka Tost je prikazana u sekundi. Kada je vrijednost 0 poruka mora biti zatvorena ručno.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Prikaži vremenu (a)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Zvuk?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Vrsta zvuka</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Zapremina</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analizator</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Obrađuje svoj ulazni isječak koristeći dodijeljeni preset analizatora.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Sadržaj unosa povezan je s odabranom kolekcijom</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Povezuje svoj ulazni isječak u dodijeljenu kolekciju oznaka.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Označiti</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Osetljiv na velika i mala slova?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Ovo može biti statički tekst za usporedbu s unosom i / ili uključivanje odabranih svojstava (preko gumba filtriranja) bit će zamijenjene kada se stanje procjenjuje.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Podaci o stanju</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Opcijski jsonpath upit koji će se primijeniti na odabranu 'ulaznu nekretninu' prije nego što se opcije uvjeta.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filter za unos</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Imovina isječka koja se koristi za ovaj uvjet.
+
+Nekretnina "Posljednja izlazna" trenutno je podržana samo kada je ovo uvjetno dijete akcije analizatora, a pružene podatke će se razlikovati ovisno o proizvodnji roditeljskog analizatora.
+
+Za rješavanje problema priložite "ALERT akciju" na roditelj ovog uvjeta i postavite parametar "poruke" poruke "kako bi se podudarao s ovom ulaznom objektom. Ovo će omogućiti preispitivanje stvarnih podataka koji se koriste za ovaj uvjet.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Ulaznu nekretninu</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Izvodi upute za tekstu na ulaznim kopčom ili prethodnom izlazu akcije. Kada usporedba ne uspije (nije podudaranje) Ni jedno dječije akcije neće biti izvršeno. Dakle, djeluje poput logičke kapije.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Sve istinite ili lažne operacije u kojima će se dječiji akcije izvršiti samo ako je rezultat istinita.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Stanje</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Sve</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Pokreće se kada se u sustav dodaje isječak odabranog tipa (međuspremnik, povlačenje - i - pad, analizator generiran ili dupliciran).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Izvršite samo ovaj okidač ako je ulazni isječak nov, a ne duplikat. Ovo je neovisno o bilo kojoj postavci preferencije da li se novi sadržaj zanemaruje ili ne.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Zanemariti duplikat</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Samo će isječci ove vrste pokrenuti ovu akciju.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Povezuje svoj ulazni isječak u dodijeljenu kolekciju oznaka.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Pokrenute kada je isječak povezan s navedenim kolekcijom oznaka.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Zbirka</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Količina vremena u milisekundi čekali prije nego što se djeca izvrši</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Kašnjenje</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimentalno) prvenstveno se koristi u kombinaciji s ponavljačem za ispitivanje daljinskih izvora ili pomoći s dugom operativnim operacijama.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kad ostane prazno, izlazna datoteka će koristiti naslov ulaznog kopča kao naziv datoteke.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Prilagođeno ime</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Imenik u kojem će datoteka biti napisana.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Direktorij</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Spremne ulaz u odabranu mapu.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Pokrenuto kada se sadržaj odabrane mape promijeni. Rezultat će biti novi ili postojeći (kada je omogućen preferencija zanemarivanje duplikata) datotečni snimka datoteke ili mape koja se promijenila uz vrstu promjene kao posljednju izlazu.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Događanja</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Zanemariti duplikat</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Vrijednost 0 će ponoviti roditeljsku akciju u nedogled</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Ponavljač</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Količina vremena u milisekundi za čekanje nakon završetka matične akcije</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Ponoviti kašnjenje</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimentalno) koristi se za stvaranje radnji ili ponavljajućih zadataka. Kada se ponovi, ponovo će izvesti svu djecu svojim originalnim unosom. Kada koristite interval bez ponovljenog broja, okidač će morati biti onemogućen i ponovno se ponovio da zaustavi ponavljanje. Može biti korisno za alativnu ili web zaprepašćivanje automatizacije.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Pokrenuto globalnom prečicom koji definirate. Ako je MonkeyyPaste aktivan, pokušat će koristiti odabrani isječak (ako postoji) kao ulaz. Inače će pokušati koristiti međuspremnik kao svoj ulaz.
+
+Napomena: Okidač prečaca i dalje će se izvršiti ako nema unosa da biste ga sačuvali fleksibilni (tako da može biti makro okidač itd.) Od njenog podatkovnog događaja.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Okidač prečaca</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Pokreće se kada se snimljena prečica pritisne u bilo koje vrijeme sa trenutnim međuspremnik</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Ova akcija zahtijeva da se aplikacija ponovo pokrene. Da li biste to željeli učiniti sada?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Bio je problem. Morate ručno ponovo pokrenuti aplikaciju.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analizirajte sa benotatorom</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Obneće okidač</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Izgrađeni elementima se čitaju - samo. Duplikat za izmenu.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonimni</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Običaj</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Jučer</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} dan pre</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>Prije 1 sat</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} sati pre</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Upravo sada</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Prije minutu</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minut pre</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Prošli mjesec</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} meseci pre</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Prošle sedmice</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} nedelje</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} godina pre</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Napomene</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Naziv aplikacije</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Put aplikacije</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Velika i mala slova</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Sadržaj</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Vrsta datoteke</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Vrsta slike</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Redovni izraz</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tip teksta</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Naslov</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL naslov</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Cijela riječ</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Poput pomicanja duž gornjeg ekrana za otvaranje, ovo će zaključati glavni prozor kada se otvori. Omogućavanje bržeg višestrukih ciljanih tokova.
+
+* Uglovi su u pogledu svih vaših ekrana, a ne po monitoru.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Prikaži prozor i zaključavanje</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Besplatno!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Dajte nam 5 zvjezdica!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Izbrisati sve</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Izbrišite sav sadržaj</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Jeste li sigurni da želite izbrisati
+Sve svoje isječke?!
+
+* Ova operacija se ne može poništiti!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Ja sam Indy Dev, molim vas, pokažite neku podršku!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Poput majmuna?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} prihvaća samo unos tipa: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Automatski režim kopiranja - simulira "kopiranje" događaj svaki put kada se pusti lijevi gumb miša.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Desni klik za paste režim - simulira "paste" događaj svaki put kada se pusti desni gumb miša</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Unaprijed</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Prikaži dodataksku mapu</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Izveštaj</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Pogled</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Prikaži tooltips</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analizatori najavljuju svoj unos ili stvaraju nove isječke kao izlaz. Djeca analizatora trebaju odlučiti koji im je potreban kao njihov ulaz. To je obično poslednji izlaz.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Vrsta unosa</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Okidač dizajnera '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Izaberite {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nije pronađeno...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} okidač</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Kada se provjeri istini ili lažni ishod stanja bit će okrenut. Dakle, na primjer, stanje 'sadrži' postat će 'ne sadrži'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Nije</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Molimo pričekajte ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Kolosor boja</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Birajte boju utakmica</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Poput okidača prečaca, ali kada se pritisne kombinacija tipke, "kopiranje" će se simulirati u aktivnoj aplikaciji, tako da i dalje djeluje poput kopije, ali tada će se lanac akcija pričvršćenih na okidač majmuna pogubiti u pozadini u pozadini Simulirani podaci za kopiranje međuspremnika.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Napredni filter</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Sakrij filtere</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Vrati filtere</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Kreirajte filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Neobavezno) Kad ostane ispraznite međuspremnik će se postaviti pomoću ulaza ove akcije. Ovdje će se nešto predviđeno samo kao običan tekst.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Sadržaj za međuspremnik</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kada se istinita, nakon ove akcije neće biti dodani isječak.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Zanemariti</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Nijedan analizator nije odabran za akciju '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analizator za akciju '{0}' nije pronađen</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Roditelj '{0}' filtri samo za sadržaj i analizator '{1}' "{2}" nikada neće izvršiti jer ne podržava "{3}" vrstu unosa</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Nije odabrana oznaka za klasifikator '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Oznaka za klasifikator '{0}' nije pronađen</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Uporedite vrijednost može biti samo slova, brojevi ili prostori</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Nije odabrana oznaka za isječak označen okidač '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Oznaka za isječak označen okidač '{0}' nije pronađen</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Nema mape za gledanje navedene za '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Satova mapa '{0}' nije pronađena za okidač '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Put pisac datoteke za akciju '{0}' nije postavljen</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Staza pisac datoteke '{0}' za '{1}' nije pronađen.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Traka zadataka</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Saznajte o dodacima</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Vratite ovu analizu konfiguraciju</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Promenite dnevnik</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Priključite se na Internet i pokušajte ponovo kasnije.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Pomoć</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} je najnovija verzija</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Svi ste gore - do - datum!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Provjerite ažuriranja ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Dostupna nova verzija!
+
+Kliknite ovdje da biste ažurirali na '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Kliknite dolje da biste ažurirali na '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Ažuriraj dostupno!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Ažurirati sada</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>{0} 'sadrži zajedničke vrijednosti. Šta biste željeli resetirati?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Jasan</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Jasne nedavne pretrage</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Resetirajte sve</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Poništite podijeljeno</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Resetiranje neoštećenog</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Poziva dodeljene akcije aplikacije. Sva naredba aplikacije su bez državljanstva i njihov ulaz zanemaruje se.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kada se ne pojavi i naredba ne može požariti, lanac izvršenja će se zaustaviti. Mnoge naredbe će zahtijevati određenu specifičnu državu aplikacije kako bi se izvršavalo.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Uvek nastavite?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Naredba za obavljanje.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Naredba</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Nijedna naredba odabrana za naredbu aplikacije '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Naredba za naredbu aplikacije '{0}' nije pronađena</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Odabrano</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Ponovo pokrenuti</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Bilo je problema sa ažuriranjem "{0}". Da biste dovršili ažuriranje, morat ćete ponovo pokrenuti i instalirati '{0}' (ne brinite da će se sva vaša podešavanja obnoviti).
+
+Sada možete ponovo pokrenuti i dovršiti ažuriranje RE - Instaliranje, zanemarivanje toga i ažurirati kasnije ili otkazati ažuriranje zajedno i nastaviti koristiti verziju '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Ažurirajte grešku</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nije moguće preuzeti ažuriranje</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Ažuriranje nije uspjelo</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Da biste dovršili ažuriranje, trebat ćete se ponovo pokrenuti. Želite li se ponovo pokrenuti sada ili kasnije?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Ažuriranje spremno</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Kasnije</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Ponovo pokrenite</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>U toku</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} je uspešno ažuriran na {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Potrebni su jezgreni dodaci i ne mogu se ukloniti.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instalira</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Ažuriranje je u toku. Ponovo pokrenite da biste dovršili.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>U toku</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Neinskaltatiranje je u tijeku. Ponovo pokrenite ako želite ponovo instalirati.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Da biste dovršili deinstaliranje, trebat ćete se ponovo pokrenuti. Želite li se ponovo pokrenuti sada ili kasnije?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Završite deinstaliranje?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Neobjavljen</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - generirana zadana postavka za '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Nije odabran za isječak</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analizirajte odabrani isječak</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Dodijelite prečicu za pokretanje '{0}' na odabranom isječku</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Globalna pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Dodijelite globalnu prečicu paste za '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Zaboravili ste lozinku?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Ulogovati se</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Odjaviti se</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Politika privatnosti</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Zahtijeva ponovno pokretanje) kada će omogućene dijagnostičke informacije biti zabilježene u datoteku. To može usporiti performanse i može sadržavati lične podatke.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Prijavite se u datoteku</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Otvoren</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Otvorite mapu za trupce</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Pregledajte dodatke</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Pročitati</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Pisati</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Pošaljite povratne informacije ili izveštaj o greškama</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Ovo skriva samo glavni prozor. Svi ostali ne-dijaloški prozori uvijek su prikazani na programskoj traci.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Pretražite u '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Dodajte filter</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Uređivanje udruživanja tipa</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Uklonite ovaj filter</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Otvori pomoć u vezi s tim ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} isječci</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Promijeniti</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Nikad</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Bez naslova</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Zapisati</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Neoznačena referenca izvora</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' je potrebno</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Ima greške)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Ograničen</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Skladište</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Smeće</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Neograničen</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Ova se aplikacija trenutno podudara s zadanim presvlakama i formatama čitača međuspremnika.
+
+Omogućavanje ili onemogućavanje zadanih postavki čitača (iz bočne trake međuspremnika) neće uticati na ovu konfiguraciju. Samo uvlačenje aplikacija slijede zadanu postavku.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Ova aplikacija trenutno odgovara zadanim presecima i formatama pisača međuspremnika.
+
+Omogućavanje ili onemogućavanje zadanih prethodno postavljenih pisača (iz bočne trake međuspremnika) neće uticati na ovu konfiguraciju. Samo uvlačenje aplikacija slijede zadanu postavku.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Da biste dodali da morate raspakirati slušatelja međuspremnika (sistemska ladica -&gt; Nastavi).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Dodatak nije dostupan</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Nema podešavanja</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Govorim samo engleski i monkeyypaste preveden na ovaj jezik.
+
+Sve verzije broda sa engleskim paketom, pa ako govorite engleski, možete promijeniti jezik na njega u bilo kojem trenutku nakon ove postavke (postavke -&gt; Postavke -&gt; International).
+
+Ako želite pomoći poboljšanju prijevoda, voljeli bismo se čuti od vas!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Zabrinutost za prijevod</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Morate ažurirati monkeypuste u cilju korištenja ove funkcije.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Prečica</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Lifesters liferca su onemogućen</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Omogućeno je slušatelj međuspremnika</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Matična akcija '{0}' ne podržava ulaznu nekretninu tipa "zadnja izlaza"</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Saznajte više o planovima</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Primjena</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Okidač</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Isječak</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analizator</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Označiti</value>
+  </data>
+</root>

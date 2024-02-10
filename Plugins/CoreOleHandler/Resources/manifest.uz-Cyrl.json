@@ -1,0 +1,12 @@
+{
+  "title": "Core Clipboard boshqaruvchisi",
+  "description": "Odatiy klipboard formatlarini ishlov berish",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Yadro, pleyboard, sudrab, matn, RTF, boy matn, HTML, CSV, Rasm, PNG, JPEG, Link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

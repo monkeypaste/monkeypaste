@@ -1,0 +1,53 @@
+{
+  "title": "이미지 주석",
+  "description": "80 가지 유형의 객체에 대해 훈련 된 완전 무료, 로컬 및 경량 객체 탐지기.",
+  "version": "1.0.2.0",
+  "author": "Monkey",
+  "guid": "a54545be-e64e-4f51-a2fe-9206d5c64496",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/ImageAnnotator",
+  "packageUrl": "https://github.com/monkeypaste/ImageAnnotator/releases/download/v1.0.0/ImageAnnotator.zip",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/ImageAnnotator/master/icon.png",
+  "packageType": "Dll",
+  "tags": "이미지 감지, 주석, 이미지, AI, 텍스트",
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageToken": true
+    },
+    "parameters": [
+      {
+        "label": "신뢰",
+        "description": "필터에서 0에서 1 사이의 값 감지 정확도",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "minimum": 0,
+        "maximum": 1,
+        "isRequired": true,
+        "paramId": "conf",
+        "values": [
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": "img64",
+        "values": [
+          {
+            "value": "{ClipText}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "ମୂଳ ପାଠ୍ୟ ଆଣ୍ଟୋଟର୍ |",
+  "description": "ଟେକ୍ସଟ୍ ଆଧାରିତ ବିଷୟବସ୍ତୁ ପାଇଁ ମ basic ଳିକ ହାଇପରଲିଙ୍କ୍ ସମର୍ଥନ ପ୍ରଦାନ କରେ |",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "CORE, ଟିପ୍ପଣୀ, ପାଠ୍ୟ, ପାଠ୍ୟ, ଠିକଣା, ଫୋନ୍, ଇମେଲ୍, ମୁଦ୍ରା, ଫ୍ରାଙ୍କସ୍ ଏବଂ ଫ୍ରାଙ୍କିଂ |"
+}

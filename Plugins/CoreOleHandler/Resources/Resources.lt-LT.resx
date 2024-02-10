@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignoruoti</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Patikrinus {0} formatą nebus skaitoma iš mainų srities ar vilkimo ir lašų duomenų.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Patikrinus {0} formatą nebus įrašyta į mainų sritį ar vilkimo ir lašo duomenis.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Perskaitykite</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Parašyk</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Failai</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Kai RTF dar nėra, HTML bus konvertuotas į RTF. Tai gali būti naudinga tarp interneto naršyklių ir (arba) teksto apdorojimo programų. (reikalauja įjungti RTF formatą ir skirtas tik palaikomoms platformoms)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Konvertuoti į RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Šie katalogai nebus skaitomi iš mainų srities ar vilkimo ir lašų duomenų.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Ignoruojami katalogai</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Ignoruojami failų plėtiniai</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Šie failų tipai nebus skaitomi iš mainų srities ar vilkimo ir lašo duomenų.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Šie failų tipai nebus įrašyti į mainų sritį ar vilkimo ir lašo duomenis.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Patikrinus vaizdai, didesni už maksimalų matmenį, bus keičiami išlaikant kraštinių santykį. Tai neturi įtakos mainų srities vaizdui.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Skalė yra per didelė</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Kai įklijuojate ar numesite bitmap, tai bus numatytasis failo tipas</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Numatytasis eksporto tipas</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Kartais visiškai skaidrūs vaizdai pasirodys ant mainų srities, jos painiavos.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Nepaisykite tuščių vaizdų</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Dideli vaizdai (daugiau nei keli MBS), deja, gali būti šiek tiek vangus. Stenkitės, kad ši vertė būtų maža.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Maksimalus aukštis</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Maksimalus plotis</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Norint susirūpinti, reikia maksimalios simbolių</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Maksimalūs simboliai</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>Html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Tekstas (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Formatas '{0}' turėjo tuščius arba skaidrius duomenis ir buvo užblokuotas</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Tušti duomenys užblokuoti</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' formatas pažymėtas kaip 'ignoruojamas'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Formatas ignoruojamas</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} riba yra {1}, o duomenys buvo {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Aptiktas maksimalus dydis</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Pagrindinių iškarpinės skaitytuvas</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Pagrindinių iškarpų rašytojas</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Numatytųjų mainų srities formatų tvarko</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>„Core“ iškarpinės tvarkyklė</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>„Core“, mainų sritis, vilkimas ir lašas, tekstas, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, nuoroda, nuoroda</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Vaizdas (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Kai HTML dar nėra, RTF bus konvertuotas į HTML. Tai gali būti naudinga tarp interneto naršyklių ir (arba) teksto apdorojimo programų. (reikalauja įjungti HTML formatą ir skirtas tik palaikomoms platformoms)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Konvertuoti į HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Tekstas</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Be pavadinimo</value>
+  </data>
+</root>

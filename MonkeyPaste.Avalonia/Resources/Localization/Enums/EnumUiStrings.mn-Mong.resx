@@ -59,1131 +59,1131 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MpThemeType_Light" xml:space="preserve">
-    <value />
+    <value>ᠭᠡᠷᠡᠯ ᠃</value>
   </data>
   <data name="MpThemeType_Dark" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠷᠠᠩᠭ᠋ᠤᠢ ᠃</value>
   </data>
   <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
-    <value />
+    <value>ᠶᠡᠷᠦ ᠡᠴᠡ ᠪᠢᠰᠢ ᠃</value>
   </data>
   <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
-    <value />
+    <value>ᠡᠳᠦᠷ ᠲᠤᠲᠤᠮ ᠤᠨ ᠃</value>
   </data>
   <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠷᠠᠭ ᠤᠨ ᠰᠡᠳᠬᠦᠯ ᠃</value>
   </data>
   <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
-    <value />
+    <value>ᠰᠠᠷ᠎ᠠ ᠪᠥᠷᠢ ᠃</value>
   </data>
   <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
-    <value />
+    <value>ᠳᠡᠭᠡᠷ᠎ᠡ ᠤᠳᠠᠭᠠᠨ ᠤ ᠭᠠᠷᠭᠠᠯᠲᠠ ᠃</value>
   </data>
   <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠶᠢᠨ ᠯᠣᠭᠢᠭ ᠃</value>
   </data>
   <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
-    <value />
+    <value>ᠦᠭᠡᠢ</value>
   </data>
   <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
-    <value />
+    <value>Shift ᠶᠢ ᠪᠠᠲᠤᠯᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠠᠪᠠᠷ ᠳᠡᠭᠡᠷ᠎ᠡ ᠲᠠᠯ᠎ᠠ ᠶᠢᠨ ᠥᠨᠴᠥᠭ᠍ ᠳᠡᠭᠡᠷ᠎ᠡ ᠃</value>
   </data>
   <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
-    <value />
+    <value>ᠵᠡᠭᠦᠨ ᠥᠨᠴᠥᠭ᠍ ᠳᠡᠭᠡᠷ᠎ᠡ ᠃</value>
   </data>
   <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠵᠢᠶᠡᠳᠡ ᠪᠠᠢ᠌ᠳᠠᠭ ᠃</value>
   </data>
   <data name="MpBillingCycleType_Never" xml:space="preserve">
-    <value />
+    <value>ᠶᠡᠷᠦ ᠡᠴᠡ ᠪᠢᠰᠢ ᠃</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
-    <value />
+    <value>ᠰᠠᠷ᠎ᠠ ᠪᠥᠷᠢ ᠃</value>
   </data>
   <data name="MpBillingCycleType_Yearly" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠯ ᠪᠦᠷᠢ᠃</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
-    <value />
+    <value>ᠠᠴᠢᠶᠠᠯᠠᠬᠤ ᠮᠠᠰᠢᠨ᠃</value>
   </data>
   <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠬᠢᠶᠠᠯᠠᠭ᠎ᠠ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ ᠨᠢ ᠬᠡᠲᠦᠷᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠩᠰᠠᠨ ᠡᠷᠦᠬᠡ ᠢᠯᠠᠭᠳᠠᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_DbError" xml:space="preserve">
-    <value />
+    <value>Db ᠪᠤᠷᠤᠭᠤ ᠪᠠᠷᠤᠭᠲᠠᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_Help" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠪᠰᠤᠷᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠪᠰᠤᠷᠭᠠᠭᠰᠠᠨ ᠵᠦᠢᠯ ᠢ ᠨᠢᠭᠡᠨᠲᠡ ᠰᠢᠨᠡᠳᠬᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_Message" xml:space="preserve">
-    <value />
+    <value>ᠴᠢᠮᠡᠭᠡ᠃</value>
   </data>
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠵᠠᠭᠪᠤᠷ ᠢ ᠥᠭᠡᠷᠡᠴᠢᠯᠡᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpNotificationType_Debug" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠵᠤ ᠲᠤᠷᠰᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
-    <value />
+    <value>ᠠᠭᠤᠯᠭ᠎ᠠ ᠶᠢᠨ ᠳᠡᠭᠡᠷ᠎ᠡ ᠲᠠᠯ᠎ᠠ ᠶᠢᠨ ᠬᠢᠵᠠᠭᠠᠷ ᠲᠤ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠦᠷᠴᠡᠶ ᠃</value>
   </data>
   <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
-    <value />
+    <value>ᠬᠣᠭ ᠨᠣᠪᠰᠢ ᠶᠢᠨ ᠰᠠᠭᠤᠯᠠ ᠶᠢᠨ ᠠᠮᠠᠰᠠᠷ ᠲᠤ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠦᠷᠴᠡᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>ᠠᠭᠤᠯᠭ᠎ᠠ ᠶᠢ ᠳᠠᠩᠰᠠᠨ ᠡᠷᠦᠬᠡ ᠨᠡᠮᠡᠵᠦ ᠬᠣᠷᠢᠭᠯᠠᠭᠳᠠᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
-    <value />
+    <value>ᠠᠭᠤᠯᠭ᠎ᠠ ᠨᠢ ᠳᠠᠩᠰᠠᠨ ᠡᠷᠦᠬᠡ ᠳᠦ ᠬᠣᠷᠢᠭᠯᠠᠭᠳᠠᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_AccountChanged" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠩᠰᠠᠨ ᠤ ᠡᠷᠦᠬᠡ ᠨᠢᠭᠡᠨᠲᠡ ᠥᠭᠡᠷᠡᠴᠢᠯᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_Welcome" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠶᠠᠷᠯᠠᠨ ᠤᠭᠲᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
-    <value />
+    <value>ᠰᠢᠨᠡᠳᠬᠡᠵᠦ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭ᠍ᠯᠡᠵᠦ ᠪᠣᠯᠬᠤ ᠰᠢᠨᠡᠳᠬᠡᠬᠦ ᠦᠭᠡᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠮᠡᠬᠦ ᠵᠠᠭᠪᠤᠷ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠤᠪᠢᠷᠠᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
-    <value />
+    <value>ᠦᠰᠦᠨ ᠮᠠᠰᠢᠨ ᠢ ᠨᠢᠭᠡᠨᠲᠡ ᠠᠰᠢᠭᠯᠠᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_AlertAction" xml:space="preserve">
-    <value />
+    <value>ᠰᠡᠷᠡᠮᠵᠢ ᠶᠢᠨ ᠳᠣᠬᠢᠶ᠎ᠠ ᠠᠵᠢᠯᠯᠠᠭᠤᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpNotificationType_StartupComplete" xml:space="preserve">
-    <value />
+    <value>ᠡᠬᠢᠯᠡᠭᠦᠯᠵᠦ ᠳᠠᠭᠤᠰᠬᠠᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ Io ᠰᠡᠷᠡᠮᠵᠢ ᠥᠭ᠍ᠬᠦ</value>
   </data>
   <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠪᠴᠢᠭᠤᠯᠤᠭᠰᠠᠨ ᠵᠦᠢᠯ ᠨᠢ ᠪᠤᠷᠤᠭᠤ ᠃</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
-    <value />
+    <value>ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠬᠠᠭᠰᠠᠭᠠᠭᠤᠷ ᠃</value>
   </data>
   <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠪᠲᠠᠰᠤ ᠨᠠᠭᠠᠬᠤ ᠬᠡᠯᠪᠡᠷᠢ ᠶᠢᠨ ᠰᠢᠶᠳᠪᠦᠷᠢᠯᠡᠬᠦ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠬᠦᠴᠦᠨ ᠦᠭᠡᠶ᠃</value>
   </data>
   <data name="MpNotificationType_InvalidAction" xml:space="preserve">
-    <value />
+    <value>ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠠᠵᠢᠯᠯᠠᠭᠤᠯᠬᠤ</value>
   </data>
   <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
-    <value />
+    <value>ᠪᠤᠷᠤᠭᠤ http ᠭᠤᠶᠤᠴᠢᠯᠠᠯ ᠃</value>
   </data>
   <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠳᠠᠯᠤᠭᠴᠢ ᠴᠠᠭ ᠠᠴᠠ ᠬᠡᠲᠦᠷᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
-    <value />
+    <value>ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠭᠤᠶᠤᠴᠢᠯᠠᠯ ᠭᠠᠷᠭᠠᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
-    <value />
+    <value>ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠲᠠᠭᠠᠬᠤ</value>
   </data>
   <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
-    <value />
+    <value>ᠪᠣᠯᠵᠣᠯᠲᠤ ᠲᠣᠭ᠎ᠠ ᠶᠢᠨ ᠭᠤᠶᠤᠴᠢᠯᠠᠯ ᠢ ᠭᠦᠢᠴᠡᠳᠬᠡᠬᠦ ᠬᠡᠷᠡᠭᠲᠡᠶ ᠃</value>
   </data>
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
-    <value />
+    <value>ᠨᠢᠭᠤᠴᠠ ᠨᠣᠮᠧᠷ ᠢ ᠣᠷᠣᠭᠤᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpNotificationType_RateApp" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠢ ᠦᠨᠡᠯᠡᠬᠦ ᠬᠡᠷᠡᠭᠲᠡᠶ᠃</value>
   </data>
   <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠢ ᠬᠠᠮᠲᠤᠪᠠᠷ ᠡᠳ᠋ᠯᠡᠬᠦ ᠥᠷᠲᠡᠭ ᠦᠨ ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ ᠶᠢ ᠳᠠᠬᠢᠨ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠠᠭᠤᠯᠭ᠎ᠠ ᠶᠢᠨ ᠬᠡᠯᠪᠡᠷᠢ ᠮᠠᠶ᠋ᠢᠭ ᠢᠶᠠᠷ ᠳᠡᠰ ᠪᠠᠭᠤᠷᠠᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠨᠢ ᠮᠡᠳᠡᠭᠡᠨ ᠦ ᠬᠦᠷᠢᠶ᠎ᠡ ᠶᠢ ᠦᠭᠡᠶᠢᠰᠬᠡᠬᠦ ᠡᠰᠡᠬᠦ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠨᠢ ᠮᠡᠳᠡᠭᠡᠨ ᠦ ᠬᠦᠷᠢᠶ᠎ᠡ ᠲᠡᠢ ᠡᠰᠡᠬᠦ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>Modal Ok ᠴᠢᠮᠡᠭᠡ ᠶᠢᠨ ᠬᠦᠷᠢᠶ᠎ᠡ ᠶᠢ ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠪᠣᠯᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠮᠧᠳᠧᠯ Ok ᠴᠢᠮᠡᠭᠡ ᠶᠢᠨ ᠬᠦᠷᠢᠶ᠎ᠡ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠪᠢᠴᠢᠭ᠌ ᠦᠨ ᠬᠦᠷᠢᠶ᠎ᠡ Ok Cancel ᠮᠡᠳᠡᠭᠡᠨ ᠦ ᠬᠦᠷᠢᠶ᠎ᠡ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠪ ᠵᠠᠭᠪᠤᠷ ᠨᠢ ᠪᠢᠴᠢᠭ᠌ ᠦᠨ ᠬᠦᠷᠢᠶ᠎ᠡ ᠶᠢ ᠴᠡᠭᠡᠵᠢᠯᠡᠵᠦ ᠪᠣᠯᠬᠤ ᠪᠥᠭᠡᠳ ᠴᠢᠮᠡᠭᠡ ᠶᠢᠨ ᠬᠦᠷᠢᠶ᠎ᠡ ᠶᠢ ᠲᠣᠭᠲᠠᠭᠠᠵᠤ ᠪᠣᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠠᠬᠢᠴᠠ ᠨᠢ ᠮᠡᠳᠡᠭᠡᠨ ᠦ ᠬᠦᠷᠢᠶ᠎ᠡ ᠶᠢ ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠪᠣᠯᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
-    <value />
+    <value>ᠮᠧᠳᠢᠯ ᠪᠧᠰ ᠮᠡᠳᠡᠭᠡᠨ ᠦ ᠬᠦᠷᠢᠶ᠎ᠡ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠪ ᠵᠠᠭᠪᠤᠷ ᠢ ᠳᠠᠬᠢᠨ ᠤᠮᠳᠤᠭᠠᠶᠢᠯᠠᠪᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠭᠪᠤᠷ ᠳᠠᠬᠢᠨ ᠰᠡᠩᠬᠡᠷᠡᠵᠦ ᠣᠳᠣ ᠪᠤᠶᠤ ᠬᠣᠶᠢᠰᠢᠳᠠ ᠃</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠮᠡᠯᠲᠡ ᠶᠢ ᠨᠤᠲᠠᠯᠠᠨ ᠲᠣᠭᠲᠠᠭᠠᠬᠤ ᠬᠡᠷᠡᠭᠲᠡᠶ᠃</value>
   </data>
   <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠭᠤᠯᠪᠤᠷᠢᠯᠠᠭᠰᠠᠨ ᠮᠡᠳᠡᠭᠡ ᠶᠢ ᠳᠠᠭᠠᠬᠤ</value>
   </data>
   <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠪᠰᠤᠷᠤᠭᠰᠠᠨ ᠲᠣᠨᠣᠭ ᠨᠢ ᠪᠤᠷᠤᠭᠤ ᠶᠢ ᠳᠠᠭᠠᠬᠤ</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠳᠬᠤᠭᠰᠠᠨ ᠲᠣᠨᠣᠭ ᠨᠢ ᠰᠡᠷᠡᠮᠵᠢ ᠥᠭᠬᠦ ᠬᠡᠷᠡᠭᠲᠡᠶ ᠃</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠩᠭᠣᠭᠰᠠᠨ ᠬᠠᠪᠴᠢᠭᠤᠯᠤᠯ ᠢ ᠳᠠᠭᠠᠵᠤ ᠰᠡᠷᠡᠮᠵᠢ ᠥᠭᠬᠦ ᠬᠡᠷᠡᠭᠲᠡᠶ ᠃</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
-    <value />
+    <value>ᠭᠣᠣᠯ ᠴᠣᠩᠬᠣ ᠶᠢ ᠰᠣᠯᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
-    <value />
+    <value>ᠠᠦ᠋ᠲ᠋ᠣ᠋ ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠵᠠᠭᠪᠤᠷ ᠢ ᠰᠣᠯᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
-    <value />
+    <value>Togle ᠪᠠᠷᠠᠭᠤᠨ ᠳᠠᠷᠤᠭᠤᠯ ᠤᠨ ᠳᠠᠩ ᠴᠣᠬᠢᠯᠲᠠ ᠶᠢᠨ ᠨᠠᠭᠠᠯᠲᠠ ᠶᠢᠨ ᠵᠠᠭᠪᠤᠷ ᠢ ᠴᠣᠬᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠨᠣᠰᠬᠤ ᠨᠠᠭᠠᠯᠲᠠ ᠬᠠᠪᠲᠠᠰᠤ ᠶᠢ ᠰᠣᠯᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
-    <value />
+    <value>Togle Appeed ᠶᠢᠨ ᠳᠣᠲᠣᠭᠠᠳᠤ ᠬᠣᠯᠪᠣᠭᠠᠲᠤ ᠵᠠᠭᠪᠤᠷ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
-    <value />
+    <value>Togle Apped Block ᠶᠢᠨ ᠵᠠᠭᠪᠤᠷ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠮᠡᠬᠦ ᠣᠷᠣᠨ ᠪᠠᠶᠢᠷᠢ ᠶᠢᠨ ᠵᠠᠭᠪᠤᠷ ᠢ ᠰᠣᠯᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
-    <value />
+    <value>Togle Apped ᠨᠢᠭᠡᠨᠲᠡ ᠲᠦᠷ ᠵᠣᠭᠰᠣᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠢ᠌ᠴᠢᠯᠠᠬᠤ ᠬᠠᠪᠲᠠᠰᠤ ᠨᠠᠭᠠᠬᠤ ᠭᠠᠷ ᠢᠶᠠᠷ ᠨᠡᠮᠡᠬᠦ</value>
   </data>
   <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
-    <value />
+    <value>ᠠᠩᠬᠠᠷᠤᠭᠤᠯᠬᠤ ᠴᠢᠭ ᠢ ᠪᠠᠭᠤᠷᠠᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
-    <value />
+    <value>ᠠᠩᠬᠠᠷᠤᠯ ᠢᠶᠠᠨ ᠨᠡᠮᠡᠭᠳᠡᠭᠦᠯᠦᠨ᠎ᠡ᠃</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
-    <value />
+    <value>ᠭᠤᠶᠤᠴᠢᠯᠠᠯ ᠢ ᠪᠤᠴᠠᠭᠠᠵᠤ ᠭᠠᠷᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
-    <value />
+    <value>ᠨᠠᠭᠠᠯᠳᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_PasteSelection" xml:space="preserve">
-    <value />
+    <value>ᠨᠠᠭᠠᠯᠲᠠ ᠲᠠᠢ ᠰᠣᠩᠭᠣᠯᠲᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠯᠭᠠᠵᠤ ᠰᠣᠩᠭᠣᠬᠤ ᠃</value>
   </data>
   <data name="MpShortcutType_CutSelection" xml:space="preserve">
-    <value />
+    <value>ᠠᠵᠢᠯᠴᠢᠨ ᠬᠡᠷᠴᠢᠵᠦ ᠰᠣᠩᠭᠣᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠩᠭᠣᠭᠰᠠᠨ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠬᠠᠰᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
-    <value />
+    <value>ᠳᠣᠤᠷᠠᠬᠢ ᠮᠡᠲᠦ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠰᠣᠩᠭᠣᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
-    <value />
+    <value>ᠳᠡᠭᠡᠷ᠎ᠡ ᠨᠢᠭᠡ ᠵᠢᠭᠰᠠᠭᠠᠭᠰᠠᠨ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠰᠣᠩᠭᠣᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠷᠠᠭ᠎ᠠ ᠨᠢᠭᠡ ᠮᠥᠷ ᠦᠨ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠰᠣᠩᠭᠣᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
-    <value />
+    <value>ᠳᠡᠭᠡᠷ᠎ᠡ ᠨᠢᠭᠡ ᠮᠥᠷ ᠦᠨ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠰᠣᠩᠭᠣᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
-    <value />
+    <value>ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠢ ᠵᠢᠭᠠᠨ ᠲᠣᠭᠲᠠᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_Undo" xml:space="preserve">
-    <value />
+    <value>ᠤᠰᠠᠳᠬᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_Redo" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠬᠢᠨ ᠬᠢᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠯᠢᠬᠤ ᠠᠭᠤᠯᠭ᠎ᠠ ᠶᠢ ᠰᠣᠯᠢᠬᠤ ᠳᠤ ᠵᠥᠪᠬᠡᠨ ᠤᠩᠰᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_Rename" xml:space="preserve">
-    <value />
+    <value>ᠬᠦᠨᠳᠦ ᠨᠡᠷᠡᠶᠢᠳᠦᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpShortcutType_Duplicate" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠪᠬᠤᠷᠳᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
-    <value />
+    <value>ᠲᠦᠷᠦᠭᠦᠦ ᠨᠢᠭᠤᠷ ᠲᠤ ᠬᠦᠷᠴᠡᠢ ᠃</value>
   </data>
   <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
-    <value />
+    <value>ᠥᠩᠬᠥᠷᠢᠭᠡᠳ ᠰᠡᠭᠦᠯ ᠬᠦᠷᠦᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
-    <value />
+    <value>ᠴᠣᠩᠬᠣᠨ ᠤ ᠶᠡᠬᠡ ᠪᠠᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
-    <value />
+    <value>ᠴᠣᠩᠬᠣᠨ ᠤ ᠠᠮᠠᠰᠠᠷ ᠢ ᠪᠠᠭᠠᠰᠬᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
-    <value />
+    <value>ᠴᠣᠩᠬᠣᠨ ᠤ ᠶᠡᠬᠡ ᠪᠠᠭ᠎ᠠ Left ᠃</value>
   </data>
   <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
-    <value />
+    <value>ᠴᠣᠩᠬᠣᠨ ᠤ ᠶᠡᠬᠡ ᠪᠠᠭ᠎ᠠ ᠪᠠᠭᠤᠷᠢ ᠃</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
-    <value />
+    <value>Orient ᠭᠣᠣᠯ ᠴᠣᠩᠬᠣᠨ ᠤ ᠣᠷᠣᠢ ᠃</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
-    <value />
+    <value>Orient ᠭᠣᠣᠯ ᠴᠣᠩᠬᠣᠨ ᠤ ᠳᠣᠣᠷ᠎ᠠ ᠬᠡᠰᠡᠭ ᠃</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
-    <value />
+    <value>ᠵᠡᠭᠦᠨᠰᠢ ᠬᠠᠨᠳᠤᠯᠭ᠎ᠠ ᠲᠠᠢ ᠭᠣᠣᠯ ᠴᠣᠩᠬᠣ ᠪᠠᠷ ᠲᠣᠭᠲᠠᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠴᠢᠮᠳᠠᠨ ᠭᠣᠣᠯ ᠴᠣᠩᠬᠣᠨ ᠳᠤ ᠲᠣᠭᠲᠠᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_PreviousPage" xml:space="preserve">
-    <value />
+    <value>ᠨᠢᠭᠡ ᠨᠢᠭᠤᠷ ᠳᠡᠭᠡᠷ᠎ᠡ ᠨᠢᠭᠡ ᠨᠢᠭᠤᠷ ᠳᠡᠭᠡᠷ᠎ᠡ ᠨᠢᠭᠡ ᠨᠢᠭᠤᠷ᠃</value>
   </data>
   <data name="MpShortcutType_NextPage" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠷᠠᠭ᠎ᠠ ᠨᠢᠭᠡ ᠨᠢᠭᠤᠷ᠃</value>
   </data>
   <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠩᠭᠣᠭᠰᠠᠨ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠡᠷᠢᠵᠦ ᠰᠣᠯᠢᠬᠤ ᠬᠡᠷᠡᠭᠲᠡᠶ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
-    <value />
+    <value>ᠭᠣᠣᠯ ᠴᠣᠩᠬᠣ ᠶᠢ ᠰᠣᠯᠢᠬᠤ ᠳᠤ ᠨᠢᠭᠡᠨᠲᠡ ᠲᠣᠭᠲᠠᠭᠠᠵᠠᠢ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
-    <value />
+    <value>ᠱᠦᠭᠦᠭᠦᠷ ᠦᠨ ᠵᠠᠭᠤᠰᠢ ᠶᠢᠨ ᠬᠠᠭᠤᠳᠠᠰᠤ ᠶᠢ ᠰᠣᠯᠢᠬᠤ ᠳᠤ ᠬᠠᠷᠠᠭᠳᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ShowSettings" xml:space="preserve">
-    <value />
+    <value>ᠦᠵᠡᠭᠦᠯᠦᠯᠭᠡ ᠶᠢᠨ ᠪᠠᠶᠢᠷᠢᠯᠠᠭᠤᠯᠤᠯᠲᠠ ᠶᠢ ᠢᠯᠡᠷᠡᠭᠦᠯᠦᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpShortcutType_TogglePinned" xml:space="preserve">
-    <value />
+    <value>Togle ᠲᠣᠭᠲᠠᠪᠤᠷᠢᠲᠠᠢ ᠃</value>
   </data>
   <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
-    <value />
+    <value>ᠴᠣᠩᠬᠣᠨ ᠳᠣᠲᠣᠷ᠎ᠠ ᠨᠡᠭᠡᠭᠡᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
-    <value />
+    <value>ᠡᠭᠦᠷᠢᠳᠡ ᠬᠠᠰᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠮᠤᠭ ᠤᠨ ᠪᠠᠭ᠎ᠠ ᠪᠣᠯᠭᠠᠭᠰᠠᠨ ᠭᠣᠤᠯ ᠴᠣᠩᠬᠣ ᠶᠢ ᠠᠯᠪᠠᠳᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠮᠡᠬᠦ ᠴᠢᠭᠯᠡᠯ ᠦᠨ ᠵᠠᠭᠪᠤᠷ ᠢ ᠰᠣᠯᠢᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠭᠡᠭᠡᠵᠦ ᠬᠠᠪᠰᠤᠷᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
-    <value />
+    <value>ᠶᠡᠬᠡᠰᠴᠦ ᠰᠣᠩᠭᠣᠬᠤ</value>
   </data>
   <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠩᠭᠣᠯᠲᠠ ᠶᠢᠨ ᠬᠡᠪᠴᠢᠶ᠎ᠡ ᠶᠢ ᠪᠠᠭᠠᠰᠬᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
-    <value />
+    <value>ᠰᠣᠩᠭᠣᠭᠤᠯᠢ ᠶᠢᠨ ᠲᠣᠭᠣᠷᠢᠭ ᠢ ᠳᠠᠬᠢᠨ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠤᠨ ᠲᠠᠯᠪᠢᠬᠤ ᠬᠡᠷᠡᠭᠲᠡᠶ᠃</value>
   </data>
   <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
-    <value />
+    <value>ᠲᠤᠩᠭᠠᠯᠠᠭ ᠵᠡᠭᠦᠦ ᠲᠦᠰᠢᠮᠡᠯ ᠫᠠᠨᠰᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
-    <value />
+    <value>M A XA P PS H O R T C U T</value>
   </data>
   <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠨᠠᠭᠠᠬᠤ ᠬᠡᠷᠡᠭᠲᠡᠶ᠃</value>
   </data>
   <data name="MpShortcutType_SelectTag" xml:space="preserve">
-    <value />
+    <value>ᠱᠣᠰᠢᠭ᠎ᠠ ᠰᠣᠩᠭᠣᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
-    <value />
+    <value>ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠥᠰᠦᠭᠡᠯᠡᠭᠰᠡᠨ ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠢ ᠵᠠᠳᠠᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
-    <value />
+    <value>ᠦᠰᠦ ᠭᠠᠷᠭᠠᠭᠤᠷ ᠢ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠤᠨ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
-    <value />
+    <value>ᠯᠣᠭᠢᠭ ᠬᠠᠢ᠌ᠴᠢᠯᠠᠬᠤ ᠪᠢᠴᠢᠭ᠌ ᠬᠠᠢ᠌ᠴᠢᠯᠠᠬᠤ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
-    <value />
+    <value>ᠤᠤᠯ ᠤᠨ ᠯᠣᠭᠢᠭ ᠤᠨ ᠲᠣᠭ᠎ᠠ ᠪᠠᠷᠢᠮᠲᠠ ᠶᠢ ᠬᠠᠢ᠌ᠴᠢᠯᠠᠳᠠᠭ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
-    <value />
+    <value>ᠯᠣᠭᠢᠭ ᠤᠨ ᠬᠡᠯᠪᠡᠷᠢ ᠶᠢ ᠬᠠᠢ᠌ᠴᠢᠯᠠᠬᠤ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠷᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠶᠢᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠵᠠᠮ ᠮᠥᠷ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠶᠢᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ URL ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
-    <value />
+    <value>ᠶᠤᠸᠠᠨ URL ᠭᠠᠷᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ URL ᠪᠦᠰᠡ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠡᠳᠦᠷ ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠯᠭᠠᠵᠤ ᠪᠣᠳᠣᠭᠰᠠᠨ ᠲᠣᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
-    <value />
+    <value>ᠰᠢᠯᠢ ᠶᠢᠨ ᠬᠠᠨᠳᠠᠨ ᠤ ᠨᠡᠶᠢᠲᠡ ᠲᠣᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠶᠢᠨ ᠲᠥᠬᠥᠭᠡᠷᠦᠮᠵᠢ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠶᠢᠨ ᠲᠥᠬᠥᠭᠡᠷᠦᠮᠵᠢ ᠶᠢᠨ ᠲᠥᠷᠥᠯ ᠬᠡᠯᠪᠡᠷᠢ᠃</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
-    <value />
+    <value>ᠳᠡᠭᠡᠷ᠎ᠡ ᠤᠳᠠᠭᠠᠨ ᠤ ᠭᠠᠷᠭᠠᠯᠲᠠ ᠃</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
-    <value />
+    <value>ᠲᠥᠷᠥᠯ ᠬᠤᠪᠢᠶᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpActionType_Analyze" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠳᠠᠯᠤᠯᠲᠠ ᠃</value>
   </data>
   <data name="MpActionType_Conditional" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠯᠳᠦᠭᠡᠨ ᠦ ᠵᠦᠢᠯ ᠪᠤᠢ ᠃</value>
   </data>
   <data name="MpActionType_Trigger" xml:space="preserve">
-    <value />
+    <value>ᠦᠰᠦ ᠬᠦᠷᠦᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpActionType_Repeater" xml:space="preserve">
-    <value />
+    <value>ᠳᠤᠮᠳᠠᠳᠤ ᠵᠠᠯᠭᠠᠮᠵᠢᠯᠠᠭᠤᠷ ᠃</value>
   </data>
   <data name="MpActionType_FileWriter" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠢ ᠨᠠᠶᠢᠷᠠᠭᠤᠯᠤᠨ ᠪᠢᠴᠢᠬᠦ ᠪᠠᠭᠠᠵᠢ</value>
   </data>
   <data name="MpActionType_SetClipboard" xml:space="preserve">
-    <value />
+    <value>ᠨᠠᠭᠠᠯᠲᠠ ᠬᠠᠪᠲᠠᠰᠤ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
-    <value />
+    <value>ᠬᠣᠢ᠌ᠰᠢᠯᠠ ᠃</value>
   </data>
   <data name="MpActionType_Alert" xml:space="preserve">
-    <value />
+    <value>ᠰᠡᠷᠡᠮᠵᠢ ᠶᠢᠨ ᠳᠣᠬᠢᠶ᠎ᠠ ᠃</value>
   </data>
   <data name="MpActionType_ApplicationCommand" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠵᠠᠷᠯᠢᠭ ᠃</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTriggerType_ClipAdded" xml:space="preserve">
-    <value />
+    <value>ᠨᠢᠭᠡᠨᠲᠡ ᠯᠣᠭᠢᠭ ᠨᠡᠮᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠤᠨ ᠰᠢᠰᠲ᠋ᠧᠮ ᠨᠢᠭᠡᠨᠲᠡ ᠥᠭᠡᠷᠡᠴᠢᠯᠡᠭ᠍ᠳᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpTriggerType_ClipTagged" xml:space="preserve">
-    <value />
+    <value>Clip ᠲᠡᠮᠳᠡᠭ᠍ ᠃</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠶᠧ ᠳ᠋ᠢᠶᠠᠨ ᠃</value>
   </data>
   <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
-    <value />
+    <value>ᠰᠠᠮᠵᠠ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠢ ᠪᠠᠭᠤᠯᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
-    <value />
+    <value>ᠳᠣᠲᠣᠭᠠᠳᠤ᠃</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
-    <value />
+    <value>ᠪᠣᠯᠵᠣᠭ᠎ᠠ ᠠᠴᠠ ᠵᠥᠷᠢᠴᠡ</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠳᠬᠠᠯ ᠃</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
-    <value />
+    <value>ᠠᠵᠢᠯᠯᠠᠬᠤ ᠰᠢᠰᠲ᠋ᠧᠮ ᠃</value>
   </data>
   <data name="MpPluginDependencyType_app" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠃</value>
   </data>
   <data name="MpPluginDependencyType_lib" xml:space="preserve">
-    <value />
+    <value>ᠡᠷᠬᠡ ᠴᠢᠯᠦᠭᠡ᠃</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
-    <value />
+    <value>ᠣᠬᠣᠷ ᠮᠡᠳᠡᠭᠡ ᠶᠠᠪᠤᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_Html" xml:space="preserve">
-    <value />
+    <value>Html ᠬᠡᠯᠪᠡᠷᠢ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
-    <value />
+    <value>RTF ᠶᠢᠨ ᠬᠢ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠶᠢᠷᠢ ᠶᠢᠨ ᠵᠢᠷᠤᠭ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠤᠨᠠᠪᠠ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_Csv" xml:space="preserve">
-    <value />
+    <value>CSV ᠰᠢᠷᠢᠰ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
-    <value />
+    <value>ᠳᠣᠲᠣᠭᠠᠳᠤ ᠠᠭᠤᠯᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
-    <value />
+    <value>Unicodde ᠪᠢᠴᠢᠭ᠌᠃</value>
   </data>
   <data name="MpClipboardFormatType_OemText" xml:space="preserve">
-    <value />
+    <value>OEM ᠵᠣᠬᠢᠶᠠᠯ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
-    <value />
+    <value>Xaml ( ᠠᠩᠭ᠌ᠯᠢ ᠬᠡᠯᠡ ᠄ Xaml )</value>
   </data>
   <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
-    <value />
+    <value>Xaml ᠪᠣᠭᠴᠣ ᠃</value>
   </data>
   <data name="MpClipboardFormatType_Custom" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠳᠬᠠᠯ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
-    <value />
+    <value>ᠲᠡᠮᠳᠡᠭ᠍ᠯᠡᠬᠦ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Status" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠶᠢᠷᠢ ᠰᠠᠭᠤᠷᠢ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Register" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠩᠰᠠᠯᠠᠭᠤᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
-    <value />
+    <value>ᠭᠣᠤᠯ ᠰᠡᠳᠦᠪ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
-    <value />
+    <value>ᠦᠰᠦᠭ ᠲᠠᠨᠢᠬᠤ ᠪᠡᠶ᠎ᠡ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠭᠤ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
-    <value />
+    <value>ᠴᠣᠩᠬᠣ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Hints" xml:space="preserve">
-    <value />
+    <value>ᠰᠠᠨᠠᠭᠤᠯᠤᠮᠵᠢ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_International" xml:space="preserve">
-    <value />
+    <value>ᠳᠡᠯᠡᠬᠡᠢ ᠶᠢᠨ ᠬᠢᠨ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Limits" xml:space="preserve">
-    <value />
+    <value>ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠯ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠭᠠᠭᠤ</value>
   </data>
   <data name="MpSettingsFrameType_Startup" xml:space="preserve">
-    <value />
+    <value>ᠡᠬᠢᠯᠡᠭᠦᠯᠦᠨ᠎ᠡ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Search" xml:space="preserve">
-    <value />
+    <value>ᠡᠷᠢᠬᠦ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
-    <value />
+    <value>ᠠᠭᠤᠯᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
-    <value />
+    <value>ᠣᠷᠣᠢ ᠶᠢᠨ ᠳᠡᠷᠭᠡᠳᠡᠬᠢ ᠭᠠᠷ ᠤᠨ ᠳᠣᠬᠢᠶ᠎ᠠ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
-    <value />
+    <value>ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_System" xml:space="preserve">
-    <value />
+    <value>ᠰᠢᠰᠲ᠋ᠧᠮ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
-    <value />
+    <value>ᠨᠢᠭᠤᠴᠠ ᠨᠣᠮᠧᠷ ᠃</value>
   </data>
   <data name="MpSettingsFrameType_Logs" xml:space="preserve">
-    <value />
+    <value>ᠤᠭ ᠮᠣᠳᠣ᠃</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
-    <value />
+    <value>ᠦᠵᠡ ᠃</value>
   </data>
   <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
-    <value />
+    <value>ᠤᠭᠰᠠᠷᠠᠬᠤ ᠃</value>
   </data>
   <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
-    <value />
+    <value>ᠰᠢᠨᠡᠴᠢᠯᠡᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠳᠦᠰᠦ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠨᠣᠭ ᠲᠥᠬᠥᠭᠡᠷᠦᠮᠵᠢ ᠃</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
-    <value />
+    <value>ᠶᠤᠸᠠᠨ᠃</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠭ᠎ᠠ ᠪᠦᠷᠢᠳᠬᠡᠯ ᠦᠨ ᠤᠬᠠᠭᠠᠨ᠃</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
-    <value />
+    <value>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠬᠠᠶᠢᠭ ᠃</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
-    <value />
+    <value>ᠡᠶ᠎ᠡ ᠨᠠᠶᠢᠷᠠ</value>
   </data>
   <data name="MpNextJoinOptionType_Or" xml:space="preserve">
-    <value />
+    <value>ᠡᠰᠡᠬᠦᠯ᠎ᠡ᠃</value>
   </data>
   <data name="MpNextJoinOptionType_Not" xml:space="preserve">
-    <value />
+    <value>ᠦᠭᠡᠢ ᠃</value>
   </data>
   <data name="MpRootOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpRootOptionType_Clip" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠵᠠᠭᠤ ᠃</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
-    <value />
+    <value>ᠴᠤᠭᠯᠠᠭᠤᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpRootOptionType_Sources" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠃</value>
   </data>
   <data name="MpRootOptionType_History" xml:space="preserve">
-    <value />
+    <value>ᠲᠡᠦᠬᠡ᠃</value>
   </data>
   <data name="MpTextOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpTextOptionType_Matches" xml:space="preserve">
-    <value />
+    <value>ᠤᠷᠤᠯᠳᠤᠭᠠᠨ ᠃</value>
   </data>
   <data name="MpTextOptionType_Contains" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠲᠠᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>ᠡᠬᠢᠯᠡᠯᠲᠡ ᠨᠢ ᠃</value>
   </data>
   <data name="MpTextOptionType_EndsWith" xml:space="preserve">
-    <value />
+    <value>ᠲᠡᠭᠦᠰᠭᠡᠯ ᠢ ᠲᠡᠭᠦᠰᠭᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpTextOptionType_RegEx" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠩᠰᠠᠯᠠᠭᠤᠯᠤᠭᠰᠠᠨ Ex᠃</value>
   </data>
   <data name="MpNumberOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpNumberOptionType_Equals" xml:space="preserve">
-    <value />
+    <value>ᠲᠡᠢ᠌ᠮᠦ ᠃</value>
   </data>
   <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
-    <value />
+    <value>ᠶᠡᠬᠡ ᠃</value>
   </data>
   <data name="MpNumberOptionType_LessThan" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpNumberOptionType_IsNot" xml:space="preserve">
-    <value />
+    <value>ᠯᠠᠮᠠ ᠃</value>
   </data>
   <data name="MpColorOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpColorOptionType_Hex" xml:space="preserve">
-    <value />
+    <value>ᠠᠷᠪᠠᠨ ᠵᠢᠷᠭᠤᠭ᠎ᠠ ᠶᠢᠨ ᠳᠦᠷᠢᠮ᠃</value>
   </data>
   <data name="MpColorOptionType_ARGB" xml:space="preserve">
-    <value />
+    <value>A R G B</value>
   </data>
   <data name="MpDimensionOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpDimensionOptionType_Width" xml:space="preserve">
-    <value />
+    <value>ᠥᠷᠭᠡᠳᠬᠡᠴᠡ ᠃</value>
   </data>
   <data name="MpDimensionOptionType_Height" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠳᠦᠷ ᠦᠨ ᠬᠡᠮᠵᠢᠶ᠎ᠡ ᠃</value>
   </data>
   <data name="MpImageOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpImageOptionType_Dimensions" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠨᠭ᠌᠃</value>
   </data>
   <data name="MpImageOptionType_Color" xml:space="preserve">
-    <value />
+    <value>ᠥᠩᠭᠡ ᠃</value>
   </data>
   <data name="MpFileOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpFileOptionType_Audio" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠭᠤᠨ ᠤ ᠳᠠᠪᠲᠠᠮᠵᠢ ᠃</value>
   </data>
   <data name="MpFileOptionType_Compressed" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠠᠰᠬᠠ ᠃</value>
   </data>
   <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
-    <value />
+    <value>ᠭᠡᠷᠡᠯ ᠫᠠᠨᠰᠠ ᠪᠣᠯᠣᠨ ᠵᠠᠭᠤᠴᠢ ᠃</value>
   </data>
   <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠭ᠎ᠠ ᠪᠠᠷᠢᠮᠲᠠ ᠪᠣᠯᠤᠨ ᠳ᠋ᠠᠶᠢᠲ᠋ᠠ ᠬᠥᠮᠥᠷᠭᠡ᠃</value>
   </data>
   <data name="MpFileOptionType_Document" xml:space="preserve">
-    <value />
+    <value>ᠠᠯᠪᠠᠨ ᠪᠢᠴᠢᠭ᠃</value>
   </data>
   <data name="MpFileOptionType_Email" xml:space="preserve">
-    <value />
+    <value>ᠡᠯᠧᠺᠲ᠋ᠷᠣᠨ ᠰᠢᠤᠳᠠᠨ ᠤ ᠵᠦᠢᠯ ᠃</value>
   </data>
   <data name="MpFileOptionType_Executable" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠵᠦ ᠪᠣᠯᠤᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpFileOptionType_Font" xml:space="preserve">
-    <value />
+    <value>ᠦᠰᠦᠭ ᠦᠨ ᠪᠡᠶ᠎ᠡ ᠃</value>
   </data>
   <data name="MpFileOptionType_Image" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠷᠤᠭ ᠳᠦᠷᠰᠦ ᠃</value>
   </data>
   <data name="MpFileOptionType_Internet" xml:space="preserve">
-    <value />
+    <value>ᠢᠨᠲ᠋ᠸᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠠ᠃</value>
   </data>
   <data name="MpFileOptionType_Presentation" xml:space="preserve">
-    <value />
+    <value>ᠲᠠᠨᠢᠯᠴᠠᠭᠤᠯᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpFileOptionType_Programming" xml:space="preserve">
-    <value />
+    <value>ᠫᠷᠤᠭ᠍ᠷᠠᠮ ᠫᠷ</value>
   </data>
   <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
-    <value />
+    <value>ᠡᠯᠧᠺᠲ᠋ᠷᠣᠨ ᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpFileOptionType_System" xml:space="preserve">
-    <value />
+    <value>ᠰᠢᠰᠲ᠋ᠧᠮ ᠃</value>
   </data>
   <data name="MpFileOptionType_Video" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠷᠠᠭᠠᠨ ᠳᠠᠪᠲᠠᠮᠵᠢ ᠃</value>
   </data>
   <data name="MpFileOptionType_UserDefined" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠴᠢ ᠶᠢᠨ ᠲᠣᠮᠢᠶᠠᠯᠠᠯᠲᠠ ᠃</value>
   </data>
   <data name="MpFileOptionType_Custom" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠳᠬᠠᠯ ᠃</value>
   </data>
   <data name="MpFileContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpFileContentOptionType_Path" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠮ ᠮᠥᠷ ᠃</value>
   </data>
   <data name="MpFileContentOptionType_Name" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠷ᠎ᠡ ᠃</value>
   </data>
   <data name="MpFileContentOptionType_Kind" xml:space="preserve">
-    <value />
+    <value>ᠲᠥᠷᠥᠯ ᠃</value>
   </data>
   <data name="MpContentTypeOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpContentTypeOptionType_Text" xml:space="preserve">
-    <value />
+    <value>ᠣᠬᠣᠷ ᠮᠡᠳᠡᠭᠡ ᠶᠠᠪᠤᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentTypeOptionType_Image" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠷᠤᠭ ᠳᠦᠷᠰᠦ ᠃</value>
   </data>
   <data name="MpContentTypeOptionType_Files" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠃</value>
   </data>
   <data name="MpAppOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠤᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ ᠃</value>
   </data>
   <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
-    <value />
+    <value>ᠠᠬᠢᠴᠠ ᠶᠢᠨ ᠵᠠᠮ ᠮᠥᠷ ᠃</value>
   </data>
   <data name="MpWebsiteOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpWebsiteOptionType_Url" xml:space="preserve">
-    <value />
+    <value>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠬᠠᠶᠢᠭ ᠃</value>
   </data>
   <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
-    <value />
+    <value>ᠣᠷᠣᠨ ᠪᠦᠰᠡ᠃</value>
   </data>
   <data name="MpWebsiteOptionType_Title" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠷᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpSourcesOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpSourcesOptionType_Device" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠨᠣᠭ ᠲᠥᠬᠥᠭᠡᠷᠦᠮᠵᠢ ᠃</value>
   </data>
   <data name="MpSourcesOptionType_App" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠃</value>
   </data>
   <data name="MpSourcesOptionType_Website" xml:space="preserve">
-    <value />
+    <value>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠥᠷᠲᠡᠭᠡ ᠃</value>
   </data>
   <data name="MpTransactionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpTransactionType_Created" xml:space="preserve">
-    <value />
+    <value>ᠡᠭᠦᠳᠦᠨ ᠪᠠᠶᠢᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpTransactionType_Dropped" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠷᠠᠪᠠ ᠃</value>
   </data>
   <data name="MpTransactionType_Dragged" xml:space="preserve">
-    <value />
+    <value>ᠴᠢᠷᠴᠦ ᠴᠢᠷᠬᠦ ᠃</value>
   </data>
   <data name="MpTransactionType_Pasted" xml:space="preserve">
-    <value />
+    <value>ᠨᠠᠭᠠᠬᠤ᠃</value>
   </data>
   <data name="MpTransactionType_Copied" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠯᠭᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpTransactionType_Cut" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠴᠢ ᠃</value>
   </data>
   <data name="MpTransactionType_Edited" xml:space="preserve">
-    <value />
+    <value>ᠨᠠᠢ᠌ᠷᠠᠭᠤᠯᠤᠭᠴᠢ ᠃</value>
   </data>
   <data name="MpTransactionType_Analyzed" xml:space="preserve">
-    <value />
+    <value>ᠵᠠᠳᠠᠯᠤᠯᠲᠠ ᠃</value>
   </data>
   <data name="MpTransactionType_Appended" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠮᠡᠯᠲᠡ᠃</value>
   </data>
   <data name="MpTransactionType_Recreated" xml:space="preserve">
-    <value />
+    <value>ᠳᠠᠬᠢᠨ ᠰᠢᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpTransactionType_Linked" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠷᠢᠯᠴᠠᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpTransactionType_Unlinked" xml:space="preserve">
-    <value />
+    <value>ᠬᠣᠯᠪᠣᠭ᠎ᠠ ᠦᠭᠡᠢ ᠃</value>
   </data>
   <data name="MpTransactionType_Error" xml:space="preserve">
-    <value />
+    <value>ᠪᠤᠷᠤᠭᠤ ᠃</value>
   </data>
   <data name="MpTransactionType_System" xml:space="preserve">
-    <value />
+    <value>ᠰᠢᠰᠲ᠋ᠧᠮ ᠃</value>
   </data>
   <data name="MpDateTimeOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠮᠤᠭ  ᠤᠨ ᠰᠡᠭᠦᠯ</value>
   </data>
   <data name="MpDateTimeOptionType_Before" xml:space="preserve">
-    <value />
+    <value>ᠥᠩᠭᠡᠷᠡᠭᠰᠡᠨ ᠳᠦ ᠃</value>
   </data>
   <data name="MpDateTimeOptionType_After" xml:space="preserve">
-    <value />
+    <value>ᠰᠡᠭᠦᠯᠡᠷ ᠃</value>
   </data>
   <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠡᠬᠡᠷ ᠣᠭᠲᠣᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
-    <value />
+    <value>ᠥᠨᠥᠳᠥᠷ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>ᠥᠴᠥᠭᠡᠳᠦᠷ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
-    <value />
+    <value>ᠡᠨᠡ ᠭᠠᠷᠠᠭ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
-    <value />
+    <value>ᠡᠨᠡ ᠰᠠᠷ᠎ᠠ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
-    <value />
+    <value>ᠡᠨᠡ ᠵᠢᠯ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠡᠬᠡᠷ ᠣᠭᠲᠣᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>ᠡᠬᠢᠯᠡᠭᠦᠯᠦᠨ᠎ᠡ᠃</value>
   </data>
   <data name="MpDateAfterUnitType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
-    <value />
+    <value>ᠥᠴᠥᠭᠡᠳᠦᠷ ᠃</value>
   </data>
   <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
-    <value />
+    <value>ᠲᠦᠷᠦᠭᠦᠦ ᠭᠠᠷᠠᠭ ᠃</value>
   </data>
   <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
-    <value />
+    <value>ᠲᠦᠷᠦᠭᠦᠦ ᠰᠠᠷ᠎ᠠ ᠃</value>
   </data>
   <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
-    <value />
+    <value>ᠨᠢᠳᠤᠨᠤᠨ ᠵᠢᠯ ᠃</value>
   </data>
   <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠡᠬᠡᠷ ᠣᠭᠲᠣᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
-    <value />
+    <value>ᠡᠬᠢᠯᠡᠭᠦᠯᠦᠨ᠎ᠡ᠃</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
-    <value />
+    <value>ᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
-    <value />
+    <value>ᠡᠳᠦᠷ ᠃</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠷᠠᠭ ᠃</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
-    <value />
+    <value>ᠰᠠᠷ᠎ᠠ ᠃</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠯ ᠃</value>
   </data>
   <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠡᠳᠦᠷ ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentSortType_Source" xml:space="preserve">
-    <value />
+    <value>ᠢᠷᠡᠯᠲᠡ ᠃</value>
   </data>
   <data name="MpContentSortType_Title" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠷᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpContentSortType_ItemData" xml:space="preserve">
-    <value />
+    <value>ᠪᠣᠳᠠᠰ ᠤᠨ ᠲᠣᠭ᠎ᠠ ᠪᠠᠷᠢᠮᠲᠠ ᠃</value>
   </data>
   <data name="MpContentSortType_ItemType" xml:space="preserve">
-    <value />
+    <value>ᠲᠥᠷᠥᠯ ᠵᠦᠢᠯ ᠦᠨ ᠲᠥᠷᠥᠯ ᠬᠡᠯᠪᠡᠷᠢ ᠃</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠰᠡᠨ ᠬᠤᠪᠢ᠃</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
-    <value />
+    <value>ᠳᠣᠲᠣᠭᠠᠳᠤ᠃</value>
   </data>
   <data name="MpRoutingType_Passive" xml:space="preserve">
-    <value />
+    <value>ᠰᠠᠨᠠᠭᠠᠴᠢᠯᠠᠭᠠᠲᠤ ᠦᠭᠡᠢ ᠃</value>
   </data>
   <data name="MpRoutingType_Pre" xml:space="preserve">
-    <value />
+    <value>ᠡᠮᠦᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpRoutingType_Post" xml:space="preserve">
-    <value />
+    <value>ᠨᠡᠶᠢᠲᠡᠯᠡᠨ᠎ᠡ᠃</value>
   </data>
   <data name="MpRoutingType_Override" xml:space="preserve">
-    <value />
+    <value>ᠪᠦᠷᠬᠦᠴᠡ᠃</value>
   </data>
   <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠭᠴᠠᠭᠠᠷ ᠪᠥᠷᠬᠥᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
-    <value />
+    <value>ᠪᠠᠭᠲᠠᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠡᠬᠡᠷ ᠣᠭᠲᠣᠯᠬᠤ ᠃</value>
   </data>
   <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
-    <value />
+    <value>ᠡᠬᠢᠯᠡᠯᠲᠡ ᠨᠢ ᠃</value>
   </data>
   <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
-    <value />
+    <value>ᠲᠡᠭᠦᠰᠭᠡᠯ ᠢ ᠲᠡᠭᠦᠰᠭᠡᠵᠡᠢ ᠃</value>
   </data>
   <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠩᠬᠢᠨᠢ ᠢᠯᠡᠳᠬᠡᠬᠦ ᠶᠣᠰᠣᠯᠠᠯ ᠃</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
-    <value />
+    <value>ᠡᠷᠬᠡ ᠴᠢᠯᠦᠭᠡ᠃</value>
   </data>
   <data name="MpUserAccountType_Basic" xml:space="preserve">
-    <value />
+    <value>ᠦᠨᠳᠦᠰᠦᠨ ᠃</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
-    <value />
+    <value>ᠬᠢᠵᠠᠭᠠᠷ ᠦᠭᠡᠢ ᠃</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
-    <value />
+    <value>— ᠰᠣᠩᠭᠣᠭᠠᠷᠠᠢ —</value>
   </data>
   <data name="MpContentOptionType_Type" xml:space="preserve">
-    <value />
+    <value>ᠲᠦᠷᠦᠯ ᠬᠡᠯᠪᠡᠷᠢ᠃</value>
   </data>
   <data name="MpContentOptionType_Text" xml:space="preserve">
-    <value />
+    <value>ᠣᠬᠣᠷ ᠮᠡᠳᠡᠭᠡ ᠶᠠᠪᠤᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentOptionType_Images" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠷᠤᠭ ᠳᠦᠷᠰᠦ ᠃</value>
   </data>
   <data name="MpContentOptionType_Files" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠃</value>
   </data>
   <data name="MpContentOptionType_AnyContent" xml:space="preserve">
-    <value />
+    <value>ᠶᠠᠮᠠᠷᠪᠠ ᠠᠭᠤᠯᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
-    <value />
+    <value>ᠭᠠᠷᠴᠠᠭ ᠃</value>
   </data>
   <data name="MpContentOptionType_Annotation" xml:space="preserve">
-    <value />
+    <value>ᠲᠠᠶᠢᠯᠪᠤᠷᠢ ᠃</value>
   </data>
   <data name="MpContentOptionType_Color" xml:space="preserve">
-    <value />
+    <value>ᠥᠩᠭᠡ ᠃</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
-    <value />
+    <value>ᠭᠣᠤᠯᠳᠠᠭᠤ᠃</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
-    <value />
+    <value>ᠬᠤᠯᠤᠭᠠᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value />
+    <value>ᠲᠣᠳᠣᠷᠬᠠᠢ ᠮᠡᠳᠡᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠰᠤᠨ᠎ᠠ᠃</value>
   </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTagType_Link" xml:space="preserve">
-    <value />
+    <value>ᠬᠣᠯᠪᠣᠬᠤ</value>
   </data>
   <data name="MpTagType_Query" xml:space="preserve">
-    <value />
+    <value>ᠠᠰᠠᠭᠤᠨ ᠯᠠᠪᠯᠠᠬᠤ ᠃</value>
   </data>
   <data name="MpTagType_Group" xml:space="preserve">
-    <value />
+    <value>ᠰᠦᠷᠦᠭ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
-    <value />
+    <value>ᠱᠣᠰᠢᠭ᠎ᠠ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_All" xml:space="preserve">
-    <value />
+    <value>ᠪᠥᠷ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
-    <value />
+    <value>ᠬᠤᠷᠢᠶᠠᠨ ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
-    <value />
+    <value>ᠱᠦᠭᠦᠭᠦᠷ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
-    <value />
+    <value>ᠬᠣᠭ ᠨᠣᠪᠰᠢ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Today" xml:space="preserve">
-    <value />
+    <value>ᠥᠨᠥᠳᠥᠷ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
-    <value />
+    <value>ᠬᠡᠯᠪᠡᠷᠢ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Text" xml:space="preserve">
-    <value />
+    <value>ᠣᠬᠣᠷ ᠮᠡᠳᠡᠭᠡ ᠶᠠᠪᠤᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Images" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠷᠤᠭ ᠳᠦᠷᠰᠦ ᠃</value>
   </data>
   <data name="MpReadOnlyTagType_Files" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠃</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
-    <value />
+    <value>ᠣᠬᠣᠷ ᠮᠡᠳᠡᠭᠡ ᠶᠠᠪᠤᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
-    <value />
+    <value>ᠵᠢᠷᠤᠭ ᠳᠦᠷᠰᠦ ᠃</value>
   </data>
   <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
-    <value />
+    <value>ᠪᠢᠴᠢᠭ᠌ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠃</value>
   </data>
   <data name="WatcherChangeTypes_Created" xml:space="preserve">
-    <value />
+    <value>ᠡᠭᠦᠳᠦᠨ ᠪᠠᠶᠢᠭᠤᠯᠤᠨ᠎ᠠ ᠃</value>
   </data>
   <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
-    <value />
+    <value>ᠬᠠᠰᠤᠨ᠎ᠠ᠃</value>
   </data>
   <data name="WatcherChangeTypes_Changed" xml:space="preserve">
-    <value />
+    <value>ᠬᠣᠪᠢᠷᠠᠨ᠎ᠠ᠃</value>
   </data>
   <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
-    <value />
+    <value>ᠬᠦᠨᠳᠦ ᠨᠡᠷᠡᠶᠢᠳᠦᠨ᠎ᠡ ᠃</value>
   </data>
   <data name="WatcherChangeTypes_All" xml:space="preserve">
-    <value />
+    <value>ᠪᠥᠷ ᠃</value>
   </data>
 </root>

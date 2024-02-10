@@ -1,0 +1,12 @@
+{
+  "title": "Alapvető vágólap -kezelő",
+  "description": "Az alapértelmezett vágólap -formátumokat kezeli",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Core, vágólap, húzás és csepp, szöveg, RTF, gazdag szöveg, HTML, CSV, kép, PNG, JPG, JPEG, Link",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

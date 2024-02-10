@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>کوئی بھی خصوصیات سبسکرپشن کے ذریعہ محدود نہیں ہے ، صرف اسٹوریج کی گنجائش ہے اور کسی بھی وقت اسے تبدیل کیا جاسکتا ہے۔</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>اپنے موجودہ اکاؤنٹ کو بحال کریں ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>مواد اور کوڑے دان ہیں
+{0} اور {1} تک محدود
+بالترتیب کلپس۔</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>مواد کے {2} کلپس اور لامحدود ردی کی ٹوکری میں اسٹوریج کی اجازت دیتا ہے۔</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>غیر محدود اور لامحدود مواد اور ردی کی ٹوکری میں اسٹوریج۔</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>بحال کریں</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>مفت</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>معیار</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>لامحدود</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>سبسکرپشن</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>آپ کی رازداری اہم ہے اور کلپ بورڈ کا ڈیٹا بہت ذاتی ہوسکتا ہے۔ اسٹوریج کو ہمیشہ خفیہ کیا جاتا ہے لیکن آپ ایک پاس ورڈ مرتب کرسکتے ہیں جس کی ضرورت ہو گی اگر آپ کا آلہ چوری ہوجائے یا کوئی اور آپ کے آلے کو استعمال کررہا ہو۔</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>پاس ورڈ</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>فعال ہونے پر ، کسی بھی درخواست سے اسکرین کے اوپری حصے میں گھسیٹنے سے مانکی پیسٹ کا انکشاف ہوتا ہے تاکہ مواد کو آسانی سے بندر میں بند کردے۔</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>مرکزی ونڈو کے اوپری بائیں میں 'لاک' کو چالو کرنے سے اب بھی بندر کی مقدار میں گرنے کی اجازت ہوگی۔</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>'ترتیبات -&gt; ترجیحات -&gt; ونڈو' مینو سے ونڈو کی مزید ترجیحات دستیاب ہیں۔</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>یہاں ڈریگ کیلے!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>ڈریگ - سے - کھلا</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>کی بورڈ شارٹ کٹ کا جائزہ لیا جاسکتا ہے یا کسی بھی وقت 'ترتیبات -&gt; شارٹ کٹ' مینو سے تبدیل کیا جاسکتا ہے۔</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>تمام عالمی شارٹ کٹ غیر فعال ہوجائیں گے تاکہ آپ انہیں بعد میں خود مرتب کرسکیں۔</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>مونکی پیسٹ کے کلپ بورڈ شارٹ کٹ تمام ایپلی کیشنز میں دستیاب ہوں گے۔</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>اندرونی</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>پہلے سے طے شدہ</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>اشارہ پروفائل</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>ارے! آئیے مانکی پیسٹ کے ساتھ اپنے مجموعی تجربے کو بہتر بنانے کے لئے کچھ چیزیں مرتب کریں۔</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>خوش آمدید</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>بندر کی مقدار میں زیادہ سے زیادہ استعمال کرنے کے لئے ، جب آپ لاگ ان ہوتے ہیں تو خود بخود لوڈ کرنا ایک اچھا خیال ہے۔ لیکن ، یہ مکمل طور پر آپ پر منحصر ہے۔</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>اسے آرام دہ اور پرسکون رکھیں۔</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>لاگ ان پر بوجھ؟</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>جب فعال ہوجائے تو ، اسکرین کے اوپری حصے میں ایک اسکرول اشارہ بندر بند کریں گے۔</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>بائیں - ٹاسک بار کے آئیکن پر کلک کرنے سے اب بھی بندر کی مقدار کھل جائے گی۔</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>'ترتیبات -&gt; ترجیحات -&gt; ونڈو' مینو سے ونڈو کی مزید ترجیحات دستیاب ہیں۔</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>آسان ٹھیک ہے؟</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>یہاں سکرول کریں!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>اسکرول - سے - کھلا</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "سینٹر"&gt; بندر ہے &lt;اسپین کلر = "ریڈ&gt; مکمل طور پر مربوط &lt;/span&gt; ڈریگ کے ساتھ - اور - ڈراپ &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>اسے یہاں چھوڑ دو!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p سیدھ = "سینٹر"&gt; اس طرح ، بندر کی قیمت تک رسائی حاصل کی جاسکتی ہے &lt;br&gt; &lt;اسپین رنگ = "سرخ"&gt; بغیر کلک کے &lt;/span&gt; یا یہاں تک کہ &lt;اسپین رنگ = "سرخ"&gt; آنکھ کی بیٹنگ &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>مجھے کھینچو!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>اسے آزمائیں!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>اسے آزمائیں!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>کوئی نتائج دستیاب نہیں ہیں۔</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>تصدیق کریں</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>ریفریش</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>تلاش ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>ترتیبات</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>انحصار:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>انسٹال کریں</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>کیا آپ واقعی '{0}' اور اس کے تمام پیش سیٹوں اور شارٹ کٹ کو ہٹانا چاہتے ہیں؟</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>انسٹال</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' کا کوئی نتیجہ نہیں ہے۔</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>کوئی انتخاب نہیں۔</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>کوئی نہیں</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>کریڈٹ:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>تفصیل:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>عطیہ کریں:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>لائسنس:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>پروجیکٹ یو آر ایل:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>شائع:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>مجھے پڑھیں:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>اطلاع دیں:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>ٹیگز:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>اپ ڈیٹ</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>ورژن:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>ونڈو میں کھولیں</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>خارج</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>ریفریش</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>بچت کریں</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>حذف کرنے کے بعد!
+
+سے بچنے کے لئے اپ گریڈ کریں۔</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>کوڑے دان کے آگے!
+
+سے بچنے کے لئے اپ گریڈ کریں۔</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>فائلوں</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>تصویر</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>کاپی {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} فائلیں | {1} ایم بی ایس</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} چارس | {1} لائنیں</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} کاپیاں | {1} پیسٹ</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>اقدام</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>شامل کریں</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>کاپی</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>کٹ</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>چسپاں کریں</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} کاپی</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>غیر محفوظ شدہ فلٹر</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- براہ مہربانی منتخب کریں -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>شکلیں</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>قارئین</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>مصنفین</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>ہینڈلرز</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>حذف کریں</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>نقل</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>نام میں ترمیم کریں</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>ری سیٹ کریں</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>ٹیگز</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>عمل</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>عالمی روٹنگ</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>شارٹ کٹ</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>اشاروں کو منفرد ہونا چاہئے اور اس میں صرف ایک ان پٹ کلید ہوسکتی ہے۔</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; داخلی &lt;/b&gt; تمام شارٹ کٹ درخواست کے اندر ہی محدود ہیں۔ یہ واقعتا an ایک مطلوبہ آپشن نہیں ہے لیکن آپ کو عالمی &lt;i&gt; کسی دن &lt;/i&gt; بنانے کا ارادہ رکھنے والے شارٹ کٹ کو اپنی مرضی کے مطابق بنانے کی اجازت دے سکتا ہے۔ &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; ڈیفالٹ &lt;/b&gt; تمام عالمی شارٹ کٹ فعال ہیں۔ &lt;b&gt; مین ونڈو کو دکھائیں/چھپائیں &lt;/b&gt; شارٹ کٹ میں &lt;اسپین کلر = "ریڈ"&gt; اوور رائڈ &lt;/اسپین&gt; &lt;b&gt; کیپس لاک &lt;/b&gt; کلید کے لئے روٹنگ کا استعمال کیا گیا ہے۔ آپ کسی بھی وقت اس روٹنگ یا اشارے کو تبدیل کرسکتے ہیں۔ لیکن &lt;اسپین رنگ = "گرین"&gt; اسے آزمائیں &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;ہیڈ&gt; &lt;/ہیڈ&gt;
+&lt;باڈی&gt;
+&lt;h1&gt; عالمی شارٹ کٹ طریقوں &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; غیر فعال &lt;/b&gt; ایک شارٹ کٹ بندر کسی بھی درخواست میں سن لے گا۔ &lt;br&gt;
+*یہ ابھی کے لئے لینکس پر &lt;/i&gt; صرف &lt;/i&gt; آپشن ہے۔
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; پری &lt;/b&gt; شارٹ کٹ &lt;b&gt; &lt;i&gt; اس سے پہلے &lt;/i&gt; &lt;/b&gt; اس کو فعال ایپلی کیشن کے ذریعہ سنبھال لیا جائے گا۔ &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; پوسٹ &lt;/b&gt; شارٹ کٹ &lt;b&gt; &lt;i&gt; کے بعد &lt;/i&gt; &lt;/b&gt; اس کو فعال ایپلی کیشن کے ذریعہ سنبھال لیا جائے گا۔ &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; اوور رائڈ &lt;/b&gt; جب مانکی پیسٹ ایک اوور رائڈ شارٹ کٹ کی ان پٹ کلید (غیر - ترمیم کنندہ کلید) سنتا ہے تو &lt;/i&gt; چھپائے گا &lt;/i&gt; اس کلیدی پریس سے درخواست - سطح کے ان پٹ۔ &lt;br&gt;
+یہ آپشن اس بات کی ضمانت دے گا کہ شارٹ کٹ کو فعال درخواست کے تنازعات کے بغیر متحرک کیا گیا ہے۔
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; خصوصی اوور رائڈ &lt;/b&gt; یہ ایک خاص قسم کا اوور رائڈ موڈ ہے جو کیپس لاک کی کے لئے ڈیزائن کیا گیا ہے۔ یہ صرف &lt;b&gt; ایک &lt;/b&gt; کلید (غیر - ترمیم کنندہ) کو اس کی تفویض کے لئے اجازت دیتا ہے۔ &lt;br&gt;
+عام اوور رائڈ موڈ میں کیپس لاک &lt;i&gt; &lt;/i&gt; پر پھنس سکتا ہے جب دوسری چابیاں کے ساتھ مل کر دبایا جاتا ہے۔ &lt;br&gt;
+لہذا اس سے کوئی فرق نہیں پڑتا ہے کہ دوسری چابیاں کیا ہیں ، اگر &lt;b&gt; ہاٹکی &lt;/b&gt; شارٹ کٹ دبایا جاتا ہے تو اسے ختم کردیا جائے گا اور اسے &lt;/i&gt; پر پھنس جانے سے روکتا ہے۔
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>غیر فعال</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>جب یہ صارف اکاؤنٹ لاگ ان ہوجائے تو لوڈ اپ اپ اپ کریں ، دوسرے صارفین کے لئے نہیں۔</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; دستیاب رابطوں کا استعمال کرتے ہوئے (فیچر پلگ ان کی ضرورت ہوتی ہے) اس فیلڈ کو اس دستاویز کے اس ٹیمپلیٹ کی تمام مثالوں کے لئے استعمال کیا جائے گا یا کسی بھی میں اس کا بعد میں حوالہ دیا جائے گا۔ &lt;/p&gt; &lt;p&gt; لہذا مثال کے طور پر اگر ای میل ایڈریس منتخب کریں تو یہاں پھر آپ کے منتخب کردہ رابطے کا ای میل فیلڈ اس دستاویز میں موجود تمام مثالوں کے لئے استعمال ہوگا۔ &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = مختصر سال &lt;br/&gt; yyyy = لمبا سال &lt;br/&gt; m = مہینہ (1-12) &lt;br/&gt; ملی میٹر = مہینہ (01-12) &lt;br/&gt; ایم ایم ایم = ماہ کا خلاصہ (جنوری ، فروری .. . دسمبر) &lt;br/&gt; ایم ایم ایم = طویل مہینہ (جنوری ، فروری ... دسمبر) &lt;br/&gt; ڈی = دن (1 - 31) &lt;br/&gt; ڈی ڈی = دن (01 - 31) الفاظ میں ہفتے کا دن (پیر ، منگل ... اتوار) &lt;br/&gt; ای = ہفتہ کا مختصر دن الفاظ میں (پیر ، منگل ... سن) &lt;br/&gt; ڈی - عام دن (پہلا ، دوسرا ، تیسرا ، 21 ویں ، 22 ویں ، 23 ویں ، 31 ویں ، چوتھا ...) &lt;br/&gt; h = AM/PM میں گھنٹہ (0-12) &gt; H = دن میں گھنٹہ (0-23) &lt;br/&gt; HH = دن میں گھنٹہ (00-23) A = am/pm مارکر &lt;br/&gt; p = a.m./p.m. مارکر</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>موجودہ تاریخ اور/یا وقت کو پیسٹ کیا جائے گا جب ڈیٹ ٹائم ٹیمپلیٹس کے لئے تبدیل کیا جائے گا۔</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; اس ٹیمپلیٹ کے تمام واقعات فراہم کردہ متن کو استعمال کریں گے۔ &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; اس ٹیمپلیٹ کے تمام واقعات فراہم کردہ متن کو استعمال کریں گے۔ &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>بڑھانا ختم کریں</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>بلاک کو فعال کریں</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>ان لائن کو فعال کریں</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>ٹوگل دستی</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>ٹوگل دستی</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>روکیں</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>اس سے پہلے ٹوگل</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>اس سے پہلے ٹوگل</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>دوبارہ شروع کریں</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>ضمیمہ ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>چسپاں کریں</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>پن</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>انپن</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>تمام '{0}' اطلاعات کو چھپائیں</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>خارج</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>آخری فعال ایپ نامعلوم۔ بندر پیسٹ پر مطلوبہ ایپ پر سوئچ کریں۔</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>چسپاں کریں</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>کم سے کم</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>برائے مہربانی انتظار کریں...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>لاک</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>کھاتہ</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>مدد</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>کاپی پیسٹ</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>ترجیحات</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>ڈیفالٹس بحال</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>فلٹر ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>شارٹ کٹ</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>ایپ شامل کریں</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>ویب سائٹ شامل کریں</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>بلاک؟</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>ایپس</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>بلاک ڈومین؟</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>بلاک یو آر ایل؟</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>ڈومین</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>ماخذ URL کی پہچان اس بات پر منحصر ہے کہ میزبان کی درخواست کس طرح کلپ بورڈ دوستانہ ہے لہذا مسترد ہونے کی ضمانت نہیں دی جاسکتی ہے</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>ویب سائٹیں</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>کچھ بندر کی خصوصیات دیگر ایپلی کیشنز میں 'کاپی' واقعات کی نقالی کرنے کے لئے کی بورڈ آٹومیشن کا استعمال کرتی ہیں۔
+
+ان خصوصیات کو صحیح طریقے سے کام کرنے کو یقینی بنانے کے ل the انوکھا کاپی شارٹ کٹ (جیسے کنسول یا شیل کی طرح) کے ساتھ ایپ کو شامل کریں اور/یا منتخب کریں۔</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>کاپی شارٹ کٹ</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>کوئی نہیں</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>مخصوص ایپلی کیشن کے لئے صرف منتخب کردہ پریسٹس استعمال ہوں گے۔ جب غیر متعینہ طور پر ، &lt;em&gt; کلپ بورڈ سائڈبار &lt;/em&gt; میں پائے جانے والے پہلے سے طے شدہ پریسٹس استعمال ہوں گے۔</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>بہت ساری بندر کی خصوصیات دیگر ایپلی کیشنز کے ساتھ بات چیت کرنے کے لئے کی بورڈ آٹومیشن کا استعمال کرتی ہیں۔
+
+کچھ ایپلی کیشنز (مثال کے طور پر کچھ کنسولز یا گولوں کی طرح) میں غیر ڈیفالٹ پیسٹ شارٹ کٹ ہوسکتا ہے۔
+
+مناسب انٹرآپریبلٹی کو یقینی بنانے کے لئے ، اس درخواست کے لئے ان شارٹ کٹ کو یہاں ریکارڈ کریں۔</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>پیسٹ شارٹ کٹ</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>قارئین</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>مسترد شدہ ایپلی کیشنز سے کلپ بورڈ کی تمام نگرانی &lt;b&gt; نظرانداز &lt;/b&gt; ہوگی۔</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>مصنفین</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>ترمیم...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>شکلیں</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>مسترد</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>شارٹ کٹ</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>کیا آپ بھی '{1}' سے تمام {0} کلپس کو ہٹانا چاہیں گے؟</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>کلپس کو ہٹا دیں؟</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>درخواست</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>ایپ کو براؤز کریں ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>درخواست کا راستہ منتخب کریں</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>کیا آپ واقعی {0} کے لئے کسٹم شارٹ کٹ کو ہٹانا چاہتے ہیں؟</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>کیا آپ واقعی {0} کے لئے کسٹم فارمیٹس کو ہٹانا چاہتے ہیں؟</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>اس ایپ کے لئے کوئی تفویض کردہ کلپ بورڈ فارمیٹس نہیں ہے۔ کٹ/کاپی یا ڈریگ کی کوشش کرنے کے ذریعے اس سے کوئی ڈیٹا نہیں پڑھا جائے گا - اور - بندر بند کریں</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>اس ایپ کے لئے کوئی تفویض کردہ کلپ بورڈ فارمیٹس نہیں ہے۔ خودکار پیسٹ یا ڈریگ - اور - مانکی پیسٹ سے ڈراپ کا کوئی اثر نہیں پڑے گا (اس کا خالی ڈیٹا)۔</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>کیا آپ واقعی تمام شارٹ کٹ کو دوبارہ ترتیب دینا چاہتے ہیں؟ تمام کسٹم شارٹ کٹ کو ہٹا دیا جائے گا۔</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>کیا آپ کو یقین ہے کہ آپ اپنے شارٹ کٹ روٹنگ پروفائل کو '{0}' میں تبدیل کرنا چاہتے ہیں؟</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>سب</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>پسندیدہ</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>فلٹرز</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>شکلیں</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>ٹیگز</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>آج</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>کوڑے دان</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>کے بارے میں</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>آسان ٹھیک ہے؟</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>انپن پر ڈبل کلک کریں</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>اپنی مرضی کے مطابق</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>عالمی</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>یہ امتزاج '{0}' سے متصادم ہے جو محفوظ ہوجائے گا تو اسے صاف کردیا جائے گا۔</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>ایک شارٹ کٹ فراہم کرنا ضروری ہے۔</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>یہ ایک عالمی شارٹ کٹ ہے۔ اس کا مطلب ہے کہ جب بھی اس پر عمل درآمد کرنے کی کوشش کی جائے گی۔ دوسری درخواستوں سے شارٹ کٹ سے متصادم نہ ہونے کے ل it اسے کافی حد تک انوکھا بنانے کی کوشش کریں (یا 'روٹنگ کی قسم')۔</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>عالمی</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>شارٹ کٹ میں ایک اور صرف ایک غیر ترمیم کنندہ کلید ہونی چاہئے۔</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>ریکارڈ کرنے کے لئے کوئی کلید دبائیں ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>شارٹ کٹ تفویض کریں</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>اورجانیے...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>اپ گریڈ</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>منسوخ کریں</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>درست کریں</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>نظر انداز کریں</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>نہیں</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>ٹھیک ہے</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>دوبارہ کوشش کریں</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>شٹ ڈاؤن</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>جمع کرائیں</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>جی ہاں</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>سالانہ</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>ماہانہ</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>بلامعاوضہ آزمائیں!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>بلنگ سائیکل</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>ای میل</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>لاگ ان کریں</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>اپنا کنکشن چیک کریں
+اور دوبارہ کوشش کرو.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>لاگ آوٹ</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>اگلی ادائیگی</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>پاس ورڈ</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>رجسٹر کریں</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>ای میل درست نہیں ہے</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>پاس ورڈ میچ نہیں کرتے.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>پاس ورڈ کم از کم {0} حروف کا ہونا چاہئے۔</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>یاد ہے؟</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>اپنے اکاؤنٹ کی تصدیق کے ل your اپنے ای میل کو چیک کریں</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>پاس ورڈ ری سیٹ</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>ایم ایم ایم ڈی ، YYYY</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>ایم ایم ایم ڈی ، ایچ: ایم ایم ٹی ٹی</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>ملی میٹر/ڈی ڈی/وائی وائی ایچ ایچ: ایم ایم ٹی ٹی</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>کبھی نہیں</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>مفت {0} دن کی آزمائش</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>کارکردگی کا مظاہرہ کرنے میں ایک مسئلہ تھا
+آپ کی خریداری.
+
+آپ کے کنکشن کی جانچ پڑتال اور
+ترتیبات میں مدد مل سکتی ہے۔
+
+کیا آپ دوبارہ کوشش کرنا چاہیں گے؟</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>آپ کا اکاؤنٹ کامیابی کے ساتھ رہا ہے
+اپ گریڈ کیا گیا:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>کامیاب خریداری!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>غلطی</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>رابطہ ناکام.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>دوبارہ کوشش کریں</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>اکاؤنٹ بدل گیا</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>آپ کی سبسکرپشن اب {0}/{1} ہے جس میں {2} مواد اور {3} کوڑے دان کا اسٹوریج ہے۔
+لیکن فکر نہ کریں ، نیچے کی گھٹاؤ کے بعد کوئی ڈیٹا ضائع نہیں ہوتا ہے۔ صرف نئی کلپس کا اندازہ کیا جائے گا۔</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>مبارک ہو! آپ کی سبسکرپشن اب {0}/{1} ہے جس میں {2} مواد اور {3} کوڑے دان کا اسٹوریج ہے۔</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>ردی کی ٹوکری میں یا کسی چیز کو لنک کریں
+مزید شامل کرنے کے لئے '{0}' سے۔</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>زیادہ سے زیادہ '{0}' اسٹوریج {1} ہے۔</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>بحال کریں</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} مسدود ہے</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>مواد اور کوڑے دان کی گنجائش پہنچ گئی!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>زیادہ سے زیادہ '{0}' اسٹوریج {1} ہے۔</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>مواد کی گنجائش پہنچ گئی!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* آپ ان انتباہات کو چھپا سکتے ہیں
+سے 'سب کو چھپائیں' پر کلک کرنا
+اوپر اختیارات کا مینو۔</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>زیادہ سے زیادہ ردی کی ٹوکری میں اسٹوریج {0} ہے۔</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>کوڑے دان کی گنجائش پہنچ گئی!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} غلط ہے</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} کم از کم {1} حروف ہونا ضروری ہے</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} صرف {1} کریکٹر ہوسکتا ہے</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>چسپاں کریں: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>آپ کے {0} کی ادائیگی
+سبسکرپشن {1} کی وجہ سے تھی
+اور موصول نہیں ہوا ہے۔
+
+براہ کرم اپنی تازہ کاری کریں
+ادائیگی کی معلومات.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>آپ کے {0} کی ادائیگی
+سبسکرپشن {1} کی وجہ سے تھی
+اور موصول نہیں ہوا ہے۔
+
+براہ کرم اس سے رابطہ کریں
+آلہ پر انٹرنیٹ
+آپ کی رکنیت کے ساتھ اور
+جاری رکھنے کے لئے دوبارہ شروع کریں
+اپنے {0} منصوبہ کا استعمال کرتے ہوئے۔</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>آپ کے {0} کی ادائیگی
+سبسکرپشن {1} کی وجہ سے تھی
+اور موصول نہیں ہوا ہے۔
+
+براہ کرم کھولیں یا دوبارہ شروع کریں
+ڈیوائس پر بندر پیسٹ
+آپ کی رکنیت کے ساتھ
+اپنا استعمال جاری رکھیں
+{0} منصوبہ۔</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>اکاؤنٹ کی میعاد ختم ہوگئی</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>نوٹ</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>مائیکروسافٹ اسٹور درجے کی اجازت نہیں دیتا ہے
+سبسکرپشن ایڈونز میں تبدیلیاں۔
+
+آپ کو اپنا منسوخ کرنا ہوگا
+{0}/{1} اپنے آپ کو منصوبہ بنائیں
+یا آپ سے دونوں کے لئے معاوضہ لیا جائے گا۔
+
+کیا آپ اب ایسا کرنا چاہیں گے؟</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>آپ کا پاس ورڈ دوبارہ ترتیب دیا گیا ہے۔
+
+براہ کرم اپنا ای میل چیک کریں اور
+تبدیلی کے ل the لنک پر عمل کریں
+آپ کا پاس ورڈ</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>لاگ ان کریں</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>مصنف (زبانیں)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>اس کی ضرورت ہے کہ آپ جاری رکھنے سے پہلے مندرجہ ذیل لائسنس کی شرائط قبول کریں۔</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>مندرجہ ذیل پیکیج (زبانیں) کا تقاضا ہے کہ آپ انسٹال کرنے سے پہلے ان کے لائسنس کی شرائط قبول کریں۔</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>رد کرتا ہوں میں</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"میں قبول" پر کلک کرنے کا مطلب ہے کہ آپ اس درخواست کے لائسنس کی شرائط سے اتفاق کرتے ہیں۔ اگر آپ شرائط سے اتفاق نہیں کرتے ہیں تو ، "میں مسترد ہوں" پر کلک کریں۔</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"میں قبول" پر کلک کرنے کا مطلب یہ ہے کہ آپ مذکورہ پلگ ان (زبانیں) کے لائسنس کی شرائط سے اتفاق کرتے ہیں۔ اگر آپ شرائط سے اتفاق نہیں کرتے ہیں تو ، "میں مسترد ہوں" پر کلک کریں۔</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>لائسنس دیکھیں</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>لائسنس کی قبولیت</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>مجھے قبول ہے</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>آف لائن</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>غیر رجسٹرڈ</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>کیا</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ پاس ورڈ مماثل نہیں ہیں</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>پاس ورڈ</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>آپ کی رکنیت ہے
+اب {0}/{1} پر سیٹ کریں۔</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>اکاؤنٹ ملا</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>لاگ ان ناکام رہے</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>رجسٹریشن ناکام</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>رجسٹریشن کامیاب!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>غلطی کو دوبارہ ترتیب دیں</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>سبسکرپشن</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>نیا کیا ہے</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>کبھی نہیں</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>لامحدود</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>صلاحیت</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>باقی</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>کل</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>آپ کی ادائیگی ماضی ہے۔</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>خصوصی اوور رائڈ شارٹ کٹ میں صرف ایک کلید ہوسکتی ہے اور وہ کلید ایک ترمیمی کلید نہیں ہوسکتی ہے۔</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>میعاد ختم</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>لوڈنگ</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>غیر فعال</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>نوٹ! یہ پاس ورڈ اختیاری ہے اور صرف اضافی سیکیورٹی کے لئے۔ آپ کا ڈیٹا پہلے ہی خفیہ کردہ ہے اور کبھی مشترکہ نہیں ہے۔ یہ پاس ورڈ کسی ایسے شخص کو آسانی سے روکتا ہے جس کے آپ کو بندر بند کرنے سے نہیں ہوتا ہے اگر وہ کسی طرح آپ کے ڈیسک ٹاپ تک رسائی حاصل کرتے ہیں (چوری شدہ ، آپ کمرے سے نکل جاتے ہیں وغیرہ)۔</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>ڈراپ کی ترتیبات کو یاد رکھیں:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>پلگ ان کو براؤز کریں</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>تجزیہ کریں</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>فوری کارروائی</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>ٹوگل ترمیم کریں</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>ٹوگل پن</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>تشریحات</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>سادہ متن</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>ونڈو میں کھولیں</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>پیروی کرنے کے لئے + Ctrl پر کلک کریں ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>پیروی کرنے کے لئے + ALT پر کلک کریں ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>یہاں کسی بھی میڈیا کو پن یا چھوڑ دیں!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>صاف</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0 سے اوپر کی دہلیز آر جی بی اے کلر اسپیس میں یوکلیڈین فاصلہ استعمال کرتے ہوئے فجی رنگ کے ملاپ فراہم کرے گی۔
+
+مثال کے طور پر ، اگر سرخ (#FF0000) تلاش کی اصطلاح ہے اور سیاہ (#000000) ایک تصویری کلپ میں ایک پکسل ہے ، تو رنگین فاصلہ 255 ہوگا۔ سیاہ سے زیادہ فاصلہ 510 کا زیادہ سے زیادہ ممکن ہے ، جس میں الفا چینل بھی شامل ہے۔</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>مندرجہ ذیل میں سے سب سچ ہیں</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>کلپ بورڈ</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>مجموعے</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>ماؤس کے طریقوں</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>محرکات</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>توقف</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>دوبارہ شروع</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>نیا ٹرگر</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>پیش سیٹ شامل کریں</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>بندر ڈراپ وزرڈ</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>پریسیٹس</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>تجزیہ کار</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>کٹوم</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>سائیکل واقفیت</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>ٹوگل گرڈ لے آؤٹ</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>حساس کیس</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>دہلیز</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>پورا لفظ</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>کوئی بھی سیٹ نہیں ہے</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>روٹنگ</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>عمل</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>گرڈ</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>کیا</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>اگلے</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>پچھلا</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>چھوڑ دو</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>موجودہ اکاؤنٹ؟</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>اگلی ادائیگی</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>رجسٹریشن آپ کو اپنے تمام آلات (دستیابی کے بعد) میں اپنی ادائیگی کی رکنیت لے جانے دیتا ہے۔ ہم آپ کے ای میل کو اسپام نہیں کریں گے جس کا ہم وعدہ کرتے ہیں۔</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>سبسکرپشن</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>صارف کا نام</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>اندراج کرنے کی ضرورت ہے؟</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>ذرائع</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>عجیب ، کچھ بھی دستیاب نہیں ہے۔ کچھ غلط ہونا چاہئے 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>دور</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>دوبارہ شروع کرنے کی ضرورت ہے</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>اعلی درجے کی</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>'{0}' سے پلگ ان نکالنے میں غلطی</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>پلگ ان انسٹال کرنے میں غلطی: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>پلگ ان '{0}' کرپٹ یا نامناسب ڈائریکٹری ڈھانچے کو انسٹال کرنے میں خرابی۔ منشور '{1}' پر موجود ہونا چاہئے لیکن نہیں ملا۔</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>پلگ ان کو پارس کرنے میں غلطی '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>GID کے ساتھ بھری ہوئی کوئی پلگ ان نہیں: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} غلطی</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>dir '{0}' کو عارضی طور پر اسٹیجنگ پلگ ان میں خرابی</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>'{0}' سے '{1}' کی پشت پناہی کرنے میں غلطی۔ تفصیلات: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>جب کسی ٹیکسٹ باکس پر توجہ نہیں دی جاتی ہے تو متن کو ٹائپ شدہ خود بخود تلاش میں لاگو ہوجائے گا۔</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>آٹو تلاش ان پٹ</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>پاس ورڈ کی تبدیلی ناکام ہوگئی</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>تبدیل کریں</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>پاس ورڈ تبدیل کریں</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>صاف</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>واضح پاس ورڈ</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>مواد</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>مواد فونٹ کا سائز</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>جب سچ ہے تو ، کسی کلپ میں داخل کردہ بیرونی مواد کلپس فارمیٹنگ کا استعمال کرے گا نہ کہ ماخذ سے کیا دستیاب ہے۔</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>پیسٹ کریں ، ڈراپ کریں یا منزل کی شکل کے ساتھ شامل کریں</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>کیا آپ واقعی پاس ورڈ کو بھول جانا چاہتے ہیں؟</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>بھول جاؤ</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>پاس ورڈ بھول جانا</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>پروفائل</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>صلاحیت واٹر مارکس چھپائیں</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>جب نئے کلپ بورڈ مواد کو شامل کیا جاتا ہے تو اسے نئے کلپ کے طور پر ٹریک نہیں کیا جائے گا</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>ضمیمہ کو نظرانداز کریں</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>جب کلپ بورڈ کسی موجودہ کلپ سے میل کھاتا ہے تو ، اس کلپ کو نیا بنانے کے بجائے استعمال کیا جائے گا</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>نئی نقلوں کو نظرانداز کریں</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>ایپ کے اندر سے کلپ بورڈ کی تبدیلیوں کا سراغ نہیں لگایا جائے گا</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>اندرونی کلپ بورڈ سے باخبر رہنے کو نظرانداز کریں</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>جگہوں ، ٹیبز اور نئی لائنوں کو ٹریکنگ سے نظرانداز کیا جائے گا</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>صرف سفید جگہ کو نظرانداز کریں</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>لاگ ان پر لوڈ کریں</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>متحرک ونڈو</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>دھندلاپن</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>سلوک دکھائیں</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>مرکزی ونڈو آپ کے مانیٹر کے اوپری کنارے پر اسکرول اشارہ کرکے انکشاف کیا جائے گا</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>ٹاپ اسکرین اسکرول پر دکھائیں</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>اطلاع کا حجم</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>یہ ترتیب سسٹم کو ٹریک کرے گی - استعمال کے اعدادوشمار کے لئے وسیع کی بورڈ پیسٹ گنتی ہے۔ یہ معلومات نجی ہے اور مشترکہ نہیں ہے بلکہ گارنٹیڈ بھی نہیں ہے۔ درست نتائج میں 'ترتیبات -&gt; کاپی اور پیسٹ -&gt; شارٹ کٹ' میں درخواست کے لئے مخصوص کی بورڈ پیسٹ کمانڈ فراہم کرنے کی ضرورت پڑسکتی ہے۔</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>تاریخ چسپاں کریں</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>بہت سارے پنڈ کلپس (جیسے براؤزر ٹیبز) اہم میموری کا استعمال کرسکتے ہیں۔ ہٹانا سب سے پہلے - پہلے - باہر ہے</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>پن کی گنجائش</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>اس کا اطلاق تمام آٹو - تکمیل شدہ آدانوں پر ہوتا ہے ، نچلی اقدار کارکردگی کو بہتر بنائیں گی</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>حالیہ متن کی حد</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>کیا آپ کو یقین ہے کہ آپ چاہتے ہیں؟
+پہلے سے طے شدہ ترجیحات کو بحال کریں؟
+
+یہ کالعدم نہیں ہوسکتا!
+
+*درخواست مکمل ہونے کے بعد دوبارہ شروع ہوجائے گی۔</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>کیا آپ واقعی تمام اطلاعات کو دوبارہ ترتیب دینا چاہتے ہیں؟
+
+*یہ کالعدم نہیں ہوسکتا!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>کسی بیرونی پروگرام میں چسپاں کرتے وقت بندر پیسٹ کلپ بورڈ (اوور رائڈس) کا تعین کرتا ہے۔ بیرونی پیسٹ کے بعد کلپ بورڈ کی حالت کو بحال کرنے کی &lt;b&gt; کوشش &lt;/b&gt; ہوگی۔
+
+کل بحالی کی ضمانت نہیں دی جاسکتی ہے اور اعداد و شمار کے منبع کے لحاظ سے کارکردگی یا یہاں تک کہ کریش مانکی پیسٹ کو بھی کم کرسکتا ہے۔</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>بندر کے پیسٹ کے بعد کلپ بورڈ کو دوبارہ ترتیب دیں</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>پلگ ان کیشے کو راستے سے حذف نہیں کرسکا: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>تمام پلگ انز کو ابتدائی پہلے سے طے شدہ حالت میں دوبارہ ترتیب دیا جائے گا</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>پلگ ان کیشے</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>کیا آپ واقعی تمام پلگ ان کو ڈیفالٹس میں دوبارہ ترتیب دینا چاہتے ہیں؟</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>کیا آپ واقعی اپنا پاس ورڈ دوبارہ ترتیب دینا چاہتے ہیں؟</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>تمام ایپلیکیشن شارٹ کٹ کو ان کے پہلے سے طے شدہ کلیدی اشاروں پر دوبارہ ترتیب دیا جائے گا۔</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>شارٹ کٹ کو دوبارہ ترتیب دیں</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>سب کو نظرانداز کیا گیا اطلاعات پہلے سیٹ کی گئیں۔</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>اطلاعات کو بحال کریں</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>۔</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>بھرپور مواد</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>پاس ورڈ رکھیں</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>اشارے دکھائیں</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>ٹاسک بار میں دکھائیں</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>ٹاسک سوئچر میں دکھائیں</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>عنوانات دکھائیں</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>فعال ہونے پر ، کسی بھی درخواست سے اسکرین کے اوپری حصے میں گھسیٹنے سے مانکی پیسٹ کا انکشاف ہوتا ہے تاکہ مواد کو آسانی سے بندر میں بند کردے۔</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>اسکرین کے اوپر ڈریگ پر دکھائیں</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>ساؤنڈ تھیم</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>ہجوں کی پڑتال</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>اسٹارٹ اپ پر کلپ بورڈ کا ماخذ نامعلوم ہوگا اور آپ کی سیکیورٹی کی ترتیبات پر منحصر ہے کہ مواد خارج شدہ ویب سائٹ یا درخواست سے آسکتا ہے۔</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>اسٹارٹ اپ کلپ بورڈ شامل کریں</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>اسٹارٹ اپ پر کلپ بورڈ سنیں</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>منتخب کریں</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>احتیاط! دوسرے پیلیٹ رنگوں کا انتخاب ریاضی نہیں آنکھوں کا استعمال کرتے ہوئے کیا جاتا ہے! لہذا آگاہ رہیں کہ کچھ رنگ اور طرز کے امتزاج میں پڑھنے کی اہلیت کے لئے مناسب تضاد نہیں ہوسکتا ہے۔</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>تھیم رنگ</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>تھیم اسٹائل</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>سیٹ وقفہ پر اسٹارٹ اپ پر خودکار ردی کی ٹوکری میں صفائی ہوگی۔</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>کوڑے دان کی صفائی</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>انٹرفیس</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>اعلی کالعدم حدود کارکردگی کو متاثر کرسکتی ہیں</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>کالعدم حد</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>کوئی حد نہیں</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>غیر پیش سیٹ فائل قسم کے لئے جدید فائل تلاش میں استعمال کیا جاتا ہے</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>صارف - تعی .ن شدہ تلاش کی توسیع</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>تلاش کریں اور تبدیل کریں...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>یہاں چسپاں کریں</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>بانٹیں...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>دیکھیں</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>انتظام کریں ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>نام تبدیل کریں</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>اسکور: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>قسم: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>مستقل طور پر حذف کریں</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>'{0}' کو براؤز کریں</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>تبدیلی</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>ان پٹ</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>آؤٹ پٹ</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>ذرائع</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>بحال کریں</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>تصویر کا انتخاب کریں ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>رنگ</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>'{0}' کا انتظام کریں ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>کھلا</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>برائے مہربانی انتظار کریں...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>پس منظر کا رنگ</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>تمام کو صاف کریں</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>کلپ بورڈ فارمیٹس</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>تمام حذف کریں</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>تفصیلات میں ترمیم کریں</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>مل</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>لکھائی کا رنگ</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>فارمیٹ پینٹ</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> انتخاب میں</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>تصویر داخل کریں</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>لنک داخل کریں</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>ویڈیو داخل کریں</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> میچ کیس</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>نیا ٹیمپلیٹ</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>اگلا ٹیمپلیٹ</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>پیسٹ متن درج کریں ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>پچھلا ٹیمپلیٹ</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> باقاعدہ اظہار</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>سب کو تبدیل کریں</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>تبدیل کریں</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> پورا لفظ</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> ارد گرد لپیٹنا</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>بلاک</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>ڈومین</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>فولڈر دکھائیں</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>ان بلاک</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>کے بارے میں</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>بلاک کو شامل کریں</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>ان لائن کو شامل کریں</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>آٹو - کاپی</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>طریقوں</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>براہ کرم انتظار کریں مانکی پیسٹ لوڈ ہو رہا ہے ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>چھوڑ دیں</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>رائ - پیسٹ پر کلک کریں</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>گروپ</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>فلٹر</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>سب کو مستقل طور پر حذف کریں</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>سب کو بحال کریں</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>عمل</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>یو آر ایل پہلے ہی موجود ہے: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>یو آر ایل کو ایک درست شکل میں ہونا چاہئے۔</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>مکمل URL درج کریں:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>یو آر ایل شامل کریں</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>اقدار درج کریں</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>درخواست دینے کے لئے متن یا فائلوں کاپی کریں۔</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>{0} {1} وضع کو چالو کریں</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>کلپ بورڈ کی تبدیلیوں کو اب شامل کیا جائے گا</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>ضمیمہ موڈ کو چالو کرنے کے بعد</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>کلپ بورڈ کی تبدیلیوں کو اب تیار کیا جائے گا</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>ضمیمہ موڈ کو چالو کرنے سے پہلے</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>بلاک</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>عام کلپ بورڈ سلوک کو بحال کردیا گیا ہے</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>غیر فعال</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>کلپ کے اوپر یا بوٹوم میں شامل کیا گیا</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>حد تک ضمیمہ موڈ چالو</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>ترتیب سے</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>دستی</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>اپنے موجودہ انتخاب میں شامل کریں۔</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>دستی ضمیمہ موڈ چالو</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>کلپ بورڈ جمع رک گیا</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>رک گیا</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>کلپ بورڈ جمع دوبارہ شروع ہوا</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>ضمیمہ دوبارہ شروع ہوا</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>کیا آپ کو یقین ہے کہ آپ اس کو ختم کرنا چاہتے ہیں؟</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>کمپیٹیبلٹی موڈ میں ترمیم کرنا تمام بھرپور فارمیٹنگ کو ختم کردے گا۔ کیا آپ واقعی اس میں ترمیم کرنا چاہتے ہیں؟</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>ڈیٹا ہراس کا انتباہ</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>بند</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>پر</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>رک گیا</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>نتیجہ</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>حالت</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>نامعلوم غلطی ہوئی۔</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>کوششیں باقی ہیں</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>پاس ورڈ درج کریں</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>تصدیق کریں</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>رابطہ کریں</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>تاریخ وقت</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>کیا آپ واقعی '{0}' کے تمام استعمال کو حذف کرنا چاہتے ہیں؟
+
+یہ کالعدم نہیں ہوسکتا!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>متحرک</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>جامد</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} خالی ہے ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>مزید جلد آرہا ہے!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>لاگ ان بوجھ غیر فعال ناکام ہوگیا</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>لاگ ان بوجھ کامیابی کو غیر فعال کرتا ہے</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>لاگ ان بوجھ قابل ناکام</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>لاگ ان بوجھ کامیابی کو فعال کریں</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>چھپائیں</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>بندر کا پیسٹ اب بھری ہوئی ہے۔
+کلپ بورڈ سن رہا ہے: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>بھری ہوئی</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>دکھائیں</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>آٹو کاپی سلیکشن موڈ: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>موڈ تبدیل ہوا</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>دائیں کلک کے موڈ پر کلک کریں: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>پلگ ان تازہ کاری</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>چسپاں '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>'{0}' تجزیہ کار چلائیں</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>'{0}' ٹرگر چلائیں</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>'{0}' منتخب کریں</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>کیا آپ واقعی '{0}' اور اس سے وابستہ تمام اعمال کو حذف کرنا چاہتے ہیں؟</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>ٹرگر</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>کیا آپ '{0}' کے لئے تمام ذیلی اعمال کو ہٹانا چاہیں گے؟ (ورنہ وہ دوبارہ '{1}' کے والدین کی حیثیت سے ہوں گے)</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>اختیارات کو ہٹا دیں</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>کیا آپ واقعی میں '{0}' کرنا چاہتے ہیں؟</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>کھاتہ</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>تجزیہ کار</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>درخواست کے کام</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>کلپ بورڈ</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>مواد</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>کنورٹرز</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>ثقافت</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>ڈیٹا</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>سمت</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>ڈریگ اور ڈراپ</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>ڈراپ وزرڈ</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>شبیہیں</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>لاگر</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>انٹرفیس</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>پیسٹ آپریشنز</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>ترجیحات</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>تلاش</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>شارٹ کٹ</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>ترتیب دیں</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>آوازیں</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>سسٹم ٹرے</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>مجموعے</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>خیالیہ</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>محرکات</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>ویب سائٹ کے کام</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>کلپ بورڈ کو ان پٹ کلپ پر سیٹ کرتا ہے۔</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>انتباہ</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>بلپ</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>چیم</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>عام مقصد کی آواز اور/یا سسٹم ٹرے میسج الرٹس۔ الرٹ ایکشن کا ان کے ان پٹ پر کوئی اثر نہیں پڑتا ہے۔</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>پیغام</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>بندر</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>پیش نظارہ</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>دکھائیں؟</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>ٹائم ٹوسٹ پیغام سیکنڈ میں دکھایا گیا ہے۔ جب قیمت 0 ہے پیغام دستی طور پر بند ہونا چاہئے۔</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>وقت دکھائیں (زبانیں)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>سونار</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>آواز؟</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>صوتی قسم</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>ٹنگ</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>حجم</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>تجزیہ کار</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>تفویض کردہ تجزیہ کار پیش سیٹ کا استعمال کرتے ہوئے اس کے ان پٹ کلپ پر کارروائی کرتا ہے۔</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>ان پٹ مواد منتخب کردہ مجموعہ سے منسلک ہے</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>اس کے ان پٹ کلپ کو تفویض کردہ ٹیگ مجموعہ سے لنک کرتا ہے۔</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>ٹیگ</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>حساس کیس؟</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>یہ ان پٹ کے ساتھ موازنہ کرنے کے لئے جامد متن ہوسکتا ہے اور/یا منتخب کردہ پراپرٹیز (فلٹر بٹن کے ذریعے) شامل کیا جائے گا جب حالت کا اندازہ کیا جائے تو اس کی جگہ لی جائے گی۔</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>حالت کا ڈیٹا</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>ایک اختیاری JSONPATH استفسار جو حالت کا اندازہ کرنے سے پہلے منتخب کردہ 'ان پٹ پراپرٹی' پر لاگو ہوگا۔</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>ان پٹ فلٹر</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>اس مشروط کے لئے استعمال شدہ کلپ پراپرٹی۔
+
+'آخری آؤٹ پٹ' پراپرٹی فی الحال صرف اس وقت تائید کی جاتی ہے جب یہ مشروط تجزیہ کار کی کارروائی کا بچہ ہوتا ہے اور فراہم کردہ ڈیٹا والدین کے تجزیہ کار کی پیداوار کے لحاظ سے مختلف ہوتا ہے۔
+
+خرابیوں کا ازالہ کرنے کے لئے ، اس مشروط والدین سے 'الرٹ ایکشن' منسلک کریں اور اس ان پٹ پراپرٹی سے ملنے کے لئے الرٹ کا 'میسج' پیرامیٹر مرتب کریں۔ اس سے اس مشروط کے لئے استعمال ہونے والے اصل اعداد و شمار کا جائزہ لینے کی اجازت ہوگی۔</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>ان پٹ پراپرٹی</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>ان پٹ کلپ یا پچھلے ایکشن آؤٹ پٹ پر ٹیکسٹ کا موازنہ انجام دیتا ہے۔ جب تقابلی ناکام ہوجاتی ہے (یہ میچ نہیں) بچوں کے اقدامات پر عمل درآمد نہیں کیا جائے گا۔ تو یہ منطقی گیٹ کی طرح کام کرتا ہے۔</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>تمام سچی یا غلط کاروائیاں جہاں بچوں کے اعمال صرف اس صورت میں عملدرآمد کریں گے جب نتیجہ صحیح ہو۔</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>حالت</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>سب</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>جب منتخب شدہ قسم کی ایک کلپ کو کسی بھی طرح سے سسٹم میں شامل کیا جاتا ہے (کلپ بورڈ ، ڈریگ - اور - ڈراپ ، تجزیہ کار تیار یا نقل تیار کیا جاتا ہے)۔</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>اس ٹرگر کو صرف اس صورت میں انجام دیں اگر ان پٹ کلپ نیا ہو اور ڈپلیکیٹ نہیں۔ یہ کسی بھی ترجیحی ترتیب سے آزاد ہے کہ آیا نئے مواد کو نظرانداز کیا گیا ہے یا نہیں۔</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>ڈپلیکیٹ کو نظرانداز کریں</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>اس قسم کے صرف کلپس ہی اس عمل کو متحرک کریں گے۔</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>اس کے ان پٹ کلپ کو تفویض کردہ ٹیگ مجموعہ سے لنک کرتا ہے۔</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>جب ایک کلپ مخصوص ٹیگ مجموعہ سے منسلک ہوتا ہے تو متحرک ہوتا ہے۔</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>مجموعہ</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>بچوں کے پھانسی سے پہلے ملی سیکنڈ میں وقت کی مقدار نے انتظار کیا</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>تاخیر</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>۔</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>جب خالی چھوڑ دیا جائے تو ، آؤٹ پٹ فائل ان پٹ کلپ کے عنوان کو فائل کے نام کے طور پر استعمال کرے گی۔</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>کسٹم نام</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>ڈائریکٹری جہاں فائل لکھی جائے گی۔</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>ڈائریکٹری</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>منتخب فولڈر میں ان پٹ محفوظ کرتا ہے۔</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>جب منتخب فولڈر کا مواد تبدیل ہوتا ہے تو متحرک ہوتا ہے۔ آؤٹ پٹ ایک نیا یا موجودہ ہوگا (جب نظرانداز ڈپلیکیٹ کی ترجیح کو قابل بنایا گیا ہے) فائل یا فولڈر کی فائل کلپ جو اس کی آخری آؤٹ پٹ کے طور پر تبدیلی کی قسم کے ساتھ بدل گئی ہے۔</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>تقریبات</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>فولڈر</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>ڈپلیکیٹ کو نظرانداز کریں</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0 کی قیمت والدین کے عمل کو غیر معینہ مدت تک دہرائیں گی</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>گنتی کو دہرائیں</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>ایک بار والدین کی کارروائی مکمل ہونے کے بعد ملی سیکنڈ میں وقت کی مقدار</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>تاخیر دہرائیں</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(تجرباتی) ایکشن لوپس یا بار بار کام کرنے کے لئے استعمال کیا جاتا ہے۔ جب دہرایا جائے گا تو ، یہ اپنے اصل ان پٹ کے ساتھ دوبارہ تمام بچوں کو پھانسی دے گا۔ بار بار گنتی کے بغیر وقفہ کا استعمال کرتے وقت ، ٹرگر کو غیر فعال کرنے کی ضرورت ہوگی اور دہرانے کو روکنے کے لئے ان کو دوبارہ قابل بنایا جائے گا۔ پولنگ یا ویب سکریپنگ آٹومیشن کے لئے کارآمد ثابت ہوسکتا ہے۔</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>عالمی شارٹ کٹ کے ذریعہ متحرک آپ کی وضاحت۔ اگر مونکی پیسٹ فعال ہے تو وہ منتخب کردہ کلپ (اگر کوئی ہے تو) کو ان پٹ کے طور پر استعمال کرنے کی کوشش کرے گا۔ بصورت دیگر یہ کلپ بورڈ کو اس کے ان پٹ کے طور پر استعمال کرنے کی کوشش کرے گا۔
+
+نوٹ: ایک شارٹ کٹ ٹرگر پھر بھی عمل میں لائے گا اگر اس کو لچکدار رکھنے کے لئے کوئی ان پٹ نہیں ہے (لہذا یہ میکرو ٹرگر وغیرہ ہوسکتا ہے) کیونکہ اس کا اعداد و شمار نہیں ہے۔</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>شارٹ کٹ ٹرگر</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>جب ریکارڈ شدہ شارٹ کٹ کو موجودہ کلپ بورڈ کے ساتھ کسی بھی وقت دبایا جاتا ہے تو متحرک</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>اس کارروائی کے لئے ایپ کو دوبارہ شروع کرنے کی ضرورت ہے۔ کیا آپ اب یہ کرنا پسند کریں گے؟</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>ایک مسئلہ تھا۔ آپ کو دستی طور پر درخواست کو دوبارہ شروع کرنے کی ضرورت ہے۔</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>تشریح کے ساتھ تجزیہ کریں</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>تشریح ٹرگر</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>عنصروں میں بنایا گیا ہے - صرف پڑھا جاتا ہے۔ تبدیل کرنے کے لئے ڈپلیکیٹ.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>گمنام</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>اپنی مرضی کے مطابق</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>کل</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} دن پہلے</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 گھنٹہ پہلے</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} گھنٹے پہلے</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>ابھی ابھی</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>ایک منٹ پہلے</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} منٹ پہلے</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>پچھلے مہینے</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} مہینے پہلے</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>پچھلا ہفتہ</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} ہفتوں پہلے</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} سال پہلے</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>تشریحات</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>درخواست کا نام</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>درخواست کا راستہ</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>حساس کیس</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>مواد</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>فائل کی قسم</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>تصویری قسم</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>باقاعدہ اظہار</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>متن کی قسم</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>یو آر ایل کا عنوان</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>پورا لفظ</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>جیسے اوپن کرنے کے لئے اوپر کی سکرین ایج کے ساتھ سکرولنگ ، یہ کھلنے پر مرکزی ونڈو کو لاک کردے گا۔ تیز تر ملٹی - ٹارگٹڈ ورک فلوز کے لئے اجازت دینا۔
+
+* کونے آپ کی تمام اسکرینوں کے لحاظ سے ہیں ، فی مانیٹر نہیں۔</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>ونڈو اور لاک دکھائیں</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>مفت!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>ہمیں 5 ستارے دیں!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>تمام حذف کریں</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>تمام مواد کو حذف کریں</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>کیا آپ کو یقین ہے کہ آپ حذف کرنا چاہتے ہیں؟
+آپ کے تمام کلپس؟!
+
+*یہ آپریشن ختم نہیں کیا جاسکتا!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>میں ایک انڈی دیو ہوں ، براہ کرم کچھ تعاون دکھائیں!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>بندر کی طرح؟</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} صرف قسم (زبانیں) کے ان پٹ کو قبول کرتا ہے: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>آٹو کاپی موڈ - جب بھی بائیں ماؤس کا بٹن جاری ہوتا ہے تو 'کاپی' ایونٹ کی نقالی کرتا ہے۔</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>دائیں کلک پیسٹ موڈ - ہر بار جب ماؤس کا صحیح بٹن جاری ہوتا ہے تو 'پیسٹ' ایونٹ کی نقالی کرتا ہے</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>پیش سیٹ</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>پلگ ان فولڈر دکھائیں</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>رپورٹ</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>دیکھیں</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>ٹول ٹپس دکھائیں</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>تجزیہ کار اپنے ان پٹ کی تشریح کرتے ہیں یا آؤٹ پٹ کے بطور نئے کلپس تشکیل دیتے ہیں۔ تجزیہ کاروں کے بچوں کو یہ فیصلہ کرنے کی ضرورت ہے کہ انہیں ان پٹ کے طور پر کس کی ضرورت ہے۔ یہ عام طور پر آخری آؤٹ پٹ ہے۔</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>ان پٹ کی قسم</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>ٹرگر ڈیزائنر '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>ایک {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>نہیں ملا...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} ٹرگر</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>جب جانچ پڑتال کی جائے گی تو حالت کا صحیح یا غلط نتیجہ پلٹ جائے گا۔ تو مثال کے طور پر ، 'پر مشتمل' حالت بن جائے گی 'پر مشتمل نہیں ہے۔</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>نہیں کرتا</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>برائے مہربانی انتظار کریں...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>رنگین انتخاب</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>میچ کا رنگ منتخب کریں</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>شارٹ کٹ ٹرگر کی طرح لیکن جب کلیدی امتزاج کو دبایا جاتا ہے تو ، فعال ایپلی کیشن میں ایک 'کاپی' ایونٹ کی نقالی کی جائے گی لہذا یہ اب بھی کاپی کی طرح کام کرتا ہے لیکن پھر بندر کاپی ٹرگر سے منسلک عملوں کا سلسلہ اس پس منظر میں اس کا استعمال کرتے ہوئے پھانسی دے گا۔ نقلی کاپی کلپ بورڈ ڈیٹا۔</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>ایڈوانسڈ فلٹر</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>فلٹرز چھپائیں</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>فلٹرز کو بحال کریں</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>فلٹر بنائیں</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(اختیاری) جب بائیں خالی جگہ پر کلپ بورڈ اس ایکشن کے ان پٹ کا استعمال کرتے ہوئے ترتیب دیا جائے گا۔ یہاں فراہم کردہ کسی بھی چیز کو صرف سادہ متن سمجھا جائے گا۔</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>کلپ بورڈ کے لئے مواد</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>جب سچ ہے تو ، اس کارروائی کے کلپ بورڈ کو طے کرنے کے بعد کوئی کلپ شامل نہیں کی جائے گی۔</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>نظر انداز کریں</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>کوئی تجزیہ کار '{0}' کے لئے منتخب نہیں ہوا</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>ایکشن کے لئے تجزیہ کار '{0}' نہیں ملا</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>والدین '{0}' صرف '{1}' ٹائپ مواد اور تجزیہ کار '{2}' کے لئے فلٹرز کبھی نہیں کریں گے کیونکہ یہ ان پٹ کی قسم '{3}' کی حمایت نہیں کرتا ہے۔</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>درجہ بندی کرنے والے '{0}' کے لئے کوئی ٹیگ منتخب نہیں کیا گیا</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>درجہ بندی کے لئے ٹیگ '{0}' نہیں ملا</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>موازنہ قیمت صرف خط ، نمبر یا خالی جگہ ہوسکتی ہے</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>کلپ ٹیگ والے ٹرگر '{0}' کے لئے کوئی ٹیگ منتخب نہیں کیا گیا</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>کلپ کے لئے ٹیگ ٹیگ ٹیگ ٹرگر '{0}' نہیں ملا</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>'{0}' کے لئے کوئی واچ فولڈر مخصوص نہیں ہے</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>فولڈر دیکھیں '{0}' ٹرگر کے لئے نہیں ملا '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>ایکشن کے لئے فائل مصنف کا راستہ '{0}' سیٹ نہیں ہے</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>فائل مصنف کا راستہ '{0}' کے لئے '{1}' نہیں ملا۔</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>ٹاسک بار</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>پلگ ان کے بارے میں جانیں</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>اس تجزیہ کی تشکیل کو بحال کریں</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} لاگ کو تبدیل کریں</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>براہ کرم انٹرنیٹ سے رابطہ کریں اور بعد میں دوبارہ کوشش کریں۔</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - مدد</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} تازہ ترین ورژن ہے</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>آپ سب تیار ہیں - سے - تاریخ!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>اپ ڈیٹ کے لیے چیک کریں...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>نیا ورژن دستیاب!
+
+'{0}' 🎉🍾🥳 پر تازہ کاری کرنے کے لئے یہاں کلک کریں</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>'{0}' کو اپ ڈیٹ کرنے کے لئے نیچے کلک کریں</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>تازہ کاری دستیاب!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>تازہ ترین کریں. جدید بنایں</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' میں مشترکہ اقدار شامل ہیں۔ آپ کیا ری سیٹ کرنا چاہیں گے؟</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>صاف</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>حالیہ تلاشیاں صاف کریں</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>تمام ری سیٹ کرو</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>ری سیٹ مشترکہ</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>غیر شیئرڈ کو دوبارہ ترتیب دیں</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>تفویض کردہ درخواست کی کارروائی کا مطالبہ کرتا ہے۔ تمام ایپلیکیشن کمانڈ اسٹیٹ لیس ہیں اور ان کے ان پٹ کلپ کو نظرانداز کردیا گیا ہے۔</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>جب بغیر چیک کیا جائے اور کمانڈ فائر نہیں کرسکتا ، تو عملدرآمد کا سلسلہ رک جائے گا۔ بہت سے احکامات پر عملدرآمد کے لئے کچھ مخصوص درخواست کی حالت کی ضرورت ہوگی۔</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>ہمیشہ جاری رکھیں؟</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>انجام دینے کا حکم۔</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>کمانڈ</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>درخواست کمانڈ '{0}' کے لئے کوئی کمانڈ منتخب نہیں کیا گیا</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>کمانڈ برائے درخواست کمانڈ '{0}' نہیں ملا</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>منتخب شدہ</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>دوبارہ شروع کریں</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>'{0}' کو اپ ڈیٹ کرنے میں ایک مسئلہ تھا۔ اپ ڈیٹ کو مکمل کرنے کے ل you آپ کو دوبارہ '{0}' کو دوبارہ شروع کرنے اور انسٹال کرنے کی ضرورت ہوگی (فکر نہ کریں کہ آپ کی تمام ترتیبات کو بحال کیا جائے گا)۔
+
+آپ ابھی دوبارہ اسٹارٹ کرسکتے ہیں اور اپ ڈیٹ کو دوبارہ انسٹال کرسکتے ہیں - انسٹال کرکے ، اس کو نظر انداز کریں اور بعد میں اسے اپ ڈیٹ کریں یا تازہ کاری کو مل کر منسوخ کریں اور '{1}' ورژن کا استعمال جاری رکھیں؟</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>اپ ڈیٹ کی غلطی</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>اپ ڈیٹ ڈاؤن لوڈ نہیں کرسکے</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>اپ ڈیٹ ناکام</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>اپ ڈیٹ مکمل کرنے کے ل you آپ کو دوبارہ شروع کرنے کی ضرورت ہوگی۔ کیا آپ ابھی یا بعد میں دوبارہ شروع کرنا چاہیں گے؟</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>اپ ڈیٹ تیار ہے</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>بعد میں</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>اب دوبارہ شروع</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>زیر التوا</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} کو کامیابی کے ساتھ {1} میں اپ ڈیٹ کیا گیا تھا</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>کور پلگ انز کی ضرورت ہے اور اسے ہٹایا نہیں جاسکتا۔</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>انسٹال</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>اپ ڈیٹ زیر التوا ہے۔ مکمل کرنے کے لئے دوبارہ شروع کریں.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>زیر التوا</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>ایک ان انسٹالیشن زیر التوا ہے۔ براہ کرم دوبارہ شروع کریں اگر آپ دوبارہ کرنا چاہتے ہیں - انسٹال کریں۔</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>انسٹال مکمل کرنے کے ل you آپ کو دوبارہ شروع کرنے کی ضرورت ہوگی۔ کیا آپ ابھی یا بعد میں دوبارہ شروع کرنا چاہیں گے؟</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>انسٹال کریں؟</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>غیر مطبوعہ</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>آٹو - '{0}' کے لئے تیار کردہ پہلے سے طے شدہ پیش سیٹ</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>کوئی کلپ منتخب نہیں ہے</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>منتخب کردہ کلپ کا تجزیہ کریں</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>منتخب کردہ کلپ پر '{0}' چلانے کے لئے ایک شارٹ کٹ تفویض کریں</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>عالمی پیسٹ</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>'{0}' کے لئے عالمی پیسٹ شارٹ کٹ تفویض کریں</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>پاسورڈ بھول گے؟</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>لاگ ان کریں</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>لاگ آوٹ</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>رازداری کی پالیسی</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(دوبارہ شروع کرنے کی ضرورت ہوتی ہے) جب قابل تشخیصی معلومات کو فائل میں لاگ ان کیا جائے گا۔ اس سے کارکردگی سست ہوسکتی ہے اور اس میں ذاتی معلومات ہوسکتی ہیں۔</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>فائل میں لاگ ان کریں</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>کھلا</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>نوشتہ جات کا فولڈر کھولیں</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>پلگ ان کو براؤز کریں</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>پڑھیں</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>لکھیں</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>رائے یا بگ رپورٹ بھیجیں</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>یہ صرف مرکزی ونڈو کو چھپاتا ہے۔ دوسرے تمام غیر ڈائیلاگ ونڈوز ہمیشہ ٹاسک بار میں دکھائے جاتے ہیں۔</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>'{0}' میں تلاش کریں</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>فلٹر شامل کریں</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>جوائن کی قسم میں ترمیم کریں</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>اس فلٹر کو ہٹا دیں</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>اس کے بارے میں مدد کھولیں ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} کلپس</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>تبدیل کریں</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>کبھی نہیں</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>سیٹ</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>بلا عنوان</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>ریکارڈ</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>بغیر لیبل والے ماخذ کا حوالہ</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' کی ضرورت ہے</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(غلطیاں ہیں)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>محدود</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>اسٹوریج</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>کوڑے دان</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>لامحدود</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>یہ ایپ فی الحال ڈیفالٹ کلپ بورڈ ریڈر پریسیٹس اور فارمیٹس سے مماثل ہے۔
+
+ڈیفالٹ ریڈر پریسٹس (کلپ بورڈ سائڈبار سے) کو چالو کرنا یا غیر فعال کرنا اس ترتیب کو متاثر نہیں کرے گا۔ صرف غیر فہرست ایپس پہلے سے طے شدہ سیٹ اپ کی پیروی کرتی ہیں۔</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>یہ ایپ فی الحال ڈیفالٹ کلپ بورڈ مصنف کے پریسیٹس اور فارمیٹس سے مماثل ہے۔
+
+پہلے سے طے شدہ مصنف کے پیش سیٹوں کو چالو کرنا یا غیر فعال کرنا (کلپ بورڈ سائڈبار سے) اس ترتیب کو متاثر نہیں کرے گا۔ صرف غیر فہرست ایپس پہلے سے طے شدہ سیٹ اپ کی پیروی کرتی ہیں۔</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>آپ کو شامل کرنے کے ل you آپ کو کلپ بورڈ سننے والوں (سسٹم ٹرے -&gt; دوبارہ شروع) کو بے نقاب کرنا ہوگا۔</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>دستیاب دستیاب نہیں</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> کوئی ترتیبات نہیں ہیں</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>میں صرف انگریزی بولتا ہوں اور مانکی پیسٹ کا اس زبان میں ترجمہ کیا گیا ہے۔
+
+تمام ورژن انگلش پیک کے ساتھ جہاز بھیجتے ہیں لہذا اگر آپ انگریزی بولتے ہیں تو آپ اس سیٹ اپ (ترتیبات -&gt; ترجیحات -&gt; بین الاقوامی) کے بعد کسی بھی وقت زبان کو اس میں تبدیل کرسکتے ہیں۔
+
+اگر آپ ترجمہ کو بہتر بنانے میں مدد کرنا چاہتے ہیں تو ہم آپ سے سننا پسند کریں گے!
+
+فیڈ بیک@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>ترجمہ کے خدشات</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>اس خصوصیت کو استعمال کرنے کے ل You آپ کو مانکی پیسٹ کو اپ ڈیٹ کرنے کی ضرورت ہے۔</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>شارٹ کٹ غیر سیٹ</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>کلپ بورڈ سننے والا غیر فعال</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>کلپ بورڈ سننے والا فعال ہے</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>والدین کی کارروائی '{0}' ان پٹ پراپرٹی کی قسم 'آخری آؤٹ پٹ' کی حمایت نہیں کرتی ہے</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>منصوبوں کے بارے میں مزید معلومات حاصل کریں</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>درخواست</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>ٹرگر</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>کلپ</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>تجزیہ کار</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>ٹیگ</value>
+  </data>
+</root>

@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Žádné funkce nejsou omezeny předplatným, pouze úložnou kapacitou a lze je kdykoli změnit.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Obnovte svůj stávající účet ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Obsah a odpadky jsou
+omezeno na {0} a {1}
+klipy.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Umožňuje až {2} klipy obsahu a neomezené úložiště odpadků.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Neomezený a neomezený obsah a skladování odpadků.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Volný, uvolnit</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Neomezený</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Předplatné</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Vaše soukromí je důležité a data schránky mohou být velmi osobní. Úložiště je vždy šifrováno, ale můžete nastavit heslo, které bude vyžadováno v případě, že bude vaše zařízení odcizeno, nebo někdo jiný používá vaše zařízení.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Po povolení, přetažení z jakékoli aplikace na horní část obrazovky odhalí MonkeyPaste, aby snadno zahodila obsah do MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Povolení „zámku“ vlevo horní část hlavního okna stále umožní klesnout na MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>V nabídce „Nastavení -&gt; Předvolby -&gt; Okno“ jsou k dispozici více předvoleb okna.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Přetáhněte banány sem!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Drag - TO - Otevřete</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Klávesné zkratky lze kdykoli zkontrolovat nebo změnit kdykoli z nabídky „Nastavení -&gt; zkratky“.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Všechny globální zkratky budou deaktivovány, takže je můžete později nastavit.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Sluční zkratky společnosti MonkeyPaste budou k dispozici ve všech aplikacích.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Vnitřní</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Výchozí</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profil gesta</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Ahoj! Pojďme nastavit několik věcí, které zlepšují celkový zážitek s MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Vítejte</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Pro získání nejvíce využití z MonkeyPaste je načítání automaticky, když se přihlásíte, dobrý nápad. Ale to je zcela na vás.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Udržujte to příležitostné.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Umožnit</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Zatížení přihlášení?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Pokud je povoleno, svitek v horní části obrazovky odhalí MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Vlevo - kliknutím na ikonu hlavního panelu bude stále otevřena MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>V nabídce „Nastavení -&gt; Předvolby -&gt; Okno“ jsou k dispozici více předvoleb okna.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Snadné, že?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Přejděte sem!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Scroll - TO - Otevřete</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P Align = "Center"&gt; MonkeyPaste je &lt;span color = "red&gt; plně integrovaný &lt;/span&gt; s tažením - a - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Nahoďte to sem!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P Align = "Center"&gt; Tímto způsobem lze přistupovat k MonkeyPaste &lt;br&gt; &lt;span color = "red"&gt; bez kliknutí &lt;/span&gt; nebo dokonce &lt;span color = "red"&gt; odpalování oka &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Táhni mě!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Vyzkoušej to!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Vyzkoušej to!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Nejsou k dispozici žádné výsledky.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Potvrdit</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Vyhledávání...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Závislost:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Nainstalujte</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Jste si jisti, že chcete odstranit '{0}' a všechny jeho předvolby a zkratky?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Odinstalovat</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' nemá žádné výsledky.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Žádný výběr.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Žádný</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Kredity:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Popis:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Darovat:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licence:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL projektu:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Publikováno:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Přečtěte si mě:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Nahlásit zneužití:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Štítky:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Aktualizace</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Verze:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Otevřeno v okně</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Zavrhnout</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Vedle smazat!
+
+Upgrade, abyste se vyhnuli.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Vedle odpadků!
+
+Upgrade, abyste se vyhnuli.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Soubory</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>obraz</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Zkopírováno {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} soubory | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} Chars | {1} řádky</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} Kopie | {1} Pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Hýbat se</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Přidat</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>kopírovat</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Střih</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Vložit</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Kopírovat</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Nepřirozený filtr</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Prosím vyberte -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formáty</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Čtenáři</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Spisovatelé</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Handlers</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplikát</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Upravit název</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Resetovat</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tagy</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Globální směrování</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Zkratka</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gesta musí být jedinečná a mohou obsahovat pouze jeden vstupní klíč.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; interní &lt;/b&gt; Všechny zkratky jsou omezeny na v rámci aplikace. Toto není ve skutečnosti zamýšlená možnost, ale může si umožnit přizpůsobit, jaké zkratky máte v úmyslu vytvořit Global &lt;i&gt; Jednoho dne &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; výchozí &lt;/b&gt; jsou povoleny všechny globální zkratky. &lt;b&gt; Show/Hide Hlavní okno &lt;/b&gt; zkratka používá &lt;rozpětí color = "red"&gt; Override &lt;/SPOR&gt; směrování pro &lt;b&gt; caps lock &lt;/b&gt;. Toto směrování nebo gesto můžete kdykoli změnit. Ale &lt;span color = "green"&gt; zkuste to &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/ head&gt;
+&lt;tělo&gt;
+&lt;H1&gt; Globální režimy zkratky &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; pasivní &lt;/b&gt; zkratka MonkeyPaste bude poslouchat v jakékoli aplikaci. &lt;br&gt;
+*Toto je možnost &lt;i&gt; prozatím na Linuxu.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; PRE &lt;/b&gt; zkratka provedou &lt;b&gt; &lt;i&gt; před &lt;/i&gt; &lt;/b&gt; je řešena aktivní aplikací. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; zkratka provedou &lt;b&gt; &lt;i&gt; po &lt;/i&gt; &lt;/b&gt; je řešena aktivní aplikací. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; přepsání &lt;/b&gt; Když MonkeyPaste uslyší vstupní klíč (ne -modifikátor) zkratky potlačení, bude skrýt &lt;/i&gt;, že klíčové stisknutí před vstupem aplikace - úroveň. &lt;br&gt;
+Tato možnost zaručí, že zkratka je spuštěna bez konfliktů k aktivní aplikaci.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Exkluzivní přepsání &lt;/b&gt; Toto je speciální typ režimu přepsání navrženého pro klávesu zámku CAPS. Umožňuje pouze &lt;b&gt; jeden &lt;/b&gt; klíč (ne - modifikátor) pro jeho přiřazení. &lt;br&gt;
+V režimu normálního přepsání se může uzávěrky uvíznout &lt;i&gt; při stisknutí v kombinaci s jinými klíči. &lt;br&gt;
+Takže bez ohledu na to, jaké jsou další klíče, pokud je stisknuta zkratka &lt;b&gt; zkratky &lt;/b&gt;, bude přepsána a zabrání tomu, aby se stal &lt;i&gt; uvíznutím na &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/Body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Deaktivovat</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Načtěte, když je tento uživatelský účet přihlášen, nikoli pro ostatní uživatele.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Pomocí dostupných kontaktů (vyžaduje plugin Fetcher) Toto pole bude použito pro všechny případy této šablony napříč tímto dokumentem nebo v jakémkoli, na který bude odkazováno později. &lt;/p&gt; &lt;p&gt; Například pokud vyberte e -mailovou adresu Zde pak bude pole e -mailu, který vyberte, použito pro všechny instance v tomto dokumentu. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = krátký rok &lt;br/&gt; yyyy = dlouhý rok &lt;br/&gt; m = měsíc (1-12) &lt;br/&gt; mm = měsíc (01-12) &lt;br/&gt; mmm = zkratka měsíce (leden, únor .. . Dec) &lt;br/&gt; mmmm = dlouhý měsíc (leden, únor ... prosinec) &lt;br/&gt; d = den (1 - 31) &lt;br/&gt; dd = den (01 - 31) &lt;br/&gt; ddd = Den v týdnu ve slovech (pondělí, úterý ... neděle) &lt;br/&gt; e = krátký den v týdnu ve slovech (mon, út ... slunce) &lt;br/&gt; d - ordinální den (1., 2., 2. 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = hodina v am/pm (0-12) &lt;br/&gt; hh = hodina v AM/PM (00-12) &lt;Br/ &gt; H = hodina v den (0-23) &lt;br/&gt; hh = hodina v den (00-23) &lt;br/&gt; mm = minuta &lt;br/&gt; ss = second &lt;br/&gt; sss = milisekundy &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; p = a.m./p.m. popisovač</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Aktuální datum a/nebo čas bude nahrazen šablonami DateTime, když jsou vloženy.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Všechny platnosti této šablony použijí poskytnutý text. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Všechny platnosti této šablony použijí poskytnutý text. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Dokončit připojení</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Povolit blok</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Povolit inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Přepínač</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Přepínač</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pozastavte připojení</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Přepínat dříve</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Přepínat dříve</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Pokračovat v připojení</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Připojit...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Vložit</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Kolík</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unlin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Skrýt všechna oznámení '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Zavrhnout</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Poslední aktivní aplikace neznámá. Přepněte na zamýšlenou aplikaci na Monkey Paste.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Vložit do: &lt;em&gt; &lt;i class = "Paste-tooltip-sufix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimalizovat</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Prosím, čekejte...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Zámek</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Účet</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopírovat vložit</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preference</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Obnovit výchozí nastavení</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtr...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Zkratky</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Přidat aplikaci</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Přidat web</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Blok?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>název</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplikace</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blok doména?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blok URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Doména</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Zdrojové rozpoznávání adresy URL je závislé na tom, jak je hostitelská aplikace přátelská k tomu, aby byla zaručena odmítnutí</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Webové stránky</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Některé funkce MonkeyPaste používají automatizaci klávesnice pro simulaci „kopírování“ událostí v jiných aplikacích.
+
+Přidejte a/nebo vyberte aplikaci s jedinečnou zkratkou kopírování (například konzole nebo shell), abyste zajistili, že tyto funkce fungují správně.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Zkopírujte zkratku</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Žádný</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Pro zadanou aplikaci budou použity pouze vybrané předvolby. Po nespecifikaci budou použity výchozí předvolby nalezené v postranním panelu &lt;em&gt; Schentional &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Mnoho funkcí MonkeyPaste používá k interakci s jinými aplikacemi automatizaci klávesnice.
+
+Některé aplikace (například například některé konzoly nebo shells) mohou mít netvolnou zkratku.
+
+Chcete -li zajistit správnou interoperabilitu, zaznamenejte tyto zkratky pro tuto aplikaci zde.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Vložit zkratku</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Čtenáři</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Veškeré monitorování schránky z odmítnutých aplikací bude ignorováno &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Spisovatelé</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Upravit...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formáty</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Odmítnuto</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Zkratky</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Chtěli byste také odstranit všechny klipy {0} z '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Odstranit klipy?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>aplikace</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Procházejte aplikaci ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Vyberte cestu aplikace</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Jste si jisti, že chcete odstranit vlastní zkratky pro {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Jste si jisti, že chcete odstranit vlastní formáty pro {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Pro tuto aplikaci neexistují žádné přiřazené formáty schránky. Z toho nebudou přečtena žádná data prostřednictvím řezu/kopie nebo pokusu o tažení - a - spadnou do MonkeyPaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Pro tuto aplikaci neexistují žádné přiřazené formáty schránky. Automatizovaná pasta nebo tažení - a - - odpnutí z MonkeyPaste nebude mít žádný vliv (její prázdná data).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Jste si jisti, že chcete resetovat všechny zkratky? Všechny vlastní zkratky budou odstraněny.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Určitě chcete změnit svůj profil směrování zkratky na '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Všechno</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Oblíbené</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtry</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formáty</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tagy</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Dnes</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Odpadky</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Snadné, že?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Dvojité kliknutím uvolníte</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Zvyk</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Globální</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Tato kombinace je v rozporu s '{0}', které se při uložení vymaže.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Musí být poskytnuta zkratka.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Toto je globální zkratka. To znamená, že se pokusí provést, kdykoli je provedeno. Pokuste se, aby byl dostatečně jedinečný (nebo změnil „typ směrování“), aby nebyl v rozporu s zkratkami z jiných aplikací.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Globální</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Zkratka musí obsahovat jeden a pouze jeden klíč modifikátoru.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Stisknutím libovolné klávesy zaznamenáte ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Přiřaďte zkratku</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Zjistěte více ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Vylepšit</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>zrušení</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Opravit</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignorovat</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Opakovat</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Vypnout</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Předložit</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Roční</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Měsíční</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Zkus zadarmo!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Zúčtovací období</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-mailem</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Zkontrolujte své připojení
+a zkusit znovu.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Odhlásit se</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Další platba</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Registrovat</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E -mail není platný</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Hesla se neshodují.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Heslo musí být minimálně {0} znaky.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Pamatovat si?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Zkontrolujte svůj e -mail a potvrďte svůj účet</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Obnovit heslo</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, Yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/DD/YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Nikdy</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Zdarma {0} denní zkouška</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Prováděl problém
+váš nákup.
+
+Kontrola vašeho připojení a
+Nastavení může pomoci.
+
+Chtěli byste to zkusit znovu?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Váš účet byl úspěšně
+upgradováno na:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Koupit úspěšný!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Chyba</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Připojení se nezdařilo.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Opakovat</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Účet se změnil</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Vaše předplatné je nyní {0}/{1} s obsahem {2} a {3} úložiště odpadků.
+Ale nebojte se, po downgradingu se neztratí žádná data. Budou vyhodnoceny pouze nové klipy.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Gratulujeme! Vaše předplatné je nyní {0}/{1} s obsahem {2} a {3} úložiště odpadků.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Odpadky nebo neovlivněte něco
+Z '{0}' přidat další.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' úložiště je {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} BLOCKED</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Obsah a kapacita odpadků!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' úložiště je {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Kapacita obsahu!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Tato varování můžete skrýt
+kliknutím na „skrýt vše“ před
+Nabídka možností výše.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Úložiště Max Trash je {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Kapacita odpadků byla dosažena!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} je neplatný</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} musí být alespoň {1} znaky</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} může být pouze {1} znak</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Vložte: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Platba za vaše {0}
+Předplatné bylo splatné {1}
+a nebyl přijat.
+
+Aktualizujte prosím své
+Informace o platbě.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Platba za vaše {0}
+Předplatné bylo splatné {1}
+a nebyl přijat.
+
+Připojte se prosím k
+Internet na zařízení
+s vaším předplatném a
+restartujte, aby bylo možné pokračovat
+pomocí plánu {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Platba za vaše {0}
+Předplatné bylo splatné {1}
+a nebyl přijat.
+
+Otevřete nebo restartujte
+MONKEYPASTE na zařízení
+S vaším předplatném
+Pokračujte v používání
+{0} Plán.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Účet vypršel</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store neumožňuje úroveň
+Změny doplňků předplatného.
+
+Musíte zrušit své
+{0}/{1} se plánujte sami
+nebo vám bude účtován za oba.
+
+Chtěli byste to udělat hned?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Vaše heslo bylo resetováno.
+
+Zkontrolujte prosím svůj e -mail a
+Sledujte odkaz pro změnu
+vaše heslo.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Před pokračováním je nutné přijmout následující licenční podmínky.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Následující balíčky vyžadují, abyste před instalací přijali jejich licenční podmínky.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Odmítám</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Kliknutím na „Přijímám“ znamená, že souhlasíte s licenčními podmínkami pro tuto aplikaci. Pokud s podmínkami nesouhlasíte, klikněte na „Odmítám“.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Kliknutím na „Přijímám“ znamená, že souhlasíte s licenčními podmínkami pro výše uvedené pluginy. Pokud s podmínkami nesouhlasíte, klikněte na „Odmítám“.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Zobrazit licenci</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Přijetí licence</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Přijímám</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktivní</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Neregistrované</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Hotovo</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ Hesla se neshodují</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Vaše předplatné je
+nyní nastaveno na {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Nalezený účet</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Přihlášení selhalo</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registrace selhala</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registrace úspěšná!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Resetovací chyba</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Předplatné</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Co je nového</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Nikdy</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Neomezený</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapacita</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>zbývající</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>celkový</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Vaše platba je splatná.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Exkluzivní zkratky potlačení mohou obsahovat pouze jeden klíč a tento klíč nemůže být modifikátorovým klíčem.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Vypršel</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>načítání</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Deaktivované</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Poznámka! Toto heslo je volitelné a pouze pro další zabezpečení. Vaše data jsou již šifrována a nikdy nesdílena. Toto heslo jednoduše zabrání někomu, jehož nejste vy naložení MonkeyPaste, pokud nějak získají přístup k vaší ploše (odcizení, opustíte místnost atd.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Nezapomeňte nastavení poklesu pro:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Procházejte pluginy</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analyzovat</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Rychlá akce</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Přepínač upravit</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Přepínač</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anotace</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Prostý text</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Otevřeno v okně</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Kliknutím na + Ctrl sledujete ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Kliknutím na + alt sledujete ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Připněte nebo uhoďte libovolná média zde!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Průhledná</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Prahové hodnoty nad 0 poskytnou fuzzy porovnávání barev pomocí euklidovské vzdálenosti v barevném prostoru RGBA.
+
+Například, pokud je Red (#FF0000) hledací termín a černá (#000000) je pixel v obrazovém klipu, pak bude barevná vzdálenost 255. Černá až bílá vzdálenost je maximální možná 510, včetně alfa kanálu</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Všechny následující jsou pravdivé</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Schránka</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Sbírky</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Režimy myši</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Spouštěče</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pauza</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Životopis</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Nový spoušť</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Přidejte předvolbu</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Předvolby</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analyzátor</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>CUTOM</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientace cyklu</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Přepínač rozložení mřížky</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Citlivý na velká písmena</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Práh</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Celý svět</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Žádná sada</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Směrování</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Mřížka</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Hotovo</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>další</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Předchozí</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Přeskočit</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Stávající účet?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Další platba</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Registrace vám umožní přenášet placené předplatné na všech vašich zařízeních (po dostupnosti). Nebudeme spam váš e -mail, slibujeme 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Předplatné</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Potřebujete se zaregistrovat?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Prameny</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Zvláštní, nic dostupného. Něco musí být špatně 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Vyžaduje restart</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Pokročilý</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Chyba extrahování pluginu z '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Chyba instalace pluginu: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Chyba instalace pluginu {0} 'Zkorumpovaná nebo nesprávná struktura adresáře. Manifest by měl existovat na '{1}', ale nebyl nalezen.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Plugin pro analýzu chyb manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Žádný plugin načtený pomocí GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} Chyba</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Plugin pro inscenování chyb pro teplotu dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Chyba zálohování '{0}' na '{1}'. Podrobnosti: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Text psaný bude automaticky použit na vyhledávání, pokud není zaostřeno žádné textové pole.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Vstup automatického vyhledávání</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Změna hesla selhala</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Změna</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Změnit heslo</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Průhledná</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Jasné heslo</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Obsah</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Velikost písma obsahu</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Pokud je to pravda, externí obsah vložený do klipu použije formátování klipů a ne to, co je k dispozici ze zdroje.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Vložte, uhoďte nebo připojte formátování cíle</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete zapomenout na heslo?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Zapomenout</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Zapomenout heslo</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Skrýt vodoznaky kapacity</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Když je připojen nový obsah schránky, nebude sledován jako nový klip</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignorujte připojení</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Když schránka odpovídá existujícímu klipu, bude tento klip použit místo vytvoření nového</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorovat nové duplikáty</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Změny schránky z aplikace nebudou sledovány</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignorujte sledování vnitřní schránky</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Sledování budou ignorovány mezery, karty a nové linky</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignorujte pouze bílý prostor</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Zatížení přihlášení</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animované okno</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Neprůhlednost</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Ukázat chování</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Hlavní okno bude odhaleno provedením gesto svitku na horním okraji monitoru</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Zobrazit na horní obrazovce</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Objem oznámení</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Toto nastavení sleduje systém - široký počet klávesnice pro statistiku použití. Tato informace je soukromá a nesdílená, ale také zaručená. Přesné výsledky mohou vyžadovat poskytnutí příkazu vložení klávesnice specifické pro aplikaci v „Nastavení -&gt; Kopírovat a vložit -&gt; zkratky“.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Historie vložení</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Příliš mnoho připevněných klipů (jako jsou karty prohlížeče) může konzumovat významnou paměť. Odstranění je první - v - první - Out</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Kapacita pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>To platí pro všechny auto -dokončené vstupy, nižší hodnoty zlepší výkon</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Nedávný limit textu</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Jsi si jistý, že chceš
+Obnovit výchozí předvolby?
+
+To nelze vrátit zpět!
+
+*Aplikace se po dokončení restartuje.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Jste si jisti, že chcete resetovat všechna oznámení?
+
+*To nelze vrátit zpět!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste nastaví schránku (přepsání) při vkládání do externího programu. Toto bude &lt;b&gt; pokusit se &lt;/b&gt; obnovit stav schránky po externí pastě.
+
+Celkové obnovení nelze zaručit a může snížit výkon nebo dokonce MonkeyPaste v závislosti na zdroji dat.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Resetujte schránku po vložení opice</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Nelze odstranit mezipaměť pluginu z cesty: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Všechny pluginy budou resetovány do počátečního výchozího stavu</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Mezipaměť pluginu</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete resetovat všechny pluginy do výchozího nastavení?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete resetovat své heslo?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Všechny zkratky aplikací budou resetovány na výchozí gesta klíčů.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Resetovat zkratky</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Všechna dříve ignorovala oznámení.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Obnovení oznámení</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Povolení může být poměrně pomalé) Deaktivace formátování sníží spotřebu paměti, ale bude bránit některé pokročilé funkce, například: připojení, šablony, anotace a nalezení/nahrazení</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Bohatý obsah</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Nastavit heslo</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Zobrazit náznaky</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Zobrazit na hlavním panelu</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Zobrazit v přepínači úkolů</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Zobrazit tituly</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Po povolení, přetažení z jakékoli aplikace na horní část obrazovky odhalí MonkeyPaste, aby snadno zahodila obsah do MonkeyPaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Zobrazit na tažení na horní část obrazovky</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Zvukové téma</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Kontrola pravopisu</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Při spuštění bude zdroj schránky neznámý a v závislosti na nastavení zabezpečení může obsah pocházet z vyloučené webové stránky nebo aplikace.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Přidejte spouštěcí schránku</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Poslouchejte schránku na startupu</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Vybrat</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Pozor! Další barvy palety jsou vybrány pomocí matematiky ne očima! Takže si uvědomte, že některé kombinace barev a stylu nemusí mít správný kontrast pro čitelnost.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Barva motivu</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Styl tématu</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Při spuštění v nastaveném intervalu dojde k automatickému čištění odpadků.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Vyčištění odpadků</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Rozhraní</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Vysoké limity u zpět mohou ovlivnit výkon</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Zvolit limit</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Bez omezení</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Používá se v pokročilém vyhledávání souborů pro druhy předvolebů</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Uživatel - definovaná rozšíření vyhledávání</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Najít a nahradit...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Vložte tady</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Podíl...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Pohled</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Spravovat...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Přejmenovat</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Skóre: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Typ: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Trvale smazat</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Procházejte '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Přeměnit</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Vstup</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Výstup</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Prameny</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Vyberte obrázek ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Barva</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Správa '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>OTEVŘENO</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Prosím, čekejte...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Barva pozadí</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Vymazat vše</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formáty schránky</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Smazat všechny</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Upravit detaily</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>název</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Nalézt</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Barva fontu</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formát barvy</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Při výběru</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Vložte obrázek</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Vložte odkaz</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Vložte video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Shodný případ</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Nová šablona</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Další šablona</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Zadejte text vložení ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Předchozí šablona</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Regulární výraz</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Vyměnit vše</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Nahradit</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Celý svět</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Obalit</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Blok</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Doména</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Zobrazit složku</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Odblokovat</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Připojit blok</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Připojit inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Automatická kopie</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Režimy</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Počkejte prosím, že se MonkeyPaste načítá ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Přestat</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - klikněte na Paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Skupina</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtr</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Trvale smazat všechny</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Obnovit vše</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL již existuje: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL musí být v platném formátu.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Zadejte úplnou adresu URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Přidat adresu URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Zadejte hodnoty</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Zkopírujte text nebo soubory k použití.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Append {0} {1} režim Aktivovaný</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Změny schránky budou nyní připojeny</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Po aktivovaném režimu Append</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Změny schránky budou nyní předloženy</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Před aktivovaným režimem append</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Blok</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Normální chování ve schránce bylo obnoveno</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Připojit deaktivovaný</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Přidané k top nebo botomu klipu</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Rozsah append režim aktivován</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>V souladu</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manuál</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Připojte k vašemu současnému výběru.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Aktivovaný režim manuálního připojení</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Akumulace schránky se zastavila</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Append se zastavil</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Akumulace schránky se obnovila</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Připojit se k obnovení</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Jste si jisti, že chcete dokončit připojení?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Úpravy v režimu kompatibility odstraní všechny bohaté formátování. Určitě to chcete upravit?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Varování degradace dat</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktivní</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Povoleno</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Vypnuto</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Na</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Odmlčené</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Výsledek</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Postavení</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Došlo k neznámé chybě.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>zbývající pokusy</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Zadejte heslo</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Potvrdit</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Čas schůzky</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete odstranit všechna využití '{0}'?
+
+To nelze vrátit zpět!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dynamický</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statický</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} je prázdný ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Více již brzy!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Přihlašovací zatížení se selhalo</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Přihlaste se zatížení deaktivace úspěchu</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Přihlašovací zatížení umožňuje selhání</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Přihlaste se povolit úspěch</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Skrýt</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Monkey Paste je nyní naložena.
+Poslech schránky je: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Načteno</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Ukázat</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Režim výběru automatického kopie: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Režim se změnil</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Režim vložení pravého kliknutí: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Aktualizován plugin</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Vložte '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Spusťte analyzátor '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Spusťte spouštěč '{0}'</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Vyberte '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete smazat '{0}' a všechny přidružené akce?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Spoušť</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Chcete odstranit všechny dílčí akce pro '{0}'? (Jinak budou znovu upraveni na '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Odebrat možnosti</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Opravdu chcete goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Účet</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analyzátory</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Aplikační operace</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Schránka</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Obsah</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Převaděče</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultura</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Směr</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Přetažení</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikony</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Rozhraní</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Operace vložení</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preference</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Vyhledávání</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Zkratky</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Třídit</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Zvuky</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Systémová lišta</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Sbírky</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Téma</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Spouštěče</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operace webových stránek</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Nastaví schránku na vstupní klip.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Upozornění</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Rozeznít</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Obecný účel Zvuková a/nebo systémová upozornění na zprávy. Výstražná akce nemá žádný vliv na jejich vstup.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Zpráva</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Opice</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Náhled</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Ukázat?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Zpráva o čase toast je zobrazena během několika sekund. Pokud je hodnota 0, musí být zpráva zavřena ručně.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Zobrazit čas (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Zvuk?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Typ zvuku</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Hlasitost</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analyzátor</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Zpracovává vstupní klip pomocí přiřazeného předvolby analyzátoru.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Vstupní obsah je propojen s vybranou kolekcí</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Propojuje vstupní klip do přiřazené kolekce značek.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Štítek</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Citlivý na velká písmena?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>To může být statický text pro srovnání se vstupem a/nebo zahrnout vybrané vlastnosti (pomocí tlačítka filtru), bude nahrazen po vyhodnocení stavu.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Data podmínky</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Před vyhodnocením stavu volitelný dotaz JsonPath, který bude použit na vybranou „vstupní vlastnost“.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Vstupní filtr</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Vlastnost klipu použitá pro toto podmíněné.
+
+Vlastnost „posledního výstupu“ je v současné době podporována pouze tehdy, je -li toto podmínky, dítě analyzátoru a poskytnutá data se budou lišit v závislosti na výstupu rodičovského analyzátoru.
+
+Pro odstraňování problémů připojte k rodiči tohoto podmíněného připojení „výstražné akce“ a nastavte parametr zprávy „Zpráva“ upozornění tak, aby odpovídal této vstupní vlastnosti. To umožní přezkoumat skutečná data použitá pro toto podmíněné.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Vstupní vlastnost</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Provádí porovnání textu na vstupním klipu nebo předchozího výstupu akce. Když selže srovnání (není to shoda), nebudou provedeny žádné dětské akce. Takže to funguje jako logická brána.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Všechny pravdivé nebo nepravdivé operace, kde budou dětské akce provádět, pouze pokud je výsledek pravdivý.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Všechno</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Spuštěno, když je do systému přidán klip vybraného typu (schránka, tažení - a - drop, analyzátor generovaný nebo duplikován).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Proveďte tento spouštěč pouze v případě, že vstupní klip je nový a ne duplikát. Toto je nezávislé na jakémkoli nastavení preference, zda je nový obsah ignorován nebo ne.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorovat duplikát</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Tuto akci spustí pouze klipy tohoto typu.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Propojuje vstupní klip do přiřazené kolekce značek.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Spuštěno, když je klip propojen s zadanou kolekcí značek.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Sbírka</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Množství času v milisekundách čekalo před provedením dětí</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Zpoždění</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Experimentální) primárně používaný ve spojení s opakovací akcí pro dotazování vzdálených zdrojů nebo pomoci s dlouhodobými operacemi.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Pokud je ponechán prázdný, výstupní soubor použije název vstupního klipu jako název souboru.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Vlastní jméno</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Adresář, ve kterém bude soubor zapsán.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Adresář</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Uloží vstup do vybrané složky.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Spuštěno, když se změní obsah vybrané složky. Výstupem bude nový nebo existující (když je povolena preference ignorovaných duplikátů) souborový klip souboru nebo složky, který se jako poslední výstup změnil spolu s typem změny.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Události</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Složka</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignorovat duplikát</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Hodnota 0 bude opakovat mateřskou akci na neurčito</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Opakujte počet</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Množství času v milisekundách čekat, jakmile je dokončena akce rodičů</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Opakujte zpoždění</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Experimentální) používané pro vytváření akčních smyček nebo opakujících se úkolů. Po opakování provede všechny děti znovu s původním vstupem. Při použití intervalu bez počtu opakování bude muset být spouštěč deaktivován a opětovný k zastavení opakování. Může být užitečný pro volební nebo automatizaci škrábání na webu.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Spuštěno globální zkratkou, kterou definujete. Pokud je MonkeyPaste aktivní, pokusí se použít jako vstup vybraný klip (pokud existuje). Jinak se pokusí použít jako vstup schránku.
+
+POZNÁMKA: Spoušť zkratky se bude stále provádět, pokud neexistuje žádný vstup, který by jej udržel flexibilní (takže to může být makro spouštěcí atd.), Protože to není událost poháněná data.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Trigger zkratky</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Spuštěno, když je zaznamenaná zkratka stisknuta kdykoli s aktuální schránce</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Tato akce vyžaduje, aby se aplikace restartovala. Chtěli byste to udělat hned?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Byl tam problém. Aplikaci musíte ručně restartovat.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analyzujte s anotátorem</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Anotace spouštěče</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Vestavěné prvky jsou čteny - pouze. Duplikát ke změně.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonymní</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Zvyk</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Včera</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} před dny</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>před 1 hodinou</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} před hodinami</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Právě teď</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Před minutou</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} před minutami</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Minulý měsíc</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} před měsíci</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Minulý týden</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} před týdny</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} před lety</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anotace</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>název aplikace</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Cesta aplikace</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Citlivý na velká písmena</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Obsah</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Typ souboru</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Typ obrazu</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Regulární výraz</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Typ textu</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Název URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Celý svět</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Stejně jako posouvání podél horní okraje obrazovky, které se otevře, zamkne hlavní okno, když se otevře. Umožňující rychlejší více cílené pracovní postupy.
+
+* Rohy jsou z hlediska všech vašich obrazovek, nikoli na monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Zobrazit okno a zámek</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Volný, uvolnit!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Dejte nám 5 hvězdiček!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Smazat všechny</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Odstranit veškerý obsah</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Jste si jistí, že to chcete smazat
+Všechny vaše klipy?!
+
+*Tuto operaci nelze vrátit zpět!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Jsem Indy Dev, prosím, ukážte nějakou podporu!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Jako Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} přijímá pouze vstup typu: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Režim automatického kopírování - simuluje událost „kopírování“ pokaždé, když je uvolněno levé tlačítko myši.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Režim vložení pravého kliknutí - Simuluje událost „Paste“ pokaždé, když je uvolněno pravé tlačítko myši</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Přednastavení</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Zobrazit složku pluginu</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Zpráva</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Pohled</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Zobrazit nástroje</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analyzátory anotují svůj vstup nebo vytvářejí nové klipy jako výstup. Děti analyzátorů se musí rozhodnout, které z nich potřebují jako svůj vstup. Toto je obvykle poslední výstup.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Typ vstupu</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger Designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Vyberte {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Nenalezeno...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Při kontrole bude skutečný nebo nepravdivý výsledek stavu převrácen. Například podmínka „obsahuje“ se „neobsahuje“.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Prosím, čekejte...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Vybírání barev</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Vyberte barvu shody</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Jako spoušť zkratky, ale když je stisknuta kombinace klíčů, bude v aktivní aplikaci simulována událost „kopírovat“, takže to stále funguje jako kopie, ale pak se řetězec akcí připojený k spouštěcím kopii opičí Simulovaná data kopírování schránky.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Pokročilý filtr</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Skrýt filtry</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Obnovení filtrů</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Vytvořte filtr</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Volitelné) Při ponechání prázdné schránky bude nastavena pomocí vstupu této akce. Všechno zde uvedené bude považováno pouze za prostý text.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Obsah pro schránku</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Pokud je to pravda, nebude po této akci nastaven žádný klip.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignorovat</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Žádný analyzátor vybraný pro akci '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analyzer pro akci '{0}' nebylo nalezeno</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Filtry mateřského '{0}' pouze pro obsah a analyzátor typu '{1}' {2} '</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Žádná značka vybrána pro klasifikátor '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag for Classifier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Porovnat hodnotu mohou být pouze písmena, čísla nebo prostory</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Žádná značka vybrána pro spouštěč označené CLIBL “{0} '</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag for Clip Tagged Trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Žádná složka sledování určená pro '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Sledujte složku '{0}' NENÍ nalezeno pro spouštěč '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Cesta spisovatele souborů pro akci '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' pro '{1}' nebylo nalezeno.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Hlavní panel</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Dozvíte se o pluginech</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Obnovte tuto konfiguraci analýzy</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Změnit protokol</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Připojte se prosím k internetu a zkuste to znovu později.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - nápověda</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} je nejnovější verze</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Všichni jste nahoře - do - datum!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Kontrola aktualizací...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Nová verze k dispozici!
+
+Kliknutím sem aktualizujte na '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Kliknutím níže aktualizujte na '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Aktualizace k dispozici!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Nyní aktualizovat</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' obsahuje sdílené hodnoty. Co byste chtěli resetovat?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Průhledná</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Vymazat nedávné vyhledávání</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Resetovat všechny</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Resetovat sdílený</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Resetujte nesdílenou</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Vyvolává přiřazenou aplikační akci. Všechny příkazy aplikací jsou bez státní příslušnosti a jejich vstupní klip je ignorován.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Když není zaškrtnuto a příkaz nemůže vystřelit, řetěz provedení se zastaví. Mnoho příkazů bude vyžadovat určitý konkrétní stav aplikace, aby bylo možné provést.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Vždy pokračovat?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Příkaz k provedení.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Příkaz</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Žádný příkaz vybraný pro příkaz aplikace '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Příkaz pro aplikační příkaz '{0}' nebylo nalezeno</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Vybraný</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Aktualizoval problém „{0}“. Chcete -li dokončit aktualizaci, budete muset znovu restartovat a nainstalovat '{0}' znovu (nebojte se, že bude obnovena všechna vaše nastavení).
+
+Nyní můžete restartovat a dokončit aktualizaci pomocí re - instalace, ignorování a aktualizujte ji později nebo zrušit aktualizaci dohromady a pokračovat v používání verze '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Chyba aktualizace</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Nelze si stáhnout aktualizaci</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Aktualizace selhala</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Chcete -li dokončit aktualizaci, budete muset restartovat. Chcete restartovat nyní nebo později?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Aktualizace připravená</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Později</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Restartovat nyní</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>čekající</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} byl úspěšně aktualizován na {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Jsou nutné jádrové pluginy a nelze je odstranit.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instaluje</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Aktualizace čeká. Restartujte k dokončení.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>čekající</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Odinstalace čeká. Pokud chcete nainstalovat, restartujte prosím.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Chcete -li dokončit odinstalaci, budete muset restartovat. Chcete restartovat nyní nebo později?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Dokončit odinstalaci?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Nepublikovaný</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto -generovaná výchozí předvolba pro '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Žádný klip</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analyzujte vybraný klip</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Přiřaďte zkratku pro spuštění '{0}' na vybraném klipu</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Globální pasta</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Přiřaďte globální zkratku Paste pro '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Zapomenuté heslo?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Odhlásit se</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Zásady ochrany osobních údajů</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Vyžaduje restart) Pokud budou povoleny diagnostické informace zaznamenány. To může zpomalit výkon a může obsahovat osobní údaje.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Protokol k souboru</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>OTEVŘENO</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Otevřená složka protokolů</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Procházejte pluginy</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Číst</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Napsat</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Odeslat zpětnou vazbu nebo zprávu o chybách</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>To skrývá pouze hlavní okno. Všechna ostatní okna bez dialogu jsou vždy zobrazena na hlavním panelu.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Hledejte v '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Přidat filtr</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Upravit typ spojení</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Odstraňte tento filtr</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Otevřete pomoc o tom ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klipy</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Změna</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Nikdy</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Soubor</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Nepojmenovaná</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Záznam</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Neznačený odkaz na zdroj</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' je vyžadován</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Má chyby)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Omezený</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Úložný prostor</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Odpadky</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Neomezený</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Tato aplikace v současné době odpovídá výchozí předvolbě a formáty čtečky schránky.
+
+Povolení nebo deaktivaci výchozích předvoleb čtečky (z postranního panelu schránky) tuto konfiguraci neovlivní. Výchozí nastavení se řídí pouze nekótované aplikace.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Tato aplikace v současné době odpovídá výchozí předvolbě a formáty spisovatelů schránky.
+
+Povolení nebo deaktivaci Výchozí předvolby spisovatelů (z postranního panelu schránky) tuto konfiguraci neovlivní. Výchozí nastavení se řídí pouze nekótované aplikace.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Chcete -li připojit, musíte znepokojen posluchači schránky (zásobník systému -&gt; obnovit).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Připojit nedostupné</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Nemá žádná nastavení</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Mluvím jen anglicky a Monkeypaste byla přeložena do tohoto jazyka.
+
+Všechny verze se dodávají s anglickým balíčkem, takže pokud mluvíte anglicky, můžete na něj změnit jazyk kdykoli po tomto nastavení (Nastavení -&gt; Předvolby -&gt; International).
+
+Pokud byste chtěli pomoci zlepšit překlad, rádi bychom od vás slyšeli!
+
+zpětná vazba@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Obavy na překlad</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Chcete -li tuto funkci použít, musíte MonkeyPaste aktualizovat.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Zkratka unset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Posluchač schránky deaktivován</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Posluhovač schránky povoleno</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Akce nadřazenosti '{0}' nepodporuje typ vlastnosti vstupu „Poslední výstup“</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Zjistěte více o plánech</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>aplikace</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Spoušť</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klip</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analyzátor</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Štítek</value>
+  </data>
+</root>

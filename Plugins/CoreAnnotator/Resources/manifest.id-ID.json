@@ -1,0 +1,11 @@
+{
+  "title": "Annotator Teks Inti",
+  "description": "Memberikan dukungan hyperlink dasar untuk konten berbasis teks",
+  "version": "1.0.0.1",
+  "author": "Monkey",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "packageType": "Dll",
+  "tags": "Inti, anotasi, teks, tautan, warna, parsing, alamat, telepon, email, mata uang, keuangan"
+}

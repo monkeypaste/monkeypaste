@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>無視する</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>チェックされた場合、{0}形式はクリップボードまたはドラッグアンドドロップデータから読み取られません。</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>チェックされた場合、{0}形式はクリップボードまたはドラッグアンドドロップデータに書き込まれません。</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>読む</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>書く</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>RTFがまだ存在しない場合、HTMLはRTFに変換されます。これは、Webブラウザーおよび/またはワードプロセッシングアプリケーションの間で役立つ場合があります。 （RTF形式を有効にする必要があり、サポートされているプラ​​ットフォーム専用です）</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>RTFに変換します</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>これらのディレクトリは、クリップボードまたはドラッグアンドドロップデータから読み取られません。</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>無視されたディレクトリ</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>無視されたファイル拡張子</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>これらのファイルタイプは、クリップボードまたはドラッグアンドドロップデータから読み取られません。</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>これらのファイルタイプは、クリップボードまたはドラッグアンドドロップデータに書き込まれません。</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>チェックすると、アスペクト比を保持しながら最大寸法よりも大きい画像が拡大されます。これは、クリップボードの画像には影響しません。</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>大きすぎます</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>ビットマップを貼り付けたりドロップしたりするとき、これはデフォルトのファイルタイプになります</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>デフォルトのエクスポートタイプ</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>完全に透明な画像がクリップボードに表示される場合がありますが、その混乱があります。</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>空の画像を無視します</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>大規模な画像（数MBを超える）は、残念ながらドラッグアンドドロップと全体的なパフォーマンスをやや緩やかにすることができます。この値を低く保つようにしてください。</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>最大高さ</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>最大幅</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>パフォーマンスの懸念のために、最大量の文字が必要です</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>マックス文字</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>html（mime）</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>テキスト（mime）</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>url（moz）</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>format '{0}'は空または透明なデータがあり、ブロックされました</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>空のデータがブロックされました</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}'フォーマットは「無視」としてフラグが付けられています</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>形式は無視されます</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0}制限は{1}で、データは{2}でした</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>最大サイズが検出されました</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>コアクリップボードリーダー</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>コアクリップボードライター</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>デフォルトのクリップボードフォーマットを処理します</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>コアクリップボードハンドラー</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>コア、クリップボード、ドラッグアンドドロップ、テキスト、RTF、リッチテキスト、HTML、CSV、画像、PNG、JPG、JPEG、リンク</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>画像（PNG）</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>HTMLがまだ存在していない場合、RTFはHTMLに変換されます。これは、Webブラウザーおよび/またはワードプロセッシングアプリケーションの間で役立つ場合があります。 （HTML形式を有効にする必要があり、サポートされているプラ​​ットフォーム専用です）</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTMLに変換します</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>文章</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>無題</value>
+  </data>
+</root>

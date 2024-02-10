@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorer</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Une fois vérifié, le format {0} ne sera pas lu dans les données du presse-papiers ou de glisser-déposer.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Une fois vérifié, le format {0} ne sera pas écrit dans les données du presse-papiers ou de glisser-déposer.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Lire</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Écrire</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>Des dossiers</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Lorsque RTF n'est pas déjà présent, HTML sera converti en RTF. Cela peut être utile entre les navigateurs Web et / ou les applications de traitement de texte. (nécessite le format RTF à activer et est uniquement pour les plates-formes prises en charge)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Convertir en RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Ces répertoires ne seront pas lus à partir de données de presse-papiers ou de glisser-déposer.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Répertoires ignorés</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Extensions de fichiers ignorées</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Ces types de fichiers ne seront pas lus à partir des données du presse-papiers ou de glisser-déposer.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Ces types de fichiers ne seront pas écrits sur les données du presse-papiers ou de glisser-déposer.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Lorsqu'ils sont vérifiés, les images supérieures à la dimension maximale seront mises à l'échelle tout en conservant le rapport d'aspect. Cela n'affecte pas l'image dans le presse-papiers.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Échelle surdimensionnée</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Lors de la collation ou de la suppression d'un bitmap, ce sera le type de fichier par défaut</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Type d'exportation par défaut</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>Parfois, des images entièrement transparentes apparaîtront dans le presse-papiers, son déroutant.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignorer les images vides</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>De grandes images (plus de quelques MBS) peuvent rendre les performances de glisser-déposer et globales quelque peu lents malheureusement. Essayez de maintenir cette valeur basse.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Hauteur maximum</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Largeur maximale</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Pour les problèmes de performance, un montant maximum est nécessaire</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Caractères max</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Texte (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format '{0}' avait des données vides ou transparentes et a été bloqué</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Données vides bloquées</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Le format '{0}' est signalé comme «ignoré»</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Format ignoré</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} limite est {1} et les données étaient {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Taille maximale détectée</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Lecteur de presse-papiers de base</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Noyau de presse-papiers</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Proporce les formats de presse-papiers par défaut</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Planche-presse</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, presse-papiers, glisser-déposer, texte, RTF, texte riche, html, csv, image, png, jpg, jpeg, lien</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Image (png)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Lorsque HTML n'est pas déjà présent, RTF sera converti en HTML. Cela peut être utile entre les navigateurs Web et / ou les applications de traitement de texte. (nécessite le format HTML pour être activé et est uniquement pour les plates-formes prises en charge)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Convertir en html</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Texte</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Sans titre</value>
+  </data>
+</root>

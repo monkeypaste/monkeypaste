@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Walang mga tampok na limitado sa pamamagitan ng subscription, tanging kapasidad ng imbakan at maaaring mabago sa anumang oras.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Ibalik ang iyong umiiral na account ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Ang nilalaman at basurahan ay
+limitado sa {0} at {1}
+Mga clip ayon sa pagkakabanggit.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Pinapayagan ang hanggang sa {2} na mga clip ng nilalaman at walang limitasyong imbakan ng basurahan.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Walang pigil at walang limitasyong nilalaman at imbakan ng basura.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Ibalik</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Libre</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Pamantayan</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Walang limitasyong</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Mahalaga ang iyong privacy at ang data ng clipboard ay maaaring maging personal. Ang pag -iimbak ay palaging naka -encrypt ngunit maaari kang magtakda ng isang password na kakailanganin kung sakaling ninakaw ang iyong aparato o ang ibang tao ay gumagamit ng iyong aparato.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Kapag pinagana, ang pag -drag mula sa anumang application sa tuktok ng screen ay magbubunyag ng Monkeypaste upang madaling i -drop ang nilalaman sa Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Ang pagpapagana ng 'lock' sa tuktok na kaliwa ng pangunahing window ay papayagan pa rin ang pagbagsak sa Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Higit pang mga kagustuhan sa window ay magagamit mula sa 'Mga Setting -&gt; Mga Kagustuhan -&gt; Window' menu.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>I -drag ang mga saging dito!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>I -drag - To - Buksan</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Ang mga shortcut ng keyboard ay maaaring suriin o mabago sa anumang oras mula sa 'Mga Setting -&gt; menu ng mga shortcut'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Ang lahat ng mga pandaigdigang shortcut ay hindi paganahin upang mai -set up mo ang iyong sarili sa ibang pagkakataon.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Ang mga shortcut ng clipboard ng Monkeypaste ay magagamit sa lahat ng mga aplikasyon.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Panloob</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profile ng kilos</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hoy! Mag -setup tayo ng ilang mga bagay upang mapagbuti ang iyong pangkalahatang karanasan sa Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Maligayang pagdating</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Upang makuha ang pinaka -paggamit ng Monkeypaste, awtomatikong pag -load kapag nag -log in ay isang magandang ideya. Ngunit, iyon ay nasa iyo.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Panatilihin itong kaswal.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Paganahin</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Mag -load sa pag -login?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Kapag pinagana, ang isang gesture ng scroll sa tuktok ng screen ay magbubunyag ng Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Kaliwa - Ang pag -click sa icon ng taskbar ay magbubukas pa rin ng Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Higit pang mga kagustuhan sa window ay magagamit mula sa 'Mga Setting -&gt; Mga Kagustuhan -&gt; Window' menu.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Madali di ba?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Mag -scroll dito!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Mag -scroll - TO - Buksan</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste is &lt;span color = "red&gt; ganap na isinama &lt;/span&gt; na may drag - at - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>I -drop ito dito!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; sa ganitong paraan, maaaring ma -access ang Monkeypaste &lt;br&gt; &lt;span color = "pula"&gt; nang walang pag -click &lt;/span&gt; o kahit na &lt;span color = "pula"&gt; batting isang mata &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>I -drag mo ako!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Subukan!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Subukan!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Walang magagamit na mga resulta.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Kumpirmahin</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>…</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Mga setting</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dependencies:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>I -install</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Sigurado ka bang nais mong alisin ang '{0}' at lahat ng mga preset at shortcut nito?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>I -uninstall</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>Ang '{0}' ay walang mga resulta.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Walang pagpipilian.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Wala</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Mga Kredito:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Paglalarawan:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Mag -donate:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Lisensya:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL ng proyekto:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Nai -publish:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Basahin mo ako:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Iulat ang pang -aabuso:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>I -update</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Bersyon:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Buksan sa window</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Tanggalin</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>I -save</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Susunod sa Tanggalin!
+
+Mag -upgrade upang maiwasan.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Susunod sa basurahan!
+
+Mag -upgrade upang maiwasan.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Mga file</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Imahe</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Teksto</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Kinopya {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} file | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} mga linya</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} kopya | {1} pastes</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Ilipat</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Idagdag</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Kopya</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Gupitin</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>I -paste</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Kopyahin</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Hindi nasampal na filter</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Pakipili -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Mga format</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Mga mambabasa</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Manunulat</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Mga tagapangasiwa</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Tanggalin</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Kopyahin</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>I -edit ang pangalan</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>I -reset</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Aksyon</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Global Ruta</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Shortcut</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Ang mga kilos ay dapat na natatangi at maaari lamang maglaman ng isang input key.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; panloob &lt;/b&gt; Lahat ng mga shortcut ay limitado sa loob ng aplikasyon. Hindi talaga ito isang inilaan na pagpipilian ngunit maaaring payagan na ipasadya kung ano ang mga shortcut na balak mong gawin ang pandaigdigang &lt;i&gt; balang araw &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; default &lt;/b&gt; Ang lahat ng mga pandaigdigang shortcut ay pinagana. Ang &lt;b&gt; Ipakita/Itago ang Main Window &lt;/b&gt; Ang shortcut ay gumagamit ng &lt;span color = "red"&gt; override &lt;/span&gt; ruta para sa &lt;b&gt; caps lock &lt;/b&gt; key. Maaari mong baguhin ang ruta o kilos sa anumang oras. Ngunit &lt;span color = "berde"&gt; subukan ito &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;pread&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; Global Shortcut Modes &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; passive &lt;/b&gt; Ang isang shortcut monkeypaste ay makikinig para sa anumang aplikasyon. &lt;br&gt;
+*Ito ang pagpipilian ng &lt;i&gt; lamang &lt;/i&gt; sa Linux sa ngayon.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Pre &lt;/b&gt; Ang shortcut ay isasagawa &lt;b&gt; &lt;i&gt; bago &lt;/i&gt; &lt;/b&gt; ito ay hawakan ng aktibong aplikasyon. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; Ang shortcut ay isasagawa &lt;b&gt; &lt;i&gt; pagkatapos &lt;/i&gt; &lt;/b&gt; ito ay hawakan ng aktibong aplikasyon. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; override &lt;/b&gt; Kapag naririnig ng Monkeypaste ang input key (non -modifier key) ng isang override shortcut ito ay &lt;i&gt; itago &lt;/i&gt; ang key press mula sa application -level input. &lt;br&gt;
+Ang pagpipiliang ito ay gagarantiyahan ang shortcut ay na -trigger nang walang mga salungatan sa aktibong aplikasyon.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; eksklusibong override &lt;/b&gt; Ito ay isang espesyal na uri ng override mode na idinisenyo para sa caps lock key. Pinapayagan lamang nito ang &lt;b&gt; isa &lt;/b&gt; key (non -modifier) ​​para sa pagtatalaga nito. &lt;br&gt;
+Sa normal na override mode caps lock ay maaaring maging &lt;i&gt; suplado sa &lt;/i&gt; kapag pinindot kasama ang iba pang mga susi.
+Kaya kahit na ano ang ibang mga susi ay bumaba, kung ang isang &lt;b&gt; hotkey &lt;/b&gt; shortcut ay pinindot ito ay mapapawi at pipigilan itong maging &lt;i&gt; na natigil sa &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Huwag paganahin</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Mag -load kapag ang account ng gumagamit na ito ay naka -log in, hindi para sa iba pang mga gumagamit.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; gamit ang mga magagamit na contact (nangangailangan ng isang fetcher plugin) ang patlang na ito ay gagamitin para sa lahat ng mga pagkakataon ng template na ito sa buong dokumentong ito o sa anumang ito ay mai -refer sa ibang pagkakataon. &lt;/p&gt; &lt;p&gt; Kaya halimbawa kung piliin ang email address Narito pagkatapos ang larangan ng email ng contact na iyong pinili ay gagamitin para sa lahat ng mga pagkakataon sa dokumentong ito. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = maikling taon &lt;br/&gt; yyyy = mahabang taon &lt;br/&gt; m = buwan (1-12) &lt;br/&gt; mm = buwan (01-12) . Dis) &lt;br/&gt; mmmm = mahabang buwan (Enero, Pebrero ... Disyembre) &lt;br/&gt; d = araw (1 - 31) Araw ng Linggo sa Mga Salita (Lunes, Martes ... Linggo) &lt;br/&gt; e = Maikling Araw ng Linggo sa Mga Salita (Mon, Tue ... Araw) Ika-3, ika-21, ika-22, ika-23, ika-31, ika-4 ...) &gt; H = oras sa araw (0-23) &lt;br/&gt; hh = oras sa araw (00-23) &lt;br/&gt; mm = minuto &lt;br/&gt; ss = pangalawa A = AM/PM marker &lt;br/&gt; p = a.m./p.m. pananda</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Ang kasalukuyang petsa at/o oras ay mapapalitan para sa mga template ng dateTime kapag sila ay na -paste.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Lahat ng mga pangyayari ng template na ito ay gagamitin ang ibinigay na teksto. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Lahat ng mga pangyayari ng template na ito ay gagamitin ang ibinigay na teksto. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Tapusin ang pagdidikit</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Paganahin ang block</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Paganahin ang Inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Manu -manong Toggle</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Manu -manong Toggle</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>I -pause ang append</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Toggle dati</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Toggle dati</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Ipagpatuloy ang append</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Idagdag ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>I -paste</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pin</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Itago ang lahat ng mga abiso sa '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Tanggalin</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Huling aktibong app na hindi kilala. Lumipat sa inilaan na app sa Monkey I -paste.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>I-paste sa: &lt;em&gt; &lt;i class = "I-paste-tooltip-suffix"&gt; {0}</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>I -minimize</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Mangyaring maghintay ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>I -lock</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Tulong</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Kopyahin at i -paste</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Kagustuhan</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Ibalik sa dating ayos</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filter ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Mga shortcut</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Magdagdag ng app</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Magdagdag ng website</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>I -block?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Pangalan</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Apps</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>I -block ang domain?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>I -block ang URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Ang pagkilala sa mapagkukunan ng URL ay nakasalalay sa kung paano magiliw ang clipboard ang application ng host upang ang pagtanggi ay hindi maaaring garantisado</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Mga website</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Ang ilang mga tampok ng Monkeypaste ay gumagamit ng automation ng keyboard upang gayahin ang mga kaganapan sa 'kopya' sa iba pang mga aplikasyon.
+
+Idagdag at/o piliin ang app gamit ang natatanging shortcut ng kopya (tulad ng isang console o shell halimbawa) upang matiyak na maayos ang mga tampok na iyon.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Kopyahin ang shortcut</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Wala</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Ang mga napiling preset lamang ang gagamitin para sa tinukoy na aplikasyon. Kapag hindi natukoy, ang mga default na preset na matatagpuan sa &lt;em&gt; clipboard sidebar &lt;/em&gt; ay gagamitin.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Maraming mga tampok ng Monkeypaste ang gumagamit ng automation ng keyboard upang makipag -ugnay sa iba pang mga aplikasyon.
+
+Ang ilang mga aplikasyon (tulad ng ilang mga console o shells halimbawa) ay maaaring magkaroon ng isang hindi default na shortcut ng i -paste.
+
+Upang matiyak ang wastong interoperability, itala ang mga shortcut para sa application na ito.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>I -paste ang shortcut</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Mga mambabasa</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ang lahat ng pagsubaybay sa clipboard mula sa tinanggihan na mga aplikasyon ay magiging &lt;b&gt; hindi pinansin &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Manunulat</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>I -edit ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Mga format</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Tinanggihan</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Mga shortcut</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Nais mo ring alisin ang lahat ng mga clip ng {0} mula sa '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Alisin ang mga clip?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Mag -browse sa app ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Piliin ang Landas ng Application</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Sigurado ka bang nais mong alisin ang mga pasadyang mga shortcut para sa {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Sigurado ka bang nais mong alisin ang mga pasadyang mga format para sa {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Walang itinalagang mga format ng clipboard para sa app na ito. Walang data na babasahin mula dito sa pamamagitan ng hiwa/kopya o pagtatangka ng isang drag - at - ihulog sa unggoy</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Walang itinalagang mga format ng clipboard para sa app na ito. Ang awtomatikong i -paste o i -drag - at - ang pag -drop mula sa Monkeypaste ay walang makakaapekto (ang walang laman na data nito).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Sigurado ka bang nais mong i -reset ang lahat ng mga shortcut? Ang lahat ng mga pasadyang shortcut ay aalisin.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Sigurado ka bang nais mong baguhin ang iyong profile sa pag -ruta ng shortcut sa '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Lahat</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Mga Paborito</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Mga Filter</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Mga format</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Ngayon</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Basurahan</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Tungkol sa</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Madali di ba?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>I -double click sa Unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Pasadya</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Ang kumbinasyon na ito ay salungat sa '{0}' na mai -clear kung mai -save.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Dapat ibigay ang isang shortcut.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Ito ay isang pandaigdigang shortcut. Nangangahulugan ito na susubukan nitong isagawa kung kailan ito ginanap. Subukang gawin itong natatanging sapat (o baguhin ang 'uri ng pagruruta') upang hindi salungatin sa mga shortcut mula sa iba pang mga aplikasyon.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Ang shortcut ay dapat maglaman ng isa at isa lamang na non -modifier key.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Pindutin ang anumang susi upang maitala ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Magtalaga ng shortcut</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Matuto nang higit pa ...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Mag -upgrade</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Kanselahin</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Ayusin</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Huwag pansinin</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Hindi</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Muling</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Ipasa</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Oo</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Taun -taon</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Buwanang</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Libreng subukan!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Cycle ng pagsingil</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Mag log in</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Suriin ang iyong koneksyon
+at subukan muli.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Mag -log out</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Susunod na pagbabayad</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Magrehistro</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Hindi wasto ang email</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Ang mga password ay hindi tumutugma.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Ang password ay dapat na isang minimum na mga character na {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Tandaan?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Suriin ang iyong email upang kumpirmahin ang iyong account</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>I -reset ang password</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, Yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Hindi kailanman</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Libreng {0} araw na pagsubok</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>May problema sa pagganap
+Ang iyong pagbili.
+
+Sinusuri ang iyong koneksyon at
+Maaaring makatulong ang mga setting.
+
+Gusto mo bang subukan ulit?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Matagumpay ang iyong account
+Na -upgrade sa:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Bumili ng matagumpay!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Nabigo ang koneksyon.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Muling</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Nagbago ang account</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Ang iyong subscription ay ngayon {0}/{1} na may nilalaman na {2} at {3} na imbakan ng basurahan.
+Ngunit huwag mag -alala, walang data na nawala pagkatapos ng pag -downgrading. Ang mga bagong clip lamang ang susuriin.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Binabati kita! Ang iyong subscription ay ngayon {0}/{1} na may nilalaman na {2} at {3} na imbakan ng basurahan.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Basurahan o i -link ang isang bagay
+mula sa '{0}' upang magdagdag ng higit pa.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' imbakan ay {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Ibalik</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>Naka -block ang {0}</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Naabot ang Nilalaman at Basura ng Basura!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' imbakan ay {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Naabot ang kapasidad ng nilalaman!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Maaari mong itago ang mga babalang ito
+pag -click sa 'itago ang lahat' mula sa
+menu ng mga pagpipilian sa itaas.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Ang max trash storage ay {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Naabot ang kapasidad ng basura!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>Ang {0} ay hindi wasto</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} ay dapat na hindi bababa sa {1} character</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>Ang {0} ay maaari lamang maging character na {1}</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>I -paste sa: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Ang pagbabayad para sa iyong {0}
+Ang subscription ay dahil sa {1}
+at hindi pa natanggap.
+
+Mangyaring i -update ang iyong
+Impormasyon sa Pagbabayad.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Ang pagbabayad para sa iyong {0}
+Ang subscription ay dahil sa {1}
+at hindi pa natanggap.
+
+Mangyaring kumonekta sa
+Internet sa aparato
+kasama ang iyong subscription at
+I -restart upang magpatuloy
+Gamit ang iyong {0} Plano.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Ang pagbabayad para sa iyong {0}
+Ang subscription ay dahil sa {1}
+at hindi pa natanggap.
+
+Mangyaring buksan o i -restart
+Monkeypaste sa aparato
+kasama ang iyong subscription sa
+Magpatuloy sa paggamit ng iyong
+{0} Plano.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Nag -expire ang account</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Tandaan</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Hindi pinapayagan ng Microsoft Store
+mga pagbabago sa mga addon ng subscription.
+
+Dapat mong kanselahin ang iyong
+{0}/{1} Plano ang iyong sarili
+O sisingilin ka para sa pareho.
+
+Gusto mo bang pumunta gawin iyon ngayon?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Ang iyong password ay na -reset.
+
+Mangyaring suriin ang iyong email at
+Sundin ang link upang baguhin
+ang iyong password.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Mag log in</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>(Mga) may -akda</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Kinakailangan na tanggapin mo ang mga sumusunod na termino ng lisensya bago magpatuloy.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Ang mga sumusunod na (mga) pakete ay nangangailangan na tanggapin mo ang kanilang mga termino ng lisensya bago mag -install.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Tumanggi ako</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Ang pag -click sa "Tanggapin ko" ay nangangahulugan na sumasang -ayon ka sa mga termino ng lisensya para sa application na ito. Kung hindi ka sumasang -ayon sa mga termino, i -click ang "I Decline".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Ang pag -click sa "I ACCEPT" ay nangangahulugang sumasang -ayon ka sa mga termino ng lisensya para sa mga (mga) plugin na nakalista sa itaas. Kung hindi ka sumasang -ayon sa mga termino, i -click ang "I Decline".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Tingnan ang Lisensya</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Pagtanggap ng lisensya</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Tinatanggap ko</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktibo</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Hindi rehistrado</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Tapos na</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Ang mga password ay hindi tumutugma</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Ang iyong subscription ay
+Ngayon itakda sa {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Natagpuan ang account</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Hindi tagumpay ang pag-login</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Nabigo ang pagpaparehistro</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Maayos ang pagrehistro!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>I -reset ang error</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Anong bago</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Hindi kailanman</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Walang limitasyong</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapasidad</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>natitira</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>Kabuuan</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Ang iyong pagbabayad ay nakaraan.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Ang mga eksklusibong override shortcut ay maaari lamang maglaman ng isang susi at ang susi na iyon ay hindi maaaring maging isang modifier key.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Nag -expire</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Naglo -load</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Hindi pinagana</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Tandaan! Ang password na ito ay opsyonal at para lamang sa labis na seguridad. Ang iyong data ay naka -encrypt na at hindi kailanman ibinahagi. Pinipigilan lamang ng password na ito ang isang tao na hindi ka mula sa pag -load ng Monkeypaste kung sa paanuman nakakakuha sila ng pag -access sa iyong desktop (ninakaw, iniwan mo ang silid, atbp.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Tandaan ang mga setting ng drop para sa:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Mag -browse ng mga plugin</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Pag -aralan</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Mabilis na aksyon</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Toggle I -edit</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Toggle pinned</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Mga anotasyon</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Plain text</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Buksan sa window</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Mag -click + Ctrl upang sundin ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Mag -click + alt upang sundin ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>I -pin o i -drop ang anumang media dito!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Malinaw</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Ang mga threshold sa itaas 0 ay magbibigay ng malabo na pagtutugma ng kulay gamit ang distansya ng Euclidean sa RGBA na kulay.
+
+Halimbawa, kung ang pula (#FF0000) ay ang termino ng paghahanap at itim (#000000) ay isang pixel sa isang clip ng imahe, kung gayon ang distansya ng kulay ay magiging 255. Itim hanggang puting distansya ay ang maximum na posible ng 510, kabilang ang isang alpha channel</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Ang lahat ng mga sumusunod ay totoo</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Mga Koleksyon</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Mga mode ng mouse</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Nag -trigger</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>I -pause</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Ipagpatuloy</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Bagong gatilyo</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Magdagdag ng preset</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Mga preset</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analyzer</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientasyon ng siklo</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Toggle Grid Layout</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Sensitibo sa kaso</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Threshold</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Buong salita</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Walang set</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Pag -ruta</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Aksyon</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Grid</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Tapos na</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Susunod</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Nakaraan</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Laktawan</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Mayroon nang account?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Susunod na pagbabayad</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Hinahayaan ka ng pagpaparehistro na dalhin ang iyong bayad na subscription sa lahat ng iyong mga aparato (sa pagkakaroon). Hindi namin i -spam ang iyong email na ipinangako namin 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Pangalan ng gumagamit</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Kailangang magparehistro?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Mga mapagkukunan</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Kakaiba, walang magagamit. May dapat mali 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Alisin</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Nangangailangan ng pag -restart</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Error sa pagkuha ng plugin mula sa '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Error sa pag -install ng plugin: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Error sa pag -install ng plugin '{0}' tiwali o hindi wastong istraktura ng direktoryo. Ang manifest ay dapat na umiiral sa '{1}' ngunit hindi natagpuan.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Error parsing plugin manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Walang plugin na puno ng gabay: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} error</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Error staging plugin sa temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Error sa pag -back up ng '{0}' to '{1}'. Mga Detalye: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Ang type ng teksto ay awtomatikong mailalapat sa isang paghahanap kapag walang nakatuon na kahon ng teksto.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Input ng paghahanap sa auto</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Nabigo ang Pagbabago ng Password</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Palitan</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Palitan ANG password</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Malinaw</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>I -clear ang password</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Nilalaman</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Laki ng font ng nilalaman</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Kapag totoo, ang panlabas na nilalaman na nakapasok sa isang clip ay gagamitin ang pag -format ng mga clip at hindi kung ano ang magagamit mula sa mapagkukunan.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>I -paste, i -drop o idagdag ang pag -format ng patutunguhan</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong kalimutan ang password?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Kalimutan</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Kalimutan ang password</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Itago ang mga watermark ng kapasidad</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Kapag ang bagong nilalaman ng clipboard ay naidugtong hindi ito masusubaybayan bilang isang bagong clip</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Huwag pansinin ang mga appends</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Kapag ang clipboard ay tumutugma sa isang umiiral na clip, ang clip na iyon ay gagamitin sa halip na lumikha ng bago</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Huwag pansinin ang mga bagong duplicate</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Ang mga pagbabago sa clipboard mula sa loob ng app ay hindi masusubaybayan</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Huwag pansinin ang panloob na pagsubaybay sa clipboard</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Ang mga puwang, tab at bagong linya ay hindi papansinin mula sa pagsubaybay</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Huwag pansinin lamang ang puting espasyo</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Mag -load sa pag -login</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Animate window</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Ipakita ang pag -uugali</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Ang pangunahing window ay ihayag sa pamamagitan ng pagsasagawa ng isang kilos ng scroll sa tuktok na gilid ng iyong monitor</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Ipakita sa tuktok na screen scroll</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Dami ng abiso</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Ang setting na ito ay susubaybayan ang system - malawak na bilang ng mga i -paste ng keyboard para sa mga istatistika ng paggamit. Ang impormasyong ito ay pribado at hindi ibinahagi ngunit hindi rin garantiya. Ang tumpak na mga resulta ay maaaring mangailangan ng pagbibigay ng isang tukoy na application na i -paste na utos sa 'Mga Setting -&gt; Kopyahin at I -paste -&gt; Mga Shortcut'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>I -paste ang kasaysayan</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Masyadong maraming mga naka -pin na clip (tulad ng mga tab ng browser) ay maaaring kumonsumo ng makabuluhang memorya. Ang pag -alis ay sa pamamagitan ng una - in - una - out</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Kapasidad ng pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Nalalapat ito sa lahat ng mga auto - nakumpleto na mga input, ang mas mababang mga halaga ay mapapabuti ang pagganap</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Kamakailang limitasyon ng teksto</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Sigurado ka bang gusto mo
+Ibalik ang mga default na kagustuhan?
+
+Hindi ito maaalis!
+
+*Ang application ay i -restart nang kumpleto.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong i -reset ang lahat ng mga abiso?
+
+*Hindi ito maaalis!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Itinatakda ng Monkey Paste ang clipboard (overrides) kapag nag -paste sa isang panlabas na programa. Ito ay &lt;b&gt; pagtatangka &lt;/b&gt; upang maibalik ang estado ng clipboard pagkatapos ng isang panlabas na i -paste.
+
+Ang kabuuang pagpapanumbalik ay hindi maaaring garantisado at maaaring mabawasan ang pagganap o kahit na pag -crash ng unggoy depende sa mapagkukunan ng data.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>I -reset ang clipboard pagkatapos ng pag -paste ng unggoy</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Hindi matanggal ang cache ng plugin mula sa landas: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Ang lahat ng mga plugin ay mai -reset sa paunang estado ng default</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Plugin cache</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong i -reset ang lahat ng mga plugin sa mga default?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong i -reset ang iyong password?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Ang lahat ng mga shortcut ng application ay mai -reset sa kanilang mga default na key na kilos.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>I -reset ang mga shortcut</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Lahat ng hindi pinansin na mga abiso na dati nang itinakda.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Ibalik ang mga abiso</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Ang pagpapagana ay maaaring maging mas mabagal) Ang hindi pagpapagana ng format ay magbabawas ng pagkonsumo ng memorya ngunit pipigilan ang ilang mga advanced na tampok, tulad ng: append, template, annotations at hanapin/palitan</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Mayaman na nilalaman</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Itakda ang password</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Ipakita ang mga pahiwatig</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Ipakita sa taskbar</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Ipakita sa Task Switcher</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Ipakita ang mga pamagat</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Kapag pinagana, ang pag -drag mula sa anumang application sa tuktok ng screen ay magbubunyag ng Monkeypaste upang madaling i -drop ang nilalaman sa Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Ipakita sa pag -drag sa tuktok ng screen</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Tema ng tunog</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Suriin ang spell</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Sa pagsisimula ang mapagkukunan ng clipboard ay hindi alam at depende sa iyong mga setting ng seguridad ang nilalaman ay maaaring magmula sa isang hindi kasama na website o aplikasyon.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Magdagdag ng startup clipboard</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Makinig sa clipboard sa pagsisimula</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Piliin</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Pag -iingat! Ang iba pang mga kulay ng palette ay pinili gamit ang matematika hindi mga mata! Kaya magkaroon ng kamalayan ng ilang mga kumbinasyon ng kulay at estilo ay maaaring walang tamang kaibahan para sa kakayahang mabasa.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Kulay ng tema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Istilo ng tema</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Ang awtomatikong paglilinis ng basurahan ay magaganap sa pagsisimula sa itinakdang agwat.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Paglilinis ng basura</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Ang mga mataas na limitasyon ng pag -undo ay maaaring makaapekto sa pagganap</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>I -undo ang limitasyon</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Walang limitasyon</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Ginamit sa advanced na paghahanap ng file para sa mga uri ng hindi preset na file</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Gumagamit - tinukoy na mga extension ng paghahanap</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Hanapin at palitan ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>I -paste dito</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Bahagi ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Tingnan</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Pamahalaan...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Palitan ang pangalan</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Kalidad: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Uri: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Permanenteng tanggalin</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Mag -browse sa '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Magbago</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Mga mapagkukunan</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Ibalik</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Pumili ng imahe ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Kulay</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Pamahalaan ang '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Buksan</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Mangyaring maghintay ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Kulay ng background</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Alisin lahat</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Mga format ng clipboard</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Tanggalin ang lahat</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Edit ng mga detalye</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Pangalan</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Hanapin</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Kulay ng font</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Format na pintura</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Sa pagpili</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Ipasok ang imahe</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>INSERT LINK</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Ipasok ang video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Kaso sa tugma</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Bagong template</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Susunod na template</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Ipasok ang text ng i -paste ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Nakaraang template</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Regular na expression</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Palitan ang lahat</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Palitan</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Buong salita</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Balutin</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>I -block</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Ipakita ang folder</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Unblock</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Tungkol sa</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>APPEND BLOCK</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Mag -apend ng inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - Kopyahin</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Mga mode</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Mangyaring maghintay ng Monkeypaste ay naglo -load ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Huminto ka</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - i -click ang i -paste</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Pangkat</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Permanenteng tanggalin ang lahat</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Ibalik ang lahat</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Aksyon</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>Ang URL ay mayroon na: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>Ang URL ay dapat na nasa isang wastong format.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Ipasok ang buong url:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Magdagdag ng URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Ipasok ang mga halaga</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Kopyahin ang teksto o mga file upang mailapat.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>APPEND {0} {1} mode na aktibo</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Ang mga pagbabago sa clipboard ay mai -apid</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Matapos maisaaktibo ang mode ng append</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Ang mga pagbabago sa clipboard ay ihahanda na ngayon</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Bago ma -aktibo ang mode ng append</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>I -block</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Ang normal na pag -uugali ng clipboard ay naibalik</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Append deactivated</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Idinagdag ang idinagdag sa tuktok o botom ng clip</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Extent Append Mode Na -aktibo</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Nasa linya</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manu -manong</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Magdagdag sa iyong kasalukuyang pagpili.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Manu -manong mode ng Append</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Tumigil ang akumulasyon ng clipboard</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Tumahimik si Append</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Nagpatuloy ang akumulasyon ng clipboard</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Nagpatuloy si Append</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong tapusin ang pag -aplay?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Ang pag -edit sa mode ng compatability ay aalisin ang lahat ng mayaman na pag -format. Sigurado ka bang nais mong baguhin ito?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Babala ng Data</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktibo</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Pinagana</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Sa</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Huminto</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Resulta</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Katayuan</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Hindi kilalang error ang naganap.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>pagtatangka natitirang</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Ilagay ang password</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Kumpirmahin</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Makipag -ugnay</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Oras ng petsa</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong tanggalin ang lahat ng mga paggamit ng '{0}'?
+
+Hindi ito maaalis!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dynamic</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Static</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} ay walang laman ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Mas malapit na!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Hindi paganahin ang pag -load ng pag -load</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Ang pag -load ng pag -login ay hindi paganahin ang tagumpay</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Nabigo ang pag -load ng pag -load</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Pag -load ng Pag -load Paganahin ang Tagumpay</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Tago</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Na -load na ngayon ang Monkey Paste.
+Ang pakikinig ng clipboard ay: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Puno</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Ipakita</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Auto Copy Selection Mode: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Nagbago ang mode</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Mag -right click sa mode ng i -paste: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Nai -update ang plugin</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>I -paste '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Patakbuhin ang '{0}' analyzer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Patakbuhin ang '{0}' trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Piliin ang '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong tanggalin ang '{0}' at lahat ng mga kaugnay na aksyon?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Nais mo bang alisin ang lahat ng mga sub - mga aksyon para sa '{0}'? (Kung hindi man sila ay muling isentro sa '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Alisin ang mga pagpipilian</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Gusto mo ba talagang goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Mga analyzer</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Mga Operasyon ng Application</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Nilalaman</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Mga convert</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Kultura</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Direksyon</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>I -drag at i -drop</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Mga icon</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>I -paste ang mga operasyon</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Kagustuhan</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Maghanap</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Mga shortcut</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Pag -uri -uriin</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Tunog</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>System tray</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Mga Koleksyon</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Nag -trigger</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Mga operasyon sa website</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Wika</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Itinatakda ang clipboard sa clip ng input.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alerto</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Pangkalahatang layunin ng tunog at/o mga alerto sa mensahe ng tray ng system. Ang alerto ng aksyon ay walang nakakaapekto sa kanilang pag -input.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Mensahe</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Unggoy</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Ipakita?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Ang mensahe ng oras ng toast ay ipinapakita sa ilang segundo. Kapag ang halaga ay 0 mensahe ay dapat na manu -manong sarado.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Ipakita ang oras (mga) oras</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Tunog?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Uri ng tunog</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Dami</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analyzer</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Pinoproseso ang clip ng input nito gamit ang itinalagang preset ng analyzer.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Ang nilalaman ng input ay naka -link sa napiling koleksyon</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Nag -uugnay sa input clip nito sa itinalagang koleksyon ng tag.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Sensitibo sa kaso?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Maaari itong maging static na teksto upang ihambing sa input at/o isama ang mga napiling mga katangian (sa pamamagitan ng pindutan ng filter) ay mapapalitan kapag nasuri ang kondisyon.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Data ng kondisyon</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Isang opsyonal na query sa JSONPath na ilalapat sa napiling 'pag -aari ng pag -aari' bago masuri ang kondisyon.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Input filter</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Ang pag -aari ng clip na ginamit para sa kondisyong ito.
+
+Ang pag -aari ng 'Huling Output' ay kasalukuyang sinusuportahan lamang kapag ang kondisyong ito ay isang bata ng isang pagkilos ng analyzer at ang ibinigay na data ay magkakaiba depende sa output ng magulang na analyzer.
+
+Para sa pag -aayos, ilakip ang isang 'alerto na aksyon' sa magulang na ito ng kundisyon at itakda ang parameter ng 'mensahe' ng alerto upang tumugma sa pag -aari ng pag -input na ito. Papayagan nitong suriin ang aktwal na data na ginagamit para sa kondisyong ito.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Pag -aari ng pag -input</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Nagsasagawa ng isang paghahambing sa teksto sa input clip o nakaraang output ng pagkilos. Kapag nabigo ang paghahambing (hindi ito isang tugma) walang mga aksyon sa bata na isasagawa. Kaya kumikilos ito tulad ng isang lohikal na gate.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Lahat ng totoo o maling operasyon kung saan isasagawa lamang ang mga aksyon ng bata kung totoo ang resulta.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Kundisyon</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Lahat</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Na -trigger kapag ang isang clip ng napiling uri ay idinagdag sa system sa anumang paraan (clipboard, drag - at - drop, analyzer na nabuo o doble).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Isakatuparan lamang ang trigger na ito kung ang input clip ay bago at hindi isang duplicate. Ito ay independyente ng anumang setting ng kagustuhan kung ang mga bagong nilalaman ay hindi pinansin o hindi.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Huwag pansinin ang dobleng</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Ang mga clip lamang ng ganitong uri ang mag -uudyok sa pagkilos na ito.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Nag -uugnay sa input clip nito sa itinalagang koleksyon ng tag.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Nag -trigger kapag ang isang clip ay naka -link sa tinukoy na koleksyon ng tag.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Koleksyon</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Ang dami ng oras sa millisecond ay naghintay bago magpatupad ang mga bata</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Pagkaantala</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimental) Pangunahing ginagamit kasabay ng pagkilos ng repeater para sa botohan ng mga malalayong mapagkukunan o tulong na may mahabang pagpapatakbo ng operasyon.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Kapag kaliwang blangko, gagamitin ng output file ang pamagat ng input clip bilang pangalan ng file.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Pasadyang pangalan</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Ang direktoryo kung saan isusulat ang file.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Direktoryo</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Makatipid ng input sa napiling folder.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Nag -trigger kapag nagbabago ang nilalaman ng napiling folder. Ang output ay magiging isang bago o umiiral (kapag pinapagana ang kagustuhan ng Doble Duplicates) file clip ng file o folder na nagbago kasama ang uri ng pagbabago bilang huling output nito.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Mga kaganapan</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Huwag pansinin ang dobleng</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Ang isang halaga ng 0 ay uulitin ang pagkilos ng magulang nang walang hanggan</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Ulitin ang bilang</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Ang dami ng oras sa millisecond upang maghintay sa sandaling makumpleto ang aksyon ng magulang</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Ulitin ang pagkaantala</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimental) na ginamit para sa paglikha ng mga aksyon na mga loop o mga gawain sa pag -uulit. Kapag paulit -ulit, isasagawa nito muli ang lahat ng mga bata kasama ang orihinal na input nito. Kapag gumagamit ng isang agwat nang walang paulit -ulit na bilang, ang trigger ay kailangang hindi paganahin at muling maibalik upang ihinto ang paulit -ulit. Maaaring maging kapaki -pakinabang para sa botohan o web scraping automation.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Na -trigger ng isang pandaigdigang shortcut na iyong tinukoy. Kung aktibo ang Monkeypaste ay susubukan nitong gamitin ang napiling clip (kung mayroong isa) bilang input. Kung hindi man susubukan nitong gamitin ang clipboard bilang input nito.
+
+Tandaan: Ang isang shortcut trigger ay isasagawa pa rin kung walang input upang mapanatili itong nababaluktot (kaya maaari itong maging isang macro trigger atbp.) Dahil hindi ito isang data - hinimok na kaganapan.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Shortcut trigger</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Nag -trigger kapag ang naitala na shortcut ay pinindot sa anumang oras kasama ang kasalukuyang clipboard</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Ang pagkilos na ito ay nangangailangan ng app upang i -restart. Nais mo bang gawin iyon ngayon?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Nagkaroon ng problema. Kailangan mong manu -manong i -restart ang application.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Pag -aralan kasama ang Annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotate trigger</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Ang mga binuo sa mga elemento ay binabasa - lamang. Doble upang baguhin.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Pasadya</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Kahapon</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} araw na ang nakakaraan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 oras na ang nakakaraan</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} oras na ang nakakaraan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Ngayon lang</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Isang minuto na ang nakakaraan</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minuto ang nakakaraan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Noong nakaraang buwan</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} buwan na ang nakakaraan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Nakaraang linggo</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} linggo na ang nakakaraan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} taon na ang nakakaraan</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Mga anotasyon</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Pangalan ng Application</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Landas ng Application</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Sensitibo sa kaso</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Nilalaman</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Uri ng file</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Uri ng imahe</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Regular na expression</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Uri ng teksto</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Pamagat</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Pamagat ng URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Buong salita</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Tulad ng pag -scroll sa kahabaan ng tuktok na gilid ng screen upang buksan, ito ay i -lock ang pangunahing window kapag magbubukas ito. Pinapayagan para sa mas mabilis na multi -target na mga daloy ng trabaho.
+
+* Ang mga sulok ay nasa mga tuntunin ng lahat ng iyong mga screen, hindi bawat monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Ipakita ang window at i -lock</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Libre!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Bigyan mo kami ng 5 bituin!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Tanggalin ang lahat</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Tanggalin ang lahat ng nilalaman</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Sigurado ka bang nais mong tanggalin
+Lahat ng iyong mga clip?!
+
+*Ang operasyon na ito ay hindi maaaring magawa!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Ako ay isang Indy Dev mangyaring magpakita ng ilang suporta!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Tulad ng Monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>Tinatanggap lamang ng {0} ang pag -input ng mga uri (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Auto Copy Mode - ginagaya ang isang 'kopya' na kaganapan sa tuwing pinakawalan ang kaliwang pindutan ng mouse.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Mag -right click sa mode ng pag -paste - simulate ang isang 'i -paste' na kaganapan sa tuwing pinakawalan ang tamang pindutan ng mouse</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Ipakita ang folder ng plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Mag -ulat</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Tingnan</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Ipakita ang mga tooltip</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Ang mga analyzer ay nag -annotate ng kanilang input o lumikha ng mga bagong clip bilang output. Ang mga bata ng mga analyzer ay kailangang magpasya kung alin ang kailangan nila bilang kanilang input. Ito ay karaniwang ang huling output.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Uri ng input</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Trigger designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Pumili ng isang {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Hindi mahanap...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} trigger</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Kapag sinuri ang totoo o maling kinalabasan ng kondisyon ay mai -flip. Kaya halimbawa, ang isang 'naglalaman ng' kondisyon ay magiging 'ay hindi naglalaman'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Ay hindi</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Mangyaring maghintay ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Tagapili ng Kulay</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Pumili ng kulay ng tugma</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Tulad ng isang shortcut trigger ngunit kapag ang key kumbinasyon ay pinindot, ang isang 'kopya' na kaganapan ay kunwa sa aktibong application kaya gumagana pa rin ito tulad ng kopya ngunit pagkatapos ay ang kadena ng mga aksyon na nakakabit sa unggoy na kopya ng unggoy ay naisakatuparan sa background gamit ang Simulated Copy Clipboard Data.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Advanced na filter</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Itago ang mga filter</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Ibalik ang mga filter</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Lumikha ng filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opsyonal) Kapag Kaliwa Walang laman ang clipboard ay itatakda gamit ang input ng aksyon na ito. Ang anumang ibinigay dito ay ituturing bilang simpleng teksto lamang.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Nilalaman para sa clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Kapag totoo, walang clip ang idadagdag pagkatapos ng pagkilos na ito ay nagtatakda ng clipboard.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Huwag pansinin</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Walang Napili ng Analyzer para sa Aksyon '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Hindi Natagpuan ang Analyzer para sa Aksyon '{0}'</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Magulang '{0}' filter lamang para sa '{1}' type na nilalaman at analyzer '{2}' ay hindi kailanman isasagawa dahil hindi ito sumusuporta sa uri ng input ng '{3}'</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Walang napiling tag para sa classifier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag para sa classifier '{0}' hindi natagpuan</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Paghambingin ang halaga ay maaari lamang maging mga titik, numero o puwang</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Walang napiling tag para sa clip na naka -tag na trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag para sa clip na naka -tag na trigger '{0}' hindi natagpuan</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Walang tinukoy na folder ng relo para sa '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Panoorin ang folder '{0}' hindi natagpuan para sa trigger '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer Path para sa Aksyon '{0}' Hindi Itakda</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' para sa '{1}' hindi natagpuan.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Taskbar</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Alamin ang tungkol sa mga plugin</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Ibalik ang pagsasaayos ng pagsusuri na ito</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Baguhin ang log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Mangyaring kumonekta sa internet at subukang muli sa ibang pagkakataon.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Tulong</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>Ang {0} ay ang pinakabagong bersyon</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Lahat kayo ay hanggang - Petsa!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Suriin para sa mga update ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Magagamit ang bagong bersyon!
+
+Mag -click dito upang i -update sa '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Mag -click sa ibaba upang i -update sa '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Mag -update Magagamit!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>I -update ngayon</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>Ang '{0}' ay naglalaman ng mga ibinahaging halaga. Ano ang nais mong i -reset?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Malinaw</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>I -clear ang mga kamakailang paghahanap</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Ulitin lahat</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Ibinahagi ang pag -reset</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>I -reset ang Unshared</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Inanyayahan ang itinalagang aksyon ng aplikasyon. Ang lahat ng utos ng aplikasyon ay walang kabuluhan at ang kanilang input clip ay hindi pinansin.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Kapag hindi mapigilan at ang utos ay hindi maaaring mag -apoy, ang kadena ng pagpapatupad ay ihinto. Maraming mga utos ang mangangailangan ng ilang tiyak na estado ng aplikasyon upang maisagawa.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Palaging magpatuloy?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Ang utos upang gumanap.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Utos</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Walang utos na napili para sa utos ng aplikasyon '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Utos para sa application command '{0}' hindi natagpuan</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Napili</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>I -restart</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Mayroong isang isyu sa pag -update ng '{0}'. Upang makumpleto ang pag -update kakailanganin mong i -restart at i -install muli ang '{0}' (huwag mag -alala ang lahat ng iyong mga setting ay maibabalik).
+
+Maaari mong i -restart ngayon at kumpletuhin ang pag -update sa pamamagitan ng muling pag -install, huwag pansinin ito at i -update ito sa ibang pagkakataon o kanselahin ang pag -update nang magkasama at magpatuloy sa paggamit ng bersyon '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>I -update ang error</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Hindi ma -download ang pag -update</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Nabigo ang pag -update</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Upang makumpleto ang pag -update kakailanganin mong i -restart. Nais mo bang i -restart ngayon o mas bago?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Mag -update nang handa</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Kalaunan</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>I -restart ngayon</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Nakabinbin</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>Ang {0} ay matagumpay na na -update sa {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Kinakailangan ang mga pangunahing plugin at hindi maalis.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>INSTALLS</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Ang pag -update ay nakabinbin. I -restart upang makumpleto.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Nakabinbin</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Ang isang pag -uninstall ay nakabinbin. Mangyaring i -restart kung nais mong muling i -install.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Upang makumpleto ang pag -uninstall kakailanganin mong i -restart. Nais mo bang i -restart ngayon o mas bago?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Tapusin ang pag -uninstall?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Hindi nai -publish</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - nabuo default na preset para sa '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Walang napiling clip</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Suriin ang napiling clip</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Magtalaga ng isang shortcut upang patakbuhin ang '{0}' sa napiling clip</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Global I -paste</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Magtalaga ng pandaigdigang i -paste na shortcut para sa '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Nakalimutan ang password?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Mag log in</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Mag -logout</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Patakaran sa Pagkapribado</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Nangangailangan ng pag -restart) Kapag pinagana ang impormasyon ng diagnostic ay mai -log upang mag -file. Maaari itong mabagal ang pagganap at maaaring maglaman ng personal na impormasyon.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Mag -log upang mag -file</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Buksan</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Buksan ang folder ng mga log</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Mag -browse ng mga plugin</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Basahin</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Sumulat</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Magpadala ng ulat ng feedback o bug</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Itinatago lamang nito ang pangunahing window. Ang lahat ng iba pang mga non -dialog windows ay palaging ipinapakita sa taskbar.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Maghanap sa '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Magdagdag ng filter</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>I -edit ang uri ng pagsali</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Alisin ang filter na ito</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Buksan ang tulong tungkol dito ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clip</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Palitan</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Hindi kailanman</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Itakda</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Hindi pamagat</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Itala</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Hindi nababagay na sanggunian ng mapagkukunan</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>Kinakailangan ang '{0}'</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(May mga error)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Limitado</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Imbakan</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Basurahan</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Walang limitasyong</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Ang app na ito ay kasalukuyang tumutugma sa default na clipboard reader preset at mga format.
+
+Ang pagpapagana o hindi pagpapagana ng mga default na preset ng mambabasa (mula sa clipboard sidebar) ay hindi makakaapekto sa pagsasaayos na ito. Ang mga hindi nakalista na apps lamang ang sumusunod sa default na pag -setup.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Ang app na ito ay kasalukuyang tumutugma sa default na clipboard manunulat na preset at mga format.
+
+Ang pagpapagana o hindi pagpapagana ng mga default na preset ng manunulat (mula sa clipboard sidebar) ay hindi makakaapekto sa pagsasaayos na ito. Ang mga hindi nakalista na apps lamang ang sumusunod sa default na pag -setup.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Upang idagdag dapat mong i -uncuse ang clipboard tagapakinig (System Tray -&gt; resume).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>APPEND HINDI MAAARI</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Walang mga setting</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Nagsasalita lamang ako ng Ingles at ang Monkeypaste ay isinalin sa wikang ito.
+
+Ang lahat ng mga bersyon ay nagpapadala ng English Pack kaya kung nagsasalita ka ng Ingles maaari mong baguhin ang wika dito sa anumang oras pagkatapos ng pag -setup na ito (Mga Setting -&gt; Mga Kagustuhan -&gt; International).
+
+Kung nais mong makatulong na mapabuti ang pagsasalin ay nais naming marinig mula sa iyo!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Mga alalahanin sa pagsasalin</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Kailangan mong i -update ang Monkeypaste upang magamit ang tampok na ito.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Shortcut unset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Hindi pinagana ang nakikinig ng clipboard</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Pinagana ang nakikinig ng clipboard</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Ang aksyon ng magulang '{0}' ay hindi sumusuporta sa uri ng pag -aari ng pag -aari na 'Huling Output'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Dagdagan ang nalalaman tungkol sa mga plano</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Clip</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analyzer</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+</root>

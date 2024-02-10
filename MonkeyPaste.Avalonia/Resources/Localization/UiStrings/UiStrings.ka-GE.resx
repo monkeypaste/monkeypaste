@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>არანაირი მახასიათებლები არ შემოიფარგლება მხოლოდ გამოწერით, მხოლოდ შენახვის მოცულობა და მისი შეცვლა შესაძლებელია ნებისმიერ დროს.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>აღადგინეთ თქვენი არსებული ანგარიში ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>შინაარსი და ნაგავი არის
+შემოიფარგლება {0} და {1}
+კლიპები, შესაბამისად.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>საშუალებას იძლევა {2} შინაარსის და შეუზღუდავი ნაგვის შესანახად.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>შეუზღუდავი და შეუზღუდავი შინაარსი და ნაგვის შენახვა.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>აღდგენა</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>უფასო</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>სტანდარტი</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>შეუზღუდავი</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>გამოწერა</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>თქვენი კონფიდენციალურობა მნიშვნელოვანია და ბუფერული მონაცემები შეიძლება იყოს ძალიან პირადი. შენახვა ყოველთვის დაშიფრულია, მაგრამ შეგიძლიათ დააყენოთ პაროლი, რომელიც საჭირო იქნება იმ შემთხვევაში, თუ თქვენი მოწყობილობა მოიპარეს ან ვინმე იყენებს თქვენს მოწყობილობას.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>როდესაც ჩართულია, ნებისმიერი აპლიკაციიდან ეკრანის ზედა ნაწილზე გადაყვანა გამოავლენს Monkeypaste- ს, რომ მარტივად ჩამოაგდოთ შინაარსი Monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>მთავარი ფანჯრის ზედა მარცხენა ნაწილში "დაბლოკვის" ჩართვა კვლავ საშუალებას მისცემს მაიმუნსასტის ჩასვლას.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>მეტი ფანჯრის პრეფერენციები ხელმისაწვდომია "პარამეტრები -&gt; პრეფერენციები -&gt; ფანჯრის" მენიუდან.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>გადაიტანეთ ბანანი აქ!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>გადაიტანეთ - to - გახსენით</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>კლავიშების მალსახმობების გადახედვა ან შეცვლა შესაძლებელია ნებისმიერ დროს "პარამეტრები -&gt; მალსახმობების" მენიუდან.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>ყველა გლობალური მალსახმობი გამორთული იქნება, ასე რომ თქვენ შეგიძლიათ შექმნათ ისინი მოგვიანებით.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Monkeypaste– ის ბუფერული მალსახმობები ხელმისაწვდომი იქნება ყველა პროგრამაში.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>შინაგანი</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>ვალდებულების შეუსრულებლობა</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>ჟესტების პროფილი</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>ჰეი! მოდით შევქმნათ რამდენიმე საკითხი, რომ გააუმჯობესოთ თქვენი საერთო გამოცდილება Monkeypaste- სთან.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>მიღება</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Monkeypaste- ისგან ყველაზე მეტად გამოყენების მისაღებად, ავტომატურად ჩატვირთვა, როდესაც შეხვალთ, კარგი იდეაა. მაგრამ, ეს შენზეა დამოკიდებული.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>შეინახეთ ეს შემთხვევით.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>შესაძლებლობის მიცემა</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>ჩატვირთვა შესვლაზე?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>ჩართვისას, ეკრანის ზედა ნაწილში გადახვევის ჟესტი გამოავლენს Monkeypaste- ს.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>მარცხენა - დავალების პანელის ხატის დაჭერით კვლავ გახსნის Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>მეტი ფანჯრის პრეფერენციები ხელმისაწვდომია "პარამეტრები -&gt; პრეფერენციები -&gt; ფანჯრის" მენიუდან.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>ადვილია?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>გადადით აქ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>გადახვევა - to - გახსენით</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste არის &lt;span color = "red&gt; სრულად ინტეგრირებული &lt;/span&gt; drag - და - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>ჩამოაგდეთ აქ!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "ცენტრი"&gt; ამ გზით, Monkeypasteast- ს შეგიძლიათ წვდომა &lt;br&gt; &lt;span ფერი = "წითელი"&gt; დაჭერის გარეშე &lt;/span&gt; ან თუნდაც &lt;span ფერი = "წითელი"&gt; თვალის დახუჭვა &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Ჩამითრიე!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Სცადე!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Სცადე!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>შედეგი არ არის ხელმისაწვდომი.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>დადასტურება</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>ძებნა ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>პარამეტრები</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>დამოკიდებულებები:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Დაინსტალირება</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ამოიღოთ '{0}' და მისი ყველა წინასწარ და მალსახმობები?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>დეინსტალირება</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' შედეგი არ აქვს.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>შერჩევა.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>არაფერი</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>კრედიტები:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>აღწერა:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>შემოწირულობა:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>ლიცენზია:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>პროექტის URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>გამოქვეყნებულია:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Წამიკითხე:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>მოხსენება ბოროტად გამოყენების შესახებ:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>ტეგები:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>ვერსია:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>გახსენით ფანჯარაში</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>დათხოვნა</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Გადარჩენა</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>წაშლის გვერდით!
+
+განაახლეთ თავიდან ასაცილებლად.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>ნაგვის გვერდით!
+
+განაახლეთ თავიდან ასაცილებლად.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>ფაილები</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>გამოსახულება</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>ტექსტი</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>კოპირებული {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} ფაილები | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} ხაზები</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} ასლები | {1} პასტები</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>მოძრაობა</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>დამატება</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>ასლი</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>გაჭრა</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>პასი</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} ასლი</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>დაუცველი ფილტრი</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- გთხოვთ აირჩიოთ -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>ფორმატი</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>მკითხველი</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>მწერლები</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>სავაჭრო ობიექტები</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>წაშლა</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>ასლი</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>სახელის რედაქტირება</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>გადაჭრა</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>ნიშნები</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>მოქმედება</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>გლობალური მარშრუტიზაცია</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>მალსახმობი</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>ჟესტები უნდა იყოს უნიკალური და შეიძლება შეიცავდეს მხოლოდ ერთ შეყვანის ღილაკს.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; შიდა &lt;/b&gt; ყველა მალსახმობი შემოიფარგლება მხოლოდ განაცხადის ფარგლებში. ეს ნამდვილად არ არის განკუთვნილი ვარიანტი, მაგრამ საშუალებას მისცემს შეცვალოს რა მალსახმობები აპირებთ გლობალური &lt;i&gt; ერთ დღეს &lt;/i&gt;. &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; ნაგულისხმევი &lt;/b&gt; ჩართულია ყველა გლობალური მალსახმობი. &lt;b&gt; შოუ/დამალვა მთავარი ფანჯარა &lt;/b&gt; მალსახმობი იყენებს &lt;span color = "red"&gt; override &lt;/span&gt; მარშრუტიზაცია &lt;b&gt; caps ჩაკეტვისთვის &lt;/b&gt; გასაღებისთვის. თქვენ შეგიძლიათ შეცვალოთ ეს მარშრუტი ან ჟესტი ნებისმიერ დროს. მაგრამ &lt;span color = "green"&gt; სცადეთ ეს &lt;/pan&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;Tody&gt;
+&lt;h1&gt; გლობალური მალსახმობების რეჟიმები &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; პასიური
+*ეს არის &lt;i&gt; მხოლოდ &lt;/i&gt; ვარიანტი Linux- ზე.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; მალსახმობი შეასრულებს &lt;b&gt; &lt;i&gt; სანამ &lt;/i&gt;
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; მალსახმობი შეასრულებს &lt;b&gt; &lt;i&gt; შემდეგ &lt;/i&gt; &lt;/b&gt; მას აქტიური აპლიკაციით.
+&lt;li&gt;
+&lt;b&gt; გადაჭარბებული &lt;/b&gt; როდესაც Monkeypaste ისმენს გადაფარვის მალსახმობის შეყვანის ღილაკს (არა - მოდიფიკატორის ღილაკს), ის &lt;i&gt; დამალავს &lt;/i&gt; რომ კლავიშის პრესა განაცხადისგან - დონის შეყვანა. &lt;br&gt;
+ეს ვარიანტი გარანტიას გაძლევთ, რომ მალსახმობი გამოწვეულია აქტიური განაცხადის კონფლიქტების გარეშე.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; ექსკლუზიური გადაჭარბება &lt;/b&gt; ეს არის სპეციალური ტიპის გადახურვის რეჟიმი, რომელიც განკუთვნილია Caps Lock Key- ისთვის. ეს მხოლოდ საშუალებას აძლევს &lt;b&gt; ერთი &lt;/b&gt; კლავიშს (არა - მოდიფიკატორს) მისი დავალებისთვის. &lt;br&gt;
+ნორმალურ გადალახვა რეჟიმში ქუდების დაბლოკვა შეიძლება გახდეს &lt;/i&gt; &lt;/i&gt;, როდესაც დაჭერით სხვა კლავიშებთან ერთად.
+არ აქვს მნიშვნელობა რა სხვა გასაღებებია, თუ A &lt;b&gt; Hotkey &lt;/b&gt; მალსახმობი დაჭერით, ის გადაჭარბდება და თავიდან აიცილებს მას &lt;/i&gt; &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>გამორთვა</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>დატვირთეთ, როდესაც ამ მომხმარებლის ანგარიში შედის და არა სხვა მომხმარებლებისთვის.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; ხელმისაწვდომი კონტაქტების გამოყენებით (მოითხოვს Fetcher მოდულს) ეს ველი გამოყენებული იქნება ამ შაბლონის ყველა შემთხვევაში ამ დოკუმენტში, ან ნებისმიერში, მას მოგვიანებით მოიხსენიებთ. &lt;/p&gt; &lt;p&gt; მაგალითად, თუ აირჩიეთ ელ.ფოსტის მისამართი აქ შემდეგ თქვენს მიერ არჩეული კონტაქტის ელ.ფოსტის ველი გამოიყენება ამ დოკუმენტში ყველა ინსტანციისთვის. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = მოკლე წელი &lt;br/&gt; yyyy = გრძელი წელი &lt;br/&gt; m = თვე (1-12) &lt;br/&gt; mm = თვე (01-12) . დეკ) &lt;br/&gt; mmmm = გრძელი თვე (იანვარი, თებერვალი ... დეკემბერი) კვირის დღე სიტყვებით (ორშაბათი, სამშაბათი ... კვირა) &lt;br/&gt; E = კვირის მოკლე დღე სიტყვებით (ორშაბათს, მზე) მე -3, 21st, 22nd, 23-ე, 31-ე, მე -4 ...) &lt;br/&gt; H = საათი AM/PM- ში (0-12) &lt;br/&gt; HH = საათი AM/PM- ში (00-12) &lt;BR/ &gt; H = დღეში საათში (0-23) &lt;br/&gt; HH = დღეში საათში (00-23) A = AM/PM მარკერი &lt;br/&gt; P = A.M./P.M. ნიშანი</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>მიმდინარე თარიღი ან/და დრო შეიცვალა DateTime შაბლონებისთვის, როდესაც ისინი ჩასვით.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; ამ შაბლონის ყველა შემთხვევა გამოიყენებს მოცემულ ტექსტს. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; ამ შაბლონის ყველა შემთხვევა გამოიყენებს მოცემულ ტექსტს. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>დასრულების დასრულება</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>ბლოკის ჩართვა</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>ჩართეთ inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>გადარიცხვის სახელმძღვანელო</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>გადარიცხვის სახელმძღვანელო</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>პაუზის დანართი</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>ადრე გადარიცხვა</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>ადრე გადარიცხვა</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>განაახლეთ დანართი</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>დანართი ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>პასი</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>ქინძისთავი</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>დამალეთ ყველა '{0}' შეტყობინებები</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>დათხოვნა</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>ბოლო აქტიური აპლიკაცია უცნობია. გადადით მიზნობრივი აპლიკაცია Monkey Paste- ში.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ჩასვით: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>შემცირება</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Გთხოვთ მოიცადოთ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>დაკეტვა</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>ანგარიში</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>დახმარება</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>დააკოპირეთ და ჩასვით</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>პრეფერენციები</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>აღადგინეთ ნაგულისხმევი</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>ფილტრი ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>მალსახმობები</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>აპის დამატება</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>ვებსაიტის დამატება</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>ბლოკი?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>სახელი</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>პროგრამები</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>ბლოკ დომენი?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>დაბლოკოს URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>დომენი</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>წყარო URL აღიარება დამოკიდებულია იმაზე</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>ვებსაიტები</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Monkeypaste- ის ზოგიერთი მახასიათებელი იყენებს კლავიშების ავტომატიზაციას სხვა პროგრამებში "ასლის" მოვლენების სიმულაციისთვის.
+
+დაამატეთ ან/და შეარჩიეთ აპლიკაცია უნიკალური ასლის მალსახმობი (მაგალითად, კონსოლი ან ჭურვი), რომ ამ მახასიათებლების სწორად ფუნქციონირება.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>დააკოპირეთ მალსახმობი</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>არაფერი</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>მხოლოდ შერჩეული წინასწარ გამოყენებული იქნება მითითებული პროგრამისთვის. დაუზუსტებელი, გამოყენებული იქნება &lt;em&gt; ბუფერული გვერდითი ზოლში ნაპოვნი ნაგულისხმევი წინასწარ განსაზღვრული წინასწარ განსაზღვრული წინასწარ განსაზღვრა.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>MonkeyPaste- ის მრავალი მახასიათებელი იყენებს კლავიშების ავტომატიზაციას სხვა პროგრამებთან ურთიერთობისთვის.
+
+ზოგიერთ პროგრამას (მაგალითად, ზოგიერთ კონსოლს ან ჭურვი) შეიძლება ჰქონდეს არა - ნაგულისხმევი პასტის მალსახმობი.
+
+სათანადო ურთიერთთანამშრომლობის უზრუნველსაყოფად, ჩაწერეთ ამ განაცხადის მალსახმობები აქ.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>ჩასვით მალსახმობი</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>მკითხველი</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ბუფერული პროგრამის ყველა მონიტორინგი იქნება &lt;b&gt; უგულებელყოფილი &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>მწერლები</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>რედაქტირება ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>ფორმატი</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>უარყოფილი</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>მალსახმობები</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>ასევე გსურთ ამოიღოთ ყველა {0} კლიპი '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>წაშალეთ კლიპები?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>გამოყენება</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>დაათვალიერეთ აპლიკაცია ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>აირჩიეთ განაცხადის გზა</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ამოიღოთ საბაჟო მალსახმობები {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ამოიღოთ საბაჟო ფორმატები {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>ამ აპლიკაციისთვის არ არსებობს დავალებული ბუფერული ფორმატები. მისგან მონაცემების წაკითხვა არ მოხდება დაჭრის/ასლის ან გადაადგილების მცდელობის საშუალებით - და - ჩამოაგდოთ Monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>ამ აპლიკაციისთვის არ არსებობს დავალებული ბუფერული ფორმატები. ავტომატიზირებული პასტა ან გადაიტანეთ - და - Monkeypaste- სგან წვეთი გავლენას არ მოახდენს (მისი ცარიელი მონაცემები).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ყველა მალსახმობის გადატვირთვა? ყველა საბაჟო მალსახმობი მოიხსნება.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ შეცვალოთ თქვენი მალსახმობის მარშრუტიზაციის პროფილი '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>ყველა</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>რჩეული</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>ფილტრები</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>ფორმატი</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>ნიშნები</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>დღეს</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>ხარახურა</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>გარშემო</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>ადვილია?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>ორმაგად დააჭირეთ Unpin- ს</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>ჩვეულება</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>გლობალური</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>ეს კომბინაცია ეწინააღმდეგება "{0}" - ს, რომელიც შენახული იქნება.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>მალსახმობი უნდა იყოს გათვალისწინებული.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>ეს არის გლობალური მალსახმობი. ეს ნიშნავს, რომ ის შეეცდება შესრულებას, როდესაც ის შესრულდება. შეეცადეთ ის საკმარისად უნიკალური გახადოთ (ან შეცვალოთ "მარშრუტიზაციის ტიპი"), რომ არ ეწინააღმდეგებოდეს სხვა პროგრამების მალსახმობებს.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>გლობალური</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>მალსახმობი უნდა შეიცავდეს ერთ და მხოლოდ ერთ არა - მოდიფიკატორის ღილაკს.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>დააჭირეთ ნებისმიერ გასაღებას, რომ ჩაწეროთ ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>მიანიჭეთ მალსახმობი</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Გაიგე მეტი...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>მიმაგრება</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>უგულვებელყოფა</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>არა</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Კარგი</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>გამოცხადება</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Გათიშვა</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>დამორჩილება</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>დიახ</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>ყოველწლიური</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>ყოველთვიური</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>სცადეთ უფასოდ!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>ბილინგის ციკლი</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>ელ.წერილი</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Შესვლა</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>შეამოწმეთ თქვენი კავშირი
+და ისევ სცადე.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>შემდეგი გადახდა</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>რეგისტრირება</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>ელ.ფოსტა არ არის მართებული</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Პაროლები არ ემთხვევა.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>პაროლი უნდა იყოს მინიმალური {0} სიმბოლო.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>გახსოვს?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>შეამოწმეთ თქვენი ელ.ფოსტა თქვენი ანგარიშის დასადასტურებლად</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>პაროლის გადატვირთვა</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>მმმ დ, იოი</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>მმმ D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>არასოდეს</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>უფასო {0} დღის საცდელი</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>იყო პრობლემა
+თქვენი შენაძენი.
+
+თქვენი კავშირის შემოწმება და
+პარამეტრები შეიძლება დაეხმაროს.
+
+გსურთ ისევ სცადოთ?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>თქვენი ანგარიში წარმატებით დასრულდა
+განახლებულია:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>წარმატებული შეიძინეთ!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>შეცდომა</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>კავშირი ვერ მოხერხდა.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>გამოცხადება</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>ანგარიში შეიცვალა</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>თქვენი გამოწერა ახლა არის {0}/{1} {2} შინაარსით და {3} ნაგვის შესანახად.
+მაგრამ არ ინერვიულოთ, მონაცემები არ იკარგება შემცირების შემდეგ. შეფასდება მხოლოდ ახალი კლიპები.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>გილოცავთ! თქვენი გამოწერა ახლა არის {0}/{1} {2} შინაარსით და {3} ნაგვის შესანახად.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>ნაგავი ან გაუკეთეთ რამე
+'{0}' - დან მეტი დამატებით.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>მაქსიმალური '{0}' შენახვა არის {1.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>აღდგენა</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} დაბლოკილია</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>შინაარსი და ნაგვის სიმძლავრე მიაღწია!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>მაქსიმალური '{0}' შენახვა არის {1.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>შინაარსის სიმძლავრე მიაღწია!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* შეგიძლიათ დამალოთ ეს გაფრთხილებები
+დაჭერით 'დამალვა ყველა'
+პარამეტრების მენიუ ზემოთ.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>მაქსიმალური ნაგვის შენახვა არის {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>ნაგვის სიმძლავრე მიაღწია!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} არასწორია</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} უნდა იყოს მინიმუმ {1} სიმბოლო</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} შეიძლება იყოს მხოლოდ {1} პერსონაჟი</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>ჩასვით: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>გადახდა თქვენი {0}
+გამოწერა იყო {1}
+და არ იქნა მიღებული.
+
+გთხოვთ განაახლოთ თქვენი
+გადახდის ინფორმაცია.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>გადახდა თქვენი {0}
+გამოწერა იყო {1}
+და არ იქნა მიღებული.
+
+გთხოვთ დაუკავშირდეთ
+ინტერნეტი მოწყობილობაზე
+თქვენი გამოწერით და
+გადატვირთვა, რომ გაგრძელდეს
+თქვენი {0} გეგმის გამოყენებით.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>გადახდა თქვენი {0}
+გამოწერა იყო {1}
+და არ იქნა მიღებული.
+
+გთხოვთ გახსნათ ან გადატვირთოთ
+Monkeypaste მოწყობილობაზე
+თქვენი გამოწერით
+განაგრძეთ თქვენი გამოყენება
+{0} გეგმა.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>ანგარიშის ვადაგასული</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>შენიშვნა</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store არ იძლევა იძლევა
+გამოწერის დამატებების ცვლილებები.
+
+თქვენ უნდა გააუქმოთ თქვენი
+{0}/{1} საკუთარი თავის დაგეგმვა
+ან ორივეს ბრალი წაგიყენებთ.
+
+გსურთ ახლა ამის გაკეთება?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>თქვენი პაროლი გადატვირთულია.
+
+გთხოვთ, გადაამოწმოთ თქვენი ელ.ფოსტა და
+მიჰყევით შეცვლის ბმულს
+თქვენი პაროლი.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Შესვლა</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>ავტორი (S)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>აუცილებელია, რომ გაგრძელებამდე მიიღოთ შემდეგი სალიცენზიო პირობები.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>შემდეგი პაკეტი (ებ) ი მოითხოვს, რომ ინსტალაციამდე მიიღოთ მათი ლიცენზიის პირობები.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>მე უარს ვამბობ</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>დაჭერით "მე ვიღებ" ნიშნავს, რომ თქვენ ეთანხმებით ამ განაცხადის სალიცენზიო პირობებს. თუ არ ეთანხმებით პირობებს, დააჭირეთ ღილაკს "მე უარი".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"მე ვიღებ" დაჭერით ნიშნავს, რომ თქვენ ეთანხმებით ზემოთ ჩამოთვლილი მოდულის (ებ) ის სალიცენზიო პირობებს. თუ არ ეთანხმებით პირობებს, დააჭირეთ ღილაკს "მე უარი".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>ლიცენზიის ნახვა</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>ლიცენზიის მიღება</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Თანახმა ვარ</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>აქტიური</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>ოფლაინი</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>არარეგისტრირებული</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>შესრულებულია</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ პაროლები არ ემთხვევა</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>თქვენი გამოწერა არის
+ახლა მითითებულია {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>ნაპოვნი ანგარიში</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Სისტემაში შესვლა ვერ მოხერხდა</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>რეგისტრაცია ვერ მოხერხდა</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Წარმატებული რეგისტრაცია!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>გადაჭრა შეცდომა</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>გამოწერა</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Რა არის ახალი</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>არასოდეს</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>შეუზღუდავი</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>უნარი</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>ნარჩენი</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>მთელი</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>თქვენი გადახდა დასრულებულია.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>ექსკლუზიური გადაფარვის მალსახმობები შეიძლება შეიცავდეს მხოლოდ ერთ ღილაკს და ეს გასაღები არ შეიძლება იყოს მოდიფიკატორის გასაღები.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>ვადაგასული</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Ჩატვირთვა</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>უუნარო</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Შენიშვნა! ეს პაროლი არჩევითია და მხოლოდ დამატებითი უსაფრთხოებისთვის. თქვენი მონაცემები უკვე დაშიფრულია და არასოდეს გაზიარებულია. ეს პაროლი უბრალოდ ხელს უშლის ადამიანს, ვისი არა თქვენ არ დატვირთოთ MonkeyPaste, თუ ისინი რატომღაც მიიღებენ თქვენს სამუშაო მაგიდაზე წვდომას (მოპარული, თქვენ ტოვებთ ოთახში და ა.შ.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>დაიმახსოვრე ვარდნის პარამეტრები:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>დაათვალიერეთ დანამატები</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>გაანალიზება</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>სწრაფი მოქმედება</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>გადართვის რედაქტირება</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>გადარიცხეთ</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>ანოტაციები</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Ჩვეულებრივი ტექსტი</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>გახსენით ფანჯარაში</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>დააჭირეთ + ctrl, რომ დაიცვას ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>დააჭირეთ + alt, რომ დაიცვას ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>დაასხით ან ჩამოაგდეთ ნებისმიერი მედია აქ!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0 -ზე ზემოთ მოცემული ბარიერები უზრუნველყოფს ფუჟირებულ ფერის შესატყვისი Euclidean– ის დისტანციური გამოყენებით RGBA Colorspace– ში.
+
+მაგალითად, თუ წითელი (#FF0000) არის საძიებო ტერმინი და შავი (#000000) არის პიქსელი გამოსახულების კლიპში, მაშინ ფერის მანძილი იქნება 255. შავი და თეთრი მანძილი მაქსიმალურია 510, მათ შორის ალფა არხის ჩათვლით</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>ყველა ჩამოთვლილი სიმართლეა</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>ბურთი</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>კოლექციები</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>მაუსის რეჟიმები</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>ტრიგერები</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>პაუზა</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Გაგრძელება</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>ახალი ტრიგერი</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>წინასწარ დაამატეთ</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monkey Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>პრეზენტაციები</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>ანალიზატორი</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>მოჭრა</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>ციკლის ორიენტაცია</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>გადარიცხეთ ქსელის განლაგება</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>საქმე მგრძნობიარე</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>ზღურბლი</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>მთელი სიტყვა</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>არცერთი მითითებული</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>მარშრუტიზაცია</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>მოქმედება</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>ბადე</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>შესრულებულია</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>შემდეგი</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>წინა</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>გადახტომა</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>არსებული ანგარიში?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>შემდეგი გადახდა</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>რეგისტრაცია საშუალებას გაძლევთ გადაიტანოთ თქვენი ფასიანი გამოწერა ყველა თქვენს მოწყობილობაში (ხელმისაწვდომობის შემდეგ). ჩვენ არ ვგულისხმობთ თქვენს ელ.წერილს, რომელსაც გპირდებით.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>გამოწერა</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>მომხმარებლის სახელი</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>დარეგისტრირება გჭირდებათ?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>წყაროები</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>უცნაური, არაფერი ხელმისაწვდომი. რაღაც უნდა იყოს არასწორი</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>ამოღება</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>მოითხოვს გადატვირთვას</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Მოწინავე</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>შეცდომა მოდულის ამოღება '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>შეცდომა მოდულის დაყენება: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>შეცდომის დაყენება მოდული '{0}' კორუმპირებული ან არასათანადო დირექტორიის სტრუქტურა. მანიფესტი უნდა არსებობდეს '{1}' - ში, მაგრამ არ მოიძებნა.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>შეცდომის გაანალიზება მოდული მანიფესტის '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>არ არის დატვირთული სახელმძღვანელო: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} შეცდომა</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>შეცდომის დადგმა მოდული to temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>შეცდომის სარეზერვო სისტემა '{0}' to '{1}'. დეტალები: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>აკრეფილი ტექსტი ავტომატურად იქნება გამოყენებული ძებნაზე, როდესაც ტექსტური ყუთი არ არის ფოკუსირებული.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>ავტო ძიების შეყვანა</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>პაროლის შეცვლა ვერ მოხერხდა</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>გადაცვლა</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Პაროლის შეცვლა</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>პაროლის გასუფთავება</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>კმაყოფილი</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>შინაარსის შრიფტის ზომა</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>მართალია, კლიპში ჩასმული გარე შინაარსი გამოიყენებს კლიპების ფორმატირებას და არა ის, რაც ხელმისაწვდომია წყაროდან.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>ჩასვით, ჩამოაგდეს ან დაამატეთ დანიშნულების ფორმატით</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხარ, რომ გინდა პაროლის დავიწყება?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Დავიწყება</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Პაროლის დავიწყება</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>პროფილი</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>სიმძლავრის წყლის დამალვა</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>როდესაც ახალი ბუფერული შინაარსის დამატება ხდება, იგი არ იქნება თვალყურის დევნება როგორც ახალი კლიპი</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>უგულებელყოფა დანართები</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>როდესაც ბუფერი შეესაბამება არსებულ კლიპს, ეს კლიპი გამოყენებული იქნება ახალი შექმნის ნაცვლად</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>ახალი დუბლიკატების უგულებელყოფა</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>ბუფერის ცვლილებები აპლიკაციის შიგნით არ დააკვირდება</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>უგულებელყოფა შიდა ბუფერული თვალყურის დევნება</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>თვალყურის დევნის ადგილები, ჩანართები და ახალი ხაზები უგულებელყოფენ</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>მხოლოდ თეთრი სივრცის უგულებელყოფა</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>ჩატვირთვა შესვლაზე</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>ანიმაციური ფანჯარა</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>სიბრტყე</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>ქცევის ჩვენება</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>მთავარი ფანჯარა გამოვლინდება თქვენი მონიტორის ზედა ზღვარზე გრაგნილის ჟესტის შესრულებით</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>აჩვენეთ ზედა ეკრანზე გადახვევა</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>შეტყობინების მოცულობა</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>ეს პარამეტრი თვალყურს ადევნებს სისტემას - ფართო კლავიშების პასტა ითვლის გამოყენების სტატისტიკას. ეს ინფორმაცია არის კერძო და არა გაზიარებული, არამედ არა გუარენტირებული. ზუსტი შედეგები შეიძლება მოითხოვოს პროგრამის სპეციფიკური კლავიშის პასტის ბრძანების მიწოდება 'პარამეტრებში -&gt; ასლი და ჩასმა -&gt; მალსახმობები'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>პასტის ისტორია</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>ძალიან ბევრმა კლიპმა (ბრაუზერის ჩანართების მსგავსად) შეიძლება მოიხმაროს მნიშვნელოვანი მეხსიერება. მოხსნა პირველ რიგში - პირველი - გარეთ - გარეთ</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>PIN სიმძლავრე</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>ეს ეხება ყველა ავტო - დასრულებულ შეყვანას, ქვედა მნიშვნელობები გააუმჯობესებს შესრულებას</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>ბოლო ტექსტის ლიმიტი</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Დარწმუნებული ხარ რომ გინდა
+აღადგინეთ ნაგულისხმევი პრეფერენციები?
+
+ეს არ შეიძლება გაუქმდეს!
+
+*განაცხადი შეასრულებს ერთხელ დასრულებას.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ყველა შეტყობინების გადატვირთვა?
+
+*ეს არ შეიძლება გაუქმდეს!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste ადგენს ბუფერას (გადალახავს) გარე პროგრამის ჩასატარებლად. ეს შეეცდება &lt;/b&gt; აღადგინოს ბუფერული მდგომარეობა გარე პასტის შემდეგ.
+
+მთლიანი აღდგენა არ შეიძლება გარანტირებული იყოს და შეიძლება შეამციროს შესრულება ან თუნდაც ავარიის Monkeypaste, დამოკიდებულია მონაცემთა წყაროდან.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>გადატვირთეთ ბუფერული მაიმუნის ჩასმის შემდეგ</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>ვერ წაშლა მოდული ქეში ბილიკიდან: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>ყველა დანამატი გადატვირთულია საწყის ნაგულისხმევი მდგომარეობაში</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>მოდული ქეში</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ყველა დანამატის ნაგულისხმევი გადატვირთვა?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ პაროლის გადატვირთვა?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>ყველა განაცხადის მალსახმობი გადატვირთულია მათი ნაგულისხმევი საკვანძო ჟესტებისთვის.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>მალსახმობების გადატვირთვა</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>ყველა უგულებელყოფილია ადრე მითითებული შეტყობინებები.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>აღადგინეთ შეტყობინებები</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>მდიდარი შინაარსი</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Პაროლის დაყენება</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>აჩვენეთ მინიშნებები</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>აჩვენე დავალების პანელში</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>აჩვენეთ ამოცანების შეცვლა</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>სათაურების ჩვენება</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>როდესაც ჩართულია, ნებისმიერი აპლიკაციიდან ეკრანის ზედა ნაწილზე გადაყვანა გამოავლენს Monkeypaste- ს, რომ მარტივად ჩამოაგდოთ შინაარსი Monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>აჩვენეთ ეკრანზე გადასასვლელად</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>ხმის თემა</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Მართლწერის შემოწმება</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>გაშვებისას ბუფერული წყაროს უცნობი იქნება და თქვენი უსაფრთხოების პარამეტრებიდან გამომდინარე, შინაარსი შეიძლება მოვიდეს გამორიცხული ვებსაიტიდან ან პროგრამიდან.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>დაამატეთ გაშვების ბუფერში</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>მოუსმინეთ ბუფერას გაშვებისას</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>გადარჩევა</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Სიფრთხილით! სხვა პალიტრის ფერები შეირჩევა მათემატიკის გამოყენებით და არა თვალების გამოყენებით! ასე რომ, გაითვალისწინეთ, რომ რამდენიმე ფერის და სტილის კომბინაციამ შეიძლება არ ჰქონდეს სათანადო კონტრასტი წაკითხვისთვის.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>თემის ფერი</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>თემის სტილი</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>ნაგვის ავტომატური გაწმენდა მოხდება სტარტაპზე მითითებული ინტერვალით.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>ნაგვის გაწმენდა</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>ინტერფეისი</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>მაღალმა გაუქმებამ შეიძლება გავლენა მოახდინოს შესრულებაზე</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>გაუქმების ზღვარი</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>არანაირი ზღვარი</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>გამოიყენება მოწინავე ფაილში მოძებნეთ არა წინასწარ განსაზღვრული ფაილის ტიპები</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>მომხმარებელი - განსაზღვრული ძიების გაფართოებები</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Იპოვე და ჩაანაცვლე...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>ჩასვით აქ</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>გაზიარება ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>ხედი</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Მართვა...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>სახელი</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>ქულა: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>ტიპი: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>სამუდამოდ წაშლა</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>დაათვალიერეთ '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>გარდაქმნა</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>მიწოდება</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>გამომავალი</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>წყაროები</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>აღდგენა</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>აირჩიე სურათი ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>ფერი</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>მართეთ '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>გახსნა</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Გთხოვთ მოიცადოთ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Ფონის ფერი</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Ყველაფრის გასუფთავება</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>ბუფერული ფორმატები</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>წაშალეთ ყველა</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>დეტალების რედაქტირება</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>სახელი</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>პოვნა</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Შრიფტის ფერი</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>ფორმატის საღებავი</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> შერჩევაში</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>გამოსახულების ჩასმა</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>ჩადეთ ბმული</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>ჩადეთ ვიდეო</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> მატჩის საქმე</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>ახალი შაბლონი</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>შემდეგი შაბლონი</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>შეიყვანეთ პასტის ტექსტი ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>წინა შაბლონი</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> რეგულარული გამოხატულება</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>შეცვალეთ ყველა</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>შეცვლა</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> მთელი სიტყვა</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> გახეხეთ გარშემო</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>ბლოკი</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>დომენი</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>საქაღალდე</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>ბლოკი</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>გარშემო</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>დაამატეთ ბლოკი</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>დანართი ინლაინ</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>ავტო - ასლი</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>რეჟიმები</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>გთხოვთ, დაელოდოთ Monkeypaste იტვირთება ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>მიტოვება</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - დააჭირეთ პასტა</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>ჯგუფი</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>ფილტრი</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>მუდმივად წაშალეთ ყველა</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>აღადგინეთ ყველა</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>მოქმედება</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL უკვე არსებობს: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL უნდა იყოს სწორი ფორმატით.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>შეიყვანეთ სრული URL:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>URL დაამატეთ</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>შეიტანეთ მნიშვნელობები</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>ასლის ასლის ტექსტი ან ფაილები.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>დანართი {0} {1} რეჟიმი გააქტიურებულია</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>ბუფერის ცვლილებები ახლა დაერთო</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>დანამატის რეჟიმის გააქტიურების შემდეგ</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>ბუფელის ცვლილებები ახლა მომზადდება</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>დანამატის რეჟიმში გააქტიურებამდე</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>ბლოკი</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>აღდგა ნორმალური ბუფერული ქცევა</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>დაამატეთ დეაქტივირებული</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>კლიპის ზედა ან ბოტომში დამატებული დამატება</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>გააქტიურებულია დანამატის რეჟიმი</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Ხაზში</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>სახელმძღვანელო</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>დაამატეთ თქვენი მიმდინარე შერჩევა.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>სახელმძღვანელო დანართის რეჟიმი გააქტიურებულია</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>ბუფერული დაგროვება შეჩერებულია</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>დანართი შეჩერებულია</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>ბუფერის დაგროვება განახლდა</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>დანართი განახლდა</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ დასრულების დასრულება?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>თავსებადობის რეჟიმში რედაქტირება ამოიღებს ყველა მდიდარ ფორმატს. დარწმუნებული ხართ, რომ გსურთ ამის შეცვლა?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>მონაცემთა დეგრადაციის გაფრთხილება</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>აქტიური</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>ჩართვა</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>-დან</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>-ზე</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>შეჩერება</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>შედეგი</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>უცნობი შეცდომა მოხდა.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>დარჩენილი მცდელობები</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>შეიყვანეთ პაროლი</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>დადასტურება</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>კონტაქტი</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>თარიღი დრო</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ '{0}' ყველა გამოყენება?
+
+ეს არ შეიძლება გაუქმდეს!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>დინამიური</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>სტატიკური</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} ცარიელია ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Უფრო მეტი იქნება მალე!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>შესვლის დატვირთვა გამორთულია</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>შესვლა დატვირთვის გამორთვა წარმატება</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>შესვლის დატვირთვა ჩართულია</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>შესვლის დატვირთვა წარმატების მისაღწევად</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>დამალვა</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>მაიმუნის პასტა ახლა დატვირთულია.
+ბუფერული მოსმენის მოსმენაა: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>დატვირთული</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>გამოფენა</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>ავტო ასლის შერჩევის რეჟიმი: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>რეჟიმი შეიცვალა</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>მარჯვენა ღილაკის პასტის რეჟიმში: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>მოდული განახლებულია</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>ჩასმა '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>გაუშვით '{0}' ანალიზატორი</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>გაუშვით '{0}' ტრიგერი</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>აირჩიეთ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ '{0}' და ყველა ასოცირებული მოქმედება?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>ზმახშეული</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>გსურთ ამოიღოთ ყველა ქვე - მოქმედება '{0}'? (წინააღმდეგ შემთხვევაში ისინი მშობლების დასაყენებლად '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>პარამეტრების ამოღება</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>მართლა გსურთ Goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>ანგარიში</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>ანალიზატორები</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>განაცხადის ოპერაციები</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>ბურთი</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>კმაყოფილი</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>გადამყვანები</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>კულტურა</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>მონაცემი</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>მიმართულება</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Გადმოათრიე და ჩააგდე</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>ხატები</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>ხე</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>ინტერფეისი</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>ჩასვით ოპერაციები</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>პრეფერენციები</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>ძებნა</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>მალსახმობები</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>სახეობა</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>ჟღერადობა</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>სისტემის უჯრა</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>კოლექციები</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>თემა</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>ტრიგერები</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>ვებსაიტის ოპერაციები</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Ენა</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>ადგენს ბუფერას შეყვანის კლიპზე.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>ფხიზელი</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>სიბრტყე</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>ქუდი</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>ზოგადი დანიშნულების ხმის ან/და სისტემის უჯრის შეტყობინებების შეტყობინებები. Alert Action– ს გავლენა არ აქვს მათ შეყვანაზე.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>შეტყობინება</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>მაიმუნი</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>ანონსი</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>აჩვენე?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>დროის სადღეგრძელოების შეტყობინება ნაჩვენებია წამში. როდესაც მნიშვნელობა 0 შეტყობინება უნდა დაიხუროს ხელით.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>აჩვენეთ დრო (S)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>სონარი</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>ხმა?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>ხმის ტიპი</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>რქა</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>ტომი</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>ანალიზატორი</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>ამუშავებს მის შეყვანის კლიპს დავალებული ანალიზატორის წინასწარ განსაზღვრის გამოყენებით.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>შეყვანის შინაარსი უკავშირდება შერჩეულ კოლექციას</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>აკავშირებს მის შეყვანის კლიპს დავალებული ტეგების კოლექციასთან.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>დრო</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>საქმე მგრძნობიარე?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>ეს შეიძლება იყოს სტატიკური ტექსტი, რომ შევადაროთ შეყვანას და/ან შერჩეულ თვისებებს (ფილტრის ღილაკის საშუალებით) შეიცვალოს, როდესაც მდგომარეობა შეფასდება.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>მდგომარეობის მონაცემები</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>სურვილისამებრ JSONPath შეკითხვა, რომელიც გამოყენებული იქნება არჩეულ "შეყვანის საკუთრება", სანამ პირობა შეაფასებს.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>შეყვანის ფილტრი</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>კლიპის საკუთრება, რომელიც გამოიყენება ამ პირობითად.
+
+"ბოლო გამომავალი" საკუთრება ამჟამად მხოლოდ მაშინ არის მხარდაჭერილი, როდესაც ეს პირობა არის ანალიზატორის მოქმედების ბავშვი და მოწოდებული მონაცემები განსხვავდება მშობლის ანალიზატორის გამომუშავებიდან გამომდინარე.
+
+პრობლემების გადასაჭრელად, მიამაგრეთ "განგაშის მოქმედება" ამ პირობითი მშობლისთვის და დააყენეთ განგაშის "შეტყობინება" პარამეტრი, რომ შეესაბამებოდეს ამ შეყვანის საკუთრებას. ეს საშუალებას მისცემს გადახედოს ამ პირობითად გამოყენებულ ფაქტობრივ მონაცემებს.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>შეყვანის ქონება</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>ასრულებს ტექსტის შედარებას შეყვანის კლიპზე ან წინა მოქმედების გამომუშავებაზე. როდესაც შედარება ვერ მოხერხდება (ეს არ არის მატჩი) ბავშვის ქმედებები არ შესრულდება. ასე რომ, ის ლოგიკური კარიბჭის მსგავსად მოქმედებს.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>ყველა ჭეშმარიტი ან ყალბი ოპერაცია, სადაც ბავშვის ქმედებები შეასრულებს მხოლოდ იმ შემთხვევაში, თუ შედეგი მართალია.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>პირობა</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>ყველა</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>გამოწვეულია, როდესაც არჩეული ტიპის კლიპს რაიმე ფორმით ემატება სისტემა (ბუფერული, გადაიტანეთ - და - წვეთი, ანალიზატორი წარმოქმნილი ან დუბლირებული).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>მხოლოდ ამ ტრიგერის შესრულება, თუ შეყვანის კლიპი არის ახალი და არა დუბლიკატი. ეს დამოუკიდებელია ნებისმიერი უპირატესობის გათვალისწინებით, თუ არა ახალი შინაარსის უგულებელყოფა თუ არა.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>უგულებელყოფა დუბლიკატი</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>ამ ტიპის მხოლოდ კლიპები გამოიწვევს ამ მოქმედებას.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>აკავშირებს მის შეყვანის კლიპს დავალებული ტეგების კოლექციასთან.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>გამოწვეულია, როდესაც კლიპი უკავშირდება მითითებულ ტეგის კოლექციას.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>კოლექცია</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>მილიწამში დროის ოდენობა დაელოდა ბავშვების შესრულებამდე</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>შენელება</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(ექსპერიმენტული), პირველ რიგში, გამოიყენება განმეორებით მოქმედებასთან ერთად დისტანციური წყაროების გამოკითხვისთვის ან გრძელი ოპერაციების დახმარებით.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>როდესაც დარჩა ცარიელი, გამომავალი ფაილი გამოიყენებს შეყვანის კლიპის სათაურს, როგორც ფაილის სახელი.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>პერსონალური სახელი</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>დირექტორია, სადაც ფაილი დაიწერა.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>ცნობარი</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>დაზოგავს შეყვანას შერჩეულ საქაღალდეში.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>გამოწვეულია, როდესაც შერჩეული საქაღალდის შინაარსი იცვლება. გამომავალი იქნება ახალი ან არსებული (როდესაც უგულებელყოფის დუბლიკატების უპირატესობა ჩართულია) ფაილის ან საქაღალდის ფაილის კლიპი, რომელიც შეიცვალა ცვლილების ტიპთან ერთად, როგორც მისი ბოლო გამომავალი.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Ივენთი</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>საქაღალდე</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>უგულებელყოფა დუბლიკატი</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0 -ის ღირებულება განუსაზღვრელი ვადით გაიმეორებს მშობლის მოქმედებას</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>განმეორებითი რაოდენობა</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>მილიწამში დროის ოდენობა, რომ დაელოდოთ მშობლის მოქმედებას</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>გაიმეორეთ შეფერხება</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(ექსპერიმენტული) გამოიყენება სამოქმედო მარყუჟების შესაქმნელად ან განმეორებითი დავალებების შესაქმნელად. განმეორებისას, ის კვლავ შეასრულებს ყველა ბავშვს თავდაპირველი შეყვანის საშუალებით. ინტერვალის გამოყენების გარეშე, განმეორებითი რაოდენობის გარეშე, ტრიგერი უნდა იყოს გამორთული და ხელახლა ხელახლა განმეორება განმეორებით. შეიძლება სასარგებლო იყოს კენჭისყრის ან ვებგვერდის ავტომატიზაციისთვის.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>თქვენს მიერ განსაზღვრული გლობალური მალსახმობის მიერ გამოწვეული. თუ MonkeyPaste არის აქტიური, ის შეეცდება გამოიყენოს შერჩეული კლიპი (თუ არსებობს), როგორც შეყვანა. წინააღმდეგ შემთხვევაში ის შეეცდება გამოიყენოს ბუფერი, როგორც მისი შეყვანა.
+
+შენიშვნა: მალსახმობი ტრიგერი კვლავ შეასრულებს, თუ არ არსებობს შეყვანა, რომ იგი მოქნილი იყოს (ასე რომ, ეს შეიძლება იყოს მაკრო ტრიგერი და ა.შ.), რადგან ეს არ არის მონაცემები - ორიენტირებული მოვლენა.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>მალსახმობის ტრიგერი</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>გამოწვეულია, როდესაც ჩაწერილი მალსახმობი დაჭერით ნებისმიერ დროს მიმდინარე ბუფერულთან ერთად</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>ეს მოქმედება მოითხოვს აპის გადატვირთვას. ახლა ამის გაკეთება გსურთ?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Პრობლემა იყო. თქვენ უნდა ხელით გადატვირთოთ განაცხადი.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>გაანალიზეთ ანოტატორთან</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>ანოტატის ტრიგერი</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>ელემენტებში აშენებული წაკითხულია - მხოლოდ. დუბლიკატი შეცვალოს.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>ანონიმური</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>ჩვეულება</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Გუშინ</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} დღის წინ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 საათის წინ</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} საათის წინ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Ახლახანს</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>ერთი წუთის წინ</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} რამდენიმე წუთის წინ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Გასული თვე</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} თვის წინ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Გასულ კვირას</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} კვირის წინ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} წლების წინ</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>ანოტაციები</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>განაცხადის სახელი</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>განაცხადის გზა</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>საქმე მგრძნობიარე</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>კმაყოფილი</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Ფაილის ტიპი</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>გამოსახულების ტიპი</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>რეგულარული გამოხატულება</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>ტექსტის ტიპი</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>ტიტული</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL სათაური</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>მთელი სიტყვა</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>ზედა ეკრანის გასწვრივ გადასასვლელად, რომ გახსნას, ეს ჩაკეტავს მთავარ ფანჯარას, როდესაც ის გაიხსნება. საშუალებას იძლევა უფრო სწრაფი მრავალჯერადი მიზნობრივი სამუშაოები.
+
+* კუთხეები არის თქვენი ყველა ეკრანის თვალსაზრისით, არა თითო მონიტორზე.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>ფანჯრის ჩვენება და ჩაკეტვა</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>უფასო!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>მოგვცეს 5 ვარსკვლავი!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>წაშალეთ ყველა</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>წაშალეთ ყველა შინაარსი</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>დარწმუნებული ხარ რომ წაშლა გინდა
+ყველა თქვენი კლიპი?!
+
+*ეს ოპერაცია არ შეიძლება გაუქმდეს!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>მე ვარ ინდი დევი, გთხოვთ, აჩვენოთ გარკვეული მხარდაჭერა!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Monkeypaste- ს მოსწონს?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} იღებს მხოლოდ ტიპის (s) შეყვანას: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>ავტო ასლის რეჟიმი - სიმულაციას უწევს "ასლის" მოვლენას ყოველ ჯერზე, როდესაც მარცხენა მაუსის ღილაკი გამოვა.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>მარჯვენა ღილაკის პასტის რეჟიმში - სიმულაციას ახდენს "პასტის" მოვლენა ყოველ ჯერზე, როდესაც მაუსის მარჯვენა ღილაკი გამოვა</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>წინასწარ განსაზღვრა</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>აჩვენეთ მოდული საქაღალდე</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>მოხსენება</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>ხედი</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>აჩვენეთ ინსტრუმენტები</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>ანალიზატორები ანოტირებენ თავიანთ შეყვანას ან ქმნიან ახალ კლიპებს, როგორც გამომავალი. ანალიზატორების შვილებმა უნდა გადაწყვიტონ, რომელი მათგანი სჭირდებათ, როგორც მათი შეყვანა. ეს, როგორც წესი, ბოლო გამოსავალია.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>შეყვანის ტიპი</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>ტრიგერის დიზაინერი '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>აირჩიე {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>ვერ მოიძებნა ...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} გამოიწვევს</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>შეამოწმეთ მდგომარეობის ნამდვილი ან ცრუ შედეგი. მაგალითად, "შეიცავს" პირობა "არ შეიცავს".</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Არ</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Გთხოვთ მოიცადოთ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>ფერის ამომრჩეველი</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>შეარჩიეთ მატჩის ფერი</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>მალსახმობის ტრიგერის მსგავსად, მაგრამ როდესაც საკვანძო კომბინაცია დააჭირეთ, "ასლის" ღონისძიება სიმულაცია მოხდება აქტიურ განაცხადში, ასე რომ, ის მაინც მუშაობს ასლის მსგავსად, მაგრამ შემდეგ მაიმუნის ასლის ტრიგზე დამაგრებული მოქმედებების ჯაჭვი შესრულდება ფონზე. ასლის ბუფერული მონაცემების სიმულაცია.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>მოწინავე ფილტრი</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>ფილტრების დამალვა</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>ფილტრების აღდგენა</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>ფილტრის შექმნა</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(სურვილისამებრ) ცარიელი დარჩენისას განთავსდება ბუფერული პროგრამა ამ მოქმედების შეყვანის გამოყენებით. აქ მოცემული ყველაფერი მხოლოდ უბრალო ტექსტად განიხილება.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>შინაარსი ბუფერისთვის</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>როდესაც მართალია, ამ მოქმედების შემდეგ არცერთი კლიპი არ დაემატება.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>უგულვებელყოფა</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>არ არის შერჩეული ანალიზატორი მოქმედებისთვის '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>ანალიზატორი მოქმედებისთვის '{0}' არ არის ნაპოვნი</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>მშობელი '{0}' ფილტრები მხოლოდ '{1}' ტიპის შინაარსისა და ანალიზატორისთვის '{2}' არასოდეს შეასრულებს, რადგან ის არ უჭერს მხარს '{3}' შეყვანის ტიპს</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>არ არის შერჩეული კლასიფიკატორის '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>საკლასო კლასიფიკატისთვის '{0}' არ არის ნაპოვნი</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>შედარება შეიძლება იყოს მხოლოდ ასოები, ციფრები ან სივრცე</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>არ არის შერჩეული კლიპის tagged trigger '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag for Clip Tagged Trigger '{0}' არ არის ნაპოვნი</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>არ არის მითითებული საქაღალდე, რომელიც მითითებულია '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>უყურეთ საქაღალდე '{0}' არ არის ნაპოვნი ტრიგისთვის '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>ფაილის მწერლის გზა მოქმედებისთვის '{0}' არ არის მითითებული</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>ფაილის მწერლის გზა '{0}' '{1}' არ არის ნაპოვნი.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>დავალების ზოლი</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>შეიტყვეთ მოდულების შესახებ</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>აღადგინეთ ამ ანალიზის კონფიგურაცია</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} შეცვალეთ ჟურნალი</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>გთხოვთ, დაუკავშირდეთ ინტერნეტს და სცადოთ მოგვიანებით.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - დახმარება</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} არის უახლესი ვერსია</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>თქვენ ყველანი ხართ - თარიღამდე!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Შეამოწმოთ განახლებები...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>ახალი ვერსია ხელმისაწვდომია!
+
+დააჭირეთ აქ, რომ განაახლოთ '{0}'</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>დააჭირეთ ქვემოთ, რომ განახლდეთ '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Განახლება შესაძლებელია!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>განაახლეთ ახლა</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' შეიცავს საერთო მნიშვნელობებს. რისი გადატვირთვა გსურთ?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>გასუფთავებული ბოლოდროინდელი ჩხრეკა</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>გადაჭრა ყველა</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>გაზიარებული</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>გადატვირთეთ Unshared</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>იძახებს დანიშვნის განაცხადის მოქმედებას. ყველა განაცხადის ბრძანება არის მოქალაქეობის მოქალაქეობა და მათი შეყვანის კლიპი უგულებელყოფილია.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>როდესაც არ ამოწმებს და ბრძანებას არ შეუძლია ცეცხლი, აღსრულების ჯაჭვი შეჩერდება. მრავალი ბრძანება დასჭირდება რამდენიმე კონკრეტული განაცხადის მდგომარეობას, რათა შეასრულოს.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>ყოველთვის გააგრძელე?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>ბრძანება შესასრულებლად.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>ბრძანება</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>ბრძანება არ არის შერჩეული განაცხადის ბრძანებისთვის '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>ბრძანება განაცხადის ბრძანებისთვის '{0}' არ მოიძებნა</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>არჩეული</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Რესტარტი</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>იყო საკითხი, რომელიც განახლდა '{0}'. განახლების დასრულების მიზნით, თქვენ დაგჭირდებათ ხელახლა გადატვირთვა და ინსტალაცია '{0}' (არ ინერვიულოთ თქვენი ყველა პარამეტრი აღდგება).
+
+შეგიძლიათ ახლავე გადატვირთოთ და შეავსოთ განახლება Re - ინსტალაციით, უგულებელყოფა და განაახლეთ იგი მოგვიანებით, ან გააუქმეთ განახლება ყველა ერთად და განაგრძეთ ვერსიის '{1}' გამოყენება?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>განახლების შეცდომა</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>ვერ გადმოწერეთ განახლება</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>განახლება ვერ მოხერხდა</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>განახლების დასრულებისთვის დაგჭირდებათ გადატვირთვა. გსურთ გადატვირთვა ახლა თუ გვიან?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>განახლება მზად არის</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>მოგვიანებით</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>გადატვირთეთ ახლა</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>გადაწყვეტის მოლოდინში</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} წარმატებით განახლდა {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>საჭიროა ძირითადი დანამატები და მისი ამოღება შეუძლებელია.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>ინსტალაცია</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>განახლება მიმდინარეობს. გადატვირთვა დასრულებისთვის.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>გადაწყვეტის მოლოდინში</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>ინსტალაცია მიმდინარეობს. გთხოვთ, გადატვირთოთ, თუ გსურთ ხელახლა - დააინსტალიროთ.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>წაშლის დასრულების მიზნით, თქვენ უნდა გადატვირთოთ. გსურთ გადატვირთვა ახლა თუ გვიან?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>დაინსტალირება?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>გამოქვეყნებული</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>ავტო - წარმოქმნილი ნაგულისხმევი წინასწარ განსაზღვრა '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>არ არის შერჩეული კლიპი</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>გაანალიზეთ არჩეული კლიპი</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>მიანიჭეთ მალსახმობი, რომ გაუშვათ '{0}' არჩეულ კლიპზე</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>გლობალური პასტა</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>მიანიჭეთ გლობალური პასტის მალსახმობი '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Დაგავიწყდა შენი პაროლი?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Შესვლა</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Კონფიდენციალურობის პოლიტიკა</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(მოითხოვს გადატვირთვას), როდესაც ჩართული დიაგნოსტიკური ინფორმაცია შეიტანება ფაილზე. ამან შეიძლება შეანელოს შესრულება და შეიძლება შეიცავდეს პირად ინფორმაციას.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>შესვლა ფაილზე</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>გახსნა</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>გახსენით ჟურნალების საქაღალდე</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>დაათვალიერეთ დანამატები</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>კითხვა</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>წერა</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>გამოაგზავნეთ უკუკავშირის ან შეცდომის შესახებ</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>ეს მხოლოდ მთავარ ფანჯარას მალავს. ყველა სხვა არა - დიალოგის ფანჯარა ყოველთვის ნაჩვენებია ამოცანების ზოლში.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>მოძებნეთ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>ფილტრის დამატება</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>რედაქტირება შეუერთდით ტიპს</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>ამოიღეთ ეს ფილტრი</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>გახსენით დახმარება ამის შესახებ ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} კლიპები</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>გადაცვლა</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>არასოდეს</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>კომპლექტი</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>უნაყოფო</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>რეკორდი</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>არასასურველი წყაროს მითითება</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' საჭიროა</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(აქვს შეცდომები)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>შეზღუდული</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>საცავი</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>ხარახურა</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>შეუზღუდავი</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>ეს აპლიკაცია ამჟამად შეესაბამება ნაგულისხმევი ბუფერული მკითხველის წინასწარ და ფორმატებს.
+
+მკითხველის ნაგულისხმევი წინასწარ განსაზღვრის ჩართვა ან გამორთვა (ბუფერული ზოლიდან) არ იმოქმედებს ამ კონფიგურაციაზე. მხოლოდ დაუსაბუთებელი პროგრამები მიჰყვება ნაგულისხმევი დაყენებას.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>ეს აპლიკაცია ამჟამად შეესაბამება ნაგულისხმევი ბუფერული მწერლის წინასწარ და ფორმატებს.
+
+ნაგულისხმევი მწერლის წინასწარ განსაზღვრის ან გამორთვის (ბუფერული გვერდითი ზოლიდან) არ იმოქმედებს ამ კონფიგურაციაზე. მხოლოდ დაუსაბუთებელი პროგრამები მიჰყვება ნაგულისხმევი დაყენებას.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>რომ დაამატოთ, უნდა გაითვალისწინოთ ბუფერული მსმენელი (სისტემის უჯრა -&gt; რეზიუმე).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>მიუწვდომელი</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> არ აქვს პარამეტრები</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>მე მხოლოდ ინგლისურად ვსაუბრობ და Monkeypasteast- მა ითარგმნა ამ ენაზე.
+
+ყველა ვერსია ინგლისურ პაკეტთან ერთად იგზავნება, ასე რომ, თუ ინგლისურად საუბრობთ, შეგიძლიათ შეცვალოთ ენა ამ დაყენების შემდეგ ნებისმიერ დროს (პარამეტრები -&gt; პრეფერენციები -&gt; საერთაშორისო).
+
+თუ გსურთ დაგეხმაროთ თარგმანის გაუმჯობესებაში, ჩვენ გვსურს მოვისმინოთ თქვენგან!
+
+გამოხმაურება@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>თარგმანის შეშფოთება</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>თქვენ უნდა განაახლოთ Monkeypaste, რომ გამოიყენოთ ეს ფუნქცია.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>მალსახმობი განუსაზღვრელი</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>ბუფერული მსმენელი გამორთულია</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>ბუფერული მსმენელი ჩართულია</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>მშობლის მოქმედება '{0}' არ უჭერს მხარს შეყვანის ქონების ტიპს 'ბოლო გამომავალი'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>შეიტყვეთ მეტი გეგმების შესახებ</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>გამოყენება</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>ზმახშეული</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>კლიპი</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>ანალიზატორი</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>დრო</value>
+  </data>
+</root>

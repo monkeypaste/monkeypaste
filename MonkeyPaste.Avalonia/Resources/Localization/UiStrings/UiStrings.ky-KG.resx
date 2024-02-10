@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Жазылуу менен гана чектелбеген өзгөчөлүктөр чектелбейт, сактагычтын кубаттуулугу гана өзгөртүлүшү мүмкүн.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Учурдагы каттоо эсебиңизди калыбына келтирүү ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Мазмун жана таштанды
+менен (0} жана {1} менен чектелген
+тиешелүүлүгүнө жараша клиптер.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Мазмунду жана чексиз таштандыларды сактоо үчүн {2} клиптерге чейин.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Чексиз жана чексиз мазмун жана таштандыларды сактоо.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Калыбына келтирүү</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Бекер</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Стандарт</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Чексиз</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Жазылуу</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Сиздин купуялыгыңыз маанилүү жана алмашуу буферинин маалыматтары өтө жеке болушу мүмкүн. Сактоо ар дайым шифрленген, бирок сиз түзмөгүңүз уурдалса же башка бирөө сиздин түзмөгүңүздү колдонуп, талап кылынган сырсөздү орнотсоңуз болот.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Купуя сөз</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Иштетилгенде, ар кандай тиркеменин экрандын жогору жагына чейин сүйрөп барганда, Мне сармыптарга майыптарды оңой эле таштап кетиш үчүн айыктырат.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Негизги терезенин жогору жагындагы "кулпу" деп айтууга дагы деле майлоочу жайга түшүп кетүүгө мүмкүндүк берет.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>"Орнотуулар -&gt; Түзөтүүлөр -&gt; Терезе 'менюсунан көбүрөөк терезелер бар.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Банананы бул жерге сүйрөңүз!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Сүйрөө - to - Ачык</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>"Орнотуулар -&gt; Жарлыктар" менюсунан каалаган убакта клавиатураны кароого же өзгөртүүгө болот.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Бардык глобалдык жарлыктар өчүрүлүп, кийинчерээк сиз аларды кийинчерээк орното аласыз.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>MonkeyPaste компаниясынын алмашуу буферинин жарлыктары бардык тиркемелерде болот.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Ички</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Жаңсоо профили</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Эй! Monkeypaste менен жалпы тажрыйбаңызды өркүндөтүү үчүн бир нече нерсени орнотуп көрөлү.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Кош келдиңиз</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Monkeypaste үчүн эң көп колдонууну алуу үчүн, сиз киргенде автоматтык түрдө жүктөлүүдө. Бирок, бул толугу менен сизге байланыштуу.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Аны кокусунан сакта.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Иштетүү</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Логинге жүктөө?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Иштетилгенде, экрандын жогору жагындагы жылдыруу жаңсоону айнекин ачып берет.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Сол - Тапшырма панелинин сүрөтчөсүн чыкылдатып, дагы эле monkeypaste ачык болот.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>"Орнотуулар -&gt; Түзөтүүлөр -&gt; Терезе 'менюсунан көбүрөөк терезелер бар.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Оңойбу?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Бул жерге жылыңыз!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Жылдыруу - to - Ачык</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p aldign = "center"&gt; monkeypaste &lt;span color = "кызыл&gt; толук интеграцияланган &lt;/ span&gt; менен сүйрөп, - жана - тамчы &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Аны бул жерге ташта!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p aldign = "борбору"&gt; Ушундай жол менен, &lt;span color = "кызыл"&gt; &lt;/ span&gt; же ал тургай &lt;span color = "кызыл"&gt; &amp; # x1f440 &lt;/ p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Мени сүйрөп!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Сынап көр!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Сынап көр!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Натыйжа жок.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Ыраста</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Жаңылоо</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Издөө ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Жөндөөлөр</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Көз карандылык:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Орнотуу</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>"{0}" алып салууну каалайсызбы жана анын бардык чөнтөктөрүн жана жарлыктарын алып салгыңыз келеби?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Орнотуу</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' Натыйжасы жок.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Тандоо жок.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Эч ким</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Насыялар:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Сүрөттөө:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Кайрымдуулук:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Лицензия:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Долбоор URL дареги:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Жарыяланган:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Мени оку:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Кыянаттык жөнүндө кабарлоо:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Тегдер:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Жаңыртуу</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Версия:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Терезеде ачык</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Бошотуу</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Жаңылоо</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Сактоо</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Андан кийин жок кылуу!
+
+Качуу үчүн жаңыртыңыз.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Таштанды жанында!
+
+Качуу үчүн жаңыртыңыз.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Файлдар</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Сүрөт</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Көчүрүлгөн {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} файлдар | {1} mbs</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} сап</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} нускалар | {1} Пасталар</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Жылуу</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Кошуу</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Көчүрүү</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Кесүү</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Паста</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} көчүрмө</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Корголгон чыпка</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Тандаңыз -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Форматтар</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Окурмандар</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Жазуучулар</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Иштетүүчүлөр</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Жок кылуу</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Дубликат</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Түзөтүү аты</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Баштапкы абалга келтирүү</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Тегдер</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Иш-аракет</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Global Routing</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Кыска жол</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Жаңсоолор уникалдуу болушу керек жана бир гана киргизүү баскычын гана камтышы мүмкүн.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;UL&gt;
+&lt;li&gt;
+&lt;b&gt; Ички &lt;/ b&gt; Бардык жарлыктар өтүнмөнүн чегинде чектелген. Бул чындыгында эле максатка ылайыктуу эмес, бирок сиз дүйнөлүк &lt;I&gt; бир күнү &lt;/ i&gt;. &lt;/ Li&gt;
+&lt;li&gt;
+&lt;b&gt; По умолчанию &lt;/ b&gt; Бардык глобалдык жарлыктар иштетилген. &lt;B&gt; көрсөтүү / Жашыруу &lt;/ b&gt; жарлык &lt;span course = "Red"&gt; жокко чыгаруу &lt;/ b&gt; капкактарды кулпулоо &lt;/ b&gt; ачкычын (/ b&gt; ачкыч) колдонот. Сиз кайсы маршрутту же жаңсоосун каалаган убакта өзгөртө аласыз. Бирок &lt;span color = "Green"&gt; бир жолу &lt;/ span&gt;
+&lt;/ li&gt;
+&lt;/ ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;Башы&gt; &lt;/ Head&gt;
+&lt;body&gt;
+&lt;h1&gt; Глобалдык кыска жол кыймылдары &lt;/ H1&gt;
+&lt;UL&gt;
+&lt;li&gt;
+&lt;b&gt; пассивдүү &lt;/ b&gt; Жарлы Monkeypaste каалаган колдонмону угат. &lt;br&gt;
+* Бул үчүн &lt;i&gt; гана &lt;/ i&gt; линукс боюнча вариант.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/ b&gt; жарлык &lt;b&gt; &lt;i&gt; чейин &lt;/ i&gt; &lt;/ b&gt; un extc extc extclect. &lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/ b&gt; жарлык &lt;b&gt; &lt;i&gt; кийин &lt;/ i&gt; &lt;i&gt; after
+&lt;li&gt;
+&lt;b&gt; жокко чыгаруу &lt;/ B&gt;
+Бул параметр кыска жолдун жигердүү арызына карама-каршылыктарга кабылбастан күчөтүлөт деп кепилдик берет.
+&lt;/ li&gt;
+&lt;li&gt;
+&lt;b&gt; эксклюзивдүү жокко чыгаруу &lt;/ b&gt; Бул капиталдык кулпу баскычы үчүн иштелип чыккан жокко чыгаруунун өзгөчө түрү. Ал бир гана жолу &lt;b&gt; бир &lt;/ b&gt; ачкычына (жок болуп) дайындоо үчүн гана мүмкүндүк берет. &lt;br&gt;
+Кадимки жокко чыгарылган режимдин капкактары &lt;i&gt; тыгылып калышы мүмкүн &lt;/ i&gt; тыгылып калышы мүмкүн &lt;/ i&gt;
+Андыктан &lt;b&gt; hotkey &lt;/ b&gt; жарлык басылбаса, анда ал кандай гана баскычтар иштебей калышы мүмкүн эмес, ал &lt;/ i&gt; тыгылып калууга жол бербейт.
+&lt;/ li&gt;
+&lt;/ ul&gt;
+&lt;/ body&gt;
+&lt;/ html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Өчүрүү</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Бул колдонуучу каттоо эсеби башка колдонуучулар үчүн эмес, киргенде, жүктөө.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>Байланышты колдонуу (Фетчердин плагин плагин талап кылынат) Бул документтин бардык учурлары ушул документтин бардык учурлары үчүн колдонулат же ал документтин бардык учурлары үчүн колдонулат же андан кийинчерээк шилтемелешет. &lt;/ p&gt; &lt;p&gt; электрондук почта дареги Бул жерде сиз тандаган байланыштын электрондук почта талаасы бул документтеги бардык учурларда колдонулат. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = Кыска жыл &lt;br/&gt; YYYY = узак жыл &lt;br/&gt; &lt;br/&gt; m = Ай (1-12) &lt;br////30 мм = Ай (01-12) &lt;br/&gt; МММ = Ай Аббревиатура (Ян, Фев) .) &lt;br/&gt; МММм = Узун ай (январь, февраль ... декабрь) &lt;br/&gt; D = Day (1 - 31) &lt;br/&gt; DD = Day (01 - 31) &lt;br/&gt; DDD = Дүйшөмбү (Дүйшөмбү, Шейшемби ... Жекшемби) &lt;br/&gt; E = жуманын кыска күнү (Дүйшөмбү, С. 3-, 21-, 23-, 23-, 4-, 4-, 4-...) &lt;br/&gt; h = саат am / pm (0-12) &lt;br/&gt; hh = саат AM / PM (00-12) &lt;br / &gt; H = саат күнүнө (0-23) &lt;br/&gt; HH = HISE DEADE (00-23) &lt;br/&gt; MM = Минута &lt;br/&gt; SS = Second &lt;br/&gt; SSS = Миллисекунд: A = Am / PM Marker &lt;br/&gt; P = A.M.M.m. Маркер</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Учурдагы датасы жана / же убактысы белгиленген учурларда, даталар шаблондоруна алмаштырылат.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Бул шаблондун бардык заряддары берилген текстти колдонот. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Бул шаблондун бардык заряддары берилген текстти колдонот. &lt;/ p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Аяктоо</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Блок иштетүү</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Inline иштетүү</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Колдонмо которгуюл</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Колдонмо которгуюл</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Тыныгуу тиркеме</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Чейин которгуч</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Чейин которгуч</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Резюме тиркеме</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Кошуу...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Паста</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>ИНФОН</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Баарын жашыруу '{0}' эскертмелерин жашыруу</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Бошотуу</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Акыркы аракет Маймыл пастасына арналган колдонмого өтүү.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Паста: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Азайтуу</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Сураныч, күтө туруңуз ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Кулпу</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Эсеп</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Жардам</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Көчүрүү жана чаптоо</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Түзөтүүлөр</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Демейки абалын калыбына келтирүү</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Чыпка ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Жарлыктар</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Колдонмо кошуңуз</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Вебсайтты кошуу</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Блок?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Аты</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Колдонмолор</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Доменди тосуу керекпи?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>URL блокту бөгөт?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Домен</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Булак URL дарегин таануу - бул алмашуучунун достору кабыл алуучу арыз ушунчалык четке кагууга кепилдик берилбейт</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Вебсайттар</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Кээ бир маймей баскычтары башка тиркемелердеги окуяларды "көчүрүү" синфаторун синфоптографияны колдонгон.
+
+Бул функцияларды туура камсыз кылуу үчүн, уникалдуу көчүрмө (мисалы, консолго же кабык сыяктуу) колдонмону кошуңуз жана тандаңыз.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Кыска жолду көчүрүү</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Эч ким</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Көрсөтүлгөн өтүнмө үчүн тандалган алдын-ала бошотулган. Белгисиз болгондо, &lt;em&gt; алмашуу тилкесинен &lt;/ em&gt; тымызын табылганда, демейки алдын-ала бошотулган.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Көптөгөн апакта көптөгөн MarkeyPaste өзгөчөлүктөрү башка тиркемелер менен өз ара аракеттенүү үчүн баскычтопту колдонгон.
+
+Айрым тиркемелер (мисалы, кээ бир консоль же снаряддар сыяктуу эле)
+
+Туура өз ара аракеттенүүнү камсыз кылуу үчүн, бул колдонмо үчүн ушул колдонууга ушул желе жазыңыз.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Кыска жол</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Окурмандар</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Четке кагылган тиркемелерден бардык алмашуу буфери &lt;b&gt; этибарга алынбайт &lt;/ b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Жазуучулар</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Түзөтүү ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Форматтар</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Четке кагылды</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Жарлыктар</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>"{1}" чейин бардык {0} клиптерди алып салгыңыз келеби?</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Клиптерди алып салабы?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Колдонмо</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Колдонмого карап тур ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Колдонмо жолун тандаңыз</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Сиз {0} үчүн бажы жарлыктарын алып салгыңыз келеби?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Сиз {0} көнүгүү формасын алып салгыңыз келеби?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Бул колдонмо үчүн жүктөлгөн алмашуу форматтары жок. Мындан тышкары, аны кыскартуу / көчүрмө же сүйрөп кетүүдөн эч кандай маалымат окуй албайт - жана - MonkeyPaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Бул колдонмо үчүн жүктөлгөн алмашуу форматтары жок. Автоматташтырылган чаптап же сүйрөп, - MonkeyPasteдан түшүү (анын бош маалыматтарын) жок кылат.</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Сиз бардык жарлыктарды баштапкы абалга келтиргиңиз келеби? Бардык бажы жарлыктары алынып салынат.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Сиздин кыска жолдун рутинг профилиңизди '{0}' деп өзгөрткүңүз келеби?</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Баары</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Сүйүктүүлөр</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Чыпкалар</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Форматтар</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Тегдер</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Бүгүн</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Таштанды</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Жөнүндө</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Оңойбу?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Кош тандоо үчүн эки жолу чыкылдатыңыз</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Салт</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Глобалдык</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Бул айкалышуу "{0}" менен чыр-чатактар, эгерде сакталса, тазаланат.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Кыска жол берилиши керек.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Бул дүйнөлүк кыска жол. Демек, ал аткарылганда аткарууга аракет кылат. Аны уникалдуу кылууга аракет кылыңыз (же "маршрут түрүн") башка тиркемелерден жарлыктар менен карама-каршы келбейт.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Глобалдык</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Кыскача бир гана жана бир гана бир гана өзгөртүү эмес ачкыч болушу керек.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Жазуу үчүн каалаган баскычты басыңыз ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Жарлыкты дайындаңыз</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Көбүрөөк билүү...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Жаңыртуу</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Жокко чыгаруу</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Оңдоо</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Этибарга албоо</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Жок</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Макул</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Кайра аракет кылуу</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Өчүрүү</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Тапшыруу</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ооба</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Жыл сайын</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Ай сайын</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Акысыз аракет кыл!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Эсеп-кысап цикли</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Электрондук почта</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Кирүү</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Туташууңузду текшериңиз
+дагы бир жолу аракет кылып көрүңүз.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Чыгуу</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Кийинки төлөө</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Купуя сөз</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Катталуу</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Электрондук почта жараксыз</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Сырсөздөр дал келбейт.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Сырсөз минималдуу {0} каарман болушу керек.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Унутпа?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Эсебиңизди ырастоо үчүн электрондук почтаңызды текшериңиз</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Сырсөздү калыбына келтирүү</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Ммм г, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>МММ Д, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Мм / DD / YYYY HH: MM TT</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Эч качан</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Акысыз {0} күн сыноо</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Маселени аткарып жүрдү
+Сиздин сатып алуу.
+
+Туташууңузду текшерүү жана
+Жөндөөлөр жардам берет.
+
+Дагы бир жолу аракет кылгыңыз келеби?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Сиздин каттоо эсебиңиз ийгиликтүү болду
+төмөнкүлөрдү жаңыртты:
+
+ {0} / {1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Ийгиликтүү сатып алыңыз!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Ката</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Туташуу ишке ашкан жок.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Кайра аракет кылуу</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Эсеп өзгөрдү</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Сиздин жазылууңуз азыр {2} менен {2} менен {2} менен {3} таштанды сактагыч.
+Бирок кабатыр болбоңуз, төмөндөтүлгөндөн кийин эч кандай маалымат жоголгон жок. Жаңы клиптер гана бааланат.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Куттуктайбыз! Сиздин жазылууңуз азыр {2} менен {2} менен {2} менен {3} таштанды сактагыч.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Таштанды же бир нерсени бошотуу
+Көбүрөөк кошуу үчүн '{0}' чейин.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' Сактоо {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Калыбына келтирүү</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} тосулган</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Мазмун жана таштанды кубаттуулугу!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' Сактоо {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Мазмун кубаттуулугу!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Сиз бул эскертүүлөрдү жашырсаңыз болот
+"бардыгын жашыруу" баскычын чыкылдатыңыз
+Жогорудагы опциялар менюсу.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Макс Таштанды сактоо - {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Таштанды кубаттуулугу!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} жараксыз</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} жок дегенде {1} каарман болушу керек</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} гана {1} болушу мүмкүн</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Паста: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Сиздин {0} төлөө үчүн төлөө
+жазылуу {1} ​​төлөнөт
+жана алынган жок.
+
+Сураныч, жаңыртыңыз
+Төлөө маалыматы.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Сиздин {0} төлөө үчүн төлөө
+жазылуу {1} ​​төлөнөт
+жана алынган жок.
+
+Сураныч, туташыңыз
+Түзмөктөгү Интернет
+жазылууңуз менен жана
+улантуу үчүн өчүрүп күйгүзүңүз
+{0} планыңызды колдонуп.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Сиздин {0} төлөө үчүн төлөө
+жазылуу {1} ​​төлөнөт
+жана алынган жок.
+
+Сураныч, ачыңыз же өчүрүп күйгүзүңүз
+Түзмөктөгү MonkeyPaste
+Жазылууңуз менен
+Сиздин колдонууну улантуу
+{0} План.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Эсеп мөөнөтү бүттү</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Эскертүү</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft дүкөнү эң жогорку деңгээлге жол бербейт
+Жазылуу адаттарга өзгөртүүлөрү.
+
+Сиз өзүңүздү жокко чыгарыңыз
+{0} / {1} План
+Же экөөнө тең акы алынат.
+
+Азыр баргыңыз келеби?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Сырсөзүңүз баштапкы абалга келтирилди.
+
+Электрондук почтаңызды текшериңиз жана
+Өзгөртүү шилтемесин аткарыңыз
+Сырсөзүңүз.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Кирүү</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Автор (лор)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Төмөнкү лицензия шарттарын улантуудан мурун, төмөнкү лицензиялык шарттарды кабыл алсаңыз болот.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Төмөнкү пакет (-лар) Орнотуудан мурун алардын лицензиялык шарттарын кабыл алууну талап кылыңыз.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Мен четке кагам</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>"Мен кабыл алам" баскычын чыкылдатып, бул колдонмонун лицензиялык шарттарына макул экендигиңизди билдирет. Эгер сиз терминдерге макул болбосоңуз, "Мен төмөндөйт" баскычын чыкылдатыңыз.</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>"Мен кабыл алам" баскычын чыкылдатып, сиз жогоруда көрсөтүлгөн плагин (дардын) лицензиялык шарттарына макул экендигиңизди билдирет. Эгер сиз терминдерге макул болбосоңуз, "Мен төмөндөйт" баскычын чыкылдатыңыз.</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Көрүү лицензиясын көрүү</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Лицензияны кабыл алуу</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Мен кабыл алам</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Жигердүү</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Катталбаган</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Бүттү</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Сырсөздөр дал келбейт</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Купуя сөз</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Сиздин жазылууңуз
+Азыр {0} / {1} коюңуз.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Эсеп табылган</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Кирүү ишке ашкан жок</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Каттоо ишке ашкан жок</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Каттоо ийгиликтүү!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Ката кетүү катасы</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Жазылуу</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Эмне жанылык</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Эч качан</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Чексиз</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>кубаттуулук</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>калган</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>Бардыгы</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Төлөмүңүз өтүп кетти.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Эксклюзивдүү жокко чыгарылган жарлыктар бир гана баскычты гана камтышы мүмкүн жана ал баскыч өзгөрүлбөйт.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Мөөнөтү бүттү</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Жүктөө</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Майып</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Эскертүү! Бул сырсөз милдеттүү эмес жана кошумча коопсуздук үчүн гана. Сиздин маалыматтарыңыз буга чейин шифрленген жана эч качан бөлүшүлбөйт. Бул сырсөз жөн гана аймакка жүктөлбөй калуудан сактайт, эгерде алар иш столуна (уурдалган, бөлмөдөн чыгып кетесиз).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Төмөнкүдөй, төмөнкүлөрдү эстейли</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Караңдак карап</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Талдоо</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Тез аракет</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Которулуу</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Которулган</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Анотациялар</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Жөнөкөй текст</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Терезеде ачык</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Click + Ctrl Click ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Арткы көрүнүш үчүн + Alt баскычын чыкылдатыңыз ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Медианы пин же басуу мүмкүн!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Тазалоо</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>0 жогорудагы босоголор RGBA Colourspaceде Евклиддик алыстыктын аралыкты колдонуп, босоголордун түсүнө дал келген.
+
+Мисалы, кызыл (# ff0000) - бул сүрөттөгү ", ал эми сүрөт клипиндеги пиксел болуп саналат</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Төмөнкүлөрдүн бардыгы чындык</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Алмашуу буфери</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Коллекциялар</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Чычкан режимдери</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Триггерлер</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Тыным</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Резюме</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Жаңы триггер</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Орнотууну кошуңуз</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Маймылдын тамчы чебери</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Алдын ала чабуул</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Анализатор</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Кесом</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Цикл</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Тордун макети которгуч</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Регистрге байланыштуу</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Босого</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Бүт сөз</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Эч ким койду</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Багыттоо</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Иш-аракет</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Тор</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Бүттү</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Кийинки</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Мурунку</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Учурдагы каттоо эсеби?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Кийинки төлөө</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Сиздин бардык түзмөктөрүңүздө сиздин акы төлөнүүчү жазылууңузга (бар болсо). Электрондук почтаңызды биз убада кылабыз деп убада беребиз.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Жазылуу</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Колдонуучунун аты</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Катталуу керек?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Булактар</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Тақ, эч нерсе жок. Бир нерсе туура эмес болушу керек 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Алып салуу</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Өчүрүп-күйгүзүүнү талап кылат</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Өркүндөтүлдү</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>"{0}" плагинден чыгаруу ERROR</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Плагин орнотуу катасы: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Плагин '{0}' коррупциялашкан же туура эмес каталог структурасын орнотуу катасы. "{1}" болушу керек, бирок табылган жок.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>"{0} 'тилкесинин катасы: {1 {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>"{0}"</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0}</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Плагин спектаклди "{0}" деп жазалоо</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>'{0}' чейин '{0}' чейин ката кетти. Толук маалымат: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Текст терилген тексттик кутучасы көңүл бурулбаганда, издөөгө автоматтык түрдө колдонулат.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Авто издөө киргизүү</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Сырсөздү өзгөртүү ишке ашкан жок</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Өзгөртүү</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Сырсөздү өзгөртүү</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Тазалоо</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Сырсөздү тазалоо</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Мазмун</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Мазмун шрифт өлчөмү</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>ЧЫНЫГЫ, клипке салынган тышкы мазмун клиптерге форматтоону колдонот жана булактан алынган эмес.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Паста, тамчы же баруучу форматтоо менен пайда табыңыз</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Сырсөздү унуткыңыз келеби?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Унутуу</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Сырсөздү унут</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Өздүк кабинет</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Ылайыктуу суу белгилерин жашыруу</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Жаңы алмашуу курсунан тиркелгенде, ал жаңы клип катары байкалбайт</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Көңүл бургула</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Алмашуу буфери бар клипке дал келгенде, ал жаңы клипти жаңы түзүүнүн ордуна колдонууга болот</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Жаңы кайталоолорду этибарга албаңыз</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Колдонмонун ичиндеги алмашуу курсу көзөмөл жүргүзүлбөйт</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ички алмашуу буферине көз чаптырбаңыз</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Боштуктар, өтмөктөр жана жаңы сызыктар көз салуудан этибарга алынбайт</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ак мейкиндикти гана этибарга албоо</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Кирүү</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Жандуу терезе</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Өкүмү</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Жүрүм-турумун көрсөтүү</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Негизги терезе мониторуңуздун алдыңкы четине жылдыруу үчүн түрмөктү иштетүү менен ачылат</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Жогорудагы экрандагы жылдырууда көрсөтүү</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Эскертме көлөмү</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Бул жөндөө тутуму - колдонуу статистикасы үчүн кең баскычтоптун эсептегичтери колдонулат. Бул маалымат купуя жана бөлүшүлбөгөн, бирок ошондой эле ыймансыз эмес. Так жыйынтыктар "Жөндөөлөрдүн көчүрмөсүн жана чаптооңуздагы" Жөндөөлөрдүн көчүрмөсүн "тиркемесин колдонууну талап кылышы мүмкүн.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Тарыхты чаптоо</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Өтө көп кадалган клиптер (браузер калдыктары сыяктуу) көп эс тутумду жей алат. Алып салуу биринчиден - биринчиден -</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>ПИН кубаттуулугу</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Бул бардык авто киргизилгенге чейин колдонулат, төмөнкү маанилердин натыйжалуулугун жогорулатат</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Акыркы текст чеги</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Сиз каалаганыңызга ишенесизби
+Демейки артыкчылыктарды калыбына келтирүү?
+
+Бул артка кайтаруу мүмкүн эмес!
+
+* Колдонмо аяктагандан кийин өчүрүлөт.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Бардык эскертмелерди баштапкы абалга келтиргиңиз келеби?
+
+*Бул артка кайтаруу мүмкүн эмес!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Маймыл пастасы тышкы программага өтүп, алмашуу буферин (ашыкча) орнотот. Бул &lt;b&gt; аракет &lt;/ b&gt; баллдын абалын тышкы пастаны андан кийин калыбына келтирүү үчүн
+
+Жалпы калыбына келтирүү кепилденүүгө болбойт жана маалыматтын булагына жараша иш-аракетти же атүгүл кырсыктасын азайтышы мүмкүн.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Маймылдын артынан бутту баштапкы абалга келтирүү</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Плагин кэшин жолдон жок кыла алган жок: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Бардык плагиндер баштапкы абалына кайтарылат</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Плагин Кэш</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Демейки шартта бардык плагиндерди баштапкы абалга келтиргиңиз келеби?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Сырсөзүңүздү баштапкы абалга келтиргиңиз келеби?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Бардык тиркемелердин жарлыктары алардын демейки негизги жаңсоолоруна кайтарылат.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Жарлыктарды баштапкы абалга келтирүү</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Буга чейин эскертмелерге көңүл бурулбайт.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Эскертмелерди калыбына келтирүү</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Жеткирүүчү жай жай)</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Бай мазмун</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Сырсөз орнотуңуз</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Көрсөтмөлөрдү көрсөтүү</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Тапшырма панелинде көрсөтүү</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Тапшырма Свитчер</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Show Shitles</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Иштетилгенде, ар кандай тиркеменин экрандын жогору жагына чейин сүйрөп барганда, Мне сармыптарга майыптарды оңой эле таштап кетиш үчүн айыктырат.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Экрандын жогору жагына сүйрөңүз</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Үн темасы</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Орфографияны текшерүү</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Алмашуу буферинин булагы белгисиз жана коопсуздук жөндөөлөрүнө жараша, мазмунуңуздан келген мазмунга жана арыздан келип чыгышы мүмкүн.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Startup алмашуу буферин кошуңуз</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Баштоо борбору үчүн алмашуу буферин угуңуз</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Тандоо</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Сак бол! Башка палитра түстөрү математиканы колдонуу менен эмес! Андыктан бир нече түстү жана стил айкалыштарын окууга болгон айырмачылыкка ээ болбошу мүмкүн.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Тема түсү</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Тема стили</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Таштанды тазалоо, топтомдун интервалында башталат.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Таштанды тазалоо</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Интерфейс</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Бийик чектери жетишсиздигине таасир этиши мүмкүн</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Чексиз чектөө</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Чектөө жок</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Алдыңкы файлды алдын-ала келбеген файлдарды издөө</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Колдонуучу - аныкталган издөө кеңейтүүсү</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Табуу жана алмаштыруу ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Бул жерде паста</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Бөлүшүү ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Көрүү</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Башкаруу ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Атын өзгөртүү</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Упай: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Түрү: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Биротоло жок кыл</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>'{0}' деп табуу</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Өзгөртүү</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Киргизүү</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Чыгуу</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Булактар</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Калыбына келтирүү</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Сүрөттү тандаңыз ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Түс</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>'{0}' дегенди ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Ачык</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Сураныч, күтө туруңуз ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Фон түсү</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Баарын тазалоо</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Алмашуу форматтары</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Бардыгын жок кыл</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Маалыматты түзөтүү</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Аты</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Табуу</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Арип түсү</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Форматтоо боёк</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Тандоо</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Сүрөттү кыстарыңыз</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Шилтемени кыстарыңыз</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Видеону киргизиңиз</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Матч иши</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Жаңы шаблон</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Кийинки шаблон</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Паста текстти киргизиңиз ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Мурунку шаблон</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Үзгүлтүксүз билдирүү</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Баарын алмаштыруу</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Алмаштыруу</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Бүт сөз</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Ороп</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Блок</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Домен</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Папка шоу</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Бөгөттөн чыгаруу</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Жөнүндө</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Тиркеме блогу</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Тиркеме inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Авто - Көчүрүү</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Modes</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Сураныч, MonkeyPaste жүктөлүүдө күтүү ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Таштоо</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Right - Паста баскычын чыкылдатыңыз</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Топ</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Чыпка</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Баарын биротоло жок кыл</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Баарын калыбына келтирүү</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Иш-аракет</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL мурунтан эле бар: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL жарактуу форматта болушу керек.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Толук URL киргизиңиз:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>URL кошуу</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Маанилерди киргизиңиз</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Текстти же файлдарды көчүрүңүз.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Append {0}} {1} режими жандырылды</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Алмашуу буферине өзгөртүүлөр киргизилет</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Append режиминен кийин жандырылды</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Алмашуу буферинин өзгөрүшү азыр алдын ала айтылат</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Тиркеме режими жандырылды</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Блок</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Кадимки алмашуу буферинин жүрүм-туруму калыбына келтирилди</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Тиркөө иштен чыгарылды</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Клиптин үстүнкү же эң сонун болушу мүмкүн</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Тиркеме режими жандырылды</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Inline</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Колдонмо</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Учурдагы тандооңузга тиркелет.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Кол менен тиркеме режими жандырылды</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Алмашуу буферинин топтолушу токтоп калды</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Тиркеме токтоду</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Алмашуу буферинин топтолушу улантты</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Тиркеме улантылды</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Сиз айткым келеби?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Шайкештик режиминде редакциялоо бардык бай форматтоону алып салат. Сиз муну өзгөрткүңүз келеби?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Маалыматтарды деградация эскертүүсү</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Жигердүү</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Иштетилген</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Өчүрүү</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Боюнча</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Тындыруу</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Натыйжа</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Абалы</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Белгисиз ката пайда болду.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Калган аракеттер</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Сырсөздү киргизиңиз</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Ыраста</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Байланыш</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Дата убакыт</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>'{0}' керектөөчүлүктү жок кылгыңыз келеби?
+
+Бул артка кайтаруу мүмкүн эмес!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Динамикалык</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Статикалык</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} бош ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Жакында көбүрөөк келет!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Кирүү жүктөө иштебей калды</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Кирүү жүктөө Ийгиликти өчүрүү</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Кирүү жүктөө иштебей калды</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Кирүү Жүктөө Ийгиликке жетет</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Жашын</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Маймыл пастасы азыр жүктөлгөн.
+Алмашуу буферинин угуусу: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Жүктөлгөн</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Көрсөтүү</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Авто көчүрүү тандоо режими: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Режим өзгөрдү</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Оң баскычты чыкылдатып, паста режими: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Плугин жаңыртылды</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Паста '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>"{0}" анализатор</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Чуркоо '{0}' триггер</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>'{0}' тандаңыз</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>"{0}" жок кылгыңыз келеби?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Триггер</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>'{0}' үчүн бардык иш-аракеттерди алып салгыңыз келеби? (Болбосо, алар "{1} 'үчүн кайрадан турушат</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Жолдорду алып салыңыз</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Чын эле "{0}" баргыңыз келеби?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Эсеп</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Талдоочулар</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Колдонмо операциялары</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Алмашуу буфери</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Мазмун</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Конвертор</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Маданият</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Маалыматтар</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Багыт</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Сүйрөп, тамчы</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Тамчы чебери</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Сүрөттөр</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Кургак</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Интерфейс</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Операциялар</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Түзөтүүлөр</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Издөө</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Жарлыктар</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Сорттоо</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Үндөр</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Тутуму</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Коллекциялар</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Триггерлер</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Вебсайттын операциялары</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Тил</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Киргизүүчү клипке алмашуу буферин орнотот.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Эскертүү</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Жалпы максаттагы үн жана / же тутумдук науалык кабар эскертүүлөрү. Эскертүү иш-аракеттери алардын киргизүүсүнө таасир этпейт.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Билдирүү</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Маймыл</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Алдын ала көрүү</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Show?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Убакыт Тоо-Чакыруусу бир нече секундада көрсөтүлөт. Мааниси 0 билдирүүсү жабылышы керек.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Убакытты көрсөтүү</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Үн?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Үн түрү</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Тинг</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Көлөмү</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Анализатор</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Дайындалган анализатордун орнотуусун колдонуп, анын киргизүү клиптерин иштеп чыгат.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Киргизүү мазмуну тандалган коллекцияга шилтемеленген</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Киргизилген клипти дайындалган тег жыйнагы менен байланыштырыңыз.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Ишти эске алуу?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Бул киргизүү менен салыштыруу үчүн статикалык текст болушу мүмкүн жана / же тандалган касиеттерди камтыган (чыпканы чыпкалоо аркылуу) камтылса, ал шарт бааланганда алмаштырылат.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Шарттуу маалыматтар</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Тандалган "киргизүү касиетке" тиркелүүчү "Киргизүүчү касиетке" тиркелүүчү "Киргизүүчү касиетке" колдонула турган кошумча JSONPATH.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Киргизүү чыпкасы</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Бул шарттуу түрдө колдонулган клип-мүлк.
+
+Учурда бул шарттуу "Акыркы чыгарылган" мүлк бул шарттуу түрдө тастыкталганда гана колдоого алынат, ал анализатордун иш-аракетинин иш-аракетинин баласы жана берилген маалыматтар ата-энелердин анализинин чыгарылышына жараша өзгөрүлүп турат.
+
+Кыйынчылыктарды чечүү үчүн, бул шарттуу ата-энесине "сергек аракеттерди" тиркеп, эскертүүчү мүлккө дал келүү үчүн сергек 'билдирүүсүнүн "параметрин коюңуз. Бул ушул шарттуу иш-аракеттер үчүн колдонулган иш жүзүндө маалыматтарды карап чыгууга мүмкүндүк берет.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Киргизүү</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Киргизүүчү клипке же мурунку аракеттердин чыгарылышына тексттик карама-каршылыктарды жүзөгө ашырат. Салыштыруу ишке ашкан жок (дал келбеген) балдардын иш-аракеттери аткарылбайт. Ошентип, ал логикалык дарбаза сыяктуу иштейт.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Эгерде натыйжа туура болсо, анда баланын иш-аракеттери гана аткарыла турган чыныгы же жалган операциялар.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Абалы</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Баары</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Тандалган түрдүн клипине кандайдыр бир жол менен түзүлгөндө (алмашуу буферине, сүйрөп, ыргытылган, анализатор түзүлгөн же кайталанган</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Эгерде киргизүү клипи жаңы болсо, анда бул триггерди гана аткарат. Бул жаңы мазмунга көңүл бурулбагандыгы же жокпу, ар кандай артыкчылыктуу шарттардын көзкарандысыз.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Кайталанма</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Бул түрдүн клиптери гана бул аракетти козгойт.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Киргизилген клипти дайындалган тег жыйнагы менен байланыштырыңыз.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Клип көрсөтүлгөн теги чогултуу менен байланышкан кезде башталды.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Коллекция</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Миллисекондордогу убакыттын көлөмү балдардын аткарылышына чейин күткөн</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Кечигүү</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Эксперименталдык), негизинен, алыскы булактарды же жардам берүү үчүн биргелешкен иш-аракеттерди жүргүзүү үчүн биргелешкен иш-аракет менен биргеликте колдонулат.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Бош калганда, чыгуучу файл файлдын аталышы катары киргизүү файлын колдонот.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Ыңгайлаштырылган ат</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Файл жазылуучу каталог.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Каталог</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Тандалган папкага киргизүүнү үнөмдөйт.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Тандалган папканын мазмунун өзгөргөндө өзгөргөндө. Чыгуу жаңы же учурдагы (кайталоолордун артыкчылыктуу артыкчылыктуу форли иштелип чыккандан этибарга албаганда) акыркы чыгуунун түрү менен бирге өзгөргөн файлдын же папканын файлынын файлдары.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Окуялар</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Кайталанма</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>0 мааниси ата-эне иш-аракетин аныктайт</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Кайталоо</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Ата-эненин иш-аракетин аяктаган бир жолу күтүү үчүн миллисекунддагы убакыттын көлөмү</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Кайталоо кечигүү</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Эксперименталдык) иш-аракеттердин илмектерин же кайталанган тапшырмаларды түзүү үчүн колдонулган. Кайталап жатканда, ал бардык балдарды баштапкы киргизүү менен аткарат. Кайталап эсептин аралыгын колдонбостон, интервалды колдонгондо, кайталануучу кайталоону токтотуу үчүн, майыптарга майып жана калыбына келтирилиши керек. Добуш берүү же веб-тырмакты автоматташтыруу үчүн пайдалуу болушу мүмкүн.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Глобалдык жарлыкка себепсиз, сиз аныктайсыз. Эгерде MonkeyPaste жигердүү болсо, анда ал тандалган клипти колдонууга аракет кылат (эгер бар болсо). Болбосо, ал алмашуу буферин киргизүү катары колдонууга аракет кылат.
+
+ЭСКЕРТҮҮ: Эгерде аны ийкемдүү кармоо үчүн эч кандай киргизүү болбосо, кыска жолду кыскартат (андыктан ал макро тамыр ж.б.).</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Кыска жол триггер</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Жазылган кыска жолдун учурдагы алмашуу буфери менен каалаган убакта басылганда</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Бул иш-аракет колдонмону өчүрүп-күйгүзүү үчүн талап кылат. Азыр муну жасагыңыз келеби?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Көйгөй бар эле. Колдонмону кол менен өчүрүп-күйгүзүшүңүз керек.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Анотатор менен анализ</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Аннотация триггер</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Элементтерде курулган - гана. Өзгөртүү үчүн дубликат.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Анонимдүү</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Салт</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Кечээ</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} күн мурун</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 саат мурун</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} саат мурун</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Азыр эле</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Бир мүнөт мурун</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} мүнөт мурун</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Өткөн ай</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0 ай мурун</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Акыркы аптада</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} жыл мурун</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Анотациялар</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Өтүнмөнүн аталышы</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Колдонмо жолу</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Регистрге байланыштуу</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Мазмун</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Файл түрү</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Сүрөт түрү</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Үзгүлтүксүз билдирүү</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Текст түрү</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Аталышы</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>URL аталышы</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Бүт сөз</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Ачык экрандагы эң жогорку экрандын четинде жылдыргы сыяктуу, бул ачылганда негизги терезени кулпулайт. Тезирээк көп максаттуу иштөөгө уруксат берүү.
+
+* Бурчтар мониторго эмес, сиздин экрандарыңыздын бардык экрандары жагынан.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Терезени жана кулпу шоу</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Акысыз!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Бизге 5 жылдыз бериңиз!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Бардыгын жок кыл</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Бардык мазмунун жок кылуу</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Сиз жок кылгыңыз келеби
+Бардык клиптериңиз?!
+
+* Бул операцияны артка кайтаруу мүмкүн эмес!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Мен Индия дефф, сураныч, кандайдыр бир колдоо көрсөтөбүз!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>MonkeyPaste сыяктуу?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} Түрү (ларынын) киргизүүнү гана кабыл алат: {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Авто көчүрүү режими - "Көчүрүү" иш-чарасын соң чычкандын сол баскычы бошотулду.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Оң баскычты чыкылдатуу - "Паста" иш-чарасын саймаңыз</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Алдын ала орнотуу</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Плагин папкасын көрсөтүү</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Отчет</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Көрүү</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Шаймандарды көрсөтүү</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Талдоочулар өзүлөрүнүн киргизүүсүн аннотациялап же жаңы клиптерди чыгарып алуу катары түзүңүз. Анализдердин балдары алардын кайсынысы алардын киргизилишин талап кылышы керек экендигин чечиш керек. Бул, адатта, акыркы чыгарылышы.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Киргизүү түрү</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>"{0} 'триггер дизайнер</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>A {0} тандаңыз ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Табылган жок...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} Триггер</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Шарттын чыныгы же жалган натыйжасы текшерилсе, анда ал абалда калат. Мисалы, бир "камакка алынган" шарт "камтылбайт" болот.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Эмес</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Сураныч, күтө туруңуз ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Түс тандаган</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Дал келүү түсүн тандаңыз</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Жарлыктын триггерине окшоп, ачкыч айкалышы басылганда, "Көчүрүү" иш-чарасы активдүү колдонмодо симуляцияланат, ошондо ал дагы эле көчүрмө сыяктуу иштейт, андан кийин маймылдын көчүрмөсүнө тиркелген иш-аракеттердин чынжыры Симуляцияланган көчүрүү буферинин маалыматтары.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Өркүндөтүлгөн чыпка</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Чыпкаларды жашыруу</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Чыпкаларын калыбына келтирүү</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Чыпка түзүү</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Ыктыярдуу) бош калган учурда, алмашуу буферинин бул иш-аракеттердин киргизүүсүн колдонуп, алмашуу борбору коюлат. Бул жерде берилген нерсе гана ачык текст катары каралат.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Алмашуу буфери үчүн мазмун</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Чыныгы болгондо, бул иш-аракет алмашуу буферин белгилейт.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Этибарга албоо</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>'{0}' аракет үчүн тандалган анализатор тандалган жок</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>"{0}" иш-аракет үчүн анализатор</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Ата-энеси '{0}' '' '' '' '' '' '' '' {2 {анализаторунун "{анализи" {2} "" "" "" "{3 {3} '' ''</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Classifier '{0}' үчүн тандалган жок</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Классификатор үчүн "{0} 'табылган жок</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Салыштыруунун маанисин, тамгалар, сандар же боштуктар болушу мүмкүн</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Клип белгилеген триггер '{0}' үчүн тандалган жок</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Clip Tagged Trigger '{0}' табылган жок</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>'{0}' үчүн көрсөтүлгөн көрүүчү папка жок</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>'{0}' Watch Folder '{1 {1}' табылган жок.</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>"{0}" иш-аракет үчүн жазуучунун жолу</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>'{1}' үчүн файл жазуучу жолу '{0}' үчүн '' табылган жок.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Иш панели</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Плагиндер жөнүндө билүү</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Бул анализ конфигурациясын калыбына келтирүү</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} өзгөртүү журналы</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Сураныч, Интернетке туташып, кийинчерээк дагы аракет кылып көрүңүз.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Жардам</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} бул акыркы версия</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Сиз бардыгыбыз - to to data!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Жаңыртууларды текшериңиз ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Жаңы версия жеткиликтүү!
+
+'{0}' 🎉🍾🥳 жаңыртуу үчүн бул жерди басыңыз</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>'{0}' чейин жаңыртуу үчүн төмөндө чыкылдатыңыз</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Жаңыртуу жеткиликтүү!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Азыр жаңыртыңыз</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' Бөлүшүлгөн маанилерди камтыйт. Баштапкы абалга келүүнү каалайсызбы?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Тазалоо</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Акыркы издөөлөрдү тазалоо</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Бардыгын баштапкы абалга келтирүү</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Баштапкы абалга келтирүү</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Калыбына келтирилген жок</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Берилген арызды колдонот. Бардык колдонмолордун буйругу жарандыгы жок жана алардын киргизүү клипи этибарга алынбайт.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Белгиленгенде жана буйрук өрттөнүп кете албайт, аткаруу чынжыры токтойт. Көптөгөн буйруктар аткаруу үчүн бир нече конкреттүү өтүнмө абалын талап кылат.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Ар дайым улантылабы?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Аткарууга буйрук.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Буйрук</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>"{0}" колдонмо үчүн буйрук тандалган жок</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Колдонмо буйругу үчүн буйрук '{0}' табылган жок</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Тандалган</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Кайра жүргүзүү</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>'{0}' жаңыртуу маселеси болду. Жаңыртууну аяктоо үчүн, сиз кайрадан '{0}' орнотушуңуз керек (Орнотууңузду орнотушуңуз керек) (Баардык жөндөөлөрүңүздүн бардыгы калыбына келтирилиши керек).
+
+Сиз азыр өчүрүп-күйгүзүп, жаңыртууну кайрадан орнотуп, аны этибарга албап, кийинчерээк жаңыртып, кийинчерээк жаңыртып, "{1}" версиясын колдонууну уланта аласызбы?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Жаңылоо катасы</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Жаңыртуу жүктөлө алган жок</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Жаңыртуу ишке ашкан жок</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Жаңыртууну аяктоо үчүн, сиз өчүрүп күйгүзүшүңүз керек. Азыр же кийинчерээк өчүрүп-күйгүзгүңүз келеби?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Даяр жаңыртуу</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Кийинчерээк</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Азыр өчүрүп күйгүзүңүз</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Күтүлүүдө</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} ийгиликтүү {1} чейин ийгиликтүү жаңыртылды</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Негизги плагин талап кылынат жана алынып салынбайт.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Орнотулат</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Жаңыртуу күтүлүүдө. Аяктоо үчүн өчүрүп күйгүзүңүз.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Күтүлүүдө</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Чыр-чатак күтүлүүдө. Сураныч, кайра орнотууну кааласаңыз, өчүрүп коюңуз.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Орнотуудан чыгаруу үчүн, сиз өчүрүп-күйгүзүү керек болот. Азыр же кийинчерээк өчүрүп-күйгүзгүңүз келеби?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Орнотуу керекпи?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Жарыяланбаган</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Авто - "{0}" үчүн авто - түзүлгөн</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Клип тандалган жок</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Тандалган клипти анализ</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Тандалган клипте '{0}' чуркоо үчүн кыска жолду дайындаңыз</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Глобалдык паста</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>'{0}' үчүн глобалдык паста кыска жолду дайындаңыз</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Сырсөздү унуттуңузбу?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Кирүү</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Чыгуу</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Купуялык саясаты</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Өчүрүп-күйгүзүүнү талап кылат) Диагностикалык маалымат файлга киргенде болот. Бул жайлап, жеке маалыматты камтышы мүмкүн.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Файлга кирүү</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Ачык</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Ачык журналдар папкасы</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Караңдак карап</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Окуу</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Жазуу</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Пикириңизди же BUG отчетун жөнөтүү</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Бул негизги терезени гана жашырат. Бардык башка адамдар диалогсуз терезелер ар дайым тапшырма панелинде көрсөтүлөт.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>'{0}' издөө</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Чыпкасын кошуңуз</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Кошулуу түрүн түзөтүү</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Бул чыпканы алып салыңыз</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Бул жөнүндө ачык жардам ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} клиптер</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Өзгөртүү</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Эч качан</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Орнотуу</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Аты жок</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Жазуу</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Белгисиз булак маалымдама</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' талап кылынат</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Каталар бар)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Чектелген</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Сактоо</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Таштанды</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Чексиз</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Учурда бул колдонмо демейки буфчанын окурманынын алдын-ала четтетилет жана форматтары.
+
+Демейки окурмандын алдын-ала бошотулушу же өчүрүү (алмашуу буферинин капталынан) бул конфигурацияга таасир этпейт. Чечилбеген колдонмолор демейки орнотууну сактаңыз.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Учурда бул колдонмо демейки буфтин алдын-ала Presets жана форматтар
+
+Демейки жазуучудан четтетүү же өчүрүү (алмашуу буферинин капталынан) бул конфигурацияга таасир этпейт. Чечилбеген колдонмолор демейки орнотууну сактаңыз.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Тасса үчүн, алмашуу буферинин угуучусун басаңдатышы керек (система -&gt; Резюме).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Тиркелбеген тиркеме</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Жөндөөлөр жок</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Мен бул тилге англис тилинде гана сүйлөйм, бул тилге которулган.
+
+Англисче пакет менен кеме менен кеме, эгер сиз англисче сүйлөсөңүз, анда бул орнотуудан кийин каалаган убакта тилди өзгөртө аласыз (жөндөөлөр -&gt; Түзөтүүлөр -&gt; Эл аралык).
+
+Эгер сиз которууну өркүндөтүүгө жардам бергиңиз келсе, биз сизден уккум келет!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Котормо маселеси</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Бул функцияны колдонуу үчүн MonkeyPaste жаңыртышыңыз керек.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Кыска жол</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Алмашуу буфери угуучу</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Алмашуу буфери угуучу</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Ата-эне иш-аракеттери '{0}' касиеттерди 'акыркы чыгуучу "мүлк түрүн колдобойт</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Пландар жөнүндө көбүрөөк билүү</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Колдонмо</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Триггер</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Клип</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Анализатор</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+</root>

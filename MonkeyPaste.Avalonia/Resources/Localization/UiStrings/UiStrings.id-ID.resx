@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Tidak ada fitur yang dibatasi oleh berlangganan, hanya kapasitas penyimpanan dan dapat diubah kapan saja.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Kembalikan akun Anda yang ada ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Konten dan sampah
+terbatas pada {0} dan {1}
+klip masing -masing.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Memungkinkan hingga {2} klip konten dan penyimpanan sampah tanpa batas.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Konten dan penyimpanan sampah yang tidak terbatas dan tidak terbatas.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Memulihkan</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Bebas</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Standar</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Tak terbatas</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Berlangganan</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Privasi Anda penting dan data clipboard bisa sangat pribadi. Penyimpanan selalu dienkripsi tetapi Anda dapat mengatur kata sandi yang akan diperlukan jika perangkat Anda dicuri atau orang lain menggunakan perangkat Anda.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Kata sandi</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Saat diaktifkan, menyeret dari aplikasi apa pun ke bagian atas layar akan mengungkapkan monkeypaste untuk dengan mudah memasukkan konten ke monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Mengaktifkan 'kunci' di kiri atas jendela utama masih akan memungkinkan jatuh ke monkeypaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Lebih banyak preferensi jendela tersedia dari menu 'Pengaturan -&gt; Preferensi -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Seret pisang ke sini!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Seret - ke - buka</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Pintasan keyboard dapat ditinjau atau diubah kapan saja dari menu 'Pengaturan -&gt; Pintasan'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Semua jalan pintas global akan dinonaktifkan sehingga Anda dapat mengaturnya sendiri nanti.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Pintasan clipboard Monkeypaste akan tersedia di semua aplikasi.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Intern</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Bawaan</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Profil Gesture</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hai! Mari kita siapkan beberapa hal untuk meningkatkan pengalaman Anda secara keseluruhan dengan Monkeypaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Selamat datang</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Untuk memanfaatkan sebagian besar dari monkeypaste, memuat secara otomatis saat Anda masuk adalah ide yang bagus. Tapi, itu sepenuhnya terserah Anda.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Tetap santai.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Memungkinkan</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Muat Login?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Saat diaktifkan, gerakan gulir di bagian atas layar akan mengungkapkan monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Kiri - Mengklik ikon Taskbar masih akan membuka Monkeypaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Lebih banyak preferensi jendela tersedia dari menu 'Pengaturan -&gt; Preferensi -&gt; Window'.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Mudah kan?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Gulir ke sini!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Gulir - untuk - Buka</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; monkeypaste adalah &lt;span color = "red&gt; sepenuhnya terintegrasi &lt;/span&gt; dengan drag - dan - drop &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Jatuhkan di sini!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Dengan cara ini, monkeypaste dapat diakses &lt;br&gt; &lt;span color = "red"&gt; tanpa klik &lt;/span&gt; atau bahkan &lt;span color = "red"&gt; batting an mata &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Seret aku!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Cobalah!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Cobalah!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Tidak ada hasil yang tersedia.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Mengonfirmasi</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Menyegarkan</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Mencari...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Pengaturan</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Ketergantungan:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus '{0}' dan semua preset dan pintasannya?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' tidak memiliki hasil.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Tidak ada pilihan.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Tidak ada</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Kredit:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Keterangan:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Menyumbangkan:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Lisensi:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL Proyek:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Diterbitkan:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Baca aku:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Laporkan Penyalahgunaan:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tag:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Memperbarui</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versi: kapan:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Buka di jendela</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Membubarkan</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Menyegarkan</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Menyimpan</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Di sebelah Hapus!
+
+Tingkatkan untuk menghindari.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Di sebelah sampah!
+
+Tingkatkan untuk menghindari.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Gambar</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Disalin {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} file | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} baris</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} salinan | {1} pasta</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Bergerak</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Menambahkan</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Menyalin</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Memotong</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Tempel</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Salin</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Filter yang belum disimpan</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Silahkan pilih -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Pembaca</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Penulis</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Penangan</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Menghapus</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplikat</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Edit nama</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Mengatur ulang</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Tindakan</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Routing global</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Jalan pintas</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gerakan harus unik dan hanya dapat berisi satu kunci input.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; internal &lt;/b&gt; Semua pintasan terbatas pada aplikasi. Ini bukan opsi yang dimaksudkan tetapi dapat mengizinkan untuk menyesuaikan jalan pintas apa yang ingin Anda buat global &lt;i&gt; suatu hari nanti &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; default &lt;/b&gt; Semua pintasan global diaktifkan. Jendela utama &lt;b&gt; show/hide &lt;/b&gt; menggunakan &lt;span color = "red"&gt; override &lt;/span&gt; routing untuk kunci &lt;b&gt; caps lock &lt;/b&gt;. Anda dapat mengubah perutean atau gerakan itu kapan saja. Tapi &lt;span color = "green"&gt; Cobalah &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;Html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt; Mode Pintasan Global &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; pasif &lt;/b&gt; Sebuah monkeypaste pintasan akan mendengarkan dalam aplikasi apa pun. &lt;br&gt;
+*Ini adalah opsi &lt;i&gt; hanya &lt;/i&gt; di Linux untuk saat ini.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; pre &lt;/b&gt; pintasan akan mengeksekusi &lt;b&gt; &lt;i&gt; sebelum &lt;/i&gt; &lt;/b&gt; ditangani oleh aplikasi aktif. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Posting &lt;/b&gt; Pintasan akan mengeksekusi &lt;b&gt; &lt;i&gt; setelah &lt;/i&gt; &lt;/b&gt; ditangani oleh aplikasi aktif. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; override &lt;/b&gt; Saat monkeypaste mendengar tombol input (tombol non -modifier) ​​dari pintasan override itu akan &lt;i&gt; sembunyikan &lt;/i&gt; Tekan tombol dari aplikasi - level input. &lt;br&gt;
+Opsi ini akan menjamin jalan pintas dipicu tanpa konflik ke aplikasi aktif.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Exclusive override &lt;/b&gt; Ini adalah jenis mode override khusus yang dirancang untuk kunci kunci CAPS. Ini hanya memungkinkan &lt;b&gt; satu &lt;/b&gt; kunci (non - pengubah) untuk penugasannya. &lt;br&gt;
+Dalam mode override normal, kunci tutup dapat menjadi &lt;i&gt; terjebak pada &lt;/i&gt; saat ditekan dalam kombinasi dengan tombol lain. &lt;br&gt;
+Jadi tidak peduli apa pun tombol lain yang turun, jika &lt;b&gt; hotkey &lt;/b&gt; pintasan ditekan, itu akan ditimpa dan mencegahnya menjadi &lt;i&gt; terjebak di &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Cacat</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Muat saat akun pengguna ini masuk, bukan untuk pengguna lain.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Menggunakan kontak yang tersedia (memerlukan plugin fetcher) Bidang ini akan digunakan untuk semua contoh templat ini di seluruh dokumen ini atau di mana pun akan direferensikan di nanti. &lt;/p&gt; &lt;p&gt; Jadi misalnya jika memilih alamat email Di sini kemudian bidang email dari kontak yang Anda pilih akan digunakan untuk semua contoh dalam dokumen ini. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = tahun pendek &lt;br/&gt; yyyy = tahun panjang &lt;br/&gt; m = bulan (1-12) &lt;br/&gt; mm = bulan (01-12) &lt;br/&gt; mmm = singkatan bulan (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = bulan panjang (Januari, Februari ... Desember) &lt;br/&gt; d = hari (1 - 31) &lt;br/&gt; dd = hari (01 - 31) &lt;br/&gt; ddd = Day of the Week in Words (Senin, Selasa ... Minggu) &lt;br/&gt; E = Hari Pendek dalam seminggu dalam kata -kata (Sen, Sel ... matahari) &lt;br/&gt; D - Hari Ordinal (1, 2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = jam dalam AM/PM (0-12) &lt;br/&gt; hh = jam dalam AM/pm (00-12) &lt;br/ &gt; H = jam demi hari (0-23) &lt;br/&gt; hh = jam demi hari (00-23) &lt;br/&gt; mm = menit &lt;br/&gt; ss = kedua &lt;br/&gt; sss = milidetik &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; p = a.m./p.m. penanda</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Tanggal dan/atau waktu saat ini akan diganti dengan template datetime saat ditempel.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Semua kejadian templat ini akan menggunakan teks yang disediakan. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Semua kejadian templat ini akan menggunakan teks yang disediakan. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Selesai Menambahkan</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Aktifkan blok</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Aktifkan inline</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Toggle Manual</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Toggle Manual</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Jeda Tambahkan</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Beralih sebelumnya</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Beralih sebelumnya</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Lanjutkan menambahkan</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Menambahkan...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Tempel</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pin</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Membuka peniti</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Sembunyikan semua '{0}' pemberitahuan</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Membubarkan</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Aplikasi aktif terakhir tidak diketahui. Beralih ke aplikasi yang dimaksudkan ke monyet pasta.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Tempel ke: &lt;em&gt; &lt;i class = "Paste-Tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Memperkecil</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Harap tunggu...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Kunci</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Akun</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Membantu</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Salin &amp; Tempel</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferensi</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Kembalikan default</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Saring...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Pintasan</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Tambahkan aplikasi</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Tambahkan situs web</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Memblokir?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nama</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplikasi</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Blok Domain?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Blok URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Pengenalan URL sumber tergantung pada bagaimana clipboard ramah aplikasi host sehingga penolakan tidak dapat dijamin</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Situs web</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Beberapa fitur monkeypaste menggunakan otomatisasi keyboard untuk mensimulasikan acara 'salin' di aplikasi lain.
+
+Tambahkan dan/atau pilih aplikasi dengan pintasan salin unik (seperti konsol atau shell misalnya) untuk memastikan fitur tersebut berfungsi dengan baik.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Salin jalan pintas</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Tidak ada</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Hanya preset yang dipilih yang akan digunakan untuk aplikasi yang ditentukan. Saat tidak ditentukan, preset default yang ditemukan di sidebar clipboard &lt;em&gt; &lt;/em&gt; akan digunakan.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Banyak fitur monkeypaste menggunakan otomatisasi keyboard untuk berinteraksi dengan aplikasi lain.
+
+Beberapa aplikasi (seperti beberapa konsol atau cangkang misalnya) mungkin memiliki pintasan pasta non -default.
+
+Untuk memastikan interoperabilitas yang tepat, catat pintasan tersebut untuk aplikasi itu di sini.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Tempel Pintasan</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Pembaca</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Semua pemantauan clipboard dari aplikasi yang ditolak akan diabaikan &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Penulis</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Edit ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Ditolak</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Pintasan</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Apakah Anda juga ingin menghapus semua klip {0} dari '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Hapus klip?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Aplikasi</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Jelajahi aplikasi ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Pilih jalur aplikasi</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Anda yakin ingin menghapus pintasan khusus untuk {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Anda yakin ingin menghapus format khusus untuk {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Tidak ada format clipboard yang ditetapkan untuk aplikasi ini. Tidak ada data yang akan dibaca darinya melalui cut/copy atau mencoba drag - dan - lepas ke monkeypaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Tidak ada format clipboard yang ditetapkan untuk aplikasi ini. Tempel Otomatis atau Seret - dan - Jatuhkan dari Monkeypaste tidak akan memiliki pengaruh (data kosongnya).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Apakah Anda yakin ingin mengatur ulang semua jalan pintas? Semua jalan pintas khusus akan dihapus.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Apakah Anda yakin ingin mengubah profil perutean pintasan Anda menjadi '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favorit</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Hari ini</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Sampah</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Tentang</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Mudah kan?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Klik dua kali untuk unpin</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Kebiasaan</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Kombinasi ini bertentangan dengan '{0}' yang akan dihapus jika disimpan.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Jalan pintas harus disediakan.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Ini adalah jalan pintas global. Itu berarti ia akan mencoba mengeksekusi setiap kali dilakukan. Cobalah membuatnya cukup unik (atau ubah 'jenis perutean') menjadi tidak bertentangan dengan jalan pintas dari aplikasi lain.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Pintasan harus berisi satu dan hanya satu kunci pengubah non.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Tekan tombol apa pun untuk direkam ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Tetapkan jalan pintas</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Belajarlah lagi...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Meningkatkan</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Membatalkan</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Memperbaiki</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Mengabaikan</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>TIDAK</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>Oke</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Mencoba kembali</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Matikan</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Kirim</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Ya</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Tahunan</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Bulanan</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Coba gratis!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Siklus penagihan</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Surel</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Gabung</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Periksa koneksi Anda
+dan coba lagi.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Pembayaran selanjutnya</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Kata sandi</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Daftar</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Email tidak valid</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Sandi tidak cocok.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Kata sandi harus minimal karakter {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Ingat?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Periksa email Anda untuk mengonfirmasi akun Anda</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Setel ulang kata sandi</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Tidak pernah</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Uji coba {0} hari gratis</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Ada masalah yang berkinerja
+pembelian Anda.
+
+Memeriksa koneksi Anda dan
+Pengaturan dapat membantu.
+
+Apakah Anda ingin mencoba lagi?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Akun Anda telah berhasil
+ditingkatkan ke:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Beli Sukses!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Kesalahan</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Koneksi gagal.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Mencoba kembali</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Akun berubah</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Langganan Anda sekarang {0}/{1} dengan {2} konten dan {3} penyimpanan sampah.
+Tapi jangan khawatir, tidak ada data yang hilang setelah penurunan peringkat. Hanya klip baru yang akan dievaluasi.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Selamat! Langganan Anda sekarang {0}/{1} dengan {2} konten dan {3} penyimpanan sampah.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Sampah atau untlink sesuatu
+dari '{0}' untuk menambahkan lebih banyak.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' penyimpanan adalah {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Memulihkan</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} diblokir</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Konten &amp; Kapasitas Sampah tercapai!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' penyimpanan adalah {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Kapasitas konten tercapai!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Anda dapat menyembunyikan peringatan ini
+mengklik 'Sembunyikan Semua' dari
+menu opsi di atas.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max Trash Storage adalah {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Kapasitas sampah tercapai!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} tidak valid</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} harus setidaknya {1} karakter</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} hanya bisa {1} karakter</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Tempel ke: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Pembayaran untuk {0} Anda
+Langganan jatuh tempo {1}
+dan belum diterima.
+
+Harap perbarui Anda
+Informasi Pembayaran.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Pembayaran untuk {0} Anda
+Langganan jatuh tempo {1}
+dan belum diterima.
+
+Harap terhubung ke
+Internet di perangkat
+dengan langganan Anda dan
+restart untuk melanjutkan
+Menggunakan paket {0} Anda.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Pembayaran untuk {0} Anda
+Langganan jatuh tempo {1}
+dan belum diterima.
+
+Harap buka atau restart
+Monkeypaste di perangkat
+dengan langganan Anda
+Lanjutkan menggunakan Anda
+{0} rencana.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Akun kedaluwarsa</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Catatan</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store tidak mengizinkan tingkat
+Perubahan pada addons berlangganan.
+
+Anda harus membatalkan
+{0}/{1} rencanakan sendiri
+Atau Anda akan dikenakan biaya untuk keduanya.
+
+Apakah Anda ingin melakukannya sekarang?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Kata sandi Anda telah diatur ulang.
+
+Silakan periksa email Anda dan
+Ikuti tautan untuk berubah
+kata sandi Anda.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Gabung</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Penulis</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Diperlukan Anda menerima persyaratan lisensi berikut sebelum melanjutkan.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Paket berikut mengharuskan Anda menerima ketentuan lisensi mereka sebelum menginstal.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Aku menolak</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Mengklik "Saya menerima" berarti Anda menyetujui persyaratan lisensi untuk aplikasi ini. Jika Anda tidak menyetujui persyaratan, klik "Saya menolak".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Mengklik "Saya menerima" berarti Anda menyetujui persyaratan lisensi untuk plugin yang tercantum di atas. Jika Anda tidak menyetujui persyaratan, klik "Saya menolak".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Lihat lisensi</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Penerimaan lisensi</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Saya menerima</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Tidak terdaftar</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Kata sandi tidak cocok</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Kata sandi</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Langganan Anda adalah
+Sekarang atur ke {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Akun ditemukan</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Gagal masuk</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registrasi gagal</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registrasi berhasil!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Reset kesalahan</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Berlangganan</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Apa yang baru</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Tidak pernah</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Tak terbatas</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>kapasitas</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>tersisa</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Pembayaran Anda sudah lewat jatuh tempo.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Pintasan override eksklusif hanya dapat berisi satu kunci dan kunci itu tidak dapat menjadi kunci pengubah.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Kedaluwarsa</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Memuat</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Dengan disabilitas</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Catatan! Kata sandi ini opsional dan hanya untuk keamanan ekstra. Data Anda sudah dienkripsi dan tidak pernah dibagikan. Kata sandi ini hanya mencegah seseorang yang bukan Anda dari memuat monkeypaste jika mereka entah bagaimana mendapatkan akses ke desktop Anda (dicuri, Anda meninggalkan ruangan, dll.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Ingat pengaturan drop untuk:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Jelajahi plugin</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Menganalisa</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Aksi Cepat</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Sakelar edit</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Toggle disematkan</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anotasi</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Teks biasa</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Buka di jendela</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Klik + Ctrl untuk diikuti ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Klik + Alt untuk mengikuti ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Pin atau jatuhkan media apa pun di sini!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Jernih</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Ambang batas di atas 0 akan memberikan pencocokan warna fuzzy menggunakan jarak Euclidean di ruang warna RGBA.
+
+Misalnya, jika merah (#FF0000) adalah istilah pencarian dan hitam (#000000) adalah piksel dalam klip gambar, maka jarak warnanya adalah 255. Jarak hitam ke putih adalah kemungkinan maksimum 510, termasuk saluran alpha</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Semua hal berikut ini benar</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>CLIPBOARD</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Koleksi</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Mode tikus</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Pemicu</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Berhenti sebentar</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Melanjutkan</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Pemicu baru</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Tambahkan preset</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Monyet Drop Wizard</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Penganalisa</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientasi siklus</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Tata tata kisi</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Hal - hal sensitif</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Ambang</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Seluruh kata</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Tidak ada yang ditetapkan</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Rute</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Tindakan</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Kisi</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Berikutnya</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Sebelumnya</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Melewati</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Akun yang ada?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Pembayaran selanjutnya</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Pendaftaran memungkinkan Anda membawa langganan berbayar di semua perangkat Anda (atas ketersediaan). Kami tidak akan spam email Anda, kami berjanji 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Berlangganan</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Nama belakang</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Perlu mendaftar?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Sumber</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Aneh, tidak ada yang tersedia. Sesuatu pasti salah 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Menghapus</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Membutuhkan restart</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Canggih</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Kesalahan mengekstraksi plugin dari '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Kesalahan menginstal plugin: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Kesalahan Menginstal Plugin '{0}' Struktur Direktori Korup atau Tidak Benar. Manifes harus ada di '{1}' tetapi tidak ditemukan.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Kesalahan Parsing Plugin Manifest '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Tidak ada plugin yang dimuat dengan GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} kesalahan</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Plugin pementasan kesalahan ke Temp dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Kesalahan mencadangkan '{0}' ke '{1}'. Detail: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Teks yang diketik akan secara otomatis diterapkan pada pencarian ketika tidak ada kotak teks yang difokuskan.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Input Pencarian Otomatis</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Perubahan Kata Sandi Gagal</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Mengubah</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Ganti kata sandi</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Jernih</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Hapus Kata Sandi</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Isi</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Ukuran font konten</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Ketika benar, konten eksternal yang dimasukkan ke dalam klip akan menggunakan format klip dan bukan apa yang tersedia dari sumbernya.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Tempel, jatuhkan atau tambahkan dengan pemformatan tujuan</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin melupakan kata sandinya?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Lupa</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Lupa Password</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Sembunyikan Kapasitas Watermark</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Saat konten clipboard baru ditambahkan, itu tidak akan dilacak sebagai klip baru</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Abaikan tambahkan</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Saat clipboard cocok dengan klip yang ada, klip itu akan digunakan alih -alih membuat yang baru</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Abaikan duplikat baru</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Perubahan clipboard dari dalam aplikasi tidak akan dilacak</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Abaikan pelacakan clipboard internal</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Spasi, tab, dan baris baru akan diabaikan dari pelacakan</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Abaikan hanya ruang putih</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Muat di login</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Jendela hidup</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Kegelapan</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Tunjukkan perilaku</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Jendela utama akan diungkapkan dengan melakukan gerakan gulir di tepi atas monitor Anda</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Tampilkan gulir layar atas</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Volume Pemberitahuan</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Pengaturan ini akan melacak sistem - jumlah pasta keyboard lebar untuk statistik penggunaan. Informasi ini bersifat pribadi dan tidak dibagikan tetapi juga tidak dijamin. Hasil yang akurat mungkin memerlukan penyediaan perintah paste keyboard spesifik aplikasi di 'Pengaturan -&gt; Salin &amp; Tempel -&gt; Pintasan'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Tempel sejarah</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Terlalu banyak klip yang disematkan (seperti tab browser) dapat mengkonsumsi memori yang signifikan. Penghapusan adalah First - In - First - Out</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Kapasitas pin</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Ini berlaku untuk semua input yang dapat diselesaikan secara otomatis, nilai yang lebih rendah akan meningkatkan kinerja</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Batas teks terbaru</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin
+Kembalikan preferensi default?
+
+Ini tidak dapat dibatalkan!
+
+*Aplikasi akan restart setelah selesai.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin mengatur ulang semua pemberitahuan?
+
+*Ini tidak dapat dibatalkan!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monyet pasta mengatur clipboard (overrides) saat menempel ke program eksternal. Ini akan &lt;b&gt; mencoba &lt;/b&gt; untuk mengembalikan keadaan clipboard setelah pasta eksternal.
+
+Total restorasi tidak dapat dijamin dan dapat mengurangi kinerja atau bahkan crash monkeypaste tergantung pada sumber data.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Reset clipboard setelah menempel monyet</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Tidak dapat menghapus cache plugin dari path: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Semua plugin akan diatur ulang ke status default awal</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Cache plugin</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin mengatur ulang semua plugin ke default?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin mengatur ulang kata sandi Anda?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Semua pintasan aplikasi akan diatur ulang ke gerakan kunci default mereka.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Reset pintasan</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Semua pemberitahuan yang diabaikan sebelumnya ditetapkan.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Kembalikan pemberitahuan</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Mengaktifkan bisa agak lambat) menonaktifkan format yang diformat akan mengurangi konsumsi memori tetapi akan menghambat beberapa fitur canggih, seperti: menambahkan, templat, anotasi dan temukan/ganti</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Konten yang kaya</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Atur kata sandi</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Tampilkan petunjuk</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Tampilkan di Taskbar</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Tampilkan di Task Switcher</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Tampilkan judul</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Saat diaktifkan, menyeret dari aplikasi apa pun ke bagian atas layar akan mengungkapkan monkeypaste untuk dengan mudah memasukkan konten ke monkeypaste.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Tampilkan di seret ke atas layar</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Tema suara</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Cek ejaan</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Pada startup sumber clipboard tidak akan diketahui dan tergantung pada pengaturan keamanan Anda, konten mungkin berasal dari situs web atau aplikasi yang dikecualikan.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Tambahkan clipboard startup</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Dengarkan Clipboard di Startup</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Pilih</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Peringatan! Warna palet lainnya dipilih menggunakan matematika bukan mata! Jadi perhatikan beberapa kombinasi warna dan gaya mungkin tidak memiliki kontras yang tepat untuk keterbacaan.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Warna tema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Gaya tema</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Pembersihan sampah otomatis akan terjadi pada startup pada interval yang ditetapkan.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Pembersihan sampah</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Antarmuka</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Batas undo tinggi dapat memengaruhi kinerja</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Batalkan batas</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Tidak ada batas</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Digunakan dalam pencarian file lanjutan untuk jenis file yang tidak ditetapkan</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Pengguna - Ekstensi Pencarian yang Ditentukan</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Temukan dan ganti...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Tempel di sini</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Membagikan...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Melihat</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Mengelola...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Ganti nama</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Skor: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Ketik: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Hapus secara permanen</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Jelajahi ke '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Mengubah</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Memasukkan</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Keluaran</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Sumber</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Memulihkan</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Pilih Gambar ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Warna</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Kelola '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Membuka</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Harap tunggu...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Warna latar belakang</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Bersihkan semua</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Format clipboard</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Hapus semua</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Edit detail</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nama</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Menemukan</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Warna huruf</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Format cat</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Dalam seleksi</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Masukkan gambar</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Masukkan tautan</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Sisipkan video</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Kasing pertandingan</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Template baru</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Template berikutnya</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Masukkan teks pasta ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Template sebelumnya</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Ekspresi reguler</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Menggantikan semua</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Mengganti</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Seluruh kata</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Membungkus</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Memblokir</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Tampilkan folder</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Buka Blokir</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Tentang</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Tambahkan blok</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Tambahkan inline</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Otomatis - Salin</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Harap tunggu monkeypaste sedang memuat ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Berhenti</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - klik tempel</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Kelompok</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Saring</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Hapus semuanya secara permanen</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Kembalikan semuanya</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Tindakan</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL sudah ada: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL harus dalam format yang valid.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Masukkan URL Lengkap:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Tambahkan URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Masukkan nilai</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Salin teks atau file yang akan diterapkan.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Tambahkan {0} {1} Mode Diaktifkan</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Perubahan clipboard sekarang akan ditambahkan</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Setelah mode tambah diaktifkan</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Perubahan clipboard sekarang akan dipersiapkan</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Sebelum Mode Tambahkan Diaktifkan</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Memblokir</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Perilaku clipboard normal telah dipulihkan</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Tambahkan dinonaktifkan</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Tambahkan ditambahkan ke atas atau botom klip</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Mode Tambahkan Luas Diaktifkan</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Di barisan</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Tambahkan pilihan Anda saat ini.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Mode penambahan manual diaktifkan</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Akumulasi clipboard dihentikan</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Tambahkan berhenti</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Akumulasi clipboard dilanjutkan</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Ditambahkan dilanjutkan</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menyelesaikannya?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Mengedit dalam mode kompatibilitas akan menghapus semua format kaya. Apakah Anda yakin ingin memodifikasi ini?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Peringatan Degradasi Data</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Diaktifkan</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Mati</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Pada</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Berhenti</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Hasil</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Kesalahan yang tidak diketahui terjadi.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>upaya tersisa</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Masukkan kata kunci</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Mengonfirmasi</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Kontak</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Tanggal Waktu</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus semua penggunaan '{0}'?
+
+Ini tidak dapat dibatalkan!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinamis</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Statis</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} kosong ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Selebihnya datang segera!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Login Load Disable Gagal</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Login Load Nonaktifkan Sukses</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Beban login memungkinkan gagal</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Beban login memungkinkan kesuksesan</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Bersembunyi</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Pasta monyet sekarang dimuat.
+Mendengarkan clipboard adalah: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Sarat</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Menunjukkan</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Mode Seleksi Salin Otomatis: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Mode berubah</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Mode pasta klik kanan: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plugin diperbarui</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Tempel '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Run '{0}' Analyzer</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Jalankan '{0}' Trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Pilih '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus '{0}' dan semua tindakan terkait?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Pemicu</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Apakah Anda ingin menghapus semua sub - tindakan untuk '{0}'? (Jika tidak, mereka akan dipasang kembali ke '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Hapus opsi</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Apakah Anda benar -benar ingin goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Akun</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analisis</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operasi Aplikasi</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>CLIPBOARD</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Isi</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Konverter</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Budaya</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Arah</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Seret dan lepas</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ikon</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Antarmuka</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Operasi Tempel</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferensi</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Mencari</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Pintasan</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Menyortir</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Suara</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Baki sistem</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Koleksi</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Pemicu</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operasi Situs Web</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Bahasa</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Mengatur clipboard ke klip input.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Berbunyi</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>SUARA TUJUAN UMUM dan/atau peringatan pesan baki sistem. Tindakan peringatan tidak mempengaruhi inputnya.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Pesan</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Monyet</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Pratinjau</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Menunjukkan?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Pesan roti panggang waktu ditampilkan dalam hitungan detik. Ketika nilai adalah 0 pesan harus ditutup secara manual.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Tunjukkan Waktu</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Suara?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Tipe suara</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Penganalisa</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Memproses klip inputnya menggunakan preset analyzer yang ditetapkan.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Konten input ditautkan ke koleksi yang dipilih</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Menautkan klip inputnya ke koleksi tag yang ditetapkan.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Menandai</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Hal - hal sensitif?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Ini dapat berupa teks statis untuk dibandingkan dengan input dan/atau termasuk properti yang dipilih (melalui tombol filter) akan diganti ketika kondisi dievaluasi.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Data Kondisi</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Kueri JSONPATH opsional yang akan diterapkan pada 'properti input' yang dipilih sebelum kondisi dievaluasi.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filter input</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Properti klip yang digunakan untuk bersyarat ini.
+
+Properti 'Output Terakhir' saat ini hanya didukung ketika bersyarat ini adalah anak dari tindakan penganalisa dan data yang disediakan akan bervariasi tergantung pada output penganalisa induk.
+
+Untuk pemecahan masalah, lampirkan 'Tindakan Peringatan' ke orang tua bersyarat ini dan atur parameter 'pesan' peringatan agar sesuai dengan properti input ini. Ini akan memungkinkan untuk meninjau data aktual yang digunakan untuk bersyarat ini.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Properti Input</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Melakukan perbandingan teks pada klip input atau output tindakan sebelumnya. Ketika perbandingan gagal (tidak cocok) tidak ada tindakan anak yang akan dieksekusi. Jadi itu bertindak seperti gerbang logis.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Semua operasi benar atau salah di mana tindakan anak hanya akan dieksekusi jika hasilnya benar.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Kondisi</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Dipicu ketika klip dari jenis yang dipilih ditambahkan ke sistem dengan cara apa pun (clipboard, drag - dan - drop, analyzer dihasilkan atau digandakan).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Hanya menjalankan pemicu ini jika klip input baru dan bukan duplikat. Ini adalah independen dari pengaturan preferensi apakah konten baru diabaikan atau tidak.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Abaikan duplikat</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Hanya klip jenis ini yang akan memicu tindakan ini.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Menautkan klip inputnya ke koleksi tag yang ditetapkan.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Dipicu saat klip ditautkan ke koleksi tag yang ditentukan.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Koleksi</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Jumlah waktu dalam milidetik menunggu sebelum anak -anak mengeksekusi</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Menunda</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Eksperimental) terutama digunakan bersama dengan tindakan repeater untuk polling sumber jarak jauh atau membantu dengan operasi yang sudah berjalan lama.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Saat dibiarkan kosong, file output akan menggunakan judul klip input sebagai nama file.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Nama khusus</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Direktori tempat file akan ditulis.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Direktori</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Menyimpan input ke folder yang dipilih.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Dipicu saat konten folder yang dipilih berubah. Output akan menjadi preferensi yang baru atau yang ada (ketika abaikan preferensi duplikat diaktifkan) klip file atau folder yang telah berubah seiring dengan jenis perubahan sebagai output terakhirnya.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Acara</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Abaikan duplikat</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Nilai 0 akan mengulangi tindakan orang tua tanpa batas waktu</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Hitungan Ulangi</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Jumlah waktu dalam milidetik untuk menunggu setelah tindakan orang tua selesai</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Ulangi penundaan</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Eksperimental) Digunakan untuk membuat loop tindakan atau tugas berulang. Saat diulang, itu akan mengeksekusi semua anak lagi dengan input aslinya. Saat menggunakan interval tanpa jumlah berulang, pemicu perlu dinonaktifkan dan diandalkan untuk menghentikan pengulangan. Dapat berguna untuk pemungutan suara atau otomatisasi pengikisan web.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Dipicu oleh jalan pintas global yang Anda tentukan. Jika monkeypaste aktif, itu akan mencoba menggunakan klip yang dipilih (jika ada) sebagai input. Kalau tidak, ia akan mencoba menggunakan clipboard sebagai inputnya.
+
+Catatan: Pemicu pintasan masih akan dijalankan jika tidak ada input untuk membuatnya tetap fleksibel (sehingga dapat menjadi pemicu makro dll.) Karena itu bukan peristiwa yang digerakkan data.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Pemicu jalan pintas</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Dipicu saat pintasan yang direkam ditekan kapan saja dengan clipboard saat ini</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Tindakan ini mengharuskan aplikasi untuk memulai kembali. Apakah Anda ingin melakukan itu sekarang?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Ada masalah. Anda perlu memulai ulang aplikasi secara manual.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analisis dengan Annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>BERGERAK pemicu</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Elemen built in hanya dibaca - hanya. Duplikat untuk diubah.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anonim</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Kebiasaan</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Kemarin</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} beberapa hari yang lalu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 jam yang lalu</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} beberapa jam yang lalu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Baru saja</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Semenit yang lalu</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} menit yang lalu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Bulan lalu</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} bulan yang lalu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Minggu lalu</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} minggu yang lalu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} tahun yang lalu</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anotasi</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>nama aplikasi</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Jalur aplikasi</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Hal - hal sensitif</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Isi</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Jenis file</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Tipe gambar</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Ekspresi reguler</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Jenis teks</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Judul</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Judul URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Seluruh kata</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Seperti menggulir di sepanjang tepi layar atas untuk dibuka, ini akan mengunci jendela utama saat terbuka. Memungkinkan alur kerja multi - yang lebih cepat ditargetkan.
+
+* Sudut -sudut dalam hal semua layar Anda, bukan per monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Tampilkan jendela dan kunci</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Bebas!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Beri kami 5 bintang!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Hapus semua</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Hapus semua konten</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus
+Semua klip Anda?!
+
+*Operasi ini tidak bisa dibatalkan!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Saya seorang dev indy tolong tunjukkan beberapa dukungan!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Suka monkeypaste?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} hanya menerima input tipe (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Mode Salin Otomatis - Simulasi acara 'salin' setiap kali tombol mouse kiri dilepaskan.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Mode Tempel Klik Kanan - Mensimulasikan Acara 'Tempel' setiap kali tombol mouse yang tepat dilepaskan</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Tampilkan folder plugin</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Laporan</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Melihat</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Tampilkan tooltips</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analisis memberi anotasi input mereka atau membuat klip baru sebagai output. Anak -anak analisis perlu memutuskan mana yang mereka butuhkan sebagai masukan mereka. Ini biasanya merupakan output terakhir.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Tipe masukan</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Pemicu desainer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Pilih {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Tidak ditemukan...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} pemicu</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Saat memeriksa hasil yang benar atau salah dari kondisi ini akan dibalik. Jadi misalnya, kondisi 'berisi' akan menjadi 'tidak mengandung'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Tidak</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Harap tunggu...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Pemilih warna</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Pilih Warna Match</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Seperti pemicu jalan pintas tetapi ketika kombinasi kunci ditekan, acara 'salin' akan disimulasikan dalam aplikasi aktif sehingga masih berfungsi seperti salinan tetapi kemudian rantai tindakan yang terlampir pada pemicu salinan monyet akan dieksekusi di latar belakang menggunakan menggunakan Data clipboard salin simulasi.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Filter lanjutan</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Sembunyikan filter</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Kembalikan filter</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Buat filter</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opsional) Saat dibiarkan kosong, clipboard akan diatur menggunakan input tindakan ini. Apa pun yang disediakan di sini akan diperlakukan sebagai teks biasa saja.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Konten untuk clipboard</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Ketika benar, tidak ada klip yang akan ditambahkan setelah tindakan ini mengatur clipboard.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Mengabaikan</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Tidak ada analisis yang dipilih untuk tindakan '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analyzer for Action '{0}' tidak ditemukan</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Parent '{0}' hanya filter untuk '{1}' Type Content and Analyzer '{2}' tidak akan pernah dieksekusi karena tidak mendukung jenis input '{3}'</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Tidak ada tag yang dipilih untuk classifier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag untuk classifier '{0}' tidak ditemukan</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Bandingkan nilai hanya bisa berupa huruf, angka atau spasi</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Tidak ada tag yang dipilih untuk pemicu klip tag '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag untuk clip tag trigger '{0}' tidak ditemukan</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>No Folder Watch Ditentukan untuk '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Tonton folder '{0}' tidak ditemukan untuk pemicu '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>File Writer Path for Action '{0}' tidak diatur</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' untuk '{1}' tidak ditemukan.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Taskbar</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Pelajari tentang plugin</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Kembalikan konfigurasi analisis ini</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} ubah log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Harap terhubung ke internet dan coba lagi nanti.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - BANTUAN</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} adalah versi terbaru</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Anda semua bangun - untuk - tanggal!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Periksa pembaruan ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Versi baru tersedia!
+
+Klik di sini untuk memperbarui ke '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Klik di bawah untuk memperbarui ke '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Pembaruan tersedia!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Memperbarui sekarang</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' berisi nilai bersama. Apa yang ingin Anda atur ulang?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Jernih</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>CLEAR Pencarian Terbaru</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Setel ulang semua</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Reset dibagikan</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Reset tidak dibagi</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Memohon tindakan aplikasi yang ditugaskan. Semua perintah aplikasi adalah stateless dan klip inputnya diabaikan.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Ketika tidak dicentang dan perintah tidak dapat menembak, rantai eksekusi akan berhenti. Banyak perintah akan memerlukan beberapa status aplikasi spesifik untuk dieksekusi.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Selalu melanjutkan?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Perintah untuk melakukan.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Memerintah</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Tidak ada perintah yang dipilih untuk perintah aplikasi '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Perintah untuk perintah aplikasi '{0}' tidak ditemukan</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Terpilih</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Mengulang kembali</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Ada masalah yang memperbarui '{0}'. Untuk menyelesaikan pembaruan, Anda perlu memulai ulang dan menginstal '{0}' lagi (jangan khawatir semua pengaturan Anda akan dipulihkan).
+
+Anda dapat memulai ulang sekarang dan menyelesaikan pembaruan dengan menginstal kembali, mengabaikan ini dan memperbarui nanti atau membatalkan pembaruan bersama -sama dan terus menggunakan versi '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Perbarui kesalahan</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Tidak dapat mengunduh pembaruan</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Pembaharuan gagal</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Untuk menyelesaikan pembaruan, Anda perlu memulai kembali. Apakah Anda ingin memulai kembali sekarang atau nanti?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Perbarui siap</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Nanti</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Restart sekarang</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Tertunda</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} berhasil diperbarui ke {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Plugin inti diperlukan dan tidak dapat dilepas.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Menginstal</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Pembaruan sedang menunggu. Restart untuk menyelesaikan.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Tertunda</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Sebuah uninstalasi sedang menunggu. Harap restart jika Anda ingin kembali - instal.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Untuk menyelesaikan uninstall, Anda harus restart. Apakah Anda ingin memulai kembali sekarang atau nanti?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Selesaikan uninstall?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Tidak dipublikasikan</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>AUTO - Preset default yang dihasilkan untuk '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Tidak ada klip yang dipilih</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Menganalisis klip yang dipilih</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Tetapkan jalan pintas untuk menjalankan '{0}' pada klip yang dipilih</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Pasta global</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Tetapkan Pintasan Pasta Global untuk '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Tidak ingat kata sandi?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Gabung</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Kebijakan pribadi</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Membutuhkan restart) Ketika informasi diagnostik yang diaktifkan akan dicatat ke file. Ini dapat memperlambat kinerja dan mungkin berisi informasi pribadi.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Log ke file</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Membuka</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Buka Folder Log</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Jelajahi plugin</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Membaca</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Menulis</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Kirim Umpan Balik atau Laporan Bug</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Ini hanya menyembunyikan jendela utama. Semua jendela dialog non -lainnya selalu ditampilkan di Taskbar.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Cari di '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Tambahkan filter</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Edit tipe gabungan</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Lepaskan filter ini</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Buka Bantuan Tentang Ini ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} klip</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Mengubah</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Tidak pernah</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Mengatur</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Tanpa judul</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Catatan</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Referensi sumber yang tidak berlabel</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' diperlukan</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Memiliki kesalahan)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Terbatas</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Penyimpanan</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Sampah</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Tak terbatas</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Aplikasi ini saat ini cocok dengan preset dan format pembaca clipboard default.
+
+Mengaktifkan atau menonaktifkan preset pembaca default (dari sidebar clipboard) tidak akan mempengaruhi konfigurasi ini. Hanya aplikasi yang tidak terdaftar yang mengikuti pengaturan default.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Aplikasi ini saat ini cocok dengan preset dan format penulis clipboard default.
+
+Mengaktifkan atau menonaktifkan preset penulis default (dari sidebar clipboard) tidak akan mempengaruhi konfigurasi ini. Hanya aplikasi yang tidak terdaftar yang mengikuti pengaturan default.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Untuk menambahkan, Anda harus tidak mengetahui pendengar clipboard (baki sistem -&gt; resume).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Tambahkan tidak tersedia</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Tidak memiliki pengaturan</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Saya hanya berbicara bahasa Inggris dan monkeypaste telah diterjemahkan ke dalam bahasa ini.
+
+Semua versi dikirimkan dengan paket bahasa Inggris, jadi jika Anda berbicara bahasa Inggris, Anda dapat mengubah bahasa itu kapan saja setelah pengaturan ini (Pengaturan -&gt; Preferensi -&gt; Internasional).
+
+Jika Anda ingin membantu meningkatkan terjemahan, kami ingin mendengar dari Anda!
+
+feedback@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Masalah terjemahan</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Anda perlu memperbarui monkeypaste untuk menggunakan fitur ini.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Pintasan yang tidak disetel</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Pendengar clipboard dinonaktifkan</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Pendengar clipboard diaktifkan</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Tindakan induk '{0}' tidak mendukung tipe properti input 'output terakhir'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Pelajari lebih lanjut tentang rencana</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Aplikasi</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Pemicu</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Klip</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Penganalisa</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Menandai</value>
+  </data>
+</root>

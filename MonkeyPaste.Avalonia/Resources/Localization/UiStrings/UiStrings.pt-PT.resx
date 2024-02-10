@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Nenhum recurso é limitado por assinatura, apenas capacidade de armazenamento e pode ser alterado a qualquer momento.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Restaure sua conta existente ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Conteúdo e lixo são
+limitado a {0} e {1}
+clipes respectivamente.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Permite até {2} clipes de conteúdo e armazenamento ilimitado de lixo.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Conteúdo irrestrito e ilimitado e armazenamento de lixo.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Livre</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Ilimitado</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Inscrição</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Sua privacidade é importante e os dados da área de transferência podem ser muito pessoais. O armazenamento é sempre criptografado, mas você pode definir uma senha necessária, caso seu dispositivo seja roubado ou outra pessoa esteja usando seu dispositivo.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Quando ativado, o arrastar de qualquer aplicativo para a parte superior da tela revelará o MonkeyyySaste para soltar facilmente o conteúdo em macacos.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Habilitar o 'bloqueio' no canto superior esquerdo da janela principal ainda permitirá cair no macaco.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Mais preferências de janela estão disponíveis nas configurações -&gt; Preferências -&gt; Window '.</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Arraste as bananas aqui em cima!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Arrastar - para - abrir</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Os atalhos do teclado podem ser revisados ​​ou alterados a qualquer momento no menu 'Configurações -&gt; atalhos'.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Todos os atalhos globais serão desativados para que você possa configurá -los mais tarde.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Os atalhos da MonkeyySaste estarão disponíveis em todas as aplicações.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>interno</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Perfil de gesto</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Ei! Vamos configurar algumas coisas para melhorar sua experiência geral com o MonkeyySaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Bem-vindo</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Para tirar o máximo proveito do macaco, carregar automaticamente quando você efetua login é uma boa ideia. Mas isso depende de você.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Mantenha -o casual.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Habilitar</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Carregar no login?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Quando ativado, um gesto de rolagem na parte superior da tela revelará o MonkeyyyySaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Esquerda - Clicar no ícone da barra de tarefas ainda abrirá o Monkeyyy7.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Mais preferências de janela estão disponíveis nas configurações -&gt; Preferências -&gt; Window '.</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Fácil, certo?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Role aqui!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Role - para - aberto</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;P align = "Center"&gt; MonkeyYySaste é &lt;span color = "Red&gt; totalmente integrado &lt;/span&gt; com arrasto - e - soltar &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Solte aqui!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "Center"&gt; Dessa forma, o macaco pode ser acessado &lt;br&gt; &lt;span color = "Red"&gt; sem um clique &lt;/span&gt; ou mesmo &lt;span color = "Red"&gt; batendo um olho &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Arraste-me!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Experimente!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Experimente!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Sem resultados disponíveis.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>confirme</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Procurar...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dependências:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Instalar</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Tem certeza de que deseja remover '{0}' e todas as suas predefinições e atalhos?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Desinstalar</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' não tem resultados.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Nenhuma seleção.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Créditos:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Descrição:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Doar:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Licença:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL do projeto:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Publicados:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Leia-me:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Relatar abuso:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tag:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Versão:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Aberto na janela</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Liberar</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Ao lado de excluir!
+
+Atualizar para evitar.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Ao lado do lixo!
+
+Atualizar para evitar.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>arquivos</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Imagem</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Texto</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Copiado {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} arquivos | {1} MBS</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} linhas</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} cópias | {1} pastas</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Mover</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>cópia de</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Corte</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Colar</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} cópia</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Filtro não salvo</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Por favor selecione -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formatos</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Leitores</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Escritoras</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Manipuladores</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplicado</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Editar nome</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Roteamento global</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Atalho</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Os gestos devem ser únicos e podem conter apenas uma chave de entrada.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; interno &lt;/b&gt; Todos os atalhos são limitados a dentro do aplicativo. Esta não é realmente uma opção pretendida, mas pode permitir personalizar quais atalhos você pretende tornar global &lt;i&gt; algum dia &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; padrão &lt;/b&gt; Todos os atalhos globais estão ativados. A janela principal &lt;b&gt; Mostrar/ocultar &lt;/b&gt; Shortcut usa &lt;span color = "Red"&gt; Substituir &lt;/span&gt; roteamento para a tecla &lt;b&gt; Caps bloqueio &lt;/b&gt;. Você pode alterar esse roteamento ou gesto a qualquer momento. Mas &lt;span color = "verde"&gt; experimente &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;Body&gt;
+&lt;H1&gt; Modos de atalho global &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; Passivo &lt;/b&gt; Um macaco de atalho ouvirá em qualquer aplicativo. &lt;br&gt;
+*Esta é a opção &lt;i&gt; &lt;/i&gt; no Linux por enquanto.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; PRE &lt;/b&gt; O atalho será executado &lt;b&gt; &lt;i&gt; antes &lt;/i&gt; &lt;/b&gt; é tratado pelo aplicativo ativo. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Post &lt;/b&gt; O atalho será executado &lt;b&gt; &lt;i&gt; depois de &lt;/i&gt; &lt;/b&gt; é tratado pelo aplicativo ativo. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; Substituir &lt;/b&gt; Quando o MonkeyyySaste ouve a tecla de entrada (tecla não modificadora) de um atalho de substituição, ele &lt;i&gt; ocultará &lt;/i&gt; que a tecla pressione a partir do aplicativo - entrada de nível. &lt;br&gt;
+Esta opção garantirá que o atalho seja acionado sem conflitos para o aplicativo ativo.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; substituição exclusiva &lt;/b&gt; Este é um tipo especial de modo de substituição projetado para a tecla de bloqueio do CAPS. Ele apenas permite &lt;b&gt; uma chave &lt;/b&gt; (não - modificador) para sua tarefa. &lt;br&gt;
+No modo de substituição normal, as tampas de bloqueio podem ficar &lt;i&gt; presas &lt;/i&gt; quando pressionadas em combinação com outras chaves. &lt;br&gt;
+Portanto, não importa quais outras teclas estejam baixas, se uma tecla de atalho &lt;b&gt; &lt;/b&gt; for pressionada, ele será substituído e impedirá que ela se torne &lt;i&gt; presa &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Desativar</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Carregue quando essa conta de usuário estiver conectada, não para outros usuários.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt; Usando contatos disponíveis (requer um plug -in Fetcher), este campo será usado para todas as instâncias deste modelo neste documento ou em qualquer um será referenciado posteriormente. &lt;/p&gt; &lt;p&gt; Por exemplo, se selecionar endereço de email Aqui, então o campo de email do contato que você selecionar será usado para todas as instâncias neste documento. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ano curto &lt;br/&gt; yyyy = longo ano &lt;br/&gt; m = mês (1-12) &lt;br/&gt; mm = mês (01-12) &lt;br/&gt; mmm = abreviatura do mês (janeiro, fevereiro .. . Dez) &lt;br/&gt; mmmm = longo mês (janeiro, fevereiro ... dezembro) &lt;br/&gt; d = dia (1 - 31) &lt;br/&gt; dd = dia (01 - 31) &lt;br/&gt; ddd = Dia da semana em palavras (segunda -feira, terça -feira ... domingo) &lt;br/&gt; e = curto dia da semana em palavras (seg, ter ... sol) &lt;br/&gt; D - Dia ordinal (1º, 2º, 3º, 21, 22, 23, 31, 4º ...) &lt;br/&gt; h = hora em am/pm (0-12) &lt;br/&gt; hh = hora em am/pm (00-12) &lt;br/ &gt; H = hora no dia (0-23) &lt;br/&gt; hh = hora no dia (00-23) &lt;br/&gt; mm = minuto &lt;br/&gt; ss = segundo &lt;br/&gt; sss = milissegundos &lt;br/&gt; A = AM/PM Marcador &lt;br/&gt; p = A.M./P.M. marcador</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>A data atual e/ou a hora serão substituídas por modelos de datetime quando forem colados.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Todas as ocorrências deste modelo usarão o texto fornecido. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Todas as ocorrências deste modelo usarão o texto fornecido. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Termine de anexar</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Ativar bloco</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Ativar embutido</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Alternar manual</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Alternar manual</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Pausa anexa</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Alternar antes</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Alternar antes</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Retomar anexar</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Acrescentar...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Colar</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Alfinete</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Ocultar todas '{0}' notificações</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Liberar</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Último aplicativo ativo desconhecido. Mude para o aplicativo pretendido para pasta de macaco.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Cole para: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimizar</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Por favor, aguarde...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Trancar</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Conta</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Copiar colar</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Restaurar padrões</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filtro...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Atalhos</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Adicionar aplicativo</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Adicionar site</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Bloquear?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Aplicativos</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Domínio de bloco?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Block URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Domínio</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>O reconhecimento de URL de origem depende de quão amigável da área de transferência é a aplicação do host, de modo que a rejeição não pode ser garantida</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Sites</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Alguns recursos do MonkeyYPaste usam a automação do teclado para simular eventos de 'cópia' em outros aplicativos.
+
+Adicione e/ou selecione o aplicativo com o atalho de cópia exclusivo (como um console ou shell, por exemplo) para garantir que esses recursos funcionem corretamente.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Copie o atalho</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Somente as predefinições selecionadas serão usadas para o aplicativo especificado. Quando não especificado, as predefinições padrão encontradas na barra lateral da área de transferência &lt;/em&gt; serão usadas.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Muitos recursos do MonkeyyYSaste usam a automação do teclado para interagir com outros aplicativos.
+
+Alguns aplicativos (como alguns consoles ou conchas, por exemplo) podem ter um atalho de pasta não padrão.
+
+Para garantir a interoperabilidade adequada, registre esses atalhos para esse aplicativo aqui.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Colar atalho</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Leitores</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Todo o monitoramento da área de transferência de aplicativos rejeitados será &lt;b&gt; ignorada &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Escritoras</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Editar...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Formatos</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Rejeitado</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Atalhos</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Você também gostaria de remover todos os clipes {0} de '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Remover clipes?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Aplicativo</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Navegue para o aplicativo ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Selecione o caminho do aplicativo</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Tem certeza de que deseja remover atalhos personalizados para {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Tem certeza de que deseja remover formatos personalizados para {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Não há formatos de quadro de transferência atribuídos para este aplicativo. Nenhum dado será lido dele por meio de corte/copiar ou tentar um arrasto - e - solte em macacos</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Não há formatos de quadro de transferência atribuídos para este aplicativo. Pasta ou arrasto automatizado - e - A queda do MonkeyyySaste não terá nenhum efeito (seus dados vazios).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Tem certeza de que deseja redefinir todos os atalhos? Todos os atalhos personalizados serão removidos.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Tem certeza de que deseja alterar seu perfil de roteamento de atalho para '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favoritos</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formatos</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Hoje</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Lixo</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Fácil, certo?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Clique duas vezes para não</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Essa combinação entra em conflito com '{0}', que será limpa se salva.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Um atalho deve ser fornecido.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Este é um atalho global. Isso significa que ele tentará executar sempre que for realizado. Tente torná -lo único o suficiente (ou altere o 'tipo de roteamento') para não entrar em conflito com os atalhos de outros aplicativos.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>O atalho deve conter uma e apenas uma chave não modificadora.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Pressione qualquer tecla para gravar ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Atribua atalho</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Saber mais...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Consertar</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignorar</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Tente novamente</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Desligar</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Anual</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Por mês</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Experimentar gratuitamente!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Ciclo de cobrança</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Conecte-se</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Verifique sua conexão
+e tente novamente.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Próximo pagamento</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Registro</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>E-mail não é válido</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>As senhas não coincidem.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>A senha deve ser um mínimo de caracteres {0}.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Lembrar?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Verifique seu e -mail para confirmar sua conta</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Redefinir senha</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Mmm D, AAA</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>Mmm d, h: mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Mm/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Nunca</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Trial {0} diário grátis</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Houve um problema de executar
+a tua compra.
+
+Verificando sua conexão e
+Configurações podem ajudar.
+
+Você gostaria de tentar de novo?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Sua conta foi com sucesso
+Atualizado para:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Compre sucesso!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>A conexão falhou.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Tente novamente</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Conta alterada</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Sua assinatura é agora {0}/{1} com {2} conteúdo e {3} armazenamento de lixo.
+Mas não se preocupe, nenhum dado é perdido após o rebaixamento. Apenas novos clipes serão avaliados.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Parabéns! Sua assinatura é agora {0}/{1} com {2} conteúdo e {3} armazenamento de lixo.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Lixo ou desvincular algo
+de '{0}' para adicionar mais.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' O armazenamento é {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} bloqueado</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Conteúdo e capacidade de lixo alcançados!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' O armazenamento é {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Capacidade de conteúdo alcançada!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Você pode esconder esses avisos por
+Clicando 'Hide All' do
+Menu de opções acima.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>O armazenamento máximo de lixo é {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Capacidade de lixo alcançada!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} é inválido</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} deve ser pelo menos {1} caracteres</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} só pode ser {1} caractere</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Cole para: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>O pagamento pelo seu {0}
+A assinatura foi vencida {1}
+e não foi recebido.
+
+Por favor, atualize o seu
+Informação de pagamento.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>O pagamento pelo seu {0}
+A assinatura foi vencida {1}
+e não foi recebido.
+
+Por favor, conecte -se ao
+Internet no dispositivo
+com sua assinatura e
+reiniciar para continuar
+usando seu plano {0}.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>O pagamento pelo seu {0}
+A assinatura foi vencida {1}
+e não foi recebido.
+
+Por favor, abra ou reinicie
+Macacão no dispositivo
+com sua assinatura para
+Continue usando o seu
+{0} plano.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Conta expirada</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Observação</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>A Microsoft Store não permite o nível
+Alterações nos complementos de assinatura.
+
+Você deve cancelar seu
+{0}/{1} Planeje você mesmo
+Ou você será cobrado por ambos.
+
+Você gostaria de fazer isso agora?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Sua senha foi alterada.
+
+Por favor, verifique seu e -mail e
+Siga o link para mudar
+sua senha.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Conecte-se</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Autor (s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>É necessário que você aceite os seguintes termos de licença antes de continuar.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Os seguintes pacotes exigem que você aceite os termos de licença deles antes de instalar.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Eu recuso</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Clicar em "Eu aceito" significa que você concorda com os termos de licença deste aplicativo. Se você não concordar com os termos, clique em "I Reclin".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Clicar em "Eu aceito" significa que você concorda com os termos de licença para os plug -in listados acima. Se você não concordar com os termos, clique em "I Reclin".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Visualizar licença</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Aceitação da licença</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Aceito</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>desligada</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Não registrado</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Feito</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Senhas não correspondem</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Sua assinatura é
+agora definido como {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Conta encontrada</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Falha no login</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Registração falhou</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Registro bem -sucedido!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Redefinir erro</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Inscrição</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>O que há de novo</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Nunca</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Ilimitado</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>capacidade</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>restante</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Seu pagamento está vencido.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Os atalhos de substituição exclusivos podem conter apenas uma chave e essa chave não pode ser uma chave modificadora.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Expirado</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Carregando</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Desabilitado</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Observação! Essa senha é opcional e apenas para segurança extra. Seus dados já estão criptografados e nunca compartilhados. Essa senha simplesmente impede alguém que você não carregue o Monkeyyyasaste se, de alguma forma, obter acesso à sua área de trabalho (roubado, você sai da sala etc.).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Lembre -se de queda de configurações para:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Navegue plugins</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Analisar</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Ação rápida</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Alternar editar</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Alternar preso</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Anotações</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Texto simples</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Aberto na janela</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Clique em + Ctrl a seguir ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Clique em + alt para seguir ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Prenda ou solte qualquer mídia aqui!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Os limiares acima de 0 fornecerão a correspondência de cores difusas usando a distância euclidiana no espaço de cores RGBA.
+
+Por exemplo, se o vermelho (#FF0000) for o termo de pesquisa e o preto (#000000) for um pixel em um clipe de imagem, a distância da cor será 255. A distância preta para branca é o máximo possível de 510, incluindo um canal alfa</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Todos os seguintes são verdadeiros</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Prancheta</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Coleções</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Modos de mouse</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Gatilhos</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Retomar</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Novo gatilho</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Adicione predefinição</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Assistente de Drop Monkey</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Predefinições</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Analisador</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Cutom</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Orientação do ciclo</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Alternar o layout da grade</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Maiúsculas e minúsculas</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Limite</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Palavra inteira</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Nenhum conjunto</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Roteamento</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Feito</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Pular</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Conta existente?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Próximo pagamento</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>O registro permite que você carregue sua assinatura paga em todos os seus dispositivos (após a disponibilidade). Não vamos enviar spam ao seu e -mail, prometemos 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Inscrição</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Nome de usuário</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Precisa se registrar?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Fontes</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Ímpar, nada disponível. Algo deve estar errado 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Requer reiniciar</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Avançado</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Erro extraindo o plugin de '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Erro de instalação do plugin: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Erro a instalação do plugin '{0}' Estrutura de diretório corrupta ou inadequada. O manifesto deve existir em '{1}', mas não foi encontrado.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Erro analisando o plugin manifesto '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Nenhum plug -in carregado com GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} erro</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Erro de encenação do plug -in para o Dir '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Erro backup de '{0}' para '{1}'. Detalhes: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>O texto digitado será aplicado automaticamente a uma pesquisa quando nenhuma caixa de texto estiver focada.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Entrada de pesquisa automática</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Falha na mudança de senha</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Mudar</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Alterar a senha</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Senha limpa</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Contente</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Tamanho da fonte de conteúdo</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Quando verdadeiro, o conteúdo externo inserido em um clipe usará a formatação de clipes e não o que está disponível na fonte.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Colar, soltar ou anexar com formatação de destino</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja esquecer a senha?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Esquecer</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Esqueceu a senha</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Ocultar as marcas d'água com capacidade</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Quando o novo conteúdo da área de transferência for anexado, ele não será rastreado como um novo clipe</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ignorar os anexos</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Quando a área de transferência combina com um clipe existente, esse clipe será usado em vez de criar um novo</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ignore novas duplicatas</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>A área de transferência muda de dentro do aplicativo não será rastreada</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ignore o rastreamento interno da área de transferência</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Espaços, guias e novas linhas serão ignoradas do rastreamento</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ignore apenas o espaço branco</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Carregue no login</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Janela animada</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Opacidade</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Mostrar comportamento</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>A janela principal será revelada executando um gesto de rolagem na borda superior do seu monitor</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Mostrar na tela superior rolagem</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Volume de notificação</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Essa configuração rastreará o sistema - contagens de pastas de teclado amplo para estatísticas de uso. Esta informação é privada e não compartilhada, mas também não é um guarente. Resultados precisos podem exigir o fornecimento de um comando de pasta de teclado específico do aplicativo em 'Configurações -&gt; Copiar e Colar -&gt; Atalhos'.</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Colar história</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Muitos clipes fixados (como guias do navegador) podem consumir memória significativa. A remoção é pela primeira vez - em - primeiro - out</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Capacidade de pino</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Isso se aplica a todas as entradas auto -completas, valores mais baixos melhorarão o desempenho</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Limite de texto recente</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Você tem certeza que quer
+Restaurar preferências padrão?
+
+Isto não pode ser desfeito!
+
+*O aplicativo será reiniciado assim que concluir.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Tem certeza de que deseja redefinir todas as notificações?
+
+*Isto não pode ser desfeito!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>A pasta de macaco define a área de transferência (substitui) ao colar para um programa externo. Isso &lt;b&gt; tentará restaurar o estado da prancheta após uma pasta externa.
+
+A restauração total não pode ser garantida e pode reduzir o desempenho ou até mesmo falhar macacão, dependendo da fonte dos dados.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Redefinir a área de transferência após a coleta de macacos</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Não foi possível excluir o cache do plug -in do caminho: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Todos os plugins serão redefinidos para o estado padrão inicial</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Cache do plug -in</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja redefinir todos os plugins para padrões?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja redefinir sua senha?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Todos os atalhos de aplicativos serão redefinidos para seus gestos -chave padrão.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Redefinir atalhos</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Todas as notificações ignoradas anteriormente definidas.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Restaurar notificações</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(A habilitação pode ser bastante lenta) A incapacidade formatada reduzirá o consumo de memória, mas inibirá alguns recursos avançados, como: Anexar, modelos, anotações e encontrar/substituir</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Conteúdo rico</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Configurar senha</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Mostrar as dicas</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Mostrar na barra de tarefas</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Mostrar no comutador de tarefas</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Mostrar títulos</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Quando ativado, o arrastar de qualquer aplicativo para a parte superior da tela revelará o MonkeyyySaste para soltar facilmente o conteúdo em macacos.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Mostre no arrasto para a tela superior</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Tema sonoro</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Verificação ortográfica</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Na inicialização, a fonte da área de transferência será desconhecida e, dependendo de suas configurações de segurança, o conteúdo pode vir de um site ou aplicativo excluído.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Adicione a área de transferência de inicialização</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Ouça a área de transferência na startup</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Selecione</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>Cuidado! Outras cores da paleta são escolhidas usando matemática, não olhos! Portanto, esteja ciente de que algumas combinações de cor e estilo podem não ter contraste adequado para a legibilidade.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Cor tema</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Estilo temático</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>A limpeza automática de lixo ocorrerá na inicialização no intervalo definido.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Limpeza de lixo</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Altos limites de desfazer podem afetar o desempenho</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Desfazer limite</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Sem limite</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Usado na pesquisa avançada de arquivos por tipos de arquivos não predefinidos</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Usuário - Extensões de pesquisa definidas</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Encontre e substitua ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Cole aqui</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Compartilhar...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Visualizar</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Gerenciar...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Renomear</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Pontuação: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Tipo: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Excluir permanentemente</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Navegue para '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Transformar</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Entrada</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Fontes</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Escolha a imagem ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Cor</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Gerenciar '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Por favor, aguarde...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Cor de fundo</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Limpar tudo</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Formatos da área de transferência</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Exclua tudo</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Editar Detalhes</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Encontrar</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Cor da fonte</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Formato tinta</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> Na seleção</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Inserir Imagem</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Insira o link</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Insira o vídeo</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Caso de compatibilidade</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Novo modelo</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Próximo modelo</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Digite o texto da pasta ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Modelo anterior</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Expressão regular</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Substitua tudo</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Substituir</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Palavra inteira</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Envolver em torno</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Bloquear</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Domínio</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Mostre pasta</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Desbloquear</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Anexo Bloco</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Anexar em linha</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Auto - cópia</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Modos</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Por favor, espere, o macaco está carregando ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Desistir</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - Clique em Colar</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Exclua permanentemente tudo</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Restaurar tudo</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL já existe: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>O URL deve estar em um formato válido.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Digite URL completo:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Adicione URL</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Insira valores</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Copie texto ou arquivos a serem aplicados.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Anexar {0} {1} Modo ativado</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>As alterações na área de transferência agora serão anexadas</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Após o Apênder, ativado</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>As alterações na área de transferência agora serão anteriores</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Antes de anexar o modo ativado</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Bloquear</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>O comportamento normal da área de transferência foi restaurado</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Anexar desativado</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Anexos adicionados ao topo ou botom do clipe</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Modo Apêndice de extensão ativado</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>Em linha</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Anexe à sua seleção atual.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Modo de anexo manual ativado</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>O acúmulo da área de transferência parou</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Anexar parado</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>O acúmulo da área de transferência foi retomada</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Anexar retomado</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Tem certeza de que deseja terminar de anexar?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>A edição no modo de compatibilidade removerá toda a formatação rica. Tem certeza de que deseja modificar isso?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Aviso de degradação de dados</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Habilitado</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Desligado</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Parou</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Resultado</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Ocorreu um erro desconhecido.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Tentativas restantes</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Digite a senha</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>confirme</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Contato</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Data hora</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir todos os usos de '{0}'?
+
+Isto não pode ser desfeito!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Dinâmico</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Estático</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} está vazio ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Mais em breve!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>LOGIN LOAD DESABLE Falha</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Login Load desativando o sucesso</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Falha na carga de carga de login falhada</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Login Load Habilable Sucesso</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Esconder</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>A pasta de macaco agora está carregada.
+A escuta da área de transferência é: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Carregado</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Mostrar</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Modo de seleção de cópia automática: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Modo alterado</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Clique com o botão direito do mouse no modo de pasta: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Plug -in atualizado</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Colar '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Run '{0}' analisador</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Run '{0}' Trigger</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Selecione '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir '{0}' e todas as ações associadas?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Acionar</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Gostaria de remover todas as ações de '{0}'? (Caso contrário, eles serão entre os pais para '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Remover opções</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Você realmente quer ir embora '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Conta</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analisadores</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Operações de aplicação</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Prancheta</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Contente</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Conversores</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Cultura</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Dados</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Direção</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Arraste e solte</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Assistente de soltar</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ícones</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Operações de pasta</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Procurar</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Atalhos</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Organizar</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Sons</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Bandeja do sistema</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Coleções</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Gatilhos</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Operações do site</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Linguagem</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Define a área de transferência para o clipe de entrada.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alerta</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>CHIME</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Alertas de mensagem de bandeja de som e/ou sistema de propósito geral. As ações de alerta não têm efeito em suas contribuições.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Macaco</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Visualização</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Mostrar?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>A mensagem de brinde ao tempo é mostrada em segundos. Quando o valor é 0, a mensagem deve ser fechada manualmente.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Mostrar (s) (s) hora (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Som?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Tipo de som</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analisador</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Processa seu clipe de entrada usando a predefinição do analisador atribuída.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>O conteúdo de entrada está vinculado à coleção selecionada</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Links seu clipe de entrada à coleção de tags atribuída.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Marcação</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Maiúsculas e minúsculas?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Isso pode ser o texto estático para comparar com a entrada e/ou incluir propriedades selecionadas (através do botão Filtro) será substituído quando a condição for avaliada.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Dados de condição</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Uma consulta JSONPATH opcional que será aplicada à 'propriedade de entrada' selecionada antes que a condição seja avaliada.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Filtro de entrada</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>A propriedade CLIP usada para este condicional.
+
+Atualmente, a propriedade 'Última saída' é suportada apenas quando esse condicional é filho de uma ação do analisador e os dados fornecidos variarão dependendo da saída do analisador pai.
+
+Para solução de problemas, anexe uma 'ação de alerta' ao pai deste condicional e defina o parâmetro 'mensagem' do alerta para corresponder a esta propriedade de entrada. Isso permitirá revisar os dados reais usados ​​para esse condicional.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Propriedade de entrada</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Executa uma comparação de texto no clipe de entrada ou na saída de ação anterior. Quando a comparação falha (não é uma correspondência), nenhuma ação infantil será executada. Por isso, age como um portão lógico.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Todas as operações verdadeiras ou falsas em que as ações da criança só serão executadas se o resultado for verdadeiro.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Doença</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Acionado quando um clipe do tipo selecionado é adicionado ao sistema de qualquer forma (quadro de transferência, arrastar - e - soltar, analisador gerado ou duplicado).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Execute apenas esse gatilho se o clipe de entrada for novo e não é um duplicado. Isso é independente de qualquer configuração de preferência para saber se o novo conteúdo é ignorado ou não.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignore duplicado</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Somente clipes desse tipo acionarão essa ação.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Links seu clipe de entrada à coleção de tags atribuída.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Acionado quando um clipe está vinculado à coleta de tags especificada.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Coleção</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>A quantidade de tempo em milissegundos esperou antes que as crianças sejam executadas</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Atraso</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Experimental) usado principalmente em conjunto com a ação do repetidor para pesquisar fontes remotas ou auxiliar com operações de longa execução.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Quando deixado em branco, o arquivo de saída usará o título do clipe de entrada como o nome do arquivo.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Nome personalizado</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>O diretório onde o arquivo será gravado.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Diretório</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Salva a entrada na pasta selecionada.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Acionado quando o conteúdo da pasta selecionado muda. A saída será um clipe de arquivo novo ou existente (quando a preferência de ignorar a preferência estiver ativada) do arquivo ou pasta que mudou junto com o tipo de alteração como sua última saída.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Eventos</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignore duplicado</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Um valor 0 repetirá a ação dos pais indefinidamente</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Repita a contagem</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>A quantidade de tempo em milissegundos para esperar quando a ação dos pais concluir</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Repita o atraso</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Experimental) usado para criar loops de ação ou tarefas repetidas. Quando repetido, ele executará todas as crianças novamente com sua entrada original. Ao usar um intervalo sem uma contagem de repetição, o gatilho precisará ser desabilitado e reencenado para interromper a repetição. Pode ser útil para a automação de pesquisas ou raspagem na web.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Acionado por um atalho global que você define. Se o MonkeyyySaste estiver ativo, ele tentará usar o clipe selecionado (se houver um) como entrada. Caso contrário, ele tentará usar a área de transferência como entrada.
+
+Nota: Um gatilho de atalho ainda será executado se não houver entrada para mantê -lo flexível (para que possa ser um gatilho macro etc.), pois não é um evento acionado por dados.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Gatilho de atalho</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Acionado quando o atalho gravado é pressionado a qualquer momento com a área de transferência atual</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Esta ação exige que o aplicativo reinicie. Você gostaria de fazer isso agora?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Havia um problema. Você precisa reiniciar manualmente o aplicativo.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analise com o Annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Anote o gatilho</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Os elementos incorporados são lidos - apenas. Duplicar para alterar.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Anônimo</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Ontem</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} dias atrás</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 hora atrás</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} horas atrás</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Agora mesmo</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Um minuto atrás</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} minutos atrás</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Mês passado</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} meses atrás</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Semana passada</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} semanas atrás</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} anos atrás</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Anotações</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Nome da Aplicação</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Caminho de aplicação</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Maiúsculas e minúsculas</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Contente</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Tipo de arquivo</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Tipo de imagem</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Expressão regular</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Tipo de texto</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Título da URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Palavra inteira</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Como rolar ao longo da borda da tela superior para abrir, isso bloqueará a janela principal quando abrir. Permitindo fluxos de trabalho multi -direcionados mais rápidos.
+
+* Os cantos são em termos de todas as suas telas, não por monitor.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Mostre a janela e trava</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>Livre!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Dê -nos 5 estrelas!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Exclua tudo</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Exclua todo o conteúdo</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir
+Todos os seus clipes?!
+
+*Esta operação não pode ser desfeita!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Eu sou um dev indy, por favor, mostre algum apoio!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Como macacão?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} aceita apenas a entrada do (s) tipo (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Modo de cópia automática - simula um evento de 'cópia' sempre que o botão esquerdo do mouse for liberado.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Clique com o botão direito do mouse do modo de pasta - simula um evento 'pasta' sempre que o botão certo do mouse é liberado</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Predefinido</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Mostre pasta de plug -in</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Relatório</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Visualizar</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Mostre dicas de ferramentas</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Analisadores anotam sua entrada ou criam novos clipes como saída. Os filhos de analisadores precisam decidir qual deles precisam como contribuição. Normalmente, esta é a última saída.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Tipo de entrada</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Gatilho designer '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Escolha um {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Não encontrado...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} gatilho</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>Quando verificado, o resultado verdadeiro ou falso da condição será invertido. Por exemplo, a condição 'contém' se tornará 'não contém'.</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Por favor, aguarde...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Caso de cores</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Escolha a cor da partida</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Como um gatilho de atalho, mas quando a combinação de teclas é pressionada, um evento de 'cópia' será simulado no aplicativo ativo para que ainda funcione como cópia, mas a cadeia de ações anexadas ao gatilho de cópia de macaco será executada em segundo plano usando o Dados simulados de cópia da área de transferência.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Filtro avançado</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Ocultar filtros</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Filtros de restauração</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Criar filtro</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Opcional) Quando deixado vazio, a área de transferência será definida usando a entrada desta ação. Qualquer coisa fornecida aqui será tratada apenas como texto simples.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Conteúdo para a área de transferência</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Quando verdadeiro, nenhum clipe será adicionado após a ação definir a área de transferência.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ignorar</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Nenhum analisador selecionado para ação '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Analisador para ação '{0}' não encontrado</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Pai '{0}' Filtros apenas para '{1}' Tipo de conteúdo e analisador '{2}' nunca será executado porque não suporta '{3}' tipo de entrada</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Nenhuma tag selecionada para classificador '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Tag para classificador '{0}' não encontrado</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Compare o valor pode ser apenas letras, números ou espaços</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Nenhuma tag selecionada para o gatilho com tags de clipe '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Tag para clipe tagged trigger '{0}' não encontrado</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Nenhuma pasta de relógio especificada para '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Assista a pasta '{0}' não encontrada para o gatilho '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Caminho do escritor de arquivos para ação '{0}' não definido</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>Path do Writer de arquivo '{0}' para '{1}' não encontrado.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Barra de tarefas</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Aprenda sobre plugins</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Restaurar esta configuração de análise</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Alterar log</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Por favor, conecte -se à Internet e tente novamente mais tarde.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - ajuda</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} é a versão mais recente</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Vocês estão todos acordados - para - data!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Verifique se há atualizações ...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Nova versão disponível!
+
+Clique aqui para atualizar para '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Clique abaixo para atualizar para '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Atualização disponível!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Atualizar agora</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' contém valores compartilhados. O que você gostaria de redefinir?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Claro pesquisas recentes</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Reiniciar tudo</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Redefinir compartilhado</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Redefinir não compartilhado</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Invoca a ação do aplicativo atribuída. Todos os comando do aplicativo estão sem estado e seu clipe de entrada é ignorado.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Quando desmarcado e o comando não pode disparar, a cadeia de execução será interrompida. Muitos comandos exigirão algum estado de aplicação específico para executar.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Sempre continua?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>O comando para executar.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Comando</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Nenhum comando selecionado para o comando do aplicativo '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Comando para o comando do aplicativo '{0}' não encontrado</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Selecionado</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Havia um problema atualizando '{0}'. Para concluir a atualização, você precisará reiniciar e instalar '{0}' novamente (não se preocupe, todas as suas configurações serão restauradas).
+
+Você pode reiniciar agora e preencher a atualização, instalando, ignore isso e atualize -o posteriormente ou cancele a atualização todos juntos e continue usando a versão '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Erro de ATUALIZAÇÃO</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Não foi possível fazer o download da atualização</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Atualização falhou</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Para concluir a atualização, você precisará reiniciar. Você gostaria de reiniciar agora ou mais tarde?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Atualização pronta</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Mais tarde</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Reinicie agora</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} foi atualizado com sucesso para {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Os plugins principais são necessários e não podem ser removidos.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Instalações</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Atualização está pendente. Reinicie para concluir.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Uma desinstalação está pendente. Por favor, reinicie se você quiser re -instalar.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Para completar a desinstalação, você precisará reiniciar. Você gostaria de reiniciar agora ou mais tarde?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Terminar a desinstalação?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Não publicado</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Auto - gerou predefinição padrão para '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Nenhum clipe selecionado</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Analise o clipe selecionado</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Atribua um atalho para executar '{0}' no clipe selecionado</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Pasta global</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Atribua atalho de pasta global para '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Esqueceu sua senha?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Conecte-se</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>política de Privacidade</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Requer reiniciar) quando as informações de diagnóstico ativadas serão registradas no arquivo. Isso pode retardar o desempenho e pode conter informações pessoais.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Log no arquivo</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Abra a pasta Logs</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Navegue plugins</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Ler</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Escrever</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Enviar feedback ou relatório de bug</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Isso apenas esconde a janela principal. Todas as outras janelas de diálogo que não são sempre mostradas na barra de tarefas.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Pesquise em '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Adicione o filtro</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Editar tipo de junção</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Remova este filtro</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Ajuda aberta sobre isso ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} clipes</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Mudar</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Nunca</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Definir</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Sem título</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Registro</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Referência de fonte não marcada</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' é necessário</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Tem erros)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Limitado</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Armazenar</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Lixo</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Ilimitado</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>Atualmente, este aplicativo corresponde às predefinições e formatos de leitor de área de transferência padrão.
+
+A ativação ou desativação de predefinições de leitor padrão (da barra lateral da área de transferência) não afetará essa configuração. Somente aplicativos não listados seguem a configuração padrão.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Atualmente, este aplicativo corresponde às predefinições e formatos padrão de escritores de transferência.
+
+Ativar ou desativar as predefinições padrão do escritor (da barra lateral da área de transferência) não afetará essa configuração. Somente aplicativos não listados seguem a configuração padrão.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Para anexar, você deve desconhecer o ouvinte da área de transferência (bandeja do sistema -&gt; currículo).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Anexar indisponível</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Não tem configurações</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Só falo inglês e o Monkeypaste foi traduzido para esse idioma.
+
+Todas as versões são enviadas com o pacote em inglês; portanto, se você falar inglês, poderá alterar o idioma a qualquer momento após esta configuração (Configurações -&gt; Preferências -&gt; Internacional).
+
+Se você gostaria de ajudar a melhorar a tradução, gostaríamos de ouvir de você!
+
+feedback@monkeypsaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Preocupações de tradução</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Você precisa atualizar o MonkeyyySaste para usar esse recurso.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Atalho Unset</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>O ouvinte de área de transferência desativada</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>O ouvinte da área de transferência ativado</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Ação dos pais '{0}' não suporta o tipo de propriedade de entrada 'Última saída'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Saiba mais sobre os planos</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Aplicativo</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Acionar</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Grampo</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Analisador</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Marcação</value>
+  </data>
+</root>

@@ -1,0 +1,12 @@
+{
+  "title": "Ракувач на таблата со основни табли",
+  "description": "Се справува со стандардните формати на таблата со исечоци",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Core, Clipboard, Drag and Drop, Text, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, LINK",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

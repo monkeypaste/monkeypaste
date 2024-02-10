@@ -1,0 +1,12 @@
+{
+  "title": "ਕੋਰ ਕਲਿੱਪਬੋਰਡ ਹੈਂਡਲਰ",
+  "description": "ਮੂਲ ਕਲਿੱਪਬੋਰਡ ਫਾਰਮੈਟਾਂ ਨੂੰ ਸੰਭਾਲਦਾ ਹੈ",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "ਕੋਰ, ਕਲਿੱਪਬੋਰਡ, ਡਰੈਗ ਅਤੇ ਡ੍ਰੌਪ, ਆਰਟੀਐਫ, ਅਮੀਰ ਟੈਕਸਟ, ਐਚਟੀਐਮਐਲ, ਸੀਐਸਵੀ, ਸੀਐਸਵੀ, ਸੀਐਸਵੀ, ਸੀਪੀਵੀ, ਜੇਪੀਜੀ, ਲਿੰਕ, ਲਿੰਕ",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

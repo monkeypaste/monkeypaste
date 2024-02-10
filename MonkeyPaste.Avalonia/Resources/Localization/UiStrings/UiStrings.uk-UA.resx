@@ -1,0 +1,2710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>Жодна функція не обмежена підпискою, лише ємності для зберігання і може бути змінена в будь -який час.</value>
+  </data>
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
+    <value>Відновіть існуючий рахунок ...</value>
+  </data>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Зміст і сміття є
+обмежений {0} та {1}
+кліпи відповідно.</value>
+  </data>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Дозволяє до {2} кліпів вмісту та необмеженого сховища сміття.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Нерозмірний та необмежений вміст та зберігання сміття.</value>
+  </data>
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
+    <value>Відновлення</value>
+  </data>
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
+    <value>Безкоштовний</value>
+  </data>
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
+    <value>Стандартний</value>
+  </data>
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
+    <value>Необмежений</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Підписка</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Ваша конфіденційність важлива, і дані про буфер обміну можуть бути дуже особистими. Зберігання завжди зашифровано, але ви можете встановити пароль, який буде потрібен у випадку викрадення вашого пристрою або хтось інший використовує ваш пристрій.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>Якщо ввімкнути, перетягування з будь -якої програми до верхньої частини екрана виявить, що мавпаста легко перекине вміст у мавпасту.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Увімкнення "замка" у верхньому лівому віці все одно дозволить потрапити на мавпасту.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>Більше налаштувань вікна доступні в меню "Налаштування" -&gt; Налаштування -&gt; Вікно ".</value>
+  </data>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Перетягніть банани сюди!</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Перетягувати - відкрити</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Ярлики клавіатури можна переглянути або змінювати в будь -який час у меню "Налаштування -&gt; Ярлики".</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Усі глобальні ярлики будуть відключені, щоб ви могли налаштувати їх пізніше.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>Ярлики буфера буфера Monkeypaste будуть доступні у всіх програмах.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Внутрішній</value>
+  </data>
+  <data name="CommonDefaultLabel" xml:space="preserve">
+    <value>За замовчуванням</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Профіль жестів</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Гей! Давайте налаштували кілька речей, щоб покращити загальний досвід роботи з Monkeypast.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Вітати</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>Щоб отримати максимальну користь від MonkeyPast, завантажувати автоматично, коли ви входите в систему, - це гарна ідея. Але, це цілком залежить від вас.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>Тримайте це випадковим.</value>
+  </data>
+  <data name="CommonEnableLabel" xml:space="preserve">
+    <value>Ввімкнути</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Завантажити на вхід?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>Коли ввімкнено, жест прокрутки у верхній частині екрана виявить мавпасту.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Зліва - клацання піктограми панелі завдань все ще відкриє мавпасту.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>Більше налаштувань вікна доступні в меню "Налаштування" -&gt; Налаштування -&gt; Вікно ".</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Легко, правда?</value>
+  </data>
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
+    <value>Прокрутіть сюди!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Прокрутка - до - відкрити</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Киньте його сюди!</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align = "center"&gt; Таким чином, у мавпасті можна отримати доступ &lt;br&gt; &lt;span color = "червоний"&gt; без клацання &lt;/span&gt; або навіть &lt;span color = "червоний"&gt; ватин око &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Перетягніть мене!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Спробуй!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Спробуй!</value>
+  </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>Жодних результатів немає.</value>
+  </data>
+  <data name="CommonConfirmLabel" xml:space="preserve">
+    <value>Підтверджувати</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Оновлювати</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Пошук ...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Залежності:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Встановити</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити "{0}" та всі його попередні та ярлики?</value>
+    <comment>Plugin Title</comment>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' не має результатів.</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>Немає вибору.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Кредити:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Опис:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Пожертвуйте:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>Ліцензія:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>URL -адреса проекту:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Опубліковано:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Читайте мене:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Повідомити про зловживання:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Теги:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Оновлення</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Версія:</value>
+  </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Відкрити у вікні</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Звільнити</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Оновлювати</value>
+  </data>
+  <data name="CommonSaveLabel" xml:space="preserve">
+    <value>Заощадити</value>
+  </data>
+  <data name="AccountNextRemoveToolTipText" xml:space="preserve">
+    <value>Поруч з видаленням!
+
+Оновлення, щоб уникнути.</value>
+  </data>
+  <data name="AccountNextTrashToolTipText" xml:space="preserve">
+    <value>Поруч із сміттям!
+
+Оновлення, щоб уникнути.</value>
+  </data>
+  <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
+    <value>Файли</value>
+  </data>
+  <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
+    <value>Зображення</value>
+  </data>
+  <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="ClipTileDetailCreated" xml:space="preserve">
+    <value>Скопійовано {0}</value>
+  </data>
+  <data name="ClipTileDetailDimFiles" xml:space="preserve">
+    <value>{0} Файли | {1} МБ</value>
+  </data>
+  <data name="ClipTileDetailDimImage" xml:space="preserve">
+    <value>{0} x {1} px</value>
+  </data>
+  <data name="ClipTileDetailDimText" xml:space="preserve">
+    <value>{0} chars | {1} рядки</value>
+  </data>
+  <data name="ClipTileDetailUsage" xml:space="preserve">
+    <value>{0} копії | {1} пасти</value>
+  </data>
+  <data name="ActionMoveLabel" xml:space="preserve">
+    <value>Рухатися</value>
+  </data>
+  <data name="CommonAddLabel" xml:space="preserve">
+    <value>Додавання</value>
+  </data>
+  <data name="CommonCopyOpLabel" xml:space="preserve">
+    <value>Копіювати</value>
+  </data>
+  <data name="CommonCutOpLabel" xml:space="preserve">
+    <value>Вирізати</value>
+  </data>
+  <data name="CommonPasteOpLabel" xml:space="preserve">
+    <value>Пасти</value>
+  </data>
+  <data name="CommonTitledCopyTitleText" xml:space="preserve">
+    <value>{0} Копія</value>
+  </data>
+  <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
+    <value>Незбережений фільтр</value>
+  </data>
+  <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
+    <value>- Виберіть будь ласка -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Формати</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Читачі</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Письменники</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Обробники</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Видаляти</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Дублікат</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Назва редагування</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Скинути</value>
+  </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Дія</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Глобальна маршрутизація</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Ярлик</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Жести повинні бути унікальними і можуть містити лише один вхідний ключ.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+&lt;li&gt;
+&lt;b&gt; внутрішні &lt;/b&gt; Усі ярлики обмежені в межах програми. Це насправді не передбачений варіант, але може дозволити налаштувати те, що ви маєте намір зробити глобальний &lt;i&gt; колись &lt;/i&gt;. &lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; за замовчуванням &lt;/b&gt; Всі глобальні ярлики увімкнено. Ярлик &lt;b&gt; шоу/приховати головне вікно &lt;/b&gt; використовує &lt;span color = "red"&gt; repride &lt;/span&gt; маршрутизацію для клавіші &lt;b&gt; caps &lt;/b&gt;. Ви можете змінити цю маршрутизацію або жест у будь -який час. Але &lt;span color = "зелений"&gt; спробуйте &lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+&lt;Голова&gt; &lt;/ Голова&gt;
+&lt;body&gt;
+&lt;h1&gt; Глобальні режими ярлика &lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+4
+*Це зараз лише &lt;i&gt; &lt;/i&gt; опція на Linux.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;b&gt; до &lt;/b&gt; ярлик виконає &lt;b&gt; &lt;i&gt; до &lt;/i&gt; &lt;/b&gt;.
+&lt;li&gt;
+&lt;b&gt; post &lt;/b&gt; ярлик виконає &lt;b&gt; &lt;i&gt; після &lt;/i&gt; &lt;/b&gt;. Він обробляється активною програмою. &lt;/li&gt;
+&lt;li&gt;
+4
+Цей варіант гарантує, що ярлик спрацьовує без конфліктів активному додатку.
+&lt;/li&gt;
+&lt;li&gt;
+4 Це дозволяє &lt;b&gt; один &lt;/b&gt; ключ (non -модифікатор) для його призначення. &lt;br&gt;
+У звичайному замиканні режиму переопрацьованості може стати &lt;i&gt; застрягти на &lt;/i&gt; при натисканні в поєднанні з іншими клавішами. &lt;br&gt;
+Тож незалежно від того, які інші клавіші вниз, якщо &lt;b&gt; гаряча клавіша &lt;/b&gt; ярлик буде натиснуто, він буде переоцінений і запобігає йому, щоб він не застряг на &lt;/i&gt;.
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/tml&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Відключати</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Завантажте, коли цей обліковий запис користувача ввійшов, а не для інших користувачів.</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>4 Тут поле електронної пошти вибраного вами контакту буде використовуватися для всіх екземплярів цього документа. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = короткий рік &lt;br/&gt; yyyy = довгий рік &lt;br/&gt; m = місяць (1-12) &lt;br/&gt; мм = місяць (01-12) &lt;br/&gt; mmm = абревіатура місяця (січень, лютий .. . Грудня) &lt;br/&gt; ммм = довгий місяць (січень, лютий ... грудень) &lt;br/&gt; d = день (1 - 31) &lt;br/&gt; dd = день (01 - 31) &lt;br/&gt; ddd = День тижня у словах (понеділок, вівторок ... неділя) &lt;br/&gt; e = короткий день тижня у словах (пн, тю ... сонце) &lt;br/&gt; d - порядковий день (1 -й, 2 -й, 3-й, 21-й, 22-й, 23-й, 31-й, 4-й ...) &lt;br/&gt; H = година в AM/PM (0-12) &lt;br/&gt; HH = година в AM/PM (00-12) &lt;BR/ &gt; H = година в день (0-23) &lt;br/&gt; hh = година в день (00-23) &lt;br/&gt; мм = хвилина &lt;br/&gt; ss = другий &lt;br/&gt; sss = мілісекунди &lt;br/&gt; A = AM/PM Маркер &lt;br/&gt; p = a.m./p.m. маркер</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>Поточна дата та/або час буде замінена на шаблони DateTime, коли вони вставляються.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt; Усі трапляються цього шаблону використовуватимуть наданий текст. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt; Усі трапляються цього шаблону використовуватимуть наданий текст. &lt;/p&gt;</value>
+  </data>
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
+    <value>Закінчити додавання</value>
+  </data>
+  <data name="EditorAppendInlineModeLabel" xml:space="preserve">
+    <value>Увімкнути блок</value>
+  </data>
+  <data name="EditorAppendLineModeLabel" xml:space="preserve">
+    <value>Увімкнути вбудовано</value>
+  </data>
+  <data name="EditorAppendManualModeLabel" xml:space="preserve">
+    <value>Посібник з перемикання</value>
+  </data>
+  <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
+    <value>Посібник з перемикання</value>
+  </data>
+  <data name="EditorAppendPauseLabel" xml:space="preserve">
+    <value>Пауза додає</value>
+  </data>
+  <data name="EditorAppendPostLabel" xml:space="preserve">
+    <value>Перемикатися до</value>
+  </data>
+  <data name="EditorAppendPreLabel" xml:space="preserve">
+    <value>Перемикатися до</value>
+  </data>
+  <data name="EditorAppendResumeLabel" xml:space="preserve">
+    <value>Відновити додаток</value>
+  </data>
+  <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
+    <value>Додайте ...</value>
+  </data>
+  <data name="EditorPasteButtonLabel" xml:space="preserve">
+    <value>Пасти</value>
+  </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Шпилька</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Розмивати</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Приховати всі сповіщення '{0}'</value>
+    <comment>Notification Type</comment>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Звільнити</value>
+  </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Останній активний додаток невідомий. Перейдіть на призначений додаток на пасту для мавп.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Вставити до: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Мінімізувати</value>
+  </data>
+  <data name="CommonBusyLabel" xml:space="preserve">
+    <value>Зачекайте ...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Замок</value>
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Рахунок</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Допомога</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Копіювати Вставити</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Уподобання</value>
+  </data>
+  <data name="PrefRestoreDefaultsLabel" xml:space="preserve">
+    <value>Відновити значення за замовчуванням</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Фільтр ...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Ярлики</value>
+  </data>
+  <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
+    <value>Додайте додаток</value>
+  </data>
+  <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
+    <value>Додайте веб -сайт</value>
+  </data>
+  <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
+    <value>Блок?</value>
+  </data>
+  <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
+    <value>Додатки</value>
+  </data>
+  <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
+    <value>Блок домен?</value>
+  </data>
+  <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
+    <value>Блок URL?</value>
+  </data>
+  <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
+    <value>Домен</value>
+  </data>
+  <data name="SettingsInteropUrlHintText" xml:space="preserve">
+    <value>Розпізнавання URL -адреси джерела залежить від того, наскільки дружнім для буфера буфера хост -програма, тому відхилення не може бути гарантовано</value>
+  </data>
+  <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
+    <value>Веб -сайти</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
+    <value>Деякі функції MonkeyPaste використовують автоматизацію клавіатури для імітації подій "копіювати" в інших програмах.
+
+Додайте та/або виберіть додаток за допомогою унікального копіювання ярлика (наприклад, консоль або оболонка), щоб забезпечити належне функціонування цих функцій.</value>
+  </data>
+  <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
+    <value>Скопіюйте ярлик</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Для зазначеної програми будуть використані лише вибрані попередні встановлення. Якщо не визначити, будуть використані попередні встановлення за замовчуванням, знайдені в бічній панелі буфера обміну &lt;/em&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
+    <value>Багато функцій MonkeyPaste використовують автоматизацію клавіатури для взаємодії з іншими програмами.
+
+Деякі програми (наприклад, деякі консолі або снаряди) можуть мати ярлик не -за замовчуванням.
+
+Щоб забезпечити належну сумісність, запишіть ці ярлики для цієї програми тут.</value>
+  </data>
+  <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
+    <value>Вставити ярлик</value>
+  </data>
+  <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
+    <value>Читачі</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Весь моніторинг буфера обміну з відхилених програм буде &lt;b&gt; ігноровано &lt;/b&gt;.</value>
+  </data>
+  <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
+    <value>Письменники</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Редагувати ...</value>
+  </data>
+  <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
+    <value>Формати</value>
+  </data>
+  <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
+    <value>Відхилений</value>
+  </data>
+  <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
+    <value>Ярлики</value>
+  </data>
+  <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
+    <value>Ви також хотіли б видалити всі {0} кліпи з '{1}'</value>
+    <comment>Number, Application Name</comment>
+  </data>
+  <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
+    <value>Видалити кліпи?</value>
+  </data>
+  <data name="CommonApplicationLabel" xml:space="preserve">
+    <value>Застосування</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
+    <value>Перейдіть до програми ...</value>
+  </data>
+  <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
+    <value>Виберіть шлях програми</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити власні ярлики для {0}?</value>
+  </data>
+  <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити власні формати для {0}?</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>Для цього додатка немає призначених форматів буфера обміну. Жодних даних не буде прочитано за допомогою Cut/Copy або спроби перетягування - і - опустіть у мавпасту</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>Для цього додатка немає призначених форматів буфера обміну. Автоматизована вставка або перетягування - і - падіння з мавпасту не матиме впливу (його порожні дані).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Ви впевнені, що хочете скинути всі ярлики? Всі спеціальні ярлики будуть видалені.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Ви впевнені, що хочете змінити свій профіль маршрутизації ярлика на "{0}"</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Фаворити</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Фільтри</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Формати</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Сьогодні</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Смітник</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>Про</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Легко, правда?</value>
+  </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Двічі клацніть, щоб роз'єднати</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Звичайний</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Глобальний</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>Ця комбінація суперечить '{0}', які будуть очищені, якщо зберегти.</value>
+    <comment>Shortcut Display Name</comment>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>Повинен бути наданий ярлик.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>Це глобальний ярлик. Це означає, що він намагатиметься виконати, коли він виконується. Постарайтеся зробити його достатньо унікальним (або змінити "тип маршрутизації"), щоб не конфліктувати з ярликами з інших додатків.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Глобальний</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Ярлик повинен містити один і лише один ключ модифікатора.</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Натисніть будь -яку клавішу для запису ...</value>
+  </data>
+  <data name="CommonAssignShortcutLabel" xml:space="preserve">
+    <value>Призначити ярлик</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Вивчайте більше...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Оновлення</value>
+  </data>
+  <data name="CommonCancelLabel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Виправити</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ігнорувати</value>
+  </data>
+  <data name="CommonNoButtonText" xml:space="preserve">
+    <value>Немає</value>
+  </data>
+  <data name="CommonOkLabel" xml:space="preserve">
+    <value>В порядку</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Повторити</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Подавати</value>
+  </data>
+  <data name="CommonYesButtonText" xml:space="preserve">
+    <value>Так</value>
+  </data>
+  <data name="AccountYearlyLabel" xml:space="preserve">
+    <value>Щорічно</value>
+  </data>
+  <data name="AccountMonthlyLabel" xml:space="preserve">
+    <value>Щомісяця</value>
+  </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Спробуйте безкоштовно!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Рілля циклу</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Електронна пошта</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Логін</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Перевірте своє з'єднання
+і спробуйте ще раз.</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Наступний платіж</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Реєструвати</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Електронна пошта не є дійсною</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Паролі не збігаються.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Пароль повинен бути мінімум {0} символів.</value>
+  </data>
+  <data name="CommonRememberLabel" xml:space="preserve">
+    <value>Пам'ятаєте?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Перевірте свій електронний лист, щоб підтвердити свій рахунок</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Скинути пароль</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>Ммм Д, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>MMM D, H: MM TT</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>Мм/dd/yyyy hh: mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Ніколи</value>
+  </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Безкоштовно {0} пробний день</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>Виникла проблема
+Ваша покупка.
+
+Перевірка вашого з'єднання та
+Налаштування можуть допомогти.
+
+Ви хотіли б спробувати ще раз?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Ваш рахунок успішно
+модернізований до:
+
+ {0}/{1}</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Придбайте успішно!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Підключення не вдалося.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Повторити</value>
+  </data>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Рахунок змінився</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Ваша підписка тепер {0}/{1} із вмістом {2} та {3} зберігання сміття.
+Але не хвилюйтеся, не втрачаються дані після зниження. Оцінюються лише нові кліпи.</value>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Вітаємо! Ваша підписка тепер {0}/{1} із вмістом {2} та {3} зберігання сміття.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Сміття або щось відсмикувати
+від '{0}', щоб додати більше.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' Зберігання - {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Відновлення</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} заблоковано</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Вміст та сміттєва здатність досягнуто!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' Зберігання - {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Вміст досягнута!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* Ви можете приховати ці попередження
+натиснувши "приховати все" з
+Параметри меню вище.</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Максимальне зберігання сміття - {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Досягнення сміттєзвалища!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} недійсне</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} повинен бути щонайменше {1} символів</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} може бути лише {1} символом</value>
+    <comment>Parameter Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Вставити до: '{0}'</value>
+    <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>Платіж для вашого {0}
+підписка була належна {1}
+і не було прийнято.
+
+Будь ласка, оновіть свій
+Інформація про оплату.</value>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>Платіж для вашого {0}
+підписка була належна {1}
+і не було прийнято.
+
+Будь ласка, підключіться до
+Інтернет на пристрої
+з вашою підпискою та
+перезапустити, щоб продовжити
+Використовуючи свій {0} план.</value>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>Платіж для вашого {0}
+підписка була належна {1}
+і не було прийнято.
+
+Будь ласка, відкрийте або перезавантажте
+Мавпаста на пристрої
+з вашою підпискою на
+Продовжуйте використовувати ваш
+{0} план.</value>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Термін дії рахунку закінчився</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Примітка</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Microsoft Store не допускає рівня
+Зміни до підписки на додатки.
+
+Ви повинні скасувати своє
+{0}/{1} Плануйте себе
+Або вам стягуватимуться за те, щоб обоє стягувались.
+
+Ви хотіли б піти робити це зараз?</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Ваш пароль скидався.
+
+Будь ласка, перевірте свою електронну пошту та
+Перейдіть за посиланням, щоб змінити
+Ваш пароль.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Логін</value>
+  </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Автор (и)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>Потрібно прийняти наступні умови ліцензії перед тим, як продовжувати.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>Наступні пакети (и) вимагають прийняти їхні ліцензійні умови перед встановленням.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>Я відмовляюся</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>Натиснення "Я приймаю" означає, що ви погоджуєтесь з умовами ліцензії для цієї заявки. Якщо ви не погоджуєтесь з умовами, натисніть "Я знижую".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>Клацання "Я приймаю" означає, що ви погоджуєтесь з умовами ліцензії для перелічених вище плагінів. Якщо ви не погоджуєтесь з умовами, натисніть "Я знижую".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>Переглянути ліцензію</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>Прийняття ліцензії</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>Я приймаю</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>Активний</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Офлайн</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Незареєстрований</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Зроблений</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠ Паролі не відповідають</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="AccountExistingLoginText" xml:space="preserve">
+    <value>Ваша підписка є
+Тепер встановлено на {0}/{1}.</value>
+  </data>
+  <data name="AccountExistingLoginTitle" xml:space="preserve">
+    <value>Знайдено рахунок</value>
+  </data>
+  <data name="AccountLoginFailedTitle" xml:space="preserve">
+    <value>Помилка логіну</value>
+  </data>
+  <data name="AccountRegistrationFailedTitle" xml:space="preserve">
+    <value>Реєстрація не вдалася</value>
+  </data>
+  <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
+    <value>Реєстрація успішна!</value>
+  </data>
+  <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
+    <value>Помилка скидання</value>
+  </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Підписка</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>Що нового</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Ніколи</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Необмежений</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>потужність</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>що залишився</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>загальний</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Ваш платіж пройшов належним.</value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Ексклюзивні ярлики переоцінки можуть містити лише один ключ, і цей ключ не може бути ключем модифікатора.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Закінчився</value>
+  </data>
+  <data name="NtfLoaderTitle" xml:space="preserve">
+    <value>Навантаження</value>
+  </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Інвалід</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Примітка! Цей пароль необов’язковий і лише для додаткової безпеки. Ваші дані вже зашифровані і ніколи не діляться. Цей пароль просто заважає когось, чий не ви завантажуєте мавпасту, якщо вони якось отримають доступ до вашого робочого столу (викрадено, ви залишаєте кімнату тощо).</value>
+  </data>
+  <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
+    <value>Пам'ятайте налаштування краплі для:</value>
+  </data>
+  <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
+    <value>Переглянути плагіни</value>
+  </data>
+  <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
+    <value>Проаналізувати</value>
+  </data>
+  <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
+    <value>Швидка дія</value>
+  </data>
+  <data name="ClipTileToggleEditLabel" xml:space="preserve">
+    <value>Перемикати редагування</value>
+  </data>
+  <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
+    <value>Перемикаченого покладеного</value>
+  </data>
+  <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
+    <value>Анотації</value>
+  </data>
+  <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
+    <value>Простий текст</value>
+  </data>
+  <data name="CommonFloatWindowLabel" xml:space="preserve">
+    <value>Відкрити у вікні</value>
+  </data>
+  <data name="LinkNavigateToolTipText" xml:space="preserve">
+    <value>Клацніть + Ctrl, щоб дотримуватися ...</value>
+  </data>
+  <data name="LinkNavigateToolTipText2" xml:space="preserve">
+    <value>Клацніть + alt, щоб дотримуватися ...</value>
+  </data>
+  <data name="PinTrayEmptyLabel" xml:space="preserve">
+    <value>Закріпіть тут або киньте будь -які носії!</value>
+  </data>
+  <data name="PinTrayUnpinAllLabel" xml:space="preserve">
+    <value>Чіткий</value>
+  </data>
+  <data name="SearchColorDistanceToolTipText" xml:space="preserve">
+    <value>Порогові значення вище 0 забезпечать нечітке узгодження кольору за допомогою евклідової відстані в кольорах RGBA.
+
+Наприклад, якщо червоний (#FF0000) - це пошуковий термін, а чорний (#000000) - піксель у кліпі зображення, то кольорова відстань буде 255. Чорна до біла відстань - максимально можлива 510, включаючи альфа -канал</value>
+  </data>
+  <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
+    <value>Все наступне є правдою</value>
+  </data>
+  <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
+    <value>Буфер обміну</value>
+  </data>
+  <data name="SidebarCollectionsToolTip" xml:space="preserve">
+    <value>Колекції</value>
+  </data>
+  <data name="SidebarMouseModesToolTip" xml:space="preserve">
+    <value>Режими миші</value>
+  </data>
+  <data name="SidebarTriggersToolTip" xml:space="preserve">
+    <value>Спрацьовує</value>
+  </data>
+  <data name="TriggerPauseButtonLabel" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="TriggerResumeButtonLabel" xml:space="preserve">
+    <value>Резюме</value>
+  </data>
+  <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
+    <value>Новий тригер</value>
+  </data>
+  <data name="CommonAddPresetButtonLabel" xml:space="preserve">
+    <value>Додати попередньо встановлено</value>
+  </data>
+  <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
+    <value>Майстер краплі мавпи</value>
+  </data>
+  <data name="AnalyzerPresetGridTitle" xml:space="preserve">
+    <value>Пресети</value>
+  </data>
+  <data name="AnalyzerSelectorLabel" xml:space="preserve">
+    <value>Аналізатор</value>
+  </data>
+  <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
+    <value>Кутом</value>
+  </data>
+  <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
+    <value>Орієнтація на велосипед</value>
+  </data>
+  <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
+    <value>Перемикання макета сітки</value>
+  </data>
+  <data name="SearchCaseSensitiveLabel" xml:space="preserve">
+    <value>Чутливий</value>
+  </data>
+  <data name="SearchThresholdLabel" xml:space="preserve">
+    <value>Поріг</value>
+  </data>
+  <data name="SearchWholeWordLabel" xml:space="preserve">
+    <value>Ціле слово</value>
+  </data>
+  <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
+    <value>Жоден встановлений</value>
+  </data>
+  <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
+    <value>Маршрутизація</value>
+  </data>
+  <data name="TriggerActionLabel" xml:space="preserve">
+    <value>Дія</value>
+  </data>
+  <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
+    <value>Сітка</value>
+  </data>
+  <data name="WelcomeDoneButtonLabel" xml:space="preserve">
+    <value>Зроблений</value>
+  </data>
+  <data name="WelcomeNextButtonLabel" xml:space="preserve">
+    <value>Наступний</value>
+  </data>
+  <data name="WelcomePreviousButtonLabel" xml:space="preserve">
+    <value>Попередній</value>
+  </data>
+  <data name="WelcomeSkipButtonLabel" xml:space="preserve">
+    <value>Пропустити</value>
+  </data>
+  <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
+    <value>Існуючий рахунок?</value>
+  </data>
+  <data name="AccountNextPaymentLabel" xml:space="preserve">
+    <value>Наступний платіж</value>
+  </data>
+  <data name="PrefRegistrationFrameHint" xml:space="preserve">
+    <value>Реєстрація дозволяє переносити платну підписку на всіх своїх пристроях (після наявності). Ми не будемо спамувати ваш електронний лист, обіцяємо 😇.</value>
+  </data>
+  <data name="AccountSubscriptionLabel" xml:space="preserve">
+    <value>Підписка</value>
+  </data>
+  <data name="AccountUserNameLabel" xml:space="preserve">
+    <value>Ім'я користувача</value>
+  </data>
+  <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
+    <value>Потрібно зареєструватися?</value>
+  </data>
+  <data name="ClipTileSourcesHeader" xml:space="preserve">
+    <value>Джерела</value>
+  </data>
+  <data name="ClipTileTransactionErrorText" xml:space="preserve">
+    <value>Дивно, нічого не доступно. Щось повинно бути неправильним 😕</value>
+  </data>
+  <data name="CommonRemoveLabel" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="CommonRequiresRestartHint" xml:space="preserve">
+    <value>Вимагає перезавантаження</value>
+  </data>
+  <data name="ContentQueryAdvancedHeader" xml:space="preserve">
+    <value>Просунутий</value>
+  </data>
+  <data name="PluginErrExtractText" xml:space="preserve">
+    <value>Помилка витягування плагіна з '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginErrInstallNtfText" xml:space="preserve">
+    <value>Помилка встановлення плагіна: '{0}'</value>
+    <comment>Error Details</comment>
+  </data>
+  <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
+    <value>Помилка встановлення плагіну '{0}' пошкоджена або неправильна структура каталогів. Маніфест повинен існувати на '{1}', але його не було знайдено.</value>
+    <comment>Plugin Name, File Path</comment>
+  </data>
+  <data name="PluginErrManifestText" xml:space="preserve">
+    <value>Помилка розбору плагіну маніфест '{0}': {1}</value>
+    <comment>File Path, Error Details</comment>
+  </data>
+  <data name="PluginErrMissingManifest" xml:space="preserve">
+    <value>Немає плагіна, завантаженого з GUID: '{0}'</value>
+    <comment>Serial Number</comment>
+  </data>
+  <data name="PluginErrNtfTitle" xml:space="preserve">
+    <value>{0} помилка</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginErrStagingText" xml:space="preserve">
+    <value>Помилка встановлення плагіна до температури '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PluginLoaderBackupErrorText" xml:space="preserve">
+    <value>Помилка резервного копіювання '{0}' до '{1}'. Деталі: '{2}'</value>
+    <comment>Folder Path, Folder Path, Error Details</comment>
+  </data>
+  <data name="PrefAutoSearchHint" xml:space="preserve">
+    <value>Текстовий набір буде автоматично застосований до пошуку, коли текстове поле не буде зосереджене.</value>
+  </data>
+  <data name="PrefAutoSearchLabel" xml:space="preserve">
+    <value>Автоматичний вхід</value>
+  </data>
+  <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
+    <value>Зміна пароля не вдалося</value>
+  </data>
+  <data name="PrefChangePasswordButtonText" xml:space="preserve">
+    <value>Зміна</value>
+  </data>
+  <data name="PrefChangePasswordLabel" xml:space="preserve">
+    <value>Змінити пароль</value>
+  </data>
+  <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
+    <value>Чіткий</value>
+  </data>
+  <data name="PrefClearPasswordLabel" xml:space="preserve">
+    <value>Очистити пароль</value>
+  </data>
+  <data name="PrefContentFontLabel" xml:space="preserve">
+    <value>Зміст</value>
+  </data>
+  <data name="PrefContentFontSizeLabel" xml:space="preserve">
+    <value>Розмір шрифту вмісту</value>
+  </data>
+  <data name="PrefDestFormatHint" xml:space="preserve">
+    <value>Коли це правда, зовнішній вміст, вставлений у кліп, використовуватиме форматування кліпів, а не те, що доступне з джерела.</value>
+  </data>
+  <data name="PrefDestFormatLabel" xml:space="preserve">
+    <value>Вставте, скидайте або додайте за допомогою форматування призначення</value>
+  </data>
+  <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете забути пароль?</value>
+  </data>
+  <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
+    <value>Забути</value>
+  </data>
+  <data name="PrefForgetPasswordLabel" xml:space="preserve">
+    <value>Забудьте пароль</value>
+  </data>
+  <data name="PrefGestureProfileLabel" xml:space="preserve">
+    <value>Профіл</value>
+  </data>
+  <data name="PrefHideWatermarksLabel" xml:space="preserve">
+    <value>Приховати ємність водяних знаків</value>
+  </data>
+  <data name="PrefIgnoreAppendsHint" xml:space="preserve">
+    <value>Коли додається новий вміст буфера обміну, він не буде відстежувати як новий кліп</value>
+  </data>
+  <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
+    <value>Ігноруйте додатки</value>
+  </data>
+  <data name="PrefIgnoreDupHint" xml:space="preserve">
+    <value>Коли буфер обміну відповідає існуючому кліпу, цей кліп буде використовуватися замість створення нового</value>
+  </data>
+  <data name="PrefIgnoreDupLabel" xml:space="preserve">
+    <value>Ігноруйте нові дублікати</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
+    <value>Зміни буфера обміну в межах програми не відстежуються</value>
+  </data>
+  <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
+    <value>Ігноруйте внутрішнє відстеження буфера обміну</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
+    <value>Пробіли, вкладки та нові лінії будуть ігноровані від відстеження</value>
+  </data>
+  <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
+    <value>Ігноруйте лише білий простір</value>
+  </data>
+  <data name="PrefLoginLoadLabel" xml:space="preserve">
+    <value>Завантажити на вхід</value>
+  </data>
+  <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
+    <value>Анімаційне вікно</value>
+  </data>
+  <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
+    <value>Непрозорість</value>
+  </data>
+  <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
+    <value>Показати поведінку</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
+    <value>Основне вікно буде розкрито, виконуючи жест прокрутки на верхньому краю вашого монітора</value>
+  </data>
+  <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
+    <value>Показати на верхньому екрані прокрутки</value>
+  </data>
+  <data name="PrefNtfVolumeLabel" xml:space="preserve">
+    <value>Обсяг сповіщення</value>
+  </data>
+  <data name="PrefPasteHistoryHint" xml:space="preserve">
+    <value>Цей параметр відстежуватиме систему - широка кількість клавіатури для статистики використання. Ця інформація є приватною і не ділиться, але також не гарантована. Точні результати можуть вимагати надання додаткової команди вставки клавіатури в «Налаштуваннях -&gt; Копіювати та вставити -&gt; Ярлики».</value>
+  </data>
+  <data name="PrefPasteHistoryLabel" xml:space="preserve">
+    <value>Історія вставки</value>
+  </data>
+  <data name="PrefPinTrayCapacityHint" xml:space="preserve">
+    <value>Занадто багато закріплених кліпів (як вкладки браузера) можуть споживати значну пам'ять. Видалення спочатку - в першому -</value>
+  </data>
+  <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
+    <value>Шпилька</value>
+  </data>
+  <data name="PrefRecentTextLimitHint" xml:space="preserve">
+    <value>Це стосується всіх автоматичних входів, нижчі значення покращить продуктивність</value>
+  </data>
+  <data name="PrefRecentTextLimitLabel" xml:space="preserve">
+    <value>Останній ліміт тексту</value>
+  </data>
+  <data name="PrefRestoreDefaultsNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете
+Відновити налаштування за замовчуванням?
+
+Це не може бути скасоване!
+
+*Додаток перезапуститься після завершення.</value>
+  </data>
+  <data name="PrefResetAllNtfForgetsText" xml:space="preserve">
+    <value>Ви впевнені, що хочете скинути всі сповіщення?
+
+*Це не може бути скасоване!</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Паста мавп встановлює буфер обміну (переосмислює) під час вставки до зовнішньої програми. Це буде &lt;b&gt; спроби &lt;/b&gt; відновити стан буфера обміну після зовнішньої пасти.
+
+Загальна реставрація не може бути гарантована і може знизити продуктивність або навіть зламати мавпасту залежно від джерела даних.</value>
+  </data>
+  <data name="PrefResetClipboardLabel" xml:space="preserve">
+    <value>Скидання буфера обміну після вставки мавп</value>
+  </data>
+  <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
+    <value>Не вдалося видалити кеш плагіна з шляху: '{0}'</value>
+    <comment>Folder Path</comment>
+  </data>
+  <data name="PrefResetPluginCacheHint" xml:space="preserve">
+    <value>Всі плагіни будуть скинуті до початкового стану за замовчуванням</value>
+  </data>
+  <data name="PrefResetPluginCacheLabel" xml:space="preserve">
+    <value>Кеш плагінів</value>
+  </data>
+  <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете скинути всі плагіни за замовчуванням?</value>
+  </data>
+  <data name="PrefResetPwdNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете скинути свій пароль?</value>
+  </data>
+  <data name="PrefResetShortcutsHint" xml:space="preserve">
+    <value>Усі ярлики додатків будуть скинуті на їхні жести за замовчуванням.</value>
+  </data>
+  <data name="PrefResetShortcutsLabel" xml:space="preserve">
+    <value>Скиньте ярлики</value>
+  </data>
+  <data name="PrefRestoreNtfHint" xml:space="preserve">
+    <value>Усі ігноровані сповіщення раніше встановлені.</value>
+  </data>
+  <data name="PrefRestorNtfLabel" xml:space="preserve">
+    <value>Відновити сповіщення</value>
+  </data>
+  <data name="PrefRichContentHint" xml:space="preserve">
+    <value>(Увімкнення може бути досить повільним) Відключення відформатованих зменшить споживання пам'яті, але пригнічуватиме деякі вдосконалені функції, такі як: додаток, шаблони, анотації та знаходження/заміну</value>
+  </data>
+  <data name="PrefRichContentLabel" xml:space="preserve">
+    <value>Багатий вміст</value>
+  </data>
+  <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
+    <value>Встановіть пароль</value>
+  </data>
+  <data name="PrefShowHintsLabel" xml:space="preserve">
+    <value>Показати підказки</value>
+  </data>
+  <data name="PrefShowInTaskbarLabel" xml:space="preserve">
+    <value>Показати на панелі завдань</value>
+  </data>
+  <data name="PrefShowInTaskSwitcher" xml:space="preserve">
+    <value>Показати перемикач завдань</value>
+  </data>
+  <data name="PrefShowTitlesLabel" xml:space="preserve">
+    <value>Показати назви</value>
+  </data>
+  <data name="PrefShowWindowOnDragHint" xml:space="preserve">
+    <value>Якщо ввімкнути, перетягування з будь -якої програми до верхньої частини екрана виявить, що мавпаста легко перекине вміст у мавпасту.</value>
+  </data>
+  <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
+    <value>Показати на перетягуванні на верхню частину екрана</value>
+  </data>
+  <data name="PrefSoundThemeLabel" xml:space="preserve">
+    <value>Звукова тема</value>
+  </data>
+  <data name="PrefSpellCheckLabel" xml:space="preserve">
+    <value>Перевірка орфографії</value>
+  </data>
+  <data name="PrefStartupClipboardHint" xml:space="preserve">
+    <value>Після запуску джерело буфера обміну буде невідомим і залежно від ваших налаштувань безпеки, вміст може надходити з виключеного веб -сайту чи програми.</value>
+  </data>
+  <data name="PrefStartupClipboardLabel" xml:space="preserve">
+    <value>Додайте буфер обміну запуску</value>
+  </data>
+  <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
+    <value>Слухайте буфер обміну при запуску</value>
+  </data>
+  <data name="CommonSelectLabel" xml:space="preserve">
+    <value>Обраний</value>
+  </data>
+  <data name="PrefThemeColorHint" xml:space="preserve">
+    <value>ПОПЕРЕДЖЕНО! Інші кольори палітри вибираються за допомогою математики, а не очей! Тож майте на увазі, що деякі комбінації кольорів та стилів можуть не мати належного контрасту для читабельності.</value>
+  </data>
+  <data name="PrefThemeColorLabel" xml:space="preserve">
+    <value>Колір теми</value>
+  </data>
+  <data name="PrefThemeStyleLabel" xml:space="preserve">
+    <value>Тематичний стиль</value>
+  </data>
+  <data name="PrefTrashCycleHint" xml:space="preserve">
+    <value>Автоматичне очищення сміття відбудеться при запуску з інтервалом встановленого.</value>
+  </data>
+  <data name="PrefTrashCycleLabel" xml:space="preserve">
+    <value>Очищення сміття</value>
+  </data>
+  <data name="PrefUiFontLabel" xml:space="preserve">
+    <value>Інтерфейс</value>
+  </data>
+  <data name="PrefUndoLimitHint" xml:space="preserve">
+    <value>Високі межі скасування можуть вплинути на продуктивність</value>
+  </data>
+  <data name="PrefUndoLimitLabel" xml:space="preserve">
+    <value>Обмеження скасування</value>
+  </data>
+  <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
+    <value>Немає межі</value>
+  </data>
+  <data name="PrefUserFileExtHint" xml:space="preserve">
+    <value>Використовується в розширеному пошуку файлів для видів файлів, які не є попередньо встановленими</value>
+  </data>
+  <data name="PrefUserFileExtLabel" xml:space="preserve">
+    <value>Користувач - Визначені розширення пошуку</value>
+  </data>
+  <data name="ClipTileFindReplaceHeader" xml:space="preserve">
+    <value>Знайти і замінити ...</value>
+  </data>
+  <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
+    <value>Вставити сюди</value>
+  </data>
+  <data name="ClipTileShareHeader" xml:space="preserve">
+    <value>Поділитися ...</value>
+  </data>
+  <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
+    <value>Переглянути</value>
+  </data>
+  <data name="CommonManageHeader" xml:space="preserve">
+    <value>Керувати ...</value>
+  </data>
+  <data name="CommonRenameLabel" xml:space="preserve">
+    <value>Перейменувати</value>
+  </data>
+  <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
+    <value>Оцінка: {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
+    <value>Тип: {0}</value>
+    <comment>Annotation Type Name</comment>
+  </data>
+  <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
+    <value>Постійно видалити</value>
+  </data>
+  <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
+    <value>Переглянути до '{0}'</value>
+    <comment>App Name</comment>
+  </data>
+  <data name="ClipTileTransformHeader" xml:space="preserve">
+    <value>Перетворити</value>
+  </data>
+  <data name="ClipTileTransInputTabHeader" xml:space="preserve">
+    <value>Введення</value>
+  </data>
+  <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
+    <value>Випуск</value>
+  </data>
+  <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
+    <value>Джерела</value>
+  </data>
+  <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
+    <value>Відновлення</value>
+  </data>
+  <data name="CommonChooseImageHeader" xml:space="preserve">
+    <value>Виберіть зображення ...</value>
+  </data>
+  <data name="CommonColorHeader" xml:space="preserve">
+    <value>Забарвлення</value>
+  </data>
+  <data name="CommonManageLabel2" xml:space="preserve">
+    <value>Керувати '{0}' ...</value>
+    <comment>Plugin name</comment>
+  </data>
+  <data name="CommonOpenLabel" xml:space="preserve">
+    <value>ВІДЧИНЕНО</value>
+  </data>
+  <data name="CommonWaitLabel" xml:space="preserve">
+    <value>Зачекайте ...</value>
+  </data>
+  <data name="EditorBgColorLabel" xml:space="preserve">
+    <value>Колір фону</value>
+  </data>
+  <data name="EditorClearAllLabel" xml:space="preserve">
+    <value>Очистити все</value>
+  </data>
+  <data name="EditorClipboardFormatsLabel" xml:space="preserve">
+    <value>Формати буфера обміну</value>
+  </data>
+  <data name="EditorDeleteAllButtonText" xml:space="preserve">
+    <value>Видалити все</value>
+  </data>
+  <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
+    <value>Редагувати деталі</value>
+  </data>
+  <data name="EditorEditTemplateNameLabel" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="EditorFindLabel" xml:space="preserve">
+    <value>Знаходити</value>
+  </data>
+  <data name="EditorFontColorLabel" xml:space="preserve">
+    <value>Шрифт</value>
+  </data>
+  <data name="EditorFormatPaintLabel" xml:space="preserve">
+    <value>Форма фарба</value>
+  </data>
+  <data name="EditorInSelectionLabel" xml:space="preserve">
+    <value> У виборі</value>
+  </data>
+  <data name="EditorInsertImageLabel" xml:space="preserve">
+    <value>Вставте зображення</value>
+  </data>
+  <data name="EditorInsertLinkLabel" xml:space="preserve">
+    <value>Вставте посилання</value>
+  </data>
+  <data name="EditorInsertVideoLabel" xml:space="preserve">
+    <value>Вставити відео</value>
+  </data>
+  <data name="EditorMatchCaseLabel" xml:space="preserve">
+    <value> Справа з відповідності</value>
+  </data>
+  <data name="EditorNewTemplateLabel" xml:space="preserve">
+    <value>Новий шаблон</value>
+  </data>
+  <data name="EditorNextTemplateLabel" xml:space="preserve">
+    <value>Наступний шаблон</value>
+  </data>
+  <data name="EditorPasteTemplateWatermark" xml:space="preserve">
+    <value>Введіть текст вставки ...</value>
+  </data>
+  <data name="EditorPrevTemplateLabel" xml:space="preserve">
+    <value>Попередній шаблон</value>
+  </data>
+  <data name="EditorRegExLabel" xml:space="preserve">
+    <value> Регулярний вираз</value>
+  </data>
+  <data name="EditorReplaceAllLabel" xml:space="preserve">
+    <value>Замініть усі</value>
+  </data>
+  <data name="EditorReplaceLabel" xml:space="preserve">
+    <value>Замінити</value>
+  </data>
+  <data name="EditorWholeWordLabel" xml:space="preserve">
+    <value> Ціле слово</value>
+  </data>
+  <data name="EditorWrapLabel" xml:space="preserve">
+    <value> Обгортати</value>
+  </data>
+  <data name="SourceBlockLabel" xml:space="preserve">
+    <value>Блок</value>
+  </data>
+  <data name="SourceDomainLabel" xml:space="preserve">
+    <value>Домен</value>
+  </data>
+  <data name="SourceShowFolderLabel" xml:space="preserve">
+    <value>Показати папку</value>
+  </data>
+  <data name="SourceUnblockLabel" xml:space="preserve">
+    <value>Розблокувати</value>
+  </data>
+  <data name="SysTrayAboutHeader" xml:space="preserve">
+    <value>Про</value>
+  </data>
+  <data name="SysTrayAppendLineHeader" xml:space="preserve">
+    <value>Додати блок</value>
+  </data>
+  <data name="SysTrayAppenInlineHeader" xml:space="preserve">
+    <value>Додавання вбудовану</value>
+  </data>
+  <data name="SysTrayAutoCopyHeader" xml:space="preserve">
+    <value>Авто - копія</value>
+  </data>
+  <data name="SysTrayModeHeader" xml:space="preserve">
+    <value>Режими</value>
+  </data>
+  <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
+    <value>Будь ласка, зачекайте, що мавпаста завантажує ...</value>
+  </data>
+  <data name="SysTrayQuitHeader" xml:space="preserve">
+    <value>Кинути</value>
+  </data>
+  <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
+    <value>Righ - натисніть Вставити</value>
+  </data>
+  <data name="TagGroupTypeName" xml:space="preserve">
+    <value>Група</value>
+  </data>
+  <data name="TagQueryTypeName" xml:space="preserve">
+    <value>Фільтрувати</value>
+  </data>
+  <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
+    <value>Назавжди видалити все</value>
+  </data>
+  <data name="TagTileRestoreAllHeader" xml:space="preserve">
+    <value>Відновити все</value>
+  </data>
+  <data name="ActionLabel" xml:space="preserve">
+    <value>Дія</value>
+  </data>
+  <data name="AddUrlNtfDupText" xml:space="preserve">
+    <value>URL вже існує: '{0}'</value>
+    <comment>Url</comment>
+  </data>
+  <data name="AddUrlNtfErrorText" xml:space="preserve">
+    <value>URL -адреса повинна бути в дійсному форматі.</value>
+  </data>
+  <data name="AddUrlNtfText" xml:space="preserve">
+    <value>Введіть повну URL -адресу:</value>
+  </data>
+  <data name="AddUrlNtfTitle" xml:space="preserve">
+    <value>Додайте URL -адресу</value>
+  </data>
+  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
+    <value>Введіть значення</value>
+  </data>
+  <data name="AppendActivateText" xml:space="preserve">
+    <value>Скопіюйте текст або файли, щоб застосувати.</value>
+  </data>
+  <data name="AppendActivateTitle" xml:space="preserve">
+    <value>Додати {0} {1} режим активовано</value>
+    <comment>Append Type, Manual or empty</comment>
+  </data>
+  <data name="AppendAfterNtfText" xml:space="preserve">
+    <value>Зміни буфера обміну тепер будуть додані</value>
+  </data>
+  <data name="AppendAfterNtfTitle" xml:space="preserve">
+    <value>Після активованого режиму додаток</value>
+  </data>
+  <data name="AppendBeforeNtfText" xml:space="preserve">
+    <value>Зміни буфера обміну тепер будуть підготовлені</value>
+  </data>
+  <data name="AppendBeforeNtfTitle" xml:space="preserve">
+    <value>Перед активованим режимом додавання</value>
+  </data>
+  <data name="AppendBlockLabel" xml:space="preserve">
+    <value>Блок</value>
+  </data>
+  <data name="AppendDeactivatedText" xml:space="preserve">
+    <value>Звичайна поведінка буфера обміну була відновлена</value>
+  </data>
+  <data name="AppendDeactivatedTitle" xml:space="preserve">
+    <value>Додавання деактивовано</value>
+  </data>
+  <data name="AppendExtentNtfText" xml:space="preserve">
+    <value>Додаток додається до топ або ботом кліпу</value>
+  </data>
+  <data name="AppendExtentNtfTitle" xml:space="preserve">
+    <value>Ступінь активованого режиму додатків</value>
+  </data>
+  <data name="AppendInlineLabel" xml:space="preserve">
+    <value>В лінію</value>
+  </data>
+  <data name="AppendManualLabel" xml:space="preserve">
+    <value>Посібник</value>
+  </data>
+  <data name="AppendManualNtfText" xml:space="preserve">
+    <value>Додайте до вашого поточного вибору.</value>
+  </data>
+  <data name="AppendManualNtfTitle" xml:space="preserve">
+    <value>Ручний режим додавання активовано</value>
+  </data>
+  <data name="AppendPausedNtfText" xml:space="preserve">
+    <value>Накопичення буфера обміну зупинено</value>
+  </data>
+  <data name="AppendPausedNtfTitle" xml:space="preserve">
+    <value>Додати паузу</value>
+  </data>
+  <data name="AppendResumedNtfText" xml:space="preserve">
+    <value>Накопичення буфера обміну відновилося</value>
+  </data>
+  <data name="AppendResumedNtfTitle" xml:space="preserve">
+    <value>Додавання відновився</value>
+  </data>
+  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
+    <value>Ви впевнені, що хочете закінчити додавання?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
+    <value>Редагування в режимі сумісності видалить усі багаті форматування. Ви впевнені, що хочете змінити це?</value>
+  </data>
+  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
+    <value>Попередження про погіршення даних</value>
+  </data>
+  <data name="CommonActiveLabel" xml:space="preserve">
+    <value>Активний</value>
+  </data>
+  <data name="CommonEnabledLabel" xml:space="preserve">
+    <value>Увімкнено</value>
+  </data>
+  <data name="CommonOffLabel" xml:space="preserve">
+    <value>Не вистачати</value>
+  </data>
+  <data name="CommonOnLabel" xml:space="preserve">
+    <value>На</value>
+  </data>
+  <data name="CommonPausedLabel" xml:space="preserve">
+    <value>Призупинений</value>
+  </data>
+  <data name="CommonResultLabel" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="CommonStatusLabel" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="CommonUnknownErrorText" xml:space="preserve">
+    <value>Невідома помилка сталася.</value>
+  </data>
+  <data name="DbPasswordNtfText" xml:space="preserve">
+    <value>Спроби залишаються</value>
+    <comment>Number</comment>
+  </data>
+  <data name="DbPasswordNtfTitle" xml:space="preserve">
+    <value>Введіть пароль</value>
+  </data>
+  <data name="EditorConfirmNtfTitle" xml:space="preserve">
+    <value>Підтверджувати</value>
+  </data>
+  <data name="EditorTemplateContactName" xml:space="preserve">
+    <value>Контакт</value>
+  </data>
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
+    <value>Дата, час</value>
+  </data>
+  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити всі використання '{0}'?
+
+Це не може бути скасоване!</value>
+  </data>
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
+    <value>Динамічний</value>
+  </data>
+  <data name="EditorTemplateStaticName" xml:space="preserve">
+    <value>Статичний</value>
+  </data>
+  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
+    <value>{0} порожній ...</value>
+    <comment>Template Name</comment>
+  </data>
+  <data name="EditorTemplateTeaserText" xml:space="preserve">
+    <value>Більше скоро!</value>
+  </data>
+  <data name="LoginLoadDisableFailed" xml:space="preserve">
+    <value>Вхід навантаження Вимкнути не вдалося</value>
+  </data>
+  <data name="LoginLoadDisableSuccess" xml:space="preserve">
+    <value>Вхід навантаження Вимкнути успіх</value>
+  </data>
+  <data name="LoginLoadEnableFailed" xml:space="preserve">
+    <value>Вхід ввімкнення ввімкнено</value>
+  </data>
+  <data name="LoginLoadEnableSuccess" xml:space="preserve">
+    <value>Вхід завантаження Увімкнення успіху</value>
+  </data>
+  <data name="MainWindowHideLabel" xml:space="preserve">
+    <value>Сховати</value>
+  </data>
+  <data name="MainWindowLoadedNtfText" xml:space="preserve">
+    <value>Мавпа тепер завантажена.
+Прослуховування буфера обміну: {0}</value>
+  </data>
+  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
+    <value>Навантажений</value>
+  </data>
+  <data name="MainWindowShowLabel" xml:space="preserve">
+    <value>Показувати</value>
+  </data>
+  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
+    <value>Автоматичний режим вибору копії: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="AppModeChangeNtfTitle" xml:space="preserve">
+    <value>Режим змінився</value>
+  </data>
+  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
+    <value>Клацніть правою кнопкою миші режим вставки: {0}</value>
+    <comment>On or off</comment>
+  </data>
+  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
+    <value>Плагін оновлений</value>
+  </data>
+  <data name="ShortcutPasteTitle" xml:space="preserve">
+    <value>Вставити '{0}'</value>
+    <comment>Content Title</comment>
+  </data>
+  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
+    <value>Запустіть аналізатор '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
+    <value>Запустіть тригер '{0}'</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="ShortcutSelectTagTitle" xml:space="preserve">
+    <value>Виберіть '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити "{0}" та всі пов'язані дії?</value>
+    <comment>Trigger Name</comment>
+  </data>
+  <data name="TriggerLabel" xml:space="preserve">
+    <value>Тригер</value>
+  </data>
+  <data name="TriggerRemoveActionText" xml:space="preserve">
+    <value>Хотіли б ви видалити всі суб -дії для '{0}'? (В іншому випадку вони будуть повторно проводитись до '{1}')</value>
+    <comment>Action Name, Action Name</comment>
+  </data>
+  <data name="TriggerRemoveActionTitle" xml:space="preserve">
+    <value>Видалити параметри</value>
+  </data>
+  <data name="UrlNavConfirmText" xml:space="preserve">
+    <value>Ви дійсно хочете goto '{0}'?</value>
+    <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Рахунок</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Аналізатори</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Застосування операцій</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Буфер обміну</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Зміст</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Перетворювачі</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Культура</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Дані</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Напрямок</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Перетягни та Впусти</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Майстер краплі</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Ікони</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Реєстратор</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Інтерфейс</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Вставити операції</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Уподобання</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Обшук</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Ярлики</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Сортувати</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Звуки</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>Системний лоток</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Колекції</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Спрацьовує</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Операції веб -сайтів</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="ActionSetClipboardHint" xml:space="preserve">
+    <value>Встановлює буфер обміну на вхідну кліп.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Насторожений</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Вибухнути</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Прорізувати</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Загальне призначення та/або сповіщення повідомлень про лоток для систем. Дія попередження не впливає на їх вклад.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>повідомлення</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Мавпа</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Попередній перегляд</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Показ?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Повідомлення про тост часу відображається за лічені секунди. Коли значення становить 0, повідомлення має бути закрите вручну.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Показати час (и)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Сонар</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Звук?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Тип звуку</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Тін</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Обсяг</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Аналізатор</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Обробляє свій вхідний кліп за допомогою призначеного попереднього аналізатора аналізатора.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Вміст введення пов'язаний з вибраною колекцією</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Посилання його вхідного кліпу на призначену колекцію тегів.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Мітка</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Чутливий випадок?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>Це може бути статичний текст для порівняння з входом та/або включення вибраних властивостей (через кнопку фільтра) буде замінено при оцінці стану.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Дані про стан</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>Необов’язковий запит JSONPATH, який буде застосований до вибраного "Вхідної властивості" до оцінки умови.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Вхідний фільтр</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>Властивість кліпу, що використовується для цього умовного.
+
+Наразі властивість "останнього виходу" підтримується лише тоді, коли ця умова є дитиною дії аналізатора, а надані дані будуть змінюватися залежно від виходу батьківського аналізатора.
+
+Для усунення несправностей додайте батьківську дію "попередження" до батьківського умовного та встановіть параметр "Повідомлення", що відповідає цій властивість введення. Це дозволить переглянути фактичні дані, що використовуються для цього умовного.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Вхідна властивість</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Виконає порівняння тексту на вхідному кліпі або попередньому виході дії. Коли порівняння не вдається (це не відповідність) Жодні дитячі дії не будуть виконані. Так воно діє як логічні ворота.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>Усі правдиві чи помилкові операції, де дитячі дії будуть виконуватися лише у тому випадку, якщо результат правдивий.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Хвороба</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Спрацьовується, коли кліп вибраного типу в будь -якому випадку додається в систему (буфер обміну, перетягування - і - падіння, аналізатор, створений або дублюється).</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Виконайте цей тригер, якщо вхідний кліп є новим, а не дублікатом. Це незалежна від будь -яких переваг того, чи ігнорується новий вміст чи ні.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ігноруйте дублікат</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Тільки кліпи такого типу викликають цю дію.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Посилання його вхідного кліпу на призначену колекцію тегів.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Спрацьовується, коли кліп пов'язаний із вказаною колекцією тегів.</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Колекція</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>Кількість часу в мілісекундах чекав, перш ніж діти страждають</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Затримка</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>(Експериментальний) в основному використовується спільно з дією ретранслятора для опитування віддалених джерел або допомоги з тривалими операціями.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>Якщо залишити порожнім, вихідний файл використовуватиме заголовок введення кліпу як ім'я файлу.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Назва на замовлення</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>Каталог, де буде записаний файл.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Каталог</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>Збереження введення у вибрану папку.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Спрацьовує, коли вміст вибраної папки змінюється. Вихід буде новим або існуючим (коли ввімкнено уподобання дублікатів Ignore) файл файлу або папки, який змінився разом із типом зміни як останнього виходу.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Події</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ігноруйте дублікат</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>Значення 0 повторити батьківську дію на невизначений термін</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Повторіть кількість</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>Кількість часу в мілісекундах, щоб чекати, коли батьки закінчиться</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Повторіть затримку</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>(Експериментально), що використовується для створення петлі дій або повторних завдань. Коли повторюється, він знову виконає всіх дітей за допомогою свого первісного введення. При використанні інтервалу без кількості повторів тригер повинен бути відключений та повторний, щоб зупинити повторення. Може бути корисним для опитування або автоматизації веб -скребта.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Запущений глобальним ярликом, який ви визначаєте. Якщо MonkeyPaste активна, він намагатиметься використовувати вибраний кліп (якщо такий є) як вхід. В іншому випадку він спробує використовувати буфер обміну як його вхід.
+
+Примітка: тригер ярлика все ще буде виконувати, якщо немає введення, щоб він зберігав гнучким (так що це може бути макро -тригер тощо), оскільки це не керована даними.</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Тригер ярлика</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Спрацьовано, коли записаний ярлик натискається в будь -який час за допомогою поточного буфера обміну</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>Ця дія вимагає від перезапуску. Ви хотіли б це зробити зараз?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>Була проблема. Потрібно вручну перезапустити заявку.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Аналіз за допомогою анотатора</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Анотувати тригер</value>
+  </data>
+  <data name="CommonReadOnlyElmDisabledToolTip" xml:space="preserve">
+    <value>Вбудовані елементи читаються - лише. Дублікат для зміни.</value>
+  </data>
+  <data name="PluginAnonymousAuthor" xml:space="preserve">
+    <value>Анонімний</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomLabel" xml:space="preserve">
+    <value>Звичайний</value>
+  </data>
+  <data name="TimeSpanDayLast" xml:space="preserve">
+    <value>Вчора</value>
+  </data>
+  <data name="TimeSpanDays" xml:space="preserve">
+    <value>{0} днів тому</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanHourLast" xml:space="preserve">
+    <value>1 година тому</value>
+  </data>
+  <data name="TimeSpanHours" xml:space="preserve">
+    <value>{0} години тому</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanJustNow" xml:space="preserve">
+    <value>Прямо зараз</value>
+  </data>
+  <data name="TimeSpanMinute" xml:space="preserve">
+    <value>Хвилина тому</value>
+  </data>
+  <data name="TimeSpanMinutes" xml:space="preserve">
+    <value>{0} хвилин тому</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanMonthLast" xml:space="preserve">
+    <value>Минулого місяця</value>
+  </data>
+  <data name="TimeSpanMonths" xml:space="preserve">
+    <value>{0} місяці тому</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanWeekLast" xml:space="preserve">
+    <value>Минулого тижня</value>
+  </data>
+  <data name="TimeSpanWeeks" xml:space="preserve">
+    <value>{0} тижні тому</value>
+    <comment>Number</comment>
+  </data>
+  <data name="TimeSpanYears" xml:space="preserve">
+    <value>{0} років тому</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
+    <value>Анотації</value>
+  </data>
+  <data name="SearchSimpleAppNameLabel" xml:space="preserve">
+    <value>Назва застосування</value>
+  </data>
+  <data name="SearchSimpleAppPathLabel" xml:space="preserve">
+    <value>Шлях застосування</value>
+  </data>
+  <data name="SearchSimpleCaseSensitiveLabel" xml:space="preserve">
+    <value>Чутливий</value>
+  </data>
+  <data name="SearchSimpleContentLabel" xml:space="preserve">
+    <value>Зміст</value>
+  </data>
+  <data name="SearchSimpleFileTypeLabel" xml:space="preserve">
+    <value>Тип файлу</value>
+  </data>
+  <data name="SearchSimpleImageTypeLabel" xml:space="preserve">
+    <value>Тип зображення</value>
+  </data>
+  <data name="SearchSimpleRegExLabel" xml:space="preserve">
+    <value>Регулярний вираз</value>
+  </data>
+  <data name="SearchSimpleTextTypeLabel" xml:space="preserve">
+    <value>Тип тексту</value>
+  </data>
+  <data name="SearchSimpleTitleLabel" xml:space="preserve">
+    <value>Титул</value>
+  </data>
+  <data name="SearchSimpleUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="SearchSimpleUrlTitleLabel" xml:space="preserve">
+    <value>Назва URL</value>
+  </data>
+  <data name="SearchSimpleWholeWordLabel" xml:space="preserve">
+    <value>Ціле слово</value>
+  </data>
+  <data name="PrefShowWindowAndLockHint" xml:space="preserve">
+    <value>Як і прокрутка по краю верхнього екрана, щоб відкрити, це заблокує головне вікно, коли воно відкриється. Дозволяючи швидше багаторічні робочі процеси.
+
+* Кути з точки зору всіх ваших екранів, а не на монітор.</value>
+  </data>
+  <data name="PrefShowWindowAndLockLabel" xml:space="preserve">
+    <value>Вікно шоу та замок</value>
+  </data>
+  <data name="AccountFreePriceText" xml:space="preserve">
+    <value>БЕЗКОШТОВНЕ!</value>
+  </data>
+  <data name="SysTrayRateAppLabel" xml:space="preserve">
+    <value>Дайте нам 5 зірок!</value>
+  </data>
+  <data name="PrefDeleteAllButtonText" xml:space="preserve">
+    <value>Видалити все</value>
+  </data>
+  <data name="PrefDeleteAllLabel" xml:space="preserve">
+    <value>Видалити весь вміст</value>
+  </data>
+  <data name="ClipTrayDeleteAllMessageText" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити
+Всі ваші кліпи?!
+
+*Цю операцію не можна скасувати!</value>
+  </data>
+  <data name="NtfRateAppText" xml:space="preserve">
+    <value>Я Інді Дев, будь ласка, покажіть підтримку!</value>
+  </data>
+  <data name="NtfRateAppTitle" xml:space="preserve">
+    <value>Як монтюпаста?</value>
+  </data>
+  <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
+    <value>{0} приймає лише вхід типу (s): {1}</value>
+    <comment>Plugin Name, Media Formats</comment>
+  </data>
+  <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
+    <value>Режим автоматичного копіювання - моделювання події "копіювати" кожного разу, коли випускається ліва кнопка миші.</value>
+  </data>
+  <data name="AppModeToggleRightClickPasteHint" xml:space="preserve">
+    <value>Режим клацання правою кнопкою миші - імітує подію "вставити" щоразу, коли випускається права кнопка миші</value>
+    <comment>#PLATFORM# no suppress on linux</comment>
+  </data>
+  <data name="CommonPresetLabel" xml:space="preserve">
+    <value>Встановлений</value>
+  </data>
+  <data name="PluginBrowserOpenPluginFolder" xml:space="preserve">
+    <value>Показати папку плагіна</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLinkText" xml:space="preserve">
+    <value>Доповідь</value>
+  </data>
+  <data name="PluginBrowserSeeLicenseLinkText" xml:space="preserve">
+    <value>Переглянути</value>
+  </data>
+  <data name="PrefShowTooltipsLabel" xml:space="preserve">
+    <value>Показати підказки</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamHint" xml:space="preserve">
+    <value>Аналізатори анотують свої введення або створюють нові кліпи як вихід. Дітям аналізаторів потрібно вирішити, який саме вони потребують в якості свого введення. Зазвичай це останній вихід.</value>
+  </data>
+  <data name="ActionAnalyzerChildInputParamLabel" xml:space="preserve">
+    <value>Тип введення</value>
+  </data>
+  <data name="ActionDesignerWindowTitle" xml:space="preserve">
+    <value>Тригер дизайнера '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
+    <value>Виберіть {0} ...</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
+    <value>Не знайдено...</value>
+  </data>
+  <data name="ActionTriggerDefaultLabel" xml:space="preserve">
+    <value>{0} тригер</value>
+    <comment>Trigger Type</comment>
+  </data>
+  <data name="ActionCondNotHint" xml:space="preserve">
+    <value>При перевірці справжній або помилковий результат стану буде перевернуто. Так, наприклад, стан "містить" стане "не містить".</value>
+  </data>
+  <data name="ActionCondNotLabel" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="EditorWatermark" xml:space="preserve">
+    <value>Зачекайте ...</value>
+  </data>
+  <data name="ColorChooserDefaultWindowTitle" xml:space="preserve">
+    <value>Вибір кольору</value>
+  </data>
+  <data name="SearchMatchColorWindowTitlePrefix" xml:space="preserve">
+    <value>Виберіть колір матчу</value>
+  </data>
+  <data name="ActionMonkeyCopyTriggerHint" xml:space="preserve">
+    <value>Як і тригер ярлика, але при натисканні комбінації клавіш буде модельовано подію "копіювання" в активній програмі, щоб вона все ще працювала як копіювати, але потім ланцюг дій, що додається до тригера копіювання мавпи, буде виконано на задньому плані за допомогою Модельовані дані копіювання буфера обміну.</value>
+  </data>
+  <data name="SearchExpanderDefaultTooltip" xml:space="preserve">
+    <value>Вдосконалений фільтр</value>
+  </data>
+  <data name="SearchExpanderExpandedTooltip" xml:space="preserve">
+    <value>Сховати фільтри</value>
+  </data>
+  <data name="SearchExpanderRestoreTooltip" xml:space="preserve">
+    <value>Відновити фільтри</value>
+  </data>
+  <data name="SearchExpanderTempQueryTooltip" xml:space="preserve">
+    <value>Створити фільтр</value>
+  </data>
+  <data name="ActionSetClipboardContentHint" xml:space="preserve">
+    <value>(Необов’язково) Якщо залишити порожній, буфер обміну буде встановлено за допомогою введення цієї дії. Все, що надається тут, буде розглядатися лише як простий текст.</value>
+  </data>
+  <data name="ActionSetClipboardContentLabel" xml:space="preserve">
+    <value>Вміст для буфера обміну</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeHint" xml:space="preserve">
+    <value>Коли це правда, жоден кліп не буде доданий після того, як ця дія встановлює буфер обміну.</value>
+  </data>
+  <data name="ActionSetClipboardIgnoreChangeLabel" xml:space="preserve">
+    <value>Ігнорувати</value>
+  </data>
+  <data name="ActionAnalyzeValidation1" xml:space="preserve">
+    <value>Жоден аналізатор не вибраний для дії '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAnalyzeValidation2" xml:space="preserve">
+    <value>Аналізатор для дії '{0}' не знайдено</value>
+    <comment>ActionName</comment>
+  </data>
+  <data name="ActionAnalyzeValidation3" xml:space="preserve">
+    <value>Батьківський '{0}' фільтри лише для '{1}' вмісту та аналізатора '{2}' ніколи не виконуватиметься, оскільки він не підтримує '{3}' тип вводу</value>
+    <comment>Action Label, Analyzer Preset Name, Content Type</comment>
+  </data>
+  <data name="ActionClassifyValidation1" xml:space="preserve">
+    <value>Немає тегу, вибраного для класифікатора '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionClassifyValidation2" xml:space="preserve">
+    <value>Тег для класифікатора '{0}' не знайдено</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="ActionConditionalValidation1" xml:space="preserve">
+    <value>Порівняйте значення може бути лише листи, числа або пробіли</value>
+  </data>
+  <data name="ActionContentTaggedValidation1" xml:space="preserve">
+    <value>Жоден тег, вибраний для тригала Tagged '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionContentTaggedValidation2" xml:space="preserve">
+    <value>Тег для позначеного тригера '{0}' не знайдено</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
+    <value>Жодна папка годинника, вказана для "{0}"</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
+    <value>Дивитися папку '{0}' не знайдено для тригера '{1}'</value>
+    <comment>Folder Path, Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation1" xml:space="preserve">
+    <value>Шлях письменника файлу для дії '{0}' не встановлено</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionFileWriterValidation2" xml:space="preserve">
+    <value>File Writer Path '{0}' для '{1}' не знайдено.</value>
+    <comment>File Path, Action Name</comment>
+  </data>
+  <data name="LoaderTaskbarLabel" xml:space="preserve">
+    <value>Панель завдань</value>
+  </data>
+  <data name="PluginsHelpTooltip" xml:space="preserve">
+    <value>Дізнайтеся про плагіни</value>
+  </data>
+  <data name="ClipTransResetParamsByTransTooltip" xml:space="preserve">
+    <value>Відновити цю конфігурацію аналізу</value>
+  </data>
+  <data name="ChangeLogWindowTitle" xml:space="preserve">
+    <value>{0} Журнал змін</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="CommonConnectionFailedText" xml:space="preserve">
+    <value>Будь ласка, підключіться до Інтернету та спробуйте пізніше.</value>
+  </data>
+  <data name="HelpWindowTitle" xml:space="preserve">
+    <value>{0} - Довідка</value>
+    <comment>Help Topic</comment>
+  </data>
+  <data name="NtfUpToDateText" xml:space="preserve">
+    <value>{0} - остання версія</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpToDateTitle" xml:space="preserve">
+    <value>Ви всі - до - побачення!</value>
+  </data>
+  <data name="SysTrayCheckForUpdateLabel" xml:space="preserve">
+    <value>Перевірити наявність оновлень...</value>
+  </data>
+  <data name="SysTrayUpdateTooltip" xml:space="preserve">
+    <value>Нова версія доступна!
+
+Клацніть тут, щоб оновити до '{0}' 🎉🍾🥳</value>
+  </data>
+  <data name="NtfUpdateAvailableText" xml:space="preserve">
+    <value>Клацніть нижче, щоб оновити до '{0}'</value>
+    <comment>App Version</comment>
+  </data>
+  <data name="NtfUpdateAvailableTitle" xml:space="preserve">
+    <value>Оновлення доступне!</value>
+  </data>
+  <data name="NtfUpdateButtonLabel" xml:space="preserve">
+    <value>Оновити зараз</value>
+  </data>
+  <data name="NtfResetSharedValueText" xml:space="preserve">
+    <value>'{0}' містить спільні значення. Що б ви хотіли скинути?</value>
+    <comment>Preset Name</comment>
+  </data>
+  <data name="PrefClearSearchesButtonText" xml:space="preserve">
+    <value>Чіткий</value>
+  </data>
+  <data name="PrefClearSearchesLabel" xml:space="preserve">
+    <value>Чіткі останні пошуки</value>
+  </data>
+  <data name="NtfResetPresetAllButtonLabel" xml:space="preserve">
+    <value>Скиньте все</value>
+  </data>
+  <data name="NtfResetPresetSharedButtonLabel" xml:space="preserve">
+    <value>Скидання спільного</value>
+  </data>
+  <data name="NtfResetPresetUnsharedButtonLabel" xml:space="preserve">
+    <value>Скиньте неподільне</value>
+  </data>
+  <data name="ActionAppCommandActionHint" xml:space="preserve">
+    <value>Викликає призначену дію програми. Усі команди додатків є без громадянства, і їх вхідний кліп ігнорується.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueHint" xml:space="preserve">
+    <value>Коли не перевіряється, і команда не може стріляти, ланцюг виконання зупиниться. Для виконання для виконання багато команд потребуватимуть певного стану додатків.</value>
+  </data>
+  <data name="ActionAppCommandAlwaysContinueLabel" xml:space="preserve">
+    <value>Завжди продовжуйте?</value>
+  </data>
+  <data name="ActionAppCommandHint" xml:space="preserve">
+    <value>Команда виконувати.</value>
+  </data>
+  <data name="ActionAppCommandLabel" xml:space="preserve">
+    <value>Командування</value>
+  </data>
+  <data name="ActionAppCommandValidation1" xml:space="preserve">
+    <value>Немає команди, вибраної для команди програми '{0}'</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="ActionAppCommandValidation2" xml:space="preserve">
+    <value>Команда для команди програми '{0}' не знайдено</value>
+    <comment>Action Name</comment>
+  </data>
+  <data name="CommonSelectedText" xml:space="preserve">
+    <value>Обраний</value>
+  </data>
+  <data name="NtfUserActionRestartButtonLabel" xml:space="preserve">
+    <value>Перезапустити</value>
+  </data>
+  <data name="PluginUpdateErrorText" xml:space="preserve">
+    <value>Було оновлення проблеми "{0}". Для завершення оновлення вам потрібно буде знову перезапустити та встановити '{0}' (не хвилюйтеся, що всі ваші налаштування будуть відновлені).
+
+Ви можете перезапустити зараз і заповнити оновлення, встановлюючи, ігноруйте це та оновити його пізніше або скасувати оновлення всі разом і продовжити використання версії '{1}'?</value>
+  </data>
+  <data name="PluginUpdateErrorTitle" xml:space="preserve">
+    <value>Помилка оновлення</value>
+  </data>
+  <data name="NtfPluginUpdateFailedText" xml:space="preserve">
+    <value>Не вдалося завантажити оновлення</value>
+  </data>
+  <data name="NtfPluginUpdateFailedTitle" xml:space="preserve">
+    <value>Не вдалося оновлення</value>
+  </data>
+  <data name="NtfPluginUpdateReadyText" xml:space="preserve">
+    <value>Для завершення оновлення вам потрібно буде перезапустити. Ви хотіли б перезапустити зараз чи пізніше?</value>
+  </data>
+  <data name="NtfPluginUpdateReadyTitle" xml:space="preserve">
+    <value>Оновлення готово</value>
+  </data>
+  <data name="NtfRestartLaterButtonText" xml:space="preserve">
+    <value>Пізніше</value>
+  </data>
+  <data name="NtfRestartNowButtonText" xml:space="preserve">
+    <value>Перезапустити зараз</value>
+  </data>
+  <data name="PluginPendingUpdateButtonText" xml:space="preserve">
+    <value>Що очікує</value>
+  </data>
+  <data name="PluginUpdatedNtfText" xml:space="preserve">
+    <value>{0} успішно оновлювався до {1}</value>
+    <comment>Plugin Title, Plugin Version</comment>
+  </data>
+  <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
+    <value>Основні плагіни потрібні і не можуть бути видалені.</value>
+  </data>
+  <data name="PluginBrowserInstallsLabel" xml:space="preserve">
+    <value>Встановити</value>
+  </data>
+  <data name="PluginPendingUpdateBtnTooltip" xml:space="preserve">
+    <value>Оновлення триває. Перезапустити, щоб завершити.</value>
+  </data>
+  <data name="PluginPendingUninstallButtonText" xml:space="preserve">
+    <value>Що очікує</value>
+  </data>
+  <data name="PluginUninstallPendingTooltip" xml:space="preserve">
+    <value>Видалення триває. Будь ласка, перезапустіть, якщо ви хочете повторно встановити.</value>
+  </data>
+  <data name="NtfPluginUninstallPendingText" xml:space="preserve">
+    <value>Для завершення видалення вам потрібно буде перезапустити. Ви хотіли б перезапустити зараз чи пізніше?</value>
+  </data>
+  <data name="NtfPluginUninstallPendingTitle" xml:space="preserve">
+    <value>Закінчити видалення?</value>
+  </data>
+  <data name="PluginUnpublishedLabel" xml:space="preserve">
+    <value>Неопублікований</value>
+  </data>
+  <data name="AnalyzerAutoGenPresetDescription" xml:space="preserve">
+    <value>Авто - створений попередньо встановлений за замовчуванням для '{0}'</value>
+    <comment>Preset Label</comment>
+  </data>
+  <data name="AnalyzerCannotExecuteNoSelectionText" xml:space="preserve">
+    <value>Ніякого кліпу не вибрано</value>
+  </data>
+  <data name="AnalyzerShortcutTooltip" xml:space="preserve">
+    <value>Проаналізувати вибраний кліп</value>
+  </data>
+  <data name="AnalyzerShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Призначте ярлик для запуску '{0}' на вибраному кліпі</value>
+    <comment>Analyzer Preset Label</comment>
+  </data>
+  <data name="ClipShortcutTooltip" xml:space="preserve">
+    <value>Глобальна паста</value>
+  </data>
+  <data name="ClipShortcutUnassignedTooltip" xml:space="preserve">
+    <value>Призначити глобальну вставку ярлика для '{0}'</value>
+    <comment>Clip Title</comment>
+  </data>
+  <data name="AccountForgotPwdButtonLabel" xml:space="preserve">
+    <value>Забули пароль?</value>
+  </data>
+  <data name="AccountLoginButtonLabel" xml:space="preserve">
+    <value>Логін</value>
+  </data>
+  <data name="AccountLogoutButtonLabel" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
+  <data name="PrivacyPolicyLabel" xml:space="preserve">
+    <value>Політика конфіденційності</value>
+  </data>
+  <data name="PrefEnableLoggingHint" xml:space="preserve">
+    <value>(Потрібно перезапустити) Коли ввімкнено діагностичну інформацію буде записано у файл. Це може уповільнити продуктивність і може містити особисту інформацію.</value>
+  </data>
+  <data name="PrefEnableLoggingLabel" xml:space="preserve">
+    <value>Ввійдіть у файл</value>
+  </data>
+  <data name="PrefShowLogsFolderBtnText" xml:space="preserve">
+    <value>ВІДЧИНЕНО</value>
+  </data>
+  <data name="PrefShowLogsFolderLabel" xml:space="preserve">
+    <value>Папка відкрити журнали</value>
+  </data>
+  <data name="SysTrayPluginBrowserLabel" xml:space="preserve">
+    <value>Переглянути плагіни</value>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Читати</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Писати</value>
+  </data>
+  <data name="SysTrayFeebackLabel" xml:space="preserve">
+    <value>Надіслати відгук або звіт про помилку</value>
+  </data>
+  <data name="PrefShowInTaskbarHint" xml:space="preserve">
+    <value>Це лише приховує головне вікно. Усі інші вітрини, що не належать до діалогу, завжди відображаються на панелі завдань.</value>
+  </data>
+  <data name="SearchButtonTooltip" xml:space="preserve">
+    <value>Пошук у '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SearchCriteriaAddRowTooltip" xml:space="preserve">
+    <value>Додати фільтр</value>
+  </data>
+  <data name="SearchCriteriaJoinTypeTooltip" xml:space="preserve">
+    <value>Редагувати тип приєднання</value>
+  </data>
+  <data name="SearchCriteriaRemoveRowTooltip" xml:space="preserve">
+    <value>Зніміть цей фільтр</value>
+  </data>
+  <data name="ToolTipHintLinkTooltip" xml:space="preserve">
+    <value>Відкрита допомога з цього приводу ...</value>
+  </data>
+  <data name="TagTileToolTip" xml:space="preserve">
+    <value>{0} кліпи</value>
+    <comment>Number</comment>
+  </data>
+  <data name="CommonChangeLabel" xml:space="preserve">
+    <value>Зміна</value>
+  </data>
+  <data name="CommonNeverLabel" xml:space="preserve">
+    <value>Ніколи</value>
+  </data>
+  <data name="CommonSetLabel" xml:space="preserve">
+    <value>Встановити</value>
+  </data>
+  <data name="CommonUntitledLabel" xml:space="preserve">
+    <value>Без назви</value>
+  </data>
+  <data name="ShortcutRecordLabel" xml:space="preserve">
+    <value>Запис</value>
+  </data>
+  <data name="TransactionUnlabledRef" xml:space="preserve">
+    <value>Посилання на не марковані джерела</value>
+  </data>
+  <data name="ParameterInvalidText" xml:space="preserve">
+    <value>'{0}' потрібно</value>
+    <comment>Parameter Label</comment>
+  </data>
+  <data name="ActionHasErrorsLabelSuffix" xml:space="preserve">
+    <value>(Має помилки)</value>
+  </data>
+  <data name="AccountLimitedLabel" xml:space="preserve">
+    <value>Обмежений</value>
+  </data>
+  <data name="AccountStorageLabel" xml:space="preserve">
+    <value>Зберігання</value>
+  </data>
+  <data name="AccountTrashLabel" xml:space="preserve">
+    <value>Смітник</value>
+  </data>
+  <data name="AccountUnlimitedLabel" xml:space="preserve">
+    <value>Необмежений</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultReaderTooltip" xml:space="preserve">
+    <value>В даний час ця програма відповідає за замовчуванням за замовчуванням попередньо встановлення та формати.
+
+Увімкнення або відключення попередніх встановлень читачів за замовчуванням (з бічної панелі буфера обміну) не вплине на цю конфігурацію. Тільки додатки, що не виконуються, дотримуються налаштування за замовчуванням.</value>
+  </data>
+  <data name="SettingsInteropAppOleDefaultWriterTooltip" xml:space="preserve">
+    <value>Наразі ця програма відповідає пресетам та форматам письменника -буфера за замовчуванням.
+
+Увімкнення або відключення пресетів письменника за замовчуванням (з бічної панелі буфера обміну) не вплине на цю конфігурацію. Тільки додатки, що не виконуються, дотримуються налаштування за замовчуванням.</value>
+  </data>
+  <data name="AppendCannotActivateText" xml:space="preserve">
+    <value>Щоб додати, ви повинні скасувати слухача буфера обміну (системний лоток -&gt; резюме).</value>
+  </data>
+  <data name="AppendCannotActivateTitle" xml:space="preserve">
+    <value>Додати недоступний</value>
+  </data>
+  <data name="AnalyzerEmptyParamText" xml:space="preserve">
+    <value> Не має налаштувань</value>
+  </data>
+  <data name="WelcomeTranslatedMessage" xml:space="preserve">
+    <value>Я розмовляю лише англійською, а мавпаста була перекладена цією мовою.
+
+Усі версії відправляються з англійською пачкою, тому якщо ви розмовляєте англійською, ви можете змінити мову на неї в будь -який час після цього налаштування (налаштування -&gt; Налаштування -&gt; Міжнародний).
+
+Якщо ви хочете допомогти покращити переклад, який ми хотіли б почути від вас!
+
+Відгук@monkeypaste.com</value>
+  </data>
+  <data name="WelcomeTranslatedTitle" xml:space="preserve">
+    <value>Проблеми з перекладом</value>
+  </data>
+  <data name="CommonOutOfDateTooltip" xml:space="preserve">
+    <value>Потрібно оновити Мавпасту, щоб використовувати цю функцію.</value>
+  </data>
+  <data name="ShortcutGestureEmptyText" xml:space="preserve">
+    <value>Ярлик не встановлений</value>
+  </data>
+  <data name="ClipboardListenerDisabledText" xml:space="preserve">
+    <value>Слухач буфера обміну вимкнено</value>
+  </data>
+  <data name="ClipboardListenerEnabledText" xml:space="preserve">
+    <value>Увімкнено слухачів буфера обміну</value>
+  </data>
+  <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
+    <value>Батьківська дія '{0}' не підтримує тип властивості введення 'останнього виходу'</value>
+    <comment>Action Label</comment>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Дізнайтеся більше про плани</value>
+  </data>
+  <data name="ShortcutInternalName" xml:space="preserve">
+    <value>Застосування</value>
+  </data>
+  <data name="ShortcutInvokeTriggerName" xml:space="preserve">
+    <value>Тригер</value>
+  </data>
+  <data name="ShortcutPasteCopyItemName" xml:space="preserve">
+    <value>Кліп</value>
+  </data>
+  <data name="ShortcutRunAnalyzerName" xml:space="preserve">
+    <value>Аналізатор</value>
+  </data>
+  <data name="ShortcutSelectTagName" xml:space="preserve">
+    <value>Мітка</value>
+  </data>
+</root>

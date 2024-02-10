@@ -1,0 +1,12 @@
+{
+  "title": "ኮር ክሊፕ ቦርድ ተቆጣጣሪ",
+  "description": "ነባሪ ቅንጥብ ሰሌዳዎች",
+  "version": "1.0.0.0",
+  "author": "Monkey",
+  "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "ኮር, ቅንጥብ ሰሌዳ, ጽሑፍ, RTF, ሀብታም ጽሑፍ, ኤችቲኤምኤል, CSV, ምስል, PRG, JPG, አገናኝ, አገናኝ",
+  "pluginType": "Clipboard",
+  "packageType": "Dll"
+}

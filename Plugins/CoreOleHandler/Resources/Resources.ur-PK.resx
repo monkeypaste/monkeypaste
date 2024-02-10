@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>نظر انداز کریں</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>جب چیک کیا جاتا ہے {0} فارمیٹ کلپ بورڈ یا ڈریگ اینڈ ڈراپ ڈیٹا سے نہیں پڑھا جائے گا۔</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>جب چیک کیا جاتا ہے {0} فارمیٹ کلپ بورڈ یا ڈریگ اینڈ ڈراپ ڈیٹا پر نہیں لکھا جائے گا۔</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>پڑھیں</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>لکھیں</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>فائلوں</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>جب آر ٹی ایف پہلے سے موجود نہیں ہے تو ، ایچ ٹی ایم ایل کو آر ٹی ایف میں تبدیل کیا جائے گا۔ یہ ویب براؤزرز اور/یا ورڈ پروسیسنگ ایپلی کیشنز کے مابین کارآمد ثابت ہوسکتا ہے۔ (RTF فارمیٹ کو فعال کرنے کی ضرورت ہے اور صرف معاون پلیٹ فارم کے لئے ہے)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>آر ٹی ایف میں تبدیل کریں</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>یہ ڈائریکٹریاں کلپ بورڈ یا ڈریگ اینڈ ڈراپ ڈیٹا سے نہیں پڑھی جائیں گی۔</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>نظرانداز شدہ ڈائریکٹریز</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>فائل کی توسیع کو نظرانداز کیا</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>ان فائل کی اقسام کو کلپ بورڈ یا ڈریگ اینڈ ڈراپ ڈیٹا سے نہیں پڑھا جائے گا۔</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>یہ فائل کی اقسام کلپ بورڈ یا ڈریگ اینڈ ڈراپ ڈیٹا پر نہیں لکھی جائیں گی۔</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>جب جانچ پڑتال کی جائے تو ، پہلو تناسب کو برقرار رکھتے ہوئے زیادہ سے زیادہ طول و عرض سے بڑی تصاویر کو اسکیل کیا جائے گا۔ اس سے کلپ بورڈ کی شبیہہ متاثر نہیں ہوتی ہے۔</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>پیمانے پر بڑے پیمانے پر</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>جب بٹ میپ کو چسپاں کرنا یا گرا رہا ہو تو یہ ڈیفالٹ فائل کی قسم ہوگی</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>پہلے سے طے شدہ برآمد کی قسم</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>بعض اوقات مکمل طور پر شفاف تصاویر کلپ بورڈ پر دکھائی دیتی ہیں ، یہ الجھا ہوا ہے۔</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>خالی تصاویر کو نظرانداز کریں</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>بڑی تصاویر (کچھ ایم بی سے زیادہ) بدقسمتی سے ڈریگ اینڈ ڈراپ اور مجموعی کارکردگی کو کسی حد تک سست بنا سکتی ہیں۔ اس قدر کو کم رکھنے کی کوشش کریں۔</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>زیادہ سے زیادہ اونچائی</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>زیادہ سے زیادہ چوڑائی</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>کارکردگی کے خدشات کے ل a ، زیادہ سے زیادہ رقم کے حروف کی ضرورت ہے</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>زیادہ سے زیادہ کردار</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>متن (مائم)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>یو آر ایل (موز)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>فارمیٹ '{0}' میں خالی یا شفاف ڈیٹا تھا اور اسے مسدود کردیا گیا تھا</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>خالی ڈیٹا مسدود ہوگیا</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' فارمیٹ کو 'نظرانداز' کے طور پر جھنڈا لگایا گیا ہے</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>فارمیٹ کو نظرانداز کیا گیا</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} کی حد {1} ہے اور ڈیٹا {2} تھا</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>زیادہ سے زیادہ سائز کا پتہ چلا</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>کور کلپ بورڈ ریڈر</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>کور کلپ بورڈ مصنف</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>پہلے سے طے شدہ کلپ بورڈ فارمیٹس کو سنبھالتا ہے</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>کور کلپ بورڈ ہینڈلر</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>کور ، کلپ بورڈ ، ڈریگ اینڈ ڈراپ ، ٹیکسٹ ، آر ٹی ایف ، رچ ٹیکسٹ ، ایچ ٹی ایم ایل ، سی ایس وی ، امیج ، پی این جی ، جے پی جی ، جے پی ای جی ، لنک</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>تصویر (png)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>جب HTML پہلے سے موجود نہیں ہے تو ، RTF HTML میں تبدیل ہوجائے گا۔ یہ ویب براؤزرز اور/یا ورڈ پروسیسنگ ایپلی کیشنز کے مابین کارآمد ثابت ہوسکتا ہے۔ (HTML فارمیٹ کو فعال کرنے کی ضرورت ہے اور صرف معاون پلیٹ فارم کے لئے ہے)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>HTML میں تبدیل کریں</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>آر ٹی ایف</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>بلا عنوان</value>
+  </data>
+</root>

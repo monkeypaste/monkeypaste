@@ -1,0 +1,12 @@
+{
+  "title": "বক্তৃতা থেকে পাঠ্য",
+  "description": "প্রদত্ত পাঠ্য কথা বলে",
+  "version": "1.0.3.0",
+  "author": "Monkey",
+  "guid": "26436e84-392e-4038-a99c-0abe92b843bd",
+  "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/README.md",
+  "projectUrl": "https://github.com/monkeypaste/TextToSpeech",
+  "iconUri": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/icon.png",
+  "packageType": "Dll",
+  "tags": "কোর, অডিও, অ্যাক্সেসযোগ্যতা, বক্তৃতা, পাঠ্য"
+}

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>ນິ້ງນອນໃຈ</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>ເມື່ອກວດກາ {0} ຮູບແບບຈະບໍ່ອ່ານຈາກຄລິບບອດຫລື drag-drop-and disp.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>ເມື່ອກວດສອບ {0} ຈະບໍ່ຖືກຂຽນໃສ່ຫນ້າຈໍຫລືຂໍ້ມູນທີ່ຖືກລາກ.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>ອ່ານ</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>ຂຽນ</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>ບໍດີ</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>ສັດຕະກຸນ</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>ເມື່ອ RTF ບໍ່ມີຢູ່ແລ້ວ, HTML ຈະຖືກປ່ຽນເປັນ RTF. ນີ້ອາດຈະເປັນປະໂຫຍດລະຫວ່າງຕົວທ່ອງເວັບແລະ / ຫຼືຄໍາຮ້ອງສະຫມັກການປຸງແຕ່ງຄໍາສັບ. (ຮຽກຮ້ອງໃຫ້ມີຮູບແບບ RTF ທີ່ຈະເປີດໃຊ້ງານແລະມີພຽງແຕ່ສໍາລັບເວທີທີ່ສະຫນັບສະຫນູນເທົ່ານັ້ນ)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>ປ່ຽນເປັນ RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>ບັນດາລາຍການເຫຼົ່ານີ້ຈະບໍ່ອ່ານຈາກ clipboard ຫຼື drag-mand-drop drop.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>ລາຍຊື່ທີ່ບໍ່ສົນໃຈ</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>ບໍ່ສົນໃຈການຂະຫຍາຍເອກະສານ</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>ປະເພດເອກະສານເຫຼົ່ານີ້ຈະບໍ່ອ່ານຈາກຂໍ້ມູນ clipboard ຫຼື drag-mand-drop-drop.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>ປະເພດເອກະສານເຫຼົ່ານີ້ຈະບໍ່ຖືກຂຽນໃສ່ຄລິບບອດຫລືຂໍ້ມູນ Drag-and-drop.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>ເມື່ອຖືກກວດກາ, ຮູບພາບຂະຫນາດໃຫຍ່ກ່ວາມິຕິເຄຍທີ່ສຸດຈະຖືກປັບຂະຫນາດໃນຂະນະທີ່ຮັກສາອັດຕາສ່ວນ. ນີ້ບໍ່ມີຜົນກະທົບຕໍ່ຮູບພາບໃນ clipboard.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>ຂະຫນາດເກີນກໍານົດ</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>ໃນເວລາທີ່ໄດ້ຮັບການປະຖິ້ມຫຼືຫຼຸດລົງຂອງ bitmap ນີ້ຈະເປັນປະເພດເອກະສານເລີ່ມຕົ້ນ</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>ປະເພດການສົ່ງອອກ Default</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>ບາງຄັ້ງຮູບພາບທີ່ໂປ່ງໃສຢ່າງເຕັມທີ່ຈະສະແດງຢູ່ເທິງຫນ້າຜາຫີນ, ຄວາມສັບສົນຂອງມັນ.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>ບໍ່ສົນໃຈຮູບພາບເປົ່າ</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>ຮູບພາບຂະຫນາດໃຫຍ່ (ຫຼາຍກ່ວາສອງສາມ Mbs) ສາມາດເຮັດໃຫ້ການລາກແລະການປະຕິບັດການຫຼຸດລົງແລະການປະຕິບັດໂດຍລວມບາງຫນ້າສິ່ງທີ່ຫນ້າເສຍດາຍ. ພະຍາຍາມຮັກສາມູນຄ່ານີ້ຕໍ່າ.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>ຄວາມສູງສູງສຸດ</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>ຄວາມກວ້າງສູງສຸດ</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>ສໍາລັບຄວາມກັງວົນກ່ຽວກັບການປະຕິບັດ, ມີຄວາມຈໍາເປັນຈໍານວນສູງສຸດ</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>ຕົວອັກສອນສູງສຸດ</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>html (mime)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>ຂໍ້ຄວາມ (MIME)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (Moz)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>ຮູບແບບ '{0}' ມີຂໍ້ມູນທີ່ຫວ່າງເປົ່າຫຼືໂປ່ງໃສແລະຖືກບລັອກ</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>ຂໍ້ມູນຫວ່າງເປົ່າຖືກບລັອກ</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>'{0}' ຮູບແບບ 'ແມ່ນຖືກຫມາຍວ່າ' ບໍ່ສົນໃຈ '</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>ຮູບແບບທີ່ບໍ່ສົນໃຈ</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>{0} ຂີດຈໍາກັດແມ່ນ {1} ແລະຂໍ້ມູນແມ່ນ {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>ກວດພົບຂະຫນາດ Max</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Core Clipboard Reader</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>ນັກຂຽນ Clipboard Core</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>ຈັດການແບບຟອມ clipboard ເລີ່ມຕົ້ນ</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Core Clipboard Handler</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>ຫຼັກ, clipboard, ລາກແລະວາງ, ຂໍ້ຄວາມ, ຂໍ້ຄວາມທີ່ອຸດົມສົມບູນ, HTML, CSV, PNG, PNG, JPG, JPEG, JPEG, JPEG, JPEG, MPEG, MPEG, JPEG, MPEG, MPEG, MPEG, MPEG, MPEG, MPEG, JPEG, MPEG, MPEG, JPEG, MPEG, MPEG, JPEG, MPEG, JPEG, JPEG, MPEG, JPEG, JPEG, MPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG, JPEG</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>ຮູບພາບ (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>ເມື່ອ HTML ບໍ່ມີຢູ່ແລ້ວ, RTF ຈະປ່ຽນເປັນ HTML. ນີ້ອາດຈະເປັນປະໂຫຍດລະຫວ່າງຕົວທ່ອງເວັບແລະ / ຫຼືຄໍາຮ້ອງສະຫມັກການປຸງແຕ່ງຄໍາສັບ. (ຕ້ອງການຮູບແບບ HTML ທີ່ຈະເປີດໃຊ້ງານແລະມີພຽງແຕ່ສໍາລັບເວທີທີ່ສະຫນັບສະຫນູນເທົ່ານັ້ນ)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>ປ່ຽນເປັນ HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>ພາຢ</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>ຂໍ້​ຄວາມ</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>ບໍ່ມີຊື່</value>
+  </data>
+</root>

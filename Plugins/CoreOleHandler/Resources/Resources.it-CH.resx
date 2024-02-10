@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonIgnoreLabel" xml:space="preserve">
+    <value>Ignorare</value>
+  </data>
+  <data name="CommonIgnoreReaderHint" xml:space="preserve">
+    <value>Quando il formato {0} non verrà letto dagli appunti o dai dati di trascinamento.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonIgnoreWriterHint" xml:space="preserve">
+    <value>Quando è stato selezionato il formato {0} non verrà scritto negli appunti o nei dati di trascinamento.</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="CommonReadLabel" xml:space="preserve">
+    <value>Leggere</value>
+  </data>
+  <data name="CommonWriteLabel" xml:space="preserve">
+    <value>Scrivere</value>
+  </data>
+  <data name="CsvFormatLabel" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="FilesFormatLabel" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Html2RtfHint" xml:space="preserve">
+    <value>Quando RTF non è già presente, HTML verrà convertito in RTF. Ciò può essere utile tra browser Web e/o applicazioni di elaborazione testi. (richiede che il formato RTF sia abilitato ed è solo per le piattaforme supportate)</value>
+  </data>
+  <data name="Html2RtfLabel" xml:space="preserve">
+    <value>Converti in RTF</value>
+  </data>
+  <data name="HtmlFormatLabel" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="IgnoredDirsHint" xml:space="preserve">
+    <value>Queste directory non verranno lette da appunti o dati di trascinamento.</value>
+  </data>
+  <data name="IgnoredDirsLabel" xml:space="preserve">
+    <value>Directory ignorate</value>
+  </data>
+  <data name="IgnoredFileExtLabel" xml:space="preserve">
+    <value>Estensioni dei file ignorate</value>
+  </data>
+  <data name="IgnoredFileExtReaderHint" xml:space="preserve">
+    <value>Questi tipi di file non verranno letti dagli appunti o dai dati di trascinamento.</value>
+  </data>
+  <data name="IgnoredFileExtWriterHint" xml:space="preserve">
+    <value>Questi tipi di file non verranno scritti negli appunti o nei dati di trascinamento.</value>
+  </data>
+  <data name="ImgDoScaleHint" xml:space="preserve">
+    <value>Se selezionato, le immagini più grandi della dimensione massima verranno ridimensionate mentre si mantengono le proporzioni. Ciò non influisce sull'immagine negli appunti.</value>
+  </data>
+  <data name="ImgDoScaleLabel" xml:space="preserve">
+    <value>Scala oversize</value>
+  </data>
+  <data name="ImgExportTypeHint" xml:space="preserve">
+    <value>Quando si incolla o si lascia cadere una bitmap, questo sarà il tipo di file predefinito</value>
+  </data>
+  <data name="ImgExportTypeLabel" xml:space="preserve">
+    <value>Tipo di esportazione predefinito</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
+    <value>A volte le immagini completamente trasparenti verranno visualizzate sugli appunti, sono confusi.</value>
+  </data>
+  <data name="ImgIgnoreTransparentImgLabel" xml:space="preserve">
+    <value>Ignora immagini vuote</value>
+  </data>
+  <data name="ImgMaxHint" xml:space="preserve">
+    <value>Le immagini di grandi dimensioni (più di qualche MBS) possono fare un po 'lente per le prestazioni di trascinamento e prestazioni complessive. Cerca di mantenere basso questo valore.</value>
+  </data>
+  <data name="ImgMaxHLabel" xml:space="preserve">
+    <value>Altezza massima</value>
+  </data>
+  <data name="ImgMaxWLabel" xml:space="preserve">
+    <value>Larghezza massima</value>
+  </data>
+  <data name="MaxCharsHint" xml:space="preserve">
+    <value>Per i problemi di prestazioni, sono necessari un numero massimo di caratteri</value>
+  </data>
+  <data name="MaxCharsLabel" xml:space="preserve">
+    <value>Caratteri massimi</value>
+  </data>
+  <data name="MimeHtmlFormatLabel" xml:space="preserve">
+    <value>HTML (MIME)</value>
+  </data>
+  <data name="MimeTextFormatLabel" xml:space="preserve">
+    <value>Testo (mime)</value>
+  </data>
+  <data name="MozUrlFormatLabel" xml:space="preserve">
+    <value>URL (MOZ)</value>
+  </data>
+  <data name="NtfEmptyImgText" xml:space="preserve">
+    <value>Format '{0}' aveva dati vuoti o trasparenti ed è stato bloccato</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="NtfEmptyImgTitle" xml:space="preserve">
+    <value>Dati vuoti bloccati</value>
+  </data>
+  <data name="NtfFormatIgnoredText" xml:space="preserve">
+    <value>Il formato '{0}' è contrassegnato come 'ignorato'</value>
+    <comment>Clipboard Format Name</comment>
+  </data>
+  <data name="NtfFormatIgnoredTitle" xml:space="preserve">
+    <value>Formato ignorato</value>
+  </data>
+  <data name="NtfMaxSizeText" xml:space="preserve">
+    <value>Il limite {0} è {1} e i dati erano {2}</value>
+    <comment>Clipboard Format Name, Number, Number</comment>
+  </data>
+  <data name="NtfMaxSizeTitle" xml:space="preserve">
+    <value>Dimensione massima rilevata</value>
+  </data>
+  <data name="NtfReaderDetail" xml:space="preserve">
+    <value>Lettore di appunti core</value>
+  </data>
+  <data name="NtfWriterDetail" xml:space="preserve">
+    <value>Writer di Appunti core</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value>Gestisce i formati di appunti predefiniti</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>Gestore di appunti core</value>
+  </data>
+  <data name="PluginTags" xml:space="preserve">
+    <value>Core, Appunti, Trascinda, Drop, testo, RTF, Testo ricco, HTML, CSV, Image, PNG, JPG, JPEG, LINK</value>
+  </data>
+  <data name="PngFormatLabel" xml:space="preserve">
+    <value>Immagine (PNG)</value>
+  </data>
+  <data name="Rtf2HtmlHint" xml:space="preserve">
+    <value>Quando HTML non è già presente, RTF verrà convertito in HTML. Ciò può essere utile tra browser Web e/o applicazioni di elaborazione testi. (richiede che il formato HTML sia abilitato ed è solo per le piattaforme supportate)</value>
+  </data>
+  <data name="Rtf2HtmlLabel" xml:space="preserve">
+    <value>Converti in HTML</value>
+  </data>
+  <data name="RtfFormatLabel" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="TextFormatLabel" xml:space="preserve">
+    <value>Testo</value>
+  </data>
+  <data name="UntitledLabel" xml:space="preserve">
+    <value>Senza titolo</value>
+  </data>
+</root>
